@@ -29,16 +29,15 @@ namespace LocalS.Service.Api.StoreApp
 
             public string TagName { get; set; }
 
-            public List<ProductSkuModel> ProductSkus { get; set; }
+            public List<SkuModel> Skus { get; set; }
 
             public E_ShopMode ShopMode { get; set; }
 
         }
 
-        public class ProductSkuModel
+        public class SkuModel
         {
             public string Id { get; set; }
-
             public string SpuId { get; set; }
             public string Name { get; set; }
             public string MainImgUrl { get; set; }
@@ -54,7 +53,6 @@ namespace LocalS.Service.Api.StoreApp
             public bool Selected { get; set; }
             public decimal SumPrice { get; set; }
             public E_ShopMode ShopMode { get; set; }
-
             public string ShopId { get; set; }
 
         }

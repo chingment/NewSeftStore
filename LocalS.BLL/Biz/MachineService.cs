@@ -162,14 +162,14 @@ namespace LocalS.BLL.Biz
             return merchMachine.IsStopUse;
         }
 
-        public void SendStock(string operater, string appId, string merchId, string machineId, List<MachineProdcutSkuStockModel> contents)
+        public void SendStock(string operater, string appId, string merchId, string machineId, List<MachineSkuStockModel> contents)
         {
             PushService.SendStock(operater, appId, merchId, machineId, contents);
         }
 
-        public void SendStock(string operater, string appId, string merchId, string machineId, MachineProdcutSkuStockModel content)
+        public void SendStock(string operater, string appId, string merchId, string machineId, MachineSkuStockModel content)
         {
-            List<MachineProdcutSkuStockModel> contents = new List<MachineProdcutSkuStockModel>();
+            List<MachineSkuStockModel> contents = new List<MachineSkuStockModel>();
             contents.Add(content);
             SendStock(operater, appId, merchId, machineId, contents);
         }
@@ -253,7 +253,7 @@ namespace LocalS.BLL.Biz
 
         //public CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, string orderId)
         //{
-        //    var orderDetails = BizFactory.Order.GetOrderProductSkuByPickup(orderId, machineId);
+        //    var orderDetails = BizFactory.Order.GetOrderSkuByPickup(orderId, machineId);
         //    var content = new { orderId = orderId, status = E_OrderStatus.Payed, orderDetails =  orderDetails };
         //    return PushService.SendPaySuccess(operater, appId, merchId, machineId, content);
         //}

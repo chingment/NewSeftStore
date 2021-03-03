@@ -13,7 +13,7 @@ namespace WebApiStoreTerm.Controllers
     public class ProductSkuController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse Search([FromUri]RupProductSkuSearch rup)
+        public OwnApiHttpResponse Search([FromUri]RupSkuSearch rup)
         {
 
             IResult result = StoreTermServiceFactory.ProductSku.Search(rup);

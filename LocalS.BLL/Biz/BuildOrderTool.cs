@@ -193,58 +193,58 @@ namespace LocalS.BLL.Biz
                 }
             }
 
-            foreach (var productSku in _buildSkus)
+            foreach (var buildSku in _buildSkus)
             {
-                if (productSku.ShopMethod == E_ShopMethod.Buy)
+                if (buildSku.ShopMethod == E_ShopMethod.Buy)
                 {
                     #region Shop
 
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(productSku.ShopMode, _merchId, _storeId, productSku.ShopId, productSku.MachineIds, productSku.Id);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(buildSku.ShopMode, _merchId, _storeId, buildSku.ShopId, buildSku.MachineIds, buildSku.Id);
 
-                    if (r_productSku == null)
+                    if (r_Sku == null)
                     {
-                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", productSku.Id));
+                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", buildSku.Id));
                     }
                     else
                     {
 
-                        productSku.SpuId = r_productSku.SpuId;
-                        productSku.Name = r_productSku.Name;
-                        productSku.MainImgUrl = r_productSku.MainImgUrl;
-                        productSku.BarCode = r_productSku.BarCode;
-                        productSku.CumCode = r_productSku.CumCode;
-                        productSku.SpecDes = r_productSku.SpecDes.ToJsonString();
-                        productSku.Producer = r_productSku.Producer;
-                        productSku.KindId1 = r_productSku.KindId1;
-                        productSku.KindId2 = r_productSku.KindId2;
-                        productSku.KindId3 = r_productSku.KindId3;
-                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
+                        buildSku.SpuId = r_Sku.SpuId;
+                        buildSku.Name = r_Sku.Name;
+                        buildSku.MainImgUrl = r_Sku.MainImgUrl;
+                        buildSku.BarCode = r_Sku.BarCode;
+                        buildSku.CumCode = r_Sku.CumCode;
+                        buildSku.SpecDes = r_Sku.SpecDes.ToJsonString();
+                        buildSku.Producer = r_Sku.Producer;
+                        buildSku.KindId1 = r_Sku.KindId1;
+                        buildSku.KindId2 = r_Sku.KindId2;
+                        buildSku.KindId3 = r_Sku.KindId3;
+                        buildSku.SupReceiveMode = r_Sku.SupReceiveMode;
 
-                        if (r_productSku.Stocks.Count == 0)
+                        if (r_Sku.Stocks.Count == 0)
                         {
-                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", productSku.Name));
+                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", buildSku.Name));
                         }
                         else
                         {
-                            productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                            buildSku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
 
-                            if (productSku.IsOffSell)
+                            if (buildSku.IsOffSell)
                             {
-                                _errorPoints.Add(string.Format("商品[{0}]已下架", productSku.Name));
+                                _errorPoints.Add(string.Format("商品[{0}]已下架", buildSku.Name));
                             }
                             else
                             {
-                                var sellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                                var sellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
 
-                                if (sellQuantity < productSku.Quantity)
+                                if (sellQuantity < buildSku.Quantity)
                                 {
-                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", productSku.Name, sellQuantity));
+                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", buildSku.Name, sellQuantity));
                                 }
                             }
 
-                            productSku.Stocks = r_productSku.Stocks;
+                            buildSku.Stocks = r_Sku.Stocks;
 
-                            decimal salePrice = r_productSku.Stocks[0].SalePrice;
+                            decimal salePrice = r_Sku.Stocks[0].SalePrice;
 
                             decimal originalPrice = salePrice;
 
@@ -259,7 +259,7 @@ namespace LocalS.BLL.Biz
                                     }
                                 }
 
-                                //var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == productSku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
+                                //var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == Sku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
                                 //if (d_MemberSkuSt != null)
                                 //{
                                 //    salePrice = d_MemberSkuSt.MemberPrice;
@@ -267,14 +267,14 @@ namespace LocalS.BLL.Biz
                                 //}
                             }
 
-                            productSku.SalePrice = salePrice;
-                            productSku.SaleAmount = salePrice * productSku.Quantity;
-                            productSku.OriginalPrice = originalPrice;
-                            productSku.OriginalAmount = originalPrice * productSku.Quantity;
+                            buildSku.SalePrice = salePrice;
+                            buildSku.SaleAmount = salePrice * buildSku.Quantity;
+                            buildSku.OriginalPrice = originalPrice;
+                            buildSku.OriginalAmount = originalPrice * buildSku.Quantity;
 
                             if (memberDiscount > 0)
                             {
-                                _memberDiscountAmount += (productSku.OriginalAmount - productSku.SaleAmount);
+                                _memberDiscountAmount += (buildSku.OriginalAmount - buildSku.SaleAmount);
                             }
 
                         }
@@ -282,142 +282,142 @@ namespace LocalS.BLL.Biz
                     }
                     #endregion
                 }
-                else if (productSku.ShopMethod == E_ShopMethod.Rent)
+                else if (buildSku.ShopMethod == E_ShopMethod.Rent)
                 {
                     #region Rent
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, productSku.Id);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, buildSku.Id);
 
-                    if (r_productSku == null)
+                    if (r_Sku == null)
                     {
-                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", productSku.Id));
+                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", buildSku.Id));
                     }
                     else
                     {
 
-                        productSku.SpuId = r_productSku.SpuId;
-                        productSku.Name = r_productSku.Name;
-                        productSku.MainImgUrl = r_productSku.MainImgUrl;
-                        productSku.BarCode = r_productSku.BarCode;
-                        productSku.CumCode = r_productSku.CumCode;
-                        productSku.SpecDes = r_productSku.SpecDes.ToJsonString();
-                        productSku.Producer = r_productSku.Producer;
-                        productSku.KindId1 = r_productSku.KindId1;
-                        productSku.KindId2 = r_productSku.KindId2;
-                        productSku.KindId3 = r_productSku.KindId3;
-                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
-                        if (r_productSku.Stocks.Count == 0)
+                        buildSku.SpuId = r_Sku.SpuId;
+                        buildSku.Name = r_Sku.Name;
+                        buildSku.MainImgUrl = r_Sku.MainImgUrl;
+                        buildSku.BarCode = r_Sku.BarCode;
+                        buildSku.CumCode = r_Sku.CumCode;
+                        buildSku.SpecDes = r_Sku.SpecDes.ToJsonString();
+                        buildSku.Producer = r_Sku.Producer;
+                        buildSku.KindId1 = r_Sku.KindId1;
+                        buildSku.KindId2 = r_Sku.KindId2;
+                        buildSku.KindId3 = r_Sku.KindId3;
+                        buildSku.SupReceiveMode = r_Sku.SupReceiveMode;
+                        if (r_Sku.Stocks.Count == 0)
                         {
-                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", productSku.Name));
+                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", buildSku.Name));
                         }
                         else
                         {
-                            productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                            buildSku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
 
-                            if (productSku.IsOffSell)
+                            if (buildSku.IsOffSell)
                             {
-                                _errorPoints.Add(string.Format("商品[{0}]已下架", productSku.Name));
+                                _errorPoints.Add(string.Format("商品[{0}]已下架", buildSku.Name));
                             }
                             else
                             {
-                                var sellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                                var sellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
 
-                                if (sellQuantity < productSku.Quantity)
+                                if (sellQuantity < buildSku.Quantity)
                                 {
-                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", productSku.Name, sellQuantity));
+                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", buildSku.Name, sellQuantity));
                                 }
                             }
 
-                            productSku.Stocks = r_productSku.Stocks;
+                            buildSku.Stocks = r_Sku.Stocks;
 
-                            decimal salePrice = r_productSku.Stocks[0].DepositPrice + r_productSku.Stocks[0].RentMhPrice;
-                            decimal originalPrice = r_productSku.Stocks[0].DepositPrice + r_productSku.Stocks[0].RentMhPrice;
+                            decimal salePrice = r_Sku.Stocks[0].DepositPrice + r_Sku.Stocks[0].RentMhPrice;
+                            decimal originalPrice = r_Sku.Stocks[0].DepositPrice + r_Sku.Stocks[0].RentMhPrice;
 
-                            productSku.SalePrice = salePrice;
-                            productSku.SaleAmount = salePrice * productSku.Quantity;
-                            productSku.OriginalPrice = originalPrice;
-                            productSku.OriginalAmount = originalPrice * productSku.Quantity;
-                            productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
-                            productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                            productSku.RentTermUnit = E_RentTermUnit.Month;
-                            productSku.RentTermValue = 1;
-                            productSku.RentTermUnitText = "月";
+                            buildSku.SalePrice = salePrice;
+                            buildSku.SaleAmount = salePrice * buildSku.Quantity;
+                            buildSku.OriginalPrice = originalPrice;
+                            buildSku.OriginalAmount = originalPrice * buildSku.Quantity;
+                            buildSku.DepositAmount = r_Sku.Stocks[0].DepositPrice;
+                            buildSku.RentAmount = r_Sku.Stocks[0].RentMhPrice;
+                            buildSku.RentTermUnit = E_RentTermUnit.Month;
+                            buildSku.RentTermValue = 1;
+                            buildSku.RentTermUnitText = "月";
                         }
                     }
 
                     #endregion
                 }
-                else if (productSku.ShopMethod == E_ShopMethod.RentFee)
+                else if (buildSku.ShopMethod == E_ShopMethod.RentFee)
                 {
                     #region RentFee
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, productSku.Id);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, _merchId, _storeId, "", null, buildSku.Id);
 
-                    if (r_productSku == null)
+                    if (r_Sku == null)
                     {
-                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", productSku.Id));
+                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", buildSku.Id));
                     }
                     else
                     {
 
-                        productSku.SpuId = r_productSku.SpuId;
-                        productSku.Name = r_productSku.Name;
-                        productSku.MainImgUrl = r_productSku.MainImgUrl;
-                        productSku.BarCode = r_productSku.BarCode;
-                        productSku.CumCode = r_productSku.CumCode;
-                        productSku.SpecDes = r_productSku.SpecDes.ToJsonString();
-                        productSku.Producer = r_productSku.Producer;
-                        productSku.KindId1 = r_productSku.KindId1;
-                        productSku.KindId2 = r_productSku.KindId2;
-                        productSku.KindId3 = r_productSku.KindId3;
-                        productSku.SupReceiveMode = r_productSku.SupReceiveMode;
-                        if (r_productSku.Stocks.Count == 0)
+                        buildSku.SpuId = r_Sku.SpuId;
+                        buildSku.Name = r_Sku.Name;
+                        buildSku.MainImgUrl = r_Sku.MainImgUrl;
+                        buildSku.BarCode = r_Sku.BarCode;
+                        buildSku.CumCode = r_Sku.CumCode;
+                        buildSku.SpecDes = r_Sku.SpecDes.ToJsonString();
+                        buildSku.Producer = r_Sku.Producer;
+                        buildSku.KindId1 = r_Sku.KindId1;
+                        buildSku.KindId2 = r_Sku.KindId2;
+                        buildSku.KindId3 = r_Sku.KindId3;
+                        buildSku.SupReceiveMode = r_Sku.SupReceiveMode;
+                        if (r_Sku.Stocks.Count == 0)
                         {
-                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", productSku.Name));
+                            _errorPoints.Add(string.Format("商品[{0}]信息库存为空", buildSku.Name));
                         }
                         else
                         {
-                            productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                            buildSku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
 
-                            if (productSku.IsOffSell)
+                            if (buildSku.IsOffSell)
                             {
-                                _errorPoints.Add(string.Format("商品[{0}]已下架", productSku.Name));
+                                _errorPoints.Add(string.Format("商品[{0}]已下架", buildSku.Name));
                             }
                             else
                             {
-                                var sellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                                var sellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
 
-                                if (sellQuantity < productSku.Quantity)
+                                if (sellQuantity < buildSku.Quantity)
                                 {
-                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", productSku.Name, sellQuantity));
+                                    _errorPoints.Add(string.Format("商品[{0}]的可销售数量为{1}个", buildSku.Name, sellQuantity));
                                 }
                             }
 
-                            productSku.Stocks = r_productSku.Stocks;
+                            buildSku.Stocks = r_Sku.Stocks;
 
-                            decimal salePrice = r_productSku.Stocks[0].RentMhPrice;
-                            decimal originalPrice =  r_productSku.Stocks[0].RentMhPrice;
+                            decimal salePrice = r_Sku.Stocks[0].RentMhPrice;
+                            decimal originalPrice = r_Sku.Stocks[0].RentMhPrice;
 
-                            productSku.SalePrice = salePrice;
-                            productSku.SaleAmount = salePrice * productSku.Quantity;
-                            productSku.OriginalPrice = originalPrice;
-                            productSku.OriginalAmount = originalPrice * productSku.Quantity;
-                            productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
-                            productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                            productSku.RentTermUnit = E_RentTermUnit.Month;
-                            productSku.RentTermValue = 1;
-                            productSku.RentTermUnitText = "月";
+                            buildSku.SalePrice = salePrice;
+                            buildSku.SaleAmount = salePrice * buildSku.Quantity;
+                            buildSku.OriginalPrice = originalPrice;
+                            buildSku.OriginalAmount = originalPrice * buildSku.Quantity;
+                            buildSku.DepositAmount = r_Sku.Stocks[0].DepositPrice;
+                            buildSku.RentAmount = r_Sku.Stocks[0].RentMhPrice;
+                            buildSku.RentTermUnit = E_RentTermUnit.Month;
+                            buildSku.RentTermValue = 1;
+                            buildSku.RentTermUnitText = "月";
                         }
                     }
 
                     #endregion
                 }
-                else if (productSku.ShopMethod == E_ShopMethod.MemberFee)
+                else if (buildSku.ShopMethod == E_ShopMethod.MemberFee)
                 {
                     #region MemberFee
 
-                    var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == _merchId && m.Id == productSku.Id).FirstOrDefault();
+                    var memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == _merchId && m.Id == buildSku.Id).FirstOrDefault();
                     if (memberFeeSt == null)
                     {
-                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", productSku.Id));
+                        _errorPoints.Add(string.Format("商品ID[{0}]信息不存在", buildSku.Id));
                     }
                     else
                     {
@@ -435,29 +435,29 @@ namespace LocalS.BLL.Biz
                         stock.SalePrice = memberFeeSt.FeeSaleValue;
                         stocks.Add(stock);
 
-                        productSku.Name = memberFeeSt.Name;
-                        productSku.SupReceiveMode = E_SupReceiveMode.FeeByMember;
-                        productSku.ReceiveMode = E_ReceiveMode.FeeByMember;
-                        productSku.MainImgUrl = memberFeeSt.MainImgUrl;
-                        productSku.SalePrice = memberFeeSt.FeeSaleValue;
-                        productSku.SaleAmount = productSku.Quantity * memberFeeSt.FeeSaleValue;
-                        productSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
-                        productSku.OriginalAmount = productSku.Quantity * memberFeeSt.FeeOriginalValue;
-                        productSku.SpuId = IdWorker.Build(IdType.EmptyGuid);
-                        productSku.BarCode = "MEMBER_FEE";
-                        productSku.CumCode = "MEMBER_FEE";
+                        buildSku.Name = memberFeeSt.Name;
+                        buildSku.SupReceiveMode = E_SupReceiveMode.FeeByMember;
+                        buildSku.ReceiveMode = E_ReceiveMode.FeeByMember;
+                        buildSku.MainImgUrl = memberFeeSt.MainImgUrl;
+                        buildSku.SalePrice = memberFeeSt.FeeSaleValue;
+                        buildSku.SaleAmount = buildSku.Quantity * memberFeeSt.FeeSaleValue;
+                        buildSku.OriginalPrice = memberFeeSt.FeeOriginalValue;
+                        buildSku.OriginalAmount = buildSku.Quantity * memberFeeSt.FeeOriginalValue;
+                        buildSku.SpuId = IdWorker.Build(IdType.EmptyGuid);
+                        buildSku.BarCode = "MEMBER_FEE";
+                        buildSku.CumCode = "MEMBER_FEE";
 
                         List<SpecDes> specDes = new List<BLL.SpecDes>();
                         specDes.Add(new SpecDes { Name = "单规格", Value = "会员费" });
-                        productSku.SpecDes = specDes.ToJsonString();
-                        productSku.Producer = "商家";
-                        productSku.CartId = "";
-                        productSku.SvcConsulterId = "";
-                        productSku.KindId1 = 0;
-                        productSku.KindId2 = 0;
-                        productSku.KindId3 = 0;
-                        productSku.IsOffSell = false;
-                        productSku.Stocks = stocks;
+                        buildSku.SpecDes = specDes.ToJsonString();
+                        buildSku.Producer = "商家";
+                        buildSku.CartId = "";
+                        buildSku.SvcConsulterId = "";
+                        buildSku.KindId1 = 0;
+                        buildSku.KindId2 = 0;
+                        buildSku.KindId3 = 0;
+                        buildSku.IsOffSell = false;
+                        buildSku.Stocks = stocks;
                     }
 
 
@@ -583,72 +583,72 @@ namespace LocalS.BLL.Biz
             LogUtil.Info("myabc.d_s_orders:" + d_s_orders.ToJsonString());
             foreach (var d_s_order in d_s_orders)
             {
-                var shopModeProductSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode && m.ShopId == d_s_order.ShopId).ToList();
+                var shopModeSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode && m.ShopId == d_s_order.ShopId).ToList();
 
-                foreach (var shopModeProductSku in _buildSkus)
+                foreach (var buildSku in _buildSkus)
                 {
-                    var productSku_Stocks = shopModeProductSku.Stocks;
+                    var sku_Stocks = buildSku.Stocks;
 
                     if (d_s_order.ShopMode == E_ShopMode.Mall)
                     {
-                        //SalePrice,OriginalPrice 以 shopModeProductSku 的 SalePrice和 OriginalPrice作为标准
+                        //SalePrice,OriginalPrice 以 shopModeSku 的 SalePrice和 OriginalPrice作为标准
                         var buildOrderChild = new BuildOrder.Child();
-                        buildOrderChild.ShopMode = productSku_Stocks[0].ShopMode;
-                        buildOrderChild.SkuId = shopModeProductSku.Id;
+                        buildOrderChild.ShopMode = sku_Stocks[0].ShopMode;
+                        buildOrderChild.SkuId = buildSku.Id;
                         buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
-                        buildOrderChild.ShopId = productSku_Stocks[0].ShopId;
-                        buildOrderChild.MachineId = productSku_Stocks[0].MachineId;
-                        buildOrderChild.CabinetId = productSku_Stocks[0].CabinetId;
-                        buildOrderChild.SlotId = productSku_Stocks[0].SlotId;
-                        buildOrderChild.Quantity = shopModeProductSku.Quantity;
-                        buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
-                        buildOrderChild.SaleAmount = shopModeProductSku.SaleAmount;
-                        buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
-                        buildOrderChild.OriginalAmount = shopModeProductSku.OriginalAmount;
-                        buildOrderChild.RentTermUnit = shopModeProductSku.RentTermUnit;
-                        buildOrderChild.RentTermValue = shopModeProductSku.RentTermValue;
-                        buildOrderChild.RentAmount = shopModeProductSku.RentAmount;
-                        buildOrderChild.DepositAmount = shopModeProductSku.DepositAmount;
-                        buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
-                        buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
-                        buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
-                        buildOrderChild.DiscountAmount = shopModeProductSku.OriginalAmount - shopModeProductSku.SaleAmount;
-                        buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
+                        buildOrderChild.ShopId = sku_Stocks[0].ShopId;
+                        buildOrderChild.MachineId = sku_Stocks[0].MachineId;
+                        buildOrderChild.CabinetId = sku_Stocks[0].CabinetId;
+                        buildOrderChild.SlotId = sku_Stocks[0].SlotId;
+                        buildOrderChild.Quantity = buildSku.Quantity;
+                        buildOrderChild.SalePrice = buildSku.SalePrice;
+                        buildOrderChild.SaleAmount = buildSku.SaleAmount;
+                        buildOrderChild.OriginalPrice = buildSku.OriginalPrice;
+                        buildOrderChild.OriginalAmount = buildSku.OriginalAmount;
+                        buildOrderChild.RentTermUnit = buildSku.RentTermUnit;
+                        buildOrderChild.RentTermValue = buildSku.RentTermValue;
+                        buildOrderChild.RentAmount = buildSku.RentAmount;
+                        buildOrderChild.DepositAmount = buildSku.DepositAmount;
+                        buildOrderChild.CouponAmountByDeposit = buildSku.CouponAmountByDeposit;
+                        buildOrderChild.CouponAmountByShop = buildSku.CouponAmountByShop;
+                        buildOrderChild.CouponAmountByRent = buildSku.CouponAmountByRent;
+                        buildOrderChild.DiscountAmount = buildSku.OriginalAmount - buildSku.SaleAmount;
+                        buildOrderChild.ChargeAmount = buildSku.SaleAmount - buildSku.CouponAmountByDeposit - buildSku.CouponAmountByShop - buildSku.CouponAmountByRent;
                         buildOrderChilds.Add(buildOrderChild);
                     }
                     else if (d_s_order.ShopMode == E_ShopMode.Machine)
                     {
-                        foreach (var item in productSku_Stocks)
+                        foreach (var item in sku_Stocks)
                         {
                             bool isFlag = false;
 
 
                             for (var i = 0; i < item.SellQuantity; i++)
                             {
-                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.SkuId == shopModeProductSku.Id && m.ShopMode == item.ShopMode).Sum(m => m.Quantity);//已订的数量
+                                int reservedQuantity = buildOrderChilds.Where(m => m.ShopId == item.ShopId && m.SkuId == buildSku.Id && m.ShopMode == item.ShopMode).Sum(m => m.Quantity);//已订的数量
                                 LogUtil.Info("myabc.reservedQuantity:" + reservedQuantity);
-                                LogUtil.Info("myabc.needReserveQuantity:" + shopModeProductSku.Quantity);
-                                int needReserveQuantity = shopModeProductSku.Quantity;//需要订的数量
+                                LogUtil.Info("myabc.needReserveQuantity:" + buildSku.Quantity);
+                                int needReserveQuantity = buildSku.Quantity;//需要订的数量
                                 if (reservedQuantity != needReserveQuantity)
                                 {
                                     var buildOrderChild = new BuildOrder.Child();
                                     buildOrderChild.ShopMode = item.ShopMode;
                                     buildOrderChild.ShopId = item.ShopId;
                                     buildOrderChild.MachineId = item.MachineId;
-                                    buildOrderChild.SkuId = shopModeProductSku.Id;
+                                    buildOrderChild.SkuId = buildSku.Id;
                                     buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                                     buildOrderChild.CabinetId = item.CabinetId;
                                     buildOrderChild.SlotId = item.SlotId;
                                     buildOrderChild.Quantity = 1;
-                                    buildOrderChild.SalePrice = shopModeProductSku.SalePrice;
-                                    buildOrderChild.SaleAmount = buildOrderChild.Quantity * shopModeProductSku.SalePrice;
-                                    buildOrderChild.OriginalPrice = shopModeProductSku.OriginalPrice;
-                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * shopModeProductSku.OriginalPrice;
-                                    buildOrderChild.CouponAmountByDeposit = shopModeProductSku.CouponAmountByDeposit;
-                                    buildOrderChild.CouponAmountByShop = shopModeProductSku.CouponAmountByShop;
-                                    buildOrderChild.CouponAmountByRent = shopModeProductSku.CouponAmountByRent;
+                                    buildOrderChild.SalePrice = buildSku.SalePrice;
+                                    buildOrderChild.SaleAmount = buildOrderChild.Quantity * buildSku.SalePrice;
+                                    buildOrderChild.OriginalPrice = buildSku.OriginalPrice;
+                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * buildSku.OriginalPrice;
+                                    buildOrderChild.CouponAmountByDeposit = buildSku.CouponAmountByDeposit;
+                                    buildOrderChild.CouponAmountByShop = buildSku.CouponAmountByShop;
+                                    buildOrderChild.CouponAmountByRent = buildSku.CouponAmountByRent;
                                     buildOrderChild.DiscountAmount = buildOrderChild.OriginalAmount - buildOrderChild.SaleAmount;
-                                    buildOrderChild.ChargeAmount = shopModeProductSku.SaleAmount - shopModeProductSku.CouponAmountByDeposit - shopModeProductSku.CouponAmountByShop - shopModeProductSku.CouponAmountByRent;
+                                    buildOrderChild.ChargeAmount = buildSku.SaleAmount - buildSku.CouponAmountByDeposit - buildSku.CouponAmountByShop - buildSku.CouponAmountByRent;
                                     buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else

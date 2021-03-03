@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RupProductSkuSearch
+    public class RupSkuSearch
     {
         public string Key { get; set; }
 

@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.Merch
 {
 
 
-    public class RopPrdProductAdd
+    public class RopProductAdd
     {
-        public RopPrdProductAdd()
+        public RopProductAdd()
         {
             this.Skus = new List<Sku>();
             this.SpecItems = new List<SpecItem>();

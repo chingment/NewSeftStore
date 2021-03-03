@@ -106,9 +106,9 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          select new { u.Id, u.SkuId, u.MerchId, u.StoreName, u.ShopMode, u.ShopName, u.SkuName, u.StoreId, u.ShopId, u.MachineId, u.CabinetId, u.SlotId, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
-            if (!string.IsNullOrEmpty(rup.ProductSkuName))
+            if (!string.IsNullOrEmpty(rup.SkuName))
             {
-                query = query.Where(m => m.SkuName.Contains(rup.ProductSkuName));
+                query = query.Where(m => m.SkuName.Contains(rup.SkuName));
             }
 
             int total = query.Count();

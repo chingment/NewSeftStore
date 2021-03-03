@@ -17,9 +17,9 @@ namespace LocalS.Service.Api.StoreApp
 
         private CartDataModel GetCartData(string clientUserId, string storeId, string shopId, E_ShopMode shopMode)
         {
-            var m_cartData = new CartDataModel();
+            var m_CartData = new CartDataModel();
 
-            var m_store = BizFactory.Store.GetOne(storeId);
+            var m_Store = BizFactory.Store.GetOne(storeId);
 
             var query = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == storeId & m.Status == E_ClientCartStatus.WaitSettle);
 
@@ -32,32 +32,32 @@ namespace LocalS.Service.Api.StoreApp
             var d_clientCarts = query.ToList();
 
             //构建购物车商品信息
-            var m_cartProductSkus = new List<CartDataModel.ProductSkuModel>();
+            var m_CartSkus = new List<CartDataModel.SkuModel>();
 
             foreach (var d_clientCart in d_clientCarts)
             {
 
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.ShopMode, d_clientCart.MerchId, d_clientCart.StoreId, d_clientCart.ShopId, null, d_clientCart.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(d_clientCart.ShopMode, d_clientCart.MerchId, d_clientCart.StoreId, d_clientCart.ShopId, null, d_clientCart.SkuId);
 
 
-                if (r_productSku != null)
+                if (r_Sku != null)
                 {
-                    if (r_productSku.Stocks.Count > 0)
+                    if (r_Sku.Stocks.Count > 0)
                     {
-                        var m_cartProductSku = new CartDataModel.ProductSkuModel();
-                        m_cartProductSku.CartId = d_clientCart.Id;
-                        m_cartProductSku.Id = d_clientCart.SkuId;
-                        m_cartProductSku.SpuId = d_clientCart.SpuId;
-                        m_cartProductSku.Name = r_productSku.Name;
-                        m_cartProductSku.MainImgUrl = r_productSku.MainImgUrl;
-                        m_cartProductSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                        m_cartProductSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
-                        m_cartProductSku.Quantity = d_clientCart.Quantity;
-                        m_cartProductSku.SumPrice = d_clientCart.Quantity * m_cartProductSku.SalePrice;
-                        m_cartProductSku.Selected = d_clientCart.Selected;
-                        m_cartProductSku.ShopMode = d_clientCart.ShopMode;
-                        m_cartProductSku.ShopId = d_clientCart.ShopId;
-                        m_cartProductSkus.Add(m_cartProductSku);
+                        var m_CartSku = new CartDataModel.SkuModel();
+                        m_CartSku.CartId = d_clientCart.Id;
+                        m_CartSku.Id = d_clientCart.SkuId;
+                        m_CartSku.SpuId = d_clientCart.SpuId;
+                        m_CartSku.Name = r_Sku.Name;
+                        m_CartSku.MainImgUrl = r_Sku.MainImgUrl;
+                        m_CartSku.SalePrice = r_Sku.Stocks[0].SalePrice;
+                        m_CartSku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
+                        m_CartSku.Quantity = d_clientCart.Quantity;
+                        m_CartSku.SumPrice = d_clientCart.Quantity * m_CartSku.SalePrice;
+                        m_CartSku.Selected = d_clientCart.Selected;
+                        m_CartSku.ShopMode = d_clientCart.ShopMode;
+                        m_CartSku.ShopId = d_clientCart.ShopId;
+                        m_CartSkus.Add(m_CartSku);
                     }
                 }
             }
@@ -69,7 +69,7 @@ namespace LocalS.Service.Api.StoreApp
             {
                 var m_carBlock = new CartDataModel.BlockModel();
                 m_carBlock.ShopMode = m_shop.ShopMode;
-                m_carBlock.ProductSkus = m_cartProductSkus.Where(m => m.ShopMode == m_shop.ShopMode && m.ShopId == m_shop.ShopId).ToList();
+                m_carBlock.Skus = m_CartSkus.Where(m => m.ShopMode == m_shop.ShopMode && m.ShopId == m_shop.ShopId).ToList();
                 switch (m_shop.ShopMode)
                 {
                     case E_ShopMode.Mall:
@@ -81,19 +81,19 @@ namespace LocalS.Service.Api.StoreApp
                         break;
                 }
 
-                if (m_carBlock.ProductSkus.Count > 0)
+                if (m_carBlock.Skus.Count > 0)
                 {
-                    m_cartData.Blocks.Add(m_carBlock);
+                    m_CartData.Blocks.Add(m_carBlock);
                 }
             }
 
-            m_cartData.Count = m_cartProductSkus.Sum(m => m.Quantity);
-            m_cartData.SumPrice = m_cartProductSkus.Sum(m => m.SumPrice);
-            m_cartData.SumPriceBySelected = m_cartProductSkus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
-            m_cartData.CountBySelected = m_cartProductSkus.Where(m => m.Selected == true).Count();
+            m_CartData.Count = m_CartSkus.Sum(m => m.Quantity);
+            m_CartData.SumPrice = m_CartSkus.Sum(m => m.SumPrice);
+            m_CartData.SumPriceBySelected = m_CartSkus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
+            m_CartData.CountBySelected = m_CartSkus.Where(m => m.Selected == true).Count();
 
 
-            return m_cartData;
+            return m_CartData;
         }
 
 
@@ -126,7 +126,7 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
-            if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+            if (rop.Skus == null || rop.Skus.Count == 0)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品为空");
             }
@@ -138,7 +138,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var store = BizFactory.Store.GetOne(rop.StoreId);
 
-                    foreach (var item in rop.ProductSkus)
+                    foreach (var item in rop.Skus)
                     {
 
                         if (item.ShopMode == E_ShopMode.Unknow)
@@ -164,15 +164,15 @@ namespace LocalS.Service.Api.StoreApp
                             case E_CartOperateType.Increase:
 
 
-                                var r_productSku = CacheServiceFactory.Product.GetSkuStock(item.ShopMode, store.MerchId, store.StoreId, item.ShopId, null, item.Id);
+                                var r_Sku = CacheServiceFactory.Product.GetSkuStock(item.ShopMode, store.MerchId, store.StoreId, item.ShopId, null, item.Id);
 
 
-                                if (r_productSku == null || r_productSku.Stocks == null || r_productSku.Stocks.Count == 0)
+                                if (r_Sku == null || r_Sku.Stocks == null || r_Sku.Stocks.Count == 0)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该商品已经售完");
                                 }
 
-                                if (r_productSku.Stocks[0].IsOffSell)
+                                if (r_Sku.Stocks[0].IsOffSell)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品已下架");
                                 }
@@ -185,7 +185,7 @@ namespace LocalS.Service.Api.StoreApp
                                     clientCart.MerchId = store.MerchId;
                                     clientCart.StoreId = rop.StoreId;
                                     clientCart.ShopId = item.ShopId;
-                                    clientCart.SpuId = r_productSku.SpuId;
+                                    clientCart.SpuId = r_Sku.SpuId;
                                     clientCart.SkuId = item.Id;
                                     clientCart.Selected = true;
                                     clientCart.CreateTime = DateTime.Now;

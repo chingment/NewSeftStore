@@ -111,7 +111,7 @@ namespace LocalS.Service.Api.StoreApp
         }
 
 
-        public void BuidProductSkus()
+        public void BuidSkus()
         {
 
         }
@@ -160,7 +160,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var c_subtotalItems = new List<RetOrderConfirm.SubtotalItemModel>();
 
-            var c_prodcutSkus = new List<BuildSku>();
+            var c_Skus = new List<BuildSku>();
 
             decimal amount_charge = 0;//实际支付总价
             decimal amount_original = 0;//原来的支付总价
@@ -178,12 +178,12 @@ namespace LocalS.Service.Api.StoreApp
             if (rop.OrderIds == null || rop.OrderIds.Count == 0)
             {
 
-                if (rop.ProductSkus == null || rop.ProductSkus.Count == 0)
+                if (rop.Skus == null || rop.Skus.Count == 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择商品");
                 }
 
-                if (rop.ProductSkus.Where(m => m.ShopMode == E_ShopMode.Unknow).Count() != 0)
+                if (rop.Skus.Where(m => m.ShopMode == E_ShopMode.Unknow).Count() != 0)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "选择商品指定的购物模式有误");
                 }
@@ -204,12 +204,12 @@ namespace LocalS.Service.Api.StoreApp
 
                 BuildOrderTool buildOrderTool = new BuildOrderTool(store.MerchId, store.StoreId, clientMemberLevel, rop.CouponIdsByShop);
 
-                foreach (var productSku in rop.ProductSkus)
+                foreach (var sku in rop.Skus)
                 {
-                    buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, productSku.ShopId, null);
+                    buildOrderTool.AddSku(sku.Id, sku.Quantity, sku.CartId, sku.ShopMode, sku.ShopMethod, E_ReceiveMode.Unknow, sku.ShopId, null);
                 }
 
-                c_prodcutSkus = buildOrderTool.BuildSkus();
+                c_Skus = buildOrderTool.BuildSkus();
 
                 if (buildOrderTool.IsSuccess)
                 {
@@ -303,27 +303,27 @@ namespace LocalS.Service.Api.StoreApp
                 selfTakeModel.BookTime.Value = string.Format("{0} {1}", selfTakeModel.BookTime.Date, selfTakeModel.BookTime.Time);
 
 
-                amount_original = c_prodcutSkus.Sum(m => m.OriginalAmount);
+                amount_original = c_Skus.Sum(m => m.OriginalAmount);
 
-                amount_sale = c_prodcutSkus.Sum(m => m.SaleAmount);
+                amount_sale = c_Skus.Sum(m => m.SaleAmount);
 
                 if (rop.ShopMethod == E_ShopMethod.Buy || rop.ShopMethod == E_ShopMethod.MemberFee)
                 {
                     if (buildOrderTool.MemberDiscountAmount == 0)
                     {
-                        ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
+                        ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_Skus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
                         amount_couponByShop = ret.CouponByShop.CouponAmount;
                     }
                     else
                     {
                         if (rop.CouponIdsByShop == null)
                         {
-                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, new List<string> { "" });
+                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_Skus, store.MerchId, store.StoreId, clientUserId, new List<string> { "" });
                             amount_couponByShop = ret.CouponByShop.CouponAmount;
                         }
                         else
                         {
-                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
+                            ret.CouponByShop = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.ShopVoucher, E_Coupon_FaceType.ShopDiscount }, c_Skus, store.MerchId, store.StoreId, clientUserId, rop.CouponIdsByShop);
                             amount_couponByShop = ret.CouponByShop.CouponAmount;
                         }
                     }
@@ -338,7 +338,7 @@ namespace LocalS.Service.Api.StoreApp
                         couponIdsByRent.Add(rop.CouponIdByRent);
                     }
 
-                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
+                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_Skus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
 
                     amount_couponByRent = ret.CouponByRent.CouponAmount;
 
@@ -347,7 +347,7 @@ namespace LocalS.Service.Api.StoreApp
                     {
                         couponIdsByDeposit.Add(rop.CouponIdByDeposit);
                     }
-                    ret.CouponByDeposit = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.DepositVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByDeposit);
+                    ret.CouponByDeposit = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.DepositVoucher }, c_Skus, store.MerchId, store.StoreId, clientUserId, couponIdsByDeposit);
 
                     amount_couponByDeposit = ret.CouponByDeposit.CouponAmount;
 
@@ -363,7 +363,7 @@ namespace LocalS.Service.Api.StoreApp
                         couponIdsByRent.Add(rop.CouponIdByRent);
                     }
 
-                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_prodcutSkus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
+                    ret.CouponByRent = StoreAppServiceFactory.Coupon.GetCanUseCount(rop.ShopMethod, new E_Coupon_FaceType[] { E_Coupon_FaceType.RentVoucher }, c_Skus, store.MerchId, store.StoreId, clientUserId, couponIdsByRent);
 
                     amount_couponByRent = ret.CouponByRent.CouponAmount;
 
@@ -392,38 +392,38 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.SkuId);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.SkuId);
 
-                    var c_prodcutSku = new BuildSku();
-                    c_prodcutSku.Id = orderSub.SkuId;
-                    c_prodcutSku.Name = orderSub.SkuName;
-                    c_prodcutSku.MainImgUrl = orderSub.SkuMainImgUrl;
-                    c_prodcutSku.Quantity = orderSub.Quantity;
-                    c_prodcutSku.SalePrice = orderSub.SalePrice;
-                    c_prodcutSku.OriginalPrice = orderSub.OriginalPrice;
-                    c_prodcutSku.SaleAmount = orderSub.SaleAmount;
-                    c_prodcutSku.OriginalAmount = orderSub.OriginalAmount;
-                    c_prodcutSku.ShopMethod = orderSub.ShopMethod;
-                    c_prodcutSku.ShopMode = orderSub.ShopMode;
-                    c_prodcutSku.SupReceiveMode = r_productSku.SupReceiveMode;
-                    c_prodcutSku.ReceiveMode = orderSub.ReceiveMode;
-                    c_prodcutSku.RentTermUnitText = "月";
-                    c_prodcutSku.RentTermUnit = orderSub.RentTermUnit;
-                    c_prodcutSku.RentTermValue = orderSub.RentTermValue;
-                    c_prodcutSku.RentAmount = orderSub.RentAmount;
-                    c_prodcutSku.DepositAmount = orderSub.DepositAmount;
-                    c_prodcutSku.KindId3 = orderSub.SkuKindId3;
-                    c_prodcutSku.ShopId = orderSub.ShopId;
-                    c_prodcutSku.MachineIds = new string[] { orderSub.MachineId };
+                    var c_Sku = new BuildSku();
+                    c_Sku.Id = orderSub.SkuId;
+                    c_Sku.Name = orderSub.SkuName;
+                    c_Sku.MainImgUrl = orderSub.SkuMainImgUrl;
+                    c_Sku.Quantity = orderSub.Quantity;
+                    c_Sku.SalePrice = orderSub.SalePrice;
+                    c_Sku.OriginalPrice = orderSub.OriginalPrice;
+                    c_Sku.SaleAmount = orderSub.SaleAmount;
+                    c_Sku.OriginalAmount = orderSub.OriginalAmount;
+                    c_Sku.ShopMethod = orderSub.ShopMethod;
+                    c_Sku.ShopMode = orderSub.ShopMode;
+                    c_Sku.SupReceiveMode = r_Sku.SupReceiveMode;
+                    c_Sku.ReceiveMode = orderSub.ReceiveMode;
+                    c_Sku.RentTermUnitText = "月";
+                    c_Sku.RentTermUnit = orderSub.RentTermUnit;
+                    c_Sku.RentTermValue = orderSub.RentTermValue;
+                    c_Sku.RentAmount = orderSub.RentAmount;
+                    c_Sku.DepositAmount = orderSub.DepositAmount;
+                    c_Sku.KindId3 = orderSub.SkuKindId3;
+                    c_Sku.ShopId = orderSub.ShopId;
+                    c_Sku.MachineIds = new string[] { orderSub.MachineId };
                     if (orderSub.ShopMethod == E_ShopMethod.MemberFee)
                     {
-                        c_prodcutSku.IsOffSell = false;
+                        c_Sku.IsOffSell = false;
                     }
                     else
                     {
-                        c_prodcutSku.IsOffSell = r_productSku.IsOffSell;
+                        c_Sku.IsOffSell = c_Sku.IsOffSell;
                     }
-                    c_prodcutSkus.Add(c_prodcutSku);
+                    c_Skus.Add(c_Sku);
                 }
 
                 var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
@@ -561,7 +561,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var orderBlock = new List<RetOrderConfirm.BlockModel>();
 
-            var skus_Mall = c_prodcutSkus.Where(m => m.ShopMode == E_ShopMode.Mall).ToList();
+            var skus_Mall = c_Skus.Where(m => m.ShopMode == E_ShopMode.Mall).ToList();
 
             if (skus_Mall.Count > 0)
             {
@@ -657,7 +657,7 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            var skus_SelfTakeByMachines = (from u in c_prodcutSkus where u.ShopMode == E_ShopMode.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
+            var skus_SelfTakeByMachines = (from u in c_Skus where u.ShopMode == E_ShopMode.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
 
             if (skus_SelfTakeByMachines.Count > 0)
             {
@@ -665,7 +665,7 @@ namespace LocalS.Service.Api.StoreApp
                 {
                     var shop = CurrentDb.Shop.Where(m => m.Id == skus_SelfTakeByMachine.ShopId).FirstOrDefault();
 
-                    var l_skus = c_prodcutSkus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_ShopMode.Machine).ToList();
+                    var l_skus = c_Skus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_ShopMode.Machine).ToList();
 
                     var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
                     ob_SelfTakeByMachine.TagName = "线下机器";

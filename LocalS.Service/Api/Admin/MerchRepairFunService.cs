@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class MerchRepairFunService: BaseService
     {
-        public CustomJsonResult ReLoadProductCache(string operater)
+        public CustomJsonResult ReLoadSpuCache(string operater)
         {
             var result = new CustomJsonResult();
 

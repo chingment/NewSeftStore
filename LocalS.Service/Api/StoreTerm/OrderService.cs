@@ -70,9 +70,9 @@ namespace LocalS.Service.Api.StoreTerm
             block.SelfTake.Mark.AreaCode = shop.AreaCode;
             block.SelfTake.Mark.AreaName = shop.AreaName;
 
-            foreach (var productSku in rop.ProductSkus)
+            foreach (var sku in rop.Skus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.ProductSkuModel() { Id = productSku.SkuId, Quantity = productSku.Quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = productSku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.SkuModel() { Id = sku.SkuId, Quantity = sku.Quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = sku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.StoreTerm
                 if (ret_Biz.Data.PayStatus == E_PayStatus.PaySuccess)
                 {
                     ret.Data.OrderId = ret_Biz.Data.OrderIds[0];
-                    ret.Data.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(ret_Biz.Data.OrderIds[0], rup.MachineId);
+                    ret.Data.Skus = BizFactory.Order.GetOrderSkuByPickup(ret_Biz.Data.OrderIds[0], rup.MachineId);
                 }
             }
 
@@ -177,7 +177,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.OrderId = order.Id;
 
 
-            ret.ProductSkus = BizFactory.Order.GetOrderProductSkuByPickup(order.Id, rup.MachineId);
+            ret.Skus = BizFactory.Order.GetOrderSkuByPickup(order.Id, rup.MachineId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;

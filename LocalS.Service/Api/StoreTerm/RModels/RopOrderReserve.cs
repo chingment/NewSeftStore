@@ -13,12 +13,13 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RopOrderReserve()
         {
-            this.ProductSkus = new List<ProductSku>();
+            this.Skus = new List<SkuModel>();
         }
 
         public string MachineId { get; set; }
-        public List<ProductSku> ProductSkus { get; set; }
-        public class ProductSku
+        public List<SkuModel> Skus { get; set; }
+
+        public class SkuModel
         {
             public string SkuId { get; set; }
             public int Quantity { get; set; }

@@ -36,13 +36,13 @@ namespace LocalS.BLL.Biz
             {
                 this.Delivery = new DeliveryModel();
                 this.SelfTake = new SelfTakeModel();
-                this.Skus = new List<ProductSkuModel>();
+                this.Skus = new List<SkuModel>();
 
             }
             public E_ReceiveMode ReceiveMode { get; set; }
             public DeliveryModel Delivery { get; set; }
             public SelfTakeModel SelfTake { get; set; }
-            public List<ProductSkuModel> Skus { get; set; }
+            public List<SkuModel> Skus { get; set; }
             public class DeliveryModel
             {
                 public DeliveryModel()
@@ -65,7 +65,7 @@ namespace LocalS.BLL.Biz
                 public BookTimeModel BookTime { get; set; }
             }
 
-            public class ProductSkuModel
+            public class SkuModel
             {
                 public string CartId { get; set; }
                 public string Id { get; set; }

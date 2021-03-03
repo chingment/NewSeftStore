@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductSkuService : BaseService
     {
-        public PageEntity<ProductSkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
+        public PageEntity<SkuModel> GetPageList(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
         {
-            var pageEntiy = new PageEntity<ProductSkuModel>();
+            var pageEntiy = new PageEntity<SkuModel>();
 
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
@@ -43,30 +43,30 @@ m.ShopMode == Entity.E_ShopMode.Machine)
 
             foreach (var item in list)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.SkuId);
 
-                var m_productSku = new ProductSkuModel();
-                m_productSku.SkuId = r_productSku.Id;
-                m_productSku.SpuId = r_productSku.SpuId;
-                m_productSku.Name = r_productSku.Name;
-                m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
-                m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;
-                m_productSku.DetailsDes = r_productSku.DetailsDes;
-                m_productSku.BriefDes = r_productSku.BriefDes;
-                m_productSku.SpecDes = SpecDes.GetDescribe(r_productSku.SpecDes);
-                m_productSku.IsTrgVideoService = r_productSku.IsTrgVideoService;
-                m_productSku.CharTags = r_productSku.CharTags;
+                var m_Sku = new SkuModel();
+                m_Sku.SkuId = r_Sku.Id;
+                m_Sku.SpuId = r_Sku.SpuId;
+                m_Sku.Name = r_Sku.Name;
+                m_Sku.MainImgUrl = ImgSet.Convert_B(r_Sku.MainImgUrl);
+                m_Sku.DisplayImgUrls = r_Sku.DisplayImgUrls;
+                m_Sku.DetailsDes = r_Sku.DetailsDes;
+                m_Sku.BriefDes = r_Sku.BriefDes;
+                m_Sku.SpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
+                m_Sku.IsTrgVideoService = r_Sku.IsTrgVideoService;
+                m_Sku.CharTags = r_Sku.CharTags;
 
-                if (r_productSku.Stocks.Count > 0)
+                if (r_Sku.Stocks.Count > 0)
                 {
-                    m_productSku.IsShowPrice = false;
-                    m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                    m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
-                    m_productSku.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                    m_Sku.IsShowPrice = false;
+                    m_Sku.SalePrice = r_Sku.Stocks[0].SalePrice;
+                    m_Sku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
+                    m_Sku.SellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
                 }
 
 
-                pageEntiy.Items.Add(m_productSku);
+                pageEntiy.Items.Add(m_Sku);
 
             }
 
@@ -74,11 +74,11 @@ m.ShopMode == Entity.E_ShopMode.Machine)
 
         }
 
-        public CustomJsonResult Search(RupProductSkuSearch rup)
+        public CustomJsonResult Search(RupSkuSearch rup)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetProductSkuSearch();
+            var ret = new RetSkuSearch();
 
             var machine = BizFactory.Machine.GetOne(rup.MachineId);
 

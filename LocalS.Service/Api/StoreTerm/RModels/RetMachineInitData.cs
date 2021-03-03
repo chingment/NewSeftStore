@@ -15,12 +15,12 @@ namespace LocalS.Service.Api.StoreTerm
         {
             this.Machine = new MachineModel();
             this.Ads = new Dictionary<string, AdModel>();
-            this.ProductSkus = new Dictionary<string, ProductSkuModel>();
-            this.ProductKinds = new List<ProductKindModel>();
+            this.Skus = new Dictionary<string, SkuModel>();
+            this.Kinds = new List<KindModel>();
         }
         public MachineModel Machine { get; set; }
-        public Dictionary<string, ProductSkuModel> ProductSkus { get; set; }
-        public List<ProductKindModel> ProductKinds { get; set; }
+        public Dictionary<string, SkuModel> Skus { get; set; }
+        public List<KindModel> Kinds { get; set; }
         public Dictionary<string, AdModel> Ads { get; set; }
     }
 }

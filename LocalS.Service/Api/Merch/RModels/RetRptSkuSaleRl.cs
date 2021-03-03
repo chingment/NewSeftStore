@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetRptProductSkuSaleRl
+    public class RetRptSkuSaleRl
     {
-        public RetRptProductSkuSaleRl()
+        public RetRptSkuSaleRl()
         {
-            this.ProductSkus = new List<object>();
+            this.Skus = new List<object>();
         }
 
-        public List<object> ProductSkus { get; set; }
+        public List<object> Skus { get; set; }
     }
 }

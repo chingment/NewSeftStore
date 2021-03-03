@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public string OrderId { get; set; }
         public E_OrderStatus Status { get; set; }
-        public List<OrderProductSkuByPickupModel> ProductSkus { get; set; }
+        public List<OrderSkuByPickupModel> Skus { get; set; }
 
     }
 }

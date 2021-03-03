@@ -11,10 +11,10 @@ namespace LocalS.Service.Api.StoreApp
     {
         public string StoreId { get; set; }
         public E_CartOperateType Operate { get; set; }
-        public List<ProductSkuModel> ProductSkus { get; set; }
+        public List<SkuModel> Skus { get; set; }
         public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
-        public class ProductSkuModel
+        public class SkuModel
         {
             public string Id { get; set; }
             public int Quantity { get; set; }

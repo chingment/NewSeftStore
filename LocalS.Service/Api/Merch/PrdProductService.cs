@@ -153,7 +153,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();
-            var ret = new RetPrdProductInitAdd();
+            var ret = new RetProductInitAdd();
 
             ret.Kinds = GetKindTree();
 
@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
             return name;
         }
 
-        public CustomJsonResult Add(string operater, string merchId, RopPrdProductAdd rop)
+        public CustomJsonResult Add(string operater, string merchId, RopProductAdd rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -292,7 +292,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult InitEdit(string operater, string merchId, string spuId)
         {
-            var ret = new RetPrdProductInitEdit();
+            var ret = new RetProductInitEdit();
             var d_Spu = CurrentDb.PrdProduct.Where(m => m.MerchId == merchId && m.Id == spuId).FirstOrDefault();
             if (d_Spu != null)
             {
@@ -324,7 +324,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var d_Sku in d_Skus)
                 {
-                    ret.Skus.Add(new RetPrdProductInitEdit.Sku { Id = d_Sku.Id, SalePrice = d_Sku.SalePrice, BarCode = d_Sku.BarCode, CumCode = d_Sku.CumCode, IsOffSell = false, SpecDes = d_Sku.SpecDes.ToJsonObject<List<object>>() });
+                    ret.Skus.Add(new RetProductInitEdit.Sku { Id = d_Sku.Id, SalePrice = d_Sku.SalePrice, BarCode = d_Sku.BarCode, CumCode = d_Sku.CumCode, IsOffSell = false, SpecDes = d_Sku.SpecDes.ToJsonObject<List<object>>() });
                 }
 
             }
@@ -332,7 +332,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult Edit(string operater, string merchId, RopPrdProductEdit rop)
+        public CustomJsonResult Edit(string operater, string merchId, RopProductEdit rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -470,7 +470,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
                 var store = BizFactory.Store.GetOne(item.StoreId);
                 olist.Add(new
                 {
@@ -478,9 +478,9 @@ namespace LocalS.Service.Api.Merch
                     StoreName = store.Name,
                     SpuId = item.SpuId,
                     SkuId = item.SkuId,
-                    SkuCumCode = productSku.CumCode,
-                    SkuName = productSku.Name,
-                    SkuMainImgUrl = productSku.MainImgUrl,
+                    SkuCumCode = r_Sku.CumCode,
+                    SkuName = r_Sku.Name,
+                    SkuMainImgUrl = r_Sku.MainImgUrl,
                     SkuIsOffSell = item.IsOffSell,
                     SkuSalePrice = item.SalePrice
                 });
@@ -492,7 +492,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
         }
 
-        public CustomJsonResult EditSalePriceOnStore(string operater, string merchId, RopPrdProductEditSalePriceOnStore rop)
+        public CustomJsonResult EditSalePriceOnStore(string operater, string merchId, RopProductEditSalePriceOnStore rop)
         {
             return BizFactory.ProductSku.AdjustStockSalePrice(operater, merchId, rop.StoreId, rop.SkuId, rop.SkuSalePrice, rop.SkuIsOffSell);
         }
@@ -506,9 +506,9 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult SearchSku(string operater, string merchId, string key)
         {
-            var productSkus = CacheServiceFactory.Product.SearchSku(merchId, "All", key);
+            var r_Skus = CacheServiceFactory.Product.SearchSku(merchId, "All", key);
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", productSkus);
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", r_Skus);
         }
 
         public CustomJsonResult GetSpecs(string operater, string merchId, string spuId)

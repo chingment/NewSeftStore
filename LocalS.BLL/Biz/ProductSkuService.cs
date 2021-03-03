@@ -81,7 +81,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region MachineCabinetSlotSave
                     SellChannelStock d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
-                    var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
                     if (d_SellChannelStock == null)
                     {
                         d_SellChannelStock = new SellChannelStock();
@@ -93,7 +93,7 @@ namespace LocalS.BLL.Biz
                         d_SellChannelStock.MachineId = machineId;
                         d_SellChannelStock.CabinetId = cabinetId;
                         d_SellChannelStock.SlotId = slotId;
-                        d_SellChannelStock.SpuId = r_ProductSku.SpuId;
+                        d_SellChannelStock.SpuId = r_Sku.SpuId;
                         d_SellChannelStock.SkuId = skuId;
                         d_SellChannelStock.WaitPayLockQuantity = 0;
                         d_SellChannelStock.WaitPickupLockQuantity = 0;
@@ -102,7 +102,7 @@ namespace LocalS.BLL.Biz
                         d_SellChannelStock.WarnQuantity = 0;
                         d_SellChannelStock.HoldQuantity = 0;
                         d_SellChannelStock.IsOffSell = false;
-                        d_SellChannelStock.SalePrice = r_ProductSku.SalePrice;
+                        d_SellChannelStock.SalePrice = r_Sku.SalePrice;
                         d_SellChannelStock.Version = 0;
                         d_SellChannelStock.MaxQuantity = maxQuantity.Value;
                         d_SellChannelStock.CreateTime = DateTime.Now;
@@ -162,9 +162,9 @@ namespace LocalS.BLL.Biz
 
                             ret.ChangeRecords.Add(record_1);
 
-                            d_SellChannelStock.SpuId = r_ProductSku.SpuId;
+                            d_SellChannelStock.SpuId = r_Sku.SpuId;
                             d_SellChannelStock.SkuId = skuId;
-                            d_SellChannelStock.SalePrice = r_ProductSku.SalePrice;
+                            d_SellChannelStock.SalePrice = r_Sku.SalePrice;
                         }
 
                         d_SellChannelStock.IsOffSell = false;
@@ -202,11 +202,11 @@ namespace LocalS.BLL.Biz
                     ret.StockId = d_SellChannelStock.Id;
                     ret.CabinetId = cabinetId;
                     ret.SlotId = slotId;
-                    ret.SkuId = r_ProductSku.Id;
-                    ret.SkuName = r_ProductSku.Name;
-                    ret.SkuCumCode = r_ProductSku.CumCode;
-                    ret.SkuMainImgUrl = ImgSet.Convert_S(r_ProductSku.MainImgUrl);
-                    ret.SkuSpecDes = SpecDes.GetDescribe(r_ProductSku.SpecDes);
+                    ret.SkuId = r_Sku.Id;
+                    ret.SkuName = r_Sku.Name;
+                    ret.SkuCumCode = r_Sku.CumCode;
+                    ret.SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl);
+                    ret.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
                     ret.SumQuantity = d_SellChannelStock.SumQuantity;
                     ret.LockQuantity = d_SellChannelStock.WaitPayLockQuantity + d_SellChannelStock.WaitPickupLockQuantity;
                     ret.SellQuantity = d_SellChannelStock.SellQuantity;
@@ -238,7 +238,7 @@ namespace LocalS.BLL.Biz
             SellChannelStock sellChannelStock = null;
             using (TransactionScope ts = new TransactionScope())
             {
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
                 switch (operateEvent)
                 {
                     case EventCode.OrderReserveSuccess:
@@ -451,7 +451,7 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
                 var sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId && m.SkuId == skuId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
                 if (sellChannelStock == null)
                 {
@@ -502,11 +502,11 @@ namespace LocalS.BLL.Biz
                     StockId = sellChannelStock.Id,
                     CabinetId = cabinetId,
                     SlotId = slotId,
-                    SkuId = r_ProductSku.Id,
-                    SkuCumCode = r_ProductSku.CumCode,
-                    SkuName = r_ProductSku.Name,
-                    SkuMainImgUrl = ImgSet.Convert_S(r_ProductSku.MainImgUrl),
-                    SkuSpecDes = SpecDes.GetDescribe(r_ProductSku.SpecDes),
+                    SkuId = r_Sku.Id,
+                    SkuCumCode = r_Sku.CumCode,
+                    SkuName = r_Sku.Name,
+                    SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl),
+                    SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
                     SumQuantity = sellChannelStock.SumQuantity,
                     LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity,
                     SellQuantity = sellChannelStock.SellQuantity,
@@ -529,9 +529,9 @@ namespace LocalS.BLL.Biz
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
 
-                CacheServiceFactory.Product.RemoveSpuInfo(merchId, r_ProductSku.SpuId);
+                CacheServiceFactory.Product.RemoveSpuInfo(merchId, r_Sku.SpuId);
 
                 var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SkuId == skuId).ToList();
 

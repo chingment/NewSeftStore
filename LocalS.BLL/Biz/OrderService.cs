@@ -439,9 +439,9 @@ namespace LocalS.BLL.Biz
 
                     foreach (var block in rop.Blocks)
                     {
-                        foreach (var productSku in block.Skus)
+                        foreach (var sku in block.Skus)
                         {
-                            buildOrderTool.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, rop.ShopMethod, block.ReceiveMode, productSku.ShopId, productSku.MachineIds);
+                            buildOrderTool.AddSku(sku.Id, sku.Quantity, sku.CartId, sku.ShopMode, rop.ShopMethod, block.ReceiveMode, sku.ShopId, sku.MachineIds);
                         }
                     }
 
@@ -572,7 +572,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                     }
-                    LogUtil.Info("rop.bizProductSkus:" + buildOrderSkus.ToJsonString());
+                    LogUtil.Info("rop.bizSkus:" + buildOrderSkus.ToJsonString());
                     var buildOrders = buildOrderTool.BuildOrders();
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
 
@@ -802,7 +802,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var buildOrderSub in buildOrder.Childs)
                         {
-                            var productSku = buildOrderSkus.Where(m => m.Id == buildOrderSub.SkuId).FirstOrDefault();
+                            var sku = buildOrderSkus.Where(m => m.Id == buildOrderSub.SkuId).FirstOrDefault();
 
                             var d_OrderSub = new OrderSub();
                             d_OrderSub.Id = d_Order.Id + buildOrder.Childs.IndexOf(buildOrderSub).ToString();
@@ -822,16 +822,16 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.SlotId = buildOrderSub.SlotId;
                             d_OrderSub.OrderId = d_Order.Id;
                             d_OrderSub.SkuId = buildOrderSub.SkuId;
-                            d_OrderSub.SpuId = productSku.SpuId;
-                            d_OrderSub.SkuName = productSku.Name;
-                            d_OrderSub.SkuMainImgUrl = productSku.MainImgUrl;
-                            d_OrderSub.SkuSpecDes = productSku.SpecDes;
-                            d_OrderSub.SkuProducer = productSku.Producer;
-                            d_OrderSub.SkuBarCode = productSku.BarCode;
-                            d_OrderSub.SkuCumCode = productSku.CumCode;
-                            d_OrderSub.SkuKindId1 = productSku.KindId1;
-                            d_OrderSub.SkuKindId2 = productSku.KindId2;
-                            d_OrderSub.SkuKindId3 = productSku.KindId3;
+                            d_OrderSub.SpuId = sku.SpuId;
+                            d_OrderSub.SkuName = sku.Name;
+                            d_OrderSub.SkuMainImgUrl = sku.MainImgUrl;
+                            d_OrderSub.SkuSpecDes = sku.SpecDes;
+                            d_OrderSub.SkuProducer = sku.Producer;
+                            d_OrderSub.SkuBarCode = sku.BarCode;
+                            d_OrderSub.SkuCumCode = sku.CumCode;
+                            d_OrderSub.SkuKindId1 = sku.KindId1;
+                            d_OrderSub.SkuKindId2 = sku.KindId2;
+                            d_OrderSub.SkuKindId3 = sku.KindId3;
                             d_OrderSub.Quantity = buildOrderSub.Quantity;
                             d_OrderSub.SalePrice = buildOrderSub.SalePrice;
                             d_OrderSub.OriginalPrice = buildOrderSub.OriginalPrice;
@@ -848,7 +848,7 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.CouponAmountByRent = buildOrderSub.CouponAmountByRent;
                             d_OrderSub.PayStatus = E_PayStatus.WaitPay;
                             d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPay;
-                            d_OrderSub.SvcConsulterId = productSku.SvcConsulterId;
+                            d_OrderSub.SvcConsulterId = sku.SvcConsulterId;
                             d_OrderSub.SaleOutletId = d_Order.SaleOutletId;
                             d_OrderSub.IsTestMode = d_Order.IsTestMode;
                             d_OrderSub.Creator = d_Order.Creator;
@@ -2102,9 +2102,9 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public List<OrderProductSkuByPickupModel> GetOrderProductSkuByPickup(string orderId, string machineId)
+        public List<OrderSkuByPickupModel> GetOrderSkuByPickup(string orderId, string machineId)
         {
-            var models = new List<OrderProductSkuByPickupModel>();
+            var models = new List<OrderSkuByPickupModel>();
 
             var order = CurrentDb.Order.Where(m => m.Id == orderId && m.MachineId == machineId).FirstOrDefault();
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.MachineId == machineId).ToList();
@@ -2120,7 +2120,7 @@ namespace LocalS.BLL.Biz
             {
                 var orderSubs_Sku = orderSubs.Where(m => m.SkuId == skuId).ToList();
 
-                var model = new OrderProductSkuByPickupModel();
+                var model = new OrderSkuByPickupModel();
                 model.SkuId = skuId;
                 model.Name = orderSubs_Sku[0].SkuName;
                 model.MainImgUrl = orderSubs_Sku[0].SkuMainImgUrl;
@@ -2129,7 +2129,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var orderSubs_SkuSlot in orderSubs_Sku)
                 {
-                    var slot = new OrderProductSkuByPickupModel.Slot();
+                    var slot = new OrderSkuByPickupModel.Slot();
                     slot.UniqueId = orderSubs_SkuSlot.Id;
                     slot.CabinetId = orderSubs_SkuSlot.CabinetId;
                     slot.SlotId = orderSubs_SkuSlot.SlotId;

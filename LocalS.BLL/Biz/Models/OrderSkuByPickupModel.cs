@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class OrderProductSkuByPickupModel
+    public class OrderSkuByPickupModel
     {
-        public OrderProductSkuByPickupModel()
+        public OrderSkuByPickupModel()
         {
             this.Slots = new List<Slot>();
         }

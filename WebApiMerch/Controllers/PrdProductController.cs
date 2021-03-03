@@ -26,7 +26,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Add([FromBody]RopPrdProductAdd rop)
+        public OwnApiHttpResponse Add([FromBody]RopProductAdd rop)
         {
             IResult result = MerchServiceFactory.PrdProduct.Add(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
@@ -40,7 +40,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Edit([FromBody]RopPrdProductEdit rop)
+        public OwnApiHttpResponse Edit([FromBody]RopProductEdit rop)
         {
             IResult result = MerchServiceFactory.PrdProduct.Edit(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
@@ -55,7 +55,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse EditSalePriceOnStore([FromBody]RopPrdProductEditSalePriceOnStore rop)
+        public OwnApiHttpResponse EditSalePriceOnStore([FromBody]RopProductEditSalePriceOnStore rop)
         {
             IResult result = MerchServiceFactory.PrdProduct.EditSalePriceOnStore(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);

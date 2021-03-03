@@ -13,13 +13,13 @@ namespace LocalS.Service.Api.StoreApp
         public List<string> OrderIds { get; set; }
         public string POrderId { get; set; }
         public string StoreId { get; set; }
-        public List<ProductSkuModel> ProductSkus { get; set; }
+        public List<SkuModel> Skus { get; set; }
         public E_AppCaller Caller { get; set; }
         public List<string> CouponIdsByShop { get; set; }
         public string CouponIdByRent { get; set; }
         public string CouponIdByDeposit { get; set; }
         public E_ShopMethod ShopMethod { get; set; }
-        public class ProductSkuModel
+        public class SkuModel
         {
             public string Id { get; set; }
             public string CartId { get; set; }

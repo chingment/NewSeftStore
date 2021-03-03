@@ -54,9 +54,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetProductSkuSaleRl()
+        public OwnApiHttpResponse GetSkuSaleRl()
         {
-            IResult result = MerchServiceFactory.Home.GetProductSkuSaleRl(this.CurrentUserId, this.CurrentMerchId);
+            IResult result = MerchServiceFactory.Home.GetSkuSaleRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }

@@ -181,18 +181,18 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetProductSkuSaleRl(string operater, string merchId)
+        public CustomJsonResult GetSkuSaleRl(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
-            var retRptProductSkuSaleRl = new RetRptProductSkuSaleRl();
+            var ret_RptSkuSaleRl = new RetRptSkuSaleRl();
 
-            StringBuilder sql = new StringBuilder("  select top 10 skuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by PrdProductSkuName order by sumQuantity desc ");
+            StringBuilder sql = new StringBuilder("  select top 10 skuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by SkuName order by sumQuantity desc ");
 
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
             {
-                var rptProductSkuSaleRlModel = new
+                var rptSkuSaleRlModel = new
                 {
 
                     Name = dtData.Rows[r]["skuName"].ToString(),
@@ -200,11 +200,11 @@ namespace LocalS.Service.Api.Merch
                     SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
                 };
 
-                retRptProductSkuSaleRl.ProductSkus.Add(rptProductSkuSaleRlModel);
+                ret_RptSkuSaleRl.Skus.Add(rptSkuSaleRlModel);
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", retRptProductSkuSaleRl);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret_RptSkuSaleRl);
 
 
             return result;

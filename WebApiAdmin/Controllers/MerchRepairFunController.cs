@@ -12,9 +12,9 @@ namespace WebApiAdmin.Controllers
     public class MerchRepairFunController : OwnApiBaseController
     {
         [HttpPost]
-        public OwnApiHttpResponse ReLoadProductSkuCache()
+        public OwnApiHttpResponse ReLoadSpuCache()
         {
-            IResult result = AdminServiceFactory.MerchRepairFun.ReLoadProductCache(this.CurrentUserId);
+            IResult result = AdminServiceFactory.MerchRepairFun.ReLoadSpuCache(this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
     }

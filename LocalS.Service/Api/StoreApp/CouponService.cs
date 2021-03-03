@@ -74,13 +74,13 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var skuId in skuIds)
                 {
-                    var r_productSku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
 
-                    if (r_productSku != null)
+                    if (r_Sku != null)
                     {
                         foreach (var prodcut1 in prodcuts1)
                         {
-                            if (prodcut1["id"].ToString() == r_productSku.SpuId)
+                            if (prodcut1["id"].ToString() == r_Sku.SpuId)
                                 return true;
                         }
                     }
@@ -89,7 +89,7 @@ namespace LocalS.Service.Api.StoreApp
 
             return false;
         }
-        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<BuildSku> productSkus)
+        public bool GetCanSelected(E_ShopMethod shopMethod, E_Coupon_UseAreaType useAreaType, string useAreaValue, E_Coupon_FaceType faceType, decimal faceValue, decimal atLeastAmount, E_ClientCouponStatus couponStatus, DateTime validTimeStart, DateTime validTimeEnd, string merchId, string storeId, string clientUserId, List<BuildSku> skus)
         {
 
             if (shopMethod == E_ShopMethod.Unknow)
@@ -98,7 +98,7 @@ namespace LocalS.Service.Api.StoreApp
                 return false;
             if (faceType == E_Coupon_FaceType.Unknow)
                 return false;
-            if (productSkus == null || productSkus.Count == 0)
+            if (skus == null || skus.Count == 0)
                 return false;
             if (couponStatus == E_ClientCouponStatus.Unknow)
                 return false;
@@ -119,34 +119,34 @@ namespace LocalS.Service.Api.StoreApp
             {
                 if (faceType == E_Coupon_FaceType.ShopVoucher || faceType == E_Coupon_FaceType.ShopDiscount)
                 {
-                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, skus);
                 }
             }
             else if (shopMethod == E_ShopMethod.Rent)
             {
                 if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
                 {
-                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, skus);
                 }
             }
             else if (shopMethod == E_ShopMethod.RentFee)
             {
                 if (faceType == E_Coupon_FaceType.DepositVoucher || faceType == E_Coupon_FaceType.RentVoucher)
                 {
-                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, productSkus);
+                    return GetCanSelected(useAreaType, useAreaValue, faceType, faceValue, atLeastAmount, merchId, storeId, clientUserId, skus);
                 }
             }
 
             return false;
         }
-        public RetOrderConfirm.CouponModel GetCanUseCount(E_ShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> productSkus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
+        public RetOrderConfirm.CouponModel GetCanUseCount(E_ShopMethod shopMethod, E_Coupon_FaceType[] faceTypes, List<BuildSku> skus, string merchId, string storeId, string clientUserId, List<string> selectCouponIds)
         {
             var model = new RetOrderConfirm.CouponModel();
 
             RopCouponMy rup = new RopCouponMy();
             rup.StoreId = storeId;
             rup.ShopMethod = shopMethod;
-            rup.ProductSkus = productSkus;
+            rup.Skus = skus;
             rup.FaceTypes = faceTypes;
 
             rup.SelectCouponIds = selectCouponIds;
@@ -379,13 +379,13 @@ namespace LocalS.Service.Api.StoreApp
             {
                 BuildOrderTool buildOrderService = new BuildOrderTool(store.MerchId, store.StoreId, memberLevel, selectCouponIds);
 
-                foreach (var productSku in rop.ProductSkus)
+                foreach (var sku in rop.Skus)
                 {
-                    buildOrderService.AddSku(productSku.Id, productSku.Quantity, productSku.CartId, productSku.ShopMode, productSku.ShopMethod, E_ReceiveMode.Unknow, productSku.ShopId, null);
+                    buildOrderService.AddSku(sku.Id, sku.Quantity, sku.CartId, sku.ShopMode, sku.ShopMethod, E_ReceiveMode.Unknow, sku.ShopId, null);
                 }
 
 
-                rop.ProductSkus = buildOrderService.BuildSkus();
+                rop.Skus = buildOrderService.BuildSkus();
             }
 
             foreach (var item in list)
@@ -403,11 +403,11 @@ namespace LocalS.Service.Api.StoreApp
                 decimal cal_sum_amount = 0;
                 if (item.UseAreaType == E_Coupon_UseAreaType.All)
                 {
-                    cal_sum_amount = rop.ProductSkus.Sum(m => m.SaleAmount);
+                    cal_sum_amount = rop.Skus.Sum(m => m.SaleAmount);
                 }
                 else if (item.UseAreaType == E_Coupon_UseAreaType.Store)
                 {
-                    cal_sum_amount = rop.ProductSkus.Sum(m => m.SaleAmount);
+                    cal_sum_amount = rop.Skus.Sum(m => m.SaleAmount);
                 }
                 else if (item.UseAreaType == E_Coupon_UseAreaType.ProductKind)
                 {
@@ -418,7 +418,7 @@ namespace LocalS.Service.Api.StoreApp
 
                         if (ids != null)
                         {
-                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
+                            cal_sum_amount = rop.Skus.Where(m => ids.Contains(m.KindId3)).Sum(m => m.SaleAmount);
                         }
                     }
 
@@ -432,25 +432,25 @@ namespace LocalS.Service.Api.StoreApp
 
                         if (ids != null)
                         {
-                            cal_sum_amount = rop.ProductSkus.Where(m => ids.Contains(m.SpuId)).Sum(m => m.SaleAmount);
+                            cal_sum_amount = rop.Skus.Where(m => ids.Contains(m.SpuId)).Sum(m => m.SaleAmount);
                         }
                     }
 
                 }
 
-                LogUtil.Info("rop.ProductSkus:" + rop.ProductSkus.ToJsonString());
+                LogUtil.Info("rop.Skus:" + rop.Skus.ToJsonString());
 
-                foreach (var productSku in rop.ProductSkus)
+                foreach (var sku in rop.Skus)
                 {
-                    productSku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, productSku.SpuId, productSku.KindId3, productSku.SaleAmount), 2);
+                    sku.CouponAmount = Decimal.Round(BizFactory.Order.CalCouponAmount(cal_sum_amount, item.AtLeastAmount, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, rop.StoreId, sku.SpuId, sku.KindId3, sku.SaleAmount), 2);
                 }
 
 
                 //金额补差
 
-                if (rop.ProductSkus != null)
+                if (rop.Skus != null)
                 {
-                    if (rop.ProductSkus.Count > 0)
+                    if (rop.Skus.Count > 0)
                     {
                         if (item.FaceType == E_Coupon_FaceType.ShopDiscount)
                         {
@@ -459,22 +459,22 @@ namespace LocalS.Service.Api.StoreApp
                         else
                         {
                             var sumCouponAmount1 = item.FaceValue;
-                            var sumCouponAmount2 = rop.ProductSkus.Sum(m => m.CouponAmount);
+                            var sumCouponAmount2 = rop.Skus.Sum(m => m.CouponAmount);
                             if (sumCouponAmount1 != sumCouponAmount2)
                             {
                                 var diff = sumCouponAmount1 - sumCouponAmount2;
-                                rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount = rop.ProductSkus[rop.ProductSkus.Count - 1].CouponAmount + diff;
+                                rop.Skus[rop.Skus.Count - 1].CouponAmount = rop.Skus[rop.Skus.Count - 1].CouponAmount + diff;
                             }
                         }
                     }
                 }
 
 
-                couponModel.CouponAmount = rop.ProductSkus.Sum(m => m.CouponAmount);
+                couponModel.CouponAmount = rop.Skus.Sum(m => m.CouponAmount);
 
                 LogUtil.Info(" couponModel.CouponAmount:" + couponModel.CouponAmount);
 
-                couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.ProductSkus);
+                couponModel.CanSelected = GetCanSelected(rop.ShopMethod, item.UseAreaType, item.UseAreaValue, item.FaceType, item.FaceValue, item.AtLeastAmount, item.Status, item.ValidStartTime, item.ValidEndTime, item.MerchId, rop.StoreId, clientUserId, rop.Skus);
 
                 ret.Coupons.Add(couponModel);
             }

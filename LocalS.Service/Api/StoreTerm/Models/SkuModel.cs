@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class ProductSkuModel
+    public class SkuModel
     {
         private bool _isOffSell = true;
 

@@ -111,17 +111,17 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Machine.PicInSampleSize = 8;
 
             ret.Ads = BizFactory.Machine.GetAds(l_machine.MachineId);
-            ret.ProductKinds = StoreTermServiceFactory.Machine.GetProductKinds(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
-            ret.ProductSkus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
+            ret.Kinds = StoreTermServiceFactory.Machine.GetKinds(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
+            ret.Skus = StoreTermServiceFactory.Machine.GetProductSkus(l_machine.MerchId, l_machine.StoreId, l_machine.ShopId, l_machine.MachineId);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public Dictionary<string, ProductSkuModel> GetProductSkus(string merchId, string storeId, string shopId, string machineId)
+        public Dictionary<string, SkuModel> GetProductSkus(string merchId, string storeId, string shopId, string machineId)
         {
             var l_Skus = StoreTermServiceFactory.ProductSku.GetPageList(0, int.MaxValue, merchId, storeId, shopId, machineId);
 
-            var dics = new Dictionary<string, ProductSkuModel>();
+            var dics = new Dictionary<string, SkuModel>();
 
             if (l_Skus == null)
             {
@@ -146,15 +146,15 @@ namespace LocalS.Service.Api.StoreTerm
             return dics;
         }
 
-        public List<ProductKindModel> GetProductKinds(string merchId, string storeId, string shopId, string machineId)
+        public List<KindModel> GetKinds(string merchId, string storeId, string shopId, string machineId)
         {
-            var l_kinds = new List<ProductKindModel>();
+            var l_kinds = new List<KindModel>();
 
             var d_kinds = CurrentDb.StoreKind.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             var d_stocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == machineId).ToList();
 
-            var l_kind_all = new ProductKindModel();
+            var l_kind_all = new KindModel();
             l_kind_all.KindId = IdWorker.Build(IdType.EmptyGuid);
             l_kind_all.Name = "全部";
             l_kind_all.Childs = d_stocks.Select(m => m.SkuId).Distinct().ToList();
@@ -163,7 +163,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var d_kind in d_kinds)
             {
-                var l_kind = new ProductKindModel();
+                var l_kind = new KindModel();
                 l_kind.KindId = d_kind.Id;
                 l_kind.Name = d_kind.Name;
 

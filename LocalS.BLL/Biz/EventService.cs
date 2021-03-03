@@ -189,11 +189,11 @@ namespace LocalS.BLL.Biz
 
                 StringBuilder remark = new StringBuilder("");
 
-                string productSkuName = "";
-                var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(d_Machine.CurUseMerchId, model.SkuId);
-                if (r_ProductSku != null)
+                string skuName = "";
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Machine.CurUseMerchId, model.SkuId);
+                if (r_Sku != null)
                 {
-                    productSkuName = r_ProductSku.Name;
+                    skuName = r_Sku.Name;
                 }
 
                 if (model.PickupStatus == E_OrderPickupStatus.SendPickupCmd)
@@ -400,13 +400,13 @@ namespace LocalS.BLL.Biz
             string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
 
             StringBuilder remark = new StringBuilder("");
-            string productSkuName = "[测试]";
+            string skuName = "[测试]";
 
-            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.SkuId);
+            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.SkuId);
 
-            if (r_ProductSku != null)
+            if (r_Sku != null)
             {
-                productSkuName += r_ProductSku.Name;
+                skuName += r_Sku.Name;
             }
 
             if (model.PickupStatus == E_OrderPickupStatus.SendPickupCmd)

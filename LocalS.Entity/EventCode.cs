@@ -98,7 +98,7 @@ namespace LocalS.Entity
 
 
         [EventCodeRemark("B", "更新机器库存信息命令")]
-        public const string MCmdUpdateProductSkuStock = "MCmdUpdateProductSkuStock";
+        public const string MCmdUpdateSkuStock = "MCmdUpdateSkuStock";
         [EventCodeRemark("C", "更新机器广告")]
         public const string MCmdUpdateAds = "MCmdUpdateAds";
         [EventCodeRemark("C", "更新机器LOGO命令")]

@@ -42,16 +42,16 @@ namespace WebApiMerch.Controllers
 
 
         [HttpGet]
-        public OwnApiHttpResponse ProductSkuSalesDateHisInit()
+        public OwnApiHttpResponse SkuSalesDateHisInit()
         {
-            IResult result = MerchServiceFactory.Report.ProductSkuSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            IResult result = MerchServiceFactory.Report.SkuSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse ProductSkuSalesDateHisGet([FromBody]RopReportProductSkuSalesDateHisGet rop)
+        public OwnApiHttpResponse SkuSalesDateHisGet([FromBody]RopReportSkuSalesDateHisGet rop)
         {
-            IResult result = MerchServiceFactory.Report.ProductSkuSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            IResult result = MerchServiceFactory.Report.SkuSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

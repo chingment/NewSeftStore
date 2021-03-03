@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class ProductKindModel
+    public class KindModel
     {
-        public ProductKindModel()
+        public KindModel()
         {
             this.Childs = new List<string>();
         }

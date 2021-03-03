@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RetProductSkuSearch
+    public class RetSkuSearch
     {
-        public RetProductSkuSearch()
+        public RetSkuSearch()
         {
             this.Skus = new List<SkuInfoBySearchModel>();
         }

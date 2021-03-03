@@ -227,11 +227,11 @@
     <Compile Include="Api\Merch\RModels\RetMachineInitManage.cs" />
     <Compile Include="Api\Merch\RModels\RetMachineInitManageBaseInfo.cs" />
     <Compile Include="Api\Merch\RModels\RetMachineInitManageStock.cs" />
-    <Compile Include="Api\Merch\RModels\RetRptProductSkuSaleRl.cs" />
+    <Compile Include="Api\Merch\RModels\RetRptSkuSaleRl.cs" />
     <Compile Include="Api\Merch\RModels\RetRptStoreGmvRl.cs" />
     <Compile Include="Api\Merch\RModels\RetRptTodaySummary.cs" />
-    <Compile Include="Api\Merch\RModels\RetPrdProductInitAdd.cs" />
-    <Compile Include="Api\Merch\RModels\RetPrdProductInitEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RetProductInitAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RetProductInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetStoreInitManage.cs" />
     <Compile Include="Api\Merch\RModels\RetAdminUserInitAdd.cs" />
     <Compile Include="Api\Merch\RModels\RetAdminUserInitEdit.cs" />
@@ -246,9 +246,9 @@
     <Compile Include="Api\Merch\RModels\RopOrderHandleExByMachineSelfTake.cs" />
     <Compile Include="Api\Merch\RModels\RopPayRefundApply.cs" />
     <Compile Include="Api\Merch\RModels\RopPayRefundHandle.cs" />
-    <Compile Include="Api\Merch\RModels\RopPrdProductAdd.cs" />
-    <Compile Include="Api\Merch\RModels\RopPrdProductEdit.cs" />
-    <Compile Include="Api\Merch\RModels\RopPrdProductEditSalePriceOnStore.cs" />
+    <Compile Include="Api\Merch\RModels\RopProductAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopProductEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopProductEditSalePriceOnStore.cs" />
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
@@ -282,7 +282,7 @@
     <Compile Include="Api\Merch\RModels\RupPayTransGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockRealDataGet.cs" />
-    <Compile Include="Api\Merch\RModels\RopReportProductSkuSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportSkuSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpu.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />
@@ -403,8 +403,8 @@
     <Compile Include="Api\StoreTerm\Models\ImSeatModel.cs" />
     <Compile Include="Api\StoreTerm\Models\MachineModel.cs" />
     <Compile Include="Api\StoreTerm\Models\MqttModel.cs" />
-    <Compile Include="Api\StoreTerm\Models\ProductKindModel.cs" />
-    <Compile Include="Api\StoreTerm\Models\ProductSkuModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\KindModel.cs" />
+    <Compile Include="Api\StoreTerm\Models\SkuModel.cs" />
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductSkuService.cs" />

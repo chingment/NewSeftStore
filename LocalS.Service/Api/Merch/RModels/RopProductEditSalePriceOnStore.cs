@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopPrdProductEditSalePriceOnStore
+    public class RopProductEditSalePriceOnStore
     {
         public string StoreId { get; set; }
 

@@ -93,7 +93,7 @@ namespace LocalS.BLL.Biz
 
                         foreach (var m_ChangeRecord in m_ChangeRecords)
                         {
-                            var r_ProductSku = CacheServiceFactory.Product.GetSkuInfo(m_ChangeRecord.MerchId, m_ChangeRecord.SkuId);
+                            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(m_ChangeRecord.MerchId, m_ChangeRecord.SkuId);
                             string storeName = BizFactory.Merch.GetStoreName(m_ChangeRecord.MerchId, m_ChangeRecord.StoreId);
                             var d_SellChannelStockLog = new SellChannelStockLog();
                             d_SellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -107,10 +107,10 @@ namespace LocalS.BLL.Biz
                             d_SellChannelStockLog.CabinetId = m_ChangeRecord.CabinetId;
                             d_SellChannelStockLog.SlotId = m_ChangeRecord.SlotId;
                             d_SellChannelStockLog.SkuId = m_ChangeRecord.SkuId;
-                            if (r_ProductSku != null)
+                            if (r_Sku != null)
                             {
-                                d_SellChannelStockLog.SpuId = r_ProductSku.SpuId;
-                                d_SellChannelStockLog.SkuName = r_ProductSku.Name;
+                                d_SellChannelStockLog.SpuId = r_Sku.SpuId;
+                                d_SellChannelStockLog.SkuName = r_Sku.Name;
                             }
                             d_SellChannelStockLog.SellQuantity = m_ChangeRecord.SellQuantity;
                             d_SellChannelStockLog.WaitPayLockQuantity = m_ChangeRecord.WaitPayLockQuantity;

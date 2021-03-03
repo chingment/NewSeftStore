@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.StoreApp
         public List<string> CouponIds { get; set; }
         public E_ShopMethod ShopMethod { get; set; }
         public string StoreId { get; set; }
-        public List<BuildSku> ProductSkus { get; set; }
+        public List<BuildSku> Skus { get; set; }
         public E_Coupon_FaceType[] FaceTypes { get; set; }
         public List<string> SelectCouponIds { get; set; }
     }

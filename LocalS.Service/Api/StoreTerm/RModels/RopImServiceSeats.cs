@@ -9,8 +9,8 @@ namespace LocalS.Service.Api.StoreTerm
     public class RopImServiceSeats
     {
         public string MachineId { get; set; }
-        public List<ProductSku> ProductSkus { get; set; }
-        public class ProductSku
+        public List<SkuModel> Skus { get; set; }
+        public class SkuModel
         {
             public string SkuId { get; set; }
             public int Quantity { get; set; }

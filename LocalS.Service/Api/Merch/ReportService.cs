@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var bizProductSku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
 
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
@@ -215,10 +215,10 @@ namespace LocalS.Service.Api.Merch
                     StoreName = sellChannelStock.StoreName,
                     SellChannelRefName = sellChannelRefName,
                     SellChannelRemark = sellChannelRemark,
-                    SkuId = bizProductSku.Id,
-                    SkuName = bizProductSku.Name,
-                    SkuSpecDes = SpecDes.GetDescribe(bizProductSku.SpecDes),
-                    SkuCumCode = bizProductSku.CumCode,
+                    SkuId = r_Sku.Id,
+                    SkuName = r_Sku.Name,
+                    SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
+                    SkuCumCode = r_Sku.CumCode,
                     SlotId = sellChannelStock.SlotId,
                     SellQuantity = sellChannelStock.SellQuantity,
                     WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
@@ -239,11 +239,11 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult ProductSkuSalesDateHisInit(string operater, string merchId)
+        public CustomJsonResult SkuSalesDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportProductSkuSalesDateHisInit();
+            var ret = new RetReportSkuSalesDateHisInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
@@ -276,7 +276,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult ProductSkuSalesDateHisGet(string operater, string merchId, RopReportProductSkuSalesDateHisGet rop)
+        public CustomJsonResult SkuSalesDateHisGet(string operater, string merchId, RopReportSkuSalesDateHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -371,11 +371,11 @@ namespace LocalS.Service.Api.Merch
                     ReceiveModeName = item.ReceiveModeName,
                     OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
-                    ProductSkuName = item.SkuName,
-                    ProductSkuBarCode = item.SkuBarCode,
-                    ProductSkuCumCode = item.SkuCumCode,
-                    ProductSkuSpecDes = SpecDes.GetDescribe(item.SkuSpecDes),
-                    ProductSkuProducer = item.SkuProducer,
+                    SkuName = item.SkuName,
+                    SkuBarCode = item.SkuBarCode,
+                    SkuCumCode = item.SkuCumCode,
+                    SkuSpecDes = SpecDes.GetDescribe(item.SkuSpecDes),
+                    SkuProducer = item.SkuProducer,
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
                     TradeAmount = item.ChargeAmount,
@@ -395,7 +395,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportProductSkuSalesDateHisInit();
+            var ret = new RetReportSkuSalesDateHisInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
@@ -497,7 +497,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportProductSkuSalesDateHisInit();
+            var ret = new RetReportSkuSalesDateHisInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 

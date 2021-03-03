@@ -71,7 +71,7 @@ namespace LocalS.BLL.Push
         public static CustomJsonResult SendStock(string operater, string appId, string merchId, string machineId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateProductSkuStock, content);
+            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateSkuStock, content);
             return result;
         }
 
