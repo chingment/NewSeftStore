@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function reLoadProductSkuCache(data) {
+export function reLoadSpuCache(data) {
   return request({
-    url: '/merchrepairfun/reLoadProductSkuCache',
+    url: '/merchrepairfun/reLoadSpuCache',
     method: 'post',
     data
   })

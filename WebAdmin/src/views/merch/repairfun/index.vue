@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="_reLoadProductSkuCache">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="_reLoadSpuCache">
         重新加载商户商品数据缓存
       </el-button>
     </div>
@@ -10,26 +10,26 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { reLoadProductSkuCache} from '@/api/merchrepairfun'
+import { reLoadSpuCache } from '@/api/merchrepairfun'
 
 export default {
-  name: 'repairfun',
+  name: 'Repairfun',
   data() {
     return {
       isDesktop: this.$store.getters.isDesktop
     }
   },
   created() {
- 
+
   },
   methods: {
-    _reLoadProductSkuCache() {
+    _reLoadSpuCache() {
       MessageBox.confirm('确定要重新加载商户商品数据缓存？', '提示（慎重操作）', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        reLoadProductSkuCache(null).then(res => {
+        reLoadSpuCache(null).then(res => {
           this.$message(res.message)
         })
       })
