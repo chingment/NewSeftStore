@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductSkuInfoModel
+    public class SkuInfoModel
     {
         public string Id { get; set; }
         public string BarCode { get; set; }
@@ -32,7 +32,7 @@ namespace LocalS.BLL
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public List<string> CharTags { get; set; }
         public List<SpecIdxSku> SpecIdxSkus { get; set; }
-        public List<ProductSkuStockModel> Stocks { get; set; }
+        public List<SkuStockModel> Stocks { get; set; }
         public int KindId1 { get; set; }
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }

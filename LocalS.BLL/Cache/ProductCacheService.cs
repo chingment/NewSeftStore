@@ -15,7 +15,7 @@ namespace LocalS.BLL
     {
         public void RemoveSpuInfo(string merchId, string spuId)
         {
-            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
+            var r_spu = RedisHashUtil.Get<SpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
             if (r_spu != null)
             {
                 var specIdxSkus = r_spu.SpecIdxSkus;
@@ -38,13 +38,13 @@ namespace LocalS.BLL
             RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SPU_SKEY, merchId.ToLower()), string.Format("*:{0}", spuId.ToLower()));
         }
 
-        public ProductSpuInfoModel GetSpuInfo(string merchId, string spuId)
+        public SpuInfoModel GetSpuInfo(string merchId, string spuId)
         {
-            var r_spu = RedisHashUtil.Get<ProductSpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
+            var r_spu = RedisHashUtil.Get<SpuInfoModel>(string.Format(RedisKeyS.PRD_SPU_INF, merchId.ToLower()), spuId.ToLower());
 
             if (r_spu == null)
             {
-                r_spu = new ProductSpuInfoModel();
+                r_spu = new SpuInfoModel();
                 r_spu.Id = spuId;
 
                 var d_spu = CurrentDb.PrdProduct.Where(m => m.Id == spuId).FirstOrDefault();
@@ -104,11 +104,11 @@ namespace LocalS.BLL
             return r_spu;
         }
 
-        public ProductSkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string skuId)
+        public SkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string skuId)
         {
-            var productSkuInfo = GetSkuInfo(merchId, skuId);
+            var m_SkuInfo = GetSkuInfo(merchId, skuId);
 
-            var productSkuStocks = new List<ProductSkuStockModel>();
+            var m_SkuStocks = new List<SkuStockModel>();
 
             var sellChannelStocks = new List<SellChannelStock>();
 
@@ -134,57 +134,57 @@ namespace LocalS.BLL
 
             foreach (var sellChannelStock in sellChannelStocks)
             {
-                var productSkuStock = new ProductSkuStockModel();
-                productSkuStock.ShopMode = sellChannelStock.ShopMode;
-                productSkuStock.ShopId = sellChannelStock.ShopId;
-                productSkuStock.MachineId = sellChannelStock.MachineId;
-                productSkuStock.CabinetId = sellChannelStock.CabinetId;
-                productSkuStock.SlotId = sellChannelStock.SlotId;
-                productSkuStock.SumQuantity = sellChannelStock.SumQuantity;
-                productSkuStock.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
-                productSkuStock.SellQuantity = sellChannelStock.SellQuantity;
-                productSkuStock.IsOffSell = sellChannelStock.IsOffSell;
-                productSkuStock.SalePrice = sellChannelStock.SalePrice;
-                productSkuStock.IsUseRent = sellChannelStock.IsUseRent;
-                productSkuStock.RentMhPrice = sellChannelStock.RentMhPrice;
-                productSkuStock.DepositPrice = sellChannelStock.DepositPrice;
-                productSkuStocks.Add(productSkuStock);
+                var m_SkuStock = new SkuStockModel();
+                m_SkuStock.ShopMode = sellChannelStock.ShopMode;
+                m_SkuStock.ShopId = sellChannelStock.ShopId;
+                m_SkuStock.MachineId = sellChannelStock.MachineId;
+                m_SkuStock.CabinetId = sellChannelStock.CabinetId;
+                m_SkuStock.SlotId = sellChannelStock.SlotId;
+                m_SkuStock.SumQuantity = sellChannelStock.SumQuantity;
+                m_SkuStock.LockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+                m_SkuStock.SellQuantity = sellChannelStock.SellQuantity;
+                m_SkuStock.IsOffSell = sellChannelStock.IsOffSell;
+                m_SkuStock.SalePrice = sellChannelStock.SalePrice;
+                m_SkuStock.IsUseRent = sellChannelStock.IsUseRent;
+                m_SkuStock.RentMhPrice = sellChannelStock.RentMhPrice;
+                m_SkuStock.DepositPrice = sellChannelStock.DepositPrice;
+                m_SkuStocks.Add(m_SkuStock);
             }
 
 
-            productSkuInfo.Stocks = productSkuStocks;
+            m_SkuInfo.Stocks = m_SkuStocks;
 
-            return productSkuInfo;
+            return m_SkuInfo;
         }
 
-        public List<ProductSkuInfoModel> GetSkuInfo(string merchId, string[] skuIds)
+        public List<SkuInfoModel> GetSkuInfo(string merchId, string[] skuIds)
         {
-            var oList = new List<ProductSkuInfoModel>();
+            var m_Skus = new List<SkuInfoModel>();
 
             foreach(var skuId in skuIds)
             {
-                var productSku = GetSkuInfo(merchId, skuId);
-                if (productSku != null)
-                    oList.Add(productSku);
+                var m_Sku = GetSkuInfo(merchId, skuId);
+                if (m_Sku != null)
+                    m_Skus.Add(m_Sku);
             }
 
-            return oList;
+            return m_Skus;
         }
 
-        public ProductSkuInfoModel GetSkuInfo(string merchId, string skuId)
+        public SkuInfoModel GetSkuInfo(string merchId, string skuId)
         {
-            var r_sku = RedisHashUtil.Get<ProductSkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), skuId.ToLower());
+            var r_sku = RedisHashUtil.Get<SkuInfoModel>(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), skuId.ToLower());
             //判断商品信息在缓存数据库是否存在，不存在则加载数据到缓存中
             if (r_sku == null)
             {
-                r_sku = new ProductSkuInfoModel();
+                r_sku = new SkuInfoModel();
                 r_sku.Id = skuId;
                 var d_sku = CurrentDb.PrdProductSku.Where(m => m.Id == skuId).FirstOrDefault();
                 if (d_sku != null)
                 {
                     var r_spu = GetSpuInfo(merchId, d_sku.SpuId);
 
-                    r_sku = new ProductSkuInfoModel();
+                    r_sku = new SkuInfoModel();
                     r_sku.Id = d_sku.Id;
                     r_sku.BarCode = d_sku.BarCode;
                     r_sku.SpuCode = r_spu.SpuCode;
@@ -236,9 +236,9 @@ namespace LocalS.BLL
             return r_sku;
         }
 
-        public List<ProductSkuInfoBySearchModel> SearchSku(string merchId, string type, string key)
+        public List<SkuInfoBySearchModel> SearchSku(string merchId, string type, string key)
         {
-            List<ProductSkuInfoBySearchModel> m_searchs = new List<ProductSkuInfoBySearchModel>();
+            List<SkuInfoBySearchModel> m_searchs = new List<SkuInfoBySearchModel>();
 
             if (string.IsNullOrEmpty(key))
                 return m_searchs;
@@ -267,8 +267,8 @@ namespace LocalS.BLL
                 {
                     try
                     {
-                        var l_sku = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSkuInfoModel>(r_sku);
-                        var m_search = new ProductSkuInfoBySearchModel();
+                        var l_sku = Newtonsoft.Json.JsonConvert.DeserializeObject<SkuInfoModel>(r_sku);
+                        var m_search = new SkuInfoBySearchModel();
                         m_search.SkuId = l_sku.Id;
                         m_search.SpuId = l_sku.SpuId;
                         m_search.Name = l_sku.Name;
@@ -290,9 +290,9 @@ namespace LocalS.BLL
             return m_searchs;
         }
 
-        public List<ProductSpuInfoBySearchModel> SearchSpu(string merchId, string type, string key)
+        public List<SpuInfoBySearchModel> SearchSpu(string merchId, string type, string key)
         {
-            List<ProductSpuInfoBySearchModel> m_searchs = new List<ProductSpuInfoBySearchModel>();
+            List<SpuInfoBySearchModel> m_searchs = new List<SpuInfoBySearchModel>();
 
             if (string.IsNullOrEmpty(key))
                 return m_searchs;
@@ -318,8 +318,8 @@ namespace LocalS.BLL
                 {
                     try
                     {
-                        var l_spu = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductSpuInfoModel>(r_spu);
-                        var m_search = new ProductSpuInfoBySearchModel();
+                        var l_spu = Newtonsoft.Json.JsonConvert.DeserializeObject<SpuInfoModel>(r_spu);
+                        var m_search = new SpuInfoBySearchModel();
                         m_search.SpuId = l_spu.Id;
                         m_search.Name = l_spu.Name;
                         m_search.SpuCode = l_spu.SpuCode;

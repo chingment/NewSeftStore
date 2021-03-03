@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductSkuStockModel
+    public class SkuStockModel
     {
         public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }

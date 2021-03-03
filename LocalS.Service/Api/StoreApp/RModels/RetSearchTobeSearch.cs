@@ -9,6 +9,6 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RetSearchTobeSearch
     {
-        public List<ProductSkuInfoBySearchModel> ProductSkus { get; set; }
+        public List<SkuInfoBySearchModel> Skus { get; set; }
     }
 }

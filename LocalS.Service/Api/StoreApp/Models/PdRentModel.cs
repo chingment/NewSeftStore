@@ -11,10 +11,10 @@ namespace LocalS.Service.Api.StoreApp
     {
         public PdRentModel()
         {
-            this.List = new List<ProductSkuModel>();
+            this.List = new List<SkuModel>();
         }
 
         public string Name { get; set; }
-        public List<ProductSkuModel> List { get; set; }
+        public List<SkuModel> List { get; set; }
     }
 }

@@ -98,7 +98,7 @@ m.ShopMode == Entity.E_ShopMode.Machine)
             }
 
 
-            ret.ProductSkus = CacheServiceFactory.Product.SearchSku(machine.MerchId, "All", rup.Key);
+            ret.Skus = CacheServiceFactory.Product.SearchSku(machine.MerchId, "All", rup.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

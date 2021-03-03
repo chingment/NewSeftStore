@@ -56,9 +56,9 @@ namespace LocalS.Service.Api.StoreApp
             return result;
         }
 
-        public PageEntity<ProductSkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_ShopMode shopMode, E_ShopMethod shopMethod, string kindId)
+        public PageEntity<SkuModel> GetProducts(int pageIndex, int pageSize, string storeId, string shopId, E_ShopMode shopMode, E_ShopMethod shopMethod, string kindId)
         {
-            var pageEntiy = new PageEntity<ProductSkuModel>();
+            var pageEntiy = new PageEntity<SkuModel>();
 
             pageEntiy.PageIndex = pageIndex;
             pageEntiy.PageSize = pageSize;
@@ -97,51 +97,51 @@ namespace LocalS.Service.Api.StoreApp
                 LogUtil.Info("shopMode:" + shopMode);
 
 
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(shopMode, store.MerchId, storeId, shopId, null, item.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(shopMode, store.MerchId, storeId, shopId, null, item.SkuId);
 
 
-                var m_productSku = new ProductSkuModel();
+                var m_Sku = new SkuModel();
 
-                m_productSku.Id = item.SkuId;
-                m_productSku.SpuId = item.SpuId;
-                m_productSku.Name = r_productSku.Name;
-                m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
-                m_productSku.BriefDes = r_productSku.BriefDes;
-                m_productSku.CharTags = r_productSku.CharTags;
-                m_productSku.SpecDes = r_productSku.SpecDes;
-                m_productSku.SpecItems = r_productSku.SpecItems;
-                m_productSku.SpecIdx = r_productSku.SpecIdx;
-                m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
+                m_Sku.Id = item.SkuId;
+                m_Sku.SpuId = item.SpuId;
+                m_Sku.Name = r_Sku.Name;
+                m_Sku.MainImgUrl = ImgSet.Convert_B(r_Sku.MainImgUrl);
+                m_Sku.BriefDes = r_Sku.BriefDes;
+                m_Sku.CharTags = r_Sku.CharTags;
+                m_Sku.SpecDes = r_Sku.SpecDes;
+                m_Sku.SpecItems = r_Sku.SpecItems;
+                m_Sku.SpecIdx = r_Sku.SpecIdx;
+                m_Sku.SpecIdxSkus = r_Sku.SpecIdxSkus;
 
 
                 if (shopMethod == E_ShopMethod.Rent)
                 {
-                    m_productSku.IsMavkBuy = true;
+                    m_Sku.IsMavkBuy = true;
                 }
                 else
                 {
-                    m_productSku.IsMavkBuy = r_productSku.IsMavkBuy;
+                    m_Sku.IsMavkBuy = r_Sku.IsMavkBuy;
                 }
 
 
                 if (shopMode == E_ShopMode.Machine)
                 {
-                    m_productSku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
+                    m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
                 }
                 else
                 {
-                    m_productSku.SupReceiveMode = r_productSku.SupReceiveMode;
+                    m_Sku.SupReceiveMode = r_Sku.SupReceiveMode;
                 }
 
-                if (r_productSku.Stocks != null)
+                if (r_Sku.Stocks != null)
                 {
-                    if (r_productSku.Stocks.Count > 0)
+                    if (r_Sku.Stocks.Count > 0)
                     {
-                        m_productSku.IsShowPrice = false;
-                        m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                        m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
+                        m_Sku.IsShowPrice = false;
+                        m_Sku.SalePrice = r_Sku.Stocks[0].SalePrice;
+                        m_Sku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
 
-                        pageEntiy.Items.Add(m_productSku);
+                        pageEntiy.Items.Add(m_Sku);
                     }
                 }
             }
@@ -156,60 +156,60 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
+            var r_Sku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
 
-            var m_productSku = new ProductSkuModel();
-            m_productSku.Id = r_productSku.Id;
-            m_productSku.SpuId = r_productSku.SpuId;
-            m_productSku.Name = r_productSku.Name;
-            m_productSku.MainImgUrl = r_productSku.MainImgUrl;
-            m_productSku.DisplayImgUrls = r_productSku.DisplayImgUrls;
-            m_productSku.DetailsDes = r_productSku.DetailsDes;
-            m_productSku.BriefDes = r_productSku.BriefDes;
-            m_productSku.SpecItems = r_productSku.SpecItems;
-            m_productSku.SpecIdx = r_productSku.SpecIdx;
-            m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
-            m_productSku.CharTags = r_productSku.CharTags;
+            var m_Sku = new SkuModel();
+            m_Sku.Id = r_Sku.Id;
+            m_Sku.SpuId = r_Sku.SpuId;
+            m_Sku.Name = r_Sku.Name;
+            m_Sku.MainImgUrl = r_Sku.MainImgUrl;
+            m_Sku.DisplayImgUrls = r_Sku.DisplayImgUrls;
+            m_Sku.DetailsDes = r_Sku.DetailsDes;
+            m_Sku.BriefDes = r_Sku.BriefDes;
+            m_Sku.SpecItems = r_Sku.SpecItems;
+            m_Sku.SpecIdx = r_Sku.SpecIdx;
+            m_Sku.SpecIdxSkus = r_Sku.SpecIdxSkus;
+            m_Sku.CharTags = r_Sku.CharTags;
 
 
             if (rup.ShopMethod == E_ShopMethod.Rent)
             {
-                m_productSku.IsMavkBuy = true;
+                m_Sku.IsMavkBuy = true;
             }
             else
             {
-                m_productSku.IsMavkBuy = r_productSku.IsMavkBuy;
+                m_Sku.IsMavkBuy = r_Sku.IsMavkBuy;
             }
 
             if (rup.ShopMode == E_ShopMode.Machine)
             {
-                m_productSku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
+                m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
             }
             else
             {
-                m_productSku.SupReceiveMode = r_productSku.SupReceiveMode;
+                m_Sku.SupReceiveMode = r_Sku.SupReceiveMode;
             }
 
-            m_productSku.KindId1 = r_productSku.KindId1;
-            m_productSku.KindId2 = r_productSku.KindId2;
-            m_productSku.KindId3 = r_productSku.KindId3;
+            m_Sku.KindId1 = r_Sku.KindId1;
+            m_Sku.KindId2 = r_Sku.KindId2;
+            m_Sku.KindId3 = r_Sku.KindId3;
 
 
 
-            if (r_productSku.Stocks.Count > 0)
+            if (r_Sku.Stocks.Count > 0)
             {
-                m_productSku.IsShowPrice = false;
-                m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
-                m_productSku.SellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
-                m_productSku.IsUseRent = r_productSku.Stocks[0].IsUseRent;
-                m_productSku.RentAmount = r_productSku.Stocks[0].RentMhPrice;
-                m_productSku.RentTermUnit = E_RentTermUnit.Month;
-                m_productSku.RentTermUnitText = "月";
-                m_productSku.DepositAmount = r_productSku.Stocks[0].DepositPrice;
+                m_Sku.IsShowPrice = false;
+                m_Sku.SalePrice = r_Sku.Stocks[0].SalePrice;
+                m_Sku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
+                m_Sku.SellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
+                m_Sku.IsUseRent = r_Sku.Stocks[0].IsUseRent;
+                m_Sku.RentAmount = r_Sku.Stocks[0].RentMhPrice;
+                m_Sku.RentTermUnit = E_RentTermUnit.Month;
+                m_Sku.RentTermUnitText = "月";
+                m_Sku.DepositAmount = r_Sku.Stocks[0].DepositPrice;
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_productSku);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", m_Sku);
 
             return result;
         }
@@ -220,21 +220,21 @@ namespace LocalS.Service.Api.StoreApp
 
             var store = BizFactory.Store.GetOne(rup.StoreId);
 
-            var r_productSku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
+            var r_Sku = CacheServiceFactory.Product.GetSkuStock(rup.ShopMode, store.MerchId, store.StoreId, rup.ShopId, null, rup.SkuId);
 
             bool isOffSell = true;
             bool isShowPrice = false;
             decimal salePrice = 0m;
             int sellQuantity = 0;
-            if (r_productSku.Stocks.Count > 0)
+            if (r_Sku.Stocks.Count > 0)
             {
                 isShowPrice = false;
-                salePrice = r_productSku.Stocks[0].SalePrice;
-                isOffSell = r_productSku.Stocks[0].IsOffSell;
-                sellQuantity = r_productSku.Stocks.Sum(m => m.SellQuantity);
+                salePrice = r_Sku.Stocks[0].SalePrice;
+                isOffSell = r_Sku.Stocks[0].IsOffSell;
+                sellQuantity = r_Sku.Stocks.Sum(m => m.SellQuantity);
             }
 
-            var data = new { skuId = rup.SkuId, name = r_productSku.Name, salePrice = salePrice, isShowPrice = isShowPrice, isOffSell = isOffSell, sellQuantity = sellQuantity };
+            var data = new { skuId = rup.SkuId, name = r_Sku.Name, salePrice = salePrice, isShowPrice = isShowPrice, isOffSell = isOffSell, sellQuantity = sellQuantity };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", data);
 

@@ -16,9 +16,9 @@ namespace LocalS.BLL
         public string SpecIdx { get; set; }
     }
 
-    public class ProductSpuInfoModel
+    public class SpuInfoModel
     {
-        public ProductSpuInfoModel()
+        public SpuInfoModel()
         {
             this.DisplayImgUrls = new List<ImgSet>();
             this.DetailsDes = new List<ImgSet>();

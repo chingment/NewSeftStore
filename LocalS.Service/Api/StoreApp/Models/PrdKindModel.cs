@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.StoreApp
     {
         public PrdKindModel()
         {
-            this.List = new PageEntity<ProductSkuModel>();
+            this.List = new PageEntity<SkuModel>();
         }
 
         public string Id { get; set; }
@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public bool Selected { get; set; }
 
-        public PageEntity<ProductSkuModel> List { get; set; }
+        public PageEntity<SkuModel> List { get; set; }
 
 
     }

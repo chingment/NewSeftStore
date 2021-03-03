@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.StoreTerm
     {
         public RetProductSkuSearch()
         {
-            this.ProductSkus = new List<ProductSkuInfoBySearchModel>();
+            this.Skus = new List<SkuInfoBySearchModel>();
         }
 
-        public List<ProductSkuInfoBySearchModel> ProductSkus { get; set; }
+        public List<SkuInfoBySearchModel> Skus { get; set; }
     }
 }

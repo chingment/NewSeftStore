@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
-    public class ProductSpuInfoBySearchModel
+    public class SpuInfoBySearchModel
     {
         public string SpuId { get; set; }
         public string SpuCode { get; set; }

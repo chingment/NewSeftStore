@@ -42,7 +42,7 @@ namespace LocalS.BLL.Biz
         public decimal DepositAmount { get; set; }
         public E_SupReceiveMode SupReceiveMode { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
-        public List<ProductSkuStockModel> Stocks { get; set; }
+        public List<SkuStockModel> Stocks { get; set; }
         public decimal CouponAmountByShop { get; set; }
         public decimal CouponAmountByDeposit { get; set; }
         public decimal CouponAmountByRent { get; set; }
@@ -421,8 +421,8 @@ namespace LocalS.BLL.Biz
                     }
                     else
                     {
-                        var stocks = new List<ProductSkuStockModel>();
-                        var stock = new ProductSkuStockModel();
+                        var stocks = new List<SkuStockModel>();
+                        var stock = new SkuStockModel();
                         stock.ShopMode = E_ShopMode.Mall;
                         stock.ShopId = "0";
                         stock.MachineId = "0";

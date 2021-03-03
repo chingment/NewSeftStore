@@ -78,27 +78,27 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_sellChannelStock in d_sellChannelStocks)
             {
-                var r_productSku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.SkuId);
-                if (r_productSku != null && r_productSku.Stocks != null && r_productSku.Stocks.Count > 0)
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.SkuId);
+                if (r_Sku != null && r_Sku.Stocks != null && r_Sku.Stocks.Count > 0)
                 {
-                    var m_productSku = new ProductSkuModel();
-                    m_productSku.Id = r_productSku.Id;
-                    m_productSku.SpuId = r_productSku.SpuId;
-                    m_productSku.Name = r_productSku.Name;
-                    m_productSku.MainImgUrl = ImgSet.Convert_B(r_productSku.MainImgUrl);
-                    m_productSku.BriefDes = r_productSku.BriefDes;
-                    m_productSku.CharTags = r_productSku.CharTags;
-                    m_productSku.SpecDes = r_productSku.SpecDes;
-                    m_productSku.SpecItems = r_productSku.SpecItems;
-                    m_productSku.SpecIdx = r_productSku.SpecIdx;
-                    m_productSku.SpecIdxSkus = r_productSku.SpecIdxSkus;
-                    m_productSku.IsMavkBuy = true;
-                    m_productSku.IsShowPrice = false;
-                    m_productSku.SalePrice = r_productSku.Stocks[0].SalePrice;
-                    m_productSku.IsOffSell = r_productSku.Stocks[0].IsOffSell;
-                    m_productSku.RentMhPrice = r_productSku.Stocks[0].RentMhPrice;
-                    m_productSku.DepositPrice = r_productSku.Stocks[0].DepositPrice;
-                    m_pdRent.List.Add(m_productSku);
+                    var m_Sku = new SkuModel();
+                    m_Sku.Id = r_Sku.Id;
+                    m_Sku.SpuId = r_Sku.SpuId;
+                    m_Sku.Name = r_Sku.Name;
+                    m_Sku.MainImgUrl = ImgSet.Convert_B(r_Sku.MainImgUrl);
+                    m_Sku.BriefDes = r_Sku.BriefDes;
+                    m_Sku.CharTags = r_Sku.CharTags;
+                    m_Sku.SpecDes = r_Sku.SpecDes;
+                    m_Sku.SpecItems = r_Sku.SpecItems;
+                    m_Sku.SpecIdx = r_Sku.SpecIdx;
+                    m_Sku.SpecIdxSkus = r_Sku.SpecIdxSkus;
+                    m_Sku.IsMavkBuy = true;
+                    m_Sku.IsShowPrice = false;
+                    m_Sku.SalePrice = r_Sku.Stocks[0].SalePrice;
+                    m_Sku.IsOffSell = r_Sku.Stocks[0].IsOffSell;
+                    m_Sku.RentMhPrice = r_Sku.Stocks[0].RentMhPrice;
+                    m_Sku.DepositPrice = r_Sku.Stocks[0].DepositPrice;
+                    m_pdRent.List.Add(m_Sku);
                 }
 
             }

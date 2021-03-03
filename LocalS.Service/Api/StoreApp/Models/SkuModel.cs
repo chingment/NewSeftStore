@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreApp
 {
-    public class ProductSkuModel
+    public class SkuModel
     {
         private bool _isOffSell = true;
 
