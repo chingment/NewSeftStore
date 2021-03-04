@@ -30,7 +30,7 @@ namespace LocalS.Entity
         public string SkuSpecDes { get; set; }
         public string SkuProducer { get; set; }
         public string SkuMainImgUrl { get; set; }
-        public string SkuDeviceId { get; set; }
+        public string SkuDeviceSn{ get; set; }
         public int KindId1 { get; set; }
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }
