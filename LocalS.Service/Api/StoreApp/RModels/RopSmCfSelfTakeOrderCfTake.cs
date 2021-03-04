@@ -8,6 +8,8 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RopSmCfSelfTakeOrderCfTake
     {
+        public string OrderId { get; set; }
+
 
     }
 }
