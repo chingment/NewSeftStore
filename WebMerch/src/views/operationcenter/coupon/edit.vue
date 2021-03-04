@@ -232,7 +232,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { edit, initEdit } from '@/api/coupon'
-import { searchSpu } from '@/api/prdproduct'
+import { searchSpu } from '@/api/product'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'

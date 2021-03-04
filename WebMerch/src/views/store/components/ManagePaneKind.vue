@@ -332,7 +332,7 @@ import {
   removeKindSpu,
   getKindSpu
 } from '@/api/store'
-import { searchSpu, getSpecs } from '@/api/prdproduct'
+import { searchSpu, getSpecs } from '@/api/product'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {

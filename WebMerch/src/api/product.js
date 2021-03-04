@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: '/prdproduct/getlist',
+    url: '/product/getlist',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getList(params) {
 
 export function initAdd(params) {
   return request({
-    url: '/prdproduct/initAdd',
+    url: '/product/initAdd',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function initAdd(params) {
 
 export function add(data) {
   return request({
-    url: '/prdproduct/add',
+    url: '/product/add',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function add(data) {
 
 export function initEdit(params) {
   return request({
-    url: '/prdproduct/initEdit',
+    url: '/product/initEdit',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function initEdit(params) {
 
 export function edit(data) {
   return request({
-    url: '/prdproduct/edit',
+    url: '/product/edit',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function edit(data) {
 
 export function getOnSaleStores(params) {
   return request({
-    url: '/prdproduct/getOnSaleStores',
+    url: '/product/getOnSaleStores',
     method: 'get',
     params
   })
@@ -50,7 +50,7 @@ export function getOnSaleStores(params) {
 
 export function editSalePriceOnStore(data) {
   return request({
-    url: '/prdproduct/EditSalePriceOnStore',
+    url: '/product/EditSalePriceOnStore',
     method: 'post',
     data
   })
@@ -58,7 +58,7 @@ export function editSalePriceOnStore(data) {
 
 export function searchSku(params) {
   return request({
-    url: '/prdproduct/searchSku',
+    url: '/product/searchSku',
     method: 'get',
     params
   })
@@ -66,7 +66,7 @@ export function searchSku(params) {
 
 export function searchSpu(params) {
   return request({
-    url: '/prdproduct/searchSpu',
+    url: '/product/searchSpu',
     method: 'get',
     params
   })
@@ -74,7 +74,7 @@ export function searchSpu(params) {
 
 export function getSpecs(params) {
   return request({
-    url: '/prdproduct/getSpecs',
+    url: '/product/getSpecs',
     method: 'get',
     params
   })

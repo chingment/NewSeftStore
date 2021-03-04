@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getList, searchSku } from '@/api/prdproduct'
+import { getList, searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -133,17 +133,17 @@ export default {
     },
     handleCreate() {
       this.$router.push({
-        path: '/prdproduct/add'
+        path: '/product/add'
       })
     },
     handleUpdate(row) {
       this.$router.push({
-        path: '/prdproduct/manage?id=' + row.id + '&tab=tabBaseInfo'
+        path: '/product/manage?id=' + row.id + '&tab=tabBaseInfo'
       })
     },
     handleSalePrice(row) {
       this.$router.push({
-        path: '/prdproduct/manage?id=' + row.id + '&tab=tabStoreSale'
+        path: '/product/manage?id=' + row.id + '&tab=tabStoreSale'
       })
     },
     handleProductSrh(queryString, cb) {

@@ -77,7 +77,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getOnSaleStores, editSalePriceOnStore } from '@/api/prdproduct'
+import { getOnSaleStores, editSalePriceOnStore } from '@/api/product'
 import fromReg from '@/utils/formReg'
 export default {
   props: {

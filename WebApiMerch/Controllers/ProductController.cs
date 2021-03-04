@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace WebApiMerch.Controllers
 {
-    public class PrdProductController : OwnApiBaseController
+    public class ProductController : OwnApiBaseController
     {
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupPrdProductGetList rup)

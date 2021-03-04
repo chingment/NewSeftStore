@@ -273,7 +273,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { add, initAdd } from '@/api/coupon'
-import { searchSpu } from '@/api/prdproduct'
+import { searchSpu } from '@/api/product'
 import fromReg from '@/utils/formReg'
 import { goBack } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'

@@ -1,6 +1,5 @@
 <template>
-  <div id="product_add">
-        <page-header/>
+  <div id="product_baseinfo">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" clearable />
@@ -28,12 +27,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item v-show="!isOpenAddMultiSpecs" label="编码" prop="singleSkuCumCode">
-        <el-input v-model="form.singleSkuCumCode" clearable />
-      </el-form-item>
-      <el-form-item v-show="!isOpenAddMultiSpecs" label="条形码" prop="singleSkuBarCode">
-        <el-input v-model="form.singleSkuBarCode" clearable />
-      </el-form-item>
       <el-form-item label="图片" prop="displayImgUrls">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
         <el-upload
@@ -53,9 +46,8 @@
           <i class="el-icon-plus" />
         </el-upload>
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDisplayImgUrls">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt="">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt>
         </el-dialog>
-
         <el-alert
           title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
           type="remark-gray"
@@ -70,14 +62,8 @@
           style="width:300px"
           clearable
         />
-        <el-alert
-          show-icon
-          title="如果商品分类不满足业务需要，请联系系统管理员进行添加或修改"
-          type="remark"
-          :closable="false"
-        />
+        <el-alert show-icon title="如果商品分类不满足业务需要，请联系系统管理员进行添加或修改" type="remark" :closable="false" />
       </el-form-item>
-
       <el-form-item label="特色标签" prop="charTags">
         <el-tag
           v-for="tag in form.charTags"
@@ -85,9 +71,7 @@
           closable
           :disable-transitions="false"
           @close="charTagsHandleClose(tag)"
-        >
-          {{ tag }}
-        </el-tag>
+        >{{ tag }}</el-tag>
         <el-input
           v-if="charTagsInputVisible"
           ref="saveTagInput"
@@ -99,18 +83,6 @@
         />
         <el-button v-else class="button-new-tag" size="small" @click="charTagsShowInput">+ 添加</el-button>
       </el-form-item>
-      <el-form-item v-show="!isOpenAddMultiSpecs" label="默认销售价" prop="singleSkuSalePrice">
-        <el-input v-model="form.singleSkuSalePrice" clearable style="width:160px">
-          <template slot="prepend">￥</template>
-        </el-input>
-
-        <el-alert
-          title="提示：该价格作为默认销售价"
-          type="remark-gray"
-          :closable="false"
-        />
-
-      </el-form-item>
       <el-form-item label="取货模式">
         <el-radio-group v-model="form.supReceiveMode">
           <el-radio-button label="1">仅限配送</el-radio-button>
@@ -120,138 +92,61 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性" style="max-width:1000px">
-        <el-checkbox v-model="isOpenAddMultiSpecs">多规格</el-checkbox>
         <el-checkbox v-model="form.isMavkBuy">单独购买</el-checkbox>
         <el-checkbox v-model="form.isTrgVideoService">音视频咨询</el-checkbox>
         <el-checkbox v-model="form.isRevService">预约服务商品</el-checkbox>
         <el-checkbox v-model="form.isSupRentService">支持租赁方式</el-checkbox>
       </el-form-item>
-      <el-form-item v-show="!isOpenAddMultiSpecs" label="规格" prop="singleSkuSpecDes">
-        <el-input v-model="form.singleSkuSpecDes" clearable />
-      </el-form-item>
-      <el-form-item v-show="isOpenAddMultiSpecs" style="max-width:1000px">
+      <el-form-item label="SKU列表" style="max-width:1000px">
+        <el-checkbox v-model="form.isUnifyUpdateSalePrice">统一更新所有店铺销售信息（价格，下架）</el-checkbox>
 
-        <div style="display:flex">
-          <div style="min-width:50px;">规格：</div>
-          <div style="flex:1;">
-            <el-tag
-              v-for="item in multiSpecsItems"
-              :key="item.name"
-              closable
-              :disable-transitions="false"
-              @close="multiSpecsHandleClose(item)"
-            >
-              {{ item.name }}
-            </el-tag>
-            <el-input
-              v-if="multiSpecsInputVisible"
-              ref="saveTagInput"
-              v-model="multiSpecsInputValue"
-              class="input-new-tag"
-              size="small"
-              @keyup.enter.native="multiSpecsHandleInputConfirm"
-              @blur="multiSpecsHandleInputConfirm"
-            />
-            <el-button v-else class="button-new-tag" size="small" @click="multiSpecsShowInput">+ 添加新规格</el-button>
-          </div>
-        </div>
-        <div
-          v-for="(item,i) in multiSpecsItems"
-          :key="item.name"
-          style="display:flex"
-        >
-          <div style="min-width:50px;"> {{ item.name }}：</div>
-
-          <div style="flex:1;">
-            <el-tag
-              v-for="value in item.value"
-              :key="value.name"
-              type="success"
-              closable
-              :disable-transitions="false"
-              @close="multiSpecsValueHandleClose(item,value)"
-            >
-              {{ value.name }}
-            </el-tag>
-            <el-input
-              v-if="item.inputVisible"
-              :id="'saveTagInput'+i"
-              v-model="item.inputValue"
-              class="input-new-tag"
-              size="small"
-              @keyup.enter.native="multiSpecsValueHandleInputConfirm(item)"
-              @blur="multiSpecsValueHandleInputConfirm(item)"
-            />
-            <el-button v-else class="button-new-tag" size="small" @click="multiSpecsValueShowInput(item,'saveTagInput'+i)">+ 添加新项</el-button>
-          </div>
-
-        </div>
+        <el-alert
+          show-icon
+          title="提示：勾选后，SKU列表里的价格会统一更新所有店铺销售信息，不勾选只作参考价格，若指定店铺信息修改，请点击在售店铺"
+          type="remark"
+          :closable="false"
+        />
 
         <table class="list-tb" cellpadding="0" cellspacing="0">
           <thead>
             <tr>
-              <th
-                v-for="item in multiSpecsItems"
-                v-show="item.value.length>0"
-                :key="item.name "
-              >
-                {{ item.name }}
-              </th>
-              <th style="width:150px">
-                编码
-              </th>
-              <th style="width:150px">
-                条形码
-              </th>
-              <th style="width:150px">
-                价格
-              </th>
+              <th>规格</th>
+              <th style="width:180px">编码</th>
+              <th style="width:180px">条形码</th>
+              <th style="width:100px">价格</th>
+              <th style="width:100px">下架</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item,x) in multiSpecsSkuResult"
-              :key="x"
-            >
-              <td
-                v-for="(spec,y) in item.specDes"
-                :key="y"
-              >
-                {{ spec.value }}
+            <tr v-for="(item,x) in form.skus" :key="x">
+              <td>
+                <span v-for="(specDes,y) in item.specDes" :key="y">{{ specDes.value }}</span>
               </td>
               <td>
-                <el-tooltip :content="item.cumCode" placement="top">
-                  <el-input v-model="item.cumCode" clearable style="width:90%" />
-                </el-tooltip>
+                <el-input v-model="item.cumCode" clearable style="width:90%" />
               </td>
               <td>
-                <el-tooltip :content="item.barCode" placement="top">
-                  <el-input v-model="item.barCode" clearable style="width:90%" />
-                </el-tooltip>
+                <el-input v-model="item.barCode" clearable style="width:90%" />
               </td>
               <td>
-                <el-tooltip :content="item.salePrice" placement="top">
-                  <el-input v-model="item.salePrice" clearable style="width:90%" />
-                </el-tooltip>
+                <el-input v-model="item.salePrice" clearable style="width:90%" />
               </td>
-            </tr>
-
-            <tr v-if="multiSpecsSkuResult.length==0">
-              <td colspan="3" style="text-align: center;padding: 30px;color: #8c939d;">
-                <span>请添加新规格</span>
+              <td>
+                <el-checkbox v-model="item.isOffSell" />
               </td>
             </tr>
           </tbody>
-
         </table>
-
       </el-form-item>
+
       <el-form-item label="简短描述" style="max-width:1000px">
-        <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
+        <el-input v-model="form.briefDes" maxlength="200" clearable />
       </el-form-item>
       <el-form-item label="详情图片" prop="detailsDes">
-
-        <el-input :value="form.detailsDes.toString()" style="display:none" />
+        <el-input
+          :value="form.detailsDes==null?'':form.detailsDes.toString()"
+          style="display:none"
+        />
         <el-upload
           ref="uploadImgByDetailsDes"
           v-model="form.detailsDes"
@@ -269,13 +164,9 @@
           <i class="el-icon-plus" />
         </el-upload>
         <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDetailsDes">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt="">
+          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt>
         </el-dialog>
-        <el-alert
-          title="提示：图片不超过4M；可拖动改变图片顺序"
-          type="remark-gray"
-          :closable="false"
-        />
+        <el-alert title="提示：图片不超过4M；可拖动改变图片顺序" type="remark-gray" :closable="false" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -287,91 +178,58 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { add, initAdd } from '@/api/prdproduct'
+import { edit, initEdit } from '@/api/product'
 import supplier from '@/api/supplier'
 import fromReg from '@/utils/formReg'
-import { goBack, strLen, isMoney } from '@/utils/commonUtil'
+import { getUrlParam, strLen, isMoney } from '@/utils/commonUtil'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import Sortable from 'sortablejs'
-import PageHeader from '@/components/PageHeader/index.vue'
 export default {
-  name: 'PrdProductAdd',
-  components: { PageHeader },
   data() {
     return {
       loading: false,
-      isOpenAddMultiSpecs: false,
       form: {
+        id: '',
         name: '',
+        spuCode: '',
+        supplierId: '',
         kindIds: [],
         subjectIds: [],
         detailsDes: [],
         charTags: [],
-        briefDes: '',
-        supplierId: '',
+        isMavkBuy: false,
         isTrgVideoService: false,
         isRevService: false,
         isSupRentService: false,
         supReceiveMode: '1',
+        briefDes: '',
         displayImgUrls: [],
-        singleSkuCumCode: '',
-        singleSkuBarCode: '',
-        singleSkuSalePrice: 0,
-        singleSkuSpecDes: ''
+        isUnifyUpdateSalePrice: false,
+        skus: []
       },
       rules: {
         name: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         spuCode: [{ required: true, min: 1, max: 50, message: '必填,且不能超过50个字符', trigger: 'change' }],
-        singleSkuCumCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        singleSkuBarCode: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
         kindIds: [{ type: 'array', required: true, message: '请选择一个三级商品分类', min: 3, max: 3 }],
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
-        singleSkuSalePrice: [{ required: true, message: '金额格式,eg:88.88', pattern: fromReg.money }],
-        singleSkuSpecDes: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }],
         detailsDes: [{ type: 'array', required: false, message: '不能超过3张', max: 3 }],
         charTags: [{ type: 'array', required: false, message: '不能超过5个', max: 3 }]
       },
+      kind_options: [],
+      supplier_options: [],
+      supplier_option_loading: false,
       uploadImglistByDisplayImgUrls: [],
-      uploadImgPmsByByDisplayImgUrls: { folder: 'product', isBuildms: 'true' },
       uploadImgPreImgDialogUrlByDisplayImgUrls: '',
       uploadImgPreImgDialogVisibleByDisplayImgUrls: false,
+      uploadImgPmsByByDisplayImgUrls: { folder: 'product', isBuildms: 'true' },
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
       uploadImglistByDetailsDes: [],
       uploadImgPreImgDialogUrlByDetailsDes: '',
       uploadImgPreImgDialogVisibleByDetailsDes: false,
       uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' },
-      kind_options: [],
-      supplier_options: [],
-      supplier_option_loading: false,
-      multiSpecsItems: [],
-      multiSpecsInputVisible: false,
-      multiSpecsInputValue: '',
-      multiSpecsSkuArray: [],
-      multiSpecsSkuList: [],
-      multiSpecsSkuResult: [],
       charTagsInputVisible: false,
       charTagsInputValue: ''
-    }
-  },
-  watch: {
-    isOpenAddMultiSpecs(val, oldVal) {
-      if (val) {
-        this.rules.singleSkuCumCode[0].required = false
-        this.rules.singleSkuBarCode[0].required = false
-        this.form.singleSkuSalePrice = 0.01
-        this.rules.singleSkuSalePrice[0].required = false
-        this.rules.singleSkuSpecDes[0].required = false
-      } else {
-        this.rules.singleSkuCumCode[0].required = true
-        this.rules.singleSkuBarCode[0].required = true
-        this.form.singleSkuSalePrice = 0
-        this.rules.singleSkuSalePrice[0].required = true
-        this.rules.singleSkuSpecDes[0].required = true
-      }
-
-      console.log('inputVal = ' + val + ' , oldValue = ' + oldVal)
     }
   },
   mounted() {
@@ -384,10 +242,30 @@ export default {
   methods: {
     init() {
       this.loading = true
-      initAdd().then(res => {
+      var id = getUrlParam('id')
+      initEdit({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
+
+          this.form.id = d.id
+          this.form.name = d.name
+          this.form.spuCode = d.spuCode
+          this.form.kindIds = d.kindIds
+          this.form.detailsDes = d.detailsDes
+          this.form.briefDes = d.briefDes
+          this.form.displayImgUrls = d.displayImgUrls
+          this.form.skus = d.skus
+          this.form.isMavkBuy = d.isMavkBuy
+          this.form.isTrgVideoService = d.isTrgVideoService
+          this.form.isRevService = d.isRevService
+          this.form.isSupRentService = d.isSupRentService
+          this.form.supReceiveMode = d.supReceiveMode + ''
+          this.form.charTags = d.charTags === null ? [] : d.charTags
+          this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
+          this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.kind_options = d.kinds
+          this.supplier_options = [{ id: d.supplierId, name: d.supplierName }]
+          this.form.supplierId = d.supplierId
         }
         this.loading = false
       })
@@ -398,104 +276,91 @@ export default {
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          var skus = []
+          for (var i = 0; i < this.form.skus.length; i++) {
+            var strName = '规格 '
 
-          if (this.isOpenAddMultiSpecs) {
-            var _skus = this.multiSpecsSkuResult
-            for (var i = 0; i < _skus.length; i++) {
-              var strName = '规格 '
-
-              for (var j = 0; j < _skus[i].specDes.length; j++) {
-                strName += _skus[i].specDes[j].value + ' '
-              }
-
-              if (strLen(_skus[i].cumCode) <= 0 || strLen(_skus[i].cumCode) > 30) {
-                this.$message(strName + '的编码不能为空，且不能超过30个字符')
-                return false
-              }
-
-              if (strLen(_skus[i].barCode) > 30) {
-                this.$message(strName + '的条形码不能超过30个字符')
-                return false
-              }
-
-              if (!isMoney(_skus[i].salePrice)) {
-                this.$message(strName + '的价格格式必须为:xx.xx,eg: 88.88')
-                return false
-              }
-
-              skus.push({ specDes: _skus[i].specDes, salePrice: _skus[i].salePrice, barCode: _skus[i].barCode, cumCode: _skus[i].cumCode })
+            for (var j = 0; j < this.form.skus[i].specDes.length; j++) {
+              strName += this.form.skus[i].specDes[j].value + ' '
             }
-          } else {
-            skus.push({ specDes: [{ name: '单规格', value: this.form.singleSkuSpecDes }], salePrice: this.form.singleSkuSalePrice, barCode: this.form.singleSkuBarCode, cumCode: this.form.singleSkuCumCode })
-          }
 
-          if (skus.length <= 0) {
-            this.$message('至少录入一个规格商品')
-            return false
-          }
+            if (strLen(this.form.skus[i].cumCode) <= 0 || strLen(this.form.skus[i].cumCode) > 30) {
+              this.$message(strName + '的编码不能为空，且不能超过30个字符')
+              return false
+            }
 
-          if (this.multiSpecsItems === null || this.multiSpecsItems.length === 0) {
-            this.multiSpecsItems = []
-            this.multiSpecsItems.push({ name: '单规格', value: [{ 'name': this.form.singleSkuSpecDes }] })
+            if (strLen(this.form.skus[i].barCode) > 30) {
+              this.$message(strName + '的条形码不能超过30个字符')
+              return false
+            }
+
+            if (!isMoney(this.form.skus[i].salePrice)) {
+              this.$message(strName + '的价格格式必须为:xx.xx,eg: 88.88')
+              return false
+            }
           }
 
           var _form = {}
+          _form.id = this.form.id
           _form.name = this.form.name
           _form.spuCode = this.form.spuCode
           _form.kindIds = this.form.kindIds
           _form.detailsDes = this.form.detailsDes
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
-          _form.specItems = this.multiSpecsItems
+          _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice
           _form.charTags = this.form.charTags
           _form.isTrgVideoService = this.form.isTrgVideoService
           _form.isRevService = this.form.isRevService
           _form.isSupRentService = this.form.isSupRentService
           _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
-          _form.skus = skus
-          console.log(JSON.stringify(_form))
+          _form.skus = this.form.skus
+          _form.supplierId = this.form.supplierId
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            add(_form).then(res => {
+            edit(_form).then(res => {
               this.$message(res.message)
-              if (res.result === 1) {
-                goBack(this)
-              }
             })
-          }).catch(() => {
           })
         }
       })
     },
-    handleGetDisplayImgUrls(fileList) {
-      var _imgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _imgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+    getUploadImglist(imgUrls) {
+      var _uploadImglist = []
+      if (imgUrls != null) {
+        for (var i = 0; i < imgUrls.length; i++) {
+          _uploadImglist.push({ status: 'success', url: imgUrls[i].url, name: imgUrls[i].name, response: { data: { name: imgUrls[i].name, url: imgUrls[i].url }}})
         }
       }
-      return _imgUrls
+      return _uploadImglist
+    },
+    handleGetDisplayImgUrls(fileList) {
+      var _displayImgUrls = []
+      for (var i = 0; i < fileList.length; i++) {
+        if (fileList[i].status === 'success') {
+          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+        }
+      }
+      return _displayImgUrls
     },
     handleRemoveByDisplayImgUrls(file, fileList) {
-      this.uploadImglistByDisplayImgUrls = fileList
+      this.uploadImglist = fileList
       this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
     handleSuccessByDisplayImgUrls(response, file, fileList) {
-      this.uploadImglistByDisplayImgUrls = fileList
+      this.uploadImglist = fileList
       this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
     handleErrorByDisplayImgUrls(errs, file, fileList) {
-      this.uploadImglistByDisplayImgUrls = fileList
+      this.uploadImglist = fileList
       this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
     },
     handlePreviewByDisplayImgUrls(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
+      this.uploadImgPreImgDialogUrlByDisplayImgUrls = file.url
+      this.uploadImgPreImgDialogVisibleByDisplayImgUrls = true
     },
     handleBeforeUploadByDisplayImgUrls(file) {
       const imgType = file.type
@@ -610,128 +475,6 @@ export default {
         animation: 150
       })
     },
-    multiSpecsHandleClose(item) {
-      var index = this.multiSpecsItems.indexOf(item)
-      this.multiSpecsItems.splice(index, 1)
-      this.buildCombination()
-    },
-    multiSpecsShowInput() {
-      this.multiSpecsInputVisible = true
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
-    },
-    multiSpecsHandleInputConfirm() {
-      var _this = this
-      var newItemName = _this.multiSpecsInputValue
-
-      var isHasSame = false
-      if (_this.multiSpecsItems != null) {
-        _this.multiSpecsItems.forEach(item => {
-          if (item.name === newItemName) {
-            isHasSame = true
-          }
-        })
-      }
-
-      if (isHasSame) {
-        _this.$message('已存在相同规格')
-        return false
-      }
-
-      if (strLen(newItemName) > 0) {
-        this.multiSpecsItems.push({ name: newItemName, value: [], inputVisible: false, inputValue: '' })
-      }
-      this.multiSpecsInputVisible = false
-      this.multiSpecsInputValue = ''
-      this.buildCombination()
-    },
-    multiSpecsValueHandleClose(item, val) {
-      var item_index = this.multiSpecsItems.indexOf(item)
-      var val_index = this.multiSpecsItems[item_index].value.indexOf(val)
-      this.multiSpecsItems[item_index].value.splice(val_index, 1)
-      this.buildCombination()
-    },
-    multiSpecsValueShowInput(item, id) {
-      var item_index = this.multiSpecsItems.indexOf(item)
-      this.multiSpecsItems[item_index].inputVisible = true
-      this.$nextTick(_ => {
-        document.querySelector('#' + id).focus()
-      })
-    },
-    multiSpecsValueHandleInputConfirm(item) {
-      var _this = this
-      var index = this.multiSpecsItems.indexOf(item)
-      var itemValues = this.multiSpecsItems[index].value
-      var newItemValue = item.inputValue
-
-      var isHasSame = false
-      if (itemValues != null) {
-        itemValues.forEach(_val => {
-          if (_val.name === newItemValue) {
-            isHasSame = true
-          }
-        })
-      }
-
-      if (isHasSame) {
-        _this.$message('已存在相同规格值')
-        return false
-      }
-
-      if (strLen(newItemValue) > 0) {
-        this.multiSpecsItems[index].value.push({ name: newItemValue })
-      }
-
-      console.log(JSON.stringify(this.multiSpecsItems))
-
-      this.multiSpecsItems[index].inputVisible = false
-      this.multiSpecsItems[index].inputValue = ''
-
-      this.buildCombination()
-    },
-    getSkuData(skuArr = [], i, list) {
-      for (let j = 0; j < list[i].length; j++) {
-        if (i < list.length - 1) {
-          skuArr[i] = list[i][j]
-          this.getSkuData(skuArr, i + 1, list) // 递归循环
-        } else {
-          this.multiSpecsSkuList.push([...skuArr, list[i][j]]) // 扩展运算符，连接两个数组
-        }
-      }
-    },
-    buildCombination() {
-      // var checkList = [
-      //   { name: '尺码', list: ['X', 'L'] },
-      //   { name: '颜色', list: ['红色'] },
-      //   { name: '图案', list: ['圆'] }
-      // ]
-
-      this.multiSpecsSkuArray = []
-      this.multiSpecsSkuList = []
-      // 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
-      this.multiSpecsItems.forEach(element => {
-        element.value.length > 0 ? this.multiSpecsSkuArray.push(element.value) : ''
-      })
-      // 勾选了规格，才调用方法
-      if (this.multiSpecsSkuArray.length > 0) {
-        this.getSkuData([], 0, this.multiSpecsSkuArray)
-      }
-
-      var multiSpecs = []
-      for (var j = 0; j < this.multiSpecsSkuList.length; j++) {
-        var arr_spec_desc = this.multiSpecsSkuList[j]
-        var ll_spec_desc = []
-        for (var k = 0; k < arr_spec_desc.length; k++) {
-          ll_spec_desc.push({ name: this.multiSpecsItems[k].name, value: arr_spec_desc[k].name })
-        }
-
-        multiSpecs.push({ specDes: ll_spec_desc, salesPrice: 0, cumCode: '', barCode: '' })
-      }
-
-      this.multiSpecsSkuResult = multiSpecs
-      console.log(JSON.stringify(this.multiSpecsSkuResult))
-    },
     charTagsHandleClose(tag) {
       this.form.charTags.splice(this.form.charTags.indexOf(tag), 1)
     },
@@ -744,23 +487,19 @@ export default {
     charTagsHandleInputConfirm() {
       const inputValue = this.charTagsInputValue
 
-      if (inputValue !== '' && this.form.charTags.length <= 2) {
-        for (var i = 0; i < this.form.charTags.length; i++) {
-          if (this.form.charTags[i] === inputValue) {
-            this.$message('已存在' + inputValue)
-            return
-          }
-        }
+      // if (inputValue === '') {
 
+      if (inputValue !== '' && this.form.charTags.length <= 2) {
         this.form.charTags.push(inputValue)
       } else if (inputValue !== '' && this.form.charTags.length >= 3) {
         this.$message('最多输入3个特色标签')
       }
+
       this.charTagsInputVisible = false
       this.charTagsInputValue = ''
     },
     searchSupplier(query) {
-      if (query !== '') {
+      if (query != null && query !== '') {
         this.supplier_option_loading = true
 
         supplier.search({ key: query }).then(res => {
@@ -779,23 +518,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#product_baseinfo {
+  .el-form .el-form-item {
+    max-width: 600px;
+  }
 
-#product_add {
+  .el-upload-list >>> .sortable-ghost {
+    opacity: 0.8;
+    color: #fff !important;
+    background: #42b983 !important;
+  }
 
-.el-form .el-form-item{
-  max-width: 600px;
-}
-.el-upload-list >>> .sortable-ghost {
-  opacity: .8;
-  color: #fff!important;
-  background: #42b983!important;
-}
+  .el-upload-list >>> .el-tag {
+    cursor: pointer;
+  }
 
-.el-upload-list >>> .el-tag {
-  cursor: pointer;
-}
-
-   .el-tag {
+  .el-tag {
     margin-right: 10px;
   }
   .button-new-tag {
@@ -809,7 +547,6 @@ export default {
     margin-right: 10px;
     vertical-align: bottom;
   }
-
 }
 </style>
 

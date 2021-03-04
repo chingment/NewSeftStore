@@ -5,8 +5,8 @@
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
             <template slot="title">商品</template>
-            <el-menu-item index="/prdproduct/list">商品列表</el-menu-item>
-            <el-menu-item index="/prdproduct/add">新建商品</el-menu-item>
+            <el-menu-item index="/product/list">商品列表</el-menu-item>
+            <el-menu-item index="/product/add">新建商品</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>
@@ -23,7 +23,7 @@ export default {
   name: 'PrdProductIndex',
   data() {
     return {
-      navActive: '/prdproduct/list',
+      navActive: '/product/list',
       isDesktop: this.$store.getters.isDesktop
     }
   },
