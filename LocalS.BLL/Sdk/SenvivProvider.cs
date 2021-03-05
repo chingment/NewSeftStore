@@ -95,7 +95,7 @@ namespace LocalS.BLL
             return accessToken;
         }
 
-        public CustomJsonResult NotifyClientExpire(string clientUserId, string skuId, string skuName, DateTime expireDate, string orderId, string pOrderId)
+        public CustomJsonResult NotifyClientExpire(string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
         {
             var result = new CustomJsonResult();
 
@@ -104,7 +104,7 @@ namespace LocalS.BLL
             if (string.IsNullOrEmpty(d_ClientUser.PhoneNumber))
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
-            var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == orderId).FirstOrDefault();
+            var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == pOrderId).FirstOrDefault();
 
             var d_SenvivUsers = CurrentDb.SenvivUser.Where(m => m.Mobile == d_ClientUser.PhoneNumber).ToList();
 

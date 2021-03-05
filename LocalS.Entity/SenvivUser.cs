@@ -25,10 +25,10 @@ namespace LocalS.Entity
         public string Weight { get; set; }
         public string TargetValue { get; set; }
         public string Remarks { get; set; }
-        public DateTime? LastloginTime { get; set; }
+        public string LastloginTime { get; set; }
         public string LoginCount { get; set; }
         public string LastReportId { get; set; }
-        public DateTime? LastReportTime { get; set; }
+        public string LastReportTime { get; set; }
         public string Details { get; set; }
         public string Status { get; set; }
         public string SAS { get; set; }

@@ -44,7 +44,6 @@ namespace LocalS.Entity
         public const string OrderReserveSuccess = "OrderReserveSuccess";
         [EventCodeRemark("A", "订单异常处理")]
         public const string OrderHandleException = "OrderHandleException";
-
         [EventCodeRemark("A", "新增管理账号信息")]
         public const string AdminUserAdd = "AdminUserAdd";
         [EventCodeRemark("A", "修改管理账号信息")]
@@ -95,8 +94,6 @@ namespace LocalS.Entity
         public const string CouponAdd = "CouponAdd";
         [EventCodeRemark("A", "修改优惠券信息")]
         public const string CouponEdit = "CouponEdit";
-
-
         [EventCodeRemark("B", "更新机器库存信息命令")]
         public const string MCmdUpdateSkuStock = "MCmdUpdateSkuStock";
         [EventCodeRemark("C", "更新机器广告")]
@@ -113,7 +110,6 @@ namespace LocalS.Entity
         public const string MCmdDsx01OpenPickupDoor = "MCmdDsx01OpenPickupDoor";
         [EventCodeRemark("C", "支付成功命令")]
         public const string MCmdPaySuccess = "MCmdPaySuccess";
-
         public static string GetEventName(string eventCode)
         {
 
@@ -236,7 +232,6 @@ namespace LocalS.Entity
 
             //return name;
         }
-
         public static string GetEventLevel(string eventCode)
         {
             string name = string.Empty;
