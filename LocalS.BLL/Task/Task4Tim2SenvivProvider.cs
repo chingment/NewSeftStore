@@ -15,7 +15,6 @@ namespace LocalS.BLL.Task
     public class Task4Tim2SenvivProvider : BaseService, IJob
     {
         public readonly string TAG = "Task4Tim2SenvivProvider";
-
         public DateTime Convert2DateTime(string str)
         {
             try
