@@ -225,7 +225,7 @@ namespace LocalS.BLL.Task
                                 //判断支付过期时间
                                 if (m.ExpireTime.AddMinutes(1) < DateTime.Now)
                                 {
-                                    BizFactory.Order.NotifyClientExpire(IdWorker.Build(IdType.EmptyGuid), model5.ClientUserId, model5.SkuId, model5.SkuName, model5.ExpireDate, model5.POrderId);
+                                    BizFactory.Order.NotifyClientExpire(IdWorker.Build(IdType.EmptyGuid), model5.ClientUserId, model5.SkuId, model5.SkuName, model5.ExpireDate, model5.OrderId, model5.POrderId);
                                 }
                                 #endregion
                                 break;

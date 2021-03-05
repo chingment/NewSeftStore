@@ -2568,7 +2568,7 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public CustomJsonResult NotifyClientExpire(string operater, string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
+        public CustomJsonResult NotifyClientExpire(string operater, string clientUserId, string skuId, string skuName, DateTime expireDate, string orderId, string pOrderId)
         {
             var result = new CustomJsonResult();
 
@@ -2577,7 +2577,7 @@ namespace LocalS.BLL.Biz
             var value = redis.KGetString(key);
             if (value == null)
             {
-                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, pOrderId);
+                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, orderId, pOrderId);
                 if (result2.Result == ResultType.Success)
                 {
                     redis.KSet(key, "1", new TimeSpan(24, 0, 0));

@@ -95,7 +95,7 @@ namespace LocalS.BLL
             return accessToken;
         }
 
-        public CustomJsonResult NotifyClientExpire(string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
+        public CustomJsonResult NotifyClientExpire(string clientUserId, string skuId, string skuName, DateTime expireDate, string orderId, string pOrderId)
         {
             var result = new CustomJsonResult();
 
@@ -104,11 +104,13 @@ namespace LocalS.BLL
             if (string.IsNullOrEmpty(d_ClientUser.PhoneNumber))
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
+            var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == orderId).FirstOrDefault();
+
             var d_SenvivUsers = CurrentDb.SenvivUser.Where(m => m.Mobile == d_ClientUser.PhoneNumber).ToList();
 
             foreach (var d_SenvivUser in d_SenvivUsers)
             {
-                var d_SenvivUserProducts = CurrentDb.SenvivUserProduct.Where(m => m.SvUserId == d_SenvivUser.Id).ToList();
+                var d_SenvivUserProducts = CurrentDb.SenvivUserProduct.Where(m => m.SvUserId == d_SenvivUser.Id && m.Sn == d_RentOrder.SkuDeviceSn).ToList();
 
                 foreach (var d_SenvivUserProduct in d_SenvivUserProducts)
                 {
@@ -121,7 +123,7 @@ namespace LocalS.BLL
                     string remark = "请尽快续费，以免影响您的设备使用！";
 
                     string mp_AppId = "wx80caad9ea41a00fc";
-                    string mp_PagePath = string.Format("pages/orderconfirm/orderconfirm?productSkus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22{0}%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId={1}", skuId, pOrderId);
+                    string mp_PagePath = string.Format("pages/orderconfirm/orderconfirm?skus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22{0}%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId={1}", skuId, pOrderId);
                     StringBuilder sb = new StringBuilder();
                     sb.Append("{\"touser\":\"" + openId + "\",");
                     sb.Append("\"template_id\":\"xCwBMd_h0ekopGsYIj7fpi7-qAY54qbuROTzmS7odhQ\",");
