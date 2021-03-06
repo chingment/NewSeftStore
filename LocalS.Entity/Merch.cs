@@ -69,5 +69,8 @@ namespace LocalS.Entity
         public bool IsOpenMemberRight { get; set; }
 
         public bool IsOpenCouponRight { get; set; }
+
+
+        public string SenvivDepts { get; set; }
     }
 }

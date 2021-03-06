@@ -97,12 +97,19 @@ namespace LocalS.BLL
 
         public CustomJsonResult NotifyClientExpire(string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
         {
+            LogUtil.Info("NotifyClientExpire");
+
             var result = new CustomJsonResult();
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == clientUserId).FirstOrDefault();
 
+            LogUtil.Info("NotifyClientExpire.PhoneNumber:" + d_ClientUser.PhoneNumber);
+
             if (string.IsNullOrEmpty(d_ClientUser.PhoneNumber))
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+
+
+            LogUtil.Info("NotifyClientExpire.pOrderId:" + pOrderId);
 
             var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == pOrderId).FirstOrDefault();
 
@@ -110,10 +117,15 @@ namespace LocalS.BLL
 
             foreach (var d_SenvivUser in d_SenvivUsers)
             {
+                LogUtil.Info("NotifyClientExpire.Sn:" + d_RentOrder.SkuDeviceSn);
+
                 var d_SenvivUserProducts = CurrentDb.SenvivUserProduct.Where(m => m.SvUserId == d_SenvivUser.Id && m.Sn == d_RentOrder.SkuDeviceSn).ToList();
 
                 foreach (var d_SenvivUserProduct in d_SenvivUserProducts)
                 {
+                    LogUtil.Info("NotifyClientExpire.Sn2:" + d_SenvivUserProduct.Sn);
+                    LogUtil.Info("NotifyClientExpire.WechatId:" + d_SenvivUser.WechatId);
+
                     string openId = d_SenvivUser.WechatId;
 
                     string first = string.Format("您好，您的{0}租约即使到期", skuName);

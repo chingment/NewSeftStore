@@ -223,8 +223,10 @@ namespace LocalS.BLL.Task
                                 #region 检查租赁订单是否到期
                                 var model5 = m.Data.ToJsonObject<RentOrder2CheckExpire>();
                                 //判断支付过期时间
-                                if (m.ExpireTime.AddMinutes(1) < DateTime.Now)
+                                if (m.ExpireTime < DateTime.Now)
                                 {
+                                    LogUtil.Info("检查到过时订单:" + model5.POrderId);
+
                                     BizFactory.Order.NotifyClientExpire(IdWorker.Build(IdType.EmptyGuid), model5.ClientUserId, model5.SkuId, model5.SkuName, model5.ExpireDate, model5.POrderId);
                                 }
                                 #endregion

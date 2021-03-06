@@ -1458,7 +1458,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var s_RentOrder in s_RentOrders)
                     {
-                        Task4Factory.Tim2Global.Enter(Task4TimType.RentOrder2CheckExpire, s_RentOrder.OrdeId, DateTime.Now.AddMinutes(2), new RentOrder2CheckExpire { ClientUserId = s_RentOrder.ClientUserId, ExpireDate = s_RentOrder.NextPayRentTime.Value, SkuId = s_RentOrder.SkuId, SkuName = s_RentOrder.SkuName, POrderId = s_RentOrder.OrdeId });
+                        Task4Factory.Tim2Global.Enter(Task4TimType.RentOrder2CheckExpire, s_RentOrder.OrdeId, s_RentOrder.NextPayRentTime.Value, new RentOrder2CheckExpire { ClientUserId = s_RentOrder.ClientUserId, ExpireDate = s_RentOrder.NextPayRentTime.Value, SkuId = s_RentOrder.SkuId, SkuName = s_RentOrder.SkuName, POrderId = s_RentOrder.OrdeId });
                     }
 
                     string trgerId = "";
@@ -2567,7 +2567,7 @@ namespace LocalS.BLL.Biz
             return result;
 
         }
-        public CustomJsonResult NotifyClientExpire(string operater, string clientUserId, string skuId, string skuName, DateTime expireDate,string pOrderId)
+        public CustomJsonResult NotifyClientExpire(string operater, string clientUserId, string skuId, string skuName, DateTime expireDate, string pOrderId)
         {
             var result = new CustomJsonResult();
 
@@ -2576,7 +2576,7 @@ namespace LocalS.BLL.Biz
             var value = redis.KGetString(key);
             if (value == null)
             {
-                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate,pOrderId);
+                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, pOrderId);
                 if (result2.Result == ResultType.Success)
                 {
                     redis.KSet(key, "1", new TimeSpan(24, 0, 0));
