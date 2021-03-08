@@ -296,7 +296,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Sortable from 'sortablejs'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
-  name: 'PrdProductAdd',
+  name: 'ProductAdd',
   components: { PageHeader },
   data() {
     return {

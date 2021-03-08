@@ -13,7 +13,7 @@ import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStoreSale from './components/ManagePaneStoreSale'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
-  name: 'PrdProductManage',
+  name: 'ProductManage',
   components: { managePaneBaseInfo, managePaneStoreSale, PageHeader },
   data() {
     return {

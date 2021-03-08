@@ -50,7 +50,7 @@ export function getOnSaleStores(params) {
 
 export function editSalePriceOnStore(data) {
   return request({
-    url: '/product/EditSalePriceOnStore',
+    url: '/product/editSalePriceOnStore',
     method: 'post',
     data
   })

@@ -20,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: 'PrdProductIndex',
+  name: 'ProductIndex',
   data() {
     return {
       navActive: '/product/list',

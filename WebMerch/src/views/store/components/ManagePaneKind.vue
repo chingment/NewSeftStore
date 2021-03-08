@@ -336,7 +336,7 @@ import { searchSpu, getSpecs } from '@/api/product'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
-  name: 'ManagePaneProduct',
+  name: 'ManagePaneKind',
   components: { Pagination },
   props: {
     storeId: {

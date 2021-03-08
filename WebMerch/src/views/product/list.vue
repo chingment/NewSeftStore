@@ -7,11 +7,11 @@
 
           <el-autocomplete
             v-model="listQuery.key"
-            :fetch-suggestions="handleProductSrh"
+            :fetch-suggestions="handleSpuSrh"
             placeholder="商品名称/编码/条形码/首拼音母"
             clearable
             style="width: 100%"
-            @select="handleProductSel"
+            @select="handleSpuSel"
             @keyup.enter.native="handleFilter"
             @clear="handleFilter"
           />
@@ -92,7 +92,7 @@ import { getList, searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'PrdProductList',
+  name: 'ProductList',
   components: { Pagination },
   data() {
     return {
@@ -146,7 +146,7 @@ export default {
         path: '/product/manage?id=' + row.id + '&tab=tabStoreSale'
       })
     },
-    handleProductSrh(queryString, cb) {
+    handleSpuSrh(queryString, cb) {
       console.log('queryString:' + queryString)
       searchSku({ key: queryString }).then(res => {
         if (res.result === 1) {
@@ -160,7 +160,7 @@ export default {
         }
       })
     },
-    handleProductSel(item) {
+    handleSpuSel(item) {
       this.listQuery.key = item.name
       getList(this.listQuery).then(res => {
         if (res.result === 1) {

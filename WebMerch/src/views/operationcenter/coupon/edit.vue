@@ -137,9 +137,9 @@
                 style="width: 75%"
                 size="medium"
                 clearable
-                @change="handleUseAreaSelProductKind"
+                @change="handleUseAreaSelKind"
               />
-              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProductKind">添加</el-button>
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddKind">添加</el-button>
             </div>
             <div>
               <el-table
@@ -156,7 +156,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
                   <template slot-scope="scope">
-                    <el-button type="text" size="mini" @click="handleUseAreaDelProductKind(scope.$index)">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelKind(scope.$index)">
                       删除
                     </el-button>
                   </template>
@@ -168,12 +168,12 @@
             <div>
               <el-autocomplete
                 v-model="temp.spuSearchKey"
-                :fetch-suggestions="handleUseAreaSrhProduct"
+                :fetch-suggestions="handleUseAreaSrhSpu"
                 placeholder="商品名称/编码/条形码/首拼音母"
                 clearable
                 style="width: 75%"
                 size="medium"
-                @select="handleUseAreaSelProduct"
+                @select="handleUseAreaSelSpu"
               >
                 <template slot-scope="{ item }">
                   <div class="spu-search">
@@ -182,7 +182,7 @@
                   </div>
                 </template>
               </el-autocomplete>
-              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddProduct">添加</el-button>
+              <el-button size="medium" style="width: 20%" @click="handleUseAreaAddSpu">添加</el-button>
             </div>
             <div>
               <el-table
@@ -204,7 +204,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="right" width="180" class-name="small-padding fixed-width">
                   <template slot-scope="scope">
-                    <el-button type="text" size="mini" @click="handleUseAreaDelProduct(scope.$index)">
+                    <el-button type="text" size="mini" @click="handleUseAreaDelSpu(scope.$index)">
                       删除
                     </el-button>
                   </template>
@@ -409,7 +409,7 @@ export default {
         }
       }
     },
-    handleUseAreaSrhProduct(queryString, cb) {
+    handleUseAreaSrhSpu(queryString, cb) {
       console.log('queryString:' + queryString)
       searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
@@ -423,12 +423,12 @@ export default {
         }
       })
     },
-    handleUseAreaSelProduct(item) {
+    handleUseAreaSelSpu(item) {
       this.temp.cur_sel_usearea_spu.id = item.spuId
       this.temp.cur_sel_usearea_spu.name = item.name
       this.temp.cur_sel_usearea_spu.spuCode = item.spuCode
     },
-    handleUseAreaAddProduct(item) {
+    handleUseAreaAddSpu(item) {
       var list = this.temp.list_usearea_spus
       var id = this.temp.cur_sel_usearea_spu.id
       var name = this.temp.cur_sel_usearea_spu.name
@@ -449,7 +449,7 @@ export default {
       list.push({ id: id, name: name, type: 'spu', spuCode: spuCode })
       this.handleUseAreaCheckSel(list)
     },
-    handleUseAreaDelProduct(index) {
+    handleUseAreaDelSpu(index) {
       var list = this.temp.list_usearea_spus
       list.splice(index, 1)
 
@@ -490,7 +490,7 @@ export default {
 
       this.handleUseAreaCheckSel(list)
     },
-    handleUseAreaSelProductKind(val) {
+    handleUseAreaSelKind(val) {
       let name1
       let name2
       let name3
@@ -520,7 +520,7 @@ export default {
       this.temp.cur_sel_usearea_kind.id = val[2]
       this.temp.cur_sel_usearea_kind.name = name1 + '/' + name2 + '/' + name3
     },
-    handleUseAreaAddProductKind(e) {
+    handleUseAreaAddKind(e) {
       var list = this.temp.list_usearea_kinds
       var id = this.temp.cur_sel_usearea_kind.id
       var name = this.temp.cur_sel_usearea_kind.name
@@ -541,7 +541,7 @@ export default {
 
       this.handleUseAreaCheckSel(list)
     },
-    handleUseAreaDelProductKind(index) {
+    handleUseAreaDelKind(index) {
       var list = this.temp.list_usearea_kinds
       list.splice(index, 1)
       this.handleUseAreaCheckSel(list)
