@@ -1173,8 +1173,8 @@ namespace LocalS.BLL.Biz
                                 if (d_RentOrder != null)
                                 {
                                     d_RentOrder.NextPayRentTime = d_RentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
-                                    d_RentOrder.Creator = operater;
-                                    d_RentOrder.CreateTime = DateTime.Now;
+                                    d_RentOrder.Mender = operater;
+                                    d_RentOrder.MendTime = DateTime.Now;
                                 }
 
                                 var d_rentOrderTransRecord = new RentOrderTransRecord();

@@ -291,20 +291,38 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var r_sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
-
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
+                var d_Store = CurrentDb.Store.Where(m => m.Id == item.StoreId).FirstOrDefault();
+                var d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.StoreId == item.StoreId && m.SkuId == item.SkuId).FirstOrDefault();
                 var status = new StatusModel();
                 if (item.IsDisabled)
+                {
                     status = new StatusModel(1, "无效");
+                }
                 else
-                    status = new StatusModel(2, "有效");
+                {
+                    if (item.StatTime > DateTime.Now)
+                    {
+                        status = new StatusModel(3, "未生效");
+                    }
+                    else if (item.EndTime < DateTime.Now)
+                    {
+                        status = new StatusModel(4, "已过期");
+                    }
+                    else
+                    {
+                        status = new StatusModel(5, "有效");
+                    }
+                }
 
                 olist.Add(new
                 {
                     Id = item.Id,
                     SkuId = item.SkuId,
-                    Name = r_sku.Name,
-                    MainImgUrl = r_sku.MainImgUrl,
+                    SkuName = r_Sku.Name,
+                    SkuMainImgUrl = r_Sku.MainImgUrl,
+                    StoreName = d_Store.Name,
+                    SalePrice = d_SellChannelStock.SalePrice,
                     MemberPrice = item.MemberPrice,
                     IsDisabled = item.IsDisabled,
                     StatTime = item.StatTime,

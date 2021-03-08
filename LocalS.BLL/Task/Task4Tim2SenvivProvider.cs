@@ -19,7 +19,14 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                return DateTime.Parse(str);
+                var dt1 = DateTime.Parse("1970-01-01T00:00:00+08:00");
+
+                var dt = DateTime.Parse(str);
+
+                if (dt < dt1)
+                    return dt1;
+
+                return dt;
             }
             catch (Exception ex)
             {
@@ -55,10 +62,10 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.Weight = senvivUser.weight;
                         d_SenvivUser.TargetValue = senvivUser.TargetValue;
                         d_SenvivUser.Remarks = senvivUser.remarks;
-                        d_SenvivUser.LastloginTime = senvivUser.lastloginTime;
+                        d_SenvivUser.LastloginTime = Convert2DateTime(senvivUser.lastloginTime);
                         d_SenvivUser.LoginCount = senvivUser.loginCount;
                         d_SenvivUser.LastReportId = senvivUser.lastReportId;
-                        d_SenvivUser.LastReportTime = senvivUser.lastReportTime;
+                        d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
                         d_SenvivUser.Details = senvivUser.details;
                         d_SenvivUser.Status = senvivUser.status;
                         d_SenvivUser.SAS = senvivUser.SAS;
@@ -94,9 +101,9 @@ namespace LocalS.BLL.Task
                                 d_SenvivUserProduct.DeviceQRCode = product.deviceQRCode;
                                 d_SenvivUserProduct.TcpAddress = product.tcpAddress;
                                 d_SenvivUserProduct.WebUrl = product.webUrl;
-                                d_SenvivUserProduct.LastOnlineTime = product.LastOnlineTime;
+                                d_SenvivUserProduct.LastOnlineTime = Convert2DateTime(product.LastOnlineTime);
                                 d_SenvivUserProduct.Model = product.model;
-                                d_SenvivUserProduct.BindTime = product.bindtime;
+                                d_SenvivUserProduct.BindTime = Convert2DateTime(product.bindtime);
                                 d_SenvivUserProduct.Status = product.status;
                                 d_SenvivUserProduct.Version = product.version;
                                 d_SenvivUserProduct.Remarks = product.remarks;

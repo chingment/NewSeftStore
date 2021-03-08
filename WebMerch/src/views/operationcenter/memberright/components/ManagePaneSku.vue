@@ -1,13 +1,13 @@
 <template>
-  <div id="coupon_list">
+  <div id="sku_list">
     <div class="filter-container">
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="优惠券名称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="商品名称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleOpenDialogByAddCoupon">添加</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleOpenDialogByEditSku">添加</el-button>
         </el-col>
       </el-row>
     </div>
@@ -24,30 +24,35 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="优惠券名称" prop="name" align="left" min-width="40%">
+      <el-table-column label="商品名称" prop="skuName" align="left" min-width="40%">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.skuName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="券种" prop="faceType" align="left" min-width="20%">
+      <el-table-column label="店铺" prop="storeName" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.faceType }}</span>
+          <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="券值" prop="faceValue" align="left" min-width="20%">
+      <el-table-column label="实际价" prop="salePrice" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.faceValue }}</span>
+          <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" prop="faceValue" align="left" min-width="20%">
+      <el-table-column label="会员价" prop="memberPrice" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.quantity }}</span> 张
+          <span>{{ scope.row.memberPrice }}</span> 张
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="status" align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.status.text }}</span> 张
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleRemove(row)">
-            移除
+            修改
           </el-button>
         </template>
       </el-table-column>
@@ -56,37 +61,52 @@
 
     <el-dialog
       title="添加"
-      :visible.sync="dialogByAddCouponIsVisible"
+      :visible.sync="dialogByEditSkuIsVisible"
       :width="isDesktop==true?'800px':'90%'"
     >
       <el-form
-        ref="formByAddCoupon"
-        v-loading="dialogByAddCouponIsLoading"
-        :model="formByAddCoupon"
-        :rules="rulesAddCoupon"
+        ref="formByEditSku"
+        v-loading="dialogByEditSkuIsLoading"
+        :model="formByEditSku"
+        :rules="rulesEditSku"
         label-width="120px"
       >
-        <el-form-item label="优惠券搜索">
+        <el-form-item label="商品搜索">
           <el-autocomplete
-            v-model="searchNameByCoupon"
+            v-model="searchNameBySku"
             style="width:300px"
-            :fetch-suggestions="searchAsyncByCoupon"
+            :fetch-suggestions="searchAsyncBySku"
             placeholder="名称"
-            @select="selectByCoupon"
+            @select="selectBySku"
           />
         </el-form-item>
 
-        <el-form-item label="优惠券名称">
-          <span>{{ formByAddCoupon.name }}</span>
+        <el-form-item label="商品名称">
+          <span>{{ formByEditSku.name }}</span>
         </el-form-item>
-        <el-form-item label="数量">
-          <el-input-number v-model="formByAddCoupon.quantity" :min="0" :max="20" style="width:160px" />
+        <el-form-item label="商品编码">
+          <span>{{ formByEditSku.cumCode }}</span>
         </el-form-item>
-
+        <el-form-item label="会员价" prop="memberPrice">
+          <el-input v-model="formByEditSku.memberPrice" clearable style="width:160px">
+            <template slot="prepend">￥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="有效期" prop="validDate">
+          <el-date-picker
+            v-model="formByEditSku.validDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd"
+            style="width: 400px"
+          />
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handelAddCoupon">保存</el-button>
-        <el-button @click="dialogByAddCouponIsVisible=false">关闭</el-button>
+        <el-button type="primary" @click="handelEditSku">保存</el-button>
+        <el-button @click="dialogByEditSkuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 
@@ -96,12 +116,13 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getCouponsByLevelSt, removeCoupon, addCoupon, searchCoupon } from '@/api/memberright'
+import { getSkus, editSku } from '@/api/memberright'
+import { searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 
 export default {
-  name: 'ManagePaneCoupon',
+  name: 'ManagePaneSku',
   components: { Pagination },
   props: {
     levelstId: {
@@ -120,18 +141,20 @@ export default {
         limit: 10,
         name: undefined
       },
-      formByAddCoupon: {
+      formByEditSku: {
         name: '',
+        cumCode: '',
         levelStId: '',
-        couponId: '',
-        quantity: 0
+        quantity: 0,
+        memberPrice: 0,
+        validDate: []
       },
-      rulesAddCoupon: {
+      rulesEditSku: {
         name: [{ required: true, min: 1, max: 200, message: '请选择优惠券', trigger: 'change' }]
       },
-      searchNameByCoupon: '',
-      dialogByAddCouponIsVisible: false,
-      dialogByAddCouponIsLoading: false,
+      searchNameBySku: '',
+      dialogByEditSkuIsVisible: false,
+      dialogByEditSkuIsLoading: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -152,7 +175,7 @@ export default {
     },
     _getListData() {
       this.loading = true
-      getCouponsByLevelSt(this.listQuery).then(res => {
+      getSkus(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items
@@ -165,13 +188,13 @@ export default {
       this.listQuery.page = 1
       this._getListData()
     },
-    handleRemove(item) {
+    handleEdit(item) {
       MessageBox.confirm('确定要移除该优惠券？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeCoupon({ couponStId: item.couponStId }).then(res => {
+        editSku({ }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this._getListData()
@@ -179,18 +202,18 @@ export default {
         })
       })
     },
-    handelAddCoupon() {
-      this.$refs['formByAddCoupon'].validate((valid) => {
+    handelEditSku() {
+      this.$refs['formByEditSku'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            addCoupon(this.formByAddCoupon).then(res => {
+            editSku(this.formByEditSku).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
-                this.dialogByAddCouponIsVisible = false
+                this.dialogByEditSkuIsVisible = false
                 this._getListData()
               }
             })
@@ -199,15 +222,17 @@ export default {
         }
       })
     },
-    handleOpenDialogByAddCoupon(item) {
-      this.dialogByAddCouponIsVisible = true
-      this.searchNameByCoupon = ''
-      this.formByAddCoupon.name = ''
-      this.formByAddCoupon.quantity = 0
+    handleOpenDialogByEditSku(item) {
+      this.dialogByEditSkuIsVisible = true
+      this.searchNameBySku = ''
+      this.formByEditSku.name = ''
+      this.formByEditSku.cumCode = ''
+      this.formByEditSku.memberPrice = 0
+      this.formByEditSku.validDate = []
     },
-    searchAsyncByCoupon(queryString, cb) {
+    searchAsyncBySku(queryString, cb) {
       console.log('queryString:' + queryString)
-      searchCoupon({ key: queryString }).then(res => {
+      searchSku({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
           var restaurants = []
@@ -215,7 +240,8 @@ export default {
             restaurants.push({
               value: d[j].name,
               id: d[j].id,
-              name: d[j].name
+              name: d[j].name,
+              cumCode: d[j].cumCode
             })
           }
 
@@ -223,11 +249,11 @@ export default {
         }
       })
     },
-    selectByCoupon(item) {
+    selectBySku(item) {
       console.log(JSON.stringify(item))
-      this.formByAddCoupon.levelStId = this.levelstId
-      this.formByAddCoupon.couponId = item.id
-      this.formByAddCoupon.name = item.name
+      this.formByEditSku.levelStId = this.levelstId
+      this.formByEditSku.name = item.name
+      this.formByEditSku.cumCode = item.cumCode
     }
   }
 }

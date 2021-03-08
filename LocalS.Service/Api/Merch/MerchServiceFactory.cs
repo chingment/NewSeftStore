@@ -136,6 +136,15 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static SenvivService Senviv
+        {
+            get
+            {
+                return new SenvivService();
+            }
+        }
+
         
+
     }
 }

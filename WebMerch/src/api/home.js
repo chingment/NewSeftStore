@@ -16,9 +16,9 @@ export function getTodaySummary(params) {
   })
 }
 
-export function getProductSkuSaleRl(params) {
+export function getSkuSaleRl(params) {
   return request({
-    url: '/home/GetProductSkuSaleRl',
+    url: '/home/getSkuSaleRl',
     method: 'get',
     params
   })
@@ -26,7 +26,7 @@ export function getProductSkuSaleRl(params) {
 
 export function getStoreGmvRl(params) {
   return request({
-    url: '/home/GetStoreGmvRl',
+    url: '/home/getStoreGmvRl',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function getStoreGmvRl(params) {
 
 export function getTodayStoreGmvRl(params) {
   return request({
-    url: '/home/GetTodayStoreGmvRl',
+    url: '/home/getTodayStoreGmvRl',
     method: 'get',
     params
   })
@@ -42,7 +42,7 @@ export function getTodayStoreGmvRl(params) {
 
 export function get7DayGmv(params) {
   return request({
-    url: '/home/Get7DayGmv',
+    url: '/home/get7DayGmv',
     method: 'get',
     params
   })
@@ -50,7 +50,7 @@ export function get7DayGmv(params) {
 
 export default {
   getTodaySummary: getTodaySummary,
-  getProductSkuSaleRl: getProductSkuSaleRl,
+  getSkuSaleRl: getSkuSaleRl,
   getStoreGmvRl: getStoreGmvRl,
   getTodayStoreGmvRl: getTodayStoreGmvRl,
   get7DayGmv: get7DayGmv

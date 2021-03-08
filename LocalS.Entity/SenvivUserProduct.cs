@@ -16,10 +16,10 @@ namespace LocalS.Entity
         public string DeviceQRCode { get; set; }
         public string TcpAddress { get; set; }
         public string WebUrl { get; set; }
-        public string LastOnlineTime { get; set; }
+        public DateTime? LastOnlineTime { get; set; }
         public string Model { get; set; }
         public string SvUserId { get; set; }
-        public string BindTime { get; set; }
+        public DateTime? BindTime { get; set; }
         public string Status { get; set; }
         public string Version { get; set; }
         public string Remarks { get; set; }

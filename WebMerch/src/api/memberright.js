@@ -80,6 +80,14 @@ export function searchCoupon(params) {
   })
 }
 
+export function getSkus(params) {
+  return request({
+    url: '/memberright/getSkus',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
@@ -90,5 +98,6 @@ export default {
   getCoupons: getCoupons,
   removeCoupon: removeCoupon,
   addCoupon: addCoupon,
-  searchCoupon: searchCoupon
+  searchCoupon: searchCoupon,
+  getSkus: getSkus
 }

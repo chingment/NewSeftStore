@@ -108,7 +108,10 @@ namespace Test
 
         static void Main(string[] args)
         {
-            DateTime dt = DateTime.Parse("2021-02-22T16:14:07.683+08:00");
+            DateTime dt = DateTime.Parse("0001-01-01T00:00:00+08:00");
+
+
+
 
             SdkFactory.Senviv.GetUserList();
 

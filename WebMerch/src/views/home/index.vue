@@ -262,7 +262,7 @@ export default {
     this._getTodaySummary()
     this._get7DayGmv()
     this._getTodayStoreGmvRl()
-    this._getProductSkuSaleRl()
+    this._getSkuSaleRl()
     this._getStoreGmvRl()
   },
   methods: {
