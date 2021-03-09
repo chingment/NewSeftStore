@@ -41,12 +41,12 @@
       </el-table-column>
       <el-table-column label="会员价" prop="memberPrice" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.memberPrice }}</span> 张
+          <span>{{ scope.row.memberPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="status" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.status.text }}</span> 张
+          <span>{{ scope.row.status.text }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
@@ -74,7 +74,7 @@
         <el-form-item label="商品搜索">
           <el-autocomplete
             v-model="searchNameBySku"
-            style="width:300px"
+            style="width: 400px"
             :fetch-suggestions="searchAsyncBySku"
             placeholder="名称"
             @select="selectBySku"
@@ -82,10 +82,20 @@
         </el-form-item>
 
         <el-form-item label="商品名称">
-          <span>{{ formByEditSku.name }}</span>
+          <span>{{ formByEditSku.skuName }}</span>
         </el-form-item>
         <el-form-item label="商品编码">
-          <span>{{ formByEditSku.cumCode }}</span>
+          <span>{{ formByEditSku.skuCumCode }}</span>
+        </el-form-item>
+        <el-form-item label="店铺">
+          <el-select v-model="formByEditSku.storeIds" multiple placeholder="选择店铺" style="width: 400px">
+            <el-option
+              v-for="item in optionsStores"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="会员价" prop="memberPrice">
           <el-input v-model="formByEditSku.memberPrice" clearable style="width:160px">
@@ -103,6 +113,9 @@
             style="width: 400px"
           />
         </el-form-item>
+        <el-form-item label="禁用" prop="isDisable">
+          <el-switch v-model="formByEditSku.isDisable" />
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handelEditSku">保存</el-button>
@@ -116,11 +129,11 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getSkus, editSku } from '@/api/memberright'
+import { getSkus, addSku } from '@/api/memberright'
 import { searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-
+import { getStores } from '@/api/common'
 export default {
   name: 'ManagePaneSku',
   components: { Pagination },
@@ -142,16 +155,19 @@ export default {
         name: undefined
       },
       formByEditSku: {
-        name: '',
-        cumCode: '',
+        skuId: '',
+        skuName: '',
+        skuCumCode: '',
+        storeIds: [],
         levelStId: '',
-        quantity: 0,
         memberPrice: 0,
-        validDate: []
+        validDate: [],
+        isDisable: false
       },
       rulesEditSku: {
         name: [{ required: true, min: 1, max: 200, message: '请选择优惠券', trigger: 'change' }]
       },
+      optionsStores: [],
       searchNameBySku: '',
       dialogByEditSkuIsVisible: false,
       dialogByEditSkuIsLoading: false,
@@ -171,6 +187,12 @@ export default {
       if (!isEmpty(this.levelstId)) {
         this.listQuery.levelStId = this.levelstId
         this._getListData()
+
+        getStores().then(res => {
+          if (res.result === 1) {
+            this.optionsStores = res.data
+          }
+        })
       }
     },
     _getListData() {
@@ -194,7 +216,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        editSku({ }).then(res => {
+        addSku({ }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this._getListData()
@@ -210,7 +232,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            editSku(this.formByEditSku).then(res => {
+            addSku(this.formByEditSku).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 this.dialogByEditSkuIsVisible = false
@@ -225,8 +247,10 @@ export default {
     handleOpenDialogByEditSku(item) {
       this.dialogByEditSkuIsVisible = true
       this.searchNameBySku = ''
-      this.formByEditSku.name = ''
-      this.formByEditSku.cumCode = ''
+      this.formByEditSku.skuId = ''
+      this.formByEditSku.storeIds = []
+      this.formByEditSku.skuName = ''
+      this.formByEditSku.skuCumCode = ''
       this.formByEditSku.memberPrice = 0
       this.formByEditSku.validDate = []
     },
@@ -239,7 +263,7 @@ export default {
           for (var j = 0; j < d.length; j++) {
             restaurants.push({
               value: d[j].name,
-              id: d[j].id,
+              id: d[j].skuId,
               name: d[j].name,
               cumCode: d[j].cumCode
             })
@@ -252,8 +276,9 @@ export default {
     selectBySku(item) {
       console.log(JSON.stringify(item))
       this.formByEditSku.levelStId = this.levelstId
-      this.formByEditSku.name = item.name
-      this.formByEditSku.cumCode = item.cumCode
+      this.formByEditSku.skuId = item.id
+      this.formByEditSku.skuName = item.name
+      this.formByEditSku.skuCumCode = item.cumCode
     }
   }
 }

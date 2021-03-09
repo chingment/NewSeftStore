@@ -88,6 +88,14 @@ export function getSkus(params) {
   })
 }
 
+export function addSku(data) {
+  return request({
+    url: '/memberright/addSku',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
@@ -99,5 +107,6 @@ export default {
   removeCoupon: removeCoupon,
   addCoupon: addCoupon,
   searchCoupon: searchCoupon,
-  getSkus: getSkus
+  getSkus: getSkus,
+  addSku: addSku
 }

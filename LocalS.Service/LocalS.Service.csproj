@@ -187,6 +187,7 @@
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
     <Compile Include="Api\Merch\AdService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
+    <Compile Include="Api\Merch\CommonService.cs" />
     <Compile Include="Api\Merch\CouponService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
     <Compile Include="Api\Merch\MachineService.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightAddCoupon.cs" />
+    <Compile Include="Api\Merch\RModels\RopMemberRightAddSku.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightGetCoupons.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightRemoveCoupon.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightSetFeeSt.cs" />

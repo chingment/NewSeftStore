@@ -247,6 +247,15 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+            if (string.IsNullOrEmpty(rop.LevelStId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请所属会员");
+
+            if (string.IsNullOrEmpty(rop.CouponId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择优惠券");
+
+            if (rop.Quantity <= 0)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数量必须大于0");
+
             var d_MemberCouponSt = CurrentDb.MemberCouponSt.Where(m => m.MerchId == merchId && m.CouponId == rop.CouponId && m.LevelStId == rop.LevelStId).FirstOrDefault();
             if (d_MemberCouponSt != null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经存在");
@@ -343,5 +352,46 @@ namespace LocalS.Service.Api.Merch
 
         }
 
+        public CustomJsonResult AddSku(string operater, string merchId, RopMemberRightAddSku rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.SkuId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择商品");
+
+            if (string.IsNullOrEmpty(rop.LevelStId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择会员");
+
+            if (rop.StoreIds == null || rop.StoreIds.Length == 0)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择店铺");
+
+            foreach (var storeId in rop.StoreIds)
+            {
+                var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == merchId && m.StoreId == storeId && m.SkuId == rop.SkuId && m.LevelStId == rop.LevelStId).FirstOrDefault();
+                if (d_MemberSkuSt != null)
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经存在");
+
+                d_MemberSkuSt = new Entity.MemberSkuSt();
+                d_MemberSkuSt.Id = IdWorker.Build(IdType.NewGuid);
+                d_MemberSkuSt.MerchId = merchId;
+                d_MemberSkuSt.StoreId = storeId;
+                d_MemberSkuSt.LevelStId = rop.LevelStId;
+                d_MemberSkuSt.SkuId = rop.SkuId;
+                d_MemberSkuSt.MemberPrice = rop.MemberPrice;
+                d_MemberSkuSt.IsDisabled = rop.IsDisabled;
+                d_MemberSkuSt.StatTime = DateTime.Parse(rop.ValidDate[0]);
+                d_MemberSkuSt.EndTime = DateTime.Parse(rop.ValidDate[1]);
+                d_MemberSkuSt.Creator = operater;
+                d_MemberSkuSt.CreateTime = DateTime.Now;
+                CurrentDb.MemberSkuSt.Add(d_MemberSkuSt);
+                CurrentDb.SaveChanges();
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+
+            return result;
+
+        }
     }
 }

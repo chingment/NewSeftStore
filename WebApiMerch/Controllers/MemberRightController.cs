@@ -88,5 +88,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.MemberRight.GetSkus(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse AddSku([FromBody]RopMemberRightAddSku rop)
+        {
+            IResult result = MerchServiceFactory.MemberRight.AddSku(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

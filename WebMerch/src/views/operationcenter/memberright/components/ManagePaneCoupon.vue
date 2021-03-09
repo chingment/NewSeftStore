@@ -57,7 +57,7 @@
     <el-dialog
       title="添加"
       :visible.sync="dialogByAddCouponIsVisible"
-      :width="isDesktop==true?'800px':'90%'"
+      :width="isDesktop==true?'600px':'90%'"
     >
       <el-form
         ref="formByAddCoupon"
@@ -202,6 +202,8 @@ export default {
     handleOpenDialogByAddCoupon(item) {
       this.dialogByAddCouponIsVisible = true
       this.searchNameByCoupon = ''
+      this.formByAddCoupon.levelStId = this.levelstId
+      this.formByAddCoupon.couponId = ''
       this.formByAddCoupon.name = ''
       this.formByAddCoupon.quantity = 0
     },
@@ -225,7 +227,6 @@ export default {
     },
     selectByCoupon(item) {
       console.log(JSON.stringify(item))
-      this.formByAddCoupon.levelStId = this.levelstId
       this.formByAddCoupon.couponId = item.id
       this.formByAddCoupon.name = item.name
     }

@@ -144,7 +144,14 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        
+
+        public static CommonService Common
+        {
+            get
+            {
+                return new CommonService();
+            }
+        }
 
     }
 }
