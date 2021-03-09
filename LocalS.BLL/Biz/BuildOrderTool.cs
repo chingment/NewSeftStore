@@ -259,12 +259,16 @@ namespace LocalS.BLL.Biz
                                     }
                                 }
 
-                                //var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == Sku.Id && m.MemberLevel == _memberLevel && m.IsDisabled == false).FirstOrDefault();
-                                //if (d_MemberSkuSt != null)
-                                //{
-                                //    salePrice = d_MemberSkuSt.MemberPrice;
-                                //    LogUtil.Info("clientUser.MemberPrice:" + d_MemberSkuSt.MemberPrice);
-                                //}
+                                var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == _merchId && m.StoreId == _storeId && m.SkuId == r_Sku.Id && m.MemberLevel == _memberLevel && m.StatTime <= DateTime.Now && m.EndTime >= DateTime.Now && m.IsDisabled == false).FirstOrDefault();
+                                if (d_MemberSkuSt != null)
+                                {
+                                    if(salePrice> d_MemberSkuSt.MemberPrice)
+                                    {
+                                        salePrice = d_MemberSkuSt.MemberPrice;
+                                    }
+
+                                    LogUtil.Info("clientUser.MemberPrice:" + salePrice);
+                                }
                             }
 
                             buildSku.SalePrice = salePrice;

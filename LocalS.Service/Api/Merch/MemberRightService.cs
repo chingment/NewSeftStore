@@ -374,11 +374,14 @@ namespace LocalS.Service.Api.Merch
                 if (d_MemberSkuSt != null)
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经存在");
 
+                var d_MemberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId && m.Id == rop.LevelStId).FirstOrDefault();
+
                 d_MemberSkuSt = new Entity.MemberSkuSt();
                 d_MemberSkuSt.Id = IdWorker.Build(IdType.NewGuid);
                 d_MemberSkuSt.MerchId = merchId;
                 d_MemberSkuSt.StoreId = storeId;
                 d_MemberSkuSt.LevelStId = rop.LevelStId;
+                d_MemberSkuSt.MemberLevel = d_MemberLevelSt.Level;
                 d_MemberSkuSt.SkuId = rop.SkuId;
                 d_MemberSkuSt.MemberPrice = rop.MemberPrice;
                 d_MemberSkuSt.IsDisabled = rop.IsDisabled;
