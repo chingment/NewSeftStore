@@ -96,6 +96,14 @@ export function addSku(data) {
   })
 }
 
+export function editSku(data) {
+  return request({
+    url: '/memberright/editSku',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getLevelSts: getLevelSts,
   initManage: initManage,
@@ -108,5 +116,6 @@ export default {
   addCoupon: addCoupon,
   searchCoupon: searchCoupon,
   getSkus: getSkus,
-  addSku: addSku
+  addSku: addSku,
+  editSku: editSku
 }

@@ -25,7 +25,7 @@
       </el-col>
     </el-row>
     <el-dialog title="设置" :visible.sync="dialogBySettingIsVisible" :width="isDesktop==true?'500px':'90%'">
-      <el-form ref="formBySetting" :model="formBySetting" :rules="rulesBySetting" label-width="80px">
+      <el-form ref="formBySetting" :model="formBySetting" label-width="80px">
         <el-form-item label="名称">
           <span>{{ formBySetting.name }}</span>
         </el-form-item>

@@ -7,7 +7,7 @@
         </el-col>
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleOpenDialogByEditSku">添加</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleOpenDialogByAddSku">添加</el-button>
         </el-col>
       </el-row>
     </div>
@@ -44,6 +44,11 @@
           <span>{{ scope.row.memberPrice }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="有效期" prop="memberPrice" align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.validDate[0] }}~{{ scope.row.validDate[1] }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" prop="status" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
@@ -51,7 +56,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleRemove(row)">
+          <el-button type="primary" size="mini" @click="handleOpenDialogByEditSku(row)">
             修改
           </el-button>
         </template>
@@ -61,14 +66,14 @@
 
     <el-dialog
       title="添加"
-      :visible.sync="dialogByEditSkuIsVisible"
+      :visible.sync="dialogByAddSkuIsVisible"
       :width="isDesktop==true?'800px':'90%'"
     >
       <el-form
-        ref="formByEditSku"
-        v-loading="dialogByEditSkuIsLoading"
-        :model="formByEditSku"
-        :rules="rulesEditSku"
+        ref="formByAddSku"
+        v-loading="dialogByAddSkuIsLoading"
+        :model="formByAddSku"
+        :rules="rulesByAddSku"
         label-width="120px"
       >
         <el-form-item label="商品搜索">
@@ -82,13 +87,13 @@
         </el-form-item>
 
         <el-form-item label="商品名称">
-          <span>{{ formByEditSku.skuName }}</span>
+          <span>{{ formByAddSku.skuName }}</span>
         </el-form-item>
         <el-form-item label="商品编码">
-          <span>{{ formByEditSku.skuCumCode }}</span>
+          <span>{{ formByAddSku.skuCumCode }}</span>
         </el-form-item>
         <el-form-item label="店铺">
-          <el-select v-model="formByEditSku.storeIds" multiple placeholder="选择店铺" style="width: 400px">
+          <el-select v-model="formByAddSku.storeIds" multiple placeholder="选择店铺" style="width: 400px">
             <el-option
               v-for="item in optionsStores"
               :key="item.value"
@@ -96,6 +101,53 @@
               :value="item.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item label="会员价" prop="memberPrice">
+          <el-input v-model="formByAddSku.memberPrice" clearable style="width:160px">
+            <template slot="prepend">￥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="有效期" prop="validDate">
+          <el-date-picker
+            v-model="formByAddSku.validDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd"
+            style="width: 400px"
+          />
+        </el-form-item>
+        <el-form-item label="禁用" prop="isDisabled">
+          <el-switch v-model="formByAddSku.isDisabled" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handelAddSku">保存</el-button>
+        <el-button @click="dialogByAddSkuIsVisible=false">关闭</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="修改"
+      :visible.sync="dialogByEditSkuIsVisible"
+      :width="isDesktop==true?'800px':'90%'"
+    >
+      <el-form
+        ref="formByEditSku"
+        v-loading="dialogByEditSkuIsLoading"
+        :model="formByEditSku"
+        :rules="rulesByEditSku"
+        label-width="120px"
+      >
+        <el-form-item label="商品名称">
+          <span>{{ formByEditSku.skuName }}</span>
+        </el-form-item>
+        <el-form-item label="商品编码">
+          <span>{{ formByEditSku.skuCumCode }}</span>
+        </el-form-item>
+        <el-form-item label="店铺">
+          <span>{{ formByEditSku.storeName }}</span>
         </el-form-item>
         <el-form-item label="会员价" prop="memberPrice">
           <el-input v-model="formByEditSku.memberPrice" clearable style="width:160px">
@@ -113,12 +165,12 @@
             style="width: 400px"
           />
         </el-form-item>
-        <el-form-item label="禁用" prop="isDisable">
-          <el-switch v-model="formByEditSku.isDisable" />
+        <el-form-item label="禁用" prop="isDisabled">
+          <el-switch v-model="formByEditSku.isDisabled" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handelEditSku">保存</el-button>
+        <el-button type="primary" @click="handleEditSku">保存</el-button>
         <el-button @click="dialogByEditSkuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
@@ -129,7 +181,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getSkus, addSku } from '@/api/memberright'
+import { getSkus, addSku, editSku } from '@/api/memberright'
 import { searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
@@ -154,7 +206,7 @@ export default {
         limit: 10,
         name: undefined
       },
-      formByEditSku: {
+      formByAddSku: {
         skuId: '',
         skuName: '',
         skuCumCode: '',
@@ -162,13 +214,29 @@ export default {
         levelStId: '',
         memberPrice: 0,
         validDate: [],
-        isDisable: false
+        isDisabled: false
       },
-      rulesEditSku: {
+      rulesByAddSku: {
+        name: [{ required: true, min: 1, max: 200, message: '请选择优惠券', trigger: 'change' }]
+      },
+      formByEditSku: {
+        skuId: '',
+        skuName: '',
+        skuCumCode: '',
+        storeId: '',
+        storeName: [],
+        levelStId: '',
+        memberPrice: 0,
+        validDate: [],
+        isDisabled: false
+      },
+      rulesByEditSku: {
         name: [{ required: true, min: 1, max: 200, message: '请选择优惠券', trigger: 'change' }]
       },
       optionsStores: [],
       searchNameBySku: '',
+      dialogByAddSkuIsVisible: false,
+      dialogByAddSkuIsLoading: false,
       dialogByEditSkuIsVisible: false,
       dialogByEditSkuIsLoading: false,
       isDesktop: this.$store.getters.isDesktop
@@ -210,21 +278,7 @@ export default {
       this.listQuery.page = 1
       this._getListData()
     },
-    handleEdit(item) {
-      MessageBox.confirm('确定要移除该优惠券？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        addSku({ }).then(res => {
-          this.$message(res.message)
-          if (res.result === 1) {
-            this._getListData()
-          }
-        })
-      })
-    },
-    handelEditSku() {
+    handleEditSku(item) {
       this.$refs['formByEditSku'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -232,7 +286,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            addSku(this.formByEditSku).then(res => {
+            editSku(this.formByEditSku).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
                 this.dialogByEditSkuIsVisible = false
@@ -244,15 +298,47 @@ export default {
         }
       })
     },
+    handelAddSku() {
+      this.$refs['formByAddSku'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            addSku(this.formByAddSku).then(res => {
+              this.$message(res.message)
+              if (res.result === 1) {
+                this.dialogByAddSkuIsVisible = false
+                this._getListData()
+              }
+            })
+          }).catch(() => {
+          })
+        }
+      })
+    },
     handleOpenDialogByEditSku(item) {
       this.dialogByEditSkuIsVisible = true
+      this.formByEditSku.skuId = item.skuId
+      this.formByEditSku.storeId = item.storeId
+      this.formByEditSku.levelStId = item.levelStId
+      this.formByEditSku.storeName = item.storeName
+      this.formByEditSku.skuName = item.skuName
+      this.formByEditSku.skuCumCode = item.skuCumCode
+      this.formByEditSku.memberPrice = item.memberPrice
+      this.formByEditSku.validDate = item.validDate
+      this.formByEditSku.isDisabled = item.isDisabled
+    },
+    handleOpenDialogByAddSku(item) {
+      this.dialogByAddSkuIsVisible = true
       this.searchNameBySku = ''
-      this.formByEditSku.skuId = ''
-      this.formByEditSku.storeIds = []
-      this.formByEditSku.skuName = ''
-      this.formByEditSku.skuCumCode = ''
-      this.formByEditSku.memberPrice = 0
-      this.formByEditSku.validDate = []
+      this.formByAddSku.skuId = ''
+      this.formByAddSku.storeIds = []
+      this.formByAddSku.skuName = ''
+      this.formByAddSku.skuCumCode = ''
+      this.formByAddSku.memberPrice = 0
+      this.formByAddSku.validDate = []
     },
     searchAsyncBySku(queryString, cb) {
       console.log('queryString:' + queryString)
@@ -275,10 +361,10 @@ export default {
     },
     selectBySku(item) {
       console.log(JSON.stringify(item))
-      this.formByEditSku.levelStId = this.levelstId
-      this.formByEditSku.skuId = item.id
-      this.formByEditSku.skuName = item.name
-      this.formByEditSku.skuCumCode = item.cumCode
+      this.formByAddSku.levelStId = this.levelstId
+      this.formByAddSku.skuId = item.id
+      this.formByAddSku.skuName = item.name
+      this.formByAddSku.skuCumCode = item.cumCode
     }
   }
 }

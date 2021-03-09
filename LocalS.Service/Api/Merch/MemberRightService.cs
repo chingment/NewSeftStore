@@ -285,7 +285,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && m.LevelStId == rup.LevelStId
-                         select new { m.Id, m.SkuId, m.MemberPrice, m.CreateTime, m.StoreId, m.StatTime, m.EndTime, m.IsDisabled });
+                         select new { m.Id, m.SkuId, m.MemberPrice, m.LevelStId, m.CreateTime, m.StoreId, m.StatTime, m.EndTime, m.IsDisabled });
 
             int total = query.Count();
 
@@ -304,6 +304,7 @@ namespace LocalS.Service.Api.Merch
                 var d_Store = CurrentDb.Store.Where(m => m.Id == item.StoreId).FirstOrDefault();
                 var d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.StoreId == item.StoreId && m.SkuId == item.SkuId).FirstOrDefault();
                 var status = new StatusModel();
+
                 if (item.IsDisabled)
                 {
                     status = new StatusModel(1, "无效");
@@ -330,12 +331,14 @@ namespace LocalS.Service.Api.Merch
                     SkuId = item.SkuId,
                     SkuName = r_Sku.Name,
                     SkuMainImgUrl = r_Sku.MainImgUrl,
+                    SkuCumCode = r_Sku.CumCode,
+                    StoreId = item.StoreId,
                     StoreName = d_Store.Name,
                     SalePrice = d_SellChannelStock.SalePrice,
+                    LevelStId = item.LevelStId,
                     MemberPrice = item.MemberPrice,
                     IsDisabled = item.IsDisabled,
-                    StatTime = item.StatTime,
-                    EndTime = item.EndTime,
+                    ValidDate = new string[] { item.StatTime.ToUnifiedFormatDate(), item.EndTime.ToUnifiedFormatDate() },
                     Status = status
                 });
 
@@ -388,7 +391,37 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+
+        }
+
+        public CustomJsonResult EditSku(string operater, string merchId, RopMemberRightEditSku rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.SkuId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择商品");
+
+            if (string.IsNullOrEmpty(rop.LevelStId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择会员");
+
+            if (string.IsNullOrEmpty(rop.StoreId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择店铺");
+
+            var d_MemberSkuSt = CurrentDb.MemberSkuSt.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.SkuId == rop.SkuId && m.LevelStId == rop.LevelStId).FirstOrDefault();
+            if (d_MemberSkuSt == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不存在");
+
+            d_MemberSkuSt.MemberPrice = rop.MemberPrice;
+            d_MemberSkuSt.IsDisabled = rop.IsDisabled;
+            d_MemberSkuSt.StatTime = DateTime.Parse(rop.ValidDate[0]);
+            d_MemberSkuSt.EndTime = DateTime.Parse(rop.ValidDate[1]);
+            d_MemberSkuSt.Mender = operater;
+            d_MemberSkuSt.MendTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
 

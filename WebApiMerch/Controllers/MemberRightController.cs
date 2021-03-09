@@ -95,5 +95,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.MemberRight.AddSku(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse EditSku([FromBody]RopMemberRightEditSku rop)
+        {
+            IResult result = MerchServiceFactory.MemberRight.EditSku(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
