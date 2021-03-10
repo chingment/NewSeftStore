@@ -197,6 +197,7 @@ namespace LocalS.BLL
                     r_Sku.DetailsDes = r_Spu.DetailsDes;
                     r_Sku.BriefDes = r_Spu.BriefDes;
                     r_Sku.SpecItems = r_Spu.SpecItems;
+                    r_Sku.SalePrice = d_Sku.SalePrice;
                     r_Sku.CharTags = r_Spu.CharTags;
                     r_Sku.SpecDes = d_Sku.SpecDes.ToJsonObject<List<SpecDes>>();
                     r_Sku.SpecIdx = d_Sku.SpecIdx;
