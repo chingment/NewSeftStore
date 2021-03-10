@@ -159,7 +159,7 @@ namespace LocalS.Service.Api.Merch
                     return "";
             }
         }
-        
+
 
         public CustomJsonResult GetUsers(string operater, string merchId, RupClientGetList rup)
         {
@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SenvivUser
                          where
                          deptIds.Contains(u.DeptId)
-                         select new { u.Id, u.Nick, u.HeadImgurl, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
+                         select new { u.Id, u.Nick, u.HeadImgurl, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
 
 
             int total = query.Count();
@@ -195,6 +195,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
+                    Account = item.Account,
                     Nick = item.Nick,
                     HeadImgurl = item.HeadImgurl,
                     Sex = item.Sex,

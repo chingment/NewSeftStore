@@ -55,6 +55,8 @@
     <Compile Include="Post\DeptSubordinateListResult.cs" />
     <Compile Include="Post\GetAccessTokenRequest.cs" />
     <Compile Include="Post\GetAccessTokenResult.cs" />
+    <Compile Include="Post\ReportDetailListRequest.cs" />
+    <Compile Include="Post\ReportDetailListResult.cs" />
     <Compile Include="Post\RequestResult.cs" />
     <Compile Include="Post\LoginRequest.cs" />
     <Compile Include="Post\LoginResult.cs" />

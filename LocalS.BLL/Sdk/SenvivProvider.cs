@@ -206,5 +206,6 @@ namespace LocalS.BLL
 
             return list;
         }
+
     }
 }
