@@ -1,6 +1,5 @@
 <template>
-     <el-page-header  @back="goBack" class="my-page-header" :content="content">
-    </el-page-header>
+  <el-page-header class="my-page-header" :content="content" @back="goBack" />
 </template>
 
 <script>
@@ -8,17 +7,16 @@
 export default {
   data() {
     return {
-        content:''
+      content: ''
     }
   },
   created() {
-       this.content=this.$route.meta.title
+    this.content = this.$route.meta.title
   },
   methods: {
-     goBack() {
-        console.log('go back');
-        this.$router.go(-1);
-     }
+    goBack() {
+      this.$router.go(-1)
+    }
   }
 }
 </script>

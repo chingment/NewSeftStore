@@ -523,8 +523,6 @@ export default {
       this.listQuery.receiveMode = this.receiveMode
     }
 
-    // console.log('receiveMode：' + this.receiveMode)
-
     this.listQuery.storeId = this.storeId
     this.listQuery.sellChannelRefId = this.sellChannelRefId
 

@@ -208,7 +208,6 @@ export default {
       this.formByAddCoupon.quantity = 0
     },
     searchAsyncByCoupon(queryString, cb) {
-      console.log('queryString:' + queryString)
       searchCoupon({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -226,7 +225,6 @@ export default {
       })
     },
     selectByCoupon(item) {
-      console.log(JSON.stringify(item))
       this.formByAddCoupon.couponId = item.id
       this.formByAddCoupon.name = item.name
     }

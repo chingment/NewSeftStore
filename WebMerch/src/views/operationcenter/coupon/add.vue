@@ -464,7 +464,6 @@ export default {
       }
     },
     handleUseAreaSrhSpu(queryString, cb) {
-      console.log('queryString:' + queryString)
       searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -575,16 +574,6 @@ export default {
         }
       }
 
-      console.log(
-        'id:' +
-          val[2] +
-          ',name1:' +
-          name1 +
-          ',name2' +
-          name2 +
-          ',name3:' +
-          name3
-      )
       // const resultArr = this.options_kinds.find((item) => {
       //   item.chhi
       //   return item.value === val
@@ -622,13 +611,11 @@ export default {
     },
     handleUseAreaCheckSel(list) {
       if (list == null || list.length === 0) {
-        console.log('a')
         this.form.useAreaValue = null
         this.rules.useAreaValue[0].required = true
         this.rules.useAreaValue[0].isShow = true
         this.rules.useAreaValue[0].message = '请选择'
       } else {
-        console.log('b')
         this.form.useAreaValue = list
         this.rules.useAreaValue[0].required = false
         this.rules.useAreaValue[0].isShow = false

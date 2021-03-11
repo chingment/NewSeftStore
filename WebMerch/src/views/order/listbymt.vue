@@ -631,7 +631,7 @@ export default {
       })
     },
     selectNav(e) {
-      console.log(e)
+
     }
   }
 }

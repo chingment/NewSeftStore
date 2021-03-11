@@ -260,7 +260,6 @@ export default {
       //         l_listData[i].cols[j].isShow = false
       //       } else {
       //         if (l_listData[i].cols[j].name.search(search) !== -1) {
-      //           console.log(l_listData[i].cols[j].name)
       //           l_listData[i].cols[j].isShow = true
       //         } else {
       //           l_listData[i].cols[j].isShow = false

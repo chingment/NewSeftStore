@@ -370,8 +370,6 @@ export default {
         this.rules.singleSkuSalePrice[0].required = true
         this.rules.singleSkuSpecDes[0].required = true
       }
-
-      console.log('inputVal = ' + val + ' , oldValue = ' + oldVal)
     }
   },
   mounted() {
@@ -455,7 +453,7 @@ export default {
           _form.isMavkBuy = this.form.isMavkBuy
           _form.supReceiveMode = this.form.supReceiveMode
           _form.skus = skus
-          console.log(JSON.stringify(_form))
+
           MessageBox.confirm('确定要保存', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -683,8 +681,6 @@ export default {
         this.multiSpecsItems[index].value.push({ name: newItemValue })
       }
 
-      console.log(JSON.stringify(this.multiSpecsItems))
-
       this.multiSpecsItems[index].inputVisible = false
       this.multiSpecsItems[index].inputValue = ''
 
@@ -730,7 +726,6 @@ export default {
       }
 
       this.multiSpecsSkuResult = multiSpecs
-      console.log(JSON.stringify(this.multiSpecsSkuResult))
     },
     charTagsHandleClose(tag) {
       this.form.charTags.splice(this.form.charTags.indexOf(tag), 1)

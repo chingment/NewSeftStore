@@ -147,7 +147,6 @@ export default {
       })
     },
     handleSpuSrh(queryString, cb) {
-      console.log('queryString:' + queryString)
       searchSku({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data

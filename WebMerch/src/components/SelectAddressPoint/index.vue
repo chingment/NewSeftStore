@@ -93,7 +93,7 @@ export default {
         // 创建地图实例
         var point = new BMap.Point(113.26688358298644, 23.135843274289744)
         if (that.curAdddress != null) {
-          console.log('that.curAdddress:' + JSON.stringify(that.curAdddress))
+          // console.log('that.curAdddress:' + JSON.stringify(that.curAdddress))
           point = new BMap.Point(that.curAdddress.point.lng, that.curAdddress.point.lat)
           that.curAddressDetails = that.curAdddress.address
         }
@@ -128,7 +128,7 @@ export default {
           var geoc = new BMap.Geocoder()
 
           geoc.getLocation(point, function(rs) {
-            console.log(rs)
+            // console.log(rs)
             that.curSelectAddress = rs
             that.curAddressDetails = rs.address
           })

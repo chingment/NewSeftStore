@@ -341,7 +341,6 @@ export default {
       this.formByAddSku.validDate = []
     },
     searchAsyncBySku(queryString, cb) {
-      console.log('queryString:' + queryString)
       searchSku({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -360,7 +359,6 @@ export default {
       })
     },
     selectBySku(item) {
-      console.log(JSON.stringify(item))
       this.formByAddSku.levelStId = this.levelstId
       this.formByAddSku.skuId = item.id
       this.formByAddSku.skuName = item.name

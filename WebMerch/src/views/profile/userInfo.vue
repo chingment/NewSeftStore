@@ -120,7 +120,7 @@ export default {
       }
     },
     cascader_org_change() {
-      console.log('dasd')
+
     }
   }
 }

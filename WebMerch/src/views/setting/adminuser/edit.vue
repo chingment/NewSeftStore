@@ -176,7 +176,7 @@ export default {
       }
     },
     cascader_org_change() {
-      console.log('dasd')
+
     },
     handleRemoveByAvatar(file, fileList) {
       this.uploadImglistByAvatar = fileList

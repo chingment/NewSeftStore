@@ -650,7 +650,6 @@ export default {
       }
     },
     spuSearchAsync(queryString, cb) {
-      console.log('queryString:' + queryString)
       searchSpu({ key: queryString }).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -670,7 +669,6 @@ export default {
       })
     },
     spuSelect(item) {
-      console.log(JSON.stringify(item))
       this.spuSearchMainImgUrl = item.mainImgUrl
       this.kindSpuForm.storeId = this.storeId
       this.kindSpuForm.spuId = item.spuId
