@@ -94,6 +94,8 @@
     <Compile Include="SellChannelStockDateHis.cs" />
     <Compile Include="Retailer.cs" />
     <Compile Include="SenvivDept.cs" />
+    <Compile Include="SenvivHealthDay.cs" />
+    <Compile Include="SenvivHealthMonth.cs" />
     <Compile Include="SenvivUser.cs" />
     <Compile Include="SenvivUserProduct.cs" />
     <Compile Include="Shop.cs" />

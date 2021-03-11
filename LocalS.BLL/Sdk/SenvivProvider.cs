@@ -207,5 +207,38 @@ namespace LocalS.BLL
             return list;
         }
 
+
+        public void GetUserHealthDayReport()
+        {
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            var d_SenvivUsers = CurrentDb.SenvivUser.ToList();
+
+            foreach (var d_SenvivUser in d_SenvivUsers)
+            {
+                var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(GetApiAccessToken(), new { deptid = d_SenvivUser.DeptId, userid = d_SenvivUser.Id, size = 1, page = 1 });
+                var resultReportDetailList = api.DoPost(requestReportDetailList);
+                if (resultReportDetailList.Result == ResultType.Success)
+                {
+                    if (resultReportDetailList.Data != null)
+                    {
+                        if (resultReportDetailList.Data.Data != null)
+                        {
+                            var d = resultReportDetailList.Data.Data.data;
+                            if (d != null && d.Count > 0)
+                            {
+                                var d1 = d[0];
+
+                               
+
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+        }
     }
 }
