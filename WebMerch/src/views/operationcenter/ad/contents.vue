@@ -65,13 +65,13 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.status.value==1" type="primary" size="mini" @click="handleSetContentStatus(row)">
+          <el-button v-if="row.status.value==1" type="text" size="mini" @click="handleSetContentStatus(row)">
             停止
           </el-button>
-          <el-button v-if="row.status.value==2" type="primary" size="mini" @click="handleSetContentStatus(row)">
+          <el-button v-if="row.status.value==2" type="text" size="mini" @click="handleSetContentStatus(row)">
             恢复
           </el-button>
-          <el-button type="primary" size="mini" @click="handleBelong(row)">
+          <el-button type="text" size="mini" @click="handleBelong(row)">
             编辑
           </el-button>
         </template>

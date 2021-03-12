@@ -56,14 +56,14 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.status.value==1" type="primary" size="mini" @click="handleSetBelongStatus(row)">
+          <el-button v-if="row.status.value==1" type="text" size="mini" @click="handleSetBelongStatus(row)">
             停止
           </el-button>
-          <el-button v-if="row.status.value==2" type="primary" size="mini" @click="handleSetBelongStatus(row)">
+          <el-button v-if="row.status.value==2" type="text" size="mini" @click="handleSetBelongStatus(row)">
             恢复
           </el-button>
 
-          <el-button v-if="row.status.value==1||row.status.value==2" type="primary" size="mini" @click="handleOpenDialogByEdit(true,row)">
+          <el-button v-if="row.status.value==1||row.status.value==2" type="text" size="mini" @click="handleOpenDialogByEdit(true,row)">
             编辑
           </el-button>
 

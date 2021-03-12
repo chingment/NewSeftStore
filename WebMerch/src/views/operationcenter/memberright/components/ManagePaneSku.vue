@@ -56,7 +56,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleOpenDialogByEditSku(row)">
+          <el-button type="text" size="mini" @click="handleOpenDialogByEditSku(row)">
             修改
           </el-button>
         </template>

@@ -81,7 +81,7 @@
                   </div>
                   <div class="below-right">
 
-                    <el-button type="primary" @click="dialogEditOpen(col)">编辑</el-button>
+                    <el-button type="text" @click="dialogEditOpen(col)">编辑</el-button>
                   </div>
                 </div>
               </div>

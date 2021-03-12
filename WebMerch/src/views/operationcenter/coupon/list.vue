@@ -80,7 +80,7 @@
           <!-- <el-button type="primary" size="mini" @click="handleDetails(row)">
             查看
           </el-button> -->
-          <el-button type="primary" size="mini" @click="handleEdit(row)">
+          <el-button type="text" size="mini" @click="handleEdit(row)">
             修改
           </el-button>
         </template>

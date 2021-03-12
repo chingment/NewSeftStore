@@ -25,10 +25,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleRelease(row)">
+          <el-button type="text" size="mini" @click="handleRelease(row)">
             发布
           </el-button>
-          <el-button type="primary" size="mini" @click="handleSawContents(row)">
+          <el-button type="text" size="mini" @click="handleSawContents(row)">
             发布记录
           </el-button>
         </template>

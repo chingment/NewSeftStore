@@ -1,7 +1,6 @@
 <template>
   <div id="product_list">
     <div class="filter-container">
-
       <el-row :gutter="12">
         <el-col :span="6" :xs="24" style="margin-bottom:20px">
 
@@ -76,14 +75,14 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" background :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
   </div>
 </template>
 

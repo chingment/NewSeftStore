@@ -91,7 +91,7 @@
       <el-table-column label="操作" align="center" width="120" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-dropdown @command="handleOperate">
-            <el-button type="primary" size="small">
+            <el-button type="text" size="small">
               操作<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">

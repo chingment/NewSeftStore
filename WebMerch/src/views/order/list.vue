@@ -146,10 +146,10 @@
         <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
 
-            <el-button v-if="row.canHandleEx" type="warning" size="mini" @click="dialogDetailsOpen(row)">
+            <el-button v-if="row.canHandleEx" type="text" size="mini" @click="dialogDetailsOpen(row)">
               处理
             </el-button>
-            <el-button v-else type="primary" size="mini" @click="dialogDetailsOpen(row)">
+            <el-button v-else type="text" size="mini" @click="dialogDetailsOpen(row)">
               查看
             </el-button>
 
