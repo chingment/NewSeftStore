@@ -234,6 +234,75 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+
+        public CustomJsonResult GetReceiveRecords(string operater, string merchId, RupCouponGetReceiveRecord rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.ClientCoupon
+                         join m in CurrentDb.SysClientUser on u.ClientUserId equals m.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where
+                                  (rup.NickName == null || tt.NickName.Contains(rup.NickName)) &&
+                         u.MerchId == merchId &&
+                         u.CouponId == rup.CouponId
+                         select new { u.Id, u.ClientUserId, tt.Avatar, tt.NickName, u.CouponId, u.Status, u.SourceType, u.SourceTime, u.SourcePoint, u.SourceObjId, u.SourceObjType, u.CreateTime });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                string sourceTypeName = "";
+                string sourceObjName = "";
+
+                if (item.SourceType == E_ClientCouponSourceType.SelfTake)
+                {
+                    sourceTypeName = "自己领取";
+                    sourceObjName = "-";
+                }
+                else if (item.SourceType == E_ClientCouponSourceType.SysGive)
+                {
+                    sourceTypeName = "系统发送";
+                    sourceObjName = "-";
+                }
+                else if (item.SourceType == E_ClientCouponSourceType.WorGive)
+                {
+                    sourceTypeName = "工作人员发送";
+                    var d_SysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == item.SourceObjId).FirstOrDefault();
+                    if (d_SysMerchUser != null)
+                    {
+                        sourceObjName = d_SysMerchUser.FullName;
+                    }
+                }
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Avatar = item.Avatar,
+                    NickName = item.NickName,
+                    SourceTypeName = sourceTypeName,
+                    SourceObjName = sourceObjName,
+                    SourceTime = item.SourceTime.ToUnifiedFormatDateTime(),
+                    SourcePoint = item.SourcePoint,
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
         public CustomJsonResult InitAdd(string operater, string merchId)
         {
             var result = new CustomJsonResult();

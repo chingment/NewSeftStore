@@ -21,6 +21,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetReceiveRecords([FromUri]RupCouponGetReceiveRecord rup)
+        {
+            IResult result = MerchServiceFactory.Coupon.GetReceiveRecords(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
             IResult result = MerchServiceFactory.Coupon.InitAdd(this.CurrentUserId, this.CurrentMerchId);

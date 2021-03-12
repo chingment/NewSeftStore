@@ -13,7 +13,7 @@
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
         </el-form-item>
       </el-form>
       <el-table

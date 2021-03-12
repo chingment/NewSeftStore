@@ -13,6 +13,9 @@
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
             新建
           </el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleWorGive">
+            赠送
+          </el-button>
         </el-col>
       </el-row>
 
@@ -24,7 +27,12 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="55"
+      />
       <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
@@ -80,6 +88,9 @@
           <!-- <el-button type="primary" size="mini" @click="handleDetails(row)">
             查看
           </el-button> -->
+          <el-button type="text" size="mini" @click="handleOpenDialogByReceiveRecord(row)">
+            领取记录
+          </el-button>
           <el-button type="text" size="mini" @click="handleEdit(row)">
             修改
           </el-button>
@@ -88,27 +99,34 @@
     </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
+    <el-dialog v-if="dialogIsShowByReceiveRecord" title="领取记录" :visible.sync="dialogIsShowByReceiveRecord" width="800px" append-to-body>
+      <panel-receive-record :coupon-id="couponId" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import PanelReceiveRecord from './components/PanelReceiveRecord.vue'
 export default {
   name: 'OperationCenterCouponList',
-  components: { Pagination },
+  components: { Pagination, PanelReceiveRecord },
   data() {
     return {
       loading: false,
       listKey: 0,
       listData: null,
       listTotal: 0,
+      couponId: '',
+      selectCouponIds: [],
       listQuery: {
         page: 1,
         limit: 10,
         name: undefined
       },
+      dialogIsShowByReceiveRecord: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -149,6 +167,21 @@ export default {
       this.$router.push({
         path: '/operationcenter/coupon/add'
       })
+    },
+    handleOpenDialogByReceiveRecord(item) {
+      this.couponId = item.id
+      this.dialogIsShowByReceiveRecord = true
+    },
+    handleSelectionChange(val) {
+      this.selectCouponIds = val
+    },
+    handleWorGive() {
+      if (this.selectCouponIds == null || this.selectCouponIds.length === 0) {
+        this.$message('请选择优惠券')
+        return
+      }
+
+      this.$message('暂未开通')
     }
   }
 }

@@ -40,10 +40,19 @@ export function edit(data) {
   })
 }
 
+export function getReceiveRecords(params) {
+  return request({
+    url: '/coupon/getReceiveRecords',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getList: getList,
   add: add,
   initAdd: initAdd,
   edit: edit,
-  initEdit: initEdit
+  initEdit: initEdit,
+  getReceiveRecords: getReceiveRecords
 }
