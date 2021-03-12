@@ -2,25 +2,23 @@
   <div id="refund_list">
     <div class="filter-container">
 
-      <el-row :gutter="20">
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.payrefundId" clearable style="width: 100%" placeholder="退款单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.paytransId" clearable style="width: 100%" placeholder="交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderId" clearable style="width: 100%" placeholder="订单号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="width: 100%" placeholder="支付商交易号" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-        </el-col>
-      </el-row>
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="退款单号">
+          <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+        </el-form-item>
+        <el-form-item label="交易号">
+          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="订单号">
+          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="支付商交易号">
+          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleFilter">查询</el-button>
+        </el-form-item>
+      </el-form>
 
     </div>
     <el-table
