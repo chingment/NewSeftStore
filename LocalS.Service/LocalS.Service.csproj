@@ -255,6 +255,7 @@
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportMachineStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
+    <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />

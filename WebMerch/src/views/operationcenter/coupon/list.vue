@@ -101,18 +101,24 @@
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
     <el-dialog v-if="dialogIsShowByReceiveRecord" title="领取记录" :visible.sync="dialogIsShowByReceiveRecord" width="800px" append-to-body>
-      <panel-receive-record :coupon-id="couponId" />
+      <pane-receive-record :coupon-id="couponId" />
     </el-dialog>
+
+      <el-dialog v-if="dialogIsShowBySendCoupon" title="发送优惠券" :visible.sync="dialogIsShowBySendCoupon" width="800px" append-to-body>
+      <pane-send-coupon :coupon-id="couponId" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import PanelReceiveRecord from './components/PanelReceiveRecord.vue'
+import PaneReceiveRecord from './components/PaneReceiveRecord.vue'
+import PaneSendCoupon from './components/PaneSendCoupon.vue'
 export default {
   name: 'OperationCenterCouponList',
-  components: { Pagination, PanelReceiveRecord },
+  components: { Pagination, PaneReceiveRecord,PaneSendCoupon },
   data() {
     return {
       loading: false,
@@ -127,6 +133,7 @@ export default {
         name: undefined
       },
       dialogIsShowByReceiveRecord: false,
+      dialogIsShowBySendCoupon: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -180,8 +187,7 @@ export default {
         this.$message('请选择优惠券')
         return
       }
-
-      this.$message('暂未开通')
+      this.dialogIsShowBySendCoupon=true
     }
   }
 }

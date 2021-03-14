@@ -126,11 +126,11 @@ namespace LocalS.Service.Api.Merch
 
                 d_SysClientUser.IsStaff = rop.IsStaff;
                 d_SysClientUser.IsHasProm = rop.IsHasProm;
-   
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ClientUserEdit, string.Format("保存客户账号（{0}）信息成功", d_SysClientUser.UserName),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ClientUserEdit, string.Format("保存客户账号（{0}）信息成功", d_SysClientUser.UserName), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -140,6 +140,37 @@ namespace LocalS.Service.Api.Merch
             return result;
 
 
+        }
+
+
+        public CustomJsonResult GetAvatars(string operater, string merchId, RupClientGetAvatars rup)
+        {
+            var result = new CustomJsonResult();
+
+            var d_SysClientUsers = (from u in CurrentDb.SysClientUser
+                                    where
+                                    rup.ClientUserIds.Contains(u.Id)
+                                    select new { u.Id, u.UserName, u.NickName, u.Avatar, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, u.IsDisable }).ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in d_SysClientUsers)
+            {
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    UserName = item.UserName,
+                    FullName = item.FullName,
+                    Email = item.Email,
+                    PhoneNumber = item.PhoneNumber,
+                    Avatar = item.Avatar,
+                    NickName = item.NickName
+                });
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+
+            return result;
         }
     }
 }

@@ -18,6 +18,13 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse GetAvatars([FromBody]RupClientGetAvatars rup)
+        {
+            IResult result = MerchServiceFactory.ClientUser.GetAvatars(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse InitDetails([FromUri]string id)
         {

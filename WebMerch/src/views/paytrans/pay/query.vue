@@ -26,67 +26,62 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.$index+1 }} </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易号" align="left" min-width="10%">
+      <el-table-column label="交易号"   fixed align="left"  width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="店铺" align="left" min-width="10%">
+      <el-table-column label="店铺" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="相关订单号" align="left" min-width="10%">
+      <el-table-column label="相关订单号" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.orderIds }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付商" align="left" min-width="5%">
+      <el-table-column label="支付商" align="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartner.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付商交易号" align="left" min-width="10%">
+      <el-table-column label="支付商交易号" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left" min-width="5%">
+      <el-table-column label="支付金额" align="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付方式" align="left" min-width="5%">
+      <el-table-column label="支付方式" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.payWay.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易状态" align="left" min-width="5%">
+      <el-table-column label="交易状态" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.payStatus.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="left" min-width="10%">
+      <el-table-column label="备注" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="应用程序" align="left" min-width="10%">
+      <el-table-column label="应用程序" align="left"  width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.appId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易时间" align="left" min-width="10%">
+      <el-table-column label="交易时间" align="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.submittedTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="120" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-dropdown @command="handleOperate">
             <el-button type="text" size="small">

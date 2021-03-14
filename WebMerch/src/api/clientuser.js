@@ -48,11 +48,20 @@ export function edit(data) {
   })
 }
 
+export function getAvatars(data) {
+  return request({
+    url: '/clientuser/getAvatars',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   edit: edit,
   initDetails: initDetails,
   initDetailsBaseInfo: initDetailsBaseInfo,
   initDetailsOrders: initDetailsOrders,
-  detailsOrdersGetOrderList: detailsOrdersGetOrderList
+  detailsOrdersGetOrderList: detailsOrdersGetOrderList,
+  getAvatars:getAvatars
 }
