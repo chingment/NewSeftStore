@@ -48,11 +48,20 @@ export function getReceiveRecords(params) {
   })
 }
 
+export function send(data) {
+  return request({
+    url: '/coupon/send',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   add: add,
   initAdd: initAdd,
   edit: edit,
   initEdit: initEdit,
-  getReceiveRecords: getReceiveRecords
+  getReceiveRecords: getReceiveRecords,
+  send:send
 }

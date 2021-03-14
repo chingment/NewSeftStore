@@ -12,11 +12,9 @@
              <client-select  multiple :select-ids="selectIds" v-on:GetSelectIds="getClientUserIds" />
 
       </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
-      </el-form-item>
     </el-form>
+
+    
   </div>
 </template>
 

@@ -62,5 +62,13 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.PrdProduct.SearchSku(this.CurrentUserId, this.CurrentMerchId, key);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse Send([FromBody]RopCouponSend rop)
+        {
+            IResult result = MerchServiceFactory.Coupon.Send(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

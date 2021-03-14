@@ -1238,8 +1238,7 @@ namespace LocalS.BLL.Biz
                                             }
 
                                             d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                                            d_clientCoupon.SourceType = E_ClientCouponSourceType.SysGive;
-                                            d_clientCoupon.SourceObjType = "System";
+                                            d_clientCoupon.SourceObjType = E_ClientCouponSourceObjType.SysGive;
                                             d_clientCoupon.SourceObjId = IdWorker.Build(IdType.EmptyGuid);
                                             d_clientCoupon.SourcePoint = "PaySuccess";
                                             d_clientCoupon.SourceTime = DateTime.Now;

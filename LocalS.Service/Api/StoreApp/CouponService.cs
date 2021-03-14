@@ -681,8 +681,7 @@ namespace LocalS.Service.Api.StoreApp
                 }
             }
             d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-            d_clientCoupon.SourceType = E_ClientCouponSourceType.SelfTake;
-            d_clientCoupon.SourceObjType = "AppUser";
+            d_clientCoupon.SourceObjType = E_ClientCouponSourceObjType.SelfTake;
             d_clientCoupon.SourceObjId = clientUserId;
             d_clientCoupon.SourcePoint = "RevCouponCenter";
             d_clientCoupon.SourceTime = DateTime.Now;

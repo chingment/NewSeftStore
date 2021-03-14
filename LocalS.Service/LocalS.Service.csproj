@@ -207,6 +207,7 @@
     <Compile Include="Api\Merch\RModels\RopAdEditContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentStatus.cs" />
+    <Compile Include="Api\Merch\RModels\RopCouponSend.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightAddCoupon.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightAddSku.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightEditSku.cs" />

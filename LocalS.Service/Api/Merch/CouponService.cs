@@ -246,7 +246,7 @@ namespace LocalS.Service.Api.Merch
                                   (rup.NickName == null || tt.NickName.Contains(rup.NickName)) &&
                          u.MerchId == merchId &&
                          u.CouponId == rup.CouponId
-                         select new { u.Id, u.ClientUserId, tt.Avatar, tt.NickName, u.CouponId, u.Status, u.SourceType, u.SourceTime, u.SourcePoint, u.SourceObjId, u.SourceObjType, u.CreateTime });
+                         select new { u.Id, u.ClientUserId, tt.Avatar, tt.NickName, u.CouponId, u.Status, u.SourceTime, u.SourcePoint, u.SourceObjId, u.SourceObjType, u.CreateTime });
 
             int total = query.Count();
 
@@ -263,17 +263,17 @@ namespace LocalS.Service.Api.Merch
                 string sourceTypeName = "";
                 string sourceObjName = "";
 
-                if (item.SourceType == E_ClientCouponSourceType.SelfTake)
+                if (item.SourceObjType == E_ClientCouponSourceObjType.SelfTake)
                 {
                     sourceTypeName = "自己领取";
                     sourceObjName = "-";
                 }
-                else if (item.SourceType == E_ClientCouponSourceType.SysGive)
+                else if (item.SourceObjType == E_ClientCouponSourceObjType.SysGive)
                 {
                     sourceTypeName = "系统发送";
                     sourceObjName = "-";
                 }
-                else if (item.SourceType == E_ClientCouponSourceType.WorGive)
+                else if (item.SourceObjType == E_ClientCouponSourceObjType.WorGive)
                 {
                     sourceTypeName = "工作人员发送";
                     var d_SysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == item.SourceObjId).FirstOrDefault();
@@ -684,6 +684,88 @@ namespace LocalS.Service.Api.Merch
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+        }
+
+        public CustomJsonResult Send(string operater, string merchId, RopCouponSend rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (rop.CouponIds == null || rop.CouponIds.Length == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择优惠券");
+            }
+
+            if (rop.Quantity <= 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "数量必须大于0");
+            }
+
+            if (rop.ClientUserIds == null || rop.ClientUserIds.Length == 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择客户");
+            }
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                foreach (var couponId in rop.CouponIds)
+                {
+                    var d_Coupon = CurrentDb.Coupon.Where(m => m.Id == couponId).FirstOrDefault();
+
+                    foreach (var clientUserId in rop.ClientUserIds)
+                    {
+                        for (var i = 0; i < rop.Quantity; i++)
+                        {
+                            var d_ClientCoupon = new ClientCoupon();
+                            d_ClientCoupon.Id = IdWorker.Build(IdType.NewGuid);
+                            d_ClientCoupon.Sn = "";
+                            d_ClientCoupon.MerchId = merchId;
+                            d_ClientCoupon.ClientUserId = clientUserId;
+                            d_ClientCoupon.CouponId = couponId;
+                            if (d_Coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
+                            {
+                                d_ClientCoupon.ValidStartTime = DateTime.Now;
+                                d_ClientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_Coupon.UseTimeValue));
+                            }
+                            else if (d_Coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
+                            {
+                                string[] arr_UseTimeValue = d_Coupon.UseTimeValue.ToJsonObject<string[]>();
+                                if (arr_UseTimeValue.Length == 2)
+                                {
+                                    d_ClientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
+                                    d_ClientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
+                                }
+                            }
+
+                            d_ClientCoupon.Status = E_ClientCouponStatus.WaitUse;
+                            d_ClientCoupon.SourceObjType = E_ClientCouponSourceObjType.WorGive;
+                            d_ClientCoupon.SourceObjId = operater;
+                            d_ClientCoupon.SourcePoint = "background";
+                            d_ClientCoupon.SourceTime = DateTime.Now;
+                            d_ClientCoupon.SourceDes = "后台用户发送";
+                            d_ClientCoupon.Creator = operater;
+                            d_ClientCoupon.CreateTime = DateTime.Now;
+                            CurrentDb.ClientCoupon.Add(d_ClientCoupon);
+
+                            d_Coupon.ReceivedQuantity += 1;
+                            d_Coupon.Mender = operater;
+                            d_Coupon.MendTime = DateTime.Now;
+
+                            CurrentDb.SaveChanges();
+                        }
+
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
+
+            }
+
+
+            return result;
         }
     }
 }

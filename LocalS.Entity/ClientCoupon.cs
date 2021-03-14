@@ -14,7 +14,7 @@ namespace LocalS.Entity
         Frozen = 5
     }
 
-    public enum E_ClientCouponSourceType
+    public enum E_ClientCouponSourceObjType
     {
 
         Unknow = 0,
@@ -41,8 +41,8 @@ namespace LocalS.Entity
         public DateTime ValidEndTime { get; set; }
         public DateTime? UseTime { get; set; }
         public E_ClientCouponStatus Status { get; set; }
-        public E_ClientCouponSourceType SourceType { get; set; }
-        public string SourceObjType { get; set; }
+        //public E_ClientCouponSourceType SourceType { get; set; }
+        public E_ClientCouponSourceObjType SourceObjType { get; set; }
         public string SourceObjId { get; set; }
         public string SourcePoint { get; set; }
         public DateTime SourceTime { get; set; }
