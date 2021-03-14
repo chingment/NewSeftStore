@@ -9,7 +9,7 @@
         </el-form-item>
       <el-form-item label="客户">
       
-             <client-select  multiple :select-ids="selectIds" />
+             <client-select  multiple :select-ids="selectIds" v-on:GetSelectIds="getClientUserIds" />
 
       </el-form-item>
 
@@ -49,7 +49,14 @@ export default {
    
   },
   methods: {
-
+  onSubmit(){
+  
+  console.log(JSON.stringify(this.selectIds))
+   },
+   getClientUserIds(ids){
+       console.log(JSON.stringify(ids))
+            this.selectIds=ids
+   }
   }
 }
 </script>

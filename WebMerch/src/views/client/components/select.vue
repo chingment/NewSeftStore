@@ -4,9 +4,10 @@
     <div class="its-clients">
 
         <template v-for="(item,index) in avatars">
-    <div class="it" :key="index">
+    <div class="it" :key="index" style="position: relative">
       <div class="it-avatar">
-            <img class="img" :src="item.avatar" style="width: 38px; height: 38px;">
+            <img class="img bd-cycle" :src="item.avatar" style="width: 38px; height: 38px;">
+            <i class="el-icon-error" @click="handleDelete(item)" style="position:absolute;right:0;top:0;"></i>
         </div>
         <div class="it-nickname">
             <span class="txt">{{item.nickName}}</span>
@@ -49,7 +50,7 @@
       </el-table-column>
      <el-table-column label="头像" prop="fullName" align="left" min-width="20%">
         <template slot-scope="scope">
-         <img :src="scope.row.avatar" style="width:38px;height:38px;">
+         <img class="img bd-cycle" :src="scope.row.avatar" style="width:38px;height:38px;">
         </template>
       </el-table-column>
       <el-table-column label="昵称" prop="nickName" align="left" min-width="20%">
@@ -81,6 +82,7 @@
 </template>
 
 <script>
+import { MessageBox } from 'element-ui'
 import { getList,getAvatars } from '@/api/clientuser'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -150,24 +152,57 @@ props: {
       this.selectIdsByMultiple = val
     },
     handleSelect(){
+      
+      if(this.multiple){
+        if(this.selectIdsByMultiple==null||this.selectIdsByMultiple.length==0)
+        {
+                 this.$message('至少选择一个')
+       return
+        }
 
-      if(this.selectIdBySingle==''&&this.selectIdsByMultiple.length==0){
+       for(var i=0;i< this.selectIdsByMultiple.length;i++){
+      console.log(this.selectIdsByMultiple[i].id)
+          this.selectIds.push(this.selectIdsByMultiple[i].id)
+          }
+
+      }
+      else{
+             if(this.selectIdBySingle==''){
        this.$message('请选择')
        return
       }
 
-      if(this.multiple){
-  for(var i=0;i< this.selectIdsByMultiple.length;i++){
-      console.log(this.selectIdsByMultiple[i].id)
-          this.selectIds.push(this.selectIdsByMultiple[i].id)
-          }
-      }
-      else{
-          this.selectIds.push(this.selectIdBySingle)
+        this.selectIds.push(this.selectIdBySingle)
       }
      
+      this.$emit('GetSelectIds',this.selectIds)
+
        this._getAvatars()
 
+    },
+    handleDelete(item){
+   MessageBox.confirm('确定移除'+item.nickName, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+           
+           for(var i=0;i<this.avatars.length;i++){
+             if(this.avatars[i].id==item.id){
+               this.avatars.splice(i,1)
+             }
+           }
+
+   for(var i=0;i<this.selectIds.length;i++){
+             if(this.selectIds[i]==item.id){
+               this.selectIds.splice(i,1)
+             }
+           }
+
+this.$emit('GetSelectIds',this.selectIds)
+
+          }).catch(() => {
+          })
     }
   }
 }
@@ -189,8 +224,9 @@ props: {
        }
 
         .it-nickname{
-    display: flex;
-    justify-content: center
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
        }
    }
 }
