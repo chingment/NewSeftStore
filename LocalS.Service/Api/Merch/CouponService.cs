@@ -263,17 +263,17 @@ namespace LocalS.Service.Api.Merch
                 string sourceTypeName = "";
                 string sourceObjName = "";
 
-                if (item.SourceObjType == E_ClientCouponSourceObjType.SelfTake)
+                if (item.SourceObjType == "SelfTake")
                 {
                     sourceTypeName = "自己领取";
                     sourceObjName = "-";
                 }
-                else if (item.SourceObjType == E_ClientCouponSourceObjType.SysGive)
+                else if (item.SourceObjType == "SysGive")
                 {
                     sourceTypeName = "系统发送";
                     sourceObjName = "-";
                 }
-                else if (item.SourceObjType == E_ClientCouponSourceObjType.WorGive)
+                else if (item.SourceObjType == "WorGive")
                 {
                     sourceTypeName = "工作人员发送";
                     var d_SysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == item.SourceObjId).FirstOrDefault();
@@ -738,7 +738,7 @@ namespace LocalS.Service.Api.Merch
                             }
 
                             d_ClientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                            d_ClientCoupon.SourceObjType = E_ClientCouponSourceObjType.WorGive;
+                            d_ClientCoupon.SourceObjType = "WorGive";
                             d_ClientCoupon.SourceObjId = operater;
                             d_ClientCoupon.SourcePoint = "background";
                             d_ClientCoupon.SourceTime = DateTime.Now;
