@@ -104,22 +104,21 @@
       <pane-receive-record :coupon-id="couponId" />
     </el-dialog>
 
-      <el-dialog v-if="dialogIsShowBySendCoupon" title="发送优惠券" :visible.sync="dialogIsShowBySendCoupon" width="800px" append-to-body>
-      
+    <el-dialog v-if="dialogIsShowBySendCoupon" title="发送优惠券" :visible.sync="dialogIsShowBySendCoupon" width="800px" append-to-body>
 
-    <el-form ref="formBySendCoupon" v-loading="loadingBySendCoupon" :model="formBySendCoupon" :rules="rulesBySendCoupon" label-width="80px">
-      <el-form-item label="优惠券">
-   <template v-for="(item,index) in selectCoupons">
-      <div  :key="index">{{item.name}} </div>
-        </template>
-      </el-form-item>
-      <el-form-item label="数量">
-          <el-input-number v-model="formBySendCoupon.quantity" :min="0" :max="20" style="width:160px" />
+      <el-form ref="formBySendCoupon" v-loading="loadingBySendCoupon" :model="formBySendCoupon" :rules="rulesBySendCoupon" label-width="80px">
+        <el-form-item label="优惠券">
+          <template v-for="(item,index) in selectCoupons">
+            <div :key="index">{{ item.name }} </div>
+          </template>
         </el-form-item>
-      <el-form-item label="客户">
-             <client-select  multiple :select-ids="formBySendCoupon.clientUserIds" v-on:GetSelectIds="getClientUserIds" />
-      </el-form-item>
-    </el-form>
+        <el-form-item label="数量">
+          <el-input-number v-model="formBySendCoupon.quantity" :min="1" :max="10" style="width:160px" />
+        </el-form-item>
+        <el-form-item label="客户" prop="clientUserIds">
+          <client-select multiple :select-ids="formBySendCoupon.clientUserIds" @GetSelectIds="getClientUserIds" />
+        </el-form-item>
+      </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogIsShowBySendCoupon = false">
@@ -138,14 +137,13 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getList,send } from '@/api/coupon'
+import { getList, send } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneReceiveRecord from './components/PaneReceiveRecord.vue'
-import PaneSendCoupon from './components/PaneSendCoupon.vue'
 import ClientSelect from '@/views/client/components/select.vue'
 export default {
   name: 'OperationCenterCouponList',
-  components: { Pagination, PaneReceiveRecord,PaneSendCoupon,ClientSelect },
+  components: { Pagination, PaneReceiveRecord, ClientSelect },
   data() {
     return {
       loading: false,
@@ -161,14 +159,16 @@ export default {
       },
       dialogIsShowByReceiveRecord: false,
       dialogIsShowBySendCoupon: false,
-      loadingBySendCoupon:false,
+      loadingBySendCoupon: false,
       formBySendCoupon: {
-        couponIds:[],
-        quantity: 0,
-        clientUserIds:[]
+        couponIds: [],
+        quantity: 1,
+        clientUserIds: []
       },
-      rulesBySendCoupon:{
-
+      rulesBySendCoupon: {
+        clientUserIds: [
+          { type: 'array', required: true, message: '请至少选择一个客户', trigger: 'change' }
+        ]
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -224,40 +224,40 @@ export default {
         return
       }
 
-      this.formBySendCoupon.couponIds=[]
+      this.formBySendCoupon.couponIds = []
 
       for (let i = 0; i < this.selectCoupons.length; i++) {
         this.formBySendCoupon.couponIds.push(this.selectCoupons[i].id)
       }
 
-      this.formBySendCoupon.clientUserIds=[]
-      this.formBySendCoupon.quantity=0
-      this.dialogIsShowBySendCoupon=true
+      this.formBySendCoupon.clientUserIds = []
+      this.formBySendCoupon.quantity = 1
+      this.dialogIsShowBySendCoupon = true
     },
-    getClientUserIds(ids){
-       console.log(JSON.stringify(ids))
-      this.formBySendCoupon.clientUserIds=ids
-   },
-   handleSendCoupon(){
-
-   MessageBox.confirm('确定要发送？', '提示', {
+    getClientUserIds(ids) {
+      console.log(JSON.stringify(ids))
+      this.formBySendCoupon.clientUserIds = ids
+    },
+    handleSendCoupon() {
+      this.$refs['formBySendCoupon'].validate(valid => {
+        if (valid) {
+          MessageBox.confirm('确定要发送？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-           
-    send(this.formBySendCoupon).then(res => {
+            send(this.formBySendCoupon).then(res => {
               this.$message(res.message)
               if (res.result === 1) {
-                     this.dialogIsShowBySendCoupon=false
+                this.dialogIsShowBySendCoupon = false
               }
             })
-
-
           }).catch(() => {
           })
+        }
+      })
+    }
 
-   }
   }
 }
 </script>
