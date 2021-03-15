@@ -12,9 +12,9 @@ using System.Transactions;
 
 namespace LocalS.BLL.Task
 {
-    public class Task4Tim2SenvivProvider : BaseService, IJob
+    public class Task4Tim2SenvivUsersProvider : BaseService, IJob
     {
-        public readonly string TAG = "Task4Tim2SenvivProvider";
+        public readonly string TAG = "Task4Tim2SenvivUsersProvider";
         public DateTime Convert2DateTime(string str)
         {
             try
@@ -80,6 +80,40 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.CreateTime = Convert2DateTime(senvivUser.createtime);
                         d_SenvivUser.MendTime = Convert2DateTime(senvivUser.updateTime);
                         CurrentDb.SenvivUser.Add(d_SenvivUser);
+                        CurrentDb.SaveChanges();
+                    }
+                    else
+                    {
+                        d_SenvivUser.DeptId = senvivUser.deptid;
+                        d_SenvivUser.Code = senvivUser.code;
+                        d_SenvivUser.WechatId = senvivUser.wechatid;
+                        d_SenvivUser.Mobile = senvivUser.mobile;
+                        d_SenvivUser.Email = senvivUser.Email;
+                        d_SenvivUser.Pwd = senvivUser.pwd;
+                        d_SenvivUser.Nick = senvivUser.nick;
+                        d_SenvivUser.Account = senvivUser.account;
+                        d_SenvivUser.HeadImgurl = senvivUser.headimgurl;
+                        d_SenvivUser.Language = senvivUser.language;
+                        d_SenvivUser.Sex = senvivUser.sex;
+                        d_SenvivUser.Birthday = senvivUser.birthday;
+                        d_SenvivUser.Height = senvivUser.height;
+                        d_SenvivUser.Weight = senvivUser.weight;
+                        d_SenvivUser.TargetValue = senvivUser.TargetValue;
+                        d_SenvivUser.Remarks = senvivUser.remarks;
+                        d_SenvivUser.LastloginTime = Convert2DateTime(senvivUser.lastloginTime);
+                        d_SenvivUser.LoginCount = senvivUser.loginCount;
+                        d_SenvivUser.LastReportId = senvivUser.lastReportId;
+                        d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
+                        d_SenvivUser.Details = senvivUser.details;
+                        d_SenvivUser.Status = senvivUser.status;
+                        d_SenvivUser.SAS = senvivUser.SAS;
+                        d_SenvivUser.BreathingMachine = senvivUser.BreathingMachine;
+                        d_SenvivUser.Perplex = senvivUser.Perplex;
+                        d_SenvivUser.OtherPerplex = senvivUser.OtherPerplex;
+                        d_SenvivUser.Medicalhistory = senvivUser.Medicalhistory;
+                        d_SenvivUser.OtherFamilyhistory = senvivUser.OtherFamilyhistory;
+                        d_SenvivUser.Medicine = senvivUser.Medicine;
+                        d_SenvivUser.OtherMedicine = senvivUser.OtherMedicine;
                         CurrentDb.SaveChanges();
                     }
 

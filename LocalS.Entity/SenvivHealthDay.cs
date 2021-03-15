@@ -10,7 +10,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string SvUserId { get; set; }
         public string HealthDate { get; set; }
-        public decimal Score { get; set; }
+        public decimal TotalScore { get; set; }
         public decimal XlAvg { get; set; }
         public decimal XlStd { get; set; }
         public decimal XlMin { get; set; }
