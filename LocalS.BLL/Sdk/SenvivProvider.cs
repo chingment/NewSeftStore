@@ -229,7 +229,56 @@ namespace LocalS.BLL
                             {
                                 var d1 = d[0];
 
-                               
+                                var d_SenvivHealthDay = CurrentDb.SenvivHealthDay.Where(m => m.Id == d1.reportId).FirstOrDefault();
+
+                                if (d_SenvivHealthDay == null)
+                                {
+                                    d_SenvivHealthDay.Id = d1.reportId;
+                                    d_SenvivHealthDay.SvUserId = d_SenvivUser.Id;
+                                    d_SenvivHealthDay.HealthDate = d1.createtime;
+                                    d_SenvivHealthDay.Score = d1.Report.TotalScore;
+
+                                    var xl = d1.ReportOfHeartBeat;
+
+                                    if (xl != null)
+                                    {
+                                        d_SenvivHealthDay.XlAvg = xl.DayCurBenchmark;//平均呼吸
+                                        d_SenvivHealthDay.XlStd = xl.Benchmark;//基准心率值
+                                        d_SenvivHealthDay.XlMin = xl.HeartbeatMin;
+                                        d_SenvivHealthDay.XlMax = xl.HeartbeatMax;
+                                    }
+
+                                    var hx = d1.ReportOfBreath;
+                                    if (hx != null)
+                                    {
+                                        d_SenvivHealthDay.HxAvg = hx.Average;
+                                        d_SenvivHealthDay.HxStd = hx.Benchmark;
+                                        d_SenvivHealthDay.HxMin = hx.BreathMin;
+                                        d_SenvivHealthDay.HxMax = hx.BreathMax;
+                                        d_SenvivHealthDay.HxTd = hx.BreathMax;
+                                        d_SenvivHealthDay.HxZtNum = hx.PauseSum;
+                                        d_SenvivHealthDay.HxZtStd = hx.LowerCounts;
+                                    }
+
+                                    var hrv = d1.ReportOfHRV;
+                                    if (hrv != null)
+                                    {
+                                        d_SenvivHealthDay.HrvXzznl = hrv.HeartIndex;
+                                       // d_SenvivHealthDay.HrvXljsl = d1.Report.TotalScore;
+                                        d_SenvivHealthDay.HrvMzsjzl = hrv.HF;
+                                        d_SenvivHealthDay.HrvJgsjzl = hrv.LF;
+                                        d_SenvivHealthDay.HrvZzsjzl = hrv.LFHF;
+                                        d_SenvivHealthDay.HrvXgss = hrv.temperature;
+                                        d_SenvivHealthDay.HrvSDNN = hrv.SDNN;
+                                        //d_SenvivHealthDay.HrvPNN50 = ;
+                                        //d_SenvivHealthDay.HrvRMSSD = d1.Report.TotalScore;
+                                    }
+
+                                    d_SenvivHealthDay.CreateTime = DateTime.Now;
+                                    d_SenvivHealthDay.Creator = IdWorker.Build(IdType.EmptyGuid);
+                                }
+
+
 
                             }
                         }

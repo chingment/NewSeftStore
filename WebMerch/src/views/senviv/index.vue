@@ -4,8 +4,8 @@
       <el-aside class="my-aside">
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
-            <template slot="title">客户信息</template>
-            <el-menu-item index="/client/shop/list">商城客户</el-menu-item>
+            <template slot="title">心晓</template>
+            <el-menu-item index="/senviv/users">客户信息</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>
@@ -23,7 +23,7 @@ export default {
   name: 'ReportIndex',
   data() {
     return {
-      navActive: '/clientuser/shop/list',
+      navActive: '/senviv/users',
       isDesktop: this.$store.getters.isDesktop
     }
   },

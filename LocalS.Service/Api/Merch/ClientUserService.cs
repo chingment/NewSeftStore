@@ -39,11 +39,16 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                string userName = item.UserName;
+                if (userName.Length == 34 && userName.IndexOf("wx") > -1)
+                {
+                    userName = "未设置";
+                }
 
                 olist.Add(new
                 {
                     Id = item.Id,
-                    UserName = item.UserName,
+                    UserName = userName,
                     FullName = item.FullName,
                     Email = item.Email,
                     PhoneNumber = item.PhoneNumber,

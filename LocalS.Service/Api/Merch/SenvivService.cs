@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.Service.UI;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace LocalS.Service.Api.Merch
                 case "6":
                     return "冠心病";
                 case "7":
-                    return "其他心脏病";
+                    return "心脏病";
                 case "8":
                     return "心衰";
                 case "9":
@@ -88,10 +89,37 @@ namespace LocalS.Service.Api.Merch
                 case "13":
                     return "不宁腿综合征";
                 case "14":
-                    return "其他";
+                    return "其它";
                 default:
                     return "";
             }
+        }
+
+
+        public List<EleTag> GetSignTags(string perplex, string otherPerplex)
+        {
+            var tags = new List<EleTag>();
+
+            if (!string.IsNullOrEmpty(perplex))
+            {
+                string[] arrs = perplex.Split(',');
+
+                foreach (var val in arrs)
+                {
+                    var name = GetPerplexName(val);
+                    if (!string.IsNullOrEmpty(name) && name != "其它")
+                    {
+                        tags.Add(new EleTag(name, ""));
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(otherPerplex) && otherPerplex != "其它")
+            {
+                tags.Add(new EleTag(otherPerplex, ""));
+            }
+
+            return tags;
         }
 
         //既往史
@@ -136,6 +164,27 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public List<string> GetMedicineNames(string medicine)
+        {
+            List<string> names = new List<string>();
+
+            if (!string.IsNullOrEmpty(medicine))
+            {
+                string[] arrs = medicine.Split(',');
+
+                foreach (var val in arrs)
+                {
+                    var name = GetMedicineName(val);
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        names.Add(name);
+                    }
+                }
+            }
+
+            return names;
+        }
+
         //肺炎情况
         public string GetFieyanName(string value)
         {
@@ -161,7 +210,7 @@ namespace LocalS.Service.Api.Merch
         }
 
 
-        public CustomJsonResult GetUsers(string operater, string merchId, RupClientGetList rup)
+        public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
 
@@ -176,7 +225,9 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SenvivUser
                          where
                          deptIds.Contains(u.DeptId)
-                         select new { u.Id, u.Nick, u.HeadImgurl, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
+                         && ((rup.Name == null || u.Nick.Contains(rup.Name)) ||
+                         (rup.Name == null || u.Account.Contains(rup.Name)))
+                         select new { u.Id, u.Nick, u.HeadImgurl, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
 
 
             int total = query.Count();
@@ -191,18 +242,47 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                List<string> perplex = new List<string>();
+
+                if (!string.IsNullOrEmpty(item.Perplex))
+                {
+                    string[] arrs = item.Perplex.Split(',');
+
+                    foreach (var val in arrs)
+                    {
+                        var name = GetPerplexName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            perplex.Add(name);
+                        }
+                    }
+                }
+
+                string signName = item.Nick;
+
+                if (!string.IsNullOrEmpty(item.Account))
+                {
+                    signName += "(" + item.Account + ")";
+                }
+
+
 
                 olist.Add(new
                 {
                     Id = item.Id,
-                    Account = item.Account,
-                    Nick = item.Nick,
+                    SignName = signName,
                     HeadImgurl = item.HeadImgurl,
-                    Sex = item.Sex,
+                    SAS = GetSASName(item.SAS),
+                    BreathingMachine = GetBreathingMachineName(item.BreathingMachine),
+                    SignTags = GetSignTags(item.Perplex, item.OtherPerplex),
+                    Medicalhistory = GetMedicalhistoryName(item.Medicalhistory),
+                    Medicine = GetMedicineNames(item.Medicine),
+                    Sex = GetSexName(item.Sex),
+                    Height = item.Height,
+                    Weight = item.Weight,
                     Mobile = item.Mobile,
                     LastReportId = item.LastReportId,
-                    LastReportTime = item.LastReportTime,
-                    CreateTime = item.CreateTime
+                    LastReportTime = item.LastReportTime
                 });
             }
 

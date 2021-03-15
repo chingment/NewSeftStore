@@ -27,7 +27,7 @@
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="客户头像" align="left" min-width="20%">
+      <el-table-column label="客户头像" align="left" min-width="15%">
         <template slot-scope="scope">
           <img :src="scope.row.avatar" style="width:30px;height:30px;">
         </template>
@@ -47,7 +47,7 @@
           <span>{{ scope.row.sourceObjName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="领取时间" align="left" min-width="20%">
+      <el-table-column label="领取时间" align="left" min-width="25%">
         <template slot-scope="scope">
           <span>{{ scope.row.sourceTime }}</span>
         </template>
@@ -93,16 +93,13 @@ export default {
 
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
-    }
     this.listQuery.couponId = this.couponId
     this.getListData()
   },
   methods: {
     getListData() {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+
       getReceiveRecords(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data

@@ -12,7 +12,7 @@ namespace WebApiMerch.Controllers
     public class SenvivController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse GetUsers([FromUri]RupClientGetList rup)
+        public OwnApiHttpResponse GetUsers([FromUri]RupSenvivGetUsers rup)
         {
             IResult result = MerchServiceFactory.Senviv.GetUsers(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);

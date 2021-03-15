@@ -111,7 +111,7 @@ export default {
     },
     handleDetails(row) {
       this.$router.push({
-        path: '/clientuser/details?id=' + row.id
+        path: '/client/shop/details?id=' + row.id
       })
     }
   }

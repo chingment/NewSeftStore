@@ -43,6 +43,8 @@ namespace LocalS.Service.Api.Account
                         //S单店铺
                         //线上商城 F
                         //线下机器 K
+
+
                         mctMode = (mctMode.Replace("M", "")).Replace("S", "");
 
                         if (mctMode == "F")

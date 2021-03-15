@@ -259,6 +259,7 @@
     <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
+    <Compile Include="Api\Merch\RModels\RupSenvivGetUsers.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreEdit.cs" />
@@ -446,6 +447,7 @@
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Badge.cs" />
+    <Compile Include="UI\EleTag.cs" />
     <Compile Include="UI\FsBlock.cs" />
     <Compile Include="UI\FsBlockByField.cs" />
     <Compile Include="UI\FsButton.cs" />
