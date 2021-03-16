@@ -65,7 +65,7 @@ namespace LocalS.Service.Api.Merch
                 case "1":
                     return "没有困扰";
                 case "2":
-                    return "睡眠呼吸暂停综合征";
+                    return "睡眠呼吸暂停综合症";
                 case "3":
                     return "打鼾";
                 case "4":
@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.Merch
                 case "12":
                     return "癫痫";
                 case "13":
-                    return "不宁腿综合征";
+                    return "不宁腿综合症";
                 case "14":
                     return "其它";
                 default:
@@ -227,8 +227,12 @@ namespace LocalS.Service.Api.Merch
                          deptIds.Contains(u.DeptId)
                          && ((rup.Name == null || u.Nick.Contains(rup.Name)) ||
                          (rup.Name == null || u.Account.Contains(rup.Name)))
-                         select new { u.Id, u.Nick, u.HeadImgurl, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
+                         select new { u.Id, u.Nick, u.HeadImgurl, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
 
+            if (rup.Sas != "0")
+            {
+                query = query.Where(m => m.SAS == rup.Sas);
+            }
 
             int total = query.Count();
 
@@ -260,12 +264,18 @@ namespace LocalS.Service.Api.Merch
 
                 string signName = item.Nick;
 
-                if (!string.IsNullOrEmpty(item.Account))
+                if (!string.IsNullOrEmpty(item.Account) && item.Nick != item.Account)
                 {
                     signName += "(" + item.Account + ")";
                 }
 
 
+                string age = "-";
+
+                if (item.Birthday != null)
+                {
+                    age = CommonUtil.GetAgeByBirthdate(item.Birthday.Value).ToString();
+                }
 
                 olist.Add(new
                 {
@@ -278,6 +288,7 @@ namespace LocalS.Service.Api.Merch
                     Medicalhistory = GetMedicalhistoryName(item.Medicalhistory),
                     Medicine = GetMedicineNames(item.Medicine),
                     Sex = GetSexName(item.Sex),
+                    Age = age,
                     Height = item.Height,
                     Weight = item.Weight,
                     Mobile = item.Mobile,

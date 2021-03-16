@@ -3,20 +3,20 @@
     <div class="filter-container">
 
       <el-form ref="form" label-width="120px">
-        <el-form-item label="困扰">
+        <el-form-item label="目前困扰">
 
           <el-checkbox-group v-model="checkboxGroup1">
             <el-checkbox-button v-for="item in perplexs" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox-button>
           </el-checkbox-group>
 
         </el-form-item>
-        <el-form-item label="呼吸综合征">
-          <el-radio-group v-model="checkboxGroup2">
+        <el-form-item label="呼吸综合症">
+          <el-radio-group v-model="listQuery.sas" @change="handleFilter">
             <el-radio-button v-for="item in sass" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="姓名">
-          <el-input v-model="listQuery.name" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+        <el-form-item label="搜索">
+          <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
@@ -25,7 +25,9 @@
 
     </div>
     <el-row v-loading="loading" :gutter="20">
+
       <el-col
+
         v-for="item in listData"
         :key="item.id"
         :span="5"
@@ -34,15 +36,19 @@
         <el-card class="box-card box-card-product" :body-style="{ padding: '0px' }">
           <div class="it-header clearfix">
             <div class="left">
-              <img class="headImgurl" :src="item.headImgurl">
-              <span class="name">{{ item.signName }}</span>
+              <div class="l1">
+                <el-avatar :src="item.headImgurl" size="medium" />
+              </div>
+              <div class="l2">
+                <span class="name">{{ item.signName }}</span>
+              </div>
             </div>
             <div class="right">
               <el-button type="text" @click="dialogKindSpuOpen(true,item)">查看</el-button>
             </div>
           </div>
           <div class="it-component">
-            <div class="t1"><span class="sex">性别：{{ item.sex }}</span><span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
+            <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
             <div>
 
               <el-tag
@@ -58,6 +64,13 @@
           </div>
         </el-card>
       </el-col>
+
+      <el-col v-if="listData===null||listData.length===0" style="text-align: center;color: #909399">
+
+        <span>数据为空</span>
+
+      </el-col>
+
     </el-row>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
   </div>
@@ -80,14 +93,14 @@ export default {
         page: 1,
         limit: 20,
         name: undefined,
+        sas: '0',
         perplexs: null
       },
       checkboxGroup1: [],
-      checkboxGroup2: [],
       perplexs: [
         { value: '0', label: '全部' },
         { value: '1', label: '没有困扰' },
-        { value: '2', label: '睡眠呼吸暂停综合征' },
+        { value: '2', label: '睡眠呼吸暂停综合症' },
         { value: '3', label: '打鼾' },
         { value: '4', label: '糖尿病' },
         { value: '5', label: '高血压' },
@@ -98,15 +111,15 @@ export default {
         { value: '10', label: '脑梗塞/脑卒中' },
         { value: '11', label: '长期失眠' },
         { value: '12', label: '癫痫' },
-        { value: '13', label: '不宁腿综合征' },
+        { value: '13', label: '不宁腿综合症' },
         { value: '14', label: '其它' }
       ],
       sass: [
         { value: '0', label: '全部' },
+        { value: '4', label: '无' },
         { value: '1', label: '轻度' },
         { value: '2', label: '中度' },
-        { value: '3', label: '重度' },
-        { value: '4', label: '无' }
+        { value: '3', label: '重度' }
       ],
       isDesktop: this.$store.getters.isDesktop
     }
@@ -159,34 +172,31 @@ export default {
 
   .it-header {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
     padding: 5px 20px;
     border-bottom: 1px solid #EBEEF5;
-    box-sizing: border-box;
+
     .left {
       flex: 1;
-      justify-content: flex-start;
-      align-items: center;
       display: flex;
-      height: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      .name {
-        padding: 0px 5px;
-      }
+  overflow: hidden;
+     .l1{
+           display: flex;
+    justify-content: center;
+    align-items: center;
+     }
 
-      .headImgurl{
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          display: block;
-      }
+     .l2{
+       display: block;
+      text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 50px;
+    padding-left:8px;
+
+     }
     }
     .right {
-      width: 100px;
+      width: 50px;
       display: flex;
       justify-content: flex-end;
       align-items: center;

@@ -108,16 +108,58 @@ namespace Test
 
         static void Main(string[] args)
         {
-            DateTime dt = DateTime.Parse("0001-01-01T00:00:00+08:00");
-            //1004B23B4DFF_1615332079038
-            //1004B23B4DFF_1615332079038
-            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-            var userListRequest2 = new SenvivSdk.ReportDetailListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1jddwMgWP8qiJ3WE+h+sBf0ivW39asBWM9y2ooYwxx8Y=\"", new { deptid = "32", userid = "321x847d11280EA34A", size = 1, page = 1 });
-            var result2 = api.DoPost(userListRequest2);
-            if (result2.Result == ResultType.Success)
-            {
 
+            var list = new List<SenvivSdk.UserListResult.DataModel>();
+
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            int page = 1;
+            int size = 10;
+            string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1fAweHovdeMHEuIhsUuZYugG3vSHJadHnarEkXBFKWAg=\"";
+            var userListRequest = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = size, page = page });
+            var result = api.DoPost(userListRequest);
+            if (result.Result == ResultType.Success)
+            {
+                var data = result.Data;
+                if (data != null)
+                {
+                    int count = data.Data.count;
+                    int pageCount = (count + size - 1) / size;
+
+                    list.AddRange(data.Data.data);
+
+                    if (pageCount >= 2)
+                    {
+                        for (var i = 2; i <= pageCount; i++)
+                        {
+                            var userListRequest2 = new SenvivSdk.UserListRequest(token, new { deptid = "32", size = size, page = i });
+                            var result2 = api.DoPost(userListRequest2);
+                            if (result2.Result == ResultType.Success)
+                            {
+                                var data2 = result2.Data;
+                                if (data2 != null)
+                                {
+                                    list.AddRange(data2.Data.data);
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
+
+
+
+            //DateTime dt = DateTime.Parse("0001-01-01T00:00:00+08:00");
+            ////1004B23B4DFF_1615332079038
+            ////1004B23B4DFF_1615332079038
+            //SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            //var userListRequest2 = new SenvivSdk.ReportDetailListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1jddwMgWP8qiJ3WE+h+sBf0ivW39asBWM9y2ooYwxx8Y=\"", new { deptid = "32", userid = "321x847d11280EA34A", size = 1, page = 1 });
+            //var result2 = api.DoPost(userListRequest2);
+            //if (result2.Result == ResultType.Success)
+            //{
+
+            //}
 
             //SdkFactory.Senviv.GetUserList();
 

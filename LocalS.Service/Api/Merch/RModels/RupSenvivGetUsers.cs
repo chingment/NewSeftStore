@@ -9,5 +9,7 @@ namespace LocalS.Service.Api.Merch
     public class RupSenvivGetUsers : RupBaseGetList
     {
         public string Name { get; set; }
+
+        public string Sas { get; set; }
     }
 }

@@ -57,7 +57,7 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.HeadImgurl = senvivUser.headimgurl;
                         d_SenvivUser.Language = senvivUser.language;
                         d_SenvivUser.Sex = senvivUser.sex;
-                        d_SenvivUser.Birthday = senvivUser.birthday;
+                        d_SenvivUser.Birthday = Convert2DateTime(senvivUser.birthday);
                         d_SenvivUser.Height = senvivUser.height;
                         d_SenvivUser.Weight = senvivUser.weight;
                         d_SenvivUser.TargetValue = senvivUser.TargetValue;
@@ -95,7 +95,7 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.HeadImgurl = senvivUser.headimgurl;
                         d_SenvivUser.Language = senvivUser.language;
                         d_SenvivUser.Sex = senvivUser.sex;
-                        d_SenvivUser.Birthday = senvivUser.birthday;
+                        d_SenvivUser.Birthday = Convert2DateTime(senvivUser.birthday);
                         d_SenvivUser.Height = senvivUser.height;
                         d_SenvivUser.Weight = senvivUser.weight;
                         d_SenvivUser.TargetValue = senvivUser.TargetValue;

@@ -87,8 +87,13 @@ namespace LocalS.Entity
         public string Name { get; set; }
         public E_Coupon_Category Category { get; set; }
         public E_Coupon_ShopMode ShopMode { get; set; }
+        //发行数量
         public int IssueQuantity { get; set; }
+        //冻结数量
+        public int FrozenQuantity { get; set; }
+        //已使用数量
         public int UsedQuantity { get; set; }
+        //已领取数量
         public int ReceivedQuantity { get; set; }
         public E_Coupon_FaceType FaceType { get; set; }
         public decimal FaceValue { get; set; }

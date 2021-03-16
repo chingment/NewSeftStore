@@ -20,7 +20,7 @@ namespace LocalS.Entity
         public string HeadImgurl { get; set; }
         public string Language { get; set; }
         public string Sex { get; set; }
-        public string Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
         public string TargetValue { get; set; }

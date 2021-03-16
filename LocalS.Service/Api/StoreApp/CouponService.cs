@@ -660,42 +660,7 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            var d_clientCoupon = new ClientCoupon();
-            d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
-            d_clientCoupon.Sn = "";
-            d_clientCoupon.MerchId = d_coupon.MerchId;
-            d_clientCoupon.ClientUserId = clientUserId;
-            d_clientCoupon.CouponId = d_coupon.Id;
-            if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
-            {
-                d_clientCoupon.ValidStartTime = DateTime.Now;
-                d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
-            }
-            else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
-            {
-                string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
-                if (arr_UseTimeValue.Length == 2)
-                {
-                    d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
-                    d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
-                }
-            }
-            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-            d_clientCoupon.SourceObjType ="SelfTake";
-            d_clientCoupon.SourceObjId = clientUserId;
-            d_clientCoupon.SourcePoint = "RevCouponCenter";
-            d_clientCoupon.SourceTime = DateTime.Now;
-            d_clientCoupon.SourceDes = "领券中心";
-            d_clientCoupon.Creator = operater;
-            d_clientCoupon.CreateTime = DateTime.Now;
-            CurrentDb.ClientCoupon.Add(d_clientCoupon);
-
-            d_coupon.ReceivedQuantity += 1;
-            d_coupon.Mender = operater;
-            d_coupon.MendTime = DateTime.Now;
-
-            CurrentDb.SaveChanges();
-
+            BizFactory.Coupon.Send("SelfTake", clientUserId, "RevCouponCenter", "领券中心自领", d_coupon.MerchId, clientUserId, d_coupon.Id, 1);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "领取成功");
 

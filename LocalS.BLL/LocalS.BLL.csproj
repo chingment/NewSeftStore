@@ -79,6 +79,7 @@
     <Compile Include="Biz\BizFactory.cs" />
     <Compile Include="Biz\BuildOrderTool.cs" />
     <Compile Include="Biz\ByPointService.cs" />
+    <Compile Include="Biz\CouponService.cs" />
     <Compile Include="Biz\EventService.cs" />
     <Compile Include="Biz\MachineService.cs" />
     <Compile Include="Biz\MerchService.cs" />

@@ -86,5 +86,13 @@ namespace LocalS.BLL.Biz
                 return new BackgroundJobService();
             }
         }
+
+        public static CouponService Coupon
+        {
+            get
+            {
+                return new CouponService();
+            }
+        }
     }
 }

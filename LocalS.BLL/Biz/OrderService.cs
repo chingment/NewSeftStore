@@ -452,6 +452,8 @@ namespace LocalS.BLL.Biz
                         return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, buildOrderTool.Message, null);
                     }
 
+                    List<string> clientCouponIds = new List<string>();
+
                     if (rop.ShopMethod == E_ShopMethod.Buy)
                     {
                         #region 计算优惠券金额
@@ -466,10 +468,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[03]，优惠券无效", null);
                                 }
 
-                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
-
+                                clientCouponIds.Add(couponIdByShop);
 
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
@@ -498,10 +497,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[04]，押金券无效", null);
                                 }
 
-                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
-
+                                clientCouponIds.Add(rop.CouponIdByDeposit);
 
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
@@ -524,9 +520,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[05]，租金券无效", null);
                                 }
 
-                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
+                                clientCouponIds.Add(rop.CouponIdByRent);
 
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
@@ -555,9 +549,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[05]，租金券无效", null);
                                 }
 
-                                d_clientCoupon.Status = E_ClientCouponStatus.Frozen;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
+                                clientCouponIds.Add(rop.CouponIdByRent);
 
                                 var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
                                 if (d_coupon != null)
@@ -572,6 +564,9 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                     }
+
+                    BizFactory.Coupon.SignFrozen(operater, clientCouponIds.ToArray());
+
                     LogUtil.Info("rop.bizSkus:" + buildOrderSkus.ToJsonString());
                     var buildOrders = buildOrderTool.BuildOrders();
                     LogUtil.Info("SlotStock.buildOrders:" + buildOrders.ToJsonString());
@@ -1212,49 +1207,7 @@ namespace LocalS.BLL.Biz
 
                                     foreach (var d_memberCouponSt in d_memberCouponSts)
                                     {
-                                        var d_coupon = CurrentDb.Coupon.Where(m => m.Id == d_memberCouponSt.CouponId).FirstOrDefault();
-
-                                        for (int i = 0; i < d_memberCouponSt.Quantity; i++)
-                                        {
-                                            var d_clientCoupon = new ClientCoupon();
-                                            d_clientCoupon.Id = IdWorker.Build(IdType.NewGuid);
-                                            d_clientCoupon.Sn = "";
-                                            d_clientCoupon.MerchId = d_OrderSub.MerchId;
-                                            d_clientCoupon.ClientUserId = d_OrderSub.ClientUserId;
-                                            d_clientCoupon.CouponId = d_coupon.Id;
-                                            if (d_coupon.UseTimeType == E_Coupon_UseTimeType.ValidDay)
-                                            {
-                                                d_clientCoupon.ValidStartTime = DateTime.Now;
-                                                d_clientCoupon.ValidEndTime = DateTime.Now.AddDays(int.Parse(d_coupon.UseTimeValue));
-                                            }
-                                            else if (d_coupon.UseTimeType == E_Coupon_UseTimeType.TimeArea)
-                                            {
-                                                string[] arr_UseTimeValue = d_coupon.UseTimeValue.ToJsonObject<string[]>();
-                                                if (arr_UseTimeValue.Length == 2)
-                                                {
-                                                    d_clientCoupon.ValidStartTime = DateTime.Parse(arr_UseTimeValue[0]);
-                                                    d_clientCoupon.ValidEndTime = DateTime.Parse(arr_UseTimeValue[1]);
-                                                }
-                                            }
-
-                                            d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                                            d_clientCoupon.SourceObjType = "SysGive";
-                                            d_clientCoupon.SourceObjId = IdWorker.Build(IdType.EmptyGuid);
-                                            d_clientCoupon.SourcePoint = "PaySuccess";
-                                            d_clientCoupon.SourceTime = DateTime.Now;
-                                            d_clientCoupon.SourceDes = "开通会员赠送";
-                                            d_clientCoupon.Creator = operater;
-                                            d_clientCoupon.CreateTime = DateTime.Now;
-                                            CurrentDb.ClientCoupon.Add(d_clientCoupon);
-
-                                            d_coupon.ReceivedQuantity += 1;
-                                            d_coupon.Mender = operater;
-                                            d_coupon.MendTime = DateTime.Now;
-
-                                            CurrentDb.SaveChanges();
-
-                                        }
-
+                                        BizFactory.Coupon.Send("SysGive", IdWorker.Build(IdType.EmptyGuid), "PaySuccess", "开通会员赠送", d_OrderSub.MerchId, d_OrderSub.ClientUserId, d_memberCouponSt.CouponId, d_memberCouponSt.Quantity);
                                     }
 
                                     if (d_clientUser != null)
@@ -1331,70 +1284,25 @@ namespace LocalS.BLL.Biz
                             s_Orders.Add(d_Order);
                         }
 
+                        List<string> clientCouponIds = new List<string>();
                         if (!string.IsNullOrEmpty(d_Order.CouponIdsByShop))
                         {
-                            string[] l_couponIdsByShop = d_Order.CouponIdsByShop.ToJsonObject<string[]>();
+                            var l_couponIdsByShop = d_Order.CouponIdsByShop.ToJsonObject<List<string>>();
 
-                            foreach (var l_couponIdByShop in l_couponIdsByShop)
-                            {
-                                var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == l_couponIdByShop).FirstOrDefault();
-                                if (d_clientCoupon != null)
-                                {
-                                    d_clientCoupon.Status = E_ClientCouponStatus.Used;
-                                    d_clientCoupon.UseTime = DateTime.Now;
-                                    d_clientCoupon.Mender = operater;
-                                    d_clientCoupon.MendTime = DateTime.Now;
-
-                                    var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                                    if (d_copon != null)
-                                    {
-                                        d_copon.UsedQuantity += 1;
-                                        d_copon.Mender = operater;
-                                        d_copon.MendTime = DateTime.Now;
-                                    }
-                                }
-                            }
+                            clientCouponIds.AddRange(l_couponIdsByShop);
                         }
 
                         if (!string.IsNullOrEmpty(d_Order.CouponIdByRent))
                         {
-                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_Order.CouponIdByRent).FirstOrDefault();
-                            if (d_clientCoupon != null)
-                            {
-                                d_clientCoupon.Status = E_ClientCouponStatus.Used;
-                                d_clientCoupon.UseTime = DateTime.Now;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
-
-                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                                if (d_copon != null)
-                                {
-                                    d_copon.UsedQuantity += 1;
-                                    d_copon.Mender = operater;
-                                    d_copon.MendTime = DateTime.Now;
-                                }
-                            }
+                            clientCouponIds.Add(d_Order.CouponIdByRent);
                         }
 
                         if (!string.IsNullOrEmpty(d_Order.CouponIdByDeposit))
                         {
-                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_Order.CouponIdByDeposit).FirstOrDefault();
-                            if (d_clientCoupon != null)
-                            {
-                                d_clientCoupon.Status = E_ClientCouponStatus.Used;
-                                d_clientCoupon.UseTime = DateTime.Now;
-                                d_clientCoupon.Mender = operater;
-                                d_clientCoupon.MendTime = DateTime.Now;
-
-                                var d_copon = CurrentDb.Coupon.Where(m => m.Id == d_clientCoupon.CouponId).FirstOrDefault();
-                                if (d_copon != null)
-                                {
-                                    d_copon.UsedQuantity += 1;
-                                    d_copon.Mender = operater;
-                                    d_copon.MendTime = DateTime.Now;
-                                }
-                            }
+                            clientCouponIds.Add(d_Order.CouponIdByDeposit);
                         }
+
+                        BizFactory.Coupon.SignUsed(operater, clientCouponIds.ToArray());
 
                         var d_orderPickupLog = new OrderPickupLog();
                         d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -1601,37 +1509,26 @@ namespace LocalS.BLL.Biz
                     var d_UnOrders = CurrentDb.Order.Where(m => m.UnId == d_Order.UnId && m.Status != E_OrderStatus.Canceled).ToList();
                     if (d_UnOrders.Count == 0)
                     {
+                        List<string> clientCouponIds = new List<string>();
+
                         if (!string.IsNullOrEmpty(d_Order.CouponIdsByShop))
                         {
-                            string[] l_couponIdsByShops = d_Order.CouponIdsByShop.ToJsonObject<string[]>();
+                            var l_couponIdsByShops = d_Order.CouponIdsByShop.ToJsonObject<List<string>>();
 
-                            foreach (var l_couponIdByShop in l_couponIdsByShops)
-                            {
-                                var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == l_couponIdByShop).FirstOrDefault();
-                                if (d_clientCoupon != null)
-                                {
-                                    d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                                }
-                            }
+                            clientCouponIds.AddRange(l_couponIdsByShops);
                         }
 
                         if (!string.IsNullOrEmpty(d_Order.CouponIdByRent))
                         {
-                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_Order.CouponIdByRent).FirstOrDefault();
-                            if (d_clientCoupon != null)
-                            {
-                                d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                            }
+                            clientCouponIds.Add(d_Order.CouponIdByRent);
                         }
 
                         if (!string.IsNullOrEmpty(d_Order.CouponIdByDeposit))
                         {
-                            var d_clientCoupon = CurrentDb.ClientCoupon.Where(m => m.Id == d_Order.CouponIdByDeposit).FirstOrDefault();
-                            if (d_clientCoupon != null)
-                            {
-                                d_clientCoupon.Status = E_ClientCouponStatus.WaitUse;
-                            }
+                            clientCouponIds.Add(d_Order.CouponIdByDeposit);
                         }
+
+                        BizFactory.Coupon.SignUnFrozen(operater, clientCouponIds.ToArray());
                     }
 
 

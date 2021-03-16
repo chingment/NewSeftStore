@@ -52,7 +52,7 @@ namespace LocalS.BLL.Task
                             d_SenvivHealthDay = new Entity.SenvivHealthDay();
                             d_SenvivHealthDay.Id = d1.reportId;
                             d_SenvivHealthDay.SvUserId = d_SenvivUser.Id;
-                            d_SenvivHealthDay.HealthDate = d1.createtime;
+                            d_SenvivHealthDay.HealthDate = Convert2DateTime(d1.createtime);
                             d_SenvivHealthDay.TotalScore = d1.Report.TotalScore;
 
                             var xl = d1.ReportOfHeartBeat;

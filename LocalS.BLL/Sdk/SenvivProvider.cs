@@ -180,7 +180,7 @@ namespace LocalS.BLL
                 if (data != null)
                 {
                     int count = data.Data.count;
-                    int pageCount = count % size;
+                    int pageCount = (count + size - 1) / size;
 
                     list.AddRange(data.Data.data);
 
