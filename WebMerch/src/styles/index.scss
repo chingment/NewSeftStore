@@ -431,7 +431,7 @@ border: 1px solid #909399;
 
 .my-container2{
   background: #fbfbfb;
-  padding: 0px;
+  padding: 10px 0px;
   .el-menu{
     background: #fbfbfb;
     border-right: solid 0px #e6e6e6;
@@ -443,7 +443,7 @@ border: 1px solid #909399;
 
   .el-main{
     background: #ffffff;
-    min-height: calc(100vh - 66px);
+    min-height: calc(100vh - 230px);
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
 
@@ -451,6 +451,8 @@ border: 1px solid #909399;
     
     text-align: center;
   }
+
+  
 }
 
 
@@ -503,3 +505,8 @@ border: 1px solid #909399;
   }
   }
 }
+
+.user-detail{
+  background-color:#fbfbfb;
+  height: 90%;
+  }

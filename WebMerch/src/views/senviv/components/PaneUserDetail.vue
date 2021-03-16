@@ -1,7 +1,7 @@
 <template>
-  <div id="senviv_user_detail" class="app-container my-container2" style="height:60%">
+  <div id="senviv_user_detail" class="app-container my-container2">
 
-    <el-container style="padding:10px 0px">
+    <el-container >
       <el-aside style="width:300px;margin-right:10px">
 
         <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
