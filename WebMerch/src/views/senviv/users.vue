@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="right">
-              <el-button type="text" @click="dialogKindSpuOpen(true,item)">查看</el-button>
+              <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
             </div>
           </div>
           <div class="it-component">
@@ -73,16 +73,22 @@
 
     </el-row>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
+    <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
+      <pane-user-detail />
+
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getUsers } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import PaneUserDetail from './components/PaneUserDetail.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination },
+  components: { Pagination, PaneUserDetail },
   data() {
     return {
       loading: false,
@@ -121,6 +127,7 @@ export default {
         { value: '2', label: '中度' },
         { value: '3', label: '重度' }
       ],
+      dialogIsShowByDetail: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -147,10 +154,8 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleDetails(row) {
-      this.$router.push({
-        path: '/client/shop/details?id=' + row.id
-      })
+    handleOpenDialogByDetail(item) {
+      this.dialogIsShowByDetail = true
     }
   }
 }

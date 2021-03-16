@@ -78,7 +78,6 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.OtherMedicine = senvivUser.OtherMedicine;
                         d_SenvivUser.Creator = IdWorker.Build(IdType.EmptyGuid);
                         d_SenvivUser.CreateTime = Convert2DateTime(senvivUser.createtime);
-                        d_SenvivUser.MendTime = Convert2DateTime(senvivUser.updateTime);
                         CurrentDb.SenvivUser.Add(d_SenvivUser);
                         CurrentDb.SaveChanges();
                     }
@@ -114,6 +113,8 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.OtherFamilyhistory = senvivUser.OtherFamilyhistory;
                         d_SenvivUser.Medicine = senvivUser.Medicine;
                         d_SenvivUser.OtherMedicine = senvivUser.OtherMedicine;
+                        d_SenvivUser.MendTime = DateTime.Now;
+                        d_SenvivUser.Mender = IdWorker.Build(IdType.EmptyGuid);
                         CurrentDb.SaveChanges();
                     }
 
@@ -150,7 +151,7 @@ namespace LocalS.BLL.Task
                                 d_SenvivUserProduct.Latitude = product.latitude;
                                 d_SenvivUserProduct.DeptId = product.deptid;
                                 d_SenvivUserProduct.Creator = IdWorker.Build(IdType.EmptyGuid);
-                                d_SenvivUserProduct.CreateTime = Convert2DateTime(senvivUser.createtime);
+                                d_SenvivUserProduct.CreateTime = DateTime.Now;
                                 CurrentDb.SenvivUserProduct.Add(d_SenvivUserProduct);
                                 CurrentDb.SaveChanges();
                             }
