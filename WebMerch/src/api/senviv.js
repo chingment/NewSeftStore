@@ -8,6 +8,15 @@ export function getUsers(params) {
   })
 }
 
+export function getUserDetail(params) {
+  return request({
+    url: '/senviv/getUserDetail',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getUsers: getUsers
+  getUsers: getUsers,
+  getUserDetail: getUserDetail
 }

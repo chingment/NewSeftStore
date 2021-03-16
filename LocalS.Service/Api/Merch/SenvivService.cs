@@ -304,5 +304,68 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult GetUserDetail(string operater, string merchId, string userId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_SenvivUser = (from u in CurrentDb.SenvivUser
+                                where u.Id == userId
+                                select new { u.Id, u.Nick, u.HeadImgurl, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
+
+            List<string> perplex = new List<string>();
+
+            if (!string.IsNullOrEmpty(d_SenvivUser.Perplex))
+            {
+                string[] arrs = d_SenvivUser.Perplex.Split(',');
+
+                foreach (var val in arrs)
+                {
+                    var name = GetPerplexName(val);
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        perplex.Add(name);
+                    }
+                }
+            }
+
+            string signName = d_SenvivUser.Nick;
+
+            if (!string.IsNullOrEmpty(d_SenvivUser.Account) && d_SenvivUser.Nick != d_SenvivUser.Account)
+            {
+                signName += "(" + d_SenvivUser.Account + ")";
+            }
+
+
+            string age = "-";
+
+            if (d_SenvivUser.Birthday != null)
+            {
+                age = CommonUtil.GetAgeByBirthdate(d_SenvivUser.Birthday.Value).ToString();
+            }
+
+            var ret = new
+            {
+                Id = d_SenvivUser.Id,
+                SignName = signName,
+                HeadImgurl = d_SenvivUser.HeadImgurl,
+                SAS = GetSASName(d_SenvivUser.SAS),
+                BreathingMachine = GetBreathingMachineName(d_SenvivUser.BreathingMachine),
+                SignTags = GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.OtherPerplex),
+                Medicalhistory = GetMedicalhistoryName(d_SenvivUser.Medicalhistory),
+                Medicine = GetMedicineNames(d_SenvivUser.Medicine),
+                Sex = GetSexName(d_SenvivUser.Sex),
+                Age = age,
+                Height = d_SenvivUser.Height,
+                Weight = d_SenvivUser.Weight,
+                Mobile = d_SenvivUser.Mobile,
+                LastReportId = d_SenvivUser.LastReportId,
+                LastReportTime = d_SenvivUser.LastReportTime
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
     }
 }

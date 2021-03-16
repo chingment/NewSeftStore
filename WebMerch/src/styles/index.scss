@@ -427,3 +427,79 @@ overflow: hidden;
 border-radius: 50%;
 border: 1px solid #909399;
 }
+
+
+.my-container2{
+  background: #fbfbfb;
+  padding: 0px;
+  .el-menu{
+    background: #fbfbfb;
+    border-right: solid 0px #e6e6e6;
+  }
+
+  .el-aside{
+    background: #fbfbfb;
+  }
+
+  .el-main{
+    background: #ffffff;
+    min-height: calc(100vh - 66px);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  }
+
+  .el-menu-item{
+    
+    text-align: center;
+  }
+}
+
+
+.box-card-senviv-user{
+
+  .it-header {
+    display: flex;
+    padding: 5px 20px;
+    border-bottom: 1px solid #EBEEF5;
+
+    .left {
+      flex: 1;
+      display: flex;
+  overflow: hidden;
+     .l1{
+           display: flex;
+    justify-content: center;
+    align-items: center;
+     }
+
+     .l2{
+       display: block;
+      text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 50px;
+    padding-left:8px;
+
+     }
+    }
+    .right {
+      width: 50px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+  .it-component {
+    height: 156px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 20px;
+
+  .t1{
+    padding:  5px 0px;
+    span{
+    font-size: 14px;
+    margin-left: 5px;
+    }
+  }
+  }
+}

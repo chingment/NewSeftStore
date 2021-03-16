@@ -1,23 +1,34 @@
 <template>
-  <div id="senviv_user_detail" class="app-container my-container1" style="height:600px">
+  <div id="senviv_user_detail" class="app-container my-container2" style="height:60%">
 
     <el-container style="padding:10px 0px">
       <el-aside style="width:300px;margin-right:10px">
 
-        <el-card class="box-card box-card-product" :body-style="{ padding: '0px' }">
+        <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
           <div class="it-header clearfix">
             <div class="left">
               <div class="l1">
-                <el-avatar size="medium" />
+                <el-avatar :src="userDetail.headImgurl" size="medium" />
               </div>
               <div class="l2">
-                <span class="name">xx</span>
+                <span class="name">{{ userDetail.signName }}</span>
               </div>
             </div>
           </div>
           <div class="it-component">
-            <div class="t1"><span class="sex">x</span> <span class="age">x岁</span> <span class="height">身高：x</span><span class="weight">体重：x</span></div>
-            <div />
+            <div class="t1"><span class="sex">{{ userDetail.sex }}</span> <span class="age">{{ userDetail.age }}岁</span> <span class="height">身高：{{ userDetail.height }}</span><span class="weight">体重：{{ userDetail.weihgt }}</span></div>
+            <div>
+
+              <el-tag
+                v-for="tag in userDetail.signTags"
+                :key="tag.name"
+                style="margin-right: 10px;margin-bottom: 10px"
+                :type="tag.type"
+              >
+                {{ tag.name }}
+              </el-tag>
+
+            </div>
           </div>
         </el-card>
 
@@ -44,6 +55,54 @@
   </div>
 </template>
 
+<script>
+
+import { MessageBox } from 'element-ui'
+import { getUserDetail } from '@/api/senviv'
+
+export default {
+  name: 'SenvivUserDetail',
+  props: {
+    userId: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      userDetail: {
+        headImgurl: '',
+        signName: '',
+        sex: '',
+        age: '',
+        height: '',
+        weight: '',
+        signTags: []
+      },
+      isDesktop: this.$store.getters.isDesktop
+    }
+  },
+  mounted() {
+
+  },
+  created() {
+    this._getUserDetail()
+  },
+  methods: {
+    _getUserDetail() {
+      this.loading = true
+      getUserDetail({ userId: this.userId }).then(res => {
+        if (res.result === 1) {
+          this.userDetail = res.data
+        }
+        this.loading = false
+      })
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 
 .el-card__header{
@@ -55,56 +114,6 @@
 
 .el-col-5 {
   width: 20%;
-}
-
-.box-card-product {
-
-  .it-header {
-    display: flex;
-    padding: 5px 20px;
-    border-bottom: 1px solid #EBEEF5;
-
-    .left {
-      flex: 1;
-      display: flex;
-  overflow: hidden;
-     .l1{
-           display: flex;
-    justify-content: center;
-    align-items: center;
-     }
-
-     .l2{
-       display: block;
-      text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    line-height: 50px;
-    padding-left:8px;
-
-     }
-    }
-    .right {
-      width: 50px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-  }
-  .it-component {
-    height: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 5px 20px;
-
-  .t1{
-    padding:  5px 0px;
-    span{
-    font-size: 14px;
-    margin-left: 5px;
-    }
-  }
-  }
 }
 
 }

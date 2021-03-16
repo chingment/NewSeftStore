@@ -17,5 +17,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Senviv.GetUsers(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetUserDetail([FromUri]string userId)
+        {
+            IResult result = MerchServiceFactory.Senviv.GetUserDetail(this.CurrentUserId, this.CurrentMerchId, userId);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

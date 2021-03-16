@@ -33,7 +33,7 @@
         :span="5"
         class="my-col"
       >
-        <el-card class="box-card box-card-product" :body-style="{ padding: '0px' }">
+        <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
           <div class="it-header clearfix">
             <div class="left">
               <div class="l1">
@@ -75,8 +75,7 @@
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
     <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
-      <pane-user-detail />
-
+      <pane-user-detail :user-id="selectUserId" />
     </el-dialog>
 
   </div>
@@ -127,6 +126,7 @@ export default {
         { value: '2', label: '中度' },
         { value: '3', label: '重度' }
       ],
+      selectUserId: '',
       dialogIsShowByDetail: false,
       isDesktop: this.$store.getters.isDesktop
     }
@@ -155,6 +155,7 @@ export default {
       this.getListData()
     },
     handleOpenDialogByDetail(item) {
+      this.selectUserId = item.id
       this.dialogIsShowByDetail = true
     }
   }
@@ -171,56 +172,6 @@ export default {
 
 .el-col-5 {
   width: 20%;
-}
-
-.box-card-product {
-
-  .it-header {
-    display: flex;
-    padding: 5px 20px;
-    border-bottom: 1px solid #EBEEF5;
-
-    .left {
-      flex: 1;
-      display: flex;
-  overflow: hidden;
-     .l1{
-           display: flex;
-    justify-content: center;
-    align-items: center;
-     }
-
-     .l2{
-       display: block;
-      text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    line-height: 50px;
-    padding-left:8px;
-
-     }
-    }
-    .right {
-      width: 50px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-  }
-  .it-component {
-    height: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 5px 20px;
-
-  .t1{
-    padding:  5px 0px;
-    span{
-    font-size: 14px;
-    margin-left: 5px;
-    }
-  }
-  }
 }
 
 }
