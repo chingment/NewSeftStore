@@ -59,22 +59,22 @@ namespace LocalS.BLL.Task
 
                             if (xl != null)
                             {
-                                d_SenvivHealthDay.XlAvg = xl.DayCurBenchmark;//平均呼吸率
-                                d_SenvivHealthDay.XlStd = xl.Benchmark;//基准心率值
-                                d_SenvivHealthDay.XlMin = xl.HeartbeatMin;//当夜最小心率值
-                                d_SenvivHealthDay.XlMax = xl.HeartbeatMax;//当夜最大心率值
+                                //d_SenvivHealthDay.XlAvg = xl.DayCurBenchmark;//平均呼吸率
+                                //d_SenvivHealthDay.XlStd = xl.Benchmark;//基准心率值
+                                //d_SenvivHealthDay.XlMin = xl.HeartbeatMin;//当夜最小心率值
+                                //d_SenvivHealthDay.XlMax = xl.HeartbeatMax;//当夜最大心率值
                             }
 
                             var hx = d1.ReportOfBreath;
                             if (hx != null)
                             {
-                                d_SenvivHealthDay.HxAvg = hx.Average;//	平均呼吸
-                                d_SenvivHealthDay.HxStd = hx.Benchmark;//基准呼吸值
-                                d_SenvivHealthDay.HxMin = hx.BreathMin;//当夜最小呼吸率
-                                d_SenvivHealthDay.HxMax = hx.BreathMax;//当夜最大呼吸率
-                                d_SenvivHealthDay.HxTd = hx.BreathMax;
-                                d_SenvivHealthDay.HxZtNum = hx.PauseSum;//呼吸暂停次数
-                                d_SenvivHealthDay.HxZtStd = hx.LowerCounts;
+                                //d_SenvivHealthDay.HxAvg = hx.Average;//	平均呼吸
+                                //d_SenvivHealthDay.HxStd = hx.Benchmark;//基准呼吸值
+                                //d_SenvivHealthDay.HxMin = hx.BreathMin;//当夜最小呼吸率
+                                //d_SenvivHealthDay.HxMax = hx.BreathMax;//当夜最大呼吸率
+                                //d_SenvivHealthDay.HxTd = hx.BreathMax;
+                                //d_SenvivHealthDay.HxZtNum = hx.PauseSum;//呼吸暂停次数
+                                //d_SenvivHealthDay.HxZtStd = hx.LowerCounts;
                             }
 
                             var hrv = d1.ReportOfHRV;
@@ -82,11 +82,11 @@ namespace LocalS.BLL.Task
                             {
                                 d_SenvivHealthDay.HrvXzznl = hrv.HeartIndex;
                                 // d_SenvivHealthDay.HrvXljsl = d1.Report.TotalScore;
-                                d_SenvivHealthDay.HrvMzsjzl = hrv.HF;
-                                d_SenvivHealthDay.HrvJgsjzl = hrv.LF;
-                                d_SenvivHealthDay.HrvZzsjzl = hrv.LFHF;
-                                d_SenvivHealthDay.HrvXgss = hrv.temperature;
-                                d_SenvivHealthDay.HrvSDNN = hrv.SDNN;
+                                //d_SenvivHealthDay.HrvMzsjzl = hrv.HF;
+                                //d_SenvivHealthDay.HrvJgsjzl = hrv.LF;
+                                //d_SenvivHealthDay.HrvZzsjzl = hrv.LFHF;
+                                //d_SenvivHealthDay.HrvXgss = hrv.temperature;
+                                //d_SenvivHealthDay.HrvSDNN = hrv.SDNN;
                                 //d_SenvivHealthDay.HrvPNN50 = ;
                                 //d_SenvivHealthDay.HrvRMSSD = d1.Report.TotalScore;
                             }
