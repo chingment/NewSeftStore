@@ -77,21 +77,51 @@ namespace LocalS.Entity
         //呼吸暂停平均时长
         public decimal HxZtPjsc { get; set; }
         //心律失常风险
-        public decimal HrvXlscfx { get; set; }
+        public decimal JbfxXlscfx { get; set; }
         //心率减速力
-        public decimal HrvXljsl { get; set; }
+        public decimal JbfxXljsl { get; set; }
         //心脏总能量
         public decimal HrvXzznl { get; set; }
+        //心脏总能量基准值
+        public decimal HrvXzznlJzz { get; set; }
         //交感神经张力指数
         public decimal HrvJgsjzlzs { get; set; }
+        //交感神经张力指数基准值
+        public decimal HrvJgsjzlzsJzz { get; set; }
         //迷走神经张力指数
         public decimal HrvMzsjzlzs { get; set; }
+        //迷走神经张力指数基准值
+        public decimal HrvMzsjzlzsJzz { get; set; }
         //自主神经平衡指数
         public decimal HrvZzsjzlzs { get; set; }
+        //自主神经平衡指数基准值
+        public decimal HrvZzsjzlzsJzz { get; set; }
         //荷尔蒙指数
         public decimal HrvHermzs { get; set; }
+        //荷尔蒙指数基准值
+        public decimal HrvHermzsJzz { get; set; }
         //体温及血管舒缩指数
         public decimal HrvTwjxgsszh { get; set; }
+        //体温及血管舒缩指数基准值
+        public decimal HrvTwjxgsszhJzz { get; set; }
+
+        //免疫力指数
+        public decimal MylMylZs { get; set; }
+        //感染风险
+        public decimal MylGrfx { get; set; }
+
+        //高血压管控
+        public decimal MbGxygk{ get; set; }
+        //冠心病管控
+        public decimal MbGxbgk { get; set; }
+        //糖尿病管控
+        public decimal MbTlbgk { get; set; }
+        //焦虑情绪
+        public decimal QxxlJlqx { get; set; }
+        //抗压能力
+        public decimal QxxlKynl { get; set; }
+        //情绪应激
+        public decimal QxxlQxyj { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }
