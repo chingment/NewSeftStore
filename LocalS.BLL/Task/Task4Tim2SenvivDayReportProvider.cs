@@ -168,7 +168,7 @@ namespace LocalS.BLL.Task
                                             //情绪心理-焦虑情绪
                                             case "Anxiety":
 
-                                                d_DayReport.QxxlJlqx = index.score;
+                                                d_DayReport.QxxlJlqx = index.explain;
 
                                                 d_Label = new SenvivHealthDayReportLabel();
                                                 d_Label.Id = IdWorker.Build(IdType.NewGuid);

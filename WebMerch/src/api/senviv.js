@@ -16,7 +16,16 @@ export function getUserDetail(params) {
   })
 }
 
+export function getDayReports(params) {
+  return request({
+    url: '/senviv/getDayReports',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getUsers: getUsers,
-  getUserDetail: getUserDetail
+  getUserDetail: getUserDetail,
+  getDayReports: getDayReports
 }

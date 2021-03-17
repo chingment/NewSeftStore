@@ -259,6 +259,7 @@
     <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
+    <Compile Include="Api\Merch\RModels\RupSenvivGetDayReports.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetUsers.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />

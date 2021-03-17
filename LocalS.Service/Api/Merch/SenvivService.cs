@@ -373,5 +373,201 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+
+        public CustomJsonResult GetDayReports(string operater, string merchId, RupSenvivGetDayReports rup)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
+
+            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+
+            var deptIds = d_Merch.SenvivDepts.Split(',');
+
+            var query = (from u in CurrentDb.SenvivHealthDayReport
+                         select new
+                         {
+                             u.Id,
+                             u.TotalScore,
+                             u.HealthDate,
+                             u.SmRssj,
+                             u.SmQxsj,
+                             u.MylGrfx,
+                             u.MylMylZs,
+                             u.MbGxbgk,
+                             u.MbGxygk,
+                             u.MbTlbgk,
+                             u.QxxlJlqx,
+                             u.QxxlKynl,
+                             u.QxxlQxyj,
+                             u.JbfxXljsl,
+                             u.JbfxXlscfx,
+                             u.HrvXzznl,
+                             u.HrvXzznlJzz,
+                             u.HrvJgsjzlzs,
+                             u.HrvJgsjzlzsJzz,
+                             u.HrvMzsjzlzs,
+                             u.HrvMzsjzlzsJzz,
+                             u.HrvZzsjzlzs,
+                             u.HrvZzsjzlzsJzz,
+                             u.HrvHermzs,
+                             u.HrvHermzsJzz,
+                             u.HrvTwjxgsszh,
+                             u.HrvTwjxgsszhJzz,
+                             //当次基准心率
+                             u.XlDcjzxl,
+                             //长期基准心率
+                             u.XlCqjzxl,
+                             //当次平均心率
+                             u.XlDcpjxl,
+                             //最高心率
+                             u.XlZg,
+                             //最低心率
+                             u.XlZd,
+                             //心动过快时长
+                             u.XlXdgksc,
+                             //心动过慢时长
+                             u.XlXdgmsc,
+                             //心率超过1.25时长
+                             u.Xlcg125,
+                             //心率超过1.15时长
+                             u.Xlcg115,
+                             //心率超过0.85时长
+                             u.Xlcg085,
+                             //心率超过075时长
+                             u.Xlcg075,
+                             //呼吸当次基准呼吸
+                             u.HxDcjzhx,
+                             //呼吸长期基准呼吸
+                             u.HxCqjzhx,
+                             //呼吸平均呼吸
+                             u.HxDcPj,
+                             //呼吸最高呼吸
+                             u.HxZgHx,
+                             //呼吸最低呼吸
+                             u.HxZdHx,
+                             //呼吸过快时长
+                             u.HxGksc,
+                             //呼吸过慢时长
+                             u.HxGmsc,
+                             //呼吸暂停次数
+                             u.HxZtcs,
+                             //呼吸暂停AHI指数
+                             u.HxZtAhizs,
+                             //呼吸暂停平均时长
+                             u.HxZtPjsc,
+                             u.CreateTime
+                         });
+
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.HealthDate).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    HealthDate = item.HealthDate.ToUnifiedFormatDate(),
+                    TotalScore = item.TotalScore,
+                    SmRssj = item.SmRssj.ToUnifiedFormatDateTime(),
+                    SmQxsj = item.SmQxsj.ToUnifiedFormatDateTime(),
+                    item.MylGrfx,
+                    item.MylMylZs,
+                    item.MbGxbgk,
+                    item.MbGxygk,
+                    item.MbTlbgk,
+                    item.QxxlJlqx,
+                    item.QxxlKynl,
+                    item.QxxlQxyj,
+                    item.JbfxXlscfx,
+                    item.JbfxXljsl,
+                    //心脏总能量
+                    item.HrvXzznl,
+                    //心脏总能量基准值
+                    item.HrvXzznlJzz,
+                    //交感神经张力指数
+                    item.HrvJgsjzlzs,
+                    //交感神经张力指数基准值
+                    item.HrvJgsjzlzsJzz,
+                    //迷走神经张力指数
+                    item.HrvMzsjzlzs,
+                    //迷走神经张力指数基准值
+                    item.HrvMzsjzlzsJzz,
+                    //自主神经平衡指数
+                    item.HrvZzsjzlzs,
+                    //自主神经平衡指数基准值
+                    item.HrvZzsjzlzsJzz,
+                    //荷尔蒙指数
+                    item.HrvHermzs,
+                    //荷尔蒙指数基准值
+                    item.HrvHermzsJzz,
+                    //体温及血管舒缩指数
+                    item.HrvTwjxgsszh,
+                    //体温及血管舒缩指数基准值
+                    item.HrvTwjxgsszhJzz,
+                    //当次基准心率
+                    item.XlDcjzxl,
+                    //长期基准心率
+                    item.XlCqjzxl,
+                    //当次平均心率
+                    item.XlDcpjxl,
+                    //最高心率
+                    item.XlZg,
+                    //最低心率
+                    item.XlZd,
+                    //心动过快时长
+                    item.XlXdgksc,
+                    //心动过慢时长
+                    item.XlXdgmsc,
+                    //心率超过1.25时长
+                    item.Xlcg125,
+                    //心率超过1.15时长
+                    item.Xlcg115,
+                    //心率超过0.85时长
+                    item.Xlcg085,
+                    //心率超过075时长
+                    item.Xlcg075,
+                    //呼吸当次基准呼吸
+                    item.HxDcjzhx,
+                    //呼吸长期基准呼吸
+                    item.HxCqjzhx,
+                    //呼吸平均呼吸
+                    item.HxDcPj,
+                    //呼吸最高呼吸
+                    item.HxZgHx,
+                    //呼吸最低呼吸
+                    item.HxZdHx,
+                    //呼吸过快时长
+                    item.HxGksc,
+                    //呼吸过慢时长
+                    item.HxGmsc,
+                    //呼吸暂停次数
+                    item.HxZtcs,
+                    //呼吸暂停AHI指数
+                    item.HxZtAhizs,
+                    //呼吸暂停平均时长
+                    item.HxZtPjsc,
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+
+        }
     }
 }

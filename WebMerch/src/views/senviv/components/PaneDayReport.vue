@@ -1,0 +1,506 @@
+<template>
+  <div id="senviv_report_list">
+    <el-table
+      :key="listKey"
+      v-loading="loading"
+      :data="listData"
+      fit
+      highlight-current-row
+      style="width: 100%;"
+    >
+
+      <el-table-column
+        label="序号"
+        fixed
+        width="120"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.$index+1 }} </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="healthDate"
+        label="日期"
+        width="120"
+        fixed
+      />
+      <el-table-column
+        prop="totalScore"
+        align="center"
+        label="总分"
+        width="120"
+      />
+      <el-table-column
+        prop="smRssj"
+        label="入睡时间"
+        align="center"
+        width="300"
+      />
+      <el-table-column
+        prop="smQxsj"
+        label="清醒时间"
+        align="center"
+        width="300"
+      />
+
+      <el-table-column label="免疫力" align="center">
+        <el-table-column
+          prop="mylMylZs"
+          label="免疫力指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="mylGrfx"
+          label="感染风险"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+      <el-table-column label="慢病管控" align="center">
+        <el-table-column
+          prop="mbGxygk"
+          label="高血压"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="mbGxbgk"
+          label="冠心病"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="mbTlbgk"
+          label="糖尿病"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="情绪心理" align="center">
+        <el-table-column
+          prop="qxxlJlqx"
+          label="焦虑情绪"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="qxxlKynl"
+          label="抗压能力"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="qxxlQxyj"
+          label="情绪应激"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="疾病风险" align="center">
+        <el-table-column
+          prop="jbfxXlscfx"
+          label="心律失常风险指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="jbfxXljsl"
+          label="心率减速力"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="心率变异性" align="center">
+        <el-table-column
+          prop="hrvXzznl"
+          label="心脏总能量"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="心脏总能量基准值"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="交感神经张力指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzsJzz"
+          label="交感神经张力基准值"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvMzsjzlzs"
+          label="迷走神经张力指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvMzsjzlzsJzz"
+          label="迷走神经张力基准值"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvZzsjzlzs"
+          label="自主神经平衡"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvZzsjzlzsJzz"
+          label="自主神经平衡基准值"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvHermzs"
+          label="荷尔蒙指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvHermzsJzz"
+          label="荷尔蒙指数基准值"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvTwjxgsszh"
+          label="体温及血管舒缩指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvTwjxgsszhJzz"
+          label="体温及血管舒缩基准值"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="心率" align="center">
+        <el-table-column
+          prop="xlDcjzxl"
+          label="当次基准心率"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlCqjzxl"
+          label="长期基准心率"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xDcpjxl"
+          label="当次平均心率"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlZg"
+          label="最高心率"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlZd"
+          label="最低心率"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlXdgksc"
+          label="心动过快时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlXdgmsc"
+          label="心动过慢时"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlcg125"
+          label="心率超过1.25时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlcg115"
+          label="心率超过1.15时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlcg085"
+          label="心率低于0.85时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="xlcg075"
+          label="心率低于0.75时长"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="呼吸暂停" align="center">
+        <el-table-column
+          prop="hxZtAhizs"
+          label="AHI指数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxZtcs"
+          label="呼吸暂停次数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxZtPjsc"
+          label="呼吸暂停平均时长"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="呼吸" align="center">
+        <el-table-column
+          prop="hxDcjzhx"
+          label="基准呼吸"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxCqjzhx"
+          label="长期基准呼吸"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxDcPj"
+          label="平均呼吸"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxZgHx"
+          label="最高呼吸"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxZdHx"
+          label="最低呼吸"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxGksc"
+          label="呼吸过快时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hxGmsc"
+          label="呼吸过慢时长"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="睡眠时间" align="center">
+        <el-table-column
+          prop="hrvXzznl"
+          label="在床时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="睡眠时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="入睡时刻"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="上床时刻"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="入睡需时"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznl"
+          label="清醒时刻"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="起床时刻"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+      <el-table-column label="睡眠结构" align="center">
+        <el-table-column
+          prop="hrvXzznl"
+          label="深睡期时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="深睡期比例"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="浅睡期时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="浅睡期比例"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvJgsjzlzs"
+          label="REM期时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznl"
+          label="REM期比例"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="清醒期时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="清醒期比例"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="离枕次数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="离枕时长"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="体动次数"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="hrvXzznlJzz"
+          label="平均体动时长"
+          width="120"
+          align="center"
+        />
+      </el-table-column>
+
+    </el-table>
+
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+
+  </div>
+</template>
+
+<script>
+import { getDayReports } from '@/api/senviv'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+export default {
+  name: 'ClientUserList',
+  components: { Pagination },
+  data() {
+    return {
+      loading: false,
+      listKey: 0,
+      listData: null,
+      listTotal: 0,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        userName: undefined
+      },
+      isDesktop: this.$store.getters.isDesktop
+    }
+  },
+  created() {
+    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
+      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+    }
+    this.getListData()
+  },
+  methods: {
+    getListData() {
+      this.loading = true
+      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+      getDayReports(this.listQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.listData = d.items
+          this.listTotal = d.total
+        }
+        this.loading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getListData()
+    },
+    handleDetails(row) {
+      this.$router.push({
+        path: '/client/shop/details?id=' + row.id
+      })
+    }
+  }
+}
+</script>

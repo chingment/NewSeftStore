@@ -132,7 +132,7 @@ namespace LocalS.Entity
         //糖尿病管控
         public decimal MbTlbgk { get; set; }
         //焦虑情绪
-        public decimal QxxlJlqx { get; set; }
+        public string QxxlJlqx { get; set; }
         //抗压能力
         public decimal QxxlKynl { get; set; }
         //情绪应激
