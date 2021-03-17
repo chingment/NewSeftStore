@@ -158,7 +158,7 @@ namespace LocalS.Service.Api.Merch
                 case "5":
                     return "治疗失眠药物";
                 case "6":
-                    return "其他";
+                    return "其它";
                 default:
                     return "";
             }
