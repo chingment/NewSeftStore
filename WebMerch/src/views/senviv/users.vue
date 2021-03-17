@@ -10,6 +10,11 @@
           </el-checkbox-group>
 
         </el-form-item>
+        <el-form-item label="慢性病">
+          <el-radio-group v-model="listQuery.chronic" @change="handleFilter">
+            <el-radio-button v-for="item in chronics" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="呼吸综合症">
           <el-radio-group v-model="listQuery.sas" @change="handleFilter">
             <el-radio-button v-for="item in sass" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
@@ -99,6 +104,7 @@ export default {
         limit: 20,
         name: undefined,
         sas: '0',
+        chronic: '0',
         perplexs: null
       },
       checkboxGroup1: [],
@@ -107,6 +113,12 @@ export default {
         { value: '1', label: '没有困扰' },
         { value: '2', label: '睡眠呼吸暂停综合症' },
         { value: '3', label: '打鼾' },
+        { value: '11', label: '长期失眠' },
+        { value: '13', label: '不宁腿综合症' },
+        { value: '14', label: '其它' }
+      ],
+      chronics: [
+        { value: '0', label: '全部' },
         { value: '4', label: '糖尿病' },
         { value: '5', label: '高血压' },
         { value: '6', label: '冠心病' },
@@ -114,10 +126,7 @@ export default {
         { value: '8', label: '心衰' },
         { value: '9', label: '慢性阻塞性肺疾病' },
         { value: '10', label: '脑梗塞/脑卒中' },
-        { value: '11', label: '长期失眠' },
-        { value: '12', label: '癫痫' },
-        { value: '13', label: '不宁腿综合症' },
-        { value: '14', label: '其它' }
+        { value: '12', label: '癫痫' }
       ],
       sass: [
         { value: '0', label: '全部' },

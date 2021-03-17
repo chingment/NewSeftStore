@@ -234,6 +234,12 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.SAS == rup.Sas);
             }
 
+
+            if (rup.Chronic != "0")
+            {
+                query = query.Where(m => m.Perplex.Contains(rup.Chronic));
+            }
+
             int total = query.Count();
 
             int pageIndex = rup.Page - 1;
