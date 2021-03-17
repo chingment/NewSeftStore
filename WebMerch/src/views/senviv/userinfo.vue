@@ -68,7 +68,6 @@
 <script>
 import { getList } from '@/api/clientuser'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
 export default {
   name: 'ClientUserList',
   components: { Pagination },

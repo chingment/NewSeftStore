@@ -210,6 +210,32 @@ namespace LocalS.Service.Api.Merch
         }
 
 
+        public string GetSignName(string nick, string account)
+        {
+            string signName = nick;
+
+            if (!string.IsNullOrEmpty(account) && nick != account)
+            {
+                signName += "(" + account + ")";
+            }
+
+
+            return signName;
+        }
+
+        public string GetAge(DateTime? bithday)
+        {
+            string age = "-";
+
+            if (bithday != null)
+            {
+                age = CommonUtil.GetAgeByBirthdate(bithday.Value).ToString();
+            }
+
+            return age;
+        }
+
+
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -335,25 +361,12 @@ namespace LocalS.Service.Api.Merch
                 }
             }
 
-            string signName = d_SenvivUser.Nick;
-
-            if (!string.IsNullOrEmpty(d_SenvivUser.Account) && d_SenvivUser.Nick != d_SenvivUser.Account)
-            {
-                signName += "(" + d_SenvivUser.Account + ")";
-            }
-
-
-            string age = "-";
-
-            if (d_SenvivUser.Birthday != null)
-            {
-                age = CommonUtil.GetAgeByBirthdate(d_SenvivUser.Birthday.Value).ToString();
-            }
 
             var ret = new
             {
                 Id = d_SenvivUser.Id,
-                SignName = signName,
+                SignName = GetSignName(d_SenvivUser.Nick, d_SenvivUser.Account),
+                Age = GetAge(d_SenvivUser.Birthday),
                 HeadImgurl = d_SenvivUser.HeadImgurl,
                 SAS = GetSASName(d_SenvivUser.SAS),
                 BreathingMachine = GetBreathingMachineName(d_SenvivUser.BreathingMachine),
@@ -361,7 +374,6 @@ namespace LocalS.Service.Api.Merch
                 Medicalhistory = GetMedicalhistoryName(d_SenvivUser.Medicalhistory),
                 Medicine = GetMedicineNames(d_SenvivUser.Medicine),
                 Sex = GetSexName(d_SenvivUser.Sex),
-                Age = age,
                 Height = d_SenvivUser.Height,
                 Weight = d_SenvivUser.Weight,
                 Mobile = d_SenvivUser.Mobile,
@@ -388,9 +400,18 @@ namespace LocalS.Service.Api.Merch
             var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var query = (from u in CurrentDb.SenvivHealthDayReport
+
+                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+
                          select new
                          {
                              u.Id,
+                             tt.Nick,
+                             tt.Sex,
+                             tt.Account,
+                             tt.Birthday,
+                             tt.HeadImgurl,
                              u.TotalScore,
                              u.HealthDate,
                              u.SmRssj,
@@ -459,10 +480,59 @@ namespace LocalS.Service.Api.Merch
                              u.HxZtAhizs,
                              //呼吸暂停平均时长
                              u.HxZtPjsc,
+                             u.SmScsj,
+                             u.SmLcsj,
+                             u.SmZcsc,
+                             //睡眠时长
+                             u.SmSmsc,
+                             //入睡需时
+                             u.SmRsxs,
+                             //深度睡眠时长
+                             u.SmSdsmsc,
+                             //深度睡眠比例
+                             u.SmSdsmbl,
+                             //浅度睡眠时长
+                             u.SmQdsmsc,
+                             //浅度睡眠比例
+                             u.SmQdsmbl,
+                             //REM睡眠时长
+                             u.SmSemqsc,
+                             //REM睡眠比例
+                             u.SmSemqbl,
+                             //清醒时刻时长
+                             u.SmQxsksc,
+                             //清醒时刻比例
+                             u.SmQxskbl,
+                             //离真次数
+                             u.SmLzcs,
+                             //离真时长
+                             u.SmLzsc,
+                             //体动次数
+                             u.SmTdcs,
+                             //平均体动时长
+                             u.SmPjtdsc,
+                             u.SvUserId,
                              u.CreateTime
                          });
 
+            if (!string.IsNullOrEmpty(rup.Name))
+            {
+                query = query.Where(m =>((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
+            }
 
+            if (rup.HealthDate != null && rup.HealthDate.Length == 2)
+            {
+
+                DateTime? startTime = CommonUtil.ConverToStartTime(rup.HealthDate[0]);
+                DateTime? endTime = CommonUtil.ConverToEndTime(rup.HealthDate[1]);
+
+                query = query.Where(m => m.HealthDate >= startTime && m.HealthDate <= endTime);
+            }
+
+            if (!string.IsNullOrEmpty(rup.UserId))
+            {
+                query = query.Where(m => m.SvUserId == rup.UserId);
+            }
 
             int total = query.Count();
 
@@ -479,6 +549,10 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
+                    SignName = GetSignName(item.Nick, item.Account),
+                    HeadImgurl = item.HeadImgurl,
+                    Sex = GetSexName(item.Sex),
+                    Age = GetAge(item.Birthday),
                     HealthDate = item.HealthDate.ToUnifiedFormatDate(),
                     TotalScore = item.TotalScore,
                     SmRssj = item.SmRssj.ToUnifiedFormatDateTime(),
@@ -559,6 +633,37 @@ namespace LocalS.Service.Api.Merch
                     item.HxZtAhizs,
                     //呼吸暂停平均时长
                     item.HxZtPjsc,
+                    item.SmZcsc,
+                    //睡眠时长
+                    item.SmSmsc,
+                    //入睡需时
+                    item.SmRsxs,
+                    //深度睡眠时长
+                    item.SmSdsmsc,
+                    //深度睡眠比例
+                    item.SmSdsmbl,
+                    //浅度睡眠时长
+                    item.SmQdsmsc,
+                    //浅度睡眠比例
+                    item.SmQdsmbl,
+                    //REM睡眠时长
+                    item.SmSemqsc,
+                    //REM睡眠比例
+                    item.SmSemqbl,
+                    //清醒时刻时长
+                    item.SmQxsksc,
+                    //清醒时刻比例
+                    item.SmQxskbl,
+                    //离真次数
+                    item.SmLzcs,
+                    //离真时长
+                    item.SmLzsc,
+                    //体动次数
+                    item.SmTdcs,
+                    //平均体动时长
+                    item.SmPjtdsc,
+                    item.SmLcsj,
+                    item.SmScsj
                 });
             }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="senviv_user_detail" class="app-container my-container2">
 
-    <el-container >
+    <el-container>
       <el-aside style="width:300px;margin-right:10px">
 
         <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
@@ -46,7 +46,7 @@
       <el-container>
         <el-main class="">
 
-          dsadsad
+          <pane-day-report :user-id="userId" />
 
         </el-main>
       </el-container>
@@ -58,10 +58,12 @@
 <script>
 
 import { MessageBox } from 'element-ui'
+import PaneDayReport from './PaneDayReport.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
-  name: 'SenvivUserDetail',
+  name: 'SenvivPaneUserDetail',
+  components: { PaneDayReport },
   props: {
     userId: {
       type: String,

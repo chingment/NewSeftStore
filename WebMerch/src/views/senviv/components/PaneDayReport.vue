@@ -1,5 +1,31 @@
 <template>
   <div id="senviv_report_list">
+
+    <div class="filter-container">
+      <el-form ref="form" label-width="120px">
+
+        <el-form-item label="日期">
+
+          <el-date-picker
+            v-model="listQuery.healthDate"
+            type="daterange"
+            range-separator="-"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            style="width: 300px"
+          />
+
+        </el-form-item>
+        <el-form-item v-if="userId===''" label="搜索">
+          <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -12,7 +38,8 @@
       <el-table-column
         label="序号"
         fixed
-        width="120"
+        width="50"
+        align="center"
       >
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
@@ -23,25 +50,53 @@
         prop="healthDate"
         label="日期"
         width="120"
+        align="center"
         fixed
       />
+      <el-table-column
+        v-if="userId===''"
+        prop="signName"
+        label="对象"
+        width="120"
+        align="center"
+        fixed
+      />
+
+      <el-table-column
+        v-if="userId===''"
+        prop="sex"
+        label="性别"
+        width="60"
+        align="center"
+        fixed
+      />
+
+      <el-table-column
+        v-if="userId===''"
+        prop="age"
+        label="年龄"
+        width="60"
+        align="center"
+        fixed
+      />
+
       <el-table-column
         prop="totalScore"
         align="center"
         label="总分"
-        width="120"
+        width="60"
       />
       <el-table-column
         prop="smRssj"
         label="入睡时间"
         align="center"
-        width="300"
+        width="100"
       />
       <el-table-column
         prop="smQxsj"
         label="清醒时间"
         align="center"
-        width="300"
+        width="100"
       />
 
       <el-table-column label="免疫力" align="center">
@@ -204,7 +259,7 @@
           align="center"
         />
         <el-table-column
-          prop="xDcpjxl"
+          prop="xlDcpjxl"
           label="当次平均心率"
           width="120"
           align="center"
@@ -327,43 +382,43 @@
 
       <el-table-column label="睡眠时间" align="center">
         <el-table-column
-          prop="hrvXzznl"
+          prop="smZcsc"
           label="在床时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smSmsc"
           label="睡眠时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smRssj"
           label="入睡时刻"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smScsj"
           label="上床时刻"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smRsxs"
           label="入睡需时"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznl"
+          prop="smQxsj"
           label="清醒时刻"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smLcsj"
           label="起床时刻"
           width="120"
           align="center"
@@ -372,77 +427,86 @@
 
       <el-table-column label="睡眠结构" align="center">
         <el-table-column
-          prop="hrvXzznl"
+          prop="smSdsmsc"
           label="深睡期时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smSdsmbl"
           label="深睡期比例"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smQdsmsc"
           label="浅睡期时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smQdsmbl"
           label="浅睡期比例"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvJgsjzlzs"
+          prop="smSemqsc"
           label="REM期时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznl"
+          prop="smSemqbl"
           label="REM期比例"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smQxsksc"
           label="清醒期时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smQxskbl"
           label="清醒期比例"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smLzcs"
           label="离枕次数"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smLzsc"
           label="离枕时长"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smTdcs"
           label="体动次数"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="hrvXzznlJzz"
+          prop="smPjtdsc"
           label="平均体动时长"
           width="120"
           align="center"
         />
+      </el-table-column>
+
+      <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="handleDetails(scope.row)">
+            查看
+          </el-button>
+
+        </template>
       </el-table-column>
 
     </el-table>
@@ -459,6 +523,12 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 export default {
   name: 'ClientUserList',
   components: { Pagination },
+  props: {
+    userId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: false,
@@ -468,7 +538,14 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        userName: undefined
+        healthDate: undefined,
+        name: undefined,
+        userId: undefined
+      },
+      datePickerHealthDate: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        }
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -477,6 +554,7 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
+    this.listQuery.userId = this.userId
     this.getListData()
   },
   methods: {
