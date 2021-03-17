@@ -41,6 +41,7 @@ namespace LocalS.BLL.Task
 
         }
 
+
         public void Execute(IJobExecutionContext context)
         {
             try
@@ -335,7 +336,7 @@ namespace LocalS.BLL.Task
 
 
                                 d_DayReport.HxZtAhizs = hx.AHI;//AHI指数
-                                d_DayReport.HxZtCs = hx.HigherCounts;//呼吸暂停次数
+                                d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
                                 d_DayReport.HxZtPjsc = hx.AvgPause;//呼吸暂停平均时长
                             }
                             #endregion
@@ -357,6 +358,14 @@ namespace LocalS.BLL.Task
                                 d_DayReport.HrvHermzsJzz = 0;//荷尔蒙指数基准值
                                 d_DayReport.HrvTwjxgsszh = hrv.temperature;//体温及血管舒缩指数
                                 d_DayReport.HrvTwjxgsszhJzz = 0;//体温及血管舒缩基准值
+
+                                d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
+
+                                var d2 = d1.UserBaseInfo;
+                                if (d2 != null)
+                                {
+                                    d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
+                               }
                             }
                             #endregion
 
@@ -365,17 +374,18 @@ namespace LocalS.BLL.Task
                             {
                                 d_DayReport.SmScsj = TicksToDate(x2.StartTime);//上床时间
                                 d_DayReport.SmLcsj = TicksToDate(x2.FinishTime);//离床时间
-                                d_DayReport.SmZcsc = (long)(d_DayReport.SmScsj - d_DayReport.SmLcsj).TotalSeconds;//起床时刻
+                                d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
                                 d_DayReport.SmRssj = TicksToDate(x2.OnbedTime);//入睡时间
                                 d_DayReport.SmQxsj = TicksToDate(x2.OffbedTime);//清醒时间
-                                d_DayReport.SmSmsc = (long)(d_DayReport.SmRssj - d_DayReport.SmQxsj).TotalSeconds;//睡眠时长
+                                d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj- d_DayReport.SmRssj).TotalSeconds;//睡眠时长
                                 d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
+                                d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
 
                                 d_DayReport.SmSdsmsc = sm.Deep;//深睡时长
                                 d_DayReport.SmSdsmbl = sm.DeepRatio;//深睡期比例
 
-                                d_DayReport.SmQxsksc = sm.Shallow;//浅睡期时长
-                                d_DayReport.SmQxskbl = sm.ShallowRatio;//浅睡期比例
+                                d_DayReport.SmQdsmsc = sm.Shallow;//浅睡期时长
+                                d_DayReport.SmQdsmbl = sm.ShallowRatio;//浅睡期比例
 
                                 d_DayReport.SmSemqsc = sm.Rem;//REM期时长
                                 d_DayReport.SmSemqbl = sm.RemRatio;//REM期比例

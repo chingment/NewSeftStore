@@ -115,15 +115,15 @@ namespace Test
         {
 
 
-            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
-            long lTime = long.Parse("1615914256");
-            TimeSpan toNow = new TimeSpan(lTime);
-            DateTime dtResult = dtStart.Add(toNow);
+            //DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            //long lTime = long.Parse("1615914256");
+            //TimeSpan toNow = new TimeSpan(lTime);
+            //DateTime dtResult = dtStart.Add(toNow);
 
 
-            var s = TicksToDate("1615914256000");
+            //var s = TicksToDate("1615914256000");
 
-            var s2 = TicksToDate("1615941148000");
+            //var s2 = TicksToDate("1615941148000");
             //1615914256000
             //1615941148000
 

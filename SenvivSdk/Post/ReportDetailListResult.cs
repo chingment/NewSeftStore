@@ -214,9 +214,9 @@ namespace SenvivSdk
             public int LF { get; set; }
             public int BaseLF { get; set; }
             public int HF { get; set; }
-            public int LFHF { get; set; }
+            public decimal LFHF { get; set; }
             public int BaseLFHF { get; set; }
-            public int DcValue { get; set; }
+            public decimal DcValue { get; set; }
             public int BaseDC { get; set; }
             public int DRsStr { get; set; }
             public int SDNN { get; set; }
@@ -225,9 +225,9 @@ namespace SenvivSdk
             public decimal temperature { get; set; }
             public int BaseULF { get; set; }
             public int BaseVLF { get; set; }
-            public int Today { get; set; }
+            public long Today { get; set; }
             public int SleepValue { get; set; }
-            public int ReportDate { get; set; }
+            public long ReportDate { get; set; }
         }
 
         public class D_ReportOfOffbed
