@@ -77,8 +77,9 @@ namespace LocalS.DAL
         public IDbSet<SenvivUser> SenvivUser { get; set; }
         public IDbSet<SenvivUserProduct> SenvivUserProduct { get; set; }
         public IDbSet<SenvivDept> SenvivDept { get; set; }
-        public IDbSet<SenvivHealthDay> SenvivHealthDay { get; set; }
-
+        public IDbSet<SenvivHealthDayReport> SenvivHealthDayReport { get; set; }
+        public IDbSet<SenvivHealthDayReportLabel> SenvivHealthDayReportLabel { get; set; }
+        public IDbSet<SenvivHealthDayReportAdvice> SenvivHealthDayReportAdvice { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

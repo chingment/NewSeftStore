@@ -105,19 +105,19 @@ namespace SenvivSdk
         {
             public List<D_ReportOfBreathPause> ReportOfBreathPause { get; set; }
             public List<D_BreathMaxCount> BreathMaxCount { get; set; }
-            public long Benchmark { get; set; }
-            public long BreathMax { get; set; }
-            public long AvgPause { get; set; }
-            public long BreathMin { get; set; }
-            public long HigherCounts { get; set; }
-            public long Longest { get; set; }
-            public long Longterm { get; set; }
-            public long LowerCounts { get; set; }
-            public long Pause10Counts { get; set; }
-            public long Pause30Counts { get; set; }
-            public long PauseSum { get; set; }
-            public long Average { get; set; }
-            public long Shortest { get; set; }
+            public int Benchmark { get; set; }
+            public int BreathMax { get; set; }
+            public int AvgPause { get; set; }
+            public int BreathMin { get; set; }
+            public int HigherCounts { get; set; }
+            public int Longest { get; set; }
+            public int Longterm { get; set; }
+            public int LowerCounts { get; set; }
+            public int Pause10Counts { get; set; }
+            public int Pause30Counts { get; set; }
+            public int PauseSum { get; set; }
+            public int Average { get; set; }
+            public int Shortest { get; set; }
             public decimal AHI { get; set; }
         }
 
@@ -139,25 +139,25 @@ namespace SenvivSdk
             public List<D_HeartbeatMaxCount> HeartbeatMaxCount { get; set; }
             public long Benchmark { get; set; }
             public long DayBenchmark { get; set; }
-            public long DayCurBenchmark { get; set; }
-            public long DayLongterm { get; set; }
-            public long ExceedBenchmark125 { get; set; }
-            public long ExceedBenchmark115 { get; set; }
-            public long ExceedBenchmark83 { get; set; }
-            public long ExceedBenchmark43 { get; set; }
-            public long HeartbeatMax { get; set; }
-            public long Average { get; set; }
-            public long HeartbeatMin { get; set; }
-            public long Higher { get; set; }
-            public long HigherCounts { get; set; }
-            public long HrvAverage { get; set; }
-            public long HrvHigher { get; set; }
-            public long HrvLower { get; set; }
-            public long Longterm { get; set; }
-            public long Lower { get; set; }
-            public long LowerCounts { get; set; }
-            public long NightCurBenchmark { get; set; }
-            public long NightLongterm { get; set; }
+            public int DayCurBenchmark { get; set; }
+            public int DayLongterm { get; set; }
+            public int ExceedBenchmark125 { get; set; }
+            public int ExceedBenchmark115 { get; set; }
+            public int ExceedBenchmark83 { get; set; }
+            public int ExceedBenchmark43 { get; set; }
+            public int HeartbeatMax { get; set; }
+            public int Average { get; set; }
+            public int HeartbeatMin { get; set; }
+            public int Higher { get; set; }
+            public int HigherCounts { get; set; }
+            public int HrvAverage { get; set; }
+            public int HrvHigher { get; set; }
+            public int HrvLower { get; set; }
+            public int Longterm { get; set; }
+            public int Lower { get; set; }
+            public int LowerCounts { get; set; }
+            public int NightCurBenchmark { get; set; }
+            public int NightLongterm { get; set; }
         }
 
         public class D_HeartbeatMaxCount
@@ -168,25 +168,25 @@ namespace SenvivSdk
 
         public class D_ReportOfSleep
         {
-            public long ShallowRatio { get; set; }
-            public long DeepRatio { get; set; }
-            public long RemRatio { get; set; }
-            public long Rem { get; set; }
-            public long MoveCounts { get; set; }
-            public long Shallow { get; set; }
-            public long Deep { get; set; }
-            public long SleepCounts { get; set; }
+            public decimal ShallowRatio { get; set; }
+            public decimal DeepRatio { get; set; }
+            public decimal RemRatio { get; set; }
+            public int Rem { get; set; }
+            public int MoveCounts { get; set; }
+            public int Shallow { get; set; }
+            public int Deep { get; set; }
+            public int SleepCounts { get; set; }
             public long SleepTime { get; set; }
             public long TotalTime { get; set; }
             public List<D_SLeepDetail> SLeepDetails { get; set; }
 
             public List<D_Move> Moves { get; set; }
 
-            public long SoberRatio { get; set; }
-            public long OffbedRatio { get; set; }
-            public long Sober { get; set; }
-            public long Offbed { get; set; }
-            public long MovingAverageLength { get; set; }
+            public decimal SoberRatio { get; set; }
+            public decimal OffbedRatio { get; set; }
+            public int Sober { get; set; }
+            public int Offbed { get; set; }
+            public int MovingAverageLength { get; set; }
         }
 
         public class D_SLeepDetail
@@ -207,27 +207,27 @@ namespace SenvivSdk
 
         public class D_ReportOfHRV
         {
-            public long HeartIndex { get; set; }
-            public long BaseTP { get; set; }
-            public long BaseHF { get; set; }
-            public long AvgHeart { get; set; }
-            public long LF { get; set; }
-            public long BaseLF { get; set; }
-            public long HF { get; set; }
-            public long LFHF { get; set; }
-            public long BaseLFHF { get; set; }
-            public long DcValue { get; set; }
-            public long BaseDC { get; set; }
-            public long DRsStr { get; set; }
-            public long SDNN { get; set; }
-            public long BaseSDNN { get; set; }
-            public long endocrine { get; set; }
-            public long temperature { get; set; }
-            public long BaseULF { get; set; }
-            public long BaseVLF { get; set; }
-            public long Today { get; set; }
-            public long SleepValue { get; set; }
-            public long ReportDate { get; set; }
+            public int HeartIndex { get; set; }
+            public int BaseTP { get; set; }
+            public int BaseHF { get; set; }
+            public int AvgHeart { get; set; }
+            public int LF { get; set; }
+            public int BaseLF { get; set; }
+            public int HF { get; set; }
+            public int LFHF { get; set; }
+            public int BaseLFHF { get; set; }
+            public int DcValue { get; set; }
+            public int BaseDC { get; set; }
+            public int DRsStr { get; set; }
+            public int SDNN { get; set; }
+            public int BaseSDNN { get; set; }
+            public decimal endocrine { get; set; }
+            public decimal temperature { get; set; }
+            public int BaseULF { get; set; }
+            public int BaseVLF { get; set; }
+            public int Today { get; set; }
+            public int SleepValue { get; set; }
+            public int ReportDate { get; set; }
         }
 
         public class D_ReportOfOffbed
