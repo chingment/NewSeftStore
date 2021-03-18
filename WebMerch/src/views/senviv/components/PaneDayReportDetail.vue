@@ -105,51 +105,51 @@
         <tr><td rowspan="9">HRV</td></tr>
         <tr>
           <td>心率失常风险</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>6-9h</td>
+          <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.value }}</span> </td>
+          <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.sign }}</span></td>
+          <td><span>{{ rd.jbfxXlscfx.refRange }}</span></td>
         </tr>
         <tr>
           <td>心率减力</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>12600~19440s</td>
+          <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.value }}</span> </td>
+          <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.sign }}</span></td>
+          <td><span>{{ rd.jbfxXljsl.refRange }}</span></td>
         </tr>
         <tr>
           <td>心脏总能量</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.sign }}</span></td>
+          <td><span>{{ rd.hrvXzznl.refRange }}</span></td>
         </tr>
         <tr>
           <td>交感神经张力指数</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.sign }}</span></td>
+          <td><span>{{ rd.hrvJgsjzlzs.refRange }}</span></td>
         </tr>
         <tr>
           <td>迷走神经张力指数</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.sign }}</span></td>
+          <td><span>{{ rd.hrvMzsjzlzs.refRange }}</span></td>
         </tr>
         <tr>
           <td>自主神经平衡指数</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.sign }}</span></td>
+          <td><span>{{ rd.hrvZzsjzlzs.refRange }}</span></td>
         </tr>
         <tr>
           <td>荷尔蒙指数</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.sign }}</span></td>
+          <td><span>{{ rd.hrvHermzs.refRange }}</span></td>
         </tr>
         <tr>
           <td>体温及血管舒缩指数</td>
-          <td>6h</td>
-          <td>x</td>
-          <td>3780~8100s</td>
+          <td><span :style="{'color': rd.hrvTwjxgsszh.color}">{{ rd.hrvTwjxgsszh.value }}</span> </td>
+          <td><span :style="{'color': rd.hrvTwjxgsszh.color}">{{ rd.hrvTwjxgsszh.sign }}</span></td>
+          <td><span>{{ rd.hrvTwjxgsszh.refRange }}</span></td>
         </tr>
       </tbody>
     </table>
@@ -216,7 +216,6 @@ export default {
 .clz{
     font-size:11px;
             color:#333333;
-            border-collapse: collapse;
                    border-top: 1px solid #666666;
         border-left: 1px solid #666666;
     th{

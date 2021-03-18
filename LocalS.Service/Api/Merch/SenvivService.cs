@@ -825,30 +825,30 @@ namespace LocalS.Service.Api.Merch
                     d_Rpt.QxxlJlqx,
                     d_Rpt.QxxlKynl,
                     d_Rpt.QxxlQxyj,
-                    d_Rpt.JbfxXlscfx,
-                    d_Rpt.JbfxXljsl,
+                    JbfxXlscfx = SvDataJdUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx),
+                    JbfxXljsl = SvDataJdUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl),
                     //心脏总能量
-                    d_Rpt.HrvXzznl,
+                    HrvXzznl= SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
                     //心脏总能量基准值
                     d_Rpt.HrvXzznlJzz,
                     //交感神经张力指数
-                    d_Rpt.HrvJgsjzlzs,
+                    HrvJgsjzlzs= SvDataJdUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs),
                     //交感神经张力指数基准值
                     d_Rpt.HrvJgsjzlzsJzz,
                     //迷走神经张力指数
-                    d_Rpt.HrvMzsjzlzs,
+                    HrvMzsjzlzs= SvDataJdUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs),
                     //迷走神经张力指数基准值
                     d_Rpt.HrvMzsjzlzsJzz,
                     //自主神经平衡指数
-                    d_Rpt.HrvZzsjzlzs,
+                    HrvZzsjzlzs= SvDataJdUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs),
                     //自主神经平衡指数基准值
                     d_Rpt.HrvZzsjzlzsJzz,
                     //荷尔蒙指数
-                    d_Rpt.HrvHermzs,
+                    HrvHermzs= SvDataJdUtil.GetHrvHermzs(d_Rpt.HrvHermzs),
                     //荷尔蒙指数基准值
                     d_Rpt.HrvHermzsJzz,
                     //体温及血管舒缩指数
-                    d_Rpt.HrvTwjxgsszh,
+                    HrvTwjxgsszh= SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszh),
                     //体温及血管舒缩指数基准值
                     d_Rpt.HrvTwjxgsszhJzz,
                     //当次基准心率
