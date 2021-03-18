@@ -85,55 +85,81 @@
         align="center"
         label="总分"
         width="60"
+        fixed
       />
       <el-table-column
         prop="smRssj"
         label="入睡时间"
         align="center"
         width="100"
+        fixed
       />
       <el-table-column
         prop="smQxsj"
         label="清醒时间"
         align="center"
         width="100"
+        fixed
       />
-
       <el-table-column label="免疫力" align="center">
         <el-table-column
-          prop="mylMylZs"
           label="免疫力指数"
           width="120"
           align="center"
-        />
+        >
+
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.mylMylzs" sign />
+          </template>
+
+        </el-table-column>
         <el-table-column
-          prop="mylGrfx"
           label="感染风险"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.mylGrfx" sign />
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="慢病管控" align="center">
         <el-table-column
-          prop="mbGxygk"
           label="高血压"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.mbGxygk" sign />
+          </template>
+
+        </el-table-column>
         <el-table-column
-          prop="mbGxbgk"
           label="冠心病"
           width="120"
           align="center"
-        />
+        >
+
+          <template slot-scope="scope">
+
+            <dv-item :value="scope.row.mbGxbgk" sign />
+
+          </template>
+
+        </el-table-column>
         <el-table-column
-          prop="mbTlbgk"
           label="糖尿病"
           width="120"
           align="center"
-        />
-      </el-table-column>
+        >
+          <template slot-scope="scope">
 
+            <dv-item :value="scope.row.mbTlbgk" sign />
+
+          </template>
+
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="情绪心理" align="center">
         <el-table-column
           prop="qxxlJlqx"
@@ -142,11 +168,14 @@
           align="center"
         />
         <el-table-column
-          prop="qxxlKynl"
           label="抗压能力"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.qxxlKynl" sign />
+          </template>
+        </el-table-column>
         <el-table-column
           prop="qxxlQxyj"
           label="情绪应激"
@@ -154,350 +183,243 @@
           align="center"
         />
       </el-table-column>
-
       <el-table-column label="疾病风险" align="center">
         <el-table-column
-          prop="jbfxXlscfx"
           label="心律失常风险指数"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.jbfxXlscfx" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
-          prop="jbfxXljsl"
           label="心率减速力"
           width="120"
           align="center"
-        />
-      </el-table-column>
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.jbfxXljsl" sign />
+          </template>
 
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="心率变异性" align="center">
         <el-table-column
           prop="hrvXzznl"
           label="心脏总能量"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvXzznlJzz"
-          label="心脏总能量基准值"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvXzznl" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="hrvJgsjzlzs"
           label="交感神经张力指数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvJgsjzlzsJzz"
-          label="交感神经张力基准值"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvJgsjzlzs" sign />
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="hrvMzsjzlzs"
           label="迷走神经张力指数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvMzsjzlzsJzz"
-          label="迷走神经张力基准值"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvMzsjzlzs" sign />
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="hrvZzsjzlzs"
           label="自主神经平衡"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvZzsjzlzsJzz"
-          label="自主神经平衡基准值"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvZzsjzlzs" sign />
+
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="hrvHermzs"
           label="荷尔蒙指数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvHermzsJzz"
-          label="荷尔蒙指数基准值"
-          width="120"
-          align="center"
-        />
+        >
+
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvHermzs" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="hrvTwjxgsszh"
           label="体温及血管舒缩指数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hrvTwjxgsszhJzz"
-          label="体温及血管舒缩基准值"
-          width="120"
-          align="center"
-        />
-      </el-table-column>
+        >
 
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hrvTwjxgsszh" sign />
+
+          </template>
+
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="心率" align="center">
         <el-table-column
           prop="xlDcjzxl"
           label="当次基准心率"
           width="120"
           align="center"
-        />
+        >
+
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.xlDcjzxl" sign />
+
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="xlCqjzxl"
           label="长期基准心率"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.xlCqjzxl" sign />
+
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="xlDcpjxl"
           label="当次平均心率"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="xlZg"
-          label="最高心率"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlZd"
-          label="最低心率"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlXdgksc"
-          label="心动过快时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlXdgmsc"
-          label="心动过慢时"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlcg125"
-          label="心率超过1.25时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlcg115"
-          label="心率超过1.15时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlcg085"
-          label="心率低于0.85时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="xlcg075"
-          label="心率低于0.75时长"
-          width="120"
-          align="center"
-        />
-      </el-table-column>
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.xlDcpjxl" sign />
 
+          </template>
+
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="呼吸暂停" align="center">
         <el-table-column
           prop="hxZtAhizs"
           label="AHI指数"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hxZtAhizs" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="hxZtcs"
           label="呼吸暂停次数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hxZtPjsc"
-          label="呼吸暂停平均时长"
-          width="120"
-          align="center"
-        />
-      </el-table-column>
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hxZtcs" sign />
 
+          </template>
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="呼吸" align="center">
         <el-table-column
           prop="hxDcjzhx"
           label="基准呼吸"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hxDcjzhx" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="hxCqjzhx"
           label="长期基准呼吸"
           width="120"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hxCqjzhx" sign />
+
+          </template>
+
+        </el-table-column>
         <el-table-column
           prop="hxDcPj"
           label="平均呼吸"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="hxZgHx"
-          label="最高呼吸"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="hxZdHx"
-          label="最低呼吸"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="hxGksc"
-          label="呼吸过快时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="hxGmsc"
-          label="呼吸过慢时长"
-          width="120"
-          align="center"
-        />
-      </el-table-column>
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.hxDcPj" sign />
 
-      <el-table-column label="睡眠时间" align="center">
-        <el-table-column
-          prop="smZcsc"
-          label="在床时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smSmsc"
-          label="睡眠时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smRssj"
-          label="入睡时刻"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smScsj"
-          label="上床时刻"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smRsxs"
-          label="入睡需时"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smQxsj"
-          label="清醒时刻"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smLcsj"
-          label="起床时刻"
-          width="120"
-          align="center"
-        />
+          </template>
+        </el-table-column>
       </el-table-column>
-
       <el-table-column label="睡眠结构" align="center">
         <el-table-column
           prop="smSdsmsc"
           label="深睡期时长"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="smSdsmbl"
-          label="深睡期比例"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.smSdsmsc" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="smQdsmsc"
           label="浅睡期时长"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="smQdsmbl"
-          label="浅睡期比例"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.smQdsmsc" sign />
+          </template>
+        </el-table-column>
         <el-table-column
           prop="smSemqsc"
           label="REM期时长"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="smSemqbl"
-          label="REM期比例"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smQxsksc"
-          label="清醒期时长"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smQxskbl"
-          label="清醒期比例"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smLzcs"
-          label="离枕次数"
-          width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="smLzsc"
-          label="离枕时长"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.smSemqsc" sign />
+
+          </template>
+        </el-table-column>
         <el-table-column
           prop="smTdcs"
           label="体动次数"
           width="120"
           align="center"
-        />
-        <el-table-column
-          prop="smPjtdsc"
-          label="平均体动时长"
-          width="120"
-          align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <dv-item :value="scope.row.smTdcs" sign />
+
+          </template>
+        </el-table-column>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
@@ -524,9 +446,10 @@
 import { getDayReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneDayReportDetail from './PaneDayReportDetail.vue'
+import DvItem from './DvItem.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneDayReportDetail },
+  components: { Pagination, PaneDayReportDetail, DvItem },
   props: {
     userId: {
       type: String,

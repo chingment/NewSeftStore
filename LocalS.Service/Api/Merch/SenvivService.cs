@@ -1,14 +1,71 @@
 ﻿using LocalS.BLL;
+using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
+    /// <summary>
+    /// 统一ParameterExpression
+    /// </summary>
+    public class ParameterReplacer : ExpressionVisitor
+    {
+        public ParameterReplacer(ParameterExpression paramExpr)
+        {
+            this.ParameterExpression = paramExpr;
+        }
+
+        public ParameterExpression ParameterExpression { get; private set; }
+
+        public Expression Replace(Expression expr)
+        {
+            return this.Visit(expr);
+        }
+
+        protected override Expression VisitParameter(ParameterExpression p)
+        {
+            return this.ParameterExpression;
+        }
+    }
+
+    public static class PredicateExtensionses
+    {
+        public static Expression<Func<T, bool>> True<T>() { return f => true; }
+
+        public static Expression<Func<T, bool>> False<T>() { return f => false; }
+
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> exp_left, Expression<Func<T, bool>> exp_right)
+        {
+            var candidateExpr = Expression.Parameter(typeof(T), "candidate");
+            var parameterReplacer = new ParameterReplacer(candidateExpr);
+
+            var left = parameterReplacer.Replace(exp_left.Body);
+            var right = parameterReplacer.Replace(exp_right.Body);
+            var body = Expression.And(left, right);
+
+            return Expression.Lambda<Func<T, bool>>(body, candidateExpr);
+        }
+
+        public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> exp_left, Expression<Func<T, bool>> exp_right)
+        {
+            var candidateExpr = Expression.Parameter(typeof(T), "candidate");
+            var parameterReplacer = new ParameterReplacer(candidateExpr);
+
+            var left = parameterReplacer.Replace(exp_left.Body);
+            var right = parameterReplacer.Replace(exp_right.Body);
+            var body = Expression.Or(left, right);
+
+            return Expression.Lambda<Func<T, bool>>(body, candidateExpr);
+        }
+    }
+
+
     public class SenvivService : BaseService
     {
         //性别
@@ -253,7 +310,7 @@ namespace LocalS.Service.Api.Merch
                          deptIds.Contains(u.DeptId)
                          && ((rup.Name == null || u.Nick.Contains(rup.Name)) ||
                          (rup.Name == null || u.Account.Contains(rup.Name)))
-                         select new { u.Id, u.Nick, u.HeadImgurl, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime });
+                         select u);
 
             if (rup.Sas != "0")
             {
@@ -261,10 +318,25 @@ namespace LocalS.Service.Api.Merch
             }
 
 
+
             if (rup.Chronic != "0")
             {
-                query = query.Where(m => m.Perplex.Contains(rup.Chronic));
+                var pred = PredicateExtensionses.False<SenvivUser>();
+                pred = pred.Or(m => m.Perplex.Contains(rup.Chronic));
+
+                //query = query.Where(m => m.Perplex.Contains(rup.Chronic));
+                query = query.Where(pred);
             }
+
+
+            if (rup.Perplex != "0")
+            {
+                var pred = PredicateExtensionses.False<SenvivUser>();
+                pred = pred.Or(m => m.Perplex.Contains(rup.Perplex));
+                query = query.Where(pred);
+            }
+
+
 
             int total = query.Count();
 
@@ -414,6 +486,7 @@ namespace LocalS.Service.Api.Merch
                              tt.HeadImgurl,
                              u.TotalScore,
                              u.HealthDate,
+                             u.SmTags,
                              u.SmRssj,
                              u.SmQxsj,
                              u.MylGrfx,
@@ -427,90 +500,26 @@ namespace LocalS.Service.Api.Merch
                              u.JbfxXljsl,
                              u.JbfxXlscfx,
                              u.HrvXzznl,
-                             u.HrvXzznlJzz,
                              u.HrvJgsjzlzs,
-                             u.HrvJgsjzlzsJzz,
                              u.HrvMzsjzlzs,
-                             u.HrvMzsjzlzsJzz,
                              u.HrvZzsjzlzs,
-                             u.HrvZzsjzlzsJzz,
                              u.HrvHermzs,
-                             u.HrvHermzsJzz,
                              u.HrvTwjxgsszh,
-                             u.HrvTwjxgsszhJzz,
-                             //当次基准心率
                              u.XlDcjzxl,
-                             //长期基准心率
                              u.XlCqjzxl,
-                             //当次平均心率
                              u.XlDcpjxl,
-                             //最高心率
-                             u.XlZg,
-                             //最低心率
-                             u.XlZd,
-                             //心动过快时长
-                             u.XlXdgksc,
-                             //心动过慢时长
-                             u.XlXdgmsc,
-                             //心率超过1.25时长
-                             u.Xlcg125,
-                             //心率超过1.15时长
-                             u.Xlcg115,
-                             //心率超过0.85时长
-                             u.Xlcg085,
-                             //心率超过075时长
-                             u.Xlcg075,
-                             //呼吸当次基准呼吸
                              u.HxDcjzhx,
-                             //呼吸长期基准呼吸
                              u.HxCqjzhx,
-                             //呼吸平均呼吸
                              u.HxDcPj,
-                             //呼吸最高呼吸
-                             u.HxZgHx,
-                             //呼吸最低呼吸
-                             u.HxZdHx,
-                             //呼吸过快时长
-                             u.HxGksc,
-                             //呼吸过慢时长
-                             u.HxGmsc,
-                             //呼吸暂停次数
                              u.HxZtcs,
-                             //呼吸暂停AHI指数
                              u.HxZtAhizs,
-                             //呼吸暂停平均时长
                              u.HxZtPjsc,
-                             u.SmScsj,
-                             u.SmLcsj,
-                             u.SmZcsc,
-                             //睡眠时长
                              u.SmSmsc,
-                             //入睡需时
-                             u.SmRsxs,
-                             //深度睡眠时长
                              u.SmSdsmsc,
-                             //深度睡眠比例
-                             u.SmSdsmbl,
-                             //浅度睡眠时长
                              u.SmQdsmsc,
-                             //浅度睡眠比例
-                             u.SmQdsmbl,
-                             //REM睡眠时长
                              u.SmSemqsc,
-                             //REM睡眠比例
-                             u.SmSemqbl,
-                             //清醒时刻时长
-                             u.SmQxsksc,
-                             //清醒时刻比例
-                             u.SmQxskbl,
-                             //离真次数
-                             u.SmLzcs,
-                             //离真时长
-                             u.SmLzsc,
-                             //体动次数
                              u.SmTdcs,
-                             //平均体动时长
-                             u.SmPjtdsc,
+                             u.SmSmzq,
                              u.SvUserId,
                              u.CreateTime
                          });
@@ -544,126 +553,70 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            foreach (var item in list)
+            foreach (var rpt in list)
             {
                 olist.Add(new
                 {
-                    Id = item.Id,
-                    SignName = GetSignName(item.Nick, item.Account),
-                    HeadImgurl = item.HeadImgurl,
-                    Sex = GetSexName(item.Sex),
-                    Age = GetAge(item.Birthday),
-                    HealthDate = item.HealthDate.ToUnifiedFormatDate(),
-                    TotalScore = item.TotalScore,
-                    SmRssj = item.SmRssj.ToUnifiedFormatDateTime(),
-                    SmQxsj = item.SmQxsj.ToUnifiedFormatDateTime(),
-                    item.MylGrfx,
-                    item.MylMylZs,
-                    item.MbGxbgk,
-                    item.MbGxygk,
-                    item.MbTlbgk,
-                    item.QxxlJlqx,
-                    item.QxxlKynl,
-                    item.QxxlQxyj,
-                    item.JbfxXlscfx,
-                    item.JbfxXljsl,
+                    Id = rpt.Id,
+                    SignName = GetSignName(rpt.Nick, rpt.Account),
+                    HeadImgurl = rpt.HeadImgurl,
+                    Sex = GetSexName(rpt.Sex),
+                    Age = GetAge(rpt.Birthday),
+                    HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
+                    TotalScore = rpt.TotalScore,
+                    SmRssj = rpt.SmRssj.ToUnifiedFormatDateTime(),
+                    SmQxsj = rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    DsTags = rpt.SmTags.ToJsonObject<List<string>>(),
+                    MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
+                    MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylZs),
+                    MbGxbgk = SvDataJdUtil.GetMbGxbgk(rpt.MbGxbgk),
+                    MbGxygk = SvDataJdUtil.GetMbGxygk(rpt.MbGxygk),
+                    MbTlbgk = SvDataJdUtil.GetMbTlbgk(rpt.MbTlbgk),
+                    rpt.QxxlJlqx,
+                    QxxlKynl = SvDataJdUtil.GetQxxlKynl(rpt.QxxlKynl),
+                    rpt.QxxlQxyj,
+                    JbfxXlscfx = SvDataJdUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
+                    JbfxXljsl = SvDataJdUtil.GetJbfxXljsl(rpt.JbfxXljsl),
                     //心脏总能量
-                    item.HrvXzznl,
-                    //心脏总能量基准值
-                    item.HrvXzznlJzz,
+                    HrvXzznl = SvDataJdUtil.GetHrvXzznl(rpt.HrvXzznl),
                     //交感神经张力指数
-                    item.HrvJgsjzlzs,
-                    //交感神经张力指数基准值
-                    item.HrvJgsjzlzsJzz,
+                    HrvJgsjzlzs = SvDataJdUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
                     //迷走神经张力指数
-                    item.HrvMzsjzlzs,
-                    //迷走神经张力指数基准值
-                    item.HrvMzsjzlzsJzz,
+                    HrvMzsjzlzs = SvDataJdUtil.GetHrvMzsjzlzs(rpt.HrvMzsjzlzs),
                     //自主神经平衡指数
-                    item.HrvZzsjzlzs,
-                    //自主神经平衡指数基准值
-                    item.HrvZzsjzlzsJzz,
+                    HrvZzsjzlzs = SvDataJdUtil.GetHrvZzsjzlzs(rpt.HrvZzsjzlzs),
                     //荷尔蒙指数
-                    item.HrvHermzs,
-                    //荷尔蒙指数基准值
-                    item.HrvHermzsJzz,
+                    HrvHermzs = SvDataJdUtil.GetHrvHermzs(rpt.HrvHermzs),
                     //体温及血管舒缩指数
-                    item.HrvTwjxgsszh,
-                    //体温及血管舒缩指数基准值
-                    item.HrvTwjxgsszhJzz,
+                    HrvTwjxgsszh = SvDataJdUtil.GetHrvTwjxgsszh(rpt.HrvTwjxgsszh),
                     //当次基准心率
-                    item.XlDcjzxl,
+                    XlDcjzxl = SvDataJdUtil.GetXlDcjzxl(rpt.XlDcjzxl),
                     //长期基准心率
-                    item.XlCqjzxl,
+                    XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(rpt.XlCqjzxl),
                     //当次平均心率
-                    item.XlDcpjxl,
-                    //最高心率
-                    item.XlZg,
-                    //最低心率
-                    item.XlZd,
-                    //心动过快时长
-                    item.XlXdgksc,
-                    //心动过慢时长
-                    item.XlXdgmsc,
-                    //心率超过1.25时长
-                    item.Xlcg125,
-                    //心率超过1.15时长
-                    item.Xlcg115,
-                    //心率超过0.85时长
-                    item.Xlcg085,
-                    //心率超过075时长
-                    item.Xlcg075,
+                    XlDcpjxl = SvDataJdUtil.GetXlDcpjxl(rpt.XlDcpjxl),
                     //呼吸当次基准呼吸
-                    item.HxDcjzhx,
+                    HxDcjzhx = SvDataJdUtil.GetHxDcjzhx(rpt.HxDcjzhx),
                     //呼吸长期基准呼吸
-                    item.HxCqjzhx,
+                    HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    item.HxDcPj,
-                    //呼吸最高呼吸
-                    item.HxZgHx,
-                    //呼吸最低呼吸
-                    item.HxZdHx,
-                    //呼吸过快时长
-                    item.HxGksc,
-                    //呼吸过慢时长
-                    item.HxGmsc,
+                    HxDcPj = SvDataJdUtil.GetHxDcPj(rpt.HxDcPj),
                     //呼吸暂停次数
-                    item.HxZtcs,
+                    HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    item.HxZtAhizs,
-                    //呼吸暂停平均时长
-                    item.HxZtPjsc,
-                    item.SmZcsc,
+                    HxZtAhizs = SvDataJdUtil.GetHxZtAhizs(rpt.HxZtAhizs),
                     //睡眠时长
-                    item.SmSmsc,
-                    //入睡需时
-                    item.SmRsxs,
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
-                    item.SmSdsmsc,
-                    //深度睡眠比例
-                    item.SmSdsmbl,
+                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
                     //浅度睡眠时长
-                    item.SmQdsmsc,
-                    //浅度睡眠比例
-                    item.SmQdsmbl,
+                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    item.SmSemqsc,
-                    //REM睡眠比例
-                    item.SmSemqbl,
-                    //清醒时刻时长
-                    item.SmQxsksc,
-                    //清醒时刻比例
-                    item.SmQxskbl,
-                    //离真次数
-                    item.SmLzcs,
-                    //离真时长
-                    item.SmLzsc,
+                    SmSemqsc = SvDataJdUtil.GetSmSemqsc(rpt.SmSemqsc),
+                    //睡眠周期=
+                    SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
-                    item.SmTdcs,
-                    //平均体动时长
-                    item.SmPjtdsc,
-                    item.SmLcsj,
-                    item.SmScsj
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
                 });
             }
 
@@ -695,6 +648,7 @@ namespace LocalS.Service.Api.Merch
                              tt.HeadImgurl,
                              u.TotalScore,
                              u.HealthDate,
+                             u.SmTags,
                              u.SmRssj,
                              u.SmQxsj,
                              u.MylGrfx,
@@ -817,6 +771,7 @@ namespace LocalS.Service.Api.Merch
                     TotalScore = d_Rpt.TotalScore,
                     SmRssj = d_Rpt.SmRssj.ToUnifiedFormatDateTime(),
                     SmQxsj = d_Rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    DsTags = d_Rpt.SmTags.ToJsonObject<List<string>>(),
                     d_Rpt.MylGrfx,
                     d_Rpt.MylMylZs,
                     d_Rpt.MbGxbgk,
@@ -828,27 +783,27 @@ namespace LocalS.Service.Api.Merch
                     JbfxXlscfx = SvDataJdUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx),
                     JbfxXljsl = SvDataJdUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl= SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
+                    HrvXzznl = SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
                     //心脏总能量基准值
                     d_Rpt.HrvXzznlJzz,
                     //交感神经张力指数
-                    HrvJgsjzlzs= SvDataJdUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs),
+                    HrvJgsjzlzs = SvDataJdUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs),
                     //交感神经张力指数基准值
                     d_Rpt.HrvJgsjzlzsJzz,
                     //迷走神经张力指数
-                    HrvMzsjzlzs= SvDataJdUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs),
+                    HrvMzsjzlzs = SvDataJdUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs),
                     //迷走神经张力指数基准值
                     d_Rpt.HrvMzsjzlzsJzz,
                     //自主神经平衡指数
-                    HrvZzsjzlzs= SvDataJdUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs),
+                    HrvZzsjzlzs = SvDataJdUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs),
                     //自主神经平衡指数基准值
                     d_Rpt.HrvZzsjzlzsJzz,
                     //荷尔蒙指数
-                    HrvHermzs= SvDataJdUtil.GetHrvHermzs(d_Rpt.HrvHermzs),
+                    HrvHermzs = SvDataJdUtil.GetHrvHermzs(d_Rpt.HrvHermzs),
                     //荷尔蒙指数基准值
                     d_Rpt.HrvHermzsJzz,
                     //体温及血管舒缩指数
-                    HrvTwjxgsszh= SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszh),
+                    HrvTwjxgsszh = SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszh),
                     //体温及血管舒缩指数基准值
                     d_Rpt.HrvTwjxgsszhJzz,
                     //当次基准心率
@@ -874,11 +829,11 @@ namespace LocalS.Service.Api.Merch
                     //心率超过075时长
                     d_Rpt.Xlcg075,
                     //呼吸当次基准呼吸
-                    HxDcjzhx= SvDataJdUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
+                    HxDcjzhx = SvDataJdUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
                     //呼吸长期基准呼吸
-                    HxCqjzhx= SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
+                    HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcPj= SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcPj),
+                    HxDcPj = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcPj),
                     //呼吸最高呼吸
                     d_Rpt.HxZgHx,
                     //呼吸最低呼吸
@@ -888,9 +843,9 @@ namespace LocalS.Service.Api.Merch
                     //呼吸过慢时长
                     d_Rpt.HxGmsc,
                     //呼吸暂停次数
-                    HxZtcs= SvDataJdUtil.GetHxZtcs(d_Rpt.HxZtcs),
+                    HxZtcs = SvDataJdUtil.GetHxZtcs(d_Rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtAhizs= SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtAhizs),
+                    HxZtAhizs = SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtAhizs),
                     //呼吸暂停平均时长
                     d_Rpt.HxZtPjsc,
                     d_Rpt.SmZcsc,

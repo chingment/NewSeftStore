@@ -1,6 +1,27 @@
 <template>
-  <div id="day_report_detail">
+  <div id="day_report_detail" v-loading="loading">
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>数据标签</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
 
+    <div>
+
+      <el-tag
+        v-for="tag in rd.dsTags"
+        :key="tag"
+        style="margin-right: 10px;margin-bottom: 10px"
+      >
+        {{ tag }}
+      </el-tag>
+    </div>
+
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>数据指标</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
     <table class="clz" cellspacing="0" cellpadding="0">
       <thead>
         <tr>

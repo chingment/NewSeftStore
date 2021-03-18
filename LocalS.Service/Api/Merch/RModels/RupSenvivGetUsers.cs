@@ -13,5 +13,7 @@ namespace LocalS.Service.Api.Merch
         public string Sas { get; set; }
 
         public string Chronic { get; set; }
+
+        public string Perplex { get; set; }
     }
 }

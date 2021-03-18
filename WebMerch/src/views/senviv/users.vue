@@ -5,9 +5,13 @@
       <el-form ref="form" label-width="120px">
         <el-form-item label="目前困扰">
 
-          <el-checkbox-group v-model="checkboxGroup1">
+          <el-radio-group v-model="listQuery.perplex" @change="handleFilter">
+            <el-radio-button v-for="item in perplexs" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+
+          <!-- <el-checkbox-group v-model="checkboxGroup1">
             <el-checkbox-button v-for="item in perplexs" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox-button>
-          </el-checkbox-group>
+          </el-checkbox-group> -->
 
         </el-form-item>
         <el-form-item label="慢性病">
@@ -105,9 +109,8 @@ export default {
         name: undefined,
         sas: '0',
         chronic: '0',
-        perplexs: null
+        perplex: '0'
       },
-      checkboxGroup1: [],
       perplexs: [
         { value: '0', label: '全部' },
         { value: '1', label: '没有困扰' },

@@ -1,5 +1,5 @@
 <template>
-  <div id="senviv_user_detail" class="app-container my-container2">
+  <div id="senviv_user_detail" v-loading="loading" class="app-container my-container2">
 
     <el-container>
       <el-aside style="width:300px;margin-right:10px">
@@ -32,13 +32,10 @@
           </div>
         </el-card>
         <el-card class="box-card box-card-menu" :body-style="{ padding: '0px'}" style="margin-top:10px;">
-          <el-menu :default-active="navActive" style="background:#fff" @select="leftMenuChange">
+          <el-menu :default-active="activeMenu" style="background:#fff" @select="leftMenuChange">
             <el-menu-item-group>
-              <el-menu-item index="0">个人主页</el-menu-item>
               <el-menu-item index="1">基本信息</el-menu-item>
-              <el-menu-item index="2">健康评价</el-menu-item>
               <el-menu-item index="DayReport">健康监测</el-menu-item>
-              <el-menu-item index="4">基线评估</el-menu-item>
             </el-menu-item-group>
           </el-menu>
         </el-card>

@@ -127,3 +127,26 @@
   flex:1;
   overflow: auto;
 }
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 8px;
+  background-color: #909399;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  width: 8px;
+  background-color: #909399;
+  border-radius: 8px;  
+  -webkit-border-radius: 8px;
+}

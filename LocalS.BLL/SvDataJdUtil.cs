@@ -94,6 +94,7 @@ namespace LocalS.BLL
         public static SvDataJd GetMbGxygk(decimal val)
         {
             var jd = new SvDataJd();
+            val = 100 - val;
             jd.Value = val.ToString();
 
             if (val <= 39)
@@ -114,6 +115,15 @@ namespace LocalS.BLL
         public static SvDataJd GetMbGxbgk(decimal val)
         {
             var jd = new SvDataJd();
+
+            if (val == 0)
+            {
+                jd.Value = "";
+                jd.Set("", "", CA_1);
+
+                return jd;
+            }
+
             jd.Value = val.ToString();
 
             if (val <= 39)
@@ -134,6 +144,9 @@ namespace LocalS.BLL
         public static SvDataJd GetMbTlbgk(decimal val)
         {
             var jd = new SvDataJd();
+
+
+            val = 100 - val;
             jd.Value = val.ToString();
 
             if (val <= 39)
@@ -452,7 +465,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "12~20次/min";
-            if (val < 10)
+            if (val < 12)
             {
                 jd.Set("低", "↓", CA_1);
             }
