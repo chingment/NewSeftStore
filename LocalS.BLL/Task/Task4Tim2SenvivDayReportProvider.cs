@@ -381,6 +381,8 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
                                 d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
 
+                                d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
+
                                 d_DayReport.SmSdsmsc = sm.Deep;//深睡时长
                                 d_DayReport.SmSdsmbl = sm.DeepRatio;//深睡期比例
 

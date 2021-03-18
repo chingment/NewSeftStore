@@ -8,231 +8,524 @@ namespace LocalS.BLL
 {
     public class SvDataJdUtil
     {
-        public readonly string CA_1 = "#e80113";
-        public readonly string CA_2 = "#f86872";
-        public readonly string CA_3 = "#5fa5dc";
-        public readonly string CA_4 = "#0368b8";
-        public readonly string CA_5 = "#59c307";
+        public readonly static string CA_0 = "#666666";
+        public readonly static string CA_1 = "#e80113";
+        public readonly static string CA_2 = "#f86872";
+        public readonly static string CA_3 = "#5fa5dc";
+        public readonly static string CA_4 = "#0368b8";
+        public readonly static string CA_5 = "#59c307";
+
+        public static double Covevt2Hour(long seconds)
+        {
+            double hour = seconds / 3600;
+
+            return hour;
+        }
+
+        public static string GetHourText(double hour)
+        {
+            if (hour <= 0)
+                return "0";
+
+            return hour.ToString("0.00");
+        }
 
         /// <summary>
         /// 免疫力指数
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
-        public SvDataJd GetMylzs(decimal val)
+        public static SvDataJd GetMylzs(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 29)
             {
-                jd = new SvDataJd(val.ToString(), "差", "", CA_1);
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 30 && val <= 49)
             {
-                jd = new SvDataJd(val.ToString(), "较差", "", CA_2);
+                jd.Set("较差", "", CA_2);
             }
             else if (val >= 50 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "中等", "", CA_3);
+                jd.Set("中等", "", CA_3);
             }
             else if (val >= 70 && val <= 89)
             {
-                jd = new SvDataJd(val.ToString(), "较好", "", CA_4);
+                jd.Set("较好", "", CA_4);
             }
             else if (val >= 90 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "好", "", CA_5);
+                jd.Set("好", "", CA_5);
             }
             return jd;
         }
 
-        public SvDataJd GetMylGrfx(decimal val)
+        public static SvDataJd GetMylGrfx(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 19)
             {
-                jd = new SvDataJd(val.ToString(), "低", "", CA_5);
+                jd.Set("低", "", CA_5);
             }
             else if (val >= 20 && val <= 39)
             {
-                jd = new SvDataJd(val.ToString(), "较低", "", CA_4);
+                jd.Set("较低", "", CA_4);
             }
             else if (val >= 40 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "中等", "", CA_3);
+                jd.Set("中等", "", CA_3);
             }
             else if (val >= 70 && val <= 84)
             {
-                jd = new SvDataJd(val.ToString(), "较高", "", CA_2);
+                jd.Set("较高", "", CA_2);
             }
             else if (val >= 85 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "高", "", CA_1);
+                jd.Set("高", "", CA_1);
             }
             return jd;
         }
 
-        public SvDataJd GetMbGxygk(decimal val)
+        public static SvDataJd GetMbGxygk(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 39)
             {
-                jd = new SvDataJd(val.ToString(), "差", "", CA_1);
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 40 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "一般", "", CA_3);
+                jd.Set("一般", "", CA_3);
             }
             else if (val >= 70 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "好", "", CA_5);
+                jd.Set("好", "", CA_5);
             }
             return jd;
         }
 
-        public SvDataJd GetMbGxbgk(decimal val)
+        public static SvDataJd GetMbGxbgk(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 39)
             {
-                jd = new SvDataJd(val.ToString(), "差", "", CA_1);
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 40 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "一般", "", CA_3);
+                jd.Set("一般", "", CA_3);
             }
             else if (val >= 70 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "好", "", CA_5);
+                jd.Set("好", "", CA_5);
             }
             return jd;
         }
 
-        public SvDataJd GetMbTlbgk(decimal val)
+        public static SvDataJd GetMbTlbgk(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 39)
             {
-                jd = new SvDataJd(val.ToString(), "差", "", CA_1);
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 40 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "一般", "", CA_3);
+                jd.Set("一般", "", CA_3);
             }
             else if (val >= 70 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "好", "", CA_5);
+                jd.Set("好", "", CA_5);
             }
             return jd;
         }
 
-        public SvDataJd GetQxxlKynl(decimal val)
+        public static SvDataJd GetQxxlKynl(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 29)
             {
-                jd = new SvDataJd(val.ToString(), "差", "", CA_1);
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 30 && val <= 69)
             {
-                jd = new SvDataJd(val.ToString(), "一般", "", CA_3);
+                jd.Set("一般", "", CA_3);
             }
             else if (val >= 70 && val <= 100)
             {
-                jd = new SvDataJd(val.ToString(), "好", "", CA_5);
+                jd.Set("好", "", CA_5);
             }
             return jd;
         }
 
-        public SvDataJd GetJbfxXlscfx(decimal val)
+        public static SvDataJd GetJbfxXlscfx(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 29)
             {
-                jd = new SvDataJd(val.ToString(), "高风险", "", CA_1);
+                jd.Set("高风险", "", CA_1);
             }
             else if (val >= 30 && val <= 49)
             {
-                jd = new SvDataJd(val.ToString(), "中风险", "", CA_2);
+                jd.Set("中风险", "", CA_2);
             }
             else if (val >= 50 && val <= 180)
             {
-                jd = new SvDataJd(val.ToString(), "低风险", "", CA_5);
+                jd.Set("低风险", "", CA_5);
             }
             else if (val >= 180 && val <= 220)
             {
-                jd = new SvDataJd(val.ToString(), "中风险", "", CA_2);
+                jd.Set("中风险", "", CA_2);
             }
             else if (val >= 221)
             {
-                jd = new SvDataJd(val.ToString(), "高风险", "", CA_1);
+                jd.Set("高风险", "", CA_1);
             }
             return jd;
         }
 
-        public SvDataJd GetJbfxXljsl(decimal val)
+        public static SvDataJd GetJbfxXljsl(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
 
             if (val <= 2.5m)
             {
-                jd = new SvDataJd(val.ToString(), "过低", "", CA_1);
+                jd.Set("过低", "", CA_1);
             }
             else if (val >= 2.5m && val <= 4.6m)
             {
-                jd = new SvDataJd(val.ToString(), "偏低", "", CA_2);
+                jd.Set("偏低", "", CA_2);
             }
             else if (val >= 4.6m && val <= 12m)
             {
-                jd = new SvDataJd(val.ToString(), "正常", "", CA_5);
+                jd.Set("正常", "", CA_5);
             }
             else if (val >= 12m && val <= 20m)
             {
-                jd = new SvDataJd(val.ToString(), "偏高", "", CA_2);
+                jd.Set("偏高", "", CA_2);
             }
             else if (val > 20m)
             {
-                jd = new SvDataJd(val.ToString(), "过高", "", CA_1);
+                jd.Set("过高", "", CA_1);
             }
             return jd;
         }
 
-        public SvDataJd GetHxZtAhizs(decimal val)
+        public static SvDataJd GetHxZtAhizs(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
-
+            jd.RefRange = "0~5次/h";
             if (val < 5)
             {
-                jd = new SvDataJd(val.ToString(), "正常", "", CA_5);
+                jd.Set("正常", "-", CA_0);
             }
             else if (val >= 5 && val < 15)
             {
-                jd = new SvDataJd(val.ToString(), "轻度", "", CA_3);
+                jd.Set("轻度", "↑", CA_3);
             }
             else if (val >= 15 && val < 30)
             {
-                jd = new SvDataJd(val.ToString(), "中度", "", CA_2);
+                jd.Set("中度", "↑↑", CA_2);
             }
             else if (val >= 30)
             {
-                jd = new SvDataJd(val.ToString(), "重度", "", CA_1);
+                jd.Set("重度", "↑↑↑", CA_1);
             }
             return jd;
         }
+
+        public static SvDataJd GetSmSmsc(long val)
+        {
+            var jd = new SvDataJd();
+
+            var hour = Covevt2Hour(val);
+            jd.Value = GetHourText(hour);
+            jd.RefRange = "6~9h";
+            if (hour < 6)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (hour >= 6 && hour <= 9)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 9)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmQdsmsc(long val)
+        {
+            var jd = new SvDataJd();
+
+            var hour = Covevt2Hour(val);
+            jd.Value = GetHourText(hour);
+
+            jd.RefRange = "3.5~5.4h";
+            if (hour < 3.5)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (hour >= 3.5 && hour <= 5.4)
+            {
+                jd.Set("-", "", CA_0);
+            }
+            else if (hour > 5.4)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmSdsmsc(long val)
+        {
+            var jd = new SvDataJd();
+
+            var hour = Covevt2Hour(val);
+            jd.Value = GetHourText(hour);
+            jd.RefRange = "1.05~2.25h";
+            if (hour < 1.05)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (hour >= 1.05 && hour <= 2.25)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 2.25)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmSemqsc(long val)
+        {
+            var jd = new SvDataJd();
+
+            var hour = Covevt2Hour(val);
+
+            jd.Value = GetHourText(hour);
+            jd.RefRange = "1.05~2.25h";
+            if (hour < 1.05)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (hour >= 1.05 && hour <= 2.25)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 2.25)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmSmzq(long val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "4~5次";
+            if (val < 4)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 4 && val <= 5)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 5)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmTdcs(long val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "0~200次";
+            if (val <= 200)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 200)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetXlDcjzxl(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "50~83次/min";
+            if (val < 50)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 50 && val <= 83)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 83)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetXlCqjzxl(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "50~65次/min";
+            if (val < 50)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 50 && val <= 65)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 65)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetXlDcpjxl(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "50~65次/min";
+            if (val < 50)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 50 && val <= 65)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 65)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+
+        public static SvDataJd GetHxDcjzhx(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "12~20次/min";
+            if (val < 10)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 12 && val <= 20)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 20)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetHxCqjzhx(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "10~18次/min";
+            if (val < 10)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 10 && val <=18)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 18)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetHxDcPj(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "10~18次/min";
+            if (val < 10)
+            {
+                jd.Set("低", "↓", CA_5);
+            }
+            else if (val >= 10 && val <= 18)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 18)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetHxZtcs(int val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "0~30次";
+            if (val <= 30)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 30)
+            {
+                jd.Set("高", "↑", CA_5);
+            }
+
+            return jd;
+        }
+
     }
 }

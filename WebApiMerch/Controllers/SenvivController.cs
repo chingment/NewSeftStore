@@ -31,5 +31,12 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Senviv.GetDayReports(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetDayReportDetail([FromUri]string reportId)
+        {
+            IResult result = MerchServiceFactory.Senviv.GetDayReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

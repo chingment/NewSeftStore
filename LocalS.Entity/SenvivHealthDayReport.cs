@@ -44,6 +44,8 @@ namespace LocalS.Entity
         public int SmLzcs{ get; set; }
         //离真时长
         public long SmLzsc { get; set; }
+        //睡眠周期
+        public int SmSmzq { get; set; }
         //体动次数
         public int SmTdcs { get; set; }
         //平均体动时长
@@ -72,9 +74,9 @@ namespace LocalS.Entity
         //心率超过075时长
         public long Xlcg075 { get; set; }
         //呼吸当次基准呼吸
-        public decimal HxDcjzhx { get; set; }
+        public int HxDcjzhx { get; set; }
         //呼吸长期基准呼吸
-        public decimal HxCqjzhx { get; set; }
+        public int HxCqjzhx { get; set; }
         //呼吸平均呼吸
         public int HxDcPj { get; set; }
         //呼吸最高呼吸

@@ -517,7 +517,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m =>((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
+                query = query.Where(m => ((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
             }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
@@ -670,6 +670,260 @@ namespace LocalS.Service.Api.Merch
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+
+        }
+
+
+        public CustomJsonResult GetDayReportDetail(string operater, string merchId, string reportId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Rpt = (from u in CurrentDb.SenvivHealthDayReport
+
+                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where u.Id == reportId
+                         select new
+                         {
+                             u.Id,
+                             tt.Nick,
+                             tt.Sex,
+                             tt.Account,
+                             tt.Birthday,
+                             tt.HeadImgurl,
+                             u.TotalScore,
+                             u.HealthDate,
+                             u.SmRssj,
+                             u.SmQxsj,
+                             u.MylGrfx,
+                             u.MylMylZs,
+                             u.MbGxbgk,
+                             u.MbGxygk,
+                             u.MbTlbgk,
+                             u.QxxlJlqx,
+                             u.QxxlKynl,
+                             u.QxxlQxyj,
+                             u.JbfxXljsl,
+                             u.JbfxXlscfx,
+                             u.HrvXzznl,
+                             u.HrvXzznlJzz,
+                             u.HrvJgsjzlzs,
+                             u.HrvJgsjzlzsJzz,
+                             u.HrvMzsjzlzs,
+                             u.HrvMzsjzlzsJzz,
+                             u.HrvZzsjzlzs,
+                             u.HrvZzsjzlzsJzz,
+                             u.HrvHermzs,
+                             u.HrvHermzsJzz,
+                             u.HrvTwjxgsszh,
+                             u.HrvTwjxgsszhJzz,
+                             //当次基准心率
+                             u.XlDcjzxl,
+                             //长期基准心率
+                             u.XlCqjzxl,
+                             //当次平均心率
+                             u.XlDcpjxl,
+                             //最高心率
+                             u.XlZg,
+                             //最低心率
+                             u.XlZd,
+                             //心动过快时长
+                             u.XlXdgksc,
+                             //心动过慢时长
+                             u.XlXdgmsc,
+                             //心率超过1.25时长
+                             u.Xlcg125,
+                             //心率超过1.15时长
+                             u.Xlcg115,
+                             //心率超过0.85时长
+                             u.Xlcg085,
+                             //心率超过075时长
+                             u.Xlcg075,
+                             //呼吸当次基准呼吸
+                             u.HxDcjzhx,
+                             //呼吸长期基准呼吸
+                             u.HxCqjzhx,
+                             //呼吸平均呼吸
+                             u.HxDcPj,
+                             //呼吸最高呼吸
+                             u.HxZgHx,
+                             //呼吸最低呼吸
+                             u.HxZdHx,
+                             //呼吸过快时长
+                             u.HxGksc,
+                             //呼吸过慢时长
+                             u.HxGmsc,
+                             //呼吸暂停次数
+                             u.HxZtcs,
+                             //呼吸暂停AHI指数
+                             u.HxZtAhizs,
+                             //呼吸暂停平均时长
+                             u.HxZtPjsc,
+                             u.SmScsj,
+                             u.SmLcsj,
+                             u.SmZcsc,
+                             //睡眠时长
+                             u.SmSmsc,
+                             //睡眠周期
+                             u.SmSmzq,
+                             //入睡需时
+                             u.SmRsxs,
+                             //深度睡眠时长
+                             u.SmSdsmsc,
+                             //深度睡眠比例
+                             u.SmSdsmbl,
+                             //浅度睡眠时长
+                             u.SmQdsmsc,
+                             //浅度睡眠比例
+                             u.SmQdsmbl,
+                             //REM睡眠时长
+                             u.SmSemqsc,
+                             //REM睡眠比例
+                             u.SmSemqbl,
+                             //清醒时刻时长
+                             u.SmQxsksc,
+                             //清醒时刻比例
+                             u.SmQxskbl,
+                             //离真次数
+                             u.SmLzcs,
+                             //离真时长
+                             u.SmLzsc,
+                             //体动次数
+                             u.SmTdcs,
+                             //平均体动时长
+                             u.SmPjtdsc,
+                             u.SvUserId,
+                             u.CreateTime
+                         }).FirstOrDefault();
+
+
+
+            var ret = new
+            {
+
+                Id = d_Rpt.Id,
+                UserInfo = new
+                {
+                    SignName = GetSignName(d_Rpt.Nick, d_Rpt.Account),
+                    HeadImgurl = d_Rpt.HeadImgurl,
+                    Sex = GetSexName(d_Rpt.Sex),
+                    Age = GetAge(d_Rpt.Birthday)
+                },
+                ReportData = new
+                {
+                    HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
+                    TotalScore = d_Rpt.TotalScore,
+                    SmRssj = d_Rpt.SmRssj.ToUnifiedFormatDateTime(),
+                    SmQxsj = d_Rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    d_Rpt.MylGrfx,
+                    d_Rpt.MylMylZs,
+                    d_Rpt.MbGxbgk,
+                    d_Rpt.MbGxygk,
+                    d_Rpt.MbTlbgk,
+                    d_Rpt.QxxlJlqx,
+                    d_Rpt.QxxlKynl,
+                    d_Rpt.QxxlQxyj,
+                    d_Rpt.JbfxXlscfx,
+                    d_Rpt.JbfxXljsl,
+                    //心脏总能量
+                    d_Rpt.HrvXzznl,
+                    //心脏总能量基准值
+                    d_Rpt.HrvXzznlJzz,
+                    //交感神经张力指数
+                    d_Rpt.HrvJgsjzlzs,
+                    //交感神经张力指数基准值
+                    d_Rpt.HrvJgsjzlzsJzz,
+                    //迷走神经张力指数
+                    d_Rpt.HrvMzsjzlzs,
+                    //迷走神经张力指数基准值
+                    d_Rpt.HrvMzsjzlzsJzz,
+                    //自主神经平衡指数
+                    d_Rpt.HrvZzsjzlzs,
+                    //自主神经平衡指数基准值
+                    d_Rpt.HrvZzsjzlzsJzz,
+                    //荷尔蒙指数
+                    d_Rpt.HrvHermzs,
+                    //荷尔蒙指数基准值
+                    d_Rpt.HrvHermzsJzz,
+                    //体温及血管舒缩指数
+                    d_Rpt.HrvTwjxgsszh,
+                    //体温及血管舒缩指数基准值
+                    d_Rpt.HrvTwjxgsszhJzz,
+                    //当次基准心率
+                    XlDcjzxl = SvDataJdUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl),
+                    //长期基准心率
+                    XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl),
+                    //当次平均心率
+                    XlDcpjxl = SvDataJdUtil.GetXlDcpjxl(d_Rpt.XlDcpjxl),
+                    //最高心率
+                    d_Rpt.XlZg,
+                    //最低心率
+                    d_Rpt.XlZd,
+                    //心动过快时长
+                    d_Rpt.XlXdgksc,
+                    //心动过慢时长
+                    d_Rpt.XlXdgmsc,
+                    //心率超过1.25时长
+                    d_Rpt.Xlcg125,
+                    //心率超过1.15时长
+                    d_Rpt.Xlcg115,
+                    //心率超过0.85时长
+                    d_Rpt.Xlcg085,
+                    //心率超过075时长
+                    d_Rpt.Xlcg075,
+                    //呼吸当次基准呼吸
+                    HxDcjzhx= SvDataJdUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
+                    //呼吸长期基准呼吸
+                    HxCqjzhx= SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
+                    //呼吸平均呼吸
+                    HxDcPj= SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcPj),
+                    //呼吸最高呼吸
+                    d_Rpt.HxZgHx,
+                    //呼吸最低呼吸
+                    d_Rpt.HxZdHx,
+                    //呼吸过快时长
+                    d_Rpt.HxGksc,
+                    //呼吸过慢时长
+                    d_Rpt.HxGmsc,
+                    //呼吸暂停次数
+                    HxZtcs= SvDataJdUtil.GetHxZtcs(d_Rpt.HxZtcs),
+                    //呼吸暂停AHI指数
+                    HxZtAhizs= SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtAhizs),
+                    //呼吸暂停平均时长
+                    d_Rpt.HxZtPjsc,
+                    d_Rpt.SmZcsc,
+                    //睡眠时长
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc),
+                    //深度睡眠时长
+                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc),
+                    //浅度睡眠时长
+                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(d_Rpt.SmQdsmsc),
+                    //REM睡眠时长
+                    SmSemqsc = SvDataJdUtil.GetSmSemqsc(d_Rpt.SmSemqsc),
+                    //睡眠周期=
+                    SmSmzq = SvDataJdUtil.GetSmSmzq(d_Rpt.SmSmzq),
+                    //清醒时刻时长
+                    d_Rpt.SmQxsksc,
+                    //清醒时刻比例
+                    d_Rpt.SmQxskbl,
+                    //离真次数
+                    d_Rpt.SmLzcs,
+                    //离真时长
+                    d_Rpt.SmLzsc,
+                    //体动次数
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(d_Rpt.SmTdcs),
+                    //平均体动时长
+                    d_Rpt.SmPjtdsc,
+                    d_Rpt.SmLcsj,
+                    d_Rpt.SmScsj
+                }
+            };
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
 

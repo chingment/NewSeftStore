@@ -502,7 +502,7 @@
 
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="handleDetails(scope.row)">
+          <el-button type="text" size="mini" @click="handleOpenDialogByDetial(scope.row)">
             查看
           </el-button>
 
@@ -513,16 +513,20 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
+    <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" append-to-body>
+      <pane-day-report-detail :report-id="selectReportId" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getDayReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import PaneDayReportDetail from './PaneDayReportDetail.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination },
+  components: { Pagination, PaneDayReportDetail },
   props: {
     userId: {
       type: String,
@@ -547,6 +551,8 @@ export default {
           return time.getTime() > Date.now()
         }
       },
+      selectReportId: '',
+      dialogIsShowByDetail: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -574,11 +580,11 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleDetails(row) {
-      this.$router.push({
-        path: '/client/shop/details?id=' + row.id
-      })
+    handleOpenDialogByDetial(row) {
+      this.selectReportId = row.id
+      this.dialogIsShowByDetail = true
     }
   }
 }
 </script>
+

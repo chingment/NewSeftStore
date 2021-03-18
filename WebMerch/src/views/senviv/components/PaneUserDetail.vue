@@ -32,21 +32,21 @@
           </div>
         </el-card>
         <el-card class="box-card box-card-menu" :body-style="{ padding: '0px'}" style="margin-top:10px;">
-        <el-menu :default-active="navActive" style="background:#fff" @select="leftMenuChange">
-          <el-menu-item-group>
-            <el-menu-item index="0">个人主页</el-menu-item>
-            <el-menu-item index="1">基本信息</el-menu-item>
-            <el-menu-item index="2">健康评价</el-menu-item>
-            <el-menu-item index="DayReport">健康监测</el-menu-item>
-            <el-menu-item index="4">基线评估</el-menu-item>
-          </el-menu-item-group>
-        </el-menu>
-</el-card>
+          <el-menu :default-active="navActive" style="background:#fff" @select="leftMenuChange">
+            <el-menu-item-group>
+              <el-menu-item index="0">个人主页</el-menu-item>
+              <el-menu-item index="1">基本信息</el-menu-item>
+              <el-menu-item index="2">健康评价</el-menu-item>
+              <el-menu-item index="DayReport">健康监测</el-menu-item>
+              <el-menu-item index="4">基线评估</el-menu-item>
+            </el-menu-item-group>
+          </el-menu>
+        </el-card>
       </el-aside>
       <el-container>
         <el-main class="">
 
-          <pane-day-report :user-id="userId" v-if="activeMenu==='DayReport'" />
+          <pane-day-report v-show="activeMenu==='DayReport'" :user-id="userId" />
 
         </el-main>
       </el-container>
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       loading: false,
-      activeMenu:"DayReport",
+      activeMenu: 'DayReport',
       userDetail: {
         headImgurl: '',
         signName: '',
@@ -102,8 +102,8 @@ export default {
         this.loading = false
       })
     },
-    leftMenuChange(index, indexPath){
-      this.activeMenu=index
+    leftMenuChange(index, indexPath) {
+      this.activeMenu = index
     }
   }
 }
