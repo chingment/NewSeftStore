@@ -1,6 +1,6 @@
 <template>
   <div id="senviv_user_list">
-    <pane-day-report />
+    <pane-day-report cache-query />
   </div>
 </template>
 

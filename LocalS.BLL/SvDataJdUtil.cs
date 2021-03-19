@@ -15,14 +15,14 @@ namespace LocalS.BLL
         public readonly static string CA_4 = "#0368b8";
         public readonly static string CA_5 = "#59c307";
 
-        public static double Covevt2Hour(long seconds)
+        public static decimal Covevt2Hour(long seconds)
         {
-            double hour = seconds / 3600;
+            decimal hour = seconds / 3600m;
 
             return hour;
         }
 
-        public static string GetHourText(double hour)
+        public static string GetHourText(decimal hour)
         {
             if (hour <= 0)
                 return "0";
@@ -295,15 +295,15 @@ namespace LocalS.BLL
             jd.Value = GetHourText(hour);
 
             jd.RefRange = "3.5~5.4h";
-            if (hour < 3.5)
+            if (hour < 3.5m)
             {
                 jd.Set("低", "↓", CA_1);
             }
-            else if (hour >= 3.5 && hour <= 5.4)
+            else if (hour >= 3.5m && hour <= 5.4m)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (hour > 5.4)
+            else if (hour > 5.4m)
             {
                 jd.Set("高", "↑", CA_1);
             }
@@ -318,15 +318,15 @@ namespace LocalS.BLL
             var hour = Covevt2Hour(val);
             jd.Value = GetHourText(hour);
             jd.RefRange = "1.05~2.25h";
-            if (hour < 1.05)
+            if (hour < 1.05m)
             {
                 jd.Set("低", "↓", CA_1);
             }
-            else if (hour >= 1.05 && hour <= 2.25)
+            else if (hour >= 1.05m && hour <= 2.25m)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (hour > 2.25)
+            else if (hour > 2.25m)
             {
                 jd.Set("高", "↑", CA_1);
             }
@@ -342,15 +342,15 @@ namespace LocalS.BLL
 
             jd.Value = GetHourText(hour);
             jd.RefRange = "1.05~2.25h";
-            if (hour < 1.05)
+            if (hour < 1.05m)
             {
                 jd.Set("低", "↓", CA_1);
             }
-            else if (hour >= 1.05 && hour <= 2.25)
+            else if (hour >= 1.05m && hour <= 2.25m)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (hour > 2.25)
+            else if (hour > 2.25m)
             {
                 jd.Set("高", "↑", CA_1);
             }

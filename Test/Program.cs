@@ -111,8 +111,20 @@ namespace Test
             return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
         }
 
+        public static string GetHourText(double hour)
+        {
+            if (hour <= 0)
+                return "0";
+
+            return hour.ToString("0.00");
+        }
+
         static void Main(string[] args)
         {
+
+            var SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(6906);
+
+            string a = GetHourText(1.9393333);
 
 
             //DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));

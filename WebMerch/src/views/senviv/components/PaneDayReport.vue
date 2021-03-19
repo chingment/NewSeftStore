@@ -68,7 +68,6 @@
         label="性别"
         width="60"
         align="center"
-        fixed
       />
 
       <el-table-column
@@ -77,7 +76,6 @@
         label="年龄"
         width="60"
         align="center"
-        fixed
       />
 
       <el-table-column
@@ -85,21 +83,18 @@
         align="center"
         label="总分"
         width="60"
-        fixed
       />
       <el-table-column
         prop="smRssj"
         label="入睡时间"
         align="center"
         width="100"
-        fixed
       />
       <el-table-column
         prop="smQxsj"
         label="清醒时间"
         align="center"
         width="100"
-        fixed
       />
       <el-table-column label="免疫力" align="center">
         <el-table-column
@@ -454,6 +449,10 @@ export default {
     userId: {
       type: String,
       default: ''
+    },
+    cacheQuery: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -480,8 +479,10 @@ export default {
     }
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+    if (this.cacheQuery) {
+      if (this.$store.getters.listPageQuery.has(this.$route.path)) {
+        this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+      }
     }
     this.listQuery.userId = this.userId
     this.getListData()
@@ -489,7 +490,9 @@ export default {
   methods: {
     getListData() {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+      if (this.cacheQuery) {
+        this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+      }
       getDayReports(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
