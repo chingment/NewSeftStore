@@ -490,7 +490,7 @@ namespace LocalS.Service.Api.Merch
                              u.SmRssj,
                              u.SmQxsj,
                              u.MylGrfx,
-                             u.MylMylZs,
+                             u.MylMylzs,
                              u.MbGxbgk,
                              u.MbGxygk,
                              u.MbTlbgk,
@@ -504,20 +504,20 @@ namespace LocalS.Service.Api.Merch
                              u.HrvMzsjzlzs,
                              u.HrvZzsjzlzs,
                              u.HrvHermzs,
-                             u.HrvTwjxgsszh,
+                             u.HrvTwjxgsszs,
                              u.XlDcjzxl,
                              u.XlCqjzxl,
                              u.XlDcpjxl,
                              u.HxDcjzhx,
                              u.HxCqjzhx,
-                             u.HxDcPj,
+                             u.HxDcpj,
                              u.HxZtcs,
                              u.HxZtAhizs,
                              u.HxZtPjsc,
                              u.SmSmsc,
                              u.SmSdsmsc,
                              u.SmQdsmsc,
-                             u.SmSemqsc,
+                             u.SmSemsmsc,
                              u.SmTdcs,
                              u.SmSmzq,
                              u.SvUserId,
@@ -568,7 +568,7 @@ namespace LocalS.Service.Api.Merch
                     SmQxsj = rpt.SmQxsj.ToUnifiedFormatDateTime(),
                     DsTags = rpt.SmTags.ToJsonObject<List<string>>(),
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
-                    MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylZs),
+                    MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvDataJdUtil.GetMbGxbgk(rpt.MbGxbgk),
                     MbGxygk = SvDataJdUtil.GetMbGxygk(rpt.MbGxygk),
                     MbTlbgk = SvDataJdUtil.GetMbTlbgk(rpt.MbTlbgk),
@@ -588,7 +588,7 @@ namespace LocalS.Service.Api.Merch
                     //荷尔蒙指数
                     HrvHermzs = SvDataJdUtil.GetHrvHermzs(rpt.HrvHermzs),
                     //体温及血管舒缩指数
-                    HrvTwjxgsszh = SvDataJdUtil.GetHrvTwjxgsszh(rpt.HrvTwjxgsszh),
+                    HrvTwjxgsszs = SvDataJdUtil.GetHrvTwjxgsszh(rpt.HrvTwjxgsszs),
                     //当次基准心率
                     XlDcjzxl = SvDataJdUtil.GetXlDcjzxl(rpt.XlDcjzxl),
                     //长期基准心率
@@ -600,7 +600,7 @@ namespace LocalS.Service.Api.Merch
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcPj = SvDataJdUtil.GetHxDcPj(rpt.HxDcPj),
+                    HxDcpj = SvDataJdUtil.GetHxDcPj(rpt.HxDcpj),
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
                     //呼吸暂停AHI指数
@@ -612,7 +612,7 @@ namespace LocalS.Service.Api.Merch
                     //浅度睡眠时长
                     SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmSemqsc = SvDataJdUtil.GetSmSemqsc(rpt.SmSemqsc),
+                    SmSemsmsc = SvDataJdUtil.GetSmSemqsc(rpt.SmSemsmsc),
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
@@ -652,7 +652,7 @@ namespace LocalS.Service.Api.Merch
                              u.SmRssj,
                              u.SmQxsj,
                              u.MylGrfx,
-                             u.MylMylZs,
+                             u.MylMylzs,
                              u.MbGxbgk,
                              u.MbGxygk,
                              u.MbTlbgk,
@@ -671,7 +671,7 @@ namespace LocalS.Service.Api.Merch
                              u.HrvZzsjzlzsJzz,
                              u.HrvHermzs,
                              u.HrvHermzsJzz,
-                             u.HrvTwjxgsszh,
+                             u.HrvTwjxgsszs,
                              u.HrvTwjxgsszhJzz,
                              //当次基准心率
                              u.XlDcjzxl,
@@ -700,11 +700,11 @@ namespace LocalS.Service.Api.Merch
                              //呼吸长期基准呼吸
                              u.HxCqjzhx,
                              //呼吸平均呼吸
-                             u.HxDcPj,
+                             u.HxDcpj,
                              //呼吸最高呼吸
-                             u.HxZgHx,
+                             u.HxZghx,
                              //呼吸最低呼吸
-                             u.HxZdHx,
+                             u.HxZdhx,
                              //呼吸过快时长
                              u.HxGksc,
                              //呼吸过慢时长
@@ -733,9 +733,9 @@ namespace LocalS.Service.Api.Merch
                              //浅度睡眠比例
                              u.SmQdsmbl,
                              //REM睡眠时长
-                             u.SmSemqsc,
+                             u.SmSemsmsc,
                              //REM睡眠比例
-                             u.SmSemqbl,
+                             u.SmSemsmbl,
                              //清醒时刻时长
                              u.SmQxsksc,
                              //清醒时刻比例
@@ -773,7 +773,7 @@ namespace LocalS.Service.Api.Merch
                     SmQxsj = d_Rpt.SmQxsj.ToUnifiedFormatDateTime(),
                     DsTags = d_Rpt.SmTags.ToJsonObject<List<string>>(),
                     d_Rpt.MylGrfx,
-                    d_Rpt.MylMylZs,
+                    d_Rpt.MylMylzs,
                     d_Rpt.MbGxbgk,
                     d_Rpt.MbGxygk,
                     d_Rpt.MbTlbgk,
@@ -803,7 +803,7 @@ namespace LocalS.Service.Api.Merch
                     //荷尔蒙指数基准值
                     d_Rpt.HrvHermzsJzz,
                     //体温及血管舒缩指数
-                    HrvTwjxgsszh = SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszh),
+                    HrvTwjxgsszs = SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszs),
                     //体温及血管舒缩指数基准值
                     d_Rpt.HrvTwjxgsszhJzz,
                     //当次基准心率
@@ -833,11 +833,11 @@ namespace LocalS.Service.Api.Merch
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcPj = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcPj),
+                    HxDcpj = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcpj),
                     //呼吸最高呼吸
-                    d_Rpt.HxZgHx,
+                    d_Rpt.HxZghx,
                     //呼吸最低呼吸
-                    d_Rpt.HxZdHx,
+                    d_Rpt.HxZdhx,
                     //呼吸过快时长
                     d_Rpt.HxGksc,
                     //呼吸过慢时长
@@ -856,7 +856,7 @@ namespace LocalS.Service.Api.Merch
                     //浅度睡眠时长
                     SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(d_Rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmSemqsc = SvDataJdUtil.GetSmSemqsc(d_Rpt.SmSemqsc),
+                    SmSemsmsc = SvDataJdUtil.GetSmSemqsc(d_Rpt.SmSemsmsc),
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(d_Rpt.SmSmzq),
                     //清醒时刻时长

@@ -33,9 +33,9 @@ namespace LocalS.Entity
         //浅度睡眠比例
         public decimal SmQdsmbl { get; set; }
         //REM睡眠时长
-        public long SmSemqsc { get; set; }
+        public long SmSemsmsc { get; set; }
         //REM睡眠比例
-        public decimal SmSemqbl { get; set; }
+        public decimal SmSemsmbl { get; set; }
         //清醒时刻时长
         public long SmQxsksc { get; set; }
         //清醒时刻比例
@@ -78,11 +78,11 @@ namespace LocalS.Entity
         //呼吸长期基准呼吸
         public int HxCqjzhx { get; set; }
         //呼吸平均呼吸
-        public int HxDcPj { get; set; }
+        public int HxDcpj { get; set; }
         //呼吸最高呼吸
-        public int HxZgHx { get; set; }
+        public int HxZghx { get; set; }
         //呼吸最低呼吸
-        public int HxZdHx { get; set; }
+        public int HxZdhx { get; set; }
         //呼吸过快时长
         public long HxGksc { get; set; }
         //呼吸过慢时长
@@ -118,12 +118,12 @@ namespace LocalS.Entity
         //荷尔蒙指数基准值
         public decimal HrvHermzsJzz { get; set; }
         //体温及血管舒缩指数
-        public decimal HrvTwjxgsszh { get; set; }
+        public decimal HrvTwjxgsszs { get; set; }
         //体温及血管舒缩指数基准值
         public decimal HrvTwjxgsszhJzz { get; set; }
 
         //免疫力指数
-        public decimal MylMylZs { get; set; }
+        public decimal MylMylzs { get; set; }
         //感染风险
         public decimal MylGrfx { get; set; }
 

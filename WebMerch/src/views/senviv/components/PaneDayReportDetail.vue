@@ -58,9 +58,9 @@
             </tr>
             <tr>
               <td>REM睡眠</td>
-              <td><span :style="{'color': rd.smSemqsc.color}">{{ rd.smSemqsc.value }}</span> </td>
-              <td><span :style="{'color': rd.smSemqsc.color}">{{ rd.smSemqsc.sign }}</span></td>
-              <td><span>{{ rd.smSemqsc.refRange }}</span></td>
+              <td><span :style="{'color': rd.smSemsmsc.color}">{{ rd.smSemsmsc.value }}</span> </td>
+              <td><span :style="{'color': rd.smSemsmsc.color}">{{ rd.smSemsmsc.sign }}</span></td>
+              <td><span>{{ rd.smSemsmsc.refRange }}</span></td>
             </tr>
             <tr>
               <td>睡眠周期</td>
@@ -172,9 +172,9 @@
             </tr>
             <tr>
               <td>体温及血管舒缩指数</td>
-              <td><span :style="{'color': rd.hrvTwjxgsszh.color}">{{ rd.hrvTwjxgsszh.value }}</span> </td>
-              <td><span :style="{'color': rd.hrvTwjxgsszh.color}">{{ rd.hrvTwjxgsszh.sign }}</span></td>
-              <td><span>{{ rd.hrvTwjxgsszh.refRange }}</span></td>
+              <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.value }}</span> </td>
+              <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.sign }}</span></td>
+              <td><span>{{ rd.hrvTwjxgsszs.refRange }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -249,12 +249,12 @@ export default {
     getPie() {
       // 绘制图表
 
-      var myChart = echarts.init(this.$refs.echart_sm_bi)
+      var myChart = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
       // 指定图表的配置项和数据
       var option = {
         // 标题
         title: {
-          text: '这是个标题',
+          text: '睡觉结构',
           x: 'left' // 标题位置
           // textStyle: { //标题内容的样式
           //   color: '#000',
@@ -280,7 +280,7 @@ export default {
             color: '#000',
             fontSize: 16
           },
-          data: ['未领取', '处理中', '已完成']// 图例上显示的饼图各模块上的名字
+          data: ['浅度睡眠', '深度睡眠', 'REM睡眠', '清醒时间']// 图例上显示的饼图各模块上的名字
         },
         // 饼图中各模块的颜色
         color: ['#32dadd', '#b6a2de', '#5ab1ef'],
@@ -292,9 +292,11 @@ export default {
           center: ['50%', '50%'], // 整个饼图在整个父元素中的位置
           // data:''               //饼图数据
           data: [ // 每个模块的名字和值
-            { name: '未领取', value: 10 },
-            { name: '处理中', value: 30 },
-            { name: '已完成', value: 50 }
+            { name: '浅度睡眠', value: 10 },
+            { name: '深度睡眠', value: 30 },
+            { name: 'REM睡眠', value: 50 },
+            { name: '清醒时间', value: 10 }
+
           ],
           itemStyle: {
             normal: {

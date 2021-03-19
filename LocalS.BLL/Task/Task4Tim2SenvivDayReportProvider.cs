@@ -108,7 +108,7 @@ namespace LocalS.BLL.Task
                                                 break;
                                             //免疫力-免疫力指数
                                             case "Immunity":
-                                                d_DayReport.MylMylZs = index.score;
+                                                d_DayReport.MylMylzs = index.score;
 
                                                 d_Label = new SenvivHealthDayReportLabel();
                                                 d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -326,10 +326,10 @@ namespace LocalS.BLL.Task
                             #region ReportOfBreath
                             if (hx != null)
                             {
-                                d_DayReport.HxDcPj = hx.Average;//	平均呼吸
+                                d_DayReport.HxDcpj = hx.Average;//	平均呼吸
                                 d_DayReport.HxDcjzhx = hx.Benchmark;//基准呼吸值
-                                d_DayReport.HxZdHx = hx.BreathMin;//当夜最低呼吸率
-                                d_DayReport.HxZgHx = hx.BreathMax;//当夜最高呼吸率
+                                d_DayReport.HxZdhx = hx.BreathMin;//当夜最低呼吸率
+                                d_DayReport.HxZghx = hx.BreathMax;//当夜最高呼吸率
                                 d_DayReport.HxCqjzhx = hx.Longterm; //长期基准呼吸
                                 d_DayReport.HxGksc = 0;//todo 
                                 d_DayReport.HxGmsc = 0;//todo 
@@ -356,7 +356,7 @@ namespace LocalS.BLL.Task
                                 d_DayReport.HrvZzsjzlzsJzz = hrv.BaseLFHF;//自主神经平衡基准值
                                 d_DayReport.HrvHermzs = hrv.endocrine;//荷尔蒙指数
                                 d_DayReport.HrvHermzsJzz = 0;//荷尔蒙指数基准值
-                                d_DayReport.HrvTwjxgsszh = hrv.temperature;//体温及血管舒缩指数
+                                d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
                                 d_DayReport.HrvTwjxgsszhJzz = 0;//体温及血管舒缩基准值
 
                                 d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
@@ -389,8 +389,8 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmQdsmsc = sm.Shallow;//浅睡期时长
                                 d_DayReport.SmQdsmbl = sm.ShallowRatio;//浅睡期比例
 
-                                d_DayReport.SmSemqsc = sm.Rem;//REM期时长
-                                d_DayReport.SmSemqbl = sm.RemRatio;//REM期比例
+                                d_DayReport.SmSemsmsc = sm.Rem;//REM期时长
+                                d_DayReport.SmSemsmbl = sm.RemRatio;//REM期比例
 
                                 d_DayReport.SmQxsksc = sm.Sober;//REM期时长
                                 d_DayReport.SmQxskbl = sm.SoberRatio;//REM期比例

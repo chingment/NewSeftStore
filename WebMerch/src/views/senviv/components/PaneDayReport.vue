@@ -266,7 +266,7 @@
         >
 
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hrvTwjxgsszh" sign />
+            <dv-item :value="scope.row.hrvTwjxgsszs" sign />
 
           </template>
 
@@ -394,13 +394,13 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="smSemqsc"
+          prop="smSemsmsc"
           label="REM期时长"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.smSemqsc" sign />
+            <dv-item :value="scope.row.smSemsmsc" sign />
 
           </template>
         </el-table-column>
