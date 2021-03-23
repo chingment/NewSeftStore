@@ -44,6 +44,9 @@ namespace LocalS.Entity
         public int SmLzcs{ get; set; }
         //离真时长
         public long SmLzsc { get; set; }
+
+        public decimal SmLzscbl { get; set; }
+
         //睡眠周期
         public int SmSmzq { get; set; }
         //体动次数

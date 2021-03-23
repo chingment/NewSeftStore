@@ -365,7 +365,7 @@ namespace LocalS.BLL.Task
                                 if (d2 != null)
                                 {
                                     d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
-                               }
+                                }
                             }
                             #endregion
 
@@ -377,10 +377,10 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
                                 d_DayReport.SmRssj = TicksToDate(x2.OnbedTime);//入睡时间
                                 d_DayReport.SmQxsj = TicksToDate(x2.OffbedTime);//清醒时间
-                                d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj- d_DayReport.SmRssj).TotalSeconds;//睡眠时长
+                                d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
                                 d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
                                 d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
-
+                                d_DayReport.SmLzscbl = sm.OffbedRatio;
                                 d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
 
                                 d_DayReport.SmSdsmsc = sm.Deep;//深睡时长

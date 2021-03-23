@@ -748,6 +748,7 @@ namespace LocalS.Service.Api.Merch
                              u.SmTdcs,
                              //平均体动时长
                              u.SmPjtdsc,
+                             u.SmLzscbl,
                              u.SvUserId,
                              u.CreateTime
                          }).FirstOrDefault();
@@ -756,7 +757,6 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new
             {
-
                 Id = d_Rpt.Id,
                 UserInfo = new
                 {
@@ -771,6 +771,15 @@ namespace LocalS.Service.Api.Merch
                     TotalScore = d_Rpt.TotalScore,
                     SmRssj = d_Rpt.SmRssj.ToUnifiedFormatDateTime(),
                     SmQxsj = d_Rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    SmPie = new
+                    {
+                        Data = new List<object>() {
+new {  Name = "浅度", Value = d_Rpt.SmQdsmbl},
+new {  Name = "深度", Value = d_Rpt.SmSdsmbl},
+new {  Name = "REM", Value = d_Rpt.SmSemsmbl},
+new {  Name = "清醒", Value = d_Rpt.SmQxskbl},
+new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
+                    },
                     DsTags = d_Rpt.SmTags.ToJsonObject<List<string>>(),
                     d_Rpt.MylGrfx,
                     d_Rpt.MylMylzs,

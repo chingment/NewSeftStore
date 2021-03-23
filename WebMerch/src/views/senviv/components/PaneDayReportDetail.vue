@@ -110,9 +110,9 @@
             </tr>
             <tr>
               <td>平均呼吸</td>
-              <td><span :style="{'color': rd.hxDcPj.color}">{{ rd.hxDcPj.value }}</span> </td>
-              <td><span :style="{'color': rd.hxDcPj.color}">{{ rd.hxDcPj.sign }}</span></td>
-              <td><span>{{ rd.hxDcPj.refRange }}</span></td>
+              <td><span :style="{'color': rd.hxDcpj.color}">{{ rd.hxDcpj.value }}</span> </td>
+              <td><span :style="{'color': rd.hxDcpj.color}">{{ rd.hxDcpj.sign }}</span></td>
+              <td><span>{{ rd.hxDcpj.refRange }}</span></td>
             </tr>
             <tr>
               <td>呼吸暂停次数</td>
@@ -182,6 +182,8 @@
       </el-col>
       <el-col :span="6" :xs="24" style="margin-bottom:20px">
         <div ref="echart_sm_bi" style="width: 600px;height: 400px;" />
+
+        <div ref="echart_sm_zx" style="width: 600px;height: 400px;" />
       </el-col>
     </el-row>
 
@@ -226,9 +228,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(function() {
-      this.getPie()
-    }, 2000)
+
   },
   created() {
     this._getDayReportDetail()
@@ -242,6 +242,11 @@ export default {
           var d = res.data
           this.userInfo = d.userInfo
           this.rd = d.reportData
+
+          this.$nextTick(function() {
+            this.getPie()
+            this.getZxt()
+          }, 2000)
         }
         this.loading = false
       })
@@ -279,11 +284,10 @@ export default {
           textStyle: {// 图例中文字的样式
             color: '#000',
             fontSize: 16
-          },
-          data: ['浅度睡眠', '深度睡眠', 'REM睡眠', '清醒时间']// 图例上显示的饼图各模块上的名字
+          }
         },
         // 饼图中各模块的颜色
-        color: ['#32dadd', '#b6a2de', '#5ab1ef'],
+        color: ['#32dadd', '#b6a2de', '#5ab1ef', '#59f5ae', '#1d0fdc'],
         // 饼图数据
         series: {
           // name: 'bug分布',
@@ -291,13 +295,7 @@ export default {
           radius: '70%', // 饼图中饼状部分的大小所占整个父元素的百分比
           center: ['50%', '50%'], // 整个饼图在整个父元素中的位置
           // data:''               //饼图数据
-          data: [ // 每个模块的名字和值
-            { name: '浅度睡眠', value: 10 },
-            { name: '深度睡眠', value: 30 },
-            { name: 'REM睡眠', value: 50 },
-            { name: '清醒时间', value: 10 }
-
-          ],
+          data: this.rd.smPie.data,
           itemStyle: {
             normal: {
               label: {
@@ -312,6 +310,155 @@ export default {
         }
 
       }
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+    },
+    getZxt() {
+      // 绘制图表
+
+      var myChart = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
+      // 指定图表的配置项和数据
+
+      var option = {
+        // 标题
+        title: {
+          text: '多条折线图测试用例' // 标题名称
+        },
+        // x轴
+        xAxis: {
+          data: ['1-1', '1-2', '1-3', '2-1', '3-1', '6-1', '7-1'] // x轴坐标名称
+        },
+        // y轴
+        yAxis: {},
+        // 提示框，鼠标悬浮交互时的信息提示
+        tooltip: {
+          show: true, // 是否显示
+          trigger: 'axis' // 触发类型，默认数据触发，见下图，可选为：'item' | 'axis'
+        },
+        legend: {
+          data: ['用例A', '用例B']
+        },
+        // 指定图标的类型
+        series: [
+        // 第一条折线图
+          {
+            name: '用例A', // 系列名称
+            type: 'line', // 类型：线
+            data: [11, 22, 33, 44, 55, 66, 77, 33, 11, 22, 33, 44, 55, 66, 77, 33], // 数据
+            markPoint: {
+              // 标注图形数据
+              data: [{
+                type: 'max', // 类型
+                symbol: 'pin', // 标志图形类型，默认自动选择（8种类型循环使用，不显示标志图形可设为'none'），默认循环选择类型有：'circle' | 'rectangle' | 'triangle' | 'diamond' |'emptyCircle' | 'emptyRectangle' | 'emptyTriangle' | 'emptyDiamond' 另外，还支持五种更特别的标志图形'heart'（心形）、'droplet'（水滴）、'pin'（标注）、'arrow'（箭头）和'star'（五角星），这并不出现在常规的8类图形中，但无论是在系列级还是数据级上你都可以指定使用，同时，'star' + n（n>=3)可变化出N角星，如指定为'star6'则可以显示6角星
+                name: '最大值'
+              },
+              {
+                type: 'min', // 类型
+                symbol: 'pin',
+                name: '最小值'
+              }
+              ],
+              // 特殊标注文字
+              label: {
+                normal: {
+                  show: true,
+                  // position: 'top', // 文字位置
+                  // 显示的文字
+                  formatter: '{b}：{c}'
+                }
+              },
+              // 触发操作
+              tooltip: {
+                show: true, // 是否显示
+                formatter: '{b}：{c}', // 内容格式器 a（系列名称），b（类目值），c（数值）, d（无）
+                trigger: 'item' // 触发类型，默认数据触发，见下图，可选为：'item' | 'axis'
+              }
+            },
+            markLine: {
+              data: [{
+                type: 'average',
+                name: '平均值',
+                itemStyle: {
+                  normal: {
+                    color: 'orange'
+                  }
+                }
+              }]
+            },
+            // 折线图圆点
+            label: {
+              normal: {
+                show: true,
+                // position: 'bottom', // 文字位置
+                // 显示的文字
+                formatter: '{c}',
+                textStyle: {
+                  color: '#000' // 文字颜色
+                }
+              }
+            }
+          },
+          // 第二条折线图
+          {
+            name: '用例B', // 系列名称
+            type: 'line', // 类型：线
+            data: [1, 2, 3, 4, 5, 6, 7, 1], // 数据
+            markPoint: {
+              // 标注图形数据
+              data: [{
+                type: 'max', // 类型
+                symbol: 'circle', // 标志图形类型，默认自动选择（8种类型循环使用，不显示标志图形可设为'none'），默认循环选择类型有：'circle' | 'rectangle' | 'triangle' | 'diamond' |'emptyCircle' | 'emptyRectangle' | 'emptyTriangle' | 'emptyDiamond' 另外，还支持五种更特别的标志图形'heart'（心形）、'droplet'（水滴）、'pin'（标注）、'arrow'（箭头）和'star'（五角星），这并不出现在常规的8类图形中，但无论是在系列级还是数据级上你都可以指定使用，同时，'star' + n（n>=3)可变化出N角星，如指定为'star6'则可以显示6角星
+                name: '最大值'
+              },
+              {
+                type: 'min', // 类型
+                symbol: 'circle',
+                name: '最小值'
+              }
+              ],
+              // 特殊标注文字
+              label: {
+                normal: {
+                  show: true,
+                  // position: 'top', // 文字位置
+                  // 显示的文字
+                  formatter: '{b}：{c}'
+                }
+              },
+              // 触发操作
+              tooltip: {
+                show: true, // 是否显示
+                formatter: '{b}：{c}', // 内容格式器 a（系列名称），b（类目值），c（数值）, d（无）
+                trigger: 'item' // 触发类型，默认数据触发，见下图，可选为：'item' | 'axis'
+              }
+            },
+            markLine: {
+              data: [{
+                type: 'average',
+                name: '平均值',
+                itemStyle: {
+                  normal: {
+                    color: 'green'
+                  }
+                }
+              }]
+            },
+            // 折线图圆点
+            label: {
+              normal: {
+                show: true,
+                // position: 'bottom', // 文字位置
+                // 显示的文字
+                formatter: '{c}',
+                textStyle: {
+                  color: '#000' // 文字颜色
+                }
+              }
+            }
+          }
+        ]
+      }
+
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option)
     }
