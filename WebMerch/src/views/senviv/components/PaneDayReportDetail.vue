@@ -16,7 +16,7 @@
         {{ tag }}
       </el-tag>
     </div>
-
+    <div ref="echart_sm_zx" style="width: 1150px;height: 400px;" />
     <div class="row-title clearfix">
       <div class="pull-left"> <h5>数据指标</h5>
       </div>
@@ -182,8 +182,6 @@
       </el-col>
       <el-col :span="6" :xs="24" style="margin-bottom:20px">
         <div ref="echart_sm_bi" style="width: 600px;height: 400px;" />
-
-        <div ref="echart_sm_zx" style="width: 600px;height: 400px;" />
       </el-col>
     </el-row>
 
@@ -313,6 +311,21 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option)
     },
+    datetimeFormat(longTypeDate) {
+      const date = new Date(longTypeDate * 1000)
+      const y = date.getFullYear()
+      let MM = date.getMonth() + 1
+      MM = MM < 10 ? ('0' + MM) : MM
+      let d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+      let h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      let m = date.getMinutes()
+      m = m < 10 ? ('0' + m) : m
+      let s = date.getSeconds()
+      s = s < 10 ? ('0' + s) : s
+      return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s
+    },
     getZxt() {
       // 绘制图表
       var data = [['2000-06-05', 116], ['2000-06-06', 129], ['2000-06-07', 135], ['2000-06-08', 86], ['2000-06-09', 73], ['2000-06-10', 85], ['2000-06-11', 73], ['2000-06-12', 68], ['2000-06-13', 92], ['2000-06-14', 130], ['2000-06-15', 245], ['2000-06-16', 139], ['2000-06-17', 115], ['2000-06-18', 111], ['2000-06-19', 309], ['2000-06-20', 206], ['2000-06-21', 137], ['2000-06-22', 128], ['2000-06-23', 85], ['2000-06-24', 94], ['2000-06-25', 71], ['2000-06-26', 106], ['2000-06-27', 84], ['2000-06-28', 93], ['2000-06-29', 85], ['2000-06-30', 73], ['2000-07-01', 83], ['2000-07-02', 125], ['2000-07-03', 107], ['2000-07-04', 82], ['2000-07-05', 44], ['2000-07-06', 72], ['2000-07-07', 106], ['2000-07-08', 107], ['2000-07-09', 66], ['2000-07-10', 91], ['2000-07-11', 92], ['2000-07-12', 113], ['2000-07-13', 107], ['2000-07-14', 131], ['2000-07-15', 111], ['2000-07-16', 64], ['2000-07-17', 69], ['2000-07-18', 88], ['2000-07-19', 77], ['2000-07-20', 83], ['2000-07-21', 111], ['2000-07-22', 57], ['2000-07-23', 55], ['2000-07-24', 60]]
@@ -322,13 +335,255 @@ export default {
       var dateList = data.map(function(item) {
         return item[0]
       })
-      var valueList = data.map(function(item) {
-        return item[1]
-      })
+      var valueList = [20, 18, 16, 19, 16, 19, 19, 18, 18, 16, 17, 14, 15, 15, 15, 15, 16, 9, 12, 16, 15, 18, 18, 19, 10, 18, 11, 17, 13, 18, 18, 18, 19, 19, 20, 19, 21, 19, 19, 19, 19, 17, 19, 18, 19, 19, 17, 18, 17, 14, 16, 9, 17, 17, 18, 17, 17, 17, 17, 17, 17, 18, 19, 18, 16, 18, 17, 18, 18, 18, 18, 17, 18, 18, 17, 16, 17, 18, 17, 17, 18, 18, 17, 18, 17, 18, 17, 18, 18, 18, 17, 18, 17, 17, 18, 17, 17, 17, 18, 17, 17, 20, 21, 18, 20, 20, 17, 17, 18, 17, 18, 13, 10, 14, 18, 18, 18, 18, 17, 18, 17, 17, 17, 9, 17, 15, 16, 18, 17, 16, 17, 17, 17, 17, 17, 15, 17, 10, 17, 16, 16, 17, 17, 16, 17, 16, 17, 17, 17, 18, 16, 16, 17, 16, 16, 17, 17, 17, 16, 16, 17, 16, 17, 17, 17, 19, 17, 17, 17, 17, 20, 15, 16, 17, 18, 17, 18, 21, 18, 18, 16, 17, 18, 16, 17, 17, 17, 17, 16, 16, 16, 16, 16, 8, 10, 17, 17, 15, 15, 16, 16, 15, 15, 16, 15, 17, 15, 16, 16, 16, 16, 15, 16, 16, 15, 16, 18, 17, 16, 17, 17, 15, 16, 15, 15, 17, 16, 14, 15, 16, 16, 17, 16, 16, 15, 16, 15, 16, 16, 16, 17, 17, 16, 16, 16, 16, 15, 16, 16, 15, 15, 16, 16, 15, 16, 11, 16, 10, 17, 16, 16, 15, 16, 12, 13, 16, 17, 16, 14, 17, 18, 16, 16, 16, 16, 16, 15, 12, 15, 16, 16, 16, 16, 16, 13, 11, 17, 16, 16, 15, 15, 14, 15, 15, 16, 16, 15, 15, 15, 16, 16, 10, 16, 14, 15, 11, 16, 17, 16, 17, 17, 17, 18, 18, 17, 16, 16, 17, 17, 17, 16, 17, 17, 17, 17, 18, 17, 18, 18, 17, 16, 17, 16, 18, 19, 19, 18, 18, 18, 19, 20, 19, 19, 21, 16, 17, 15, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 15, 15, 15, 16, 16, 16, 16, 16, 15, 16, 16, 15, 15, 15, 16, 16, 16, 15, 15, 16, 15, 15, 15, 15, 15, 17, 17, 16, 16, 16, 16, 16, 16, 16, 17, 19, 18, 18, 18, 16, 10, 14, 16, 15, 14, 15, 15, 15, 16, 10, 12, 11, 12, 14]
 
-      var valueList2 = data2.map(function(item) {
-        return item[1]
-      })
+      var valueList2 = [76, 76, 76, 74, 71, 68, 60, 58, 59, 59, 59, 59, 60, 60, 60, 60, 60, 60, 60, 61, 61, 60, 60, 61, 61, 61, 62, 62, 62, 60, 60, 60, 61, 63, 63, 64, 64, 64, 64, 64, 64, 62, 62, 63, 63, 63, 62, 63, 63, 63, 63, 62, 61, 62, 63, 63, 61, 62, 61, 62, 61, 60, 59, 58, 57, 59, 57, 58, 57, 57, 57, 57, 57, 58, 58, 58, 58, 58, 58, 59, 59, 59, 58, 58, 58, 57, 57, 57, 57, 57, 57, 57, 57, 57, 57, 57, 56, 56, 57, 56, 57, 59, 63, 60, 59, 61, 62, 61, 55, 59, 58, 60, 61, 62, 62, 62, 60, 59, 58, 58, 58, 57, 57, 56, 55, 55, 55, 57, 58, 58, 58, 57, 57, 57, 56, 56, 55, 54, 54, 53, 53, 53, 53, 53, 53, 53, 53, 52, 54, 55, 55, 55, 55, 54, 54, 59, 58, 57, 55, 53, 54, 52, 51, 53, 53, 52, 52, 52, 52, 51, 55, 57, 58, 53, 50, 51, 51, 56, 54, 53, 52, 51, 51, 53, 51, 52, 52, 52, 51, 52, 51, 52, 52, 55, 57, 60, 59, 59, 56, 55, 55, 54, 53, 53, 53, 54, 54, 54, 54, 52, 54, 53, 53, 53, 53, 52, 53, 55, 54, 54, 53, 52, 52, 52, 52, 52, 51, 53, 52, 52, 52, 52, 52, 52, 52, 52, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 52, 52, 53, 53, 52, 51, 50, 51, 52, 55, 54, 50, 51, 52, 52, 52, 56, 52, 50, 51, 50, 51, 52, 53, 52, 54, 55, 56, 55, 55, 57, 57, 56, 55, 55, 55, 56, 55, 55, 55, 55, 54, 54, 54, 54, 54, 54, 53, 51, 52, 52, 52, 55, 56, 56, 58, 59, 61, 58, 58, 56, 56, 55, 56, 55, 55, 54, 55, 53, 54, 52, 56, 56, 54, 55, 57, 56, 56, 55, 55, 56, 57, 55, 56, 56, 52, 54, 55, 54, 57, 55, 56, 56, 56, 56, 56, 55, 56, 55, 55, 55, 55, 55, 55, 54, 55, 54, 54, 55, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 55, 56, 56, 56, 56, 56, 55, 55, 53, 54, 54, 57, 56, 53, 56, 58, 61, 54, 54, 53, 53, 53, 53, 55, 53, 53, 53, 53, 52]
+
+      var my_data = [{
+        'starttime': 1615914256,
+        'endtime': 1615917625,
+        'type': 0
+      }, {
+        'starttime': 1615917626,
+        'endtime': 1615917628,
+        'type': 1
+      }, {
+        'starttime': 1615917629,
+        'endtime': 1615918039,
+        'type': 5
+      }, {
+        'starttime': 1615918040,
+        'endtime': 1615918245,
+        'type': 1
+      }, {
+        'starttime': 1615918246,
+        'endtime': 1615918451,
+        'type': 5
+      }, {
+        'starttime': 1615918452,
+        'endtime': 1615918656,
+        'type': 1
+      }, {
+        'starttime': 1615918657,
+        'endtime': 1615918862,
+        'type': 6
+      }, {
+        'starttime': 1615918863,
+        'endtime': 1615919479,
+        'type': 5
+      }, {
+        'starttime': 1615919480,
+        'endtime': 1615919685,
+        'type': 1
+      }, {
+        'starttime': 1615919686,
+        'endtime': 1615920324,
+        'type': 5
+      }, {
+        'starttime': 1615920325,
+        'endtime': 1615921235,
+        'type': 4
+      }, {
+        'starttime': 1615921236,
+        'endtime': 1615921314,
+        'type': 3
+      }, {
+        'starttime': 1615921315,
+        'endtime': 1615921485,
+        'type': 0
+      }, {
+        'starttime': 1615921486,
+        'endtime': 1615921825,
+        'type': 4
+      }, {
+        'starttime': 1615921826,
+        'endtime': 1615921952,
+        'type': 5
+      }, {
+        'starttime': 1615921953,
+        'endtime': 1615922652,
+        'type': 1
+      }, {
+        'starttime': 1615922653,
+        'endtime': 1615923353,
+        'type': 5
+      }, {
+        'starttime': 1615923354,
+        'endtime': 1615923586,
+        'type': 1
+      }, {
+        'starttime': 1615923587,
+        'endtime': 1615923820,
+        'type': 5
+      }, {
+        'starttime': 1615923821,
+        'endtime': 1615923924,
+        'type': 1
+      }, {
+        'starttime': 1615923925,
+        'endtime': 1615925655,
+        'type': 4
+      }, {
+        'starttime': 1615925656,
+        'endtime': 1615926215,
+        'type': 0
+      }, {
+        'starttime': 1615926216,
+        'endtime': 1615926296,
+        'type': 3
+      }, {
+        'starttime': 1615926297,
+        'endtime': 1615926855,
+        'type': 0
+      }, {
+        'starttime': 1615926856,
+        'endtime': 1615926879,
+        'type': 5
+      }, {
+        'starttime': 1615926880,
+        'endtime': 1615927113,
+        'type': 1
+      }, {
+        'starttime': 1615927114,
+        'endtime': 1615927815,
+        'type': 5
+      }, {
+        'starttime': 1615927816,
+        'endtime': 1615928282,
+        'type': 1
+      }, {
+        'starttime': 1615928283,
+        'endtime': 1615930153,
+        'type': 5
+      }, {
+        'starttime': 1615930154,
+        'endtime': 1615930224,
+        'type': 1
+      }, {
+        'starttime': 1615930225,
+        'endtime': 1615931055,
+        'type': 4
+      }, {
+        'starttime': 1615931056,
+        'endtime': 1615931616,
+        'type': 0
+      }, {
+        'starttime': 1615931617,
+        'endtime': 1615932179,
+        'type': 3
+      }, {
+        'starttime': 1615932180,
+        'endtime': 1615932470,
+        'type': 0
+      }, {
+        'starttime': 1615932471,
+        'endtime': 1615932664,
+        'type': 3
+      }, {
+        'starttime': 1615932665,
+        'endtime': 1615932771,
+        'type': 0
+      }, {
+        'starttime': 1615932772,
+        'endtime': 1615933311,
+        'type': 1
+      }, {
+        'starttime': 1615933312,
+        'endtime': 1615933671,
+        'type': 5
+      }, {
+        'starttime': 1615933672,
+        'endtime': 1615933851,
+        'type': 1
+      }, {
+        'starttime': 1615933852,
+        'endtime': 1615934031,
+        'type': 6
+      }, {
+        'starttime': 1615934032,
+        'endtime': 1615934055,
+        'type': 1
+      }, {
+        'starttime': 1615934056,
+        'endtime': 1615934284,
+        'type': 0
+      }, {
+        'starttime': 1615934285,
+        'endtime': 1615934386,
+        'type': 3
+      }, {
+        'starttime': 1615934387,
+        'endtime': 1615934655,
+        'type': 0
+      }, {
+        'starttime': 1615934656,
+        'endtime': 1615934777,
+        'type': 6
+      }, {
+        'starttime': 1615934778,
+        'endtime': 1615935484,
+        'type': 1
+      }, {
+        'starttime': 1615935485,
+        'endtime': 1615935624,
+        'type': 6
+      }, {
+        'starttime': 1615935625,
+        'endtime': 1615937125,
+        'type': 4
+      }, {
+        'starttime': 1615937126,
+        'endtime': 1615938546,
+        'type': 5
+      }, {
+        'starttime': 1615938547,
+        'endtime': 1615939184,
+        'type': 1
+      }, {
+        'starttime': 1615939185,
+        'endtime': 1615939725,
+        'type': 0
+      }, {
+        'starttime': 1615939726,
+        'endtime': 1615940165,
+        'type': 3
+      }, {
+        'starttime': 1615940166,
+        'endtime': 1615941148,
+        'type': 0
+      }]
+
+      var my_xAxis = []
+      var my_xAxis_data = []
+      for (let index = 0; index < my_data.length; index++) {
+        const var1 = my_data[index].starttime
+        const var2 = my_data[index].endtime
+        var type = my_data[index].type
+
+        var var3
+        if (type === 0) {
+          var3 = 'W'
+        } else if (type === 1) {
+          var3 = 'N3'
+        } else if (type === 5) {
+          var3 = 'N1'
+        } else if (type === 4) {
+          var3 = 'R'
+        } else if (type === 3) {
+          var3 = 'O'
+        } else if (type === 6) {
+          var3 = 'N2'
+        }
+
+        my_xAxis.push(this.datetimeFormat(var1))
+        my_xAxis.push(this.datetimeFormat(var2))
+
+        my_xAxis_data.push({ value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
+      }
+
+      // my_xAxis=['03-17 01:04:16','']
+      console.log(JSON.stringify(my_xAxis))
+      console.log(JSON.stringify(my_xAxis_data))
 
       var myChart = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
       // 指定图表的配置项和数据
@@ -336,10 +591,6 @@ export default {
       var option = {
         // Make gradient line here
         grid: [{
-          bottom: '60%'
-        }, {
-          top: '60%'
-        }, {
           show: false,
           borderWidth: 1
           // borderColor: '#FF0000' // 网格的边框颜色
@@ -361,8 +612,18 @@ export default {
           trigger: 'axis' // 触发类型。坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用/none什么都不触发
         },
         xAxis: [{
-          data: dateList,
-          show: false // 是否显示x轴
+          data: my_xAxis,
+          show: true // 是否显示x轴
+        },
+        {
+          data: my_xAxis,
+          show: true, // 是否显示x轴
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLabel: {
+            showMaxLabel: true
+          }
         }],
         yAxis: [{
           nameTextStyle: { // 坐标轴名称的文字样式。
@@ -378,7 +639,8 @@ export default {
               color: ['#4F5258', '#30394F']
             }
           }
-        }],
+        }
+        ],
         // 系列列表。每个系列通过 type 决定自己的图表类型
         series: [{
           type: 'line', // 线条
@@ -400,15 +662,13 @@ export default {
                 name: '最小心率',
                 label: {
                   color: '#CCCCCC',
-                  show: true,
-                  position: 'bottom'
-                },
-                symbolSize: [5, 5] // 标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
+                  show: true
+                }
               }
             ],
             // symbol: 'none', // 标记的图形。circle-圆形,rect-方形
             label: { // 标注的文本
-              show: true
+              show: false
             },
             itemStyle: {
               color: '#081944', // 图形的颜色--设置这个是为了隐藏掉图标
@@ -437,10 +697,8 @@ export default {
                 name: '最小心率',
                 label: {
                   color: '#CCCCCC',
-                  show: true,
-                  position: 'bottom'
-                },
-                symbolSize: [5, 5] // 标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
+                  show: true
+                }
               }
             ],
             // symbol: 'none', // 标记的图形。circle-圆形,rect-方形
@@ -456,6 +714,135 @@ export default {
         ]
       }
 
+      option = {
+        // Make gradient line here
+
+        grid: [{
+          bottom: '50%'
+        }, {
+          top: '50%'
+        }, {
+          show: false,
+          borderWidth: 1,
+          borderColor: '#FF0000' // 网格的边框颜色
+        }],
+        // 视觉映射组件，用于进行『视觉编码』
+        visualMap: [{
+          show: false, // 是否显示 visualMap-piecewise 组件。如果设置为 false，不会显示，但是数据映射的功能还存在。
+          type: 'continuous', // 定义为连续型 visualMap
+          seriesIndex: 0, // 指定取哪个系列的数据，即哪个系列的 series.data。默认取所有系列
+          min: 0, // 指定 visualMapPiecewise 组件的最小值。
+          max: 400
+        }, {
+          show: false,
+          type: 'continuous',
+          seriesIndex: 1,
+          dimension: 0,
+          min: 0,
+          max: dateList.length - 1
+        }],
+        title: [{
+          left: 'center',
+          text: 'Gradient along the y axis'
+        }],
+        // 提示框组件
+        tooltip: {
+          trigger: 'axis' // 触发类型。坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用/none什么都不触发
+        },
+        xAxis: [{
+          data: valueList,
+          show: false // 是否显示x轴
+        }, {
+          data: my_xAxis,
+
+          gridIndex: 1, // x 轴所在的 grid 的索引，默认位于第一个 grid。
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLabel: {
+            interval: 0,
+            rotate: 30,
+            formatter: function(val) {
+              console.log(val)
+
+              if (val == '2021-03-17 01:04:16') {
+                return '上床'
+              } else if (val == '2021-03-17 02:00:26') {
+                return '入眠'
+              } else if (val == '2021-03-17 07:59:44') {
+                return '清醒'
+              } else if (val == '2021-03-17 07:00:59') {
+                return '起床'
+              }
+              return ''
+            }
+
+          }
+        }],
+        yAxis: [{
+          nameTextStyle: { // 坐标轴名称的文字样式。
+            color: '#63B8FF',
+            fontWeight: 'bold', // 坐标轴名称文字字体的粗细
+            fontSize: 15
+          },
+          name: '心率次数',
+          splitLine: {
+            show: true
+          }
+        }, {
+          splitLine: { show: false },
+          gridIndex: 1,
+          data: ['N3', 'N2', 'N1', 'R', 'W', 'O']
+        }],
+        // 系列列表。每个系列通过 type 决定自己的图表类型
+        series: [{
+          type: 'line', // 线条
+          showSymbol: false, // 是否显示 symbol符号, 如果 false 则只有在 tooltip hover 的时候显示。
+          data: valueList
+        }, {
+          type: 'line', // 线条
+          showSymbol: false, // 是否显示 symbol符号, 如果 false 则只有在 tooltip hover 的时候显示。
+          data: valueList2
+        },
+        {
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          type: 'custom',
+          renderItem: function(params, api) {
+            var categoryIndex = api.value(0)
+
+            // console.log(categoryIndex + ',' + api.value(1) + ',' + api.value(2))
+
+            var start = api.coord([api.value(1), categoryIndex])
+
+            var end = api.coord([api.value(2), categoryIndex])
+
+            // console.log(start + ',' + end)
+            var height = 12
+
+            return {
+              type: 'rect',
+              shape: echarts.graphic.clipRectByRect({
+                x: start[0],
+                y: start[1] - height / 2,
+                width: end[0] - start[0],
+                height: height
+              }, {
+                x: params.coordSys.x,
+                y: params.coordSys.y,
+                width: params.coordSys.width,
+                height: params.coordSys.height
+              }),
+              style: api.style()
+            }
+          },
+          encode: {
+            x: [1, 2],
+            y: 0
+          },
+          data: my_xAxis_data
+        }]
+      }
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option)
     }
