@@ -142,6 +142,9 @@ namespace LocalS.Entity
         public decimal QxxlKynl { get; set; }
         //情绪应激
         public decimal QxxlQxyj { get; set; }
+        public string XlPoint { get; set; }
+        public string HxPoint { get; set; }
+        public string SmPoint { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

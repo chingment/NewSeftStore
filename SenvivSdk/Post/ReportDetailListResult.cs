@@ -277,7 +277,7 @@ namespace SenvivSdk
 
         public class D_ReportBarChart
         {
-            public string ChartTypeId { get; set; }
+            public int ChartTypeId { get; set; }
             public string Title { get; set; }
             public string Comments { get; set; }
             public List<D_ReportBarChart_Item> Items { get; set; }

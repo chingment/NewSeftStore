@@ -750,6 +750,9 @@ namespace LocalS.Service.Api.Merch
                              u.SmPjtdsc,
                              u.SmLzscbl,
                              u.SvUserId,
+                             u.SmPoint,
+                             u.HxPoint,
+                             u.XlPoint,
                              u.CreateTime
                          }).FirstOrDefault();
 
@@ -881,7 +884,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //平均体动时长
                     d_Rpt.SmPjtdsc,
                     d_Rpt.SmLcsj,
-                    d_Rpt.SmScsj
+                    d_Rpt.SmScsj,
+                    SmPoint = d_Rpt.SmPoint.ToJsonObject<object>(),
+                    XlPoint = d_Rpt.XlPoint.ToJsonObject<object>(),
+                    HxPoint = d_Rpt.HxPoint.ToJsonObject<object>()
                 }
             };
 

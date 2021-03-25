@@ -401,6 +401,46 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmPjtdsc = sm.MovingAverageLength;//平均体动时长
 
                             }
+                            var rc = d1.ReportCharts;
+                            if (rc != null)
+                            {
+                                var trendCharts = rc.ReportTrendChart;
+
+                                if (trendCharts != null)
+                                {
+                                    foreach (var chart in trendCharts)
+                                    {
+                                        if (chart.type == 2107)
+                                        {
+                                            d_DayReport.HxPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
+                                        }
+                                        else if (chart.type == 2106)
+                                        {
+                                            d_DayReport.XlPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
+                                        }
+                                    }
+                                }
+
+                                var barCharts = rc.ReportBarChart;
+                                if (barCharts != null)
+                                {
+                                    foreach (var chart in barCharts)
+                                    {
+                                        var items = chart.Items;
+                                        if (items != null)
+                                        {
+                                            if (chart.ChartTypeId == 2110)
+                                            {
+                                                foreach (var item in items)
+                                                {
+                                                    d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
 
                             d_DayReport.CreateTime = DateTime.Now;
                             d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
