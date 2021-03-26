@@ -556,7 +556,7 @@ export default {
 
         var var3
         var color = ''
-        var name = ''
+
         if (type === 0) {
           var3 = 'W'
           color = '#d8edff'
@@ -580,10 +580,10 @@ export default {
         my_xAxis.push(this.datetimeFormat(var1))
         my_xAxis.push(this.datetimeFormat(var2))
 
-        my_xAxis_data.push({ name: '睡眠', itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
+        my_xAxis_data.push({ itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
       }
 
-      var myChart = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
+      var myChart = echarts.init(this.$refs.echart_sm_zx, null)
 
       var option = {
         grid: [{
@@ -609,8 +609,7 @@ export default {
             if (params[0].componentSubType === 'line') {
               return ' 心率：' + params[1].data + '<br/>' + ' 呼吸：' + params[0].data
             } else if (params[0].componentSubType === 'custom') {
-              console.log(JSON.stringify(params))
-              return ' 时间段：' + params[0].value[1] + '-' + params[0].value[2] + ',' + params[0].value[0]
+              return params[0].value[1] + '-' + params[0].value[2] + ',' + params[0].value[0]
             }
           }
         },
@@ -626,8 +625,11 @@ export default {
           rotate: 0,
           splitLine: { show: false },
           interval: 60 * 1000,
-          min: '2021/03/17 01:04',
+          min: '2021/03/17 01:03',
           axisLabel: {
+            textStyle: {
+              align: 'left'
+            },
             interval: 0,
             formatter: function(value) {
               function datetimeFormat(longTypeDate) {
@@ -645,9 +647,9 @@ export default {
                 s = s < 10 ? ('0' + s) : s
                 return y + '/' + MM + '/' + d + ' ' + h + ':' + m
               }
-              if (datetimeFormat(value) === '2021/03/17 02:00') {
+              if (datetimeFormat(value) === '2021/03/17 01:04') {
                 console.log('入睡')
-                return '{' + value + '| }'
+                return '{ABC|} 02:00'
               }
               return ''
             },
@@ -655,10 +657,11 @@ export default {
               // 这里的rich，下面有解释
               'ABC': {
               // 这里的warnValue对应上面的标签名
-                height: 10,
-                align: 'center',
+                width: 1,
+                height: 30,
+                left: '500px',
                 backgroundColor: {
-                  image: 'http://file.17fanju.com/Upload/product/fd73f4a233fc4ea3a8c77b2ece7ba063_S.jpg' // 这个warnImg是上面定义的图片var warnImg = "img/warn.png";
+                  image: 'http://file.17fanju.com/Upload/common/spl1.png' // 这个warnImg是上面定义的图片var warnImg = "img/warn.png";
                 }
               }
             }
