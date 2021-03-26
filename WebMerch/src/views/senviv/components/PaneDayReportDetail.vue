@@ -556,6 +556,7 @@ export default {
 
         var var3
         var color = ''
+        var name = ''
         if (type === 0) {
           var3 = 'W'
           color = '#d8edff'
@@ -579,152 +580,18 @@ export default {
         my_xAxis.push(this.datetimeFormat(var1))
         my_xAxis.push(this.datetimeFormat(var2))
 
-        my_xAxis_data.push({ itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
+        my_xAxis_data.push({ name: '睡眠', itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
       }
 
-      // my_xAxis=['03-17 01:04:16','']
-      // console.log(JSON.stringify(my_xAxis))
-      // console.log(JSON.stringify(my_xAxis_data))
-
       var myChart = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
-      // 指定图表的配置项和数据
-
-      // var option = {
-      //   // Make gradient line here
-      //   grid: [{
-      //     show: false,
-      //     borderWidth: 1
-      //     // borderColor: '#FF0000' // 网格的边框颜色
-      //   }],
-      //   // 视觉映射组件，用于进行『视觉编码』
-      //   visualMap: [{
-      //     show: false, // 是否显示 visualMap-piecewise 组件。如果设置为 false，不会显示，但是数据映射的功能还存在。
-      //     type: 'continuous', // 定义为连续型 visualMap
-      //     seriesIndex: 0, // 指定取哪个系列的数据，即哪个系列的 series.data。默认取所有系列
-      //     min: 0, // 指定 visualMapPiecewise 组件的最小值。
-      //     max: 400
-      //   }],
-      //   title: [{
-      //     left: 'center',
-      //     text: 'Gradient along the y axis'
-      //   }],
-      //   // 提示框组件
-      //   tooltip: {
-      //     trigger: 'axis' // 触发类型。坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用/none什么都不触发
-      //   },
-      //   xAxis: [{
-      //     data: my_xAxis,
-      //     show: true // 是否显示x轴
-      //   },
-      //   {
-      //     data: my_xAxis,
-      //     show: true, // 是否显示x轴
-      //     axisTick: {
-      //       alignWithLabel: true
-      //     },
-      //     axisLabel: {
-      //       showMaxLabel: true
-      //     }
-      //   }],
-      //   yAxis: [{
-      //     nameTextStyle: { // 坐标轴名称的文字样式。
-      //       color: '#63B8FF',
-      //       fontWeight: 'bold', // 坐标轴名称文字字体的粗细
-      //       fontSize: 15
-      //     },
-      //     name: '心率次数/bmp',
-      //     splitLine: {
-      //       show: true, // x轴、y轴显示网格线,坐标轴在 grid 区域中的分隔线
-      //       lineStyle: {
-      //         // 使用深浅的间隔色--分隔线颜色，可以设置成单个颜色。也可以设置成颜色数组，分隔线会按数组中颜色的顺序依次循环设置颜色。
-      //         color: ['#4F5258', '#30394F']
-      //       }
-      //     }
-      //   }
-      //   ],
-      //   // 系列列表。每个系列通过 type 决定自己的图表类型
-      //   series: [{
-      //     type: 'line', // 线条
-      //     showSymbol: false, // 是否显示 symbol符号, 如果 false 则只有在 tooltip hover 的时候显示。
-      //     data: valueList,
-      //     lineStyle: { color: '#BA3945' }, // 线条样式
-      //     markPoint: { // 图表标注
-      //       data: [
-      //         {
-      //           type: 'max',
-      //           name: '最高心率',
-      //           label: {
-      //             color: '#CCCCCC',
-      //             show: true
-      //           }
-      //         },
-      //         {
-      //           type: 'min',
-      //           name: '最小心率',
-      //           label: {
-      //             color: '#CCCCCC',
-      //             show: true
-      //           }
-      //         }
-      //       ],
-      //       // symbol: 'none', // 标记的图形。circle-圆形,rect-方形
-      //       label: { // 标注的文本
-      //         show: false
-      //       },
-      //       itemStyle: {
-      //         color: '#081944', // 图形的颜色--设置这个是为了隐藏掉图标
-      //         opacity: 1 // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。
-      //       }
-      //     }
-      //   },
-
-      //   {
-      //     type: 'line', // 线条
-      //     showSymbol: false, // 是否显示 symbol符号, 如果 false 则只有在 tooltip hover 的时候显示。
-      //     data: valueList2,
-      //     lineStyle: { color: '#BA3945' }, // 线条样式
-      //     markPoint: { // 图表标注
-      //       data: [
-      //         {
-      //           type: 'max',
-      //           name: '最高心率',
-      //           label: {
-      //             color: '#CCCCCC',
-      //             show: true
-      //           }
-      //         },
-      //         {
-      //           type: 'min',
-      //           name: '最小心率',
-      //           label: {
-      //             color: '#CCCCCC',
-      //             show: true
-      //           }
-      //         }
-      //       ],
-      //       // symbol: 'none', // 标记的图形。circle-圆形,rect-方形
-      //       label: { // 标注的文本
-      //         show: true
-      //       },
-      //       itemStyle: {
-      //         color: '#081944', // 图形的颜色--设置这个是为了隐藏掉图标
-      //         opacity: 1 // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。
-      //       }
-      //     }
-      //   }
-      //   ]
-      // }
 
       var option = {
         grid: [{
-
           bottom: '50%'
 
         }, {
-
           top: '50%'
         }, {
-
           show: false,
           borderWidth: 1,
           borderColor: '#FF0000'
@@ -734,27 +601,7 @@ export default {
           text: ''
         }],
         legend: {
-          show: true,
-          data: [
-            {
-              name: '蒸发量',
-              textStyle: {
-                fontSize: 12,
-                fontWeight: 'bolder',
-                color: '#cccccc'
-              },
-              icon: 'stack'
-            },
-            {
-              name: '降水量',
-              textStyle: {
-                fontSize: 12,
-                fontWeight: 'bolder',
-                color: '#df3434'
-              },
-              icon: 'pie'
-            }
-          ]
+          data: ['呼吸', '心率', 'N3', 'N2', 'N1', 'R', 'W', 'O']
         },
         tooltip: {
           trigger: 'axis',
@@ -776,17 +623,12 @@ export default {
             show: false
           },
           type: 'time',
-          rotate: 40,
+          rotate: 0,
           splitLine: { show: false },
           interval: 60 * 1000,
           min: '2021/03/17 01:04',
           axisLabel: {
             interval: 0,
-            rotate: 15,
-            textStyle: {
-              color: '#000',
-              fontSize: 10
-            },
             formatter: function(value) {
               function datetimeFormat(longTypeDate) {
                 const date = new Date(longTypeDate)
@@ -803,11 +645,22 @@ export default {
                 s = s < 10 ? ('0' + s) : s
                 return y + '/' + MM + '/' + d + ' ' + h + ':' + m
               }
-              if (datetimeFormat(value) === '2021/03/17 01:04') {
-                console.log('xxxxxxxxxxxxxxxxx')
-                return ''
+              if (datetimeFormat(value) === '2021/03/17 02:00') {
+                console.log('入睡')
+                return '{' + value + '| }'
               }
               return ''
+            },
+            rich: {
+              // 这里的rich，下面有解释
+              'ABC': {
+              // 这里的warnValue对应上面的标签名
+                height: 10,
+                align: 'center',
+                backgroundColor: {
+                  image: 'http://file.17fanju.com/Upload/product/fd73f4a233fc4ea3a8c77b2ece7ba063_S.jpg' // 这个warnImg是上面定义的图片var warnImg = "img/warn.png";
+                }
+              }
             }
 
           }
@@ -827,256 +680,169 @@ export default {
           gridIndex: 1,
           data: ['N3', 'N2', 'N1', 'R', 'W', 'O']
         }],
-        series: [{
-          type: 'line',
-          showSymbol: false,
-          data: valueList,
-          itemStyle: {
+        series: [
+          { name: 'N3', type: 'bar', data: [], itemStyle: {
             normal: {
-              color: '#2f2ffa',
+              color: '#4c6ce5',
               lineStyle: {
-                color: '#2f2ffa'
+                color: '#4c6ce5'
               }
             }
-          },
-          markPoint: {
-            data: [
-              {
-                type: 'max',
-                name: '最高呼吸',
-                label: {
-                  color: '#2f2ffa',
-                  show: true
-                }
-              },
-              {
-                type: 'min',
-                name: '最低呼吸',
-                label: {
-                  color: '#2f2ffa',
-                  show: true
-                }
-              }
-            ],
-            label: {
-              show: false
-            },
-            itemStyle: {
-              color: '#6a6afc',
-              opacity: 1
-            }
-          }
-        }, {
-          type: 'line',
-          showSymbol: false,
-          data: valueList2,
-          itemStyle: {
+          }},
+          { name: 'N2', type: 'bar', data: [], itemStyle: {
             normal: {
-              color: '#ffa500',
+              color: '#a9ddfd',
               lineStyle: {
-                color: '#ffa500'
+                color: '#a9ddfd'
               }
             }
-          },
-          markPoint: {
-            data: [
-              {
-                type: 'max',
-                name: '最大心率',
-                label: {
-                  color: '#ffa500',
-                  show: true
-                }
-              },
-              {
-                type: 'min',
-                name: '最小心率',
-                label: {
-                  color: '#ffa500',
-                  show: true
-                }
+          }},
+          { name: 'N1', type: 'bar', data: [], itemStyle: {
+            normal: {
+              color: '#a9ddfd',
+              lineStyle: {
+                color: '#a9ddfd'
               }
-            ],
-            label: {
-              show: false
-            },
+            }
+          }},
+          { name: 'R', type: 'bar', data: [], itemStyle: {
+            normal: {
+              color: '#e6affd',
+              lineStyle: {
+                color: '#e6affd'
+              }
+            }
+          }},
+          { name: 'W', type: 'bar', data: [], itemStyle: {
+            normal: {
+              color: '#d8edff',
+              lineStyle: {
+                color: '#d8edff'
+              }
+            }
+          }},
+          { name: 'O', type: 'bar', data: [], itemStyle: {
+            normal: {
+              color: '#ffdf24',
+              lineStyle: {
+                color: '#ffdf24'
+              }
+            }
+          }},
+          {
+            type: 'line',
+            name: '呼吸',
+            showSymbol: false,
+            data: valueList,
             itemStyle: {
-              color: '#081944',
-              opacity: 1
+              normal: {
+                color: '#2f2ffa',
+                lineStyle: {
+                  color: '#2f2ffa'
+                }
+              }
+            },
+            markPoint: {
+              data: [
+                {
+                  type: 'max',
+                  name: '最高呼吸',
+                  label: {
+                    color: '#2f2ffa',
+                    show: true
+                  }
+                },
+                {
+                  type: 'min',
+                  name: '最低呼吸',
+                  label: {
+                    color: '#2f2ffa',
+                    show: true
+                  }
+                }
+              ],
+              label: {
+                show: false
+              },
+              itemStyle: {
+                color: '#6a6afc',
+                opacity: 1
+              }
             }
-          }
-        },
-        {
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          type: 'custom',
-          renderItem: function(params, api) {
-            var categoryIndex = api.value(0)
-            var start = api.coord([api.value(1), categoryIndex])
-            var end = api.coord([api.value(2), categoryIndex])
-            var height = 12
-            return {
-              type: 'rect',
-              shape: echarts.graphic.clipRectByRect({
-                x: start[0],
-                y: start[1] - height / 2,
-                width: end[0] - start[0],
-                height: height
-              }, {
-                x: params.coordSys.x,
-                y: params.coordSys.y,
-                width: params.coordSys.width,
-                height: params.coordSys.height
-              }),
-              style: api.style()
+          }, {
+            name: '心率',
+            type: 'line',
+            showSymbol: false,
+            data: valueList2,
+            itemStyle: {
+              normal: {
+                color: '#ffa500',
+                lineStyle: {
+                  color: '#ffa500'
+                }
+              }
+            },
+            markPoint: {
+              data: [
+                {
+                  type: 'max',
+                  name: '最大心率',
+                  label: {
+                    color: '#ffa500',
+                    show: true
+                  }
+                },
+                {
+                  type: 'min',
+                  name: '最小心率',
+                  label: {
+                    color: '#ffa500',
+                    show: true
+                  }
+                }
+              ],
+              label: {
+                show: false
+              },
+              itemStyle: {
+                color: '#081944',
+                opacity: 1
+              }
             }
           },
-          encode: {
-            x: [1, 2],
-            y: 0
-          },
-          data: my_xAxis_data
-        }]
+          {
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            type: 'custom',
+            renderItem: function(params, api) {
+              var categoryIndex = api.value(0)
+              var start = api.coord([api.value(1), categoryIndex])
+              var end = api.coord([api.value(2), categoryIndex])
+              var height = 12
+              return {
+                type: 'rect',
+                shape: echarts.graphic.clipRectByRect({
+                  x: start[0],
+                  y: start[1] - height / 2,
+                  width: end[0] - start[0],
+                  height: height
+                }, {
+                  x: params.coordSys.x,
+                  y: params.coordSys.y,
+                  width: params.coordSys.width,
+                  height: params.coordSys.height
+                }),
+                style: api.style()
+              }
+            },
+            encode: {
+              x: [1, 2],
+              y: 0
+            },
+            data: my_xAxis_data
+          }]
       }
 
-      // var colors = ['#2f4554', '#d48265', '#c23531'] // 三种状态的颜色
-      // var state = ['深睡', '浅睡', '清醒'] // 三种状态
-
-      // // echart配置
-      // option = {
-      //   grid: [{
-      //     show: false,
-      //     borderWidth: 1,
-      //     borderColor: '#FF0000' // 网格的边框颜色
-      //   }],
-      //   color: colors,
-      //   tooltip: {// 提示框
-      //     formatter: function(params) {
-      //       return params.name + ':' + params.value[1] + '~' + params.value[2]
-      //     }// 数据的值
-      //   },
-      //   legend: {// 图例
-      //     data: state,
-      //     bottom: '1%',
-      //     selectedMode: false, // 图例设为不可点击
-      //     textStyle: {
-      //       color: '#000'
-      //     }
-      //   },
-      //   xAxis: {
-
-      //     axisTick: {
-      //       show: false
-      //     },
-      //     type: 'time',
-      //     rotate: 40,
-      //     splitLine: { show: false },
-      //     interval: 60 * 1000, // 以一个小时递增
-      //     min: '2009/5/31 23:28', // 将data里最小时间的整点时间设为min,否则min会以data里面的min为开始进行整点递增,
-      //     axisLabel: {
-      //       formatter: function(value) {
-      //         // var date = new Date(value)
-
-      //         function datetimeFormat(longTypeDate) {
-      //           const date = new Date(longTypeDate)
-      //           const y = date.getFullYear()
-      //           let MM = date.getMonth() + 1
-      //           MM = MM < 10 ? ('0' + MM) : MM
-      //           let d = date.getDate()
-      //           d = d < 10 ? ('0' + d) : d
-      //           let h = date.getHours()
-      //           h = h < 10 ? ('0' + h) : h
-      //           let m = date.getMinutes()
-      //           m = m < 10 ? ('0' + m) : m
-      //           let s = date.getSeconds()
-      //           s = s < 10 ? ('0' + s) : s
-      //           return y + '/' + MM + '/' + d + ' ' + h + ':' + m
-      //         }
-
-      //         var da = datetimeFormat(value)
-      //         console.log('da:' + da)
-      //         if (datetimeFormat(value) === '2009/06/01 08:41') { return '入睡' }
-      //         console.log(value)
-      //         return ''
-      //       }
-
-      //     }
-      //   },
-      //   yAxis: [{
-
-      //     data: ['深睡', '浅睡', '清醒']
-      //   }],
-      //   series: [
-      //     {
-      //       type: 'custom',
-      //       renderItem: function(params, api) { // 开发者自定义的图形元素渲染逻辑，是通过书写 renderItem 函数实现的
-      //         var categoryIndex = api.value(0)// 这里使用 api.value(0) 取出当前 dataItem 中第一个维度的数值。
-      //         var start = api.coord([api.value(1), categoryIndex]) // 这里使用 api.coord(...) 将数值在当前坐标系中转换成为屏幕上的点的像素值。
-      //         var end = api.coord([api.value(2), categoryIndex])
-      //         var height = api.size([0, 1])[1]
-
-      //         return {
-      //           type: 'rect', // 表示这个图形元素是矩形。还可以是 'circle', 'sector', 'polygon' 等等。
-      //           shape: echarts.graphic.clipRectByRect({ // 矩形的位置和大小。
-      //             x: start[0],
-      //             y: start[1] - height / 2,
-      //             width: end[0] - start[0],
-      //             height: height
-      //           }, { // 当前坐标系的包围盒。
-      //             x: params.coordSys.x,
-      //             y: params.coordSys.y,
-      //             width: params.coordSys.width,
-      //             height: params.coordSys.height
-      //           }),
-      //           style: api.style()
-      //         }
-      //       },
-      //       encode: {
-      //         x: [1, 2], // data 中『维度1』和『维度2』对应到 X 轴
-      //         y: 0// data 中『维度0』对应到 Y 轴
-      //       },
-      //       data: [ // 维度0 维度1 维度2
-      //         {
-      //           itemStyle: { normal: { color: colors[0] }}, // 条形颜色
-      //           name: '深睡',
-      //           value: [0, '2009/5/31 23:28', '2009/6/1 5:00']// 0,1,2代表y轴的索引，后两位代表x轴数据开始和结束
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[0] }},
-      //           name: '深睡',
-      //           value: [0, '2009/6/1 6:13', '2009/6/1 8:22']
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[1] }},
-      //           name: '浅睡',
-      //           value: [1, '2009/6/1 5:00', '2009/6/1 6:13']
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[1] }},
-      //           name: '浅睡',
-      //           value: [1, '2009/6/1 8:22', '2009/6/1 9:10']
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[1] }},
-      //           name: '浅睡',
-      //           value: [1, '2009/6/1 12:47', '2009/6/1 14:52']
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[2] }},
-      //           name: '清醒',
-      //           value: [2, '2009/6/1 9:10', '2009/6/1 12:47']
-      //         },
-      //         {
-      //           itemStyle: { normal: { color: colors[2] }},
-      //           name: '清醒',
-      //           value: [2, '2009/6/1 14:52', '2009/6/1 17:00']
-      //         }
-      //       ]
-      //     }
-      //   ]
-      // }
-
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option)
     }
   }
