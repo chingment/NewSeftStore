@@ -772,8 +772,10 @@ namespace LocalS.Service.Api.Merch
                 {
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
                     TotalScore = d_Rpt.TotalScore,
-                    SmRssj = d_Rpt.SmRssj.ToUnifiedFormatDateTime(),
-                    SmQxsj = d_Rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
+                    SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),
+                    SmQxsj = d_Rpt.SmQxsj.ToString("yyyy/MM/dd HH:mm"),
+                    SmLcsj = d_Rpt.SmLcsj.ToString("yyyy/MM/dd HH:mm"),
                     SmPie = new
                     {
                         Data = new List<object>() {
@@ -883,8 +885,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     SmTdcs = SvDataJdUtil.GetSmTdcs(d_Rpt.SmTdcs),
                     //平均体动时长
                     d_Rpt.SmPjtdsc,
-                    d_Rpt.SmLcsj,
-                    d_Rpt.SmScsj,
                     SmPoint = d_Rpt.SmPoint.ToJsonObject<object>(),
                     XlPoint = d_Rpt.XlPoint.ToJsonObject<object>(),
                     HxPoint = d_Rpt.HxPoint.ToJsonObject<object>()
