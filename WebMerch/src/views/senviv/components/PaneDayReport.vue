@@ -430,7 +430,7 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="1000px" custom-class="user-detail" append-to-body>
+    <el-dialog v-if="dialogIsShowByDetail" title="健康报告（日）" :visible.sync="dialogIsShowByDetail" width="1000px" custom-class="user-detail" append-to-body>
       <pane-day-report-detail :report-id="selectReportId" />
     </el-dialog>
 

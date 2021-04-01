@@ -36,7 +36,7 @@ namespace LocalS.Entity
         public decimal SmTdcs { get; set; }
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }
-        public bool IsVisit { get; set; }
+        public int VisitCount { get; set; }
         public E_SenvivHealthMonthStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
