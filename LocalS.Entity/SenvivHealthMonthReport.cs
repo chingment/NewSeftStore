@@ -30,7 +30,6 @@ namespace LocalS.Entity
         public decimal SmQdsmsc { get; set; }
         public decimal SmSdsmsc { get; set; }
         public decimal SmRemsmsc { get; set; }
-
         public decimal SmDtqcs { get; set; }
         public string SmDtqcsPt { get; set; }
         public decimal HrvXzznl { get; set; }
