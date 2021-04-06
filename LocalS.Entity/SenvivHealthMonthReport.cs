@@ -26,18 +26,29 @@ namespace LocalS.Entity
         public int DayCount { get; set; }
         public decimal TotalScore { get; set; }
         public decimal SmSmsc { get; set; }
+        public string SmSmscPt { get; set; }
         public decimal SmQdsmsc { get; set; }
         public decimal SmSdsmsc { get; set; }
         public decimal SmRemsmsc { get; set; }
+
+        public decimal SmDtqcs { get; set; }
+        public string SmDtqcsPt { get; set; }
         public decimal HrvXzznl { get; set; }
+        public string HrvXzznlPt { get; set; }
         public decimal HrvPjhx { get; set; }
         public decimal HrvPjxl { get; set; }
         public decimal HrvPjahizs { get; set; }
+        public decimal Hxztcs { get; set; }
+        public string HxztcsPt { get; set; }
         public decimal SmTdcs { get; set; }
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }
         public int VisitCount { get; set; }
         public E_SenvivHealthMonthStatus Status { get; set; }
+        public string SugByYd { get; set; }
+        public string SugByYy { get; set; }
+        public string SugBySm { get; set; }
+        public string SugByQxyl { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }
