@@ -323,8 +323,6 @@ namespace LocalS.Service.Api.Merch
             {
                 var pred = PredicateExtensionses.False<SenvivUser>();
                 pred = pred.Or(m => m.Perplex.Contains(rup.Chronic));
-
-                //query = query.Where(m => m.Perplex.Contains(rup.Chronic));
                 query = query.Where(pred);
             }
 
@@ -512,8 +510,8 @@ namespace LocalS.Service.Api.Merch
                              u.HxCqjzhx,
                              u.HxDcpjhx,
                              u.HxZtcs,
-                             u.HxZtAhizs,
-                             u.HxZtPjsc,
+                             u.HxZtahizs,
+                             u.HxZtpjsc,
                              u.SmSmsc,
                              u.SmSdsmsc,
                              u.SmQdsmsc,
@@ -604,7 +602,7 @@ namespace LocalS.Service.Api.Merch
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtAhizs = SvDataJdUtil.GetHxZtAhizs(rpt.HxZtAhizs),
+                    HxZtahizs = SvDataJdUtil.GetHxZtAhizs(rpt.HxZtahizs),
                     //睡眠时长
                     SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
@@ -627,7 +625,6 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
-
 
         public CustomJsonResult GetDayReportDetail(string operater, string merchId, string reportId)
         {
@@ -662,17 +659,17 @@ namespace LocalS.Service.Api.Merch
                              u.JbfxXljsl,
                              u.JbfxXlscfx,
                              u.HrvXzznl,
-                             u.HrvXzznlJzz,
+                             u.HrvXzznljzz,
                              u.HrvJgsjzlzs,
-                             u.HrvJgsjzlzsJzz,
+                             u.HrvJgsjzlzsjzz,
                              u.HrvMzsjzlzs,
-                             u.HrvMzsjzlzsJzz,
+                             u.HrvMzsjzlzsjzz,
                              u.HrvZzsjzlzs,
-                             u.HrvZzsjzlzsJzz,
+                             u.HrvZzsjzlzsjzz,
                              u.HrvHermzs,
-                             u.HrvHermzsJzz,
+                             u.HrvHermzsjzz,
                              u.HrvTwjxgsszs,
-                             u.HrvTwjxgsszhJzz,
+                             u.HrvTwjxgsszhjzz,
                              //当次基准心率
                              u.XlDcjzxl,
                              //长期基准心率
@@ -712,9 +709,9 @@ namespace LocalS.Service.Api.Merch
                              //呼吸暂停次数
                              u.HxZtcs,
                              //呼吸暂停AHI指数
-                             u.HxZtAhizs,
+                             u.HxZtahizs,
                              //呼吸暂停平均时长
-                             u.HxZtPjsc,
+                             u.HxZtpjsc,
                              u.SmScsj,
                              u.SmLcsj,
                              u.SmZcsc,
@@ -799,27 +796,27 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //心脏总能量
                     HrvXzznl = SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
                     //心脏总能量基准值
-                    d_Rpt.HrvXzznlJzz,
+                    d_Rpt.HrvXzznljzz,
                     //交感神经张力指数
                     HrvJgsjzlzs = SvDataJdUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs),
                     //交感神经张力指数基准值
-                    d_Rpt.HrvJgsjzlzsJzz,
+                    d_Rpt.HrvJgsjzlzsjzz,
                     //迷走神经张力指数
                     HrvMzsjzlzs = SvDataJdUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs),
                     //迷走神经张力指数基准值
-                    d_Rpt.HrvMzsjzlzsJzz,
+                    d_Rpt.HrvMzsjzlzsjzz,
                     //自主神经平衡指数
                     HrvZzsjzlzs = SvDataJdUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs),
                     //自主神经平衡指数基准值
-                    d_Rpt.HrvZzsjzlzsJzz,
+                    d_Rpt.HrvZzsjzlzsjzz,
                     //荷尔蒙指数
                     HrvHermzs = SvDataJdUtil.GetHrvHermzs(d_Rpt.HrvHermzs),
                     //荷尔蒙指数基准值
-                    d_Rpt.HrvHermzsJzz,
+                    d_Rpt.HrvHermzsjzz,
                     //体温及血管舒缩指数
                     HrvTwjxgsszs = SvDataJdUtil.GetHrvTwjxgsszh(d_Rpt.HrvTwjxgsszs),
                     //体温及血管舒缩指数基准值
-                    d_Rpt.HrvTwjxgsszhJzz,
+                    d_Rpt.HrvTwjxgsszhjzz,
                     //当次基准心率
                     XlDcjzxl = SvDataJdUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl),
                     //长期基准心率
@@ -859,9 +856,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(d_Rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtAhizs = SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtAhizs),
+                    HxZtahizs = SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtahizs),
                     //呼吸暂停平均时长
-                    d_Rpt.HxZtPjsc,
+                    d_Rpt.HxZtpjsc,
                     d_Rpt.SmZcsc,
                     //睡眠时长
                     SmSmsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc),
@@ -898,5 +895,93 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
 
         }
+
+        public CustomJsonResult GetMonthReports(string operater, string merchId, RupSenvivGetDayReports rup)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
+
+            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+
+            var deptIds = d_Merch.SenvivDepts.Split(',');
+
+            var query = (from u in CurrentDb.SenvivHealthMonthReport
+
+                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+
+                         select new
+                         {
+                             u.Id,
+                             tt.Nick,
+                             tt.Sex,
+                             tt.Account,
+                             tt.Birthday,
+                             tt.HeadImgurl,
+                             u.TotalScore,
+                             u.HealthDate,
+                             u.SmSmsc,
+                             u.SmQdsmsc,
+                             u.SmSdsmsc,
+                             u.SmRemsmsc,
+                             u.SmDtqcs,
+                             u.HrvXzznl,
+                             u.HxPjhx,
+                             u.XlPjxl,
+                             u.HxZtpjahizs,
+                             u.HxZtcs,
+                             u.SmTdcs,
+                             u.IsBuild,
+                             u.IsSend,
+                             u.VisitCount,
+                             u.Status,
+                             u.SvUserId,
+                             u.CreateTime
+                         });
+
+            if (!string.IsNullOrEmpty(rup.Name))
+            {
+                query = query.Where(m => ((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
+            }
+
+
+            if (!string.IsNullOrEmpty(rup.UserId))
+            {
+                query = query.Where(m => m.SvUserId == rup.UserId);
+            }
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.HealthDate).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var rpt in list)
+            {
+                olist.Add(new
+                {
+                    Id = rpt.Id,
+                    SignName = GetSignName(rpt.Nick, rpt.Account),
+                    HeadImgurl = rpt.HeadImgurl,
+                    Sex = GetSexName(rpt.Sex),
+                    Age = GetAge(rpt.Birthday)
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+
+        }
+
     }
 }

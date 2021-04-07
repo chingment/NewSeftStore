@@ -122,9 +122,9 @@
         </tr>
         <tr>
           <td>AHI指数</td>
-          <td><span :style="{'color': rd.hxZtAhizs.color}">{{ rd.hxZtAhizs.value }}</span> </td>
-          <td><span :style="{'color': rd.hxZtAhizs.color}">{{ rd.hxZtAhizs.sign }}</span></td>
-          <td><span>{{ rd.hxZtAhizs.refRange }}</span></td>
+          <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span> </td>
+          <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.sign }}</span></td>
+          <td><span>{{ rd.hxZtahizs.refRange }}</span></td>
         </tr>
 
         <tr><td rowspan="9">HRV</td></tr>

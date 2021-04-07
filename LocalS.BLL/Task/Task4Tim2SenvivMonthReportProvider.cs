@@ -59,13 +59,13 @@ namespace LocalS.BLL.Task
 
                     d_MonthReport.HxPjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
                     d_MonthReport.XlPjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
-                    d_MonthReport.HxztPjAhizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtAhizs).Average().ToString());//
+                    d_MonthReport.HxZtpjahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
 
 
                     d_MonthReport.SmTdcs = Decimal.Parse(d_DayReports.Select(m => m.SmTdcs).Average().ToString());//
 
-                    d_MonthReport.Hxztcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
-                    d_MonthReport.HxztcsPt = hxztcsPt.ToJsonString();//
+                    d_MonthReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
+                    d_MonthReport.HxZtcsPt = hxztcsPt.ToJsonString();//
 
 
 

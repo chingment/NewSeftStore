@@ -93,9 +93,9 @@ namespace LocalS.Entity
         //呼吸暂停次数
         public int HxZtcs { get; set; }
         //呼吸暂停AHI指数
-        public decimal HxZtAhizs { get; set; }
+        public decimal HxZtahizs { get; set; }
         //呼吸暂停平均时长
-        public long HxZtPjsc { get; set; }
+        public long HxZtpjsc { get; set; }
         //心律失常风险
         public int JbfxXlscfx { get; set; }
         //心率减速力
@@ -103,27 +103,27 @@ namespace LocalS.Entity
         //心脏总能量
         public int HrvXzznl { get; set; }
         //心脏总能量基准值
-        public int HrvXzznlJzz { get; set; }
+        public int HrvXzznljzz { get; set; }
         //交感神经张力指数
         public int HrvJgsjzlzs { get; set; }
         //交感神经张力指数基准值
-        public int HrvJgsjzlzsJzz { get; set; }
+        public int HrvJgsjzlzsjzz { get; set; }
         //迷走神经张力指数
         public int HrvMzsjzlzs { get; set; }
         //迷走神经张力指数基准值
-        public int HrvMzsjzlzsJzz { get; set; }
+        public int HrvMzsjzlzsjzz { get; set; }
         //自主神经平衡指数
         public decimal HrvZzsjzlzs { get; set; }
         //自主神经平衡指数基准值
-        public decimal HrvZzsjzlzsJzz { get; set; }
+        public decimal HrvZzsjzlzsjzz { get; set; }
         //荷尔蒙指数
         public decimal HrvHermzs { get; set; }
         //荷尔蒙指数基准值
-        public decimal HrvHermzsJzz { get; set; }
+        public decimal HrvHermzsjzz { get; set; }
         //体温及血管舒缩指数
         public decimal HrvTwjxgsszs { get; set; }
         //体温及血管舒缩指数基准值
-        public decimal HrvTwjxgsszhJzz { get; set; }
+        public decimal HrvTwjxgsszhjzz { get; set; }
 
         //免疫力指数
         public decimal MylMylzs { get; set; }

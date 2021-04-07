@@ -36,9 +36,9 @@ namespace LocalS.Entity
         public string HrvXzznlPt { get; set; }
         public decimal HxPjhx { get; set; }
         public decimal XlPjxl { get; set; }
-        public decimal HxztPjAhizs { get; set; }
-        public decimal Hxztcs { get; set; }
-        public string HxztcsPt { get; set; }
+        public decimal HxZtpjahizs { get; set; }
+        public decimal HxZtcs { get; set; }
+        public string HxZtcsPt { get; set; }
         public decimal SmTdcs { get; set; }
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }

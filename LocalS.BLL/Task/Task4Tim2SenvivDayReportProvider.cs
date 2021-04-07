@@ -335,9 +335,9 @@ namespace LocalS.BLL.Task
                                 d_DayReport.HxGmsc = 0;//todo 
 
 
-                                d_DayReport.HxZtAhizs = hx.AHI;//AHI指数
+                                d_DayReport.HxZtahizs = hx.AHI;//AHI指数
                                 d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
-                                d_DayReport.HxZtPjsc = hx.AvgPause;//呼吸暂停平均时长
+                                d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
                             }
                             #endregion
 
@@ -347,17 +347,17 @@ namespace LocalS.BLL.Task
                             if (hrv != null)
                             {
                                 d_DayReport.HrvXzznl = hrv.HeartIndex;//心脏总能量
-                                d_DayReport.HrvXzznlJzz = hrv.BaseTP;//心脏总能量基准值
+                                d_DayReport.HrvXzznljzz = hrv.BaseTP;//心脏总能量基准值
                                 d_DayReport.HrvJgsjzlzs = hrv.LF;//交感神经张力指数
-                                d_DayReport.HrvJgsjzlzsJzz = hrv.BaseLF;// 交感神经张力基准值
+                                d_DayReport.HrvJgsjzlzsjzz = hrv.BaseLF;// 交感神经张力基准值
                                 d_DayReport.HrvMzsjzlzs = hrv.HF;//迷走神经张力指数
-                                d_DayReport.HrvMzsjzlzsJzz = hrv.BaseHF;//迷走神经张力基准值
+                                d_DayReport.HrvMzsjzlzsjzz = hrv.BaseHF;//迷走神经张力基准值
                                 d_DayReport.HrvZzsjzlzs = hrv.LFHF;//自主神经平衡
-                                d_DayReport.HrvZzsjzlzsJzz = hrv.BaseLFHF;//自主神经平衡基准值
+                                d_DayReport.HrvZzsjzlzsjzz = hrv.BaseLFHF;//自主神经平衡基准值
                                 d_DayReport.HrvHermzs = hrv.endocrine;//荷尔蒙指数
-                                d_DayReport.HrvHermzsJzz = 0;//荷尔蒙指数基准值
+                                d_DayReport.HrvHermzsjzz = 0;//荷尔蒙指数基准值
                                 d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
-                                d_DayReport.HrvTwjxgsszhJzz = 0;//体温及血管舒缩基准值
+                                d_DayReport.HrvTwjxgsszhjzz = 0;//体温及血管舒缩基准值
 
                                 d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
 

@@ -319,7 +319,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hxZtahizs" sign />
+            <dv-item :value="scope.row.hxZtAhizs" sign />
 
           </template>
         </el-table-column>
@@ -366,7 +366,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hxDcpj" sign />
+            <dv-item :value="scope.row.hxDcPj" sign />
 
           </template>
         </el-table-column>
