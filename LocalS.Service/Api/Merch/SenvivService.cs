@@ -510,7 +510,7 @@ namespace LocalS.Service.Api.Merch
                              u.XlDcpjxl,
                              u.HxDcjzhx,
                              u.HxCqjzhx,
-                             u.HxDcpj,
+                             u.HxDcpjhx,
                              u.HxZtcs,
                              u.HxZtAhizs,
                              u.HxZtPjsc,
@@ -600,7 +600,7 @@ namespace LocalS.Service.Api.Merch
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcpj = SvDataJdUtil.GetHxDcPj(rpt.HxDcpj),
+                    HxDcpj = SvDataJdUtil.GetHxDcPj(rpt.HxDcpjhx),
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
                     //呼吸暂停AHI指数
@@ -700,7 +700,7 @@ namespace LocalS.Service.Api.Merch
                              //呼吸长期基准呼吸
                              u.HxCqjzhx,
                              //呼吸平均呼吸
-                             u.HxDcpj,
+                             u.HxDcpjhx,
                              //呼吸最高呼吸
                              u.HxZghx,
                              //呼吸最低呼吸
@@ -847,7 +847,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcpj = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcpj),
+                    HxDcpjhx = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcpjhx),
                     //呼吸最高呼吸
                     d_Rpt.HxZghx,
                     //呼吸最低呼吸

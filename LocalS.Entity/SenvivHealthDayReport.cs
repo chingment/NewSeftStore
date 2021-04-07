@@ -81,7 +81,7 @@ namespace LocalS.Entity
         //呼吸长期基准呼吸
         public int HxCqjzhx { get; set; }
         //呼吸平均呼吸
-        public int HxDcpj { get; set; }
+        public int HxDcpjhx { get; set; }
         //呼吸最高呼吸
         public int HxZghx { get; set; }
         //呼吸最低呼吸

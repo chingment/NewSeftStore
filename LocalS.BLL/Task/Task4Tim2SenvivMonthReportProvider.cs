@@ -34,21 +34,41 @@ namespace LocalS.BLL.Task
 
                     var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id).ToList();
 
+                    List<object> smSmscPt = new List<object>();
+                    List<object> hrvXzznlPt = new List<object>();
+                    List<object> hxztcsPt = new List<object>();
+
+                    foreach (var d in d_DayReports)
+                    {
+                        smSmscPt.Add(new string[] { d.HealthDate.ToUnifiedFormatDate(), d.SmSmsc.ToString() });
+                    }
+
                     d_MonthReport = new SenvivHealthMonthReport();
                     d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
                     d_MonthReport.HealthDate = month;
                     d_MonthReport.SvUserId = d_User.Id;
                     d_MonthReport.DayCount = d_DayReports.Count;
                     d_MonthReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
-                    d_MonthReport.SmSmsc = 0;
-                    d_MonthReport.SmQdsmsc = 0;
-                    d_MonthReport.SmSdsmsc = 0;
-                    d_MonthReport.SmRemsmsc = 0;
-                    d_MonthReport.SmTdcs = 0;
-                    d_MonthReport.HrvXzznl = 0;
-                    d_MonthReport.HrvPjhx = 0;
-                    d_MonthReport.HrvPjxl = 0;
-                    d_MonthReport.HrvPjahizs = 0;
+                    d_MonthReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
+                    d_MonthReport.SmSmscPt = smSmscPt.ToJsonString();//
+                    d_MonthReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
+                    d_MonthReport.SmSdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmsc).Average().ToString());//
+                    d_MonthReport.SmRemsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSemsmsc).Average().ToString());//
+                    d_MonthReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
+                    d_MonthReport.HrvXzznlPt = hrvXzznlPt.ToJsonString();//
+
+                    d_MonthReport.HxPjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
+                    d_MonthReport.XlPjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
+                    d_MonthReport.HxztPjAhizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtAhizs).Average().ToString());//
+
+
+                    d_MonthReport.SmTdcs = Decimal.Parse(d_DayReports.Select(m => m.SmTdcs).Average().ToString());//
+
+                    d_MonthReport.Hxztcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
+                    d_MonthReport.HxztcsPt = hxztcsPt.ToJsonString();//
+
+
+
                     d_MonthReport.IsSend = false;
                     d_MonthReport.VisitCount = 0;
                     d_MonthReport.CreateTime = DateTime.Now;

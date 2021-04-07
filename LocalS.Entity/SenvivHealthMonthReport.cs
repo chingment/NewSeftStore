@@ -17,7 +17,7 @@ namespace LocalS.Entity
         SendFailure = 8
     }
 
-    [Table("SenvivHealthMonth")]
+    [Table("SenvivHealthMonthReport")]
     public class SenvivHealthMonthReport
     {
         public string Id { get; set; }
@@ -34,9 +34,9 @@ namespace LocalS.Entity
         public string SmDtqcsPt { get; set; }
         public decimal HrvXzznl { get; set; }
         public string HrvXzznlPt { get; set; }
-        public decimal HrvPjhx { get; set; }
-        public decimal HrvPjxl { get; set; }
-        public decimal HrvPjahizs { get; set; }
+        public decimal HxPjhx { get; set; }
+        public decimal XlPjxl { get; set; }
+        public decimal HxztPjAhizs { get; set; }
         public decimal Hxztcs { get; set; }
         public string HxztcsPt { get; set; }
         public decimal SmTdcs { get; set; }

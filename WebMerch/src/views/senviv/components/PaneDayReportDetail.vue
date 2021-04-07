@@ -110,9 +110,9 @@
         </tr>
         <tr>
           <td>平均呼吸</td>
-          <td><span :style="{'color': rd.hxDcpj.color}">{{ rd.hxDcpj.value }}</span> </td>
-          <td><span :style="{'color': rd.hxDcpj.color}">{{ rd.hxDcpj.sign }}</span></td>
-          <td><span>{{ rd.hxDcpj.refRange }}</span></td>
+          <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span> </td>
+          <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.sign }}</span></td>
+          <td><span>{{ rd.hxDcpjhx.refRange }}</span></td>
         </tr>
         <tr>
           <td>呼吸暂停次数</td>

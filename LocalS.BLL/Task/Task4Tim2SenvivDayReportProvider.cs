@@ -326,7 +326,7 @@ namespace LocalS.BLL.Task
                             #region ReportOfBreath
                             if (hx != null)
                             {
-                                d_DayReport.HxDcpj = hx.Average;//	平均呼吸
+                                d_DayReport.HxDcpjhx = hx.Average;//	平均呼吸
                                 d_DayReport.HxDcjzhx = hx.Benchmark;//基准呼吸值
                                 d_DayReport.HxZdhx = hx.BreathMin;//当夜最低呼吸率
                                 d_DayReport.HxZghx = hx.BreathMax;//当夜最高呼吸率
