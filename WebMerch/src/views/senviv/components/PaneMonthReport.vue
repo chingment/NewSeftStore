@@ -84,18 +84,6 @@
         label="总分"
         width="60"
       />
-      <el-table-column
-        prop="smRssj"
-        label="入睡时间"
-        align="center"
-        width="100"
-      />
-      <el-table-column
-        prop="smQxsj"
-        label="清醒时间"
-        align="center"
-        width="100"
-      />
       <el-table-column label="免疫力" align="center">
         <el-table-column
           label="免疫力指数"
