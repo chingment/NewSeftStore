@@ -473,7 +473,7 @@ namespace LocalS.Service.Api.Merch
 
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
-
+                         where u.IsValid == true
                          select new
                          {
                              u.Id,
@@ -515,7 +515,7 @@ namespace LocalS.Service.Api.Merch
                              u.SmSmsc,
                              u.SmSdsmsc,
                              u.SmQdsmsc,
-                             u.SmSemsmsc,
+                             u.SmRemsmsc,
                              u.SmTdcs,
                              u.SmSmzq,
                              u.SvUserId,
@@ -598,11 +598,11 @@ namespace LocalS.Service.Api.Merch
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcpj = SvDataJdUtil.GetHxDcPj(rpt.HxDcpjhx),
+                    HxDcpjhx = SvDataJdUtil.GetHxDcpjhx(rpt.HxDcpjhx),
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtahizs = SvDataJdUtil.GetHxZtAhizs(rpt.HxZtahizs),
+                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtahizs),
                     //睡眠时长
                     SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
@@ -610,7 +610,7 @@ namespace LocalS.Service.Api.Merch
                     //浅度睡眠时长
                     SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmSemsmsc = SvDataJdUtil.GetSmSemqsc(rpt.SmSemsmsc),
+                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
@@ -650,6 +650,7 @@ namespace LocalS.Service.Api.Merch
                              u.SmQxsj,
                              u.MylGrfx,
                              u.MylMylzs,
+
                              u.MbGxbgk,
                              u.MbGxygk,
                              u.MbTlbgk,
@@ -730,9 +731,9 @@ namespace LocalS.Service.Api.Merch
                              //浅度睡眠比例
                              u.SmQdsmbl,
                              //REM睡眠时长
-                             u.SmSemsmsc,
+                             u.SmRemsmsc,
                              //REM睡眠比例
-                             u.SmSemsmbl,
+                             u.SmRemsmbl,
                              //清醒时刻时长
                              u.SmQxsksc,
                              //清醒时刻比例
@@ -778,7 +779,7 @@ namespace LocalS.Service.Api.Merch
                         Data = new List<object>() {
 new {  Name = "浅度", Value = d_Rpt.SmQdsmbl},
 new {  Name = "深度", Value = d_Rpt.SmSdsmbl},
-new {  Name = "REM", Value = d_Rpt.SmSemsmbl},
+new {  Name = "REM", Value = d_Rpt.SmRemsmbl},
 new {  Name = "清醒", Value = d_Rpt.SmQxskbl},
 new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     },
@@ -844,7 +845,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸长期基准呼吸
                     HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcpjhx = SvDataJdUtil.GetHxDcPj(d_Rpt.HxDcpjhx),
+                    HxDcpjhx = SvDataJdUtil.GetHxDcpjhx(d_Rpt.HxDcpjhx),
                     //呼吸最高呼吸
                     d_Rpt.HxZghx,
                     //呼吸最低呼吸
@@ -856,7 +857,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(d_Rpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtahizs = SvDataJdUtil.GetHxZtAhizs(d_Rpt.HxZtahizs),
+                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
                     //呼吸暂停平均时长
                     d_Rpt.HxZtpjsc,
                     d_Rpt.SmZcsc,
@@ -867,7 +868,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //浅度睡眠时长
                     SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(d_Rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmSemsmsc = SvDataJdUtil.GetSmSemqsc(d_Rpt.SmSemsmsc),
+                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(d_Rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(d_Rpt.SmSmzq),
                     //清醒时刻时长
@@ -971,7 +972,20 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     SignName = GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
                     Sex = GetSexName(rpt.Sex),
-                    Age = GetAge(rpt.Birthday)
+                    Age = GetAge(rpt.Birthday),
+                    rpt.TotalScore,
+                    rpt.HealthDate,
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
+                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
+                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
+                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
+                    rpt.SmDtqcs,
+                    HrvXzznl = SvDataJdUtil.GetHrvXzznl(rpt.HrvXzznl),
+                    HxPjhx = SvDataJdUtil.GetHxDcpjhx(rpt.HxPjhx),
+                    XlPjxl = SvDataJdUtil.GetXlDcpjxl(rpt.XlPjxl),
+                    HxZtpjahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtpjahizs),
+                    HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
                 });
             }
 

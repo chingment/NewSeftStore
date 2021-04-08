@@ -15,7 +15,7 @@ namespace LocalS.BLL
         public readonly static string CA_4 = "#0368b8";
         public readonly static string CA_5 = "#59c307";
 
-        public static decimal Covevt2Hour(long seconds)
+        public static decimal Covevt2Hour(decimal seconds)
         {
             decimal hour = seconds / 3600m;
 
@@ -240,7 +240,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetHxZtAhizs(decimal val)
+        public static SvDataJd GetHxZtahizs(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
@@ -264,7 +264,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSmsc(long val)
+        public static SvDataJd GetSmSmsc(decimal val)
         {
             var jd = new SvDataJd();
 
@@ -287,7 +287,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmQdsmsc(long val)
+        public static SvDataJd GetSmQdsmsc(decimal val)
         {
             var jd = new SvDataJd();
 
@@ -311,7 +311,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSdsmsc(long val)
+        public static SvDataJd GetSmSdsmsc(decimal val)
         {
             var jd = new SvDataJd();
 
@@ -334,7 +334,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSemqsc(long val)
+        public static SvDataJd GetSmRemsmsc(decimal val)
         {
             var jd = new SvDataJd();
 
@@ -379,7 +379,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmTdcs(long val)
+        public static SvDataJd GetSmTdcs(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
@@ -438,7 +438,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetXlDcpjxl(int val)
+        public static SvDataJd GetXlDcpjxl(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
@@ -502,7 +502,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetHxDcPj(int val)
+        public static SvDataJd GetHxDcpjhx(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
@@ -523,7 +523,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetHxZtcs(int val)
+        public static SvDataJd GetHxZtcs(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
@@ -541,7 +541,7 @@ namespace LocalS.BLL
         }
 
 
-        public static SvDataJd GetHrvXzznl(int val)
+        public static SvDataJd GetHrvXzznl(decimal val)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();

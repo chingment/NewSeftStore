@@ -4,15 +4,15 @@
     <div class="filter-container">
       <el-form ref="form" label-width="120px">
 
-        <el-form-item label="日期">
+        <el-form-item label="月份">
 
           <el-date-picker
             v-model="listQuery.healthDate"
-            type="daterange"
+            type="monthrange"
             range-separator="-"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            value-format="yyyy-MM"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
             style="width: 300px"
           />
 
@@ -48,7 +48,7 @@
 
       <el-table-column
         prop="healthDate"
-        label="日期"
+        label="月份"
         width="120"
         align="center"
         fixed
@@ -438,7 +438,7 @@
 </template>
 
 <script>
-import { getDayReports } from '@/api/senviv'
+import { getMonthReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneDayReportDetail from './PaneDayReportDetail.vue'
 import DvItem from './DvItem.vue'
@@ -493,7 +493,7 @@ export default {
       if (this.cacheQuery) {
         this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       }
-      getDayReports(this.listQuery).then(res => {
+      getMonthReports(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

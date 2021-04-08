@@ -21,7 +21,7 @@ namespace LocalS.Entity
         //入睡需时
         public long SmRsxs { get; set; }
         //入睡时刻
-        public DateTime SmRssj{ get; set; }
+        public DateTime SmRssj { get; set; }
         //清醒时刻
         public DateTime SmQxsj { get; set; }
         //深度睡眠时长
@@ -33,15 +33,15 @@ namespace LocalS.Entity
         //浅度睡眠比例
         public decimal SmQdsmbl { get; set; }
         //REM睡眠时长
-        public long SmSemsmsc { get; set; }
+        public long SmRemsmsc { get; set; }
         //REM睡眠比例
-        public decimal SmSemsmbl { get; set; }
+        public decimal SmRemsmbl { get; set; }
         //清醒时刻时长
         public long SmQxsksc { get; set; }
         //清醒时刻比例
-        public decimal SmQxskbl{ get; set; }
+        public decimal SmQxskbl { get; set; }
         //离真次数
-        public int SmLzcs{ get; set; }
+        public int SmLzcs { get; set; }
         //离真时长
         public long SmLzsc { get; set; }
 
@@ -131,7 +131,7 @@ namespace LocalS.Entity
         public decimal MylGrfx { get; set; }
 
         //高血压管控
-        public decimal MbGxygk{ get; set; }
+        public decimal MbGxygk { get; set; }
         //冠心病管控
         public decimal MbGxbgk { get; set; }
         //糖尿病管控
@@ -145,6 +145,7 @@ namespace LocalS.Entity
         public string XlPoint { get; set; }
         public string HxPoint { get; set; }
         public string SmPoint { get; set; }
+        public bool IsValid { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

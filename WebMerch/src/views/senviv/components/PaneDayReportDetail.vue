@@ -58,9 +58,9 @@
         </tr>
         <tr>
           <td>REM睡眠</td>
-          <td><span :style="{'color': rd.smSemsmsc.color}">{{ rd.smSemsmsc.value }}</span> </td>
-          <td><span :style="{'color': rd.smSemsmsc.color}">{{ rd.smSemsmsc.sign }}</span></td>
-          <td><span>{{ rd.smSemsmsc.refRange }}</span></td>
+          <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span> </td>
+          <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.sign }}</span></td>
+          <td><span>{{ rd.smRemsmsc.refRange }}</span></td>
         </tr>
         <tr>
           <td>睡眠周期</td>

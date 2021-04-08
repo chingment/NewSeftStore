@@ -394,13 +394,13 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="smSemsmsc"
+          prop="smRemsmsc"
           label="REM期时长"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.smSemsmsc" sign />
+            <dv-item :value="scope.row.smRemsmsc" sign />
 
           </template>
         </el-table-column>

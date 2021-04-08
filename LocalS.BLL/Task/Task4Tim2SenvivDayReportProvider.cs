@@ -389,8 +389,8 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmQdsmsc = sm.Shallow;//浅睡期时长
                                 d_DayReport.SmQdsmbl = sm.ShallowRatio;//浅睡期比例
 
-                                d_DayReport.SmSemsmsc = sm.Rem;//REM期时长
-                                d_DayReport.SmSemsmbl = sm.RemRatio;//REM期比例
+                                d_DayReport.SmRemsmsc = sm.Rem;//REM期时长
+                                d_DayReport.SmRemsmbl = sm.RemRatio;//REM期比例
 
                                 d_DayReport.SmQxsksc = sm.Sober;//REM期时长
                                 d_DayReport.SmQxskbl = sm.SoberRatio;//REM期比例
@@ -444,6 +444,12 @@ namespace LocalS.BLL.Task
 
                             d_DayReport.CreateTime = DateTime.Now;
                             d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
+
+                            if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                            {
+                                d_DayReport.IsValid = true;
+                            }
+
                             CurrentDb.SenvivHealthDayReport.Add(d_DayReport);
                             CurrentDb.SaveChanges();
                         }
