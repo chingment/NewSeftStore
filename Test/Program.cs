@@ -121,6 +121,25 @@ namespace Test
 
         static void Main(string[] args)
         {
+            List<string> smTags = new List<string>();
+
+            smTags.Add("A");
+            smTags.Add("A2");
+            smTags.Add("A3");
+            smTags.Add("AG");
+            smTags.Add("A2");
+
+            var quary = smTags
+            .GroupBy(s => s)
+            .Select(group => new
+            {
+                name = group.Key,
+                Count = group.Count()
+            });
+
+            //   var smTags_Count =( smTags.GroupBy(s => s).OrderByDescending(s => s.Count()).ToList();
+
+            string asss = quary.OrderByDescending(m => m.Count).ToJsonString();
 
             var SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(6906);
 

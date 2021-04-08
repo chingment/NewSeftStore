@@ -40,6 +40,8 @@ namespace LocalS.Entity
         public decimal HxZtcs { get; set; }
         public string HxZtcsPt { get; set; }
         public decimal SmTdcs { get; set; }
+
+        public string SmTags { get; set; }
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }
         public int VisitCount { get; set; }

@@ -49,6 +49,21 @@ namespace LocalS.BLL.Task
                                 hxZtcsPt.Add(new object[] { d.HealthDate.ToUnifiedFormatDate(), d.HxZtcs });
                             }
 
+                            var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
+                            List<string> smTags = new List<string>();
+                            foreach (var s in _smTags)
+                            {
+                                var arr = s.ToJsonObject<List<string>>();
+                                if (arr != null)
+                                {
+                                    smTags.AddRange(arr);
+                                }
+                            }
+
+                            var smTags_Count = smTags.GroupBy(s => s).OrderByDescending(s => s.Count()).ToList();
+
+                           // var a= from s in smTags group
+
                             d_MonthReport = new SenvivHealthMonthReport();
                             d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
                             d_MonthReport.HealthDate = month;
@@ -73,7 +88,7 @@ namespace LocalS.BLL.Task
                             d_MonthReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
                             d_MonthReport.HxZtcsPt = hxZtcsPt.ToJsonString();//
 
-
+                            d_MonthReport.SmTags = smTags_Count.ToJsonString();
 
                             d_MonthReport.IsSend = false;
                             d_MonthReport.VisitCount = 0;

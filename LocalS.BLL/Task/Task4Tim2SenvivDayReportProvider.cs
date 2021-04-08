@@ -205,73 +205,88 @@ namespace LocalS.BLL.Task
 
                                     foreach (var label in labels)
                                     {
-                                        SenvivHealthDayReportLabel d_Label = null;
+                                        //SenvivHealthDayReportLabel d_Label = null;
 
-                                        switch (label.TagName)
-                                        {
-                                            case "消化力差":
-                                                d_Label = new SenvivHealthDayReportLabel();
-                                                d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                                d_Label.DayReportId = d_DayReport.Id;
-                                                d_Label.SvUserId = d_DayReport.SvUserId;
-                                                d_Label.TypeCode = "Xhnl";
-                                                d_Label.TypeName = "消化力差";
-                                                d_Label.Explain = label.Explain;
-                                                d_Label.Suggest = label.suggest.ToJsonString();
-                                                d_Label.Level = label.level;
+                                        //switch (label.TagName)
+                                        //{
+                                        //    case "消化力差":
+                                        //        d_Label = new SenvivHealthDayReportLabel();
+                                        //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        //        d_Label.DayReportId = d_DayReport.Id;
+                                        //        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        //        d_Label.TypeCode = "Xhnl";
+                                        //        d_Label.TypeName = "消化力差";
+                                        //        d_Label.Explain = label.Explain;
+                                        //        d_Label.Suggest = label.suggest.ToJsonString();
+                                        //        d_Label.Level = label.level;
 
-                                                break;
-                                            case "睡眠不安":
+                                        //        break;
+                                        //    case "睡眠不安":
 
-                                                d_Label = new SenvivHealthDayReportLabel();
-                                                d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                                d_Label.DayReportId = d_DayReport.Id;
-                                                d_Label.SvUserId = d_DayReport.SvUserId;
-                                                d_Label.TypeCode = "Smba";
-                                                d_Label.TypeName = "睡眠不安";
-                                                d_Label.Explain = label.Explain;
-                                                d_Label.Suggest = label.suggest.ToJsonString();
-                                                d_Label.Level = label.level;
+                                        //        d_Label = new SenvivHealthDayReportLabel();
+                                        //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        //        d_Label.DayReportId = d_DayReport.Id;
+                                        //        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        //        d_Label.TypeCode = "Smba";
+                                        //        d_Label.TypeName = "睡眠不安";
+                                        //        d_Label.Explain = label.Explain;
+                                        //        d_Label.Suggest = label.suggest.ToJsonString();
+                                        //        d_Label.Level = label.level;
 
-                                                break;
-                                            case "易醒":
+                                        //        break;
+                                        //    case "易醒":
 
-                                                d_Label = new SenvivHealthDayReportLabel();
-                                                d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                                d_Label.DayReportId = d_DayReport.Id;
-                                                d_Label.SvUserId = d_DayReport.SvUserId;
-                                                d_Label.TypeCode = "Yx";
-                                                d_Label.TypeName = "易醒";
-                                                d_Label.Explain = label.Explain;
-                                                d_Label.Suggest = label.suggest.ToJsonString();
-                                                d_Label.Level = label.level;
+                                        //        d_Label = new SenvivHealthDayReportLabel();
+                                        //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        //        d_Label.DayReportId = d_DayReport.Id;
+                                        //        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        //        d_Label.TypeCode = "Yx";
+                                        //        d_Label.TypeName = "易醒";
+                                        //        d_Label.Explain = label.Explain;
+                                        //        d_Label.Suggest = label.suggest.ToJsonString();
+                                        //        d_Label.Level = label.level;
 
-                                                break;
-                                            case "较难入睡":
+                                        //        break;
+                                        //    case "较难入睡":
 
-                                                d_Label = new SenvivHealthDayReportLabel();
-                                                d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                                d_Label.DayReportId = d_DayReport.Id;
-                                                d_Label.SvUserId = d_DayReport.SvUserId;
-                                                d_Label.TypeCode = "Jxrs";
-                                                d_Label.TypeName = "较难入睡";
-                                                d_Label.Explain = label.Explain;
-                                                d_Label.Suggest = label.suggest.ToJsonString();
-                                                d_Label.Level = label.level;
+                                        //        d_Label = new SenvivHealthDayReportLabel();
+                                        //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        //        d_Label.DayReportId = d_DayReport.Id;
+                                        //        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        //        d_Label.TypeCode = "Jxrs";
+                                        //        d_Label.TypeName = "较难入睡";
+                                        //        d_Label.Explain = label.Explain;
+                                        //        d_Label.Suggest = label.suggest.ToJsonString();
+                                        //        d_Label.Level = label.level;
 
-                                                break;
-                                            default:
-                                                d_Label = null;
-                                                break;
+                                        //        break;
+                                        //    default:
+                                        //        d_Label = new SenvivHealthDayReportLabel();
+                                        //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        //        d_Label.DayReportId = d_DayReport.Id;
+                                        //        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        //        d_Label.TypeName = label.TagName;
+                                        //        d_Label.Explain = label.Explain;
+                                        //        d_Label.Suggest = label.suggest.ToJsonString();
+                                        //        d_Label.Level = label.level;
+                                        //        break;
 
-                                        }
+                                        //}
 
 
-                                        if (d_Label != null)
-                                        {
-                                            CurrentDb.SenvivHealthDayReportLabel.Add(d_Label);
-                                            CurrentDb.SaveChanges();
-                                        }
+                                        //if (d_Label != null)
+                                        //{
+                                        var d_Label = new SenvivHealthDayReportLabel();
+                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.SvUserId = d_DayReport.SvUserId;
+                                        d_Label.TypeName = label.TagName;
+                                        d_Label.Explain = label.Explain;
+                                        d_Label.Suggest = label.suggest.ToJsonString();
+                                        d_Label.Level = label.level;
+                                        CurrentDb.SenvivHealthDayReportLabel.Add(d_Label);
+                                        CurrentDb.SaveChanges();
+                                        //}
                                     }
 
                                     d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();

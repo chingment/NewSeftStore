@@ -360,13 +360,13 @@
 
         </el-table-column>
         <el-table-column
-          prop="hxDcPj"
+          prop="hxDcpjhx"
           label="平均呼吸"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hxDcpj" sign />
+            <dv-item :value="scope.row.hxDcpjhx" sign />
 
           </template>
         </el-table-column>
