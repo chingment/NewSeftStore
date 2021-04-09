@@ -51,7 +51,7 @@ namespace LocalS.BLL.Task
                                 }
                             }
 
-    
+
                             d_MonthReport = new SenvivHealthMonthReport();
                             d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
                             d_MonthReport.HealthDate = month;
@@ -86,7 +86,7 @@ namespace LocalS.BLL.Task
                             d_MonthReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
                             d_MonthReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
 
-                            d_MonthReport.DatePt = d_DayReports.Select(m => m.HealthDate).ToJsonString();//
+                            d_MonthReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
                             d_MonthReport.SmSmscPt = d_DayReports.Select(m => m.SmSmsc).ToJsonString();//
                             // d_MonthReport.SmDtqcsPt = d_DayReports.Select(m => m.SmDtqcs).ToJsonString();
                             d_MonthReport.XlDcjzxlPt = d_DayReports.Select(m => m.XlDcjzxl).ToJsonString();//

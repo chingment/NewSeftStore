@@ -121,6 +121,14 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            List<DateTime> smTags1 = new List<DateTime>();
+            smTags1.Add(DateTime.Now);
+            smTags1.Add(DateTime.Now);
+
+            string cccc = smTags1.Select(m => m.ToUnifiedFormatDate()).ToJsonString();//
+
+
             List<string> smTags = new List<string>();
 
             smTags.Add("A");
