@@ -301,13 +301,13 @@
       </el-table-column>
       <el-table-column label="呼吸暂停" align="center">
         <el-table-column
-          prop="hxZtAhizs"
+          prop="hxZtahizs"
           label="AHI指数"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hxZtAhizs" sign />
+            <dv-item :value="scope.row.hxZtahizs" sign />
 
           </template>
         </el-table-column>
@@ -348,13 +348,13 @@
 
         </el-table-column>
         <el-table-column
-          prop="hxDcPj"
+          prop="hxDcpjhx"
           label="平均呼吸"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.hxDcPj" sign />
+            <dv-item :value="scope.row.hxDcpjhx" sign />
 
           </template>
         </el-table-column>
@@ -382,13 +382,13 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="smSemsmsc"
+          prop="smRemsmsc"
           label="REM期时长"
           width="120"
           align="center"
         >
           <template slot-scope="scope">
-            <dv-item :value="scope.row.smSemsmsc" sign />
+            <dv-item :value="scope.row.smRemsmsc" sign />
 
           </template>
         </el-table-column>

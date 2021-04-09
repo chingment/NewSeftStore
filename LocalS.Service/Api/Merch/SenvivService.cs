@@ -924,16 +924,37 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              tt.HeadImgurl,
                              u.TotalScore,
                              u.HealthDate,
-                             u.SmSmsc,
-                             u.SmQdsmsc,
-                             u.SmSdsmsc,
-                             u.SmRemsmsc,
+                             u.MylGrfx,
+                             u.MylMylzs,
+                             u.MbGxbgk,
+                             u.MbGxygk,
+                             u.MbTlbgk,
+                             u.QxxlJlqx,
+                             u.QxxlKynl,
+                             u.QxxlQxyj,
+                             u.JbfxXljsl,
+                             u.JbfxXlscfx,
                              u.HrvXzznl,
-                             u.HxDcpjhx,
+                             u.HrvJgsjzlzs,
+                             u.HrvMzsjzlzs,
+                             u.HrvZzsjzlzs,
+                             u.HrvHermzs,
+                             u.HrvTwjxgsszs,
+                             u.XlDcjzxl,
+                             u.XlCqjzxl,
                              u.XlDcpjxl,
-                             u.HxZtahizs,
+                             u.HxDcjzhx,
+                             u.HxCqjzhx,
+                             u.HxDcpjhx,
                              u.HxZtcs,
+                             u.HxZtahizs,
+                             u.HxZtpjsc,
+                             u.SmSmsc,
+                             u.SmSdsmsc,
+                             u.SmQdsmsc,
+                             u.SmRemsmsc,
                              u.SmTdcs,
+                             u.SmSmzq,
                              u.IsBuild,
                              u.IsSend,
                              u.VisitCount,
@@ -974,18 +995,59 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     Age = GetAge(rpt.Birthday),
                     rpt.TotalScore,
                     rpt.HealthDate,
-                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
-                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
-                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
-                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
+                    MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
+                    MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylzs),
+                    MbGxbgk = SvDataJdUtil.GetMbGxbgk(rpt.MbGxbgk),
+                    MbGxygk = SvDataJdUtil.GetMbGxygk(rpt.MbGxygk),
+                    MbTlbgk = SvDataJdUtil.GetMbTlbgk(rpt.MbTlbgk),
+                    rpt.QxxlJlqx,
+                    QxxlKynl = SvDataJdUtil.GetQxxlKynl(rpt.QxxlKynl),
+                    rpt.QxxlQxyj,
+                    JbfxXlscfx = SvDataJdUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
+                    JbfxXljsl = SvDataJdUtil.GetJbfxXljsl(rpt.JbfxXljsl),
+                    //心脏总能量
                     HrvXzznl = SvDataJdUtil.GetHrvXzznl(rpt.HrvXzznl),
-                    HxDcpjhx = SvDataJdUtil.GetHxDcpjhx(rpt.HxDcpjhx),
+                    //交感神经张力指数
+                    HrvJgsjzlzs = SvDataJdUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
+                    //迷走神经张力指数
+                    HrvMzsjzlzs = SvDataJdUtil.GetHrvMzsjzlzs(rpt.HrvMzsjzlzs),
+                    //自主神经平衡指数
+                    HrvZzsjzlzs = SvDataJdUtil.GetHrvZzsjzlzs(rpt.HrvZzsjzlzs),
+                    //荷尔蒙指数
+                    HrvHermzs = SvDataJdUtil.GetHrvHermzs(rpt.HrvHermzs),
+                    //体温及血管舒缩指数
+                    HrvTwjxgsszs = SvDataJdUtil.GetHrvTwjxgsszh(rpt.HrvTwjxgsszs),
+                    //当次基准心率
+                    XlDcjzxl = SvDataJdUtil.GetXlDcjzxl(rpt.XlDcjzxl),
+                    //长期基准心率
+                    XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(rpt.XlCqjzxl),
+                    //当次平均心率
                     XlDcpjxl = SvDataJdUtil.GetXlDcpjxl(rpt.XlDcpjxl),
-                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtahizs),
+                    //呼吸当次基准呼吸
+                    HxDcjzhx = SvDataJdUtil.GetHxDcjzhx(rpt.HxDcjzhx),
+                    //呼吸长期基准呼吸
+                    HxCqjzhx = SvDataJdUtil.GetHxCqjzhx(rpt.HxCqjzhx),
+                    //呼吸平均呼吸
+                    HxDcpjhx = SvDataJdUtil.GetHxDcpjhx(rpt.HxDcpjhx),
+                    //呼吸暂停次数
                     HxZtcs = SvDataJdUtil.GetHxZtcs(rpt.HxZtcs),
+                    //呼吸暂停AHI指数
+                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtahizs),
+                    //睡眠时长
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
+                    //深度睡眠时长
+                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
+                    //浅度睡眠时长
+                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
+                    //REM睡眠时长
+                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
+                    //睡眠周期=
+                    SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
+                    //体动次数
                     SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
                 });
             }
+
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 

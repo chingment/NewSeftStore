@@ -59,6 +59,13 @@ namespace LocalS.BLL.Task
                             d_MonthReport.DayCount = d_DayReports.Count;
                             d_MonthReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
 
+                            d_MonthReport.MylGrfx = Decimal.Parse(d_DayReports.Select(m => m.MylGrfx).Average().ToString());//
+                            d_MonthReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
+                            d_MonthReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
+                            d_MonthReport.MbGxbgk = Decimal.Parse(d_DayReports.Select(m => m.MbGxbgk).Average().ToString());//
+                            d_MonthReport.MbGxygk = Decimal.Parse(d_DayReports.Select(m => m.MbGxygk).Average().ToString());//
+                            d_MonthReport.MbTlbgk = Decimal.Parse(d_DayReports.Select(m => m.MbTlbgk).Average().ToString());//
+
                             d_MonthReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
                             d_MonthReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
                             d_MonthReport.SmQdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmbl).Average().ToString());//
@@ -74,6 +81,7 @@ namespace LocalS.BLL.Task
                             d_MonthReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
                             d_MonthReport.HxDcpjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
                             d_MonthReport.HxDcjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcjzhx).Average().ToString());//
+                            d_MonthReport.HxCqjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxCqjzhx).Average().ToString());//
                             d_MonthReport.XlDcpjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
                             d_MonthReport.XlDcjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcjzxl).Average().ToString());//
                             d_MonthReport.HxZtahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
@@ -83,6 +91,9 @@ namespace LocalS.BLL.Task
                             d_MonthReport.HrvJgsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvJgsjzlzs).Average().ToString());//
                             d_MonthReport.HrvMzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvMzsjzlzs).Average().ToString());//
                             d_MonthReport.HrvZzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvZzsjzlzs).Average().ToString());//
+                            d_MonthReport.HrvHermzs = Decimal.Parse(d_DayReports.Select(m => m.HrvHermzs).Average().ToString());//
+                            d_MonthReport.HrvTwjxgsszs = Decimal.Parse(d_DayReports.Select(m => m.HrvTwjxgsszs).Average().ToString());//
+
                             d_MonthReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
                             d_MonthReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
 
