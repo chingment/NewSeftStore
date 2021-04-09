@@ -88,6 +88,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "QxxlQxyj";
                                                 d_Label.TypeName = "情绪应激";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -102,6 +103,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "QxxlKynl";
                                                 d_Label.TypeName = "抗压能力";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -116,6 +118,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "MylMylZs";
                                                 d_Label.TypeName = "免疫力指数";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -131,6 +134,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "MylGrfx";
                                                 d_Label.TypeName = "感染风险";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -146,6 +150,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "MbGxbgk";
                                                 d_Label.TypeName = "高血压管控";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -160,6 +165,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "MbTlbgk";
                                                 d_Label.TypeName = "糖尿病管控";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -176,6 +182,7 @@ namespace LocalS.BLL.Task
                                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                                 d_Label.TypeCode = "QxxlJlqx";
                                                 d_Label.TypeName = "焦虑情绪";
+                                                d_Label.TypeClass = "2";
                                                 d_Label.Explain = index.explain;
                                                 d_Label.Suggest = index.suggest.ToJsonString();
                                                 d_Label.Score = index.score;
@@ -284,6 +291,7 @@ namespace LocalS.BLL.Task
                                         d_Label.Explain = label.Explain;
                                         d_Label.Suggest = label.suggest.ToJsonString();
                                         d_Label.Level = label.level;
+                                        d_Label.TypeClass = "1";
                                         CurrentDb.SenvivHealthDayReportLabel.Add(d_Label);
                                         CurrentDb.SaveChanges();
                                         //}

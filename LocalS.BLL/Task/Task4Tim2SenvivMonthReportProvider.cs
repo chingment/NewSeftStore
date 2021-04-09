@@ -38,18 +38,9 @@ namespace LocalS.BLL.Task
                         var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true).ToList();
                         if (d_DayReports.Count > 0)
                         {
-                            List<object> smSmscPt = new List<object>();
-                            List<object> hrvXzznlPt = new List<object>();
-                            List<object> hxZtcsPt = new List<object>();
-
-                            foreach (var d in d_DayReports)
-                            {
-                                smSmscPt.Add(new object[] { d.HealthDate.ToUnifiedFormatDate(), d.SmSmsc });
-                                hrvXzznlPt.Add(new object[] { d.HealthDate.ToUnifiedFormatDate(), d.HrvXzznl });
-                                hxZtcsPt.Add(new object[] { d.HealthDate.ToUnifiedFormatDate(), d.HxZtcs });
-                            }
 
                             var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
+
                             List<string> smTags = new List<string>();
                             foreach (var s in _smTags)
                             {
@@ -60,35 +51,60 @@ namespace LocalS.BLL.Task
                                 }
                             }
 
-                            var smTags_Count = smTags.GroupBy(s => s).OrderByDescending(s => s.Count()).ToList();
-
-                           // var a= from s in smTags group
-
+    
                             d_MonthReport = new SenvivHealthMonthReport();
                             d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
                             d_MonthReport.HealthDate = month;
                             d_MonthReport.SvUserId = d_User.Id;
                             d_MonthReport.DayCount = d_DayReports.Count;
                             d_MonthReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
+
                             d_MonthReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
-                            d_MonthReport.SmSmscPt = smSmscPt.ToJsonString();//
                             d_MonthReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
+                            d_MonthReport.SmQdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmbl).Average().ToString());//
                             d_MonthReport.SmSdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmsc).Average().ToString());//
+                            d_MonthReport.SmSdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmbl).Average().ToString());//
                             d_MonthReport.SmRemsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmsc).Average().ToString());//
-                            d_MonthReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
-                            d_MonthReport.HrvXzznlPt = hrvXzznlPt.ToJsonString();//
-
-                            d_MonthReport.HxPjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
-                            d_MonthReport.XlPjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
-                            d_MonthReport.HxZtpjahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
-
-
+                            d_MonthReport.SmRemsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmbl).Average().ToString());//
                             d_MonthReport.SmTdcs = Decimal.Parse(d_DayReports.Select(m => m.SmTdcs).Average().ToString());//
+                            d_MonthReport.SmSmzq = Decimal.Parse(d_DayReports.Select(m => m.SmSmzq).Average().ToString());//
 
+                            d_MonthReport.QxxlQxyj = Decimal.Parse(d_DayReports.Select(m => m.QxxlQxyj).Average().ToString());//
+                            d_MonthReport.QxxlKynl = Decimal.Parse(d_DayReports.Select(m => m.QxxlKynl).Average().ToString());//
+                            d_MonthReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
+                            d_MonthReport.HxDcpjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
+                            d_MonthReport.HxDcjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcjzhx).Average().ToString());//
+                            d_MonthReport.XlDcpjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
+                            d_MonthReport.XlDcjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcjzxl).Average().ToString());//
+                            d_MonthReport.HxZtahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
                             d_MonthReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
-                            d_MonthReport.HxZtcsPt = hxZtcsPt.ToJsonString();//
 
-                            d_MonthReport.SmTags = smTags_Count.ToJsonString();
+
+                            d_MonthReport.HrvJgsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvJgsjzlzs).Average().ToString());//
+                            d_MonthReport.HrvMzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvMzsjzlzs).Average().ToString());//
+                            d_MonthReport.HrvZzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvZzsjzlzs).Average().ToString());//
+                            d_MonthReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
+                            d_MonthReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
+
+                            d_MonthReport.DatePt = d_DayReports.Select(m => m.HealthDate).ToJsonString();//
+                            d_MonthReport.SmSmscPt = d_DayReports.Select(m => m.SmSmsc).ToJsonString();//
+                            // d_MonthReport.SmDtqcsPt = d_DayReports.Select(m => m.SmDtqcs).ToJsonString();
+                            d_MonthReport.XlDcjzxlPt = d_DayReports.Select(m => m.XlDcjzxl).ToJsonString();//
+                            d_MonthReport.XlCqjzxlPt = d_DayReports.Select(m => m.XlCqjzxl).ToJsonString();//
+                            d_MonthReport.HrvXzznlPt = d_DayReports.Select(m => m.HrvXzznl).ToJsonString();//
+                            d_MonthReport.HxZtcsPt = d_DayReports.Select(m => m.HxZtcs).ToJsonString();//
+                            d_MonthReport.HxDcjzhxPt = d_DayReports.Select(m => m.HxDcjzhx).ToJsonString();//
+                            d_MonthReport.HxCqjzhxPt = d_DayReports.Select(m => m.HxCqjzhx).ToJsonString();//
+                            d_MonthReport.HxZtahizsPt = d_DayReports.Select(m => m.HxZtahizs).ToJsonString();//
+                            d_MonthReport.HrvJgsjzlzsPt = d_DayReports.Select(m => m.HrvJgsjzlzs).ToJsonString();//
+                            d_MonthReport.HrvMzsjzlzsPt = d_DayReports.Select(m => m.HrvMzsjzlzs).ToJsonString();//
+                            d_MonthReport.HrvZzsjzlzsPt = d_DayReports.Select(m => m.HrvZzsjzlzs).ToJsonString();//
+                            d_MonthReport.HrvHermzsPt = d_DayReports.Select(m => m.HrvHermzs).ToJsonString();//
+                            d_MonthReport.HrvTwjxgsszsPt = d_DayReports.Select(m => m.HrvTwjxgsszs).ToJsonString();//
+
+                            var smTags_Count = smTags.GroupBy(s => s).Select(group => new { Name = group.Key, Count = group.Count() });
+
+                            d_MonthReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
 
                             d_MonthReport.IsSend = false;
                             d_MonthReport.VisitCount = 0;
