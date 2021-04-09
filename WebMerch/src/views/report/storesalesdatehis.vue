@@ -183,10 +183,19 @@ export default {
         const filterVal = ['storeName', 'sumCount', 'sumReceiveMode3', 'sumReceiveMode2', 'sumReceiveMode1', 'sumNoComplete', 'sumNoComplete', 'sumEx', 'sumQuantity', 'sumChargeAmount', 'sumRefundAmount', 'sumAmount']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
+
+        var filename = this.filename
+
+        if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
+          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
+        } else {
+          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
+        }
+
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
+          filename: filename,
           autoWidth: this.autoWidth,
           bookType: this.bookType
         })
