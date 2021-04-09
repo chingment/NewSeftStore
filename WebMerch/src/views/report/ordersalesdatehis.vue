@@ -123,7 +123,7 @@ export default {
       },
       optionsStores: [],
       optionsReceiveModes: [{
-        value: '3',
+        value: '4',
         label: '机器自提'
       }, {
         value: '2',
@@ -189,10 +189,18 @@ export default {
         const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
+
+        var filename = this.filename
+        if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
+          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
+        } else {
+          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
+        }
+
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
+          filename: filename,
           autoWidth: this.autoWidth,
           bookType: this.bookType
         })

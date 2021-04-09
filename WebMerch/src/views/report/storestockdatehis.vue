@@ -210,6 +210,7 @@ export default {
         const filterVal = ['storeName', 'sellChannelRefName', 'sellChannelRemark', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
+
         excel.export_json_to_excel({
           header: tHeader,
           data,
