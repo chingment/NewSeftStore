@@ -44,10 +44,19 @@
             <svg-icon icon-class="t_money" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">
-              总收入
+
+            <div>
+              <div class="card-panel-text">
+                总收入
+              </div>
+              <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
             </div>
-            <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
+            <div>
+              <div class="card-panel-text">
+                总收入
+              </div>
+              <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
+            </div>
           </div>
         </div>
       </el-col>

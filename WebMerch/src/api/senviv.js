@@ -40,10 +40,19 @@ export function getMonthReports(params) {
   })
 }
 
+export function getMonthReportDetail(params) {
+  return request({
+    url: '/senviv/getMonthReportDetail',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getUsers: getUsers,
   getUserDetail: getUserDetail,
   getDayReports: getDayReports,
   getDayReportDetail: getDayReportDetail,
-  getMonthReports: getMonthReports
+  getMonthReports: getMonthReports,
+  getMonthReportDetail: getMonthReportDetail
 }
