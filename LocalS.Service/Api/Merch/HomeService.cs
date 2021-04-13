@@ -108,7 +108,7 @@ namespace LocalS.Service.Api.Merch
             var retRpt7DayGmvRl = new RetRpt7DayGmvRl();
 
             StringBuilder sql = new StringBuilder();
-            sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
+            sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount,isnull(sumQuantity,0) as sumQuantity, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
             for (int i = 0; i < 10; i++)
             {
                 string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.Merch
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(ChargeAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 10  group by PayedTime ) tb  group by datef ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount) as sumCount , sum(sumQuantity) as sumQuantity,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 10  group by PayedTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 
@@ -132,6 +132,7 @@ namespace LocalS.Service.Api.Merch
 
                     Datef = dtData.Rows[r]["datef"].ToString(),
                     SumCount = dtData.Rows[r]["sumCount"].ToString(),
+                    SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
                     SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
                 };
 
@@ -154,7 +155,7 @@ namespace LocalS.Service.Api.Merch
             string startTime = CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).ToUnifiedFormatDateTime();
             string endTime = CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).ToUnifiedFormatDateTime();
 
-            StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
+            StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumCount,0) as sumCount ,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
             sql.Append("  select StoreId ,count(*) as sumCount, sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];

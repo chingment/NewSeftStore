@@ -78,7 +78,10 @@
           </div>
           <div class="today-sum" style="height:300px;">
             <div class="it">
-              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单</span></div>
+              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单量</span></div>
+            </div>
+            <div class="it">
+              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumQuantity }}</span><br> <span class="d1">今日商品量</span></div>
             </div>
             <div class="it">
               <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
@@ -244,11 +247,13 @@ export default {
         sumExHdByMachineSelfTake: 0,
         todayGmvRl: {
           sumCount: 0,
+          sumQuantity: 0,
           sumTradeAmount: 0
         }
       },
       todayGmv: {
         datef: '',
+        sumQuantity: 0,
         sumCount: 0,
         sumTradeAmount: 0
       },
