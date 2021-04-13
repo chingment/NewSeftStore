@@ -10,17 +10,25 @@ namespace LocalS.Service.Api.Merch
     {
         public RetRptTodaySummary()
         {
-            this.TodayGmvRl = new TodayGmvRlModel();
+            this.TodayGmvRl = new GmvRlModel();
+            this.NowMonthGmvRl = new GmvRlModel();
+            this.LastMonthGmvRl = new GmvRlModel();
         }
 
         public int SumExHdByMachineSelfTake { get; set; }
 
-        public TodayGmvRlModel TodayGmvRl { get; set; }
+        public GmvRlModel TodayGmvRl { get; set; }
 
-        public class TodayGmvRlModel
+        public GmvRlModel NowMonthGmvRl { get; set; }
+
+        public GmvRlModel LastMonthGmvRl { get; set; }
+
+        public class GmvRlModel
         {
             public string SumCount { get; set; }
+            public string SumQuantity { get; set; }
             public string SumTradeAmount { get; set; }
         }
+
     }
 }

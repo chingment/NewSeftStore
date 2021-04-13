@@ -66,6 +66,32 @@ namespace LocalS.Service.Api.Merch
 
             retRptTodaySummary.SumExHdByMachineSelfTake = sumExHdByMachineSelfTake;
 
+            string date = DateTime.Now.ToString("yyyy-MM") + "-01";
+
+            StringBuilder sql2 = new StringBuilder();
+            sql2.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 0 and merchId='" + merchId + "' ");
+            DataTable dtData2 = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql2.ToString()).Tables[0];
+
+
+            if (dtData2.Rows.Count > 0)
+            {
+                retRptTodaySummary.NowMonthGmvRl.SumCount = dtData2.Rows[0]["sumCount"].ToString();
+                retRptTodaySummary.NowMonthGmvRl.SumQuantity = dtData2.Rows[0]["sumQuantity"].ToString();
+                retRptTodaySummary.NowMonthGmvRl.SumTradeAmount = dtData2.Rows[0]["sumTradeAmount"].ToString();
+            }
+
+            StringBuilder sql3 = new StringBuilder();
+            sql3.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 1 and merchId='" + merchId + "' ");
+            DataTable dtData3 = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql2.ToString()).Tables[0];
+
+
+            if (dtData3.Rows.Count > 0)
+            {
+                retRptTodaySummary.LastMonthGmvRl.SumCount = dtData3.Rows[0]["sumCount"].ToString();
+                retRptTodaySummary.LastMonthGmvRl.SumQuantity = dtData3.Rows[0]["sumQuantity"].ToString();
+                retRptTodaySummary.LastMonthGmvRl.SumTradeAmount = dtData3.Rows[0]["sumTradeAmount"].ToString();
+            }
+
 
 
 
@@ -129,7 +155,7 @@ namespace LocalS.Service.Api.Merch
             string endTime = CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).ToUnifiedFormatDateTime();
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
-            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
+            sql.Append("  select StoreId ,count(*) as sumCount, sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
@@ -138,6 +164,7 @@ namespace LocalS.Service.Api.Merch
                 {
 
                     Name = dtData.Rows[r]["name"].ToString(),
+                    SumCount = dtData.Rows[r]["sumCount"].ToString(),
                     SumQuantity = dtData.Rows[r]["sumQuantity"].ToString(),
                     SumTradeAmount = dtData.Rows[r]["sumTradeAmount"].ToString()
                 };
