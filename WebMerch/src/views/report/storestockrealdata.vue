@@ -110,7 +110,7 @@
 
 <script>
 
-import { storeStockRealDataInit, storeStockRealDataGet } from '@/api/report'
+import { storeStockRealDataInit, storeStockRealDataGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportStoreStockRealData',
@@ -188,7 +188,11 @@ export default {
       }))
     },
     handleDownload() {
-      this.downloadLoading = true
+      var filename = this.filename
+
+      checkRightExport({ fileName: filename }).then(res => {
+        if (res.result === 1) {
+          this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['店铺', '销售模式', '模式备注', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
         const filterVal = ['storeName', 'sellChannelRefName', 'sellChannelRemark', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
@@ -197,11 +201,15 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
+          filename: filename,
           autoWidth: this.autoWidth,
           bookType: this.bookType
         })
         this.downloadLoading = false
+      })
+        } else {
+          this.$message(res.message)
+        }
       })
     }
   }

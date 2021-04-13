@@ -80,6 +80,14 @@ export function storeSalesDateHisGet(data) {
   })
 }
 
+export function checkRightExport(data) {
+  return request({
+    url: '/report/checkRightExport',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   storemachineStockRealDataInit: storeStockRealDataInit,
   storehStockRealDataGet: storeStockRealDataGet,
@@ -90,5 +98,6 @@ export default {
   storeStockDateHisInit: storeStockDateHisInit,
   storeStockDateHisGet: storeStockDateHisGet,
   storeSalesDateHisInit: storeSalesDateHisInit,
-  storeSalesDateHisGet: storeSalesDateHisGet
+  storeSalesDateHisGet: storeSalesDateHisGet,
+  checkRightExport: checkRightExport
 }

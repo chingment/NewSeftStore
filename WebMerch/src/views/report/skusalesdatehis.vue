@@ -65,7 +65,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?220:80">
+      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?110:80">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
@@ -73,6 +73,11 @@
       <el-table-column v-if="isDesktop" label="提货方式" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.receiveModeName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isDesktop" label="方式备注" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.receiveRemark }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单号" align="left" min-width="10%">
@@ -137,7 +142,7 @@
 
 <script>
 
-import { skuSalesDateHisInit, skuSalesDateHisGet } from '@/api/report'
+import { skuSalesDateHisInit, skuSalesDateHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportSkuSalesDateHis',
@@ -231,20 +236,22 @@ export default {
       this._getData()
     },
     handleDownload() {
-      this.downloadLoading = true
+      var filename = this.filename
+
+      if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
+        filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
+      } else {
+        filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
+      }
+
+      checkRightExport({ fileName: filename }).then(res => {
+        if (res.result === 1) {
+          this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '提货方式', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
-        const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'skuName', 'skuCumCode', 'skuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
+        const tHeader = ['店铺', '提货方式', '方式备注', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
+        const filterVal = ['storeName', 'receiveModeName', 'receiveRemark', 'orderId', 'tradeTime', 'skuName', 'skuCumCode', 'skuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
-
-        var filename = this.filename
-
-        if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
-          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
-        } else {
-          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
-        }
 
         excel.export_json_to_excel({
           header: tHeader,
@@ -254,6 +261,10 @@ export default {
           bookType: this.bookType
         })
         this.downloadLoading = false
+      })
+        } else {
+          this.$message(res.message)
+        }
       })
     }
   }

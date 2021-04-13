@@ -83,5 +83,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse CheckRightExport([FromBody]RopReportCheckRightExport rop)
+        {
+            IResult result = MerchServiceFactory.Report.CheckRightExport(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

@@ -56,6 +56,8 @@ namespace LocalS.Entity
         public const string AdDeleteContent = "AdDeleteContent";
         [EventCodeRemark("A", "保存机器信息")]
         public const string MachineEdit = "MachineEdit";
+        [EventCodeRemark("A", "导出Excel")]
+        public const string ExportExcel = "ExportExcel";
         [EventCodeRemark("A", "解绑门店机器")]
         public const string MachineUnBindShop = "MachineUnBindShop";
         [EventCodeRemark("A", "绑定门店机器")]

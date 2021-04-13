@@ -1,5 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
+using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using Lumos.DbRelay;
@@ -310,7 +312,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -365,10 +367,19 @@ namespace LocalS.Service.Api.Merch
                     pickupStatus = "待取货";
                 }
 
+                var receiveRemark = "";
+
+                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByMachine)
+                {
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, item.MachineId);
+                }
+
+
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
                     ReceiveModeName = item.ReceiveModeName,
+                    ReceiveRemark = receiveRemark,
                     OrderId = item.OrderId,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     SkuName = item.SkuName,
@@ -589,6 +600,20 @@ namespace LocalS.Service.Api.Merch
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", dtData);
+
+            return result;
+
+        }
+
+
+        public CustomJsonResult CheckRightExport(string operater, string merchId, RopReportCheckRightExport rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ExportExcel, string.Format("导出报表：{0}", rop.FileName), rop);
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
 
             return result;
 

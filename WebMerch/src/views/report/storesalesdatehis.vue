@@ -105,7 +105,7 @@
 
 <script>
 
-import { storeSalesDateHisInit, storeSalesDateHisGet } from '@/api/report'
+import { storeSalesDateHisInit, storeSalesDateHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportStoreSalesDateHis',
@@ -177,20 +177,22 @@ export default {
       }))
     },
     handleDownload() {
-      this.downloadLoading = true
+      var filename = this.filename
+
+      if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
+        filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
+      } else {
+        filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
+      }
+
+      checkRightExport({ fileName: filename }).then(res => {
+        if (res.result === 1) {
+          this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['店铺', '总订单数', '机器自提', '店铺自取', '配送商品', '已完成', '未完成', '异常', '商品数量', '支付金额', '退款金额', '合计金额']
         const filterVal = ['storeName', 'sumCount', 'sumReceiveMode3', 'sumReceiveMode2', 'sumReceiveMode1', 'sumNoComplete', 'sumNoComplete', 'sumEx', 'sumQuantity', 'sumChargeAmount', 'sumRefundAmount', 'sumAmount']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
-
-        var filename = this.filename
-
-        if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
-          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
-        } else {
-          filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
-        }
 
         excel.export_json_to_excel({
           header: tHeader,
@@ -200,6 +202,10 @@ export default {
           bookType: this.bookType
         })
         this.downloadLoading = false
+      })
+        } else {
+          this.$message(res.message)
+        }
       })
     }
   }
