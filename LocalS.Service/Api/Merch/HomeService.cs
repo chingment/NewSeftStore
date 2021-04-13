@@ -83,7 +83,7 @@ namespace LocalS.Service.Api.Merch
 
             StringBuilder sql = new StringBuilder();
             sql.Append(" select a1.datef,isnull(sumCount,0) as sumCount, isnull(sumTradeAmount,0) as  sumTradeAmount from (  ");
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 10; i++)
             {
                 string datef = DateTime.Now.AddDays(double.Parse((-i).ToString())).ToUnifiedFormatDate();
 
@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.Merch
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(ChargeAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 7  group by PayedTime ) tb  group by datef ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount) as sumCount ,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(ChargeAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 10  group by PayedTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 

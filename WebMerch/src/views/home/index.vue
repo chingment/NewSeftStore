@@ -51,12 +51,6 @@
               </div>
               <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
             </div>
-            <div>
-              <div class="card-panel-text">
-                总收入
-              </div>
-              <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
-            </div>
           </div>
         </div>
       </el-col>
@@ -82,7 +76,7 @@
           <div slot="header" class="clearfix">
             <span>今日总览</span>
           </div>
-          <div class="today-sum" style="height:200px;">
+          <div class="today-sum" style="height:300px;">
             <div class="it">
               <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单</span></div>
             </div>
@@ -103,7 +97,7 @@
 
             <el-button style="float: right; padding: 0px 0;display:none" type="text">更多</el-button>
           </div>
-          <div style="height:200px;">
+          <div style="height:300px;">
 
             <div v-if="todayStoreGmvRl.length>0">
 
@@ -130,9 +124,9 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>最近7天销售额</span>
+            <span>最近10天销售额</span>
           </div>
-          <div style="height:200px;">
+          <div style="height:300px;">
 
             <div v-if="get7DayGmv.length>0">
 
