@@ -27,7 +27,7 @@ namespace LocalS.BLL.Task
                 {
                     LogUtil.Info("UserId：" + d_User.Id);
 
-                    string month = DateTime.Now.ToString("yyyy-MM");
+                    string month = DateTime.Now.AddMonths(-1).ToString("yyyy-MM");
 
                     var d_MonthReport = CurrentDb.SenvivHealthMonthReport.Where(m => m.HealthDate == month && m.SvUserId == d_User.Id).FirstOrDefault();
 
@@ -35,7 +35,7 @@ namespace LocalS.BLL.Task
                     {
                         LogUtil.Info("UserId：" + d_User.Id + ",d_MonthReport is null");
 
-                        var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true && System.Data.Entity.DbFunctions.DiffMonths(m.HealthDate, DateTime.Now) == 0).ToList();
+                        var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true && System.Data.Entity.DbFunctions.DiffMonths(m.HealthDate, DateTime.Now) == 1).ToList();
                         if (d_DayReports.Count > 0)
                         {
 
