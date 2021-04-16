@@ -16,8 +16,17 @@
         {{ tag }}
       </el-tag>
     </div>
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>监测数据图</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
     <div ref="echart_sm_zx" style="width: 960px;height: 400px;margin:auto" />
-
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>睡眠结构</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
     <div ref="echart_sm_bi" style="width: 960px;height: 400px;margin:auto" />
 
     <div class="row-title clearfix">
@@ -278,7 +287,7 @@ export default {
       var option = {
         // 标题
         title: {
-          text: '睡觉结构',
+          text: '',
           x: 'left' // 标题位置
           // textStyle: { //标题内容的样式
           //   color: '#000',

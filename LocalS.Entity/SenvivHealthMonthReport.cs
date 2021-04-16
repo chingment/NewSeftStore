@@ -164,6 +164,8 @@ namespace LocalS.Entity
         public string HrvZzsjzlzsPt { get; set; }
         public string HrvHermzsPt { get; set; }
         public string HrvTwjxgsszsPt { get; set; }
+        public string JbfxXlscfxPt { get; set; }
+        public string JbfxXljslPt { get; set; }
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }
         public int VisitCount { get; set; }

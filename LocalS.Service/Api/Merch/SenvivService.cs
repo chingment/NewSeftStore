@@ -1129,6 +1129,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.HrvZzsjzlzsPt,
                            u.HrvHermzsPt,
                            u.HrvTwjxgsszsPt,
+                           u.JbfxXljslPt,
+                           u.JbfxXlscfxPt,
                            u.CreateTime
                        }).FirstOrDefault();
 
@@ -1213,7 +1215,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     HrvMzsjzlzsPt = rpt.HrvMzsjzlzsPt.ToJsonObject<List<object>>(),
                     HrvZzsjzlzsPt = rpt.HrvZzsjzlzsPt.ToJsonObject<List<object>>(),
                     HrvHermzsPt = rpt.HrvHermzsPt.ToJsonObject<List<object>>(),
-                    HrvTwjxgsszsPt = rpt.HrvTwjxgsszsPt.ToJsonObject<List<object>>()
+                    HrvTwjxgsszsPt = rpt.HrvTwjxgsszsPt.ToJsonObject<List<object>>(),
+                    JbfxXljslPt = rpt.JbfxXljslPt.ToJsonObject<List<object>>(),
+                    JbfxXlscfxPt = rpt.JbfxXlscfxPt.ToJsonObject<List<object>>()
                 }
             };
 

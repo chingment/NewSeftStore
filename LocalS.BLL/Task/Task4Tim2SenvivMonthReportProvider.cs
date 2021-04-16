@@ -35,7 +35,7 @@ namespace LocalS.BLL.Task
                     {
                         LogUtil.Info("UserId：" + d_User.Id + ",d_MonthReport is null");
 
-                        var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true).ToList();
+                        var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true && System.Data.Entity.DbFunctions.DiffMonths(m.HealthDate, DateTime.Now) == 0).ToList();
                         if (d_DayReports.Count > 0)
                         {
 
@@ -112,6 +112,8 @@ namespace LocalS.BLL.Task
                             d_MonthReport.HrvZzsjzlzsPt = d_DayReports.Select(m => m.HrvZzsjzlzs).ToJsonString();//
                             d_MonthReport.HrvHermzsPt = d_DayReports.Select(m => m.HrvHermzs).ToJsonString();//
                             d_MonthReport.HrvTwjxgsszsPt = d_DayReports.Select(m => m.HrvTwjxgsszs).ToJsonString();//
+                            d_MonthReport.JbfxXlscfxPt = d_DayReports.Select(m => m.JbfxXlscfx).ToJsonString();//
+                            d_MonthReport.JbfxXljslPt = d_DayReports.Select(m => m.JbfxXljsl).ToJsonString();//
 
                             var smTags_Count = smTags.GroupBy(s => s).Select(group => new { Name = group.Key, Count = group.Count() });
 
