@@ -60,13 +60,7 @@
         width="120"
         align="center"
         fixed
-      >
-        <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="handleOpenDialogByClient(scope.row)">
-            {{ scope.row.signName }}
-          </el-button>
-        </template>
-      </el-table-column>
+      />
 
       <el-table-column
         v-if="userId===''"
@@ -439,6 +433,7 @@
     <el-dialog v-if="dialogIsShowByReportDetail" title="健康报告（日）" :visible.sync="dialogIsShowByReportDetail" width="1000px" custom-class="user-detail" append-to-body>
       <pane-day-report-detail :report-id="selectReportId" />
     </el-dialog>
+
   </div>
 </template>
 
@@ -448,7 +443,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import PaneDayReportDetail from './PaneDayReportDetail.vue'
 import DvItem from './DvItem.vue'
 export default {
-  name: 'ClientUserList',
+  name: 'PaneDayReport',
   components: { Pagination, PaneDayReportDetail, DvItem },
   props: {
     userId: {

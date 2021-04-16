@@ -60,13 +60,7 @@
         width="120"
         align="center"
         fixed
-      >
-        <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="handleOpenDialogByClient(scope.row)">
-            {{ scope.row.signName }}
-          </el-button>
-        </template>
-      </el-table-column>
+      />
 
       <el-table-column
         v-if="userId===''"
@@ -468,7 +462,7 @@ export default {
       },
       selectReportId: '',
       selectUserId: '',
-      dialogIsShowByDetail: false,
+      dialogIsShowByReportDetail: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },

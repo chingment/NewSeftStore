@@ -266,7 +266,6 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-
         public string GetSignName(string nick, string account)
         {
             string signName = nick;
@@ -291,8 +290,7 @@ namespace LocalS.Service.Api.Merch
 
             return age;
         }
-
-
+        
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -455,7 +453,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult GetDayReports(string operater, string merchId, RupSenvivGetDayReports rup)
         {

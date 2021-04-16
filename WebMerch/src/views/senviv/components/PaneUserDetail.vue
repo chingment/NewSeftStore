@@ -44,7 +44,7 @@
       <el-container>
         <el-main class="">
 
-          <pane-day-report v-show="activeMenu==='DayReport'" :user-id="userId" />
+          <pane-day-reporta v-show="activeMenu==='DayReport'" name="aaadadads" :user-id="userId" />
           <pane-month-report v-show="activeMenu==='MonthReport'" :user-id="userId" />
         </el-main>
       </el-container>
@@ -56,13 +56,13 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import PaneDayReport from './PaneDayReport.vue'
+import PaneDayReporta from './PaneDayReport.vue'
 import PaneMonthReport from './PaneMonthReport.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
   // name: 'SenvivPaneUserDetail',
-  components: { PaneDayReport, PaneMonthReport },
+  components: { PaneDayReporta, PaneMonthReport },
   props: {
     userId: {
       type: String,
