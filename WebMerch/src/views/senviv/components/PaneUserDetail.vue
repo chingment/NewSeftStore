@@ -61,7 +61,7 @@ import PaneMonthReport from './PaneMonthReport.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
-  name: 'SenvivPaneUserDetail',
+  // name: 'SenvivPaneUserDetail',
   components: { PaneDayReport, PaneMonthReport },
   props: {
     userId: {

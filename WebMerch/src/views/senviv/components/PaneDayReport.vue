@@ -439,9 +439,6 @@
     <el-dialog v-if="dialogIsShowByReportDetail" title="健康报告（日）" :visible.sync="dialogIsShowByReportDetail" width="1000px" custom-class="user-detail" append-to-body>
       <pane-day-report-detail :report-id="selectReportId" />
     </el-dialog>
-    <el-dialog v-if="dialogIsShowByClientDetail" title="详情" :visible.sync="dialogIsShowByClientDetail" width="80%" custom-class="user-detail" append-to-body>
-      <pane-user-detail :user-id="selectUserId" />
-    </el-dialog>
   </div>
 </template>
 
@@ -449,11 +446,10 @@
 import { getDayReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneDayReportDetail from './PaneDayReportDetail.vue'
-import PaneUserDetail from './PaneUserDetail.vue'
 import DvItem from './DvItem.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneDayReportDetail, PaneUserDetail, DvItem },
+  components: { Pagination, PaneDayReportDetail, DvItem },
   props: {
     userId: {
       type: String,
