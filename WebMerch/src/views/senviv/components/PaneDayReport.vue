@@ -60,7 +60,13 @@
         width="120"
         align="center"
         fixed
-      />
+      >
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="handleOpenDialogByClient(scope.row)">
+            {{ scope.row.signName }}
+          </el-button>
+        </template>
+      </el-table-column>
 
       <el-table-column
         v-if="userId===''"
@@ -430,10 +436,12 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog v-if="dialogIsShowByDetail" title="健康报告（日）" :visible.sync="dialogIsShowByDetail" width="1000px" custom-class="user-detail" append-to-body>
+    <el-dialog v-if="dialogIsShowByReportDetail" title="健康报告（日）" :visible.sync="dialogIsShowByReportDetail" width="1000px" custom-class="user-detail" append-to-body>
       <pane-day-report-detail :report-id="selectReportId" />
     </el-dialog>
-
+    <el-dialog v-if="dialogIsShowByClientDetail" title="详情" :visible.sync="dialogIsShowByClientDetail" width="80%" custom-class="user-detail" append-to-body>
+      <pane-user-detail :user-id="selectUserId" />
+    </el-dialog>
   </div>
 </template>
 
@@ -441,10 +449,11 @@
 import { getDayReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneDayReportDetail from './PaneDayReportDetail.vue'
+import PaneUserDetail from './PaneUserDetail.vue'
 import DvItem from './DvItem.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneDayReportDetail, DvItem },
+  components: { Pagination, PaneDayReportDetail, PaneUserDetail, DvItem },
   props: {
     userId: {
       type: String,
@@ -474,7 +483,9 @@ export default {
         }
       },
       selectReportId: '',
-      dialogIsShowByDetail: false,
+      selectUserId: '',
+      dialogIsShowByReportDetail: false,
+      dialogIsShowByClientDetail: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -508,7 +519,11 @@ export default {
     },
     handleOpenDialogByDetial(row) {
       this.selectReportId = row.id
-      this.dialogIsShowByDetail = true
+      this.dialogIsShowByReportDetail = true
+    },
+    handleOpenDialogByClient(row) {
+      this.selectUserId = row.svUserId
+      this.dialogIsShowByClientDetail = true
     }
   }
 }

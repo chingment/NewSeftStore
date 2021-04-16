@@ -479,6 +479,7 @@ namespace LocalS.Service.Api.Merch
                              u.Id,
                              tt.Nick,
                              tt.Sex,
+                             u.SvUserId,
                              tt.Account,
                              tt.Birthday,
                              tt.HeadImgurl,
@@ -518,7 +519,6 @@ namespace LocalS.Service.Api.Merch
                              u.SmRemsmsc,
                              u.SmTdcs,
                              u.SmSmzq,
-                             u.SvUserId,
                              u.CreateTime
                          });
 
@@ -556,6 +556,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = rpt.Id,
+                    SvUserId = rpt.SvUserId,
                     SignName = GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
                     Sex = GetSexName(rpt.Sex),
@@ -989,6 +990,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 olist.Add(new
                 {
                     Id = rpt.Id,
+                    SvUserId = rpt.SvUserId,
                     SignName = GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
                     Sex = GetSexName(rpt.Sex),
