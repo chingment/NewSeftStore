@@ -34,7 +34,7 @@
       </div>
       <div class="pull-right" />
     </div>
-    <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%">
+    <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%;margin-bottom:80px;">
       <thead>
         <tr>
           <th>类别</th>
@@ -186,6 +186,65 @@
         </tr>
       </tbody>
     </table>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="drawer = true">评价</el-button>
+    </span>
+
+    <el-drawer
+      title="健康评价"
+      :visible.sync="drawer"
+      :direction="direction"
+      :before-close="handleClose"
+      :modal="modal"
+      size="50%"
+    >
+      <div
+        class="drawer__content"
+        style="padding:20px;
+            display: flex;
+    flex-direction: column;
+    height: 100%;"
+      >
+        <div style="flex:1">
+          <el-card class="box-card" style="margin-bottom:10px">
+            <div slot="header" class="clearfix">
+              <span>运动</span>
+            </div>
+            <div>
+              <el-input v-model="formBySug.sugByYd" type="textarea" />
+            </div>
+          </el-card>
+          <el-card class="box-card" style="margin-bottom:10px">
+            <div slot="header" class="clearfix">
+              <span>营养</span>
+            </div>
+            <div>
+              <el-input v-model="formBySug.sugByYy" type="textarea" />
+            </div>
+          </el-card>
+          <el-card class="box-card" style="margin-bottom:10px">
+            <div slot="header" class="clearfix">
+              <span>睡眠</span>
+            </div>
+            <div>
+              <el-input v-model="formBySug.sugBySm" type="textarea" />
+            </div>
+          </el-card>
+          <el-card class="box-card" style="margin-bottom:10px">
+            <div slot="header" class="clearfix">
+              <span>情绪压力</span>
+            </div>
+            <div>
+              <el-input v-model="formBySug.sugByQxyl" type="textarea" />
+            </div>
+          </el-card>
+        </div>
+        <div style="display:flex" class="demo-drawer__footer">
+          <el-button style="flex:1">取 消</el-button>
+          <el-button style="flex:1" type="primary">确 定</el-button>
+        </div>
+      </div>
+    </el-drawer>
 
   </div>
 </template>
@@ -220,6 +279,15 @@ export default {
         signTags: []
       },
       rd: {
+      },
+      drawer: false,
+      direction: 'rtl',
+      modal: false,
+      formBySug: {
+        sugByYd: '',
+        sugByYy: '',
+        sugBySm: '',
+        sugByQxyl: ''
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -458,6 +526,20 @@ export default {
 
   #main{
  width: 100%;
+ }
+
+ .dialog-footer{
+   padding: 0px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+    height: 80px;
+    line-height: 80px;
  }
 
 </style>
