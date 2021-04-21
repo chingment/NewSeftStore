@@ -521,7 +521,9 @@ export default {
     },
     handleOpenByDrawerBySug() {
       this.drawerBySug.visible = true
-
+      this._getMonthReportSug()
+    },
+    _getMonthReportSug() {
       this.loadingBySug = true
       getMonthReportSug({ reportId: this.reportId }).then(res => {
         this.loadingBySug = false
@@ -537,23 +539,28 @@ export default {
       })
     },
     handleSaveSug(isSend) {
-      this.formBySug.reportId = this.reportId
-      this.formBySug.isSend = isSend
-
       var tips = '确定要暂存'
       if (isSend) {
         tips = '确定要保存并发送'
       }
 
+      var form = {
+        reportId: this.reportId,
+        isSend: isSend,
+        sugByYd: this.formBySug.sugByYd,
+        sugByYy: this.formBySug.sugByYy,
+        sugBySm: this.formBySug.sugBySm,
+        sugByQxyl: this.formBySug.sugByQxyl
+      }
       MessageBox.confirm(tips, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        saveMonthReportSug(this.formBySug).then(res => {
+        saveMonthReportSug(form).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
-            getMonthReportDetail({ reportId: this.reportId })
+            this._getMonthReportSug()
           }
         })
       }).catch(() => {
