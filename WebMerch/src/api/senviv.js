@@ -48,11 +48,29 @@ export function getMonthReportDetail(params) {
   })
 }
 
+export function saveMonthReportSug(data) {
+  return request({
+    url: '/senviv/saveMonthReportSug',
+    method: 'post',
+    data
+  })
+}
+
+export function getMonthReportSug(params) {
+  return request({
+    url: '/senviv/getMonthReportSug',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getUsers: getUsers,
   getUserDetail: getUserDetail,
   getDayReports: getDayReports,
   getDayReportDetail: getDayReportDetail,
   getMonthReports: getMonthReports,
-  getMonthReportDetail: getMonthReportDetail
+  getMonthReportDetail: getMonthReportDetail,
+  saveMonthReportSug: saveMonthReportSug,
+  getMonthReportSug: getMonthReportSug
 }

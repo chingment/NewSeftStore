@@ -187,31 +187,42 @@
       </tbody>
     </table>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="drawer = true">评价</el-button>
+      <el-button type="primary" @click="handleOpenByDrawerBySug">评 价</el-button>
     </span>
 
     <el-drawer
       title="健康评价"
-      :visible.sync="drawer"
-      :direction="direction"
-      :before-close="handleClose"
-      :modal="modal"
+      :visible.sync="drawerBySug.visible"
+      :direction="drawerBySug.direction"
+      :modal="drawerBySug.modal"
       size="50%"
     >
       <div
+        v-loading="loadingBySug"
         class="drawer__content"
-        style="padding:20px;
+        style="padding:8px 20px;
             display: flex;
     flex-direction: column;
     height: 100%;"
       >
         <div style="flex:1">
+
+          <div style="margin-bottom:10px">
+            <el-tag v-if="formBySug.isSend" type="success">
+              已发送
+            </el-tag>
+
+            <el-tag v-if="!formBySug.isSend" type="warning">
+              未发送
+            </el-tag>
+          </div>
           <el-card class="box-card" style="margin-bottom:10px">
             <div slot="header" class="clearfix">
               <span>运动</span>
             </div>
             <div>
-              <el-input v-model="formBySug.sugByYd" type="textarea" />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByYd" type="textarea" />
+              <span v-if="formBySug.isSend">{{ formBySug.sugByYd }}</span>
             </div>
           </el-card>
           <el-card class="box-card" style="margin-bottom:10px">
@@ -219,7 +230,8 @@
               <span>营养</span>
             </div>
             <div>
-              <el-input v-model="formBySug.sugByYy" type="textarea" />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByYy" type="textarea" />
+              <span v-if="formBySug.isSend">{{ formBySug.sugByYy }}</span>
             </div>
           </el-card>
           <el-card class="box-card" style="margin-bottom:10px">
@@ -227,7 +239,8 @@
               <span>睡眠</span>
             </div>
             <div>
-              <el-input v-model="formBySug.sugBySm" type="textarea" />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugBySm" type="textarea" />
+              <span v-if="formBySug.isSend">{{ formBySug.sugBySm }}</span>
             </div>
           </el-card>
           <el-card class="box-card" style="margin-bottom:10px">
@@ -235,13 +248,15 @@
               <span>情绪压力</span>
             </div>
             <div>
-              <el-input v-model="formBySug.sugByQxyl" type="textarea" />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByQxyl" type="textarea" />
+              <span v-if="formBySug.isSend">{{ formBySug.sugByQxyl }}</span>
             </div>
           </el-card>
         </div>
-        <div style="display:flex" class="demo-drawer__footer">
-          <el-button style="flex:1">取 消</el-button>
-          <el-button style="flex:1" type="primary">确 定</el-button>
+        <div style="display:flex" class="drawer__footer">
+          <el-button style="flex:1" @click="handleCloseByDrawerBySug">取 消</el-button>
+          <el-button v-if="!formBySug.isSend" style="flex:1" type="primary" @click="handleSaveSug(false)">暂 存</el-button>
+          <el-button v-if="!formBySug.isSend" style="flex:1" type="success" @click="handleSaveSug(true)">保存并发送</el-button>
         </div>
       </div>
     </el-drawer>
@@ -253,7 +268,7 @@
 
 import { MessageBox } from 'element-ui'
 import echarts from 'echarts'
-import { getMonthReportDetail } from '@/api/senviv'
+import { getMonthReportDetail, saveMonthReportSug, getMonthReportSug } from '@/api/senviv'
 
 var myChart1
 var myChart2
@@ -269,6 +284,7 @@ export default {
   data() {
     return {
       loading: false,
+      loadingBySug: false,
       userInfo: {
         headImgurl: '',
         signName: '',
@@ -280,14 +296,18 @@ export default {
       },
       rd: {
       },
-      drawer: false,
-      direction: 'rtl',
-      modal: false,
+      drawerBySug: {
+        visible: false,
+        direction: 'rtl',
+        modal: false
+      },
       formBySug: {
+        reportId: '',
         sugByYd: '',
         sugByYy: '',
         sugBySm: '',
-        sugByQxyl: ''
+        sugByQxyl: '',
+        isSend: false
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -495,6 +515,49 @@ export default {
       }
 
       myChart2.setOption(option, null)
+    },
+    handleCloseByDrawerBySug() {
+      this.drawerBySug.visible = false
+    },
+    handleOpenByDrawerBySug() {
+      this.drawerBySug.visible = true
+
+      this.loadingBySug = true
+      getMonthReportSug({ reportId: this.reportId }).then(res => {
+        this.loadingBySug = false
+        if (res.result === 1) {
+          var d = res.data
+
+          this.formBySug.sugByYd = d.sugByYd
+          this.formBySug.sugByYy = d.sugByYy
+          this.formBySug.sugBySm = d.sugBySm
+          this.formBySug.sugByQxyl = d.sugByQxyl
+          this.formBySug.isSend = d.isSend
+        }
+      })
+    },
+    handleSaveSug(isSend) {
+      this.formBySug.reportId = this.reportId
+      this.formBySug.isSend = isSend
+
+      var tips = '确定要暂存'
+      if (isSend) {
+        tips = '确定要保存并发送'
+      }
+
+      MessageBox.confirm(tips, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        saveMonthReportSug(this.formBySug).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            getMonthReportDetail({ reportId: this.reportId })
+          }
+        })
+      }).catch(() => {
+      })
     }
   }
 }

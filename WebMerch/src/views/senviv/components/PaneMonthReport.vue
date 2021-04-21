@@ -405,6 +405,14 @@
         </el-table-column>
       </el-table-column>
 
+      <el-table-column
+        prop="isSend"
+        label="状态"
+        width="120"
+        align="center"
+        fixed="right"
+      />
+
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="handleOpenDialogByDetial(scope.row)">

@@ -290,7 +290,7 @@ namespace LocalS.Service.Api.Merch
 
             return age;
         }
-        
+
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -1222,6 +1222,61 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+
+        }
+
+        public CustomJsonResult GetMonthReportSug(string operater, string merchId, string reportId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+                       where u.Id == reportId
+                       select new
+                       {
+                           u.Id,
+                           u.SugByYy,
+                           u.SugByYd,
+                           u.SugBySm,
+                           u.SugByQxyl,
+                           u.IsSend,
+                           u.Status,
+                           u.CreateTime
+                       }).FirstOrDefault();
+
+            var ret = new
+            {
+                rpt.SugByYy,
+                rpt.SugByYd,
+                rpt.SugBySm,
+                rpt.SugByQxyl,
+                rpt.IsSend
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+
+        }
+
+        public CustomJsonResult SaveMonthReportSug(string operater, string merchId, SenvivSaveMonthReportSug rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+
+            rpt.SugByYd = rop.SugByYd;
+            rpt.SugByQxyl = rop.SugByQxyl;
+            rpt.SugBySm = rop.SugBySm;
+            rpt.SugByYy = rop.SugByYy;
+            rpt.IsSend = rop.IsSend;
+
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
 

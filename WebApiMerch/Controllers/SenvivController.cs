@@ -52,5 +52,19 @@ namespace WebApiMerch.Controllers
             IResult result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetMonthReportSug([FromUri]string reportId)
+        {
+            IResult result = MerchServiceFactory.Senviv.GetMonthReportSug(this.CurrentUserId, this.CurrentMerchId, reportId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveMonthReportSug([FromBody]SenvivSaveMonthReportSug rop)
+        {
+            IResult result = MerchServiceFactory.Senviv.SaveMonthReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

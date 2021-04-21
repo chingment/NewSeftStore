@@ -298,6 +298,7 @@
     <Compile Include="Api\Merch\RModels\RupStoreGetShops.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetMachines.cs" />
     <Compile Include="Api\Merch\RModels\RupAdminUserGetList.cs" />
+    <Compile Include="Api\Merch\RModels\SenvivSaveMonthReportSug.cs" />
     <Compile Include="Api\Merch\RopReportCheckRightExport.cs" />
     <Compile Include="Api\Merch\SenvivService.cs" />
     <Compile Include="Api\Merch\ShopService.cs" />
