@@ -4,32 +4,32 @@
     <div class="dv-section">
       <div ref="chart_BySmsc" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smsc.png" alt=""> <span class="dv-name">日均睡觉时长</span><span class="dv-value">5h10'</span> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">7h~9h</span></div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smsc.png" alt=""> <span class="dv-name">日均睡觉时长</span><span class="dv-value">{{ rd.smSmsc.value }}</span> </div>
+        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.smSmsc.refRange }}</span></div>
       </div>
     </div>
 
     <div class="dv-section">
       <div ref="chart_ByHrvxzznl" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hrvxlzl.png" alt=""> <span class="dv-name">心脏总能量</span><span class="dv-value">5h10'</span> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">7h~9h</span></div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hrvxlzl.png" alt=""> <span class="dv-name">心脏总能量</span><span class="dv-value">{{ rd.hrvXzznl.value }}</span> </div>
+        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hrvXzznl.refRange }}</span></div>
       </div>
     </div>
 
     <div class="dv-section">
       <div ref="chart_ByHxztcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hxztcs.png" alt=""> <span class="dv-name">呼吸暂停次数</span><span class="dv-value">5h10'</span> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">7h~9h</span></div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hxztcs.png" alt=""> <span class="dv-name">呼吸暂停次数</span><span class="dv-value">{{ rd.hxZtcs.value }}</span> </div>
+        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtcs.refRange }}</span></div>
       </div>
     </div>
 
     <div class="dv-section">
       <div ref="chart_ByHxdtcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smdtcs.png" alt=""> <span class="dv-name">低通气次数</span><span class="dv-value">5h10'</span> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">7h~9h</span></div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smdtcs.png" alt=""> <span class="dv-name">低通气次数</span><span class="dv-value">{{ rd.hxZtahizs.value }}</span> </div>
+        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtahizs.refRange }}</span></div>
       </div>
     </div>
 
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+
+import { getEnergy } from '@/api/monthreport'
 
 import echarts from 'echarts'
 
@@ -47,6 +49,22 @@ var chartByHxdtcs
 
 export default {
   name: 'Energy',
+  data() {
+    return {
+      loading: false,
+      rd: {
+        hrvXzznl: { color: '', value: '', refRange: '' },
+        hxZtcs: { color: '', value: '', refRange: '' },
+        smSmsc: { color: '', value: '', refRange: '' },
+        hxZtahizs: { color: '', value: '', refRange: '' },
+        datePt: [0],
+        hrvXzznlPt: [0],
+        hxZtcsPt: [0],
+        smSmscPt: [0],
+        hxZtahizsPt: [0]
+      }
+    }
+  },
   mounted() {
     if (!chartBySmsc) {
       chartBySmsc = echarts.init(this.$refs.chart_BySmsc, null, { renderer: 'svg' })
@@ -63,12 +81,7 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this.$nextTick(function() {
-      this.getChartBySmsc()
-      this.getChartByHrvxzznl()
-      this.getChartByHxztcs()
-      this.getChartByHxdtcs()
-    }, 2000)
+    this._getEnergy()
   },
   beforeDestroy() {
     if (chartBySmsc) {
@@ -101,18 +114,44 @@ export default {
     window.removeEventListener('beforeunload', this.clearChart)
   },
   methods: {
+    _getEnergy() {
+      this.loading = true
+      getEnergy({ rptId: this.$route.query.rptId }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+
+          this.rd.hrvXzznl = d.hrvXzznl
+          this.rd.hxZtcs = d.hxZtcs
+          this.rd.smSmsc = d.smSmsc
+          this.rd.hxZtahizs = d.hxZtahizs
+          this.rd.datePt = d.datePt
+          this.rd.hrvXzznlPt = d.hrvXzznlPt
+          this.rd.hxZtcsPt = d.hxZtcsPt
+          this.rd.smSmscPt = d.smSmscPt
+          this.rd.hxZtahizsPt = d.hxZtahizsPt
+
+          this.$nextTick(function() {
+            this.getChartBySmsc()
+            this.getChartByHrvxzznl()
+            this.getChartByHxztcs()
+            this.getChartByHxdtcs()
+          }, 2000)
+        }
+        this.loading = false
+      })
+    },
     clearChart() {
       this.$destroy()
     },
     getChartBySmsc() {
-      var datePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
-      var valuePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
+      var datePt = this.rd.datePt
+      var valuePt = this.rd.smSmscPt
       var option = {
         grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 50
         }],
         tooltip: {
           trigger: 'axis'
@@ -136,14 +175,14 @@ export default {
       chartBySmsc.setOption(option, null)
     },
     getChartByHrvxzznl() {
-      var datePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
-      var valuePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
+      var datePt = this.rd.datePt
+      var valuePt = this.rd.hrvXzznlPt
       var option = {
         grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 50
         }],
         tooltip: {
           trigger: 'axis'
@@ -167,14 +206,14 @@ export default {
       chartByHrvxzznl.setOption(option, null)
     },
     getChartByHxztcs() {
-      var datePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
-      var valuePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
+      var datePt = this.rd.datePt
+      var valuePt = this.rd.hxZtcsPt
       var option = {
         grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 50
         }],
         tooltip: {
           trigger: 'axis'
@@ -198,14 +237,14 @@ export default {
       chartByHxztcs.setOption(option, null)
     },
     getChartByHxdtcs() {
-      var datePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
-      var valuePt = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30]
+      var datePt = this.rd.datePt
+      var valuePt = this.rd.hxZtahizsPt
       var option = {
         grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 50
         }],
         tooltip: {
           trigger: 'axis'

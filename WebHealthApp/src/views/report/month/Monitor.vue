@@ -2,13 +2,13 @@
   <div class="pg-monitor">
     <div class="user-info">
 
-      <div class="t1"> <img class="avatar" src="@/assets/images/default_avatar.png" alt=""></div>
-      <div class="t2"> <span>用户nic</span></div>
-      <div class="t3"><span>2021-4</span></div>
+      <div class="t1"> <img class="avatar" :src="userInfo.headImgurl" alt=""></div>
+      <div class="t2"> <span>{{ userInfo.signName }}</span></div>
+      <div class="t3"><span>{{ rd.healthDate }}</span></div>
 
       <div class="t4">
         <div class="lf">
-          <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">60</span></span>
+          <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">{{ rd.totalScore }}</span></span>
         </div>
         <div class="rf">
           <span class="tt1"><span class="tt2">得分超过人数</span><span class="tt3">41%</span></span>
@@ -80,10 +80,15 @@
 </template>
 
 <script>
+import { getMonitor } from '@/api/monthreport'
 export default {
   name: 'Report',
   data() {
     return {
+      loading: false,
+      userInfo: {
+        signName: ''
+      },
       rd: {
         smSmsc: { color: '1', value: '0', refRange: '3' },
         smQdsmsc: { color: '', value: '', refRange: '' },
@@ -97,6 +102,22 @@ export default {
         hxZtahizs: { color: '', value: '', refRange: '' }
       }
 
+    }
+  },
+  created() {
+    this._getMonitor()
+  },
+  methods: {
+    _getMonitor() {
+      this.loading = true
+      getMonitor({ rptId: this.$route.query.rptId }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.userInfo = d.userInfo
+          this.rd = d.reportData
+        }
+        this.loading = false
+      })
     }
   }
 }
