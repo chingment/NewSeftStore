@@ -26,52 +26,52 @@
         </div>
         <div class="dvit-item">
           <div class="t1"><span>睡眠时长</span></div>
-          <div class="t2"><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.smSmsc" sign /></div>
           <div class="t3"><span>{{ rd.smSmsc.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>浅睡眠时长</span></div>
-          <div class="t2"><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.smQdsmsc" sign /></div>
           <div class="t3"><span>{{ rd.smQdsmsc.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>深睡眠时长</span></div>
-          <div class="t2"><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.smSdsmsc" sign /></div>
           <div class="t3"><span>{{ rd.smSdsmsc.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>REM睡眠时长</span></div>
-          <div class="t2"><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.smRemsmsc" sign /></div>
           <div class="t3"><span>{{ rd.smRemsmsc.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>心脏总能量</span></div>
-          <div class="t2"><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.hrvXzznl" sign /></div>
           <div class="t3"><span>{{ rd.hrvXzznl.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>平均呼吸</span></div>
-          <div class="t2"><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.hxDcpjhx" sign /></div>
           <div class="t3"><span>{{ rd.hxDcpjhx.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>平均心率</span></div>
-          <div class="t2"><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.xlDcpjxl" sign /></div>
           <div class="t3"><span>{{ rd.xlDcpjxl.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>呼吸暂停</span></div>
-          <div class="t2"><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.hxZtcs" sign /></div>
           <div class="t3"><span>{{ rd.hxZtcs.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>体动</span></div>
-          <div class="t2"><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.smTdcs" sign /></div>
           <div class="t3"><span>{{ rd.smTdcs.refRange }}</span></div>
         </div>
         <div class="dvit-item">
           <div class="t1"><span>AHI指数</span></div>
-          <div class="t2"><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span></div>
+          <div class="t2"><dv-item :value="rd.hxZtahizs" sign /></div>
           <div class="t3"><span>{{ rd.hxZtahizs.refRange }}</span></div>
         </div>
       </div>
@@ -81,8 +81,10 @@
 
 <script>
 import { getMonitor } from '@/api/monthreport'
+import DvItem from '@/components/DvItem.vue'
 export default {
   name: 'Report',
+  components: { DvItem },
   data() {
     return {
       loading: false,

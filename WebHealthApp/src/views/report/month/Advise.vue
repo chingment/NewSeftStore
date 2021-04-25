@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="lm-card_body">
-        <p>一般来说自主神经平衡下降的人是适合运动的，这种人对心率的调节能力是较强的，可进行一些兼顾力量与协调性的运动，如篮球，足球，网球，羽毛球等。但对于已经存在高血压的人群来说，运动强度需要谨慎。</p>
+        <p>{{ rd.sugByYd }}</p>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="lm-card_body">
-        <p>今天需多吃蛋白质量含量高的食物，如早餐补充一个鸡蛋</p>
+        <p>{{ rd.sugByYy }}</p>
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="lm-card_body">
-        <p>睡眠时间不足，深度睡眠时长必然过少，这将加速身体的衰老，今天务必早睡</p>
+        <p>{{ rd.sugBySm }}</p>
       </div>
     </div>
 
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="lm-card_body">
-        <p>今日不适合过多劳累，需多营养</p>
+        <p>{{ rd.sugByQxyl }}</p>
       </div>
     </div>
 
@@ -52,8 +52,37 @@
 </template>
 
 <script>
+
+import { getAdvise } from '@/api/monthreport'
+
 export default {
-  name: 'Advise'
+  name: 'Advise',
+  data() {
+    return {
+      loading: false,
+      rd: {
+        sugByYy: '',
+        sugByYd: '',
+        sugBySm: '',
+        sugByQxyl: ''
+      }
+    }
+  },
+  created() {
+    this._getAdvise()
+  },
+  methods: {
+    _getAdvise() {
+      this.loading = true
+      getAdvise({ rptId: this.$route.query.rptId }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.rd = d
+        }
+        this.loading = false
+      })
+    }
+  }
 }
 </script>
 

@@ -39,7 +39,7 @@
 <script>
 
 import { getEnergy } from '@/api/monthreport'
-
+import DvItem from '@/components/DvItem.vue'
 import echarts from 'echarts'
 
 var chartBySmsc
@@ -49,6 +49,7 @@ var chartByHxdtcs
 
 export default {
   name: 'Energy',
+  components: { DvItem },
   data() {
     return {
       loading: false,
@@ -148,10 +149,10 @@ export default {
       var valuePt = this.rd.smSmscPt
       var option = {
         grid: [{
-          x: 50,
-          y: 50,
-          x2: 50,
-          y2: 50
+          x: 25,
+          y: 25,
+          x2: 25,
+          y2: 25
         }],
         tooltip: {
           trigger: 'axis'
@@ -161,11 +162,28 @@ export default {
           show: true
         }],
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+            formatter: function(value) {
+              var texts = []
+              if (value == 0) {
+                texts.push('0')
+              } else if (value == 10000) {
+                texts.push('1')
+              } else if (value == 20000) {
+                texts.push('2')
+              } else if (value == 30000) {
+                texts.push('3')
+              } else if (value == 40000) {
+                texts.push('4')
+              }
+              return texts
+            }
+          }
         },
         series: [{
           type: 'line',
-          name: '当吃基准心率',
+          name: '日均睡觉时长',
           showSymbol: false,
           data: valuePt
         }
@@ -179,10 +197,10 @@ export default {
       var valuePt = this.rd.hrvXzznlPt
       var option = {
         grid: [{
-          x: 50,
-          y: 50,
-          x2: 50,
-          y2: 50
+          x: 25,
+          y: 25,
+          x2: 25,
+          y2: 25
         }],
         tooltip: {
           trigger: 'axis'
@@ -192,11 +210,28 @@ export default {
           show: true
         }],
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+            formatter: function(value) {
+              var texts = []
+              if (value == 0) {
+                texts.push('0')
+              } else if (value == 1000) {
+                texts.push('1')
+              } else if (value == 2000) {
+                texts.push('2')
+              } else if (value == 3000) {
+                texts.push('3')
+              } else if (value == 4000) {
+                texts.push('4')
+              }
+              return texts
+            }
+          }
         },
         series: [{
           type: 'line',
-          name: '当吃基准心率',
+          name: '心脏总能量',
           showSymbol: false,
           data: valuePt
         }
@@ -210,10 +245,10 @@ export default {
       var valuePt = this.rd.hxZtcsPt
       var option = {
         grid: [{
-          x: 50,
-          y: 50,
-          x2: 50,
-          y2: 50
+          x: 25,
+          y: 25,
+          x2: 25,
+          y2: 25
         }],
         tooltip: {
           trigger: 'axis'
@@ -227,7 +262,7 @@ export default {
         },
         series: [{
           type: 'line',
-          name: '当吃基准心率',
+          name: '呼吸暂停次数',
           showSymbol: false,
           data: valuePt
         }
@@ -241,10 +276,10 @@ export default {
       var valuePt = this.rd.hxZtahizsPt
       var option = {
         grid: [{
-          x: 50,
-          y: 50,
-          x2: 50,
-          y2: 50
+          x: 25,
+          y: 25,
+          x2: 25,
+          y2: 25
         }],
         tooltip: {
           trigger: 'axis'
@@ -258,7 +293,7 @@ export default {
         },
         series: [{
           type: 'line',
-          name: '当吃基准心率',
+          name: '低通气次数',
           showSymbol: false,
           data: valuePt
         }

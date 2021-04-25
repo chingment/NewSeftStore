@@ -209,10 +209,10 @@ namespace LocalS.Service.Api.HealthApp
 
             var ret = new
             {
-                rpt.SugByYy,
-                rpt.SugByYd,
-                rpt.SugBySm,
-                rpt.SugByQxyl,
+                SugByYy = rpt.SugByYy.NullToEmpty(),
+                SugByYd = rpt.SugByYd.NullToEmpty(),
+                SugBySm = rpt.SugBySm.NullToEmpty(),
+                SugByQxyl = rpt.SugByQxyl.NullToEmpty(),
                 rpt.IsSend
             };
 
