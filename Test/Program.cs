@@ -4,6 +4,7 @@ using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.BLL.Task;
 using LocalS.Entity;
+using LocalS.Service;
 using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
 using LocalS.Service.Api.StoreTerm;

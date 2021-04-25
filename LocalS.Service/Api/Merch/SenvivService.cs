@@ -68,228 +68,6 @@ namespace LocalS.Service.Api.Merch
 
     public class SenvivService : BaseService
     {
-        //性别
-        public string GetSexName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "男";
-                case "2":
-                    return "女";
-                default:
-                    return "";
-            }
-        }
-
-        //呼吸暂停综合证
-        public string GetSASName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "轻度";
-                case "2":
-                    return "中度";
-                case "3":
-                    return "重度";
-                case "4":
-                    return "无";
-                default:
-                    return "";
-            }
-        }
-
-        //呼吸机
-        public string GetBreathingMachineName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "是";
-                case "2":
-                    return "否";
-                default:
-                    return "";
-            }
-        }
-
-        //目前困扰
-        public string GetPerplexName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "没有困扰";
-                case "2":
-                    return "睡眠呼吸暂停综合症";
-                case "3":
-                    return "打鼾";
-                case "4":
-                    return "糖尿病";
-                case "5":
-                    return "高血压";
-                case "6":
-                    return "冠心病";
-                case "7":
-                    return "心脏病";
-                case "8":
-                    return "心衰";
-                case "9":
-                    return "慢性阻塞性肺疾病";
-                case "10":
-                    return "脑梗塞/脑卒中";
-                case "11":
-                    return "长期失眠";
-                case "12":
-                    return "癫痫";
-                case "13":
-                    return "不宁腿综合症";
-                case "14":
-                    return "其它";
-                default:
-                    return "";
-            }
-        }
-
-
-        public List<EleTag> GetSignTags(string perplex, string otherPerplex)
-        {
-            var tags = new List<EleTag>();
-
-            if (!string.IsNullOrEmpty(perplex))
-            {
-                string[] arrs = perplex.Split(',');
-
-                foreach (var val in arrs)
-                {
-                    var name = GetPerplexName(val);
-                    if (!string.IsNullOrEmpty(name) && name != "其它")
-                    {
-                        tags.Add(new EleTag(name, ""));
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(otherPerplex) && otherPerplex != "其它")
-            {
-                tags.Add(new EleTag(otherPerplex, ""));
-            }
-
-            return tags;
-        }
-
-        //既往史
-        public string GetMedicalhistoryName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "重大手术史";
-                case "2":
-                    return "输血史(非献血)";
-                case "3":
-                    return "传染病史";
-                case "4":
-                    return "都没有";
-                default:
-                    return "";
-            }
-        }
-
-        //用药情况
-        public string GetMedicineName(string value)
-        {
-            switch (value)
-            {
-                case "0":
-                    return "未服用药物";
-                case "1":
-                    return "高血压药物";
-                case "2":
-                    return "心脏病药物";
-                case "3":
-                    return "糖尿病药物";
-                case "4":
-                    return "脑梗塞药物";
-                case "5":
-                    return "治疗失眠药物";
-                case "6":
-                    return "其它";
-                default:
-                    return "";
-            }
-        }
-
-        public List<string> GetMedicineNames(string medicine)
-        {
-            List<string> names = new List<string>();
-
-            if (!string.IsNullOrEmpty(medicine))
-            {
-                string[] arrs = medicine.Split(',');
-
-                foreach (var val in arrs)
-                {
-                    var name = GetMedicineName(val);
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        names.Add(name);
-                    }
-                }
-            }
-
-            return names;
-        }
-
-        //肺炎情况
-        public string GetFieyanName(string value)
-        {
-            switch (value)
-            {
-                case "1":
-                    return "抗疫一线医务人员";
-                case "2":
-                    return "湖北旅行史或居住史";
-                case "3":
-                    return "病例报告社区旅行史或接触史";
-                case "4":
-                    return "不确定有无接触史";
-                case "5":
-                    return "无接触史";
-                case "6":
-                    return "确诊患者";
-                case "7":
-                    return "确诊患者密切接触史";
-                default:
-                    return "";
-            }
-        }
-
-        public string GetSignName(string nick, string account)
-        {
-            string signName = nick;
-
-            if (!string.IsNullOrEmpty(account) && nick != account)
-            {
-                signName += "(" + account + ")";
-            }
-
-
-            return signName;
-        }
-
-        public string GetAge(DateTime? bithday)
-        {
-            string age = "-";
-
-            if (bithday != null)
-            {
-                age = CommonUtil.GetAgeByBirthdate(bithday.Value).ToString();
-            }
-
-            return age;
-        }
 
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
@@ -354,7 +132,7 @@ namespace LocalS.Service.Api.Merch
 
                     foreach (var val in arrs)
                     {
-                        var name = GetPerplexName(val);
+                        var name = SvUtil.GetPerplexName(val);
                         if (!string.IsNullOrEmpty(name))
                         {
                             perplex.Add(name);
@@ -382,12 +160,12 @@ namespace LocalS.Service.Api.Merch
                     Id = item.Id,
                     SignName = signName,
                     HeadImgurl = item.HeadImgurl,
-                    SAS = GetSASName(item.SAS),
-                    BreathingMachine = GetBreathingMachineName(item.BreathingMachine),
-                    SignTags = GetSignTags(item.Perplex, item.OtherPerplex),
-                    Medicalhistory = GetMedicalhistoryName(item.Medicalhistory),
-                    Medicine = GetMedicineNames(item.Medicine),
-                    Sex = GetSexName(item.Sex),
+                    SAS = SvUtil.GetSASName(item.SAS),
+                    BreathingMachine = SvUtil.GetBreathingMachineName(item.BreathingMachine),
+                    SignTags = SvUtil.GetSignTags(item.Perplex, item.OtherPerplex),
+                    Medicalhistory = SvUtil.GetMedicalhistoryName(item.Medicalhistory),
+                    Medicine = SvUtil.GetMedicineNames(item.Medicine),
+                    Sex = SvUtil.GetSexName(item.Sex),
                     Age = age,
                     Height = item.Height,
                     Weight = item.Weight,
@@ -421,7 +199,7 @@ namespace LocalS.Service.Api.Merch
 
                 foreach (var val in arrs)
                 {
-                    var name = GetPerplexName(val);
+                    var name = SvUtil.GetPerplexName(val);
                     if (!string.IsNullOrEmpty(name))
                     {
                         perplex.Add(name);
@@ -433,15 +211,15 @@ namespace LocalS.Service.Api.Merch
             var ret = new
             {
                 Id = d_SenvivUser.Id,
-                SignName = GetSignName(d_SenvivUser.Nick, d_SenvivUser.Account),
-                Age = GetAge(d_SenvivUser.Birthday),
+                SignName = SvUtil.GetSignName(d_SenvivUser.Nick, d_SenvivUser.Account),
+                Age = SvUtil.GetAge(d_SenvivUser.Birthday),
                 HeadImgurl = d_SenvivUser.HeadImgurl,
-                SAS = GetSASName(d_SenvivUser.SAS),
-                BreathingMachine = GetBreathingMachineName(d_SenvivUser.BreathingMachine),
-                SignTags = GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.OtherPerplex),
-                Medicalhistory = GetMedicalhistoryName(d_SenvivUser.Medicalhistory),
-                Medicine = GetMedicineNames(d_SenvivUser.Medicine),
-                Sex = GetSexName(d_SenvivUser.Sex),
+                SAS = SvUtil.GetSASName(d_SenvivUser.SAS),
+                BreathingMachine = SvUtil.GetBreathingMachineName(d_SenvivUser.BreathingMachine),
+                SignTags = SvUtil.GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.OtherPerplex),
+                Medicalhistory = SvUtil.GetMedicalhistoryName(d_SenvivUser.Medicalhistory),
+                Medicine = SvUtil.GetMedicineNames(d_SenvivUser.Medicine),
+                Sex = SvUtil.GetSexName(d_SenvivUser.Sex),
                 Height = d_SenvivUser.Height,
                 Weight = d_SenvivUser.Weight,
                 Mobile = d_SenvivUser.Mobile,
@@ -554,10 +332,10 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = GetSignName(rpt.Nick, rpt.Account),
+                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
-                    Sex = GetSexName(rpt.Sex),
-                    Age = GetAge(rpt.Birthday),
+                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Age = SvUtil.GetAge(rpt.Birthday),
                     HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
                     TotalScore = rpt.TotalScore,
                     SmRssj = rpt.SmRssj.ToUnifiedFormatDateTime(),
@@ -759,10 +537,10 @@ namespace LocalS.Service.Api.Merch
                 Id = d_Rpt.Id,
                 UserInfo = new
                 {
-                    SignName = GetSignName(d_Rpt.Nick, d_Rpt.Account),
+                    SignName = SvUtil.GetSignName(d_Rpt.Nick, d_Rpt.Account),
                     HeadImgurl = d_Rpt.HeadImgurl,
-                    Sex = GetSexName(d_Rpt.Sex),
-                    Age = GetAge(d_Rpt.Birthday)
+                    Sex = SvUtil.GetSexName(d_Rpt.Sex),
+                    Age = SvUtil.GetAge(d_Rpt.Birthday)
                 },
                 ReportData = new
                 {
@@ -988,10 +766,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = GetSignName(rpt.Nick, rpt.Account),
+                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
-                    Sex = GetSexName(rpt.Sex),
-                    Age = GetAge(rpt.Birthday),
+                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Age = SvUtil.GetAge(rpt.Birthday),
                     rpt.TotalScore,
                     rpt.HealthDate,
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
@@ -1115,7 +893,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.SvUserId,
                            u.DatePt,
                            u.SmSmscPt,
-                           u.SmDtqcsPt,
                            u.XlDcjzxlPt,
                            u.XlCqjzxlPt,
                            u.HrvXzznlPt,
@@ -1140,10 +917,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 Id = rpt.Id,
                 UserInfo = new
                 {
-                    SignName = GetSignName(rpt.Nick, rpt.Account),
+                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
                     HeadImgurl = rpt.HeadImgurl,
-                    Sex = GetSexName(rpt.Sex),
-                    Age = GetAge(rpt.Birthday)
+                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Age = SvUtil.GetAge(rpt.Birthday)
                 },
                 ReportData = new
                 {
@@ -1202,7 +979,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
                     DatePt = rpt.DatePt.ToJsonObject<List<object>>(),
                     SmSmscPt = rpt.SmSmscPt.ToJsonObject<List<object>>(),
-                    SmDtqcsPt = rpt.SmDtqcsPt.ToJsonObject<List<object>>(),
                     XlDcjzxlPt = rpt.XlDcjzxlPt.ToJsonObject<List<object>>(),
                     XlCqjzxlPt = rpt.XlCqjzxlPt.ToJsonObject<List<object>>(),
                     HrvXzznlPt = rpt.HrvXzznlPt.ToJsonObject<List<object>>(),

@@ -151,7 +151,6 @@ namespace LocalS.Entity
 
         public string DatePt { get; set; }
         public string SmSmscPt { get; set; }
-        public string SmDtqcsPt { get; set; }
         public string XlDcjzxlPt { get; set; }
         public string XlCqjzxlPt { get; set; }
         public string HrvXzznlPt { get; set; }

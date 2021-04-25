@@ -153,6 +153,8 @@
     <Compile Include="Api\Admin\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupMerchMasterGetList.cs" />
     <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
+    <Compile Include="Api\HealthApp\MonthReportService.cs" />
     <Compile Include="Api\InsApp\HomeService.cs" />
     <Compile Include="Api\InsApp\InsAppServiceFactory.cs" />
     <Compile Include="Api\InsApp\InsCarService.cs" />
@@ -449,6 +451,9 @@
     <Compile Include="Api\StoreTerm\StockSettingService.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SvDataJd.cs" />
+    <Compile Include="SvDataJdUtil.cs" />
+    <Compile Include="SvUtil.cs" />
     <Compile Include="UI\Badge.cs" />
     <Compile Include="UI\EleTag.cs" />
     <Compile Include="UI\FsBlock.cs" />
