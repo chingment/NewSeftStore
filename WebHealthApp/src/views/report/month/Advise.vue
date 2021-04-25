@@ -60,7 +60,7 @@ export default {
 <style lang="scss" scoped>
 
 .pg-advise{
-  padding: 20px;
+  padding: 10px;
 }
 
 .lm-card{
@@ -72,7 +72,7 @@ export default {
     transition: .3s;
     border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .lm-card__header{
@@ -102,7 +102,7 @@ export default {
 padding: 20px;
 
 p{
-  color: #5a5353;
+  color: #707070;
   line-height: 24px;
 }
 }

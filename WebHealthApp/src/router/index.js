@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Main_Index from '../views/main/Index.vue'
-import Main_Report from '../views/main/Report.vue'
-import Main_Energy from '../views/main/Energy.vue'
-import Main_Advise from '../views/main/Advise.vue'
+import Main_Index from '../views/report/month/Index.vue'
+import Main_Monitor from '../views/report/month/Monitor.vue'
+import Main_Energy from '../views/report/month/Energy.vue'
+import Main_Advise from '../views/report/month/Advise.vue'
 
 Vue.use(VueRouter)
 
@@ -13,24 +13,28 @@ const routes = [
     path: '/',
     name: 'MainIndex',
     component: Main_Index,
-    redirec: 'report',
+    redirec: 'monitor',
     children: [
       {
         path: '/',
-        redirect: 'report'
+        redirect: '/report/month/monitor'
       },
       {
-        path: '/report',
-        name: 'MainReport',
-        component: Main_Report
+        path: '/report/month',
+        redirect: '/report/month/monitor'
       },
       {
-        path: '/energy',
+        path: '/report/month/monitor',
+        name: 'MainMonitor',
+        component: Main_Monitor
+      },
+      {
+        path: '/report/month/energy',
         name: 'MainEnergy',
         component: Main_Energy
       },
       {
-        path: '/advise',
+        path: '/report/month/advise',
         name: 'MainAdvise',
         component: Main_Advise
       }

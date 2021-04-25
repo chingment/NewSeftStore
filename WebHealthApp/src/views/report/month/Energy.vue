@@ -235,7 +235,7 @@ export default {
 <style lang="scss" scoped>
 
 .pg-energy{
-  padding: 20px;
+  padding: 10px;
 }
 
 .dv-section{
@@ -248,13 +248,14 @@ export default {
     transition: .3s;
     border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 20px
+    margin-bottom: 10px
 }
 
 .desrb{
   display: flex;
     padding: 10px 20px;
         font-size: 14px;
+        color: #707070;
   .lf{
     display: flex;
     align-items: center;
