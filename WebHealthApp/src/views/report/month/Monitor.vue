@@ -20,12 +20,18 @@
 
     <div class="swiper-container sm-tags">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">标签1</div>
+        <div v-for="(item, index) in rd.smTags" :key="index" class="swiper-slide">
+          <div :class="'item item_'+(index<=2?index:2)">
+            <div> {{ item.name }} <br>{{ item.count }}</div>
+          </div>
+        </div>
+
+        <!-- <div class="swiper-slide">标签1</div>
         <div class="swiper-slide">标签2</div>
         <div class="swiper-slide">标签3</div>
         <div class="swiper-slide">标签4</div>
         <div class="swiper-slide">标签5</div>
-        <div class="swiper-slide">标签</div>
+        <div class="swiper-slide">标签6</div> -->
       </div>
       <!-- 如果需要分页器 -->
       <!-- <div class="swiper-pagination" /> -->
@@ -135,22 +141,7 @@ export default {
     }
   },
   mounted() {
-    new Swiper('.swiper-container', {
-      slidesPerView: 3,
-      loop: true,
-      // 如果需要分页器
-      pagination: '.swiper-pagination',
-      // 如果需要前进后退按钮
-      nextButton: null,
-      prevButton: null
-      // 如果需要滚动条
-      // scrollbar: '.swiper-scrollbar',
-      // 如果需要自动切换海报
-      // autoplay: {
-      //   delay: 1000,//时间 毫秒
-      //   disableOnInteraction: false,//用户操作之后是否停止自动轮播默认true
-      // },
-    })
+
   },
   created() {
     this._getMonitor()
@@ -163,6 +154,24 @@ export default {
           var d = res.data
           this.userInfo = d.userInfo
           this.rd = d.reportData
+          this.$nextTick(function() {
+            new Swiper('.swiper-container', {
+              slidesPerView: 3,
+              loop: true,
+              // 如果需要分页器
+              pagination: '.swiper-pagination',
+              // 如果需要前进后退按钮
+              nextButton: null,
+              prevButton: null
+            // 如果需要滚动条
+            // scrollbar: '.swiper-scrollbar',
+            // 如果需要自动切换海报
+            // autoplay: {
+            //   delay: 1000,//时间 毫秒
+            //   disableOnInteraction: false,//用户操作之后是否停止自动轮播默认true
+            // },
+            })
+          }, 2000)
         }
         this.loading = false
       })
@@ -174,9 +183,11 @@ export default {
 <style lang="scss" scoped>
 
 .user-info{
-  background: #2b9df9;
+ // background: #2b9df9;
+  background-image: url('~@/assets/images/bg_1.jpg');
   height: 230px;
   padding: 20px;
+  background-size: 100% 100%;
 .t1,.t2,.t3{
   display: flex;
   align-items: center;
@@ -281,17 +292,39 @@ background: #fff;
 }
 
 .sm-tags{
-  height: 100px;
   width: 100%;
   margin-bottom: 10px;
+  padding: 20px;
   background: #fff;
   .swiper-wrapper{
     .swiper-slide{
       width: 100%;
       height: 100%;
       text-align: center;
-      line-height: 100px;
+      padding: 0px 10px;
+      color:#fff;
+      font-weight: 600;
     }
+  }
+
+  .item{
+    background-size: 100% 100%;
+    width: 12Y0px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 24px;
+  }
+
+  .item_0{
+    background-image: url('~@/assets/images/sm_tag_0.jpg');
+  }
+    .item_1{
+    background-image: url('~@/assets/images/sm_tag_1.jpg');
+  }
+    .item_2{
+    background-image: url('~@/assets/images/sm_tag_2.jpg');
   }
 }
 
