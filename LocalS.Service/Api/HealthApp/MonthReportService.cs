@@ -204,7 +204,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.SugByQxyl,
                            u.IsSend,
                            u.Status,
-                           u.CreateTime
+                           u.CreateTime 
                        }).FirstOrDefault();
 
             var ret = new

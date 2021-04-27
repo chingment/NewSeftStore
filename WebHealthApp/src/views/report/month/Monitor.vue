@@ -309,7 +309,7 @@ background: #fff;
 
   .item{
     background-size: 100% 100%;
-    width: 12Y0px;
+    width: 120px;
     height: 80px;
     display: flex;
     justify-content: center;
