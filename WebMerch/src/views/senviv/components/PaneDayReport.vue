@@ -401,7 +401,6 @@
         >
           <template slot-scope="scope">
             <dv-item :value="scope.row.smRemsmsc" sign />
-
           </template>
         </el-table-column>
         <el-table-column
@@ -412,7 +411,6 @@
         >
           <template slot-scope="scope">
             <dv-item :value="scope.row.smTdcs" sign />
-
           </template>
         </el-table-column>
       </el-table-column>
@@ -422,7 +420,6 @@
           <el-button type="text" size="mini" @click="handleOpenDialogByDetial(scope.row)">
             查看
           </el-button>
-
         </template>
       </el-table-column>
 

@@ -1,5 +1,6 @@
 <template>
   <div class="pg-monitor">
+
     <div class="user-info">
 
       <div class="t1"> <img class="avatar" :src="userInfo.headImgurl" alt=""></div>
@@ -16,7 +17,30 @@
       </div>
 
     </div>
-    <div class="sum-report">
+
+    <div class="swiper-container sm-tags">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">标签1</div>
+        <div class="swiper-slide">标签2</div>
+        <div class="swiper-slide">标签3</div>
+        <div class="swiper-slide">标签4</div>
+        <div class="swiper-slide">标签5</div>
+        <div class="swiper-slide">标签</div>
+      </div>
+      <!-- 如果需要分页器 -->
+      <!-- <div class="swiper-pagination" /> -->
+
+      <!-- 如果需要导航按钮 -->
+      <!-- <div class="swiper-button-prev" />
+      <div class="swiper-button-next" /> -->
+
+    <!-- 如果需要滚动条 -->
+      <!--    <div class="swiper-scrollbar"></div>-->
+    </div>
+
+    <div
+      class="sum-report"
+    >
       <div class="title"><span>月报告统计</span></div>
       <div class="dvit">
         <div class="dvit-head">
@@ -80,8 +104,12 @@
 </template>
 
 <script>
+
 import { getMonitor } from '@/api/monthreport'
 import DvItem from '@/components/DvItem.vue'
+import Swiper from 'swiper'
+import 'swiper/dist/css/swiper.min.css'
+import 'swiper/dist/js/swiper.min'
 export default {
   name: 'Report',
   components: { DvItem },
@@ -105,6 +133,24 @@ export default {
       }
 
     }
+  },
+  mounted() {
+    new Swiper('.swiper-container', {
+      slidesPerView: 3,
+      loop: true,
+      // 如果需要分页器
+      pagination: '.swiper-pagination',
+      // 如果需要前进后退按钮
+      nextButton: null,
+      prevButton: null
+      // 如果需要滚动条
+      // scrollbar: '.swiper-scrollbar',
+      // 如果需要自动切换海报
+      // autoplay: {
+      //   delay: 1000,//时间 毫秒
+      //   disableOnInteraction: false,//用户操作之后是否停止自动轮播默认true
+      // },
+    })
   },
   created() {
     this._getMonitor()
@@ -233,4 +279,20 @@ background: #fff;
 }
 
 }
+
+.sm-tags{
+  height: 100px;
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
+  .swiper-wrapper{
+    .swiper-slide{
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 100px;
+    }
+  }
+}
+
 </style>
