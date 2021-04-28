@@ -1,19 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import getters from './getters'
-import app from './modules/app'
-import settings from './modules/settings'
-import own from './modules/own'
-
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  modules: {
-    app,
-    settings,
-    own
+  state: {
+    isLoading: false// loading全局开关
   },
-  getters
+  mutations: {
+    changeisLoading(state, data) {
+      state.isLoading = data
+    }
+  }
 })
 
 export default store

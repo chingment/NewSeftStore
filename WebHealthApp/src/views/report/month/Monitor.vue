@@ -194,6 +194,14 @@ export default {
   justify-content: center;
 }
 
+.t2{
+  height: 28px;
+}
+
+.t3{
+  height: 28px;
+}
+
 .t4{
   display: flex;
    padding-top: 50px;

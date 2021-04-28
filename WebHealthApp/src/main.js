@@ -8,6 +8,8 @@ import App from './views/App'
 import store from './store'
 import router from './router'
 import VueCookies from 'vue-cookies'
+import Vant from 'vant'
+import 'vant/lib/index.css'
 
 import '@/permission' // permission control
 
@@ -23,7 +25,7 @@ import '@/permission' // permission control
 // if (process.env.NODE_ENV === 'production') {
 //   mockXHR()
 // }
-
+Vue.use(Vant)
 Vue.use(VueCookies)
 Vue.config.productionTip = false
 

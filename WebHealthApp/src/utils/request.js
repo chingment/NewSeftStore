@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -16,6 +16,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    store.state.isLoading = true
     // do something before request is sent
     // console.log(config.url)
     if (store.getters.token) {
@@ -46,41 +47,19 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    store.state.isLoading = false
     const res = response.data
     // console.log(JSON.stringify(res))
     // if the custom code is not 20000, it is judged as an error.
     if (res.result === 1 || res.result === 2) {
       if (res.result === 2) {
-        // Message({
-        //   message: res.message || 'Error',
-        //   type: 'error',
-        //   duration: 5 * 1000
-        // })
-
         if (res.code === 5000) {
-          // to re-login
-          MessageBox.confirm('您链接请求已经超时', '确定退出？', {
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            store.dispatch('own/resetToken').then(() => {
-              var path = encodeURIComponent(window.location.href)
-              window.location.href = `${process.env.VUE_APP_LOGIN_URL}?appId=${process.env.VUE_APP_ID}&logout=2&redirect=${path}`
-            })
-          }).catch(() => {
-          })
+
         }
       }
 
       return res
     } else {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-
       return Promise.reject(new Error(res.message || 'Error'))
     }
   },
