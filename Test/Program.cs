@@ -122,8 +122,13 @@ namespace Test
 
         static void Main(string[] args)
         {
+            List<decimal> smTags2 = new List<decimal>();
+            smTags2.Add(1200m);
+            smTags2.Add(3600m);
 
-            List<DateTime> smTags1 = new List<DateTime>();
+            string cccc1 = smTags2.Select(m => Math.Round(m / 3600m, 2)).ToJsonString();//
+
+             List<DateTime> smTags1 = new List<DateTime>();
             smTags1.Add(DateTime.Now);
             smTags1.Add(DateTime.Now);
 
