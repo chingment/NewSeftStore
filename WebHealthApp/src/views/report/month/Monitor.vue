@@ -1,12 +1,9 @@
 <template>
   <div class="pg-monitor">
-
     <div class="user-info">
-
       <div class="t1"> <img class="avatar" :src="userInfo.headImgurl" alt=""></div>
       <div class="t2"> <span>{{ userInfo.signName }}</span></div>
       <div class="t3"><span>{{ rd.healthDate }}</span></div>
-
       <div class="t4">
         <div class="lf">
           <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">{{ rd.totalScore }}</span></span>
@@ -15,9 +12,7 @@
           <span class="tt1"><span class="tt2">得分超过人数</span><span class="tt3">41%</span></span>
         </div>
       </div>
-
     </div>
-
     <div class="swiper-container sm-tags">
       <div class="swiper-wrapper">
         <div v-for="(item, index) in rd.smTags" :key="index" class="swiper-slide">
@@ -25,7 +20,6 @@
             <div> {{ item.name }} <br>{{ item.count }}</div>
           </div>
         </div>
-
         <!-- <div class="swiper-slide">标签1</div>
         <div class="swiper-slide">标签2</div>
         <div class="swiper-slide">标签3</div>
@@ -35,18 +29,13 @@
       </div>
       <!-- 如果需要分页器 -->
       <!-- <div class="swiper-pagination" /> -->
-
       <!-- 如果需要导航按钮 -->
       <!-- <div class="swiper-button-prev" />
       <div class="swiper-button-next" /> -->
-
-    <!-- 如果需要滚动条 -->
-      <!--    <div class="swiper-scrollbar"></div>-->
+      <!-- 如果需要滚动条 -->
+      <!--<div class="swiper-scrollbar"></div>-->
     </div>
-
-    <div
-      class="sum-report"
-    >
+    <div class="sum-report">
       <div class="title"><span>月报告统计</span></div>
       <div class="dvit">
         <div class="dvit-head">
@@ -108,7 +97,6 @@
     </div>
   </div>
 </template>
-
 <script>
 
 import { getMonitor } from '@/api/monthreport'
@@ -126,7 +114,7 @@ export default {
         signName: ''
       },
       rd: {
-        smSmsc: { color: '1', value: '0', refRange: '3' },
+        smSmsc: { color: '', value: '', refRange: '' },
         smQdsmsc: { color: '', value: '', refRange: '' },
         smSdsmsc: { color: '', value: '', refRange: '' },
         smRemsmsc: { color: '', value: '', refRange: '' },
@@ -137,11 +125,9 @@ export default {
         smTdcs: { color: '', value: '', refRange: '' },
         hxZtahizs: { color: '', value: '', refRange: '' }
       }
-
     }
   },
   mounted() {
-
   },
   created() {
     this._getMonitor()
@@ -220,9 +206,9 @@ export default {
     justify-content: flex-end;
   }
 
-   .tt1 { }
-    .tt2 {   float: left;font-size: 16px; }
-        .tt3 {  float: left; font-weight: 600;font-size: 30px;      margin-top: -12px;     margin-left: 8px;}
+  .tt1 {     display: flex; }
+  .tt2 {   float: left;font-size: 16px;  white-space: nowrap; }
+  .tt3 {  float: left; font-weight: 600;font-size: 28px;      margin-top: -10px;     margin-left: 5px;}
 }
 
 .t1{
@@ -235,7 +221,7 @@ export default {
 
 .t3{
   padding-top: 10px;
-    color: #fff;
+  color: #fff;
 }
 
   .avatar{
@@ -249,9 +235,9 @@ export default {
 }
 
 .sum-report{
-background: #fff;
+    background: #fff;
 .title{
-      height: 60px;
+    height: 60px;
     line-height: 60px;
     margin: 0px 20px;
     border-bottom: 1px solid gainsboro;
@@ -269,9 +255,9 @@ background: #fff;
 
 .dvit-item{
   display: flex;
-   padding: 10px 20px;
-    font-size: 14px;
-    color: #707070;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #707070;
 }
 
 .dvit-item:nth-child(even){
@@ -317,7 +303,7 @@ background: #fff;
 
   .item{
     background-size: 100% 100%;
-    width: 120px;
+    max-width: 120px;
     height: 80px;
     display: flex;
     justify-content: center;
