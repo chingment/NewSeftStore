@@ -13,16 +13,8 @@ const routes = [
     path: '/',
     name: 'MainIndex',
     component: Main_Index,
-    redirec: 'monitor',
+    redirec: '/report/month/monitor',
     children: [
-      {
-        path: '/',
-        redirect: '/report/month/monitor'
-      },
-      {
-        path: '/report/month',
-        redirect: '/report/month/monitor'
-      },
       {
         path: '/report/month/monitor',
         name: 'MainMonitor',

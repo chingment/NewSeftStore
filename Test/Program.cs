@@ -122,13 +122,43 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            var getAccessTokenRequest = new SenvivSdk.GetAccessTokenRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Nacx0i51L2sHnpnWkUnPP9FXO9vDkG6HPo20BLbURis=\"", new { deptid = "32" });
+
+            var result = api.DoPost(getAccessTokenRequest);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"on0dM51JLVry0lnKT4Q8nsJBRXNs\",");
+            sb.Append("\"template_id\":\"GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY\",");
+            sb.Append("\"url\":\"http://health.17fanju.com/#/report/month/monitor?rptId=a83045abb4444b9089edefcc195be998\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"张三您好，您的最近一期健康报告已生成，详情如下。\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"2014年7月21日 18:36\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"各项指标均正常，请进一步保持。总体评分4分\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"感谢您的支持，如需查看往期报告信息请点击\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxAppInfoConfig config = new WxAppInfoConfig();
+            config.AppId = "wxf0d98b28bebd0c82";
+            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+
+            string access_token = result.Data.Data.access_token;
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(access_token, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            c.DoPost(templateSend);
+
             List<decimal> smTags2 = new List<decimal>();
             smTags2.Add(1200m);
             smTags2.Add(3600m);
 
             string cccc1 = smTags2.Select(m => Math.Round(m / 3600m, 2)).ToJsonString();//
 
-             List<DateTime> smTags1 = new List<DateTime>();
+            List<DateTime> smTags1 = new List<DateTime>();
             smTags1.Add(DateTime.Now);
             smTags1.Add(DateTime.Now);
 
@@ -216,13 +246,13 @@ namespace Test
             //DateTime dt = DateTime.Parse("0001-01-01T00:00:00+08:00");
             ////1004B23B4DFF_1615332079038
             ////1004B23B4DFF_1615332079038
-            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-            var userListRequest2 = new SenvivSdk.ReportDetailListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1jddwMgWP8qiJ3WE+h+sBf0ivW39asBWM9y2ooYwxx8Y=\"", new { deptid = "32", userid = "321x847d11280EA34A", size = 1, page = 1 });
-            var result2 = api.DoPost(userListRequest2);
-            if (result2.Result == ResultType.Success)
-            {
+            //SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            //var userListRequest2 = new SenvivSdk.ReportDetailListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1jddwMgWP8qiJ3WE+h+sBf0ivW39asBWM9y2ooYwxx8Y=\"", new { deptid = "32", userid = "321x847d11280EA34A", size = 1, page = 1 });
+            //var result2 = api.DoPost(userListRequest2);
+            //if (result2.Result == ResultType.Success)
+            //{
 
-            }
+            //}
 
             //SdkFactory.Senviv.GetUserList();
 

@@ -4,7 +4,9 @@
     <div class="dv-section">
       <div ref="chart_BySmsc" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smsc.png" alt=""> <span class="dv-name">日均睡觉时长</span><span class="dv-value">{{ rd.smSmsc.value }}</span> </div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smsc.png" alt="">
+
+          <span class="dv-name">日均睡觉时长</span>  <dv-item :value="rd.smSmsc" sign />  </div>
         <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.smSmsc.refRange }}</span></div>
       </div>
     </div>
@@ -12,7 +14,7 @@
     <div class="dv-section">
       <div ref="chart_ByHrvxzznl" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hrvxlzl.png" alt=""> <span class="dv-name">心脏总能量</span><span class="dv-value">{{ rd.hrvXzznl.value }}</span> </div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hrvxlzl.png" alt=""> <span class="dv-name">心脏总能量</span> <dv-item :value="rd.hrvXzznl" sign /> </div>
         <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hrvXzznl.refRange }}</span></div>
       </div>
     </div>
@@ -20,7 +22,7 @@
     <div class="dv-section">
       <div ref="chart_ByHxztcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hxztcs.png" alt=""> <span class="dv-name">呼吸暂停次数</span><span class="dv-value">{{ rd.hxZtcs.value }}</span> </div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hxztcs.png" alt=""> <span class="dv-name">呼吸暂停次数</span> <dv-item :value="rd.hxZtcs" sign />  </div>
         <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtcs.refRange }}</span></div>
       </div>
     </div>
@@ -28,7 +30,7 @@
     <div class="dv-section">
       <div ref="chart_ByHxdtcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
       <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smdtcs.png" alt=""> <span class="dv-name">低通气次数</span><span class="dv-value">{{ rd.hxZtahizs.value }}</span> </div>
+        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smdtcs.png" alt=""> <span class="dv-name">低通气次数</span>  <dv-item :value="rd.hxZtahizs" sign /> </div>
         <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtahizs.refRange }}</span></div>
       </div>
     </div>

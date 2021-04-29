@@ -232,5 +232,36 @@ namespace LocalS.BLL
             return null;
         }
 
+
+        public void SendMonthReport(string reportId)
+        {
+            var report = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == reportId).FirstOrDefault();
+
+            var user = CurrentDb.SenvivUser.Where(m => m.Id == report.SvUserId).FirstOrDefault();
+
+            //var opendId = user.WechatId;
+            var opendId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            var deptId = user.DeptId;
+            var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+            var healthDate = report.HealthDate;
+            var totalScore = report.TotalScore;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + opendId + "\",");
+            sb.Append("\"template_id\":\"" + template_id + "\",");
+            sb.Append("\"url\":\"http://health.17fanju.com/#/report/month/monitor?rptId=" + reportId + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"您好，新的月健康报告已生成，详情如下。\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + healthDate + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"总体评分" + totalScore + "分\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"感谢您的支持，如需查看详情报告信息请点击\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(GetWxPaAccessToken(deptId), WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            c.DoPost(templateSend);
+        }
+
     }
 }

@@ -1052,6 +1052,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             CurrentDb.SaveChanges();
 
+            if (rpt.IsSend)
+            {
+                SdkFactory.Senviv.SendMonthReport(rop.ReportId);
+            }
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;

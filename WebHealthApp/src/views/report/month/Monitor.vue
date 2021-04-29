@@ -143,7 +143,7 @@ export default {
           this.$nextTick(function() {
             new Swiper('.swiper-container', {
               slidesPerView: 3,
-              loop: true,
+              loop: false,
               // 如果需要分页器
               pagination: '.swiper-pagination',
               // 如果需要前进后退按钮

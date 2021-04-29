@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="dv-value">
     <span :style="{'color': value.color}">{{ value.value }}</span>
     <span v-if="value.sign!='-'" :style="{'color': value.color}">{{ value.sign }}</span>
   </span>
