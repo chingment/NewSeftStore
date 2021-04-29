@@ -162,24 +162,7 @@ export default {
           show: true
         }],
         yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: function(value) {
-              var texts = []
-              if (value == 0) {
-                texts.push('0')
-              } else if (value == 10000) {
-                texts.push('1')
-              } else if (value == 20000) {
-                texts.push('2')
-              } else if (value == 30000) {
-                texts.push('3')
-              } else if (value == 40000) {
-                texts.push('4')
-              }
-              return texts
-            }
-          }
+          type: 'value'
         },
         series: [{
           type: 'line',
