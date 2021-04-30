@@ -71,6 +71,15 @@ namespace LocalS.Service.Api.HealthApp
                        }).FirstOrDefault();
 
 
+            var sum_TotalScores = CurrentDb.SenvivHealthMonthReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
+            int scoreRatio = 80;
+            if (sum_TotalScores.Count > 0)
+            {
+                int a = sum_TotalScores.Where(m => m < rpt.TotalScore).Count();
+                int b = sum_TotalScores.Count();
+                double r = Math.Round((Convert.ToDouble(a) / Convert.ToDouble(b)), 2) * 100;
+                scoreRatio = Convert.ToInt32(r);
+            }
 
             var ret = new
             {
@@ -84,6 +93,7 @@ namespace LocalS.Service.Api.HealthApp
                 },
                 ReportData = new
                 {
+                    scoreRatio,
                     rpt.TotalScore,
                     rpt.HealthDate,
                     SmTags = rpt.SmTags.ToJsonObject<List<object>>(),
@@ -204,7 +214,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.SugByQxyl,
                            u.IsSend,
                            u.Status,
-                           u.CreateTime 
+                           u.CreateTime
                        }).FirstOrDefault();
 
             var ret = new

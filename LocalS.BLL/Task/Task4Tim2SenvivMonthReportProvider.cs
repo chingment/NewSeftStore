@@ -102,7 +102,7 @@ namespace LocalS.BLL.Task
                             d_MonthReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
 
 
-         
+
                             d_MonthReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
 
                             // d_MonthReport.SmDtqcsPt = d_DayReports.Select(m => m.SmDtqcs).ToJsonString();
@@ -127,6 +127,7 @@ namespace LocalS.BLL.Task
 
                             d_MonthReport.IsSend = false;
                             d_MonthReport.VisitCount = 0;
+                            d_MonthReport.Status = E_SenvivHealthMonthStatus.WaitSend;
                             d_MonthReport.CreateTime = DateTime.Now;
                             d_MonthReport.Creator = IdWorker.Build(IdType.NewGuid);
                             CurrentDb.SenvivHealthMonthReport.Add(d_MonthReport);

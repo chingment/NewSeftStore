@@ -233,7 +233,7 @@ namespace LocalS.BLL
         }
 
 
-        public void SendMonthReport(string reportId)
+        public bool SendMonthReport(string reportId)
         {
             var report = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == reportId).FirstOrDefault();
 
@@ -251,8 +251,8 @@ namespace LocalS.BLL
             sb.Append("\"template_id\":\"" + template_id + "\",");
             sb.Append("\"url\":\"http://health.17fanju.com/#/report/month/monitor?rptId=" + reportId + "\", ");
             sb.Append("\"data\":{");
-            sb.Append("\"first\":{ \"value\":\"您好，新的月健康报告已生成，详情如下。\",\"color\":\"#173177\" },");
-            sb.Append("\"keyword1\":{ \"value\":\"" + healthDate + "\",\"color\":\"#173177\" },");
+            sb.Append("\"first\":{ \"value\":\"您好，" + healthDate + "月健康报告已生成，详情如下。\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + DateTime.Now.ToUnifiedFormatDateTime() + "\",\"color\":\"#173177\" },");
             sb.Append("\"keyword2\":{ \"value\":\"总体评分" + totalScore + "分\",\"color\":\"#173177\" },");
             sb.Append("\"remark\":{ \"value\":\"感谢您的支持，如需查看详情报告信息请点击\",\"color\":\"#173177\"}");
             sb.Append("}}");
@@ -260,7 +260,12 @@ namespace LocalS.BLL
             WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(GetWxPaAccessToken(deptId), WxPostDataType.Text, sb.ToString());
             WxApi c = new WxApi();
 
-            c.DoPost(templateSend);
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
         }
 
     }

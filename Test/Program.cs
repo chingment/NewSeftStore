@@ -122,7 +122,9 @@ namespace Test
 
         static void Main(string[] args)
         {
-
+           // double scoreRatio =3 / 22;
+            double r = Math.Round((Convert.ToDouble(21) / Convert.ToDouble(22)), 2)*100;
+            var scoreRatio = Convert.ToInt32(r);
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
             var getAccessTokenRequest = new SenvivSdk.GetAccessTokenRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Nacx0i51L2sHnpnWkUnPP9FXO9vDkG6HPo20BLbURis=\"", new { deptid = "32" });

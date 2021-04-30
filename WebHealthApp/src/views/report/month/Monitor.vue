@@ -9,7 +9,7 @@
           <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">{{ rd.totalScore }}</span></span>
         </div>
         <div class="rf">
-          <span class="tt1"><span class="tt2">得分超过人数</span><span class="tt3">41%</span></span>
+          <span class="tt1"><span class="tt2">得分超过人数</span><span class="tt3">{{ rd.scoreRatio }}%</span></span>
         </div>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
         signName: ''
       },
       rd: {
+        scoreRatio: '',
         smSmsc: { color: '', value: '', refRange: '' },
         smQdsmsc: { color: '', value: '', refRange: '' },
         smSdsmsc: { color: '', value: '', refRange: '' },

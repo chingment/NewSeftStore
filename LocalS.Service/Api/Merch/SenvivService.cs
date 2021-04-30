@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
@@ -68,6 +69,40 @@ namespace LocalS.Service.Api.Merch
 
     public class SenvivService : BaseService
     {
+        public StatusModel GetMonthReportStatus(E_SenvivHealthMonthStatus status)
+        {
+            var statusModel = new StatusModel();
+
+            switch (status)
+            {
+                case E_SenvivHealthMonthStatus.WaitBuild:
+                    statusModel = new StatusModel(1, "待生成");
+                    break;
+                case E_SenvivHealthMonthStatus.Building:
+                    statusModel = new StatusModel(2, "生成中");
+                    break;
+                case E_SenvivHealthMonthStatus.BuildSuccess:
+                    statusModel = new StatusModel(3, "生成成功");
+                    break;
+                case E_SenvivHealthMonthStatus.BuildFailure:
+                    statusModel = new StatusModel(4, "生成失败");
+                    break;
+                case E_SenvivHealthMonthStatus.WaitSend:
+                    statusModel = new StatusModel(5, "待评价");
+                    break;
+                case E_SenvivHealthMonthStatus.Sending:
+                    statusModel = new StatusModel(6, "发送中");
+                    break;
+                case E_SenvivHealthMonthStatus.SendSuccess:
+                    statusModel = new StatusModel(7, "发送成功");
+                    break;
+                case E_SenvivHealthMonthStatus.SendFailure:
+                    statusModel = new StatusModel(8, "发送失败");
+                    break;
+            }
+
+            return statusModel;
+        }
 
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
@@ -821,7 +856,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
-                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
+                    Status = GetMonthReportStatus(rpt.Status),
+                    IsBuild = rpt.IsBuild,
+                    IsSend = rpt.IsSend
                 });
             }
 
@@ -1048,16 +1086,40 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             rpt.SugByQxyl = rop.SugByQxyl;
             rpt.SugBySm = rop.SugBySm;
             rpt.SugByYy = rop.SugByYy;
-            rpt.IsSend = rop.IsSend;
 
-            CurrentDb.SaveChanges();
-
-            if (rpt.IsSend)
+            if (rop.IsSend)
             {
-                SdkFactory.Senviv.SendMonthReport(rop.ReportId);
+
+                var isSend = SdkFactory.Senviv.SendMonthReport(rop.ReportId);
+                if (isSend)
+                {
+                    rpt.IsSend = true;
+                    rpt.Status = E_SenvivHealthMonthStatus.SendSuccess;
+                }
+                else
+                {
+                    rpt.Status = E_SenvivHealthMonthStatus.SendFailure;
+                }
+
+                CurrentDb.SaveChanges();
+
+                if (isSend)
+                {
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
+                }
+                else
+                {
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送失败");
+                }
+            }
+            else
+            {
+                CurrentDb.SaveChanges();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
 
