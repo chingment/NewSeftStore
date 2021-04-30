@@ -31,5 +31,12 @@ namespace WebApiHealthApp.Controllers
             IResult result = HealthAppServiceFactory.MonthReport.GetAdvise(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
+        {
+            IResult result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

@@ -14,6 +14,9 @@
   </div>
 </template>
 <script>
+
+import { updateVisitCount } from '@/api/monthreport'
+
 export default {
   name: 'Tabbar',
   data() {
@@ -38,6 +41,13 @@ export default {
           text: '建议'
         }
       ]
+    }
+  },
+  mounted() {
+    if (window.performance.navigation.type === 1) {
+      console.log('页面被刷新！')
+    } else {
+      updateVisitCount({ rptId: this.$route.query.rptId }).then(res => {})
     }
   },
   methods: {

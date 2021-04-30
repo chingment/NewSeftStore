@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.CreateTime
                        }).FirstOrDefault();
 
-           
+
 
             var sum_TotalScores = CurrentDb.SenvivHealthMonthReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
             int scoreRatio = 80;
@@ -232,5 +232,21 @@ namespace LocalS.Service.Api.HealthApp
             return result;
         }
 
+        public CustomJsonResult UpdateVisitCount(string operater, string rptId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == rptId).FirstOrDefault();
+            if (rpt != null)
+            {
+                rpt.VisitCount += 1;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+
+            return result;
+        }
     }
 }

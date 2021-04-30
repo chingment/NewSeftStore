@@ -24,8 +24,17 @@ export function getAdvise(params) {
   })
 }
 
+export function updateVisitCount(params) {
+  return request({
+    url: '/monthreport/updateVisitCount',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getAdvise: getAdvise,
   getEnergy: getEnergy,
-  getMonitor: getMonitor
+  getMonitor: getMonitor,
+  updateVisitCount: updateVisitCount
 }

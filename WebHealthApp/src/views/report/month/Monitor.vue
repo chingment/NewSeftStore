@@ -128,8 +128,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   created() {
     this._getMonitor()
   },
