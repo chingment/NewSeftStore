@@ -127,7 +127,7 @@ namespace LocalS.BLL.Task
 
                             d_MonthReport.IsSend = false;
                             d_MonthReport.VisitCount = 0;
-                            d_MonthReport.Status = E_SenvivHealthMonthStatus.WaitSend;
+                            d_MonthReport.Status = E_SenvivHealthReportStatus.WaitSend;
                             d_MonthReport.CreateTime = DateTime.Now;
                             d_MonthReport.Creator = IdWorker.Build(IdType.NewGuid);
                             CurrentDb.SenvivHealthMonthReport.Add(d_MonthReport);

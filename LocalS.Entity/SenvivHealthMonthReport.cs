@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
 
-    public enum E_SenvivHealthMonthStatus
+    public enum E_SenvivHealthReportStatus
     {
         Unknow = 0,
         WaitBuild = 1,
@@ -168,7 +168,7 @@ namespace LocalS.Entity
         public bool IsBuild { get; set; }
         public bool IsSend { get; set; }
         public int VisitCount { get; set; }
-        public E_SenvivHealthMonthStatus Status { get; set; }
+        public E_SenvivHealthReportStatus Status { get; set; }
         public string SugByYd { get; set; }
         public string SugByYy { get; set; }
         public string SugBySm { get; set; }

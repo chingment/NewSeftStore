@@ -414,12 +414,22 @@
           </template>
         </el-table-column>
       </el-table-column>
-
+      <el-table-column
+        fixed="right"
+        prop="status"
+        label="状态"
+        width="120"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.status.text }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="handleOpenDialogByDetial(scope.row)">
-            查看
-          </el-button>
+
+          <el-link v-if="scope.row.isSend" type="primary" size="mini" @click="handleOpenDialogByDetial(scope.row)">查看</el-link>
+          <el-link v-else type="warning" size="mini" @click="handleOpenDialogByDetial(scope.row)">评价 </el-link>
         </template>
       </el-table-column>
 

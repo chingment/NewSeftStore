@@ -69,34 +69,34 @@ namespace LocalS.Service.Api.Merch
 
     public class SenvivService : BaseService
     {
-        public StatusModel GetMonthReportStatus(E_SenvivHealthMonthStatus status)
+        public StatusModel GetReportStatus(E_SenvivHealthReportStatus status)
         {
             var statusModel = new StatusModel();
 
             switch (status)
             {
-                case E_SenvivHealthMonthStatus.WaitBuild:
+                case E_SenvivHealthReportStatus.WaitBuild:
                     statusModel = new StatusModel(1, "待生成");
                     break;
-                case E_SenvivHealthMonthStatus.Building:
+                case E_SenvivHealthReportStatus.Building:
                     statusModel = new StatusModel(2, "生成中");
                     break;
-                case E_SenvivHealthMonthStatus.BuildSuccess:
-                    statusModel = new StatusModel(3, "生成成功");
+                case E_SenvivHealthReportStatus.BuildSuccess:
+                    statusModel = new StatusModel(3, "已生成");
                     break;
-                case E_SenvivHealthMonthStatus.BuildFailure:
+                case E_SenvivHealthReportStatus.BuildFailure:
                     statusModel = new StatusModel(4, "生成失败");
                     break;
-                case E_SenvivHealthMonthStatus.WaitSend:
+                case E_SenvivHealthReportStatus.WaitSend:
                     statusModel = new StatusModel(5, "待评价");
                     break;
-                case E_SenvivHealthMonthStatus.Sending:
+                case E_SenvivHealthReportStatus.Sending:
                     statusModel = new StatusModel(6, "发送中");
                     break;
-                case E_SenvivHealthMonthStatus.SendSuccess:
-                    statusModel = new StatusModel(7, "发送成功");
+                case E_SenvivHealthReportStatus.SendSuccess:
+                    statusModel = new StatusModel(7, "已发送");
                     break;
-                case E_SenvivHealthMonthStatus.SendFailure:
+                case E_SenvivHealthReportStatus.SendFailure:
                     statusModel = new StatusModel(8, "发送失败");
                     break;
             }
@@ -329,6 +329,8 @@ namespace LocalS.Service.Api.Merch
                              u.SmRemsmsc,
                              u.SmTdcs,
                              u.SmSmzq,
+                             u.Status,
+                             u.IsSend,
                              u.CreateTime
                          });
 
@@ -425,7 +427,9 @@ namespace LocalS.Service.Api.Merch
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
-                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
+                    IsSend = rpt.IsSend,
+                    Status = GetReportStatus(rpt.Status),
                 });
             }
 
@@ -857,7 +861,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
                     SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
-                    Status = GetMonthReportStatus(rpt.Status),
+                    Status = GetReportStatus(rpt.Status),
                     IsBuild = rpt.IsBuild,
                     IsSend = rpt.IsSend
                 });
@@ -1094,11 +1098,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 if (isSend)
                 {
                     rpt.IsSend = true;
-                    rpt.Status = E_SenvivHealthMonthStatus.SendSuccess;
+                    rpt.Status = E_SenvivHealthReportStatus.SendSuccess;
                 }
                 else
                 {
-                    rpt.Status = E_SenvivHealthMonthStatus.SendFailure;
+                    rpt.Status = E_SenvivHealthReportStatus.SendFailure;
                 }
 
                 CurrentDb.SaveChanges();

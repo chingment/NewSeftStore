@@ -464,7 +464,8 @@ namespace LocalS.BLL.Task
                                 }
                             }
 
-
+                            d_DayReport.IsSend = true;
+                            d_DayReport.Status = E_SenvivHealthReportStatus.SendSuccess;
                             d_DayReport.CreateTime = DateTime.Now;
                             d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
 

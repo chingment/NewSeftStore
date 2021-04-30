@@ -70,6 +70,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.CreateTime
                        }).FirstOrDefault();
 
+           
 
             var sum_TotalScores = CurrentDb.SenvivHealthMonthReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
             int scoreRatio = 80;

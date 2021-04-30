@@ -421,10 +421,7 @@
         <template slot-scope="scope">
 
           <el-link v-if="scope.row.isSend" type="primary" size="mini" @click="handleOpenDialogByDetial(scope.row)">查看</el-link>
-
-          <el-link v-else type="warning" size="mini" @click="handleOpenDialogByDetial(scope.row)">
-            评价
-          </el-link>
+          <el-link v-else type="warning" size="mini" @click="handleOpenDialogByDetial(scope.row)">评价 </el-link>
 
         </template>
       </el-table-column>
