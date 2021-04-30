@@ -145,6 +145,7 @@ namespace LocalS.Entity
         public string XlPoint { get; set; }
         public string HxPoint { get; set; }
         public string SmPoint { get; set; }
+        public int VisitCount { get; set; }
         public bool IsValid { get; set; }
         public bool IsSend { get; set; }
         public E_SenvivHealthReportStatus Status { get; set; }
