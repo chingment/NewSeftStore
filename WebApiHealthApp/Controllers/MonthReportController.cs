@@ -14,28 +14,28 @@ namespace WebApiHealthApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetMonitor([FromUri]string rptId)
         {
-            IResult result = HealthAppServiceFactory.MonthReport.GetMonitor(this.CurrentUserId, rptId);
+            var result = HealthAppServiceFactory.MonthReport.GetMonitor(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetEnergy([FromUri]string rptId)
         {
-            IResult result = HealthAppServiceFactory.MonthReport.GetEnergy(this.CurrentUserId, rptId);
+            var result = HealthAppServiceFactory.MonthReport.GetEnergy(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetAdvise([FromUri]string rptId)
         {
-            IResult result = HealthAppServiceFactory.MonthReport.GetAdvise(this.CurrentUserId, rptId);
+            var result = HealthAppServiceFactory.MonthReport.GetAdvise(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
         {
-            IResult result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);
+            var result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
     }

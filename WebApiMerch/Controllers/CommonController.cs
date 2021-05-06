@@ -14,7 +14,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetStores()
         {
-            IResult result = MerchServiceFactory.Common.GetStores(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Common.GetStores(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
     }

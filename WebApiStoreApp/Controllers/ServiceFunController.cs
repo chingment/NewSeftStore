@@ -14,7 +14,7 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse ScanCodeResult([FromBody]RopServiceFunScanCodeResult rop)
         {
-            IResult result = StoreAppServiceFactory.ServiceFun.ScanCodeResult(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.ServiceFun.ScanCodeResult(this.CurrentUserId, this.CurrentUserId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -22,7 +22,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetMyReffSkus([FromUri]RupServiceFunGetMyReffSkus rup)
         {
-            IResult result = StoreAppServiceFactory.ServiceFun.GetMyReffSkus(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.ServiceFun.GetMyReffSkus(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

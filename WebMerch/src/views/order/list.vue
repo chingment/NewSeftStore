@@ -289,7 +289,7 @@
                     <el-link slot="reference" type="primary" style="margin-right:15px;">出货流程</el-link>
                   </el-popover>
                 </td>
-                <td v-show="pickupSku.status.value==6000" style="width:200px">
+                <td style="width:200px">
                   <div v-if="pickupSku.status.value==6000">
                     <el-radio v-model="pickupSku.signStatus" label="1" style="margin-right:5px;">已取</el-radio>
                     <el-radio v-model="pickupSku.signStatus" label="2">未取</el-radio>

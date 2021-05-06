@@ -11,7 +11,7 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse Operate([FromBody]RopCartOperate rop)
         {
-            IResult result = StoreAppServiceFactory.Cart.Operate(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.Cart.Operate(this.CurrentUserId, this.CurrentUserId, rop);
 
             return new OwnApiHttpResponse(result);
 
@@ -20,7 +20,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse<RetCartPageData> PageData([FromUri]RupCartPageData rup)
         {
-            IResult<RetCartPageData> result = StoreAppServiceFactory.Cart.PageData(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Cart.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse<RetCartPageData>(result);
         }
@@ -28,7 +28,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetCartData([FromUri]RupCartGetCartData rup)
         {
-            IResult result = StoreAppServiceFactory.Cart.GetCartData(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Cart.GetCartData(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

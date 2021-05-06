@@ -15,7 +15,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetPromSt([FromUri]RupMemberGetPromSt rup)
         {
-            IResult result = StoreAppServiceFactory.Member.GetPromSt(this.CurrentUserId,this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Member.GetPromSt(this.CurrentUserId,this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }
@@ -25,7 +25,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetPayLevelSt([FromUri]RupMemberGetPayLevelSt rup)
         {
-            IResult result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Member.GetPayLevelSt(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }
@@ -34,7 +34,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetRightDescSt([FromUri]RupMemberGetRightDescSt rup)
         {
-            IResult result = StoreAppServiceFactory.Member.GetRightDescSt(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Member.GetRightDescSt(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

@@ -9,7 +9,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse Result([FromUri]RupOperateResult rup)
         {
-            IResult result = StoreAppServiceFactory.Operate.Result(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Operate.Result(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

@@ -15,7 +15,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse TobeSearch([FromUri]RupSearchTobeSearch rup)
         {
-            IResult result = StoreAppServiceFactory.Search.TobeSearch(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Search.TobeSearch(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

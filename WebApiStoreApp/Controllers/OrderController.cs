@@ -19,21 +19,21 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse Confirm([FromBody]RopOrderConfirm rop)
         {
-            IResult result = StoreAppServiceFactory.Order.Confrim(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.Order.Confrim(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Reserve([FromBody]RopOrderReserve rop)
         {
-            IResult result = StoreAppServiceFactory.Order.Reserve(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.Order.Reserve(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse List([FromUri]RupOrderList rup)
         {
-            IResult result = StoreAppServiceFactory.Order.List(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Order.List(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -56,14 +56,14 @@ namespace WebApiStoreApp.Controllers
         {
             rop.CreateIp = Lumos.CommonUtil.GetIpAddress(this.HttpRequest);
 
-            IResult result = StoreAppServiceFactory.Order.BuildPayParams(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.Order.BuildPayParams(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse BuildPayOptions([FromUri]RupOrderBuildPayOptions rup)
         {
-            IResult result = StoreAppServiceFactory.Order.BuildPayOptions(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Order.BuildPayOptions(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -194,14 +194,14 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse BuildBookTimeArea([FromUri]RupOrderBuildBookTimeArea rup)
         {
-            IResult result = StoreAppServiceFactory.Order.BuildBookTimeArea(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Order.BuildBookTimeArea(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetMyRent([FromUri]RupOrderGetMyRent rup)
         {
-            IResult result = StoreAppServiceFactory.Order.GetMyRent(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Order.GetMyRent(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 

@@ -15,7 +15,7 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse Search([FromUri]string key)
         {
 
-            IResult result = MerchServiceFactory.Supplier.Search(this.CurrentUserId, this.CurrentMerchId, key);
+            var result = MerchServiceFactory.Supplier.Search(this.CurrentUserId, this.CurrentMerchId, key);
             return new OwnApiHttpResponse(result);
         }
 

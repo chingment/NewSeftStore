@@ -14,14 +14,14 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse CfTake([FromBody]RopSmCfSelfTakeOrderCfTake rop)
         {
-            IResult result = StoreAppServiceFactory.SmCfSelfTakeOrder.CfTake(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.SmCfSelfTakeOrder.CfTake(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse Details(string id)
         {
-            IResult result = StoreAppServiceFactory.SmCfSelfTakeOrder.Details(this.CurrentUserId, this.CurrentUserId, id);
+            var result = StoreAppServiceFactory.SmCfSelfTakeOrder.Details(this.CurrentUserId, this.CurrentUserId, id);
             return new OwnApiHttpResponse(result);
         }
     }

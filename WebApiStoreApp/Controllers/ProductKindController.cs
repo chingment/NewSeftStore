@@ -15,7 +15,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse<RetProductKindPageData> PageData([FromUri]RupProductKindPageData rup)
         {
-            IResult<RetProductKindPageData> result = StoreAppServiceFactory.ProductKind.PageData(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.ProductKind.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse<RetProductKindPageData>(result);
         }

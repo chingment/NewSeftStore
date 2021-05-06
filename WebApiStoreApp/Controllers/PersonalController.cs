@@ -15,7 +15,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse<RetPersonalPageData> PageData([FromUri]RupPersonalPageData rup)
         {
-            IResult<RetPersonalPageData> result = StoreAppServiceFactory.Personal.PageData(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Personal.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse<RetPersonalPageData>(result);
         }

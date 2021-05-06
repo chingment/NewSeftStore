@@ -5,6 +5,10 @@
       <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
+      <el-form-item label="机器昵称">
+        <el-input v-show="isEdit" v-model="form.name" clearable />
+        <span v-show="!isEdit">{{ temp.name }}</span>
+      </el-form-item>
       <el-form-item label="机器Logo">
         <img v-show="!isEdit" :src="temp.logoImgUrl" class="singlepic-machine-banner">
 

@@ -15,7 +15,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupPayTransGetList rup)
         {
-            IResult result = MerchServiceFactory.PayTrans.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.PayTrans.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

@@ -10,7 +10,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse My(RupDeliveryAddressMy rup)
         {
-            IResult result = StoreAppServiceFactory.DeliveryAddress.My(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.DeliveryAddress.My(this.CurrentUserId, this.CurrentUserId, rup);
     
             return new OwnApiHttpResponse(result);
         }
@@ -18,7 +18,7 @@ namespace WebApiStoreApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopDeliveryAddressEdit rop)
         {
-            IResult result = StoreAppServiceFactory.DeliveryAddress.Edit(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreAppServiceFactory.DeliveryAddress.Edit(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

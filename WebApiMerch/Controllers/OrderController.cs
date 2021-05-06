@@ -16,7 +16,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupOrderGetList rup)
         {
-            IResult result = MerchServiceFactory.Order.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Order.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -24,14 +24,14 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetDetails(string id)
         {
-            IResult result = MerchServiceFactory.Order.GetDetails(this.CurrentUserId, this.CurrentMerchId, id);
+            var result = MerchServiceFactory.Order.GetDetails(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetDetailsByMachineSelfTake(string id)
         {
-            IResult result = MerchServiceFactory.Order.GetDetailsByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
+            var result = MerchServiceFactory.Order.GetDetailsByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
@@ -39,7 +39,7 @@ namespace WebApiMerch.Controllers
         public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderHandleExByMachineSelfTake rop)
         {
             rop.AppId = AppId.MERCH;
-            IResult result = MerchServiceFactory.Order.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Order.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

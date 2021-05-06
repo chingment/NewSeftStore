@@ -14,21 +14,21 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupShopGetList rup)
         {
-            IResult result = MerchServiceFactory.Shop.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Shop.GetList(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetDetails([FromUri]RupShopGetDetails rup)
         {
-            IResult result = MerchServiceFactory.Shop.GetDetails(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Shop.GetDetails(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Save([FromBody]RopShopSave rop)
         {
-            IResult result = MerchServiceFactory.Shop.Save(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Shop.Save(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

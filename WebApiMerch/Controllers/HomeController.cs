@@ -15,7 +15,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetIndexPageData()
         {
-            IResult result = MerchServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }
@@ -23,7 +23,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetTodaySummary()
         {
-            IResult result = MerchServiceFactory.Home.GetTodaySummary(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.GetTodaySummary(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }
@@ -31,7 +31,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse Get7DayGmv()
         {
-            IResult result = MerchServiceFactory.Home.Get7DayGmv(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.Get7DayGmv(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }
@@ -40,7 +40,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetTodayStoreGmvRl()
         {
-            IResult result = MerchServiceFactory.Home.GetTodayStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.GetTodayStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }
@@ -48,7 +48,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetStoreGmvRl()
         {
-            IResult result = MerchServiceFactory.Home.GetStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.GetStoreGmvRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }
@@ -56,7 +56,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetSkuSaleRl()
         {
-            IResult result = MerchServiceFactory.Home.GetSkuSaleRl(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Home.GetSkuSaleRl(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
         }

@@ -15,7 +15,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse<RetIndexPageData> PageData([FromUri]RupIndexPageData rup)
         {
-            IResult<RetIndexPageData> result = StoreAppServiceFactory.Index.PageData(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Index.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse<RetIndexPageData>(result);
         }
@@ -24,7 +24,7 @@ namespace WebApiStoreApp.Controllers
         [HttpGet]
         public OwnApiHttpResponse SugProducts([FromUri]RupIndexSugProducts rup)
         {
-            IResult result = StoreAppServiceFactory.Index.SugProducts(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreAppServiceFactory.Index.SugProducts(this.CurrentUserId, this.CurrentUserId, rup);
 
             return new OwnApiHttpResponse(result);
         }

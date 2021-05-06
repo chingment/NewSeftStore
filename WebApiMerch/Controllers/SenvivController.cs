@@ -14,56 +14,56 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetUsers([FromUri]RupSenvivGetUsers rup)
         {
-            IResult result = MerchServiceFactory.Senviv.GetUsers(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Senviv.GetUsers(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetUserDetail([FromUri]string userId)
         {
-            IResult result = MerchServiceFactory.Senviv.GetUserDetail(this.CurrentUserId, this.CurrentMerchId, userId);
+            var result = MerchServiceFactory.Senviv.GetUserDetail(this.CurrentUserId, this.CurrentMerchId, userId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetDayReports([FromUri]RupSenvivGetDayReports rup)
         {
-            IResult result = MerchServiceFactory.Senviv.GetDayReports(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Senviv.GetDayReports(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetDayReportDetail([FromUri]string reportId)
         {
-            IResult result = MerchServiceFactory.Senviv.GetDayReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetDayReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetMonthReports([FromUri]RupSenvivGetDayReports rup)
         {
-            IResult result = MerchServiceFactory.Senviv.GetMonthReports(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Senviv.GetMonthReports(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetMonthReportDetail([FromUri]string reportId)
         {
-            IResult result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetMonthReportSug([FromUri]string reportId)
         {
-            IResult result = MerchServiceFactory.Senviv.GetMonthReportSug(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetMonthReportSug(this.CurrentUserId, this.CurrentMerchId, reportId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse SaveMonthReportSug([FromBody]SenvivSaveMonthReportSug rop)
         {
-            IResult result = MerchServiceFactory.Senviv.SaveMonthReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Senviv.SaveMonthReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

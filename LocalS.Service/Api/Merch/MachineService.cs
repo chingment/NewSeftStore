@@ -282,9 +282,6 @@ namespace LocalS.Service.Api.Merch
                 ret.ShopName = string.Format("{0}/{1}", store.Name, shop.Name);
             }
 
-
-
-
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
