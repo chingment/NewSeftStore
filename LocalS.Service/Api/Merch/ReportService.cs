@@ -82,7 +82,7 @@ namespace LocalS.Service.Api.Merch
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
-     
+
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
 
@@ -312,7 +312,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.MachineCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -371,7 +371,7 @@ namespace LocalS.Service.Api.Merch
 
                 if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByMachine)
                 {
-                    receiveRemark = string.Format("{0},{1}", item.ShopName, item.MachineId);
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode));
                 }
 
 
@@ -466,7 +466,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess &&
                          u.IsTestMode == false
-                         select new { u.Id, u.StoreName, u.StoreId, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
+                         select new { u.Id, u.StoreName, u.ShopName, u.StoreId, u.MachineId, u.MachineCumCode, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
@@ -486,10 +486,18 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                var receiveRemark = "";
+
+                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByMachine)
+                {
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode));
+                }
+
                 olist.Add(new
                 {
                     StoreName = item.StoreName,
                     ReceiveModeName = item.ReceiveModeName,
+                    ReceiveRemark = receiveRemark,
                     OrderId = item.Id,
                     TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,

@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.Merch
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
-                    MachineCumCode = item.MachineCumCode,
+                    MachineCode = MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode),
                     SubmittedTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
                     ChargeAmount = item.ChargeAmount.ToF2Price(),
                     DiscountAmount = item.DiscountAmount.ToF2Price(),

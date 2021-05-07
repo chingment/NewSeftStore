@@ -64,6 +64,11 @@
           <span>{{ scope.row.receiveModeName }}</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="isDesktop" label="方式备注" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.receiveRemark }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单号" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.orderId }}</span>
