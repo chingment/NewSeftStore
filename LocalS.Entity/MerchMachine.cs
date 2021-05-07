@@ -24,6 +24,7 @@ namespace LocalS.Entity
         public string MachineId { get; set; }
         public string CurUseStoreId { get; set; }
         public string CurUseShopId { get; set; }
+        public string CumCode { get; set; }
         [MaxLength(128)]
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }

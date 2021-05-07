@@ -16,6 +16,13 @@ namespace LocalS.Service.Api.Merch
 {
     public class MachineService : BaseService
     {
+        public string GetCode(string machineId, string cumCode)
+        {
+            if (string.IsNullOrEmpty(cumCode))
+                return machineId;
+
+            return cumCode;
+        }
 
         public StatusModel GetStatus(string curUseShopId, bool isStopUse, bool isEx, E_MachineRunStatus runstatus, DateTime? lastRequestTime)
         {
@@ -88,7 +95,7 @@ namespace LocalS.Service.Api.Merch
                          where (rup.Id == null || u.MachineId.Contains(rup.Id))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.MachineId, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.MachineId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
 
             if (rup.OpCode == "list")
             {
@@ -154,7 +161,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.MachineId,
-                    Name = item.MachineId,
+                    Code = GetCode(item.MachineId, item.CumCode),
                     StoreId = item.CurUseStoreId,
                     ShopId = item.CurUseShopId,
                     MainImgUrl = item.MainImgUrl,
@@ -210,7 +217,7 @@ namespace LocalS.Service.Api.Merch
 
                         if (store != null && shop != null)
                         {
-                            name = string.Format("{0} [{1}/{2}]", merchMachine.MachineId, store.Name, shop.Name);
+                            name = string.Format("{0} [{1}/{2}]", GetCode(merchMachine.MachineId, merchMachine.CumCode), store.Name, shop.Name);
                         }
                         else
                         {
@@ -258,10 +265,11 @@ namespace LocalS.Service.Api.Merch
                              s.MerchId == merchId
                              &&
                              s.MachineId == machineId
-                             select new { s.MachineId, u.AppVersionCode, u.CtrlSdkVersionCode, u.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
+                             select new { s.MachineId, u.AppVersionCode, u.CtrlSdkVersionCode, s.CumCode, s.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
 
             ret.Id = d_machine.MachineId;
             ret.Name = d_machine.Name;
+            ret.CumCode = d_machine.CumCode;
             ret.LogoImgUrl = d_machine.LogoImgUrl;
             ret.Status = GetStatus(d_machine.CurUseShopId, d_machine.IsStopUse, d_machine.ExIsHas, d_machine.RunStatus, d_machine.LastRequestTime);
             ret.LastRequestTime = d_machine.LastRequestTime.ToUnifiedFormatDateTime();
@@ -479,17 +487,24 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器已停止使用");
             }
 
+            var d_ExistCumCode = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId != rop.Id && m.CumCode == rop.CumCode).FirstOrDefault();
+            if (d_ExistCumCode != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该机器自定义编码已经存在");
+            }
+
+            d_MerchMachine.CumCode = rop.CumCode;
             d_MerchMachine.LogoImgUrl = rop.LogoImgUrl;
             d_MerchMachine.MendTime = DateTime.Now;
             d_MerchMachine.Mender = operater;
             CurrentDb.SaveChanges();
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("机器：{0}，信息修改，保存成功", d_MerchMachine.MachineId), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             if (result.Result == ResultType.Success)
             {
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.MachineEdit, string.Format("机器：{0}，信息修改，保存成功", d_MerchMachine.MachineId), rop);
                 BizFactory.Machine.SendHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
             }
 
@@ -597,8 +612,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
-
         public CustomJsonResult BindShop(string operater, string merchId, RopMachineUnBindShop rop)
         {
             CustomJsonResult result = new CustomJsonResult();

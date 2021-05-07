@@ -5,9 +5,9 @@
       <el-form-item label="机器编号">
         {{ temp.id }}
       </el-form-item>
-      <el-form-item label="机器昵称">
-        <el-input v-show="isEdit" v-model="form.name" clearable />
-        <span v-show="!isEdit">{{ temp.name }}</span>
+      <el-form-item label="自定义编号">
+        <el-input v-show="isEdit" v-model="form.cumCode" clearable />
+        <span v-show="!isEdit">{{ temp.cumCode }}</span>
       </el-form-item>
       <el-form-item label="机器Logo">
         <img v-show="!isEdit" :src="temp.logoImgUrl" class="singlepic-machine-banner">
@@ -69,6 +69,7 @@ export default {
       loading: false,
       temp: {
         name: '',
+        cumCode: '',
         logoImgUrl: '',
         status: {
           text: '',
@@ -78,6 +79,7 @@ export default {
       form: {
         id: '',
         name: '',
+        cumCode: '',
         logoImgUrl: ''
       },
       rules: {
@@ -106,10 +108,12 @@ export default {
             var d = res.data
             this.form.id = d.id
             this.form.name = d.name
+            this.form.cumCode = d.cumCode
             this.form.logoImgUrl = d.logoImgUrl
 
             this.temp.id = d.id
             this.temp.name = d.name
+            this.temp.cumCode = d.cumCode
             this.temp.logoImgUrl = d.logoImgUrl
             this.temp.status = d.status
             this.temp.ctrlSdkVersion = d.ctrlSdkVersion
@@ -143,6 +147,7 @@ export default {
       })
     },
     openEdit() {
+      this.form.cumCode = this.temp.cumCode
       this.isEdit = true
     },
     cancleEdit() {

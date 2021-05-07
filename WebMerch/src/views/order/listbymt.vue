@@ -108,6 +108,11 @@
             <span>{{ scope.row.storeName }}</span>
           </template>
         </el-table-column>
+        <el-table-column v-if="isDesktop" label="机器" prop="machineCumCode" align="left" min-width="10%">
+          <template slot-scope="scope">
+            <span>{{ scope.row.machineCumCode }}</span>
+          </template>
+        </el-table-column>
         <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.clientUserName }}</span>

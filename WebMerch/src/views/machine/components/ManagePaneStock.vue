@@ -55,7 +55,7 @@
 
             <div class="box-slot">
 
-              <div v-if="col.skuId!=null" style="max-width:180px;margin:auto">
+              <div v-if="col.skuId!=null">
                 <div class="above">
                   <div class="above-img">
                     <div v-show="col.isOffSell" class="isOffSell-box">
@@ -63,10 +63,10 @@
                     </div>
                     <img :src="col.mainImgUrl" alt=""> </div>
                   <div class="above-des">
-                    <div class="des1">
+                    <!-- <div class="des1">
                       <div class="name">{{ col.name }}</div>
                       <div class="price" style="display:none;"> <span class="saleprice">{{ col.salePrice }}</span> </div>
-                    </div>
+                    </div> -->
                     <div class="des2">
                       <span class="sellQuantity">{{ col.sellQuantity }}</span> /
                       <span class="lockQuantity">{{ col.lockQuantity }}</span> /
@@ -354,7 +354,7 @@ export default {
   }
 
   .box-slot{
-     min-width: 160px;
+     min-width: 85px;
   }
 }
 
@@ -365,10 +365,10 @@ export default {
     color: #303133;
     -webkit-transition: .3s;
     transition: .3s;
-    padding: 10px;
+    padding: 4px;
     border-radius: 4px;
     overflow: hidden;
-    height: 188px;
+    height: 100px;
 }
   .above{
 
@@ -401,8 +401,8 @@ export default {
       text-align: center;
           position: relative;
      img{
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
     }
      }
   }

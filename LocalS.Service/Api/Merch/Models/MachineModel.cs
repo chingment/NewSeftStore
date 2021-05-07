@@ -9,9 +9,7 @@ namespace LocalS.Service.Api.Merch
     public class MachineModel
     {
         public string Id { get; set; }
-
         public string Name { get; set; }
-
         public string StoreName { get; set; }
     }
 }

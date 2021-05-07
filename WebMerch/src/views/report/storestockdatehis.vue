@@ -204,6 +204,10 @@ export default {
       }))
     },
     handleDownload() {
+      if (this.listData === null || this.listData.length === 0) {
+        this.$message('没有可导出的数据')
+        return
+      }
       var filename = this.filename + '(' + this.listQuery.stockDate + ')'
 
       checkRightExport({ fileName: filename }).then(res => {

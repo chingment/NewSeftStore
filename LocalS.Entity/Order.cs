@@ -77,6 +77,7 @@ namespace LocalS.Entity
         public string ShopId { get; set; }
         public string ShopName { get; set; }
         public string MachineId { get; set; }
+        public string MachineCumCode { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string ReceiveModeName { get; set; }
         public string Receiver { get; set; }

@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.IsTestMode, o.MachineId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Id, o.StoreId, o.IsTestMode, o.MachineCumCode, o.MachineId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
@@ -223,6 +223,7 @@ namespace LocalS.Service.Api.Merch
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
+                    MachineCumCode = item.MachineCumCode,
                     SubmittedTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
                     ChargeAmount = item.ChargeAmount.ToF2Price(),
                     DiscountAmount = item.DiscountAmount.ToF2Price(),
@@ -308,7 +309,7 @@ namespace LocalS.Service.Api.Merch
 
             var receiveMode = new RetOrderDetailsByMachineSelfTake.ReceiveMode();
             receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = order.ReceiveModeName;
+            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, order.MachineCumCode);
             receiveMode.Type = 1;
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();

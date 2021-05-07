@@ -82,7 +82,7 @@ namespace LocalS.Service.Api.Merch
             foreach (var sellChannelStock in sellChannelStocks)
             {
                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
-
+     
                 string sellChannelRefName = "";
                 string sellChannelRemark = "";
 

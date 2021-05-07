@@ -19,6 +19,7 @@ namespace LocalS.Entity
         public string ShopName { get; set; }
         public E_ShopMode ShopMode { get; set; }
         public string MachineId { get; set; }
+        public string MachineCumCode { get; set; }
         public string ReceiveModeName { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string OrderId { get; set; }

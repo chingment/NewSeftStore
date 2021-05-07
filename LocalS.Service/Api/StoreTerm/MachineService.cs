@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreTerm
             {
                 d_machine = new Machine();
                 d_machine.Id = IdWorker.Build(IdType.MachineId);
-                d_machine.Name = "贩卖X1";//默认名称
+                d_machine.Name = d_machine.Id;//默认名称
                 d_machine.JPushRegId = rop.JPushRegId;
                 d_machine.DeviceId = rop.DeviceId;
                 d_machine.ImeiId = string.IsNullOrEmpty(rop.ImeiId) == true ? IdWorker.Build(IdType.NewGuid) : rop.ImeiId;

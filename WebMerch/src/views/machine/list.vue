@@ -29,7 +29,7 @@
           <div slot="header" class="it-header clearfix">
             <div class="left">
 
-              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.name }} <span style="font-size:12px;"> ({{ item.status.text }})</span></span></div>
+              <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.code }} <span style="font-size:12px;"> ({{ item.status.text }})</span></span></div>
 
             </div>
             <div class="right">
@@ -100,7 +100,7 @@
           </el-table-column>
           <el-table-column label="编号" align="left" min-width="45%">
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.code }}</span>
             </template>
           </el-table-column>
           <el-table-column label="门店" align="left" min-width="55%">
