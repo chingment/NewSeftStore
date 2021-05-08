@@ -14,7 +14,7 @@ namespace WebApiStoreSvcChat.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetInfoByUserName([FromUri]RupUserGetInfo rup)
         {
-            IResult result = StoreSvcChatServiceFactory.User.GetInfoByUserName(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = StoreSvcChatServiceFactory.User.GetInfoByUserName(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

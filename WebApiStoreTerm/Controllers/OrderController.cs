@@ -12,7 +12,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Reserve([FromBody]RopOrderReserve rop)
         {
-            IResult result = StoreTermServiceFactory.Order.Reserve(rop);
+            var result = StoreTermServiceFactory.Order.Reserve(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -26,7 +26,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Cancle([FromBody]RopOrderCancle rop)
         {
-            IResult result = StoreTermServiceFactory.Order.Cancle(rop);
+            var result = StoreTermServiceFactory.Order.Cancle(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -34,21 +34,21 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse BuildPayParams([FromBody]RopOrderBuildPayParams rop)
         {
-            IResult result = StoreTermServiceFactory.Order.BuildPayParams(rop);
+            var result = StoreTermServiceFactory.Order.BuildPayParams(rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse SearchByPickupCode([FromUri]RupOrderSearchByPickupCode rup)
         {
-            IResult result = StoreTermServiceFactory.Order.SearchByPickupCode(rup);
+            var result = StoreTermServiceFactory.Order.SearchByPickupCode(rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse PickupStatusQuery([FromUri]RupOrderPickupStatusQuery rup)
         {
-            IResult result = StoreTermServiceFactory.Order.PickupStatusQuery(rup);
+            var result = StoreTermServiceFactory.Order.PickupStatusQuery(rup);
             return new OwnApiHttpResponse(result);
         }
     }

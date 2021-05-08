@@ -14,14 +14,14 @@ namespace WebApiHealthApp.Controllers
         {
             rop.Ip = CommonUtil.GetIP();
 
-            IResult result = AccountServiceFactory.Own.LoginByMinProgram(rop);
+            var result = AccountServiceFactory.Own.LoginByMinProgram(rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse BindPhoneNumberByWx(RopOwnBindPhoneNumberByWx rop)
         {
-            IResult result = AccountServiceFactory.Own.BindPhoneNumberByWx(this.CurrentUserId, rop);
+            var result = AccountServiceFactory.Own.BindPhoneNumberByWx(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -29,7 +29,7 @@ namespace WebApiHealthApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse WxApiCode2Session(RopWxApiCode2Session rop)
         {
-            IResult result = AccountServiceFactory.Own.GetWxApiCode2Session(rop);
+            var result = AccountServiceFactory.Own.GetWxApiCode2Session(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -37,7 +37,7 @@ namespace WebApiHealthApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse Config(RopGetConfig rop)
         {
-            IResult result = AccountServiceFactory.Own.GetConfig(rop);
+            var result = AccountServiceFactory.Own.GetConfig(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -46,7 +46,7 @@ namespace WebApiHealthApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse WxPhoneNumber(RopWxGetPhoneNumber rop)
         {
-            IResult result = AccountServiceFactory.Own.GetWxPhoneNumber(rop);
+            var result = AccountServiceFactory.Own.GetWxPhoneNumber(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -54,7 +54,7 @@ namespace WebApiHealthApp.Controllers
         [HttpPost]
         public OwnApiHttpResponse GetWxACodeUnlimit(RopOwnGetWxACodeUnlimit rop)
         {
-            IResult result = AccountServiceFactory.Own.GetWxACodeUnlimit(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = AccountServiceFactory.Own.GetWxACodeUnlimit(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

@@ -14,7 +14,7 @@ namespace WebApiAdmin.Controllers
         [HttpPost]
         public OwnApiHttpResponse ReLoadSpuCache()
         {
-            IResult result = AdminServiceFactory.MerchRepairFun.ReLoadSpuCache(this.CurrentUserId);
+            var result = AdminServiceFactory.MerchRepairFun.ReLoadSpuCache(this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
     }

@@ -14,21 +14,21 @@ namespace WebApiStoreTerm.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetInfo([FromUri]LocalS.Service.Api.Account.RupOwnGetInfo rup)
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.GetInfo(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.GetInfo(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse UploadFingerVeinData([FromBody]LocalS.Service.Api.Account.RopUploadFingerVeinData rop)
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.UploadFingerVeinData(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse DeleteFingerVeinData()
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.DeleteFingerVeinData(this.CurrentUserId, this.CurrentUserId);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.DeleteFingerVeinData(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -37,7 +37,7 @@ namespace WebApiStoreTerm.Controllers
         public OwnApiHttpResponse LoginByFingerVein([FromBody]LocalS.Service.Api.Account.RopOwnLoginByFingerVein rop)
         {
             rop.Ip = CommonUtil.GetIP();
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -48,7 +48,7 @@ namespace WebApiStoreTerm.Controllers
 
             rop.Ip = CommonUtil.GetIP();
 
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -63,7 +63,7 @@ namespace WebApiStoreTerm.Controllers
             rop.AppId = AppId.STORETERM;
             rop.Token = this.Token;
 
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

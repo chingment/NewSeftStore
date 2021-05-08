@@ -15,7 +15,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Seats([FromBody]RopImServiceSeats rop)
         {
-            IResult result = StoreTermServiceFactory.ImService.Seats(rop);
+            var result = StoreTermServiceFactory.ImService.Seats(rop);
             return new OwnApiHttpResponse(result);
         }
     }

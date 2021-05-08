@@ -15,35 +15,35 @@ namespace WebApiAdmin.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupSysRoleGetList rup)
         {
-            IResult result = AdminServiceFactory.SysRole.GetList(this.CurrentUserId, Enumeration.BelongSite.Agent, rup);
+            var result = AdminServiceFactory.SysRole.GetList(this.CurrentUserId, Enumeration.BelongSite.Agent, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
-            IResult result = AdminServiceFactory.SysRole.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Agent);
+            var result = AdminServiceFactory.SysRole.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Agent);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopSysRoleAdd rop)
         {
-            IResult result = AdminServiceFactory.SysRole.Add(this.CurrentUserId, Enumeration.BelongSite.Agent, rop);
+            var result = AdminServiceFactory.SysRole.Add(this.CurrentUserId, Enumeration.BelongSite.Agent, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.SysRole.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Agent, id);
+            var result = AdminServiceFactory.SysRole.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Agent, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopSysRoleEdit rop)
         {
-            IResult result = AdminServiceFactory.SysRole.Edit(this.CurrentUserId, Enumeration.BelongSite.Agent, rop);
+            var result = AdminServiceFactory.SysRole.Edit(this.CurrentUserId, Enumeration.BelongSite.Agent, rop);
             return new OwnApiHttpResponse(result);
         }
     }

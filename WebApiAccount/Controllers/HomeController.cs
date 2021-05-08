@@ -15,7 +15,7 @@ namespace WebApiAccount.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetIndexPageData()
         {
-            IResult result = AccountServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentUserId);
+            var result = AccountServiceFactory.Home.GetIndexPageData(this.CurrentUserId, this.CurrentUserId);
 
             return new OwnApiHttpResponse(result);
         }

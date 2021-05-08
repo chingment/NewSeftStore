@@ -14,34 +14,34 @@ namespace WebApiAdmin.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupAdminUserGetList rup)
         {
-            IResult result = AdminServiceFactory.AdminUser.GetList(this.CurrentUserId, rup);
+            var result = AdminServiceFactory.AdminUser.GetList(this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
-            IResult result = AdminServiceFactory.AdminUser.InitAdd(this.CurrentUserId);
+            var result = AdminServiceFactory.AdminUser.InitAdd(this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopAdminUserAdd rop)
         {
-            IResult result = AdminServiceFactory.AdminUser.Add(this.CurrentUserId, rop);
+            var result = AdminServiceFactory.AdminUser.Add(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.AdminUser.InitEdit(this.CurrentUserId, id);
+            var result = AdminServiceFactory.AdminUser.InitEdit(this.CurrentUserId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopAdminUserEdit rop)
         {
-            IResult result = AdminServiceFactory.AdminUser.Edit(this.CurrentUserId, rop);
+            var result = AdminServiceFactory.AdminUser.Edit(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

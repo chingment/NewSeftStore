@@ -16,41 +16,41 @@ namespace WebApiAdmin.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupSysMenuGetList rup)
         {
-            IResult result = AdminServiceFactory.SysMenu.GetList(this.CurrentUserId, Enumeration.BelongSite.Admin, rup);
+            var result = AdminServiceFactory.SysMenu.GetList(this.CurrentUserId, Enumeration.BelongSite.Admin, rup);
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
         public OwnApiHttpResponse InitAdd([FromUri]string pId)
         {
-            IResult result = AdminServiceFactory.SysMenu.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Admin, pId);
+            var result = AdminServiceFactory.SysMenu.InitAdd(this.CurrentUserId, Enumeration.BelongSite.Admin, pId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopSysMenuAdd rop)
         {
-            IResult result = AdminServiceFactory.SysMenu.Add(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
+            var result = AdminServiceFactory.SysMenu.Add(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.SysMenu.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Admin, id);
+            var result = AdminServiceFactory.SysMenu.InitEdit(this.CurrentUserId, Enumeration.BelongSite.Admin, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopSysMenuEdit rop)
         {
-            IResult result = AdminServiceFactory.SysMenu.Edit(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
+            var result = AdminServiceFactory.SysMenu.Edit(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Sort([FromBody]RopSysMenuSort rop)
         {
-            IResult result = AdminServiceFactory.SysMenu.Sort(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
+            var result = AdminServiceFactory.SysMenu.Sort(this.CurrentUserId, Enumeration.BelongSite.Admin, rop);
             return new OwnApiHttpResponse(result);
         }
     }

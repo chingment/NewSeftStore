@@ -14,34 +14,34 @@ namespace WebApiAdmin.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupMerchMasterGetList rup)
         {
-            IResult result = AdminServiceFactory.MerchMaster.GetList(this.CurrentUserId, rup);
+            var result = AdminServiceFactory.MerchMaster.GetList(this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
         [HttpGet]
         public OwnApiHttpResponse InitAdd()
         {
-            IResult result = AdminServiceFactory.MerchMaster.InitAdd(this.CurrentUserId);
+            var result = AdminServiceFactory.MerchMaster.InitAdd(this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Add([FromBody]RopMerchMasterAdd rop)
         {
-            IResult result = AdminServiceFactory.MerchMaster.Add(this.CurrentUserId, rop);
+            var result = AdminServiceFactory.MerchMaster.Add(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse InitEdit([FromUri]string id)
         {
-            IResult result = AdminServiceFactory.MerchMaster.InitEdit(this.CurrentUserId, id);
+            var result = AdminServiceFactory.MerchMaster.InitEdit(this.CurrentUserId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopMerchMasterEdit rop)
         {
-            IResult result = AdminServiceFactory.MerchMaster.Edit(this.CurrentUserId, rop);
+            var result = AdminServiceFactory.MerchMaster.Edit(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

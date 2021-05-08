@@ -14,14 +14,14 @@ namespace WebApiAccount.Controllers
         [HttpPost]
         public OwnApiHttpResponse Save([FromBody]RopUserInfoSave rop)
         {
-            IResult result = AccountServiceFactory.UserInfo.Save(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = AccountServiceFactory.UserInfo.Save(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse ChangePassword([FromBody]RopUserInfoChangePassword rop)
         {
-            IResult result = AccountServiceFactory.UserInfo.ChangePassword(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = AccountServiceFactory.UserInfo.ChangePassword(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

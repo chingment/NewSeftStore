@@ -46,7 +46,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [HttpGet]
         public OwnApiHttpResponse GetOnSaleStores([FromUri]string id)
         {

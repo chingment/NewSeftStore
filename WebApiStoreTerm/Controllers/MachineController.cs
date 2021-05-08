@@ -15,7 +15,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse InitData([FromBody]RopMachineInitData rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.InitData(rop);
+            var result = StoreTermServiceFactory.Machine.InitData(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -23,7 +23,7 @@ namespace WebApiStoreTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse ByPoint([FromBody]LocalS.BLL.Biz.RopByPoint rop)
         {
-            IResult result = LocalS.BLL.Biz.BizFactory.ByPoint.Record(this.CurrentUserId, rop);
+            var result = LocalS.BLL.Biz.BizFactory.ByPoint.Record(this.CurrentUserId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -32,21 +32,21 @@ namespace WebApiStoreTerm.Controllers
         [AllowAnonymous]
         public OwnApiHttpResponse CheckUpdate([FromUri]RupMachineCheckUpdate rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
+            var result = StoreTermServiceFactory.Machine.CheckUpdate(rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse EventNotify([FromBody]RopMachineEventNotify rop)
         {
-            IResult result = StoreTermServiceFactory.Machine.EventNotify(this.CurrentUserId, rop);
+            var result = StoreTermServiceFactory.Machine.EventNotify(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
         public OwnApiHttpResponse GetRunExHandleItems([FromUri]RupMachineGetRunExHandleItems rup)
         {
-            IResult result = StoreTermServiceFactory.Machine.GetRunExHandleItems(this.CurrentUserId, rup);
+            var result = StoreTermServiceFactory.Machine.GetRunExHandleItems(this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
 
@@ -54,7 +54,7 @@ namespace WebApiStoreTerm.Controllers
         public OwnApiHttpResponse HandleRunExItems([FromBody]RopMachineHandleRunExItems rop)
         {
             rop.AppId = AppId.STORETERM;
-            IResult result = StoreTermServiceFactory.Machine.HandleRunExItems(this.CurrentUserId, rop);
+            var result = StoreTermServiceFactory.Machine.HandleRunExItems(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

@@ -14,7 +14,7 @@ namespace WebApiAccount.Controllers
         [HttpGet]
         public OwnApiHttpResponse GetList([FromUri]RupLoginLogGetList rup)
         {
-            IResult result = AccountServiceFactory.LoginLog.GetList(this.CurrentUserId, this.CurrentUserId, rup);
+            var result = AccountServiceFactory.LoginLog.GetList(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);
         }
     }

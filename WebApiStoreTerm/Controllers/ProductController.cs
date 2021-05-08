@@ -16,7 +16,7 @@ namespace WebApiStoreTerm.Controllers
         public OwnApiHttpResponse SearchSku([FromUri]RupProductSearchSku rup)
         {
 
-            IResult result = StoreTermServiceFactory.Product.SearchSku(rup);
+            var result = StoreTermServiceFactory.Product.SearchSku(rup);
             return new OwnApiHttpResponse(result);
         }
 

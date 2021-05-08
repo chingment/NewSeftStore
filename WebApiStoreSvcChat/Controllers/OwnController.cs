@@ -17,7 +17,7 @@ namespace WebApiStoreSvcChat.Controllers
         [HttpPost]
         public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.Account.RopOwnLoginByAccount rop)
         {
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -33,14 +33,14 @@ namespace WebApiStoreSvcChat.Controllers
             rop.Ip = CommonUtil.GetIP();
             rop.AppId = AppId.SVCCHAT;
 
-            IResult result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse GetContactInfos([FromBody]RopOwnGetContactInfos rop)
         {
-            IResult result = StoreSvcChatServiceFactory.Own.GetContactInfos(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = StoreSvcChatServiceFactory.Own.GetContactInfos(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 

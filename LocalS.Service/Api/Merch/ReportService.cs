@@ -613,7 +613,6 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-
         public CustomJsonResult CheckRightExport(string operater, string merchId, RopReportCheckRightExport rop)
         {
 
