@@ -14,7 +14,7 @@
     </div>
     <el-row v-loading="loading" :gutter="20">
 
-      <el-col v-for="item in listData" :key="item.id" :span="6" :xs="24" class="my-col">
+      <el-col v-for="item in listData" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="6" class="my-col">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">

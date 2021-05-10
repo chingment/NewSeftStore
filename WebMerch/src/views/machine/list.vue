@@ -12,7 +12,7 @@
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px;display:flex;">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -22,9 +22,9 @@
         </el-col>
       </el-row>
     </div>
-    <el-row v-loading="loading" :gutter="20">
+    <el-row v-loading="loading" :gutter="24">
 
-      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :span="span" :xs="24" class="my-col">
+      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="6" class="my-col">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
@@ -37,7 +37,7 @@
               <el-button v-if="opCode==='bindshop'" type="text" @click="handleUnBindShop(item)">解绑</el-button>
             </div>
           </div>
-          <div class="storeName" style="font-size:12px;">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
+          <div class="storeName" style="font-size:12px;white-space: nowrap">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
           <div class="it-component">
 
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>

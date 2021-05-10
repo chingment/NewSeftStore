@@ -48,11 +48,14 @@
           >添加商品</el-button>
         </el-header>
         <el-main class="fn-main">
-          <el-row v-loading="isLoaingByKindSpus" :gutter="20">
+          <el-row v-loading="isLoaingByKindSpus" :gutter="24">
             <el-col
               v-for="item in listDataByKindSpus"
               :key="item.id"
-              :span="5"
+              :xs="24"
+              :sm="24"
+              :lg="8"
+              :xl="6"
               class="my-col"
             >
               <el-card class="box-card box-card-product">
