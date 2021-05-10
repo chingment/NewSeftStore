@@ -52,8 +52,9 @@
             <el-col
               v-for="item in listDataByKindSpus"
               :key="item.id"
+
               :xs="24"
-              :sm="24"
+              :sm="12"
               :lg="8"
               :xl="6"
               class="my-col"
