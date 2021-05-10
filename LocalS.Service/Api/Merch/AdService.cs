@@ -216,7 +216,9 @@ namespace LocalS.Service.Api.Merch
 
                     if (!d_AdContentBelongIds.Contains(merchMachine.MachineId))
                     {
-                        objs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", merchMachine.MachineId, storeName) });
+                        var code = MerchServiceFactory.Machine.GetCode(merchMachine.MachineId, merchMachine.CumCode);
+
+                        objs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", code, storeName) });
 
                     }
                 }
@@ -430,7 +432,15 @@ namespace LocalS.Service.Api.Merch
                 string belongName = "";
                 if (item.BelongType == E_AdSpaceBelongType.Machine)
                 {
-                    belongName = string.Format("终端: {0}", item.BelongId);
+                    var code = item.BelongId;
+
+                    var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == item.BelongId).FirstOrDefault();
+                    if (d_MerchMachine != null)
+                    {
+                        code = MerchServiceFactory.Machine.GetCode(d_MerchMachine.MachineId, d_MerchMachine.CumCode);
+                    }
+
+                    belongName = string.Format("终端: {0}", code);
                 }
                 else if (item.BelongType == E_AdSpaceBelongType.App)
                 {
