@@ -3,7 +3,7 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
             <el-option
               v-for="item in optionsStores"
@@ -14,7 +14,7 @@
           </el-select>
         </el-col>
 
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-select v-model="listQuery.shopMode" clearable placeholder="销售模式" style="width: 100%">
             <el-option
               v-for="item in optionsShopModes"
@@ -25,7 +25,7 @@
           </el-select>
         </el-col>
 
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>

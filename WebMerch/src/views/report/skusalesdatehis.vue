@@ -3,7 +3,7 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
 
           <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
             <el-option
@@ -14,7 +14,7 @@
             />
           </el-select>
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -25,8 +25,8 @@
             style="width: 100%"
           />
         </el-col>
-        <el-col :span="3" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.pickupStatus" clearable placeholder="全部取货状态">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-select v-model="listQuery.pickupStatus" style="width:100%" clearable placeholder="全部取货状态">
             <el-option
               v-for="item in optionsPickupStatus"
               :key="item.value"
@@ -35,8 +35,8 @@
             />
           </el-select>
         </el-col>
-        <el-col :span="3" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" clearable placeholder="全部提货方式">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-select v-model="listQuery.receiveMode" style="width:100%" clearable placeholder="全部提货方式">
             <el-option
               v-for="item in optionsReceiveModes"
               :key="item.value"
@@ -45,7 +45,7 @@
             />
           </el-select>
         </el-col>
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -53,7 +53,7 @@
             导出
           </el-button>
         </el-col>
-      </el-row>
+        </el-col:xs="24"></el-row>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
     </div>
     <el-table

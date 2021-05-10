@@ -9,10 +9,10 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :span="span" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
-        <el-col :span="span" :xs="24" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
