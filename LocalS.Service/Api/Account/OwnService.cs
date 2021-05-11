@@ -80,7 +80,6 @@ namespace LocalS.Service.Api.Account
 
         }
 
-
         private List<MenuNode> GetMenus2(Enumeration.BelongSite belongSite, string userId, string mctMode = "")
         {
             List<MenuNode> menuNodes = new List<MenuNode>();
@@ -1001,7 +1000,6 @@ namespace LocalS.Service.Api.Account
             return result;
         }
 
-
         public CustomJsonResult GetWxACodeUnlimit(string operater, string userId, RopOwnGetWxACodeUnlimit rop)
         {
             var result = new CustomJsonResult();
@@ -1111,7 +1109,6 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[05]");
             }
         }
-
 
         public string CreateWxAvatar(string userId, string avatarUrl)
         {
