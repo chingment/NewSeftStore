@@ -155,7 +155,10 @@ namespace LocalS.Service.Api.Merch
                         {
                             storeName = store.Name;
                         }
-                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", merchMachine.MachineId, storeName) });
+
+                        string code = MerchServiceFactory.Machine.GetCode(merchMachine.MachineId, merchMachine.CumCode);
+
+                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", code, storeName) });
                     }
                 }
             }

@@ -309,7 +309,7 @@ namespace LocalS.Service.Api.Merch
 
             var receiveMode = new RetOrderDetailsByMachineSelfTake.ReceiveMode();
             receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, order.MachineCumCode);
+            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Machine.GetCode(order.MachineId, order.MachineCumCode));
             receiveMode.Type = 1;
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();

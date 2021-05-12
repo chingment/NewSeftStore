@@ -264,7 +264,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button type="primary" @click="onSubmit">立即创建</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -386,7 +386,7 @@ export default {
     onSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          MessageBox.confirm('确定要保存', '提示', {
+          MessageBox.confirm('确定要创建', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

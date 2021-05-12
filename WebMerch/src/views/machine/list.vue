@@ -38,6 +38,7 @@
             </div>
           </div>
           <div class="storeName" style="font-size:12px;white-space: nowrap">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
+
           <div class="it-component">
 
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>

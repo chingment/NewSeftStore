@@ -92,7 +92,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.MerchMachine
                          join m in CurrentDb.Machine on u.MachineId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
-                         where (rup.Id == null || u.MachineId.Contains(rup.Id))
+                         where ((rup.Id == null || u.MachineId.Contains(rup.Id)) || (rup.Id == null || u.CumCode.Contains(rup.Id)))
                          &&
                          u.MerchId == merchId
                          select new { u.Id, u.MachineId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
