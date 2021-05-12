@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-row v-loading="loading" :gutter="20">
+    <el-row v-loading="loading" :gutter="24">
 
       <el-col v-for="item in listData" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="6" class="my-col">
         <el-card class="box-card">
@@ -33,7 +33,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />

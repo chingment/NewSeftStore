@@ -51,7 +51,7 @@
         </el-card>
       </el-col>
 
-      <el-col v-show="machineCount===0" :span="6" :xs="24" style="margin-bottom:20px">
+      <el-col v-show="machineCount===0" :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
