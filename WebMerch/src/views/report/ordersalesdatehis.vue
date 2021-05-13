@@ -203,8 +203,8 @@ export default {
         if (res.result === 1) {
           this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '提货方式', '订单号', '交易时间', '数量', '总金额', '支付方式']
-        const filterVal = ['storeName', 'receiveModeName', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
+        const tHeader = ['店铺', '提货方式', '方式备注', '订单号', '交易时间', '数量', '总金额', '支付方式']
+        const filterVal = ['storeName', 'receiveModeName', 'receiveRemark', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
 

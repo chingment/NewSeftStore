@@ -84,7 +84,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult GetList(string operater, string merchId, RupMachineGetList rup)
         {
             var result = new CustomJsonResult();

@@ -380,12 +380,12 @@ overflow: hidden;
 
 
 #app .sidebar-container{
-  width: 150px !important;
+  width: 115px !important;
 }
 
 #app .main-container{
   background: #fbfbfb !important;
-  margin-left: 150px;
+  margin-left: 115px;
 }
 
 #app  .app-main{
@@ -394,6 +394,9 @@ overflow: hidden;
  // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
+#app .mobile .sidebar-container{
+  width: 115px !important;
+}
 
 .my-container1{
   background: #fbfbfb;
