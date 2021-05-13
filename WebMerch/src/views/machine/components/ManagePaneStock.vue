@@ -7,45 +7,13 @@
       <div class="circle-item"> <span class="icon-status sumQuantity sumQuantity-bg" /> <span class="name">总量</span></div>
     </div>
 
-    <div class="filter-container">
+    <div class="filter-container" style="margin-bottom:20px">
 
-      <el-row :gutter="12">
-        <el-col :span="6" :xs="24" style="margin-bottom:20px">
-          <el-select v-model="listQuery.cabinetId" clearable placeholder="选择机柜" style="width: 100%">
-            <el-option
-              v-for="item in options_cabinets"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.skuName" style="width: 100%" placeholder="商品名称" class="filter-item" />
-        </el-col>
-        <el-col :span="4" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-        </el-col>
-      </el-row>
+      <el-radio-group v-model="listQuery.cabinetId" @change="handleFilter">
+        <el-radio-button v-for="item in options_cabinets" :key="item.value" :label="item.value">{{ item.label }}库存</el-radio-button>
+      </el-radio-group>
+
     </div>
-    <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
-    <!-- <vueSeamlessScroll :data="listData3" :class-option="classOption3" class="warp2 demo4">
-      <span
-        slot="left-switch"
-        class="name"
-        style="display: block;width: 30px;height: 40px;cursor: pointer;background-color:yellow;text-align: center;line-height:40px;"
-      >&lt;</span>
-      <ul class="ul-item clearfix">
-        <li v-for="(item, index) in listData3" :key="index" class="li-item">{{ item }}</li>
-      </ul>
-      <span
-        slot="right-switch"
-        class="name"
-        style="display: block;width: 30px;height: 40px;cursor: pointer;background-color:yellow;text-align: center;line-height:40px;"
-      >&gt;</span>
-    </vueSeamlessScroll> -->
 
     <div class="rows">
 
@@ -223,6 +191,8 @@ export default {
           if (res.result === 1) {
             var d = res.data
             this.options_cabinets = d.optionsCabinets
+            this.listQuery.cabinetId = this.options_cabinets[0].value
+            this.handleFilter()
           }
           this.loading = false
         })
@@ -251,27 +221,6 @@ export default {
     },
     handleFilter() {
       this.getListData(this.listQuery)
-      // var search = this.listQuery.skuName
-      // var l_listData = this.listData
-      // for (var i = 0; i < l_listData.length; i++) {
-      //   for (var j = 0; j < l_listData[i].cols.length; j++) {
-      //     if (search !== undefined && search != null && search.length > 0) {
-      //       if (l_listData[i].cols[j].name == null) {
-      //         l_listData[i].cols[j].isShow = false
-      //       } else {
-      //         if (l_listData[i].cols[j].name.search(search) !== -1) {
-      //           l_listData[i].cols[j].isShow = true
-      //         } else {
-      //           l_listData[i].cols[j].isShow = false
-      //         }
-      //       }
-      //     } else {
-      //       l_listData[i].cols[j].isShow = true
-      //     }
-      //   }
-      // }
-      // this.listData = []
-      // this.listData = l_listData
     },
     dialogEditOpen(sku) {
       this.dialogEditIsVisible = true
