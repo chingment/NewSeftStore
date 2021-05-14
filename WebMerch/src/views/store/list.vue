@@ -1,11 +1,11 @@
 <template>
   <div id="store_list">
     <div class="filter-container">
-      <el-row :gutter="12">
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+      <el-row :gutter="24">
+        <el-col :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="店铺名称" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="6" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>

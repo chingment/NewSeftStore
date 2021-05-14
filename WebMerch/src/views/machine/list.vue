@@ -8,7 +8,7 @@
     </div>
     <div class="filter-container">
 
-      <el-row :gutter="12">
+      <el-row :gutter="24">
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px">
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
