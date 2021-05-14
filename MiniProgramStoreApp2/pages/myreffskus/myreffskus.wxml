@@ -1,0 +1,42 @@
+<view class="page-ct skeleton">
+	<view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
+		<own-scroll pulldownDistance="100" emptyTipText="暂未找到相关数据" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试"
+			refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore
+			bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}"
+			isEmpty="{{dataList.isEmpty}}">
+			<view class='list-data its-reffskus'>
+				<block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+
+					<view class="it">
+						<view class="it-l">
+							<view class="imgUrl skeleton-rect">
+								<image class="img" src="{{item.mainImgUrl}}"></image>
+							</view>
+						</view>
+						<view class="it-m">
+							<view class="it-ml" style="display:block">
+								<view style="height:100rpx;">
+									<text class='name skeleton-rect'>{{item.name}}</text>
+								</view>
+								<view style="height:50rpx;">
+									<text class='quantity skeleton-rect'> x {{item.quantity}}</text>
+								</view>
+							</view>
+							<view class="it-mr">
+
+							</view>
+						</view>
+						<view class="it-r" style="width:100rpx">
+							<view class="avatar">
+								<image class="img" src='{{item.reffClientUserAvatar}}'></image>
+							</view>
+							<view class="nickname">
+								<text>{{item.reffClientUserNickName}}</text>
+							</view>
+						</view>
+					</view>
+				</block>
+			</view>
+		</own-scroll>
+	</view>
+</view>

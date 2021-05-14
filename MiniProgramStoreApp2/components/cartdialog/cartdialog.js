@@ -100,24 +100,24 @@ Component({
       var pIndex = e.currentTarget.dataset.replyPindex
       var cIndex = e.currentTarget.dataset.replyCindex
       var operate = e.currentTarget.dataset.replyOperate
-      var productSku = _this.data.myCart.blocks[pIndex].productSkus[cIndex];
+      var sku = _this.data.myCart.blocks[pIndex].skus[cIndex];
 
       switch (operate) {
         case "1":
-          if (productSku.selected) {
-            productSku.selected = false
+          if (sku.selected) {
+            sku.selected = false
           } else {
-            productSku.selected = true
+            sku.selected = true
           }
           break;
       }
 
-      var operateProductSkus = new Array();
-      operateProductSkus.push({
-        id: productSku.id,
+      var operateSkus = new Array();
+      operateSkus.push({
+        id: sku.id,
         quantity: 1,
-        selected: productSku.selected,
-        shopMode: productSku.shopMode,
+        selected: sku.selected,
+        shopMode: sku.shopMode,
         shopMethod: 1
       });
 
@@ -126,7 +126,7 @@ Component({
         apiCart.operate({
           storeId: storeage.getStoreId(),
           operate: operate,
-          productSkus: operateProductSkus
+          skus: operateSkus
         }).then(function (res) {
           if (res.result == 1) {
 
@@ -139,7 +139,7 @@ Component({
 
         apiGlobal.byPoint(_this.data.tag, "op_cart", {
           operate: operate,
-          productSkus: operateProductSkus
+          skus: operateSkus
         })
       }
 
@@ -163,24 +163,24 @@ Component({
 
       var blocks = _this.data.myCart.blocks
 
-      var productSkus = []
+      var skus = []
 
       for (var i = 0; i < blocks.length; i++) {
-        for (var j = 0; j < blocks[i].productSkus.length; j++) {
-          if (blocks[i].productSkus[j].selected) {
-            productSkus.push({
-              cartId: blocks[i].productSkus[j].cartId,
-              id: blocks[i].productSkus[j].id,
-              quantity: blocks[i].productSkus[j].quantity,
-              shopMode: blocks[i].productSkus[j].shopMode,
-              shopId: blocks[i].productSkus[j].shopId,
+        for (var j = 0; j < blocks[i].skus.length; j++) {
+          if (blocks[i].skus[j].selected) {
+            skus.push({
+              cartId: blocks[i].skus[j].cartId,
+              id: blocks[i].skus[j].id,
+              quantity: blocks[i].skus[j].quantity,
+              shopMode: blocks[i].skus[j].shopMode,
+              shopId: blocks[i].skus[j].shopId,
               shopMethod: 1
             })
           }
         }
       }
 
-      if (productSkus.length == 0) {
+      if (skus.length == 0) {
         toast.show({
           title: '至少选择一件商品'
         })
@@ -188,7 +188,7 @@ Component({
       }
 
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=1',
+        url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=1',
         success: function (res) {
           // success
         },
@@ -200,9 +200,9 @@ Component({
       var _this = this
 
       for (var i = 0; i < _this.data.myCart.blocks.length; i++) {
-        for (var j = 0; j < _this.data.myCart.blocks[i].productSkus.length; j++) {
-          if (_this.data.myCart.blocks[i].productSkus[j].isTouchMove) {
-            _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false;
+        for (var j = 0; j < _this.data.myCart.blocks[i].skus.length; j++) {
+          if (_this.data.myCart.blocks[i].skus[j].isTouchMove) {
+            _this.data.myCart.blocks[i].skus[j].isTouchMove = false;
           }
         }
       }
@@ -240,23 +240,23 @@ Component({
 
 
       for (var i = 0; i < _this.data.myCart.blocks.length; i++) {
-        for (var j = 0; j < _this.data.myCart.blocks[i].productSkus.length; j++) {
+        for (var j = 0; j < _this.data.myCart.blocks[i].skus.length; j++) {
 
-          _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false
+          _this.data.myCart.blocks[i].skus[j].isTouchMove = false
 
           //滑动超过30度角 return
 
           if (Math.abs(angle) > 30) return;
 
-          if (cartId == _this.data.myCart.blocks[i].productSkus[j].cartId) {
+          if (cartId == _this.data.myCart.blocks[i].skus[j].cartId) {
 
             if (touchMoveX > startX) //右滑
 
-              _this.data.myCart.blocks[i].productSkus[j].isTouchMove = false
+              _this.data.myCart.blocks[i].skus[j].isTouchMove = false
 
             else //左滑
 
-              _this.data.myCart.blocks[i].productSkus[j].isTouchMove = true
+              _this.data.myCart.blocks[i].skus[j].isTouchMove = true
 
           }
         }
@@ -280,6 +280,7 @@ Component({
 
     },
     myClose: function (e) {
+      console.log(e)
       var self = e.target.dataset.ref
       if (self == 'self') {
         this._dialogClose()

@@ -12,7 +12,7 @@
                   <image class="more img" src='/content/default/images/col_nav_right.png'></image>
                 </view>
                 <view class="it-skus">
-                  <block wx:for="{{item.productSkus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
+                  <block wx:for="{{item.skus}}" wx:for-index="cindex" wx:for-item="itemsku" wx:key="list">
                     <view class="it touch-item {{itemsku.isTouchMove ? 'touch-move-active' : ''}}"
                       data-cartid="{{itemsku.cartId}}" bindtouchstart="itemTouchstart" bindtouchmove="itemTouchmove">
                       <view class="it-content">
@@ -59,7 +59,7 @@
                   </block>
                 </view>
               </view>
-              <view class="line-space"></view>
+              <view wx:if="{{pindex%2}}" class="line-space"></view>
             </block>
           </view>
         </scroll-view>

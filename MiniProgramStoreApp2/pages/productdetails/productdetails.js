@@ -3,7 +3,7 @@ const storeage = require('../../utils/storeageutil.js')
 const ownRequest = require('../../own/ownRequest.js')
 const apiCart = require('../../api/cart.js')
 const apiProduct = require('../../api/product.js')
-const config = require('../../config')
+const apiOwn = require('../../api/own.js')
 const pageMain = require('../../pages/main/main.js')
 const app = getApp()
 
@@ -21,6 +21,10 @@ Page({
     specsDialog: {
       isShow: false
     },
+    shareDialog: {
+      isShow: false,
+      dataS: {}
+    },
     proSign: '',
     cartDialog: {
       isShow: false,
@@ -31,6 +35,11 @@ Page({
         countBySelected: 0,
         sumPriceBySelected: 0
       }
+    },
+    canvasPoster: {
+      isShow: false,
+      shareImage: '',
+      painting: []
     }
   },
 
@@ -94,11 +103,11 @@ Page({
       if (res.result == 1) {
         var d = res.data
         _this.setData({
-          productSku: d
+          sku: d
         })
 
         app.byPoint(_this.data.tag, 'browse_spu', {
-          productSkuId: d.id,
+          skuId: d.id,
           kindId1: d.kindId1,
           kindId2: d.kindId2,
           kindId3: d.kindId3
@@ -119,10 +128,18 @@ Page({
       cartDialog: cartDialog
     })
   },
+  goShare: function () {
+    var _this = this
+    var shareDialog = _this.data.shareDialog
+    shareDialog.isShow = true
+    _this.setData({
+      shareDialog: shareDialog
+    })
+  },
   addToCart: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -131,8 +148,8 @@ Page({
 
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
 
-    var productSkus = new Array();
-    productSkus.push({
+    var skus = new Array();
+    skus.push({
       id: skuId,
       quantity: 1,
       selected: true,
@@ -143,7 +160,7 @@ Page({
     apiCart.operate({
       storeId: _this.data.storeId,
       operate: 2,
-      productSkus: productSkus,
+      skus: skus,
       shopId: _this.data.shopId
     }).then(function (res) {
       if (res.result == 1) {
@@ -168,11 +185,11 @@ Page({
   },
   selectSpecs: function (e) {
     var _this = this
-    var sku = _this.data.productSku
+    var sku = _this.data.sku
     _this.setData({
       specsDialog: {
         isShow: true,
-        productSku: sku,
+        sku: sku,
         shopMode: _this.data.shopMode,
         storeId: _this.data.storeId
       }
@@ -181,7 +198,7 @@ Page({
   immeBuy: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -193,9 +210,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -204,7 +221,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -213,7 +230,7 @@ Page({
   immeRent: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -225,9 +242,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -236,7 +253,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -245,7 +262,7 @@ Page({
   immeMavkBuy: function (e) {
     var _this = this
 
-    if (_this.data.productSku.isOffSell) {
+    if (_this.data.sku.isOffSell) {
       toast.show({
         title: '商品已下架'
       })
@@ -257,9 +274,9 @@ Page({
       return
     }
 
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skuId = _this.data.sku.id //对应页面data-reply-index
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -268,7 +285,7 @@ Page({
       shopId: _this.data.shopId
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=' + _this.data.shopMethod,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=' + _this.data.shopMethod,
       success: function (res) {
         // success
       },
@@ -276,7 +293,7 @@ Page({
   },
   immeSawRent: function (e) {
     var _this = this
-    var skuId = _this.data.productSku.id //对应页面data-reply-index
+    var skuId = _this.data.sku.id //对应页面data-reply-index
 
     wx.navigateTo({
       url: '/pages/productdetails/productdetails?skuId=' + skuId + '&shopMethod=2',
@@ -286,24 +303,24 @@ Page({
     })
 
   },
-  updateProductSku: function (e) {
+  updateSku: function (e) {
     var _this = this
-    var selSku = e.detail.productSku
+    var selSku = e.detail.sku
 
     console.log("updateParent:" + JSON.stringify(selSku))
 
-    var productSku = _this.data.productSku
-    productSku.id = selSku.id
-    productSku.name = selSku.name
-    productSku.isOffSell = selSku.isOffSell
-    productSku.salePrice = selSku.salePrice
-    productSku.isShowPrice = selSku.isShowPrice
-    productSku.salePriceByVip = selSku.salePriceByVip
-    productSku.sellQuantity = selSku.sellQuantity
-    productSku.specIdx = selSku.specIdx
+    var sku = _this.data.sku
+    sku.id = selSku.id
+    sku.name = selSku.name
+    sku.isOffSell = selSku.isOffSell
+    sku.salePrice = selSku.salePrice
+    sku.isShowPrice = selSku.isShowPrice
+    sku.salePriceByVip = selSku.salePriceByVip
+    sku.sellQuantity = selSku.sellQuantity
+    sku.specIdx = selSku.specIdx
 
     _this.setData({
-      productSku: productSku
+      sku: sku
     })
   },
   cartdialogClose: function () {
@@ -318,11 +335,13 @@ Page({
 
     var _this = this
     var _data = _this.data
+
+    console.log(_this.data.sku.mainImgUrl)
     // 设置转发内容
     var shareObj = {
-      title: _this.data.productSku.name,
-      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.productSku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
-      imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
+      title: _this.data.sku.name,
+      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      imageUrl: _this.data.sku.mainImgUrl, //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}
       },
@@ -354,5 +373,175 @@ Page({
   },
   onShow: function () {
 
-  }
+  },
+  buildPoster: function () {
+    var _this = this
+    var _data = _this.data
+    console.log('buildPoster')
+
+    var accountInfo = wx.getAccountInfoSync()
+    var appId = accountInfo.miniProgram.appId
+    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId()
+    apiOwn.getWxACodeUnlimit({
+      appId: appId,
+      merchId: storeage.getMerchId(),
+      openId: storeage.getOpenId(),
+      data: wxacode_data,
+      type: 'url',
+      isGetAvatar: true,
+    }).then(function (res) {
+      if (res.result == 1) {
+        var d = res.data
+
+        _this.setData({
+          canvasPoster: {
+            isShow: true,
+            painting: {
+              width: 375,
+              height: 555,
+              clear: true,
+              views: [{
+                  type: 'image',
+                  url: 'https://file.17fanju.com/upload/sharecode/1/bg_white.png',
+                  top: 0,
+                  left: 0,
+                  width: 375,
+                  height: 555
+                },
+                {
+                  type: 'image',
+                  url: d.avatar,
+                  top: 27.5,
+                  left: 29,
+                  width: 55,
+                  height: 55,
+                  borderRadius: 100
+                },
+                {
+                  type: 'text',
+                  content: '您的好友【' + d.nickName + '】',
+                  fontSize: 16,
+                  color: '#402D16',
+                  textAlign: 'left',
+                  top: 33,
+                  left: 96,
+                  bolder: true,
+                },
+                {
+                  type: 'text',
+                  content: '发现一件好货，邀请你一起购买！',
+                  fontSize: 15,
+                  color: '#563D20',
+                  textAlign: 'left',
+                  top: 59.5,
+                  left: 96
+                },
+                {
+                  type: 'image',
+                  url: _this.data.sku.mainImgUrl,
+                  top: 110,
+                  left: 375 / 2 - 186 / 2,
+                  width: 186,
+                  height: 186
+                },
+                {
+                  type: 'image',
+                  url: d.wxaCodeUrl,
+                  top: 443,
+                  left: 85,
+                  width: 68,
+                  height: 68
+                },
+                {
+                  type: 'text',
+                  content: _this.data.sku.name,
+                  fontSize: 16,
+                  lineHeight: 21,
+                  color: '#383549',
+                  textAlign: 'left',
+                  top: 336,
+                  left: 44,
+                  width: 287,
+                  MaxLineNumber: 2,
+                  breakWord: true,
+                  bolder: true
+                },
+                {
+                  type: 'text',
+                  content: '￥' + _this.data.sku.salePrice,
+                  fontSize: 19,
+                  color: '#E62004',
+                  textAlign: 'left',
+                  top: 387,
+                  left: 44.5,
+                  bolder: true
+                },
+                // {
+                //   type: 'text',
+                //   content: '原价:￥138.00',
+                //   fontSize: 13,
+                //   color: '#7E7E8B',
+                //   textAlign: 'left',
+                //   top: 391,
+                //   left: 110,
+                //   textDecoration: 'line-through'
+                // },
+                {
+                  type: 'text',
+                  content: '长按识别图中二维码立即试一试~',
+                  fontSize: 14,
+                  color: '#383549',
+                  textAlign: 'left',
+                  top: 460,
+                  left: 165.5,
+                  lineHeight: 20,
+                  MaxLineNumber: 2,
+                  breakWord: true,
+                  width: 125
+                }
+              ]
+            }
+          }
+        })
+
+      } else {
+        toast.show({
+          title: res.message
+        })
+      }
+    })
+  },
+  buildPosterEvent(event) {
+    var _this = this
+    console.log("event:" + JSON.stringify(event))
+    const {
+      tempFilePath,
+      errMsg
+    } = event.detail
+
+    if (errMsg === 'canvasdrawer:build start') {
+      wx.showLoading({
+        title: '正在生成海报',
+        mask: true
+      })
+    } else if (errMsg === 'canvasdrawer:ok') {
+      wx.hideLoading()
+      var shareDialog = _this.data.shareDialog
+      shareDialog.isShow = false
+      this.setData({
+        shareDialog: shareDialog
+      })
+    } else if (errMsg === 'canvasdrawer:share ok') {
+      wx.hideLoading()
+
+      toast.show({
+        title: '保存图片成功'
+      })
+
+    } else if (errMsg === 'canvasdrawer:download fail') {
+      toast.show({
+        title: '生成失败'
+      })
+    }
+  },
 })

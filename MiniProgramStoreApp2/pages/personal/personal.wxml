@@ -99,8 +99,20 @@
 							<image src='/content/default/images/col_nav_right.png'></image>
 						</view>
 					</view>
-					<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen" class="col-nav-item"
-						hover-class="none">
+					<view bindtap="navigateToClick" data-ischecklogin="true"
+						data-url="/pages/myrent/myrent" class="col-nav-item" hover-class="none">
+						<view class="item-left">
+							<image src='/content/default/images/col_nav_icon_rent.png'></image>
+						</view>
+						<view class="item-middle">
+							<text class="title">租赁商品</text>
+						</view>
+						<view class='item-right'>
+							<image src='/content/default/images/col_nav_right.png'></image>
+						</view>
+					</view>
+					<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/notopen/notopen"
+						class="col-nav-item" hover-class="none">
 						<view class="item-left">
 							<image src='/content/default/images/col_nav_icon_personalinfo.png'></image>
 						</view>
@@ -129,33 +141,37 @@
 			</view>
 
 			<view class="personal-proservice" wx:if="{{proService!=null}}">
-			<view class="col-nav" >
-				<view class="container">
-					<view class="col-nav-item" hover-class="none">
-						<view class="item-left">
-							<image src='/content/default/images/col_nav_icon_myservice.png'></image>
-						</view>
-						<view class="item-middle">
-							<text class="title">我的服务</text>
+				<view class="col-nav">
+					<view class="container">
+						<view class="col-nav-item" hover-class="none">
+							<view class="item-left">
+								<image src='/content/default/images/col_nav_icon_myservice.png'></image>
+							</view>
+							<view class="item-middle">
+								<text class="title">我的服务</text>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class='col-proservice'>
-				<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myserviceprom/myserviceprom" wx:if="{{proService.isHasProm}}"
+				<view class='col-proservice'>
+					<!-- <view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myserviceprom/myserviceprom" wx:if="{{proService.isHasProm}}"
 					class="item" hover-class="none">
 					<image class='item-img' src='/content/default/images/myservice_prom.png'></image>
 					<text class='item-title'>推广码</text>
-				</view>
-				<view bindtap="clickToScanCode"  wx:if="{{proService.isHasScanCode}}"
-					class="item" hover-class="none">
-					<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
-					<text class='item-title'>扫一扫</text>
-				</view>
+				</view> -->
+					<view bindtap="navigateToClick" data-ischecklogin="true" data-url="/pages/myreffskus/myreffskus"
+						wx:if="{{proService.isHasProm}}" class="item" hover-class="none">
+						<image class='item-img' src='/content/default/images/myservice_userreff.png'></image>
+						<text class='item-title'>我的推荐</text>
+					</view>
+					<view bindtap="clickToScanCode" wx:if="{{proService.isHasScanCode}}" class="item" hover-class="none">
+						<image class='item-img' src='/content/default/images/myservice_coupon.png'></image>
+						<text class='item-title'>扫一扫</text>
+					</view>
 
 
+				</view>
 			</view>
-		</view>
 		</view>
 	</view>
 </scroll-view>

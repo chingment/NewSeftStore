@@ -99,7 +99,9 @@ Page({
       isLogin: false,
       userInfo: null
     },
-    isOnLoad: false
+    isOnLoad: false,
+    isFirst:true,
+    scene:null
   },
   onLoad: function (options) {
     var _this = this
@@ -110,54 +112,10 @@ Page({
       tag: tag
     })
 
-    // var _this = this;
+    _this.setData({scene: decodeURIComponent(options.scene)})
 
-    // wx.createSelectorQuery().selectAll('.main-tabbar-nav').boundingClientRect(function (rect) {
-    //   var wHeight = wx.getSystemInfoSync().windowHeight;
-    //   _this.setData({
-    //     tabBarContentHeight: wHeight - rect[0].height
-    //   });
-    // }).exec()
+    console.log('options.scene:'+ JSON.stringify(options))
 
-    // if (app.globalData.checkConfig) {
-    //   console.log("call>>1")
-    //   if (!ownRequest.isSelectedStore(true)) {
-    //     return
-    //   }
-    //   apiCart.pageData()
-    //   // if (!_this.data.isOnLoad) {
-    //   //var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //   //mainTabBarSwitch(tabBarIndex)
-    //   // }
-
-
-    //   _this.setData({
-    //     isOnLoad: true
-    //   })
-
-    // } else {
-    //   console.log("call>>2")
-    //   app.checkConfigReadyCallback = res => {
-
-    //     console.log("call>>3," + JSON.stringify(res))
-    //     if (!ownRequest.isSelectedStore(true)) {
-    //       return
-    //     }
-
-
-    //     apiCart.pageData()
-
-    //     if (!_this.data.isOnLoad) {
-    //       var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
-    //       mainTabBarSwitch(tabBarIndex)
-
-    //       _this.setData({
-    //         isOnLoad: true
-    //       })
-    //     }
-
-    //   }
-    // }
   },
   onShow: function (options) {
     console.log("mian.onShow")
@@ -180,20 +138,46 @@ Page({
         _this._onShow()
       }
     }
-
   },
   onUnload: function () {
 
   },
   _onShow() {
     var _this = this
+    var isFirst=_this.data.isFirst
+
+    console.log('isFirst:'+isFirst)
 
     apiGlobal.msgTips({
       storeId: storeage.getStoreId()
     })
 
     var tabBarIndex = wx.getStorageSync('main_tabbar_index') || 0
+    
     mainTabBarSwitch(tabBarIndex, false)
+
+    _this.setData({isFirst:false})
+
+    if(isFirst){
+      apiGlobal.getWxSceneData({
+        scene: _this.data.scene
+      }).then(function (res) {
+        if (res.result == 1) {
+         var d=res.data
+          if(d.type==='url'){
+            
+            wx.navigateTo({
+              url: d.data,
+              success: function (res) {
+                // success
+              },
+            })
+  
+          }
+        }
+      })
+    }
+    
   },
   mainTabBarItemClick(e) {
     var _this = this
@@ -212,7 +196,8 @@ Page({
 function mainTabBarSwitch(index, isOnShow) {
 
   var pages = getCurrentPages();
-  var isHasMain = false;
+  var isHasMain = false
+  var isFirst=false
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].data.tag.indexOf("main-") > -1) {
       var old_index = wx.getStorageSync('main_tabbar_index')

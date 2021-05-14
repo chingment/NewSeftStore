@@ -1,0 +1,119 @@
+<view class="page-ct skeleton">
+  <view class="tabbar-contents" current="0" style="height:{{scrollHeight}}px">
+    <own-scroll pulldownDistance="100" emptyTipText="暂未找到相关数据" refreshPulldownText="你再往下拉试试" refreshUndoText="你松开试试"
+      refreshLoadingText="正在努力刷新中~" loadmoreLoadingText="正在加载数据~" loadmoreAllloadedText="已经到底了哟~" isNeedLoadmore
+      bind:_loadmore="loadmore" bind:_refresh="refresh" allloaded="{{dataList.allloaded}}"
+      isEmpty="{{dataList.isEmpty}}">
+      <view class='list'>
+        <block wx:for="{{dataList.items}}" wx:for-index="index" wx:for-item="item" wx:key="list">
+          <view class="it pd-com it-ordbk">
+            <view class="it-tag">
+              <view class="tag-name">
+                <view class="icon">
+                  <image class="img" src="/content/default/images/store_address.png"></image>
+                </view>
+                <view class="content">
+                  <text class="txt">{{item.tag.name.content}}</text>
+                </view>
+              </view>
+              <view class="tag-desc">
+                <view class="content">
+                  <text class="txt">{{item.tag.desc.title.content}}</text>
+                  <text class="txt">{{item.tag.desc.value.content}}</text>
+                </view>
+              </view>
+            </view>
+            <view class="it-blocks">
+              <block wx:for="{{item.blocks}}" wx:for-index="j" wx:for-item="block" wx:key="list">
+                <view class="block">
+                  <view class="block-tag">
+
+                    <view class="tag-name">
+
+                      <view class="content">
+                        <text class="txt">{{block.tag.name.content}}</text>
+                      </view>
+
+                    </view>
+                    <view class="tag-desc">
+                      <view class="content">
+                        <text class="t">{{block.tag.desc.title.content}}</text>
+                        <text class="c"
+                          style="color:{{block.tag.desc.value.color}}">{{block.tag.desc.value.content}}</text>
+                      </view>
+
+                    </view>
+                  </view>
+                  <view class="block-field">
+                    <view class="its-odcskus">
+                      <block wx:for="{{block.data}}" wx:for-index="x" wx:for-item="skusitem" wx:key="list">
+                        <view class="it">
+                          <view class="it-l">
+                            <view class="imgUrl">
+                              <image class="img" src="{{skusitem.value.mainImgUrl}}"></image>
+                            </view>
+                          </view>
+                          <view class="it-m">
+                            <view class="it-ml" style="display:block">
+                              <view style="height:100rpx;">
+                                <text class='name skeleton-rect'>{{skusitem.value.name}}</text>
+                              </view>
+                              <view style="height:50rpx;">
+                                <text class='quantity skeleton-rect'> x {{skusitem.value.quantity}}</text>
+                              </view>
+                            </view>
+                            <view class="it-mr">
+                              <text wx:if="{{skusitem.value.originalAmount!=skusitem.value.saleAmount}}"
+                                class='originalPrice skeleton-rect'>{{skusitem.value.originalAmount}}</text>
+                            </view>
+                          </view>
+                          <view class="it-r">
+                            <view class="dt">
+                              <view class="dt1"> <text>租金</text> </view>
+                              <view class="dt2">
+                                <text
+                                  class='salePrice skeleton-rect'>{{skusitem.value.rentAmount}}/{{skusitem.value.rentTermUnitText}}</text>
+                              </view>
+                            </view>
+                          </view>
+                        </view>
+                      </block>
+                    </view>
+                  </view>
+                </view>
+              </block>
+            </view>
+
+            <view class="it-message">
+
+            </view>
+            <view class="it-buttons">
+
+             <view class="expiredate">
+               <view>到期时间：</view>
+               <text>{{item.params.nextPayRentTime}}</text>
+             </view>
+
+
+
+              <block wx:for="{{item.buttons}}" wx:for-index="index" wx:for-item="button" wx:key="list">
+                <view class="btnbox">
+                  <view class="btn" bindtap="operate" data-reply-opval="{{button.opVal}}"
+                    data-reply-optype="{{button.opType}}" data-reply-order-id="{{item.params.orderId}}"
+                    data-reply-sku-id="{{item.params.skuId}}"
+                    style="color:{{button.name.color}}; border:1px solid {{button.name.color}};">
+                    {{button.name.content}}</view>
+                </view>
+              </block>
+
+            </view>
+          </view>
+          <view class="line-space"></view>
+
+
+
+        </block>
+      </view>
+    </own-scroll>
+  </view>
+</view>

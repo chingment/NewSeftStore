@@ -1,11 +1,11 @@
 const ownRequest = require('../../own/ownRequest.js')
-const apiShop = require('../../api/shop.js')
+const apiStore = require('../../api/store.js')
 const storeage = require('../../utils/storeageutil.js')
 const app = getApp()
 
 Page({
   data: {
-    tag: 'shopchoice'
+    tag:'store'
   },
   onLoad: function (options) {
     var _this = this
@@ -15,19 +15,18 @@ Page({
     if (isClearCache != undefined) {
       wx.clearStorage()
     }
+    
+    var storeId = storeage.getStoreId()
 
-    var shopId = storeage.getShopId()
-
-    function getShopList(lat, lng) {
-      apiShop.list({
-        storeId: storeage.getStoreId(),
+    function getStoreList(lat, lng) {
+      apiStore.list({
         lat: lat,
         lng: lng
       }).then(function (res) {
         if (res.result == 1) {
           _this.setData({
             list: res.data,
-            currentChoiceId: shopId == undefined ? '' : shopId
+            currentStoreId: storeId == undefined ? '' : storeId
           })
         }
       })
@@ -42,6 +41,7 @@ Page({
       }
     }
 
+
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
@@ -52,31 +52,34 @@ Page({
           lng: longitude
         })
         if (loaction.lat != latitude || loaction.lng != longitude) {
-          getShopList(latitude, longitude)
+          getStoreList(latitude, longitude)
         }
       }
     })
 
-    getShopList(loaction.lat, loaction.lng)
+
+
+    app.globalData.checkConfig = false
+    
+    if (app.globalData.checkConfig) {
+      console.log("call>>1")
+      getStoreList(loaction.lat, loaction.lng)
+    } else {
+      console.log("call>>2")
+      app.checkConfigReadyCallback = res => {
+        console.log("call>>3," + JSON.stringify(res))
+        getStoreList(loaction.lat, loaction.lng)
+      }
+    }
 
   },
   onShow: function () {},
   onUnload: function () {},
-  choice: function (e) {
-    var choice = e.currentTarget.dataset.replyItem
-    storeage.setShopId(choice.id);
-
-    var pages = getCurrentPages();
-    var beforePage = pages[pages.length - 2]; // 前一个页面
-
-    beforePage.getPageData()
-    
-    wx.navigateBack({
-      //返回
-      delta: 1
+  selectStore: function (e) {
+    var store = e.currentTarget.dataset.replyStore
+   // ownRequest.setCurrentStoreId(store.id);
+    wx.reLaunch({
+      url: ownRequest.getReturnUrl()
     })
-
-
-
   }
 })

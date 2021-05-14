@@ -1,16 +1,22 @@
 <import src="/template/showToast.wxml" />
 <template is="showToast" data="{{showToast: showToast}}" />
 
-<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateProductSku="updateProductSku"
-	productSku="{{specsDialog.productSku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}">
+<specsdialog isShow="{{specsDialog.isShow}}" bind:_updateSku="updateSku"
+	sku="{{specsDialog.sku}}" storeId="{{specsDialog.storeId}}" shopMode="{{specsDialog.shopMode}}">
 </specsdialog>
 <cartdialog id="cart" isShow="{{cartDialog.isShow}}" dataS="{{cartDialog.dataS}}" bindcartdialogClose="cartdialogClose">
 </cartdialog>
+<sharedialog id="share" isShow="{{shareDialog.isShow}}" dataS="{{shareDialog.dataS}}"  bindbuildPoster="buildPoster" >
+</sharedialog>
+
+
+<canvasdrawer  painting="{{canvasPoster.painting}}" class="canvasdrawer" bind:buildEvent="buildPosterEvent"/>
+
 
 <view class="page-ct details">
 	<view class="details-main">
 		<swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-			<block wx:for-items="{{productSku.displayImgUrls}}" wx:for-item="item" wx:key="index">
+			<block wx:for-items="{{sku.displayImgUrls}}" wx:for-item="item" wx:key="index">
 				<swiper-item>
 					<view class="swiper-img">
 						<image src="{{item.url}}" mode="heightFix"></image>
@@ -24,22 +30,22 @@
 				<view class="details-info1">
 					<view class='container'>
 						<view class="item-name">
-							<text class="name">{{productSku.name}}</text>
+							<text class="name">{{sku.name}}</text>
 						</view>
 						<view class="item-tag">
-							<view wx:if="{{productSku.supReceiveMode==2}}" class="tag">仅限店铺自提</view>
-							<view wx:if="{{productSku.supReceiveMode==4}}" class="tag">仅限机器自取</view>
+							<view wx:if="{{sku.supReceiveMode==2}}" class="tag">仅限店铺自提</view>
+							<view wx:if="{{sku.supReceiveMode==4}}" class="tag">仅限机器自取</view>
 						</view>
 						<view class="item-briefIntro font-gray">
-							<text class="briefIntro">{{productSku.briefDes}}</text>
+							<text class="briefIntro">{{sku.briefDes}}</text>
 						</view>
-						<view wx:if="{{productSku.isOffSell}}" class="item-isOffSell">
+						<view wx:if="{{sku.isOffSell}}" class="item-isOffSell">
 							<text class="txt">已下架</text>
 						</view>
 						<view wx:else>
 							<view wx:if="{{shopMethod==1}}" class="item-price">
-								<text class="unitPrice">{{productSku.salePrice}}</text>
-								<text wx:if="{{productSku.isShowPrice}}" class="showPrice">{{productSku.showPrice}}</text>
+								<text class="unitPrice">{{sku.salePrice}}</text>
+								<text wx:if="{{sku.isShowPrice}}" class="showPrice">{{sku.showPrice}}</text>
 							</view>
 							<view wx:if="{{shopMethod==2}}" class="item-rent">
 
@@ -48,7 +54,7 @@
 										<view class="spect-item-name">押金</view>
 										<view class="spect-item-values">
 											<view class="spect-item-value active">
-												{{productSku.depositAmount}}
+												{{sku.depositAmount}}
 											</view>
 										</view>
 									</view>
@@ -56,16 +62,16 @@
 										<view class="spect-item-name">租金</view>
 										<view class="spect-item-values">
 											<view class="spect-item-value active">
-												<text class="rentAmount">{{productSku.rentAmount}}</text>
-												<text class="rentTermUnit">/{{productSku.rentTermUnitText}}</text>
+												<text class="rentAmount">{{sku.rentAmount}}</text>
+												<text class="rentTermUnit">/{{sku.rentTermUnitText}}</text>
 											</view>
 										</view>
 									</view>
 								</view>
 							</view>
 
-							<view class="charTags" wx:if="{{productSku.charTags!=null&&productSku.charTags.length>1}}">
-								<view class="it-charTag" wx:for="{{productSku.charTags}}" wx:for-index='index'
+							<view class="charTags" wx:if="{{sku.charTags!=null&&sku.charTags.length>1}}">
+								<view class="it-charTag" wx:for="{{sku.charTags}}" wx:for-index='index'
 									wx:for-item="charTag" wx:key="x">
 									<image class="icon" src="/content/default/images/icon_chartag.png"></image>
 									<text class="txt">{{charTag}}</text>
@@ -73,7 +79,7 @@
 							</view>
 
 
-							<view wx:if="{{shopMethod==1&&productSku.isUseRent}}" class="item-renttip">
+							<view wx:if="{{shopMethod==1&&sku.isUseRent}}" class="item-renttip">
 
 								<image class="icon" src="/content/default/images/icon_rent.png"></image>
 
@@ -84,11 +90,11 @@
 						</view>
 					</view>
 				</view>
-				<view wx:if="{{shopMethod==1}}" wx:if="{{productSku.specIdxSkus.length>1}}" bindtap="selectSpecs"
+				<view wx:if="{{shopMethod==1}}" wx:if="{{sku.specIdxSkus.length>1}}" bindtap="selectSpecs"
 					class="details-info3 its-option">
 					<view class="it">
 						<view class="title"><text>已选</text> </view>
-						<view class="content">{{productSku.specIdx}}</view>
+						<view class="content">{{sku.specIdx}}</view>
 						<view class="icon">
 							<image class="img" style="width:60rpx;height:60rpx" src='/content/default/images/icon_more1.png'></image>
 						</view>
@@ -96,8 +102,8 @@
 				</view>
 				<view class="details-info2">
 					<view style='height:100vh'>
-						<block wx:if="{{productSku.detailsDes!=null}}">
-							<block wx:for-items="{{productSku.detailsDes}}" wx:for-item="item" wx:key="index">
+						<block wx:if="{{sku.detailsDes!=null}}">
+							<block wx:for-items="{{sku.detailsDes}}" wx:for-item="item" wx:key="index">
 								<image src="{{item.url}}" style="width:100%;height:100%;" mode="widthFix"></image>
 							</block>
 
@@ -110,29 +116,32 @@
 
 	</view>
 	<view class="details-nav">
-		<view bindtap="goHome" class="item-home">
-			<image src="/content/default/images/home.png" />
+		<view bindtap="goShare" class="item-home">
+			<image class="img" src="/content/default/images/share.png" />
 		</view>
-		<view bindtap="goCart" class="item-cart" wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}">
+		<view bindtap="goHome" class="item-share">
+			<image class="img" src="/content/default/images/home.png" />
+		</view>
+		<view bindtap="goCart" class="item-cart" wx:if="{{!sku.isMavkBuy&&shopMethod==1}}">
 			<view class='number {{cartDialog.dataS.count==0?"hidden":""}}'>{{cartDialog.dataS.count}}</view>
-			<image src="/content/default/images/cart.png" />
+			<image  class="img" src="/content/default/images/cart.png" />
 		</view>
-		<view bindtap="addToCart" class='item-increase {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
-			wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+		<view bindtap="addToCart" class='item-increase {{sku.isOffSell==true?"bg-gray":"bg-blue"}}'
+			wx:if="{{!sku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{sku.id}}">
 			<text>加入购物车</text>
 		</view>
-		<view bindtap="immeBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}'
-			wx:if="{{!productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+		<view bindtap="immeBuy" class='item-buy {{sku.isOffSell==true?"bg-gray":"bg-main"}}'
+			wx:if="{{!sku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{sku.id}}">
 			<text>立即购买</text>
 		</view>
 
-		<view bindtap="immeMavkBuy" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-main"}}'
-			wx:if="{{productSku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{productSku.id}}">
+		<view bindtap="immeMavkBuy" class='item-buy {{sku.isOffSell==true?"bg-gray":"bg-main"}}'
+			wx:if="{{sku.isMavkBuy&&shopMethod==1}}" data-reply-skuid="{{sku.id}}">
 			<text>立即购买</text>
 		</view>
 
-		<view bindtap="immeRent" class='item-buy {{productSku.isOffSell==true?"bg-gray":"bg-blue"}}'
-			wx:if="{{productSku.isMavkBuy&&shopMethod==2}}" data-reply-skuid="{{productSku.id}}">
+		<view bindtap="immeRent" class='item-buy {{sku.isOffSell==true?"bg-gray":"bg-blue"}}'
+			wx:if="{{sku.isMavkBuy&&shopMethod==2}}" data-reply-skuid="{{sku.id}}">
 			<text>立即租用</text>
 		</view>
 	</view>

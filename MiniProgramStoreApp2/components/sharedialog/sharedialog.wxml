@@ -1,0 +1,21 @@
+<view class="cumUpDialog" wx:if="{{myShow}}" data-ref="self" catchtouchmove="ture" bindtap="myClose">
+  <view class='wrapper' animation='{{myAnimationData}}'>
+    <view class="contentinfo">
+      <view class="share-tpye">
+        <button class="it" open-type="share" hover-class="none">
+          <image class="img" src="/content/default/images/share_friend.png"></image>
+          <text class="txt">发送给好友</text>
+        </button>
+        <button class="it" hover-class="none" bindtap="_buildPoster">
+          <image class="img" src="/content/default/images/share_line.png"></image>
+          <text class="txt">生成商品海报</text>
+        </button>
+      </view>
+    </view>
+    <view class="bottominfo" data-ref="self" bindtap="_myClose">
+      <view class="wrapper">
+        <text class="txt">取消</text>
+      </view>
+    </view>
+  </view>
+</view>

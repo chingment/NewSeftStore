@@ -25,7 +25,7 @@ function init(_data) {
 
     //console.log('oldOnShow:' + obj.onShow)
 
-    obj.onShow = function () {
+    obj.onShow = function (options) {
       // console.log("==>parent.onShow==");
 
       this.setData({

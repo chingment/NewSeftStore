@@ -39,8 +39,8 @@ Component({
       var skuId = e.currentTarget.dataset.replySkuid
       var sku = e.currentTarget.dataset.replySku
 
-      var productSkus = new Array();
-      productSkus.push({
+      var skus = new Array();
+      skus.push({
         id: skuId,
         quantity: 1,
         selected: true,
@@ -51,7 +51,7 @@ Component({
       apiCart.operate({
         storeId: _this.data.storeId,
         operate: 2,
-        productSkus: productSkus
+        skus: skus
       }).then(function (res) {
         if (res.result == 1) {
           toast.show({
@@ -66,7 +66,7 @@ Component({
 
       apiGlobal.byPoint(_this.data.tag, "op_cart", {
         operate: 2,
-        productSkus: productSkus
+        skus: skus
       })
     },
     selectSpecs: function (e) {
@@ -75,7 +75,7 @@ Component({
       _this.setData({
         specsDialog: {
           isShow: true,
-          productSku: sku,
+          sku: sku,
           shopMode: _this.data.shopMode,
           storeId: _this.data.storeId,
         }
@@ -120,26 +120,6 @@ Component({
         }
       })
     },
-    goSelectStore: function (e) {
-
-      var _this = this
-
-      if (_this.data.singleStore)
-        return
-
-      wx.navigateTo({
-        url: '/pages/store/store',
-      })
-    },
-    switchShopMode: function (e) {
-      var _this = this
-      var shopMode = e.currentTarget.dataset.replyShopmodeid //对应页面\
-      _this.setData({
-        shopMode: shopMode
-      })
-      _this.getPageData()
-
-    },
     onReady: function () {
       console.log("index.onReady")
     },
@@ -176,8 +156,8 @@ Component({
       }
 
       var skuId = sku.id //对应页面data-reply-index
-      var productSkus = []
-      productSkus.push({
+      var skus = []
+      skus.push({
         cartId: 0,
         id: skuId,
         quantity: 1,
@@ -186,7 +166,7 @@ Component({
         shopId: '0'
       })
       wx.navigateTo({
-        url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + '&shopMethod=2',
+        url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus)) + '&shopMethod=2',
         success: function (res) {
           // success
         },

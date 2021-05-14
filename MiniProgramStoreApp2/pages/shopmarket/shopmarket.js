@@ -145,8 +145,8 @@ Page({
   addToCart: function (e) {
     var _this = this
     var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-    var productSkus = new Array();
-    productSkus.push({
+    var skus = new Array();
+    skus.push({
       id: skuId,
       quantity: 1,
       selected: true,
@@ -159,7 +159,7 @@ Page({
       operate: 2,
       shopMode: _this.data.shopMode,
       shopId: _this.data.shopId,
-      productSkus: productSkus
+      skus: skus
     }).then(function (res) {
       if (res.result == 1) {
         toast.show({
@@ -178,7 +178,7 @@ Page({
     _this.setData({
       specsDialog: {
         isShow: true,
-        productSku: sku,
+        sku: sku,
         shopMode: _this.data.shopMode,
         storeId: _this.data.storeId,
       }

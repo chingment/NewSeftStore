@@ -2,6 +2,8 @@
   "navigationBarTitleText": "商品详情",
   "usingComponents": {
     "cartdialog": "/components/cartdialog/cartdialog",
-    "specsdialog": "/components/specsdialog/specsdialog"
+    "specsdialog": "/components/specsdialog/specsdialog",
+    "sharedialog": "/components/sharedialog/sharedialog",
+    "canvasdrawer": "/components/canvasdrawer/canvasdrawer"
   }
 }

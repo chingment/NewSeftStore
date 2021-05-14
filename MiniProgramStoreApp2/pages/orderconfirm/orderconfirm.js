@@ -42,7 +42,8 @@ Page({
     },
     action: '',
     saleOutletId: '',
-    shopMethod: 1
+    shopMethod: 1,
+    pOrderId: ''
   },
   onLoad: function (options) {
     var _this = this
@@ -51,9 +52,8 @@ Page({
     var _action = options.action == undefined ? null : options.action
     var _saleOutletId = options.saleOutletId == undefined ? null : options.saleOutletId
     var _shopMethod = options.shopMethod == undefined ? 1 : options.shopMethod
-    var _productSkus = options.productSkus == undefined ? null : JSON.parse(options.productSkus)
-
-
+    var _skus = options.skus == undefined ? null : JSON.parse(decodeURIComponent(options.skus))
+    var _pOrderId = options.pOrderId == undefined ? null : options.pOrderId
     var orderIds = []
     if (_orderIds != null) {
       var arr_order = _orderIds.split(',')
@@ -65,10 +65,11 @@ Page({
     _this.setData({
       storeId: storeage.getStoreId(),
       orderIds: orderIds,
-      productSkus: _productSkus,
+      skus: _skus,
       action: _action,
       saleOutletId: _saleOutletId,
-      shopMethod: _shopMethod
+      shopMethod: _shopMethod,
+      pOrderId: _pOrderId
     })
 
     _this.buildPayOptions()
@@ -126,12 +127,12 @@ Page({
       couponIds = [_this.data.couponIdByDeposit]
     }
 
-    var productSkus = _this.data.productSkus
+    var skus = _this.data.skus
     var shopMethod = _this.data.shopMethod
     var storeId = _this.data.storeId
 
     wx.navigateTo({
-      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&productSkus=" + JSON.stringify(productSkus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId + '&faceTypes=' + faceTypes,
+      url: "/pages/mycoupon/mycoupon?operate=2&isGetHis=false&skus=" + JSON.stringify(skus) + "&couponIds=" + JSON.stringify(couponIds) + '&shopMethod=' + shopMethod + "&storeId=" + storeId + '&faceTypes=' + faceTypes,
       success: function (res) {
         // success
       },
@@ -243,6 +244,7 @@ Page({
 
     if (util.isEmptyOrNull(_this.data.orderIds)) {
       apiOrder.reserve({
+        pOrderId: _this.data.pOrderId,
         storeId: _this.data.storeId,
         blocks: blocks,
         source: 3,
@@ -415,7 +417,7 @@ Page({
     apiOrder.confirm({
       orderIds: _data.orderIds,
       storeId: _data.storeId,
-      productSkus: _data.productSkus,
+      skus: _data.skus,
       couponIdsByShop: _data.couponIdsByShop,
       couponIdByRent: _data.couponIdByRent,
       couponIdByDeposit: _data.couponIdByDeposit,

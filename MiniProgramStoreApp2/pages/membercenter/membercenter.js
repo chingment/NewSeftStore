@@ -159,8 +159,8 @@ Page({
     }
 
     var skuId = curFeeSt.id //对应页面data-reply-index
-    var productSkus = []
-    productSkus.push({
+    var skus = []
+    skus.push({
       cartId: 0,
       id: skuId,
       quantity: 1,
@@ -169,7 +169,7 @@ Page({
       shopId:'0'
     })
     wx.navigateTo({
-      url: '/pages/orderconfirm/orderconfirm?productSkus=' + JSON.stringify(productSkus) + "&shopMethod=3&action=memberfee&saleOutletId=" + _data.curSaleOutlet.id,
+      url: '/pages/orderconfirm/orderconfirm?skus=' +  encodeURIComponent(JSON.stringify(skus))+ "&shopMethod=3&action=memberfee&saleOutletId=" + _data.curSaleOutlet.id,
       success: function (res) {
         // success
       },

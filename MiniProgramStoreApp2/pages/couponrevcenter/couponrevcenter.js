@@ -83,7 +83,7 @@ Page({
   },
   getCoupons: function () {
     var _this = this
-    apiCoupon.revCenterSt({}).then(function (res) {
+    apiCoupon.revPosSt({posCode:'REV_CENTER'}).then(function (res) {
       if (res.result == 1) {
         var d = res.data
 

@@ -52,8 +52,8 @@ Component({
     addToCart: function (e) {
       var _this = this
       var skuId = e.currentTarget.dataset.replySkuid //对应页面data-reply-index
-      var productSkus = new Array();
-      productSkus.push({
+      var skus = new Array();
+      skus.push({
         id: skuId,
         quantity: 1,
         selected: true,
@@ -64,7 +64,7 @@ Component({
       apiCart.operate({
         storeId: _this.data.storeId,
         operate: 2,
-        productSkus: productSkus,
+        skus: skus,
         shopId: _this.data.shopId
       }).then(function (res) {
         if (res.result == 1) {
@@ -84,7 +84,7 @@ Component({
       _this.setData({
         specsDialog: {
           isShow: true,
-          productSku: sku,
+          sku: sku,
           shopMode: _this.data.shopMode,
           storeId: _this.data.storeId,
         }
