@@ -9,10 +9,10 @@
     <div class="filter-container">
 
       <el-row :gutter="12">
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+        <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px">
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px;display:flex;">
+        <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px;display:flex;">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -24,7 +24,7 @@
     </div>
     <el-row v-loading="loading" :gutter="24">
 
-      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="6" class="my-col">
+      <el-col v-for="item in listData" v-show="machineCount!==0" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="span" class="my-col">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
@@ -43,7 +43,7 @@
 
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
-              <ul>
+              <ul v-if="opCode==='list'">
                 <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageStock(item)">库存查看</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageControlCenter(item)">控制中心</el-button></li>
               </ul>
@@ -181,7 +181,7 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.span = this.shopId === '' ? 6 : 12
+    this.span = this.opCode === 'list' ? 6 : 12
     this.init()
   },
   methods: {
