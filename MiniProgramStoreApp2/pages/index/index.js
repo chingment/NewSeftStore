@@ -128,6 +128,7 @@ Component({
       var _this = this
       app.globalData.skeletonPage = _this
 
+      console.log('store_id:'+storeage.getStoreId())
       _this.setData({
         storeId: storeage.getStoreId()
       })

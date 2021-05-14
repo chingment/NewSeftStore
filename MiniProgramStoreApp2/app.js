@@ -89,7 +89,7 @@ App({
             appId: appId,
             code: res.code,
           }).then(function (res2) {
-
+            console.log('store_id:fff')
             if (res2.result == 1) {
               var d = res2.data
 
@@ -97,6 +97,10 @@ App({
               storeage.setSessionKey(d.sessionKey)
               storeage.setMerchId(d.merchId)
               storeage.setStoreId(d.storeId) //指定设置单店铺模式，为NULL 多店铺模式
+
+              console.log('store_id:'+storeage.getStoreId())
+            
+
               if (d.storeId != null) {
                 storeage.setStoreId(d.storeId) //设置当前店铺
               }
