@@ -589,7 +589,7 @@ namespace LocalS.BLL.Biz
             {
                 var shopModeSkus = _buildSkus.Where(m => m.ShopMode == d_s_order.ShopMode && m.ReceiveMode == d_s_order.ReceiveMode && m.ShopId == d_s_order.ShopId).ToList();
 
-                foreach (var buildSku in _buildSkus)
+                foreach (var buildSku in shopModeSkus)
                 {
                     var sku_Stocks = buildSku.Stocks;
 

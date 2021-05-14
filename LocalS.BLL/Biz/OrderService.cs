@@ -633,7 +633,12 @@ namespace LocalS.BLL.Biz
                         d_Order.StoreName = store.Name;
                         d_Order.ShopId = buildOrder.ShopId;
 
+                        string machineCumCode = null;
                         var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == store.MerchId && m.MachineId == buildOrder.MachineId).FirstOrDefault();
+                        if (merchMachine != null)
+                        {
+                            machineCumCode = merchMachine.CumCode;
+                        }
 
                         var shop = CurrentDb.Shop.Where(m => m.Id == buildOrder.ShopId).FirstOrDefault();
                         if (shop != null)
@@ -643,7 +648,7 @@ namespace LocalS.BLL.Biz
                         d_Order.ShopMode = buildOrder.ShopMode;
                         d_Order.ShopId = buildOrder.ShopId;
                         d_Order.MachineId = buildOrder.MachineId;
-                        d_Order.MachineCumCode = merchMachine.CumCode;
+                        d_Order.MachineCumCode = machineCumCode;
                         d_Order.SaleOutletId = rop.SaleOutletId;
                         d_Order.PayExpireTime = DateTime.Now.AddSeconds(300);
                         d_Order.PickupCode = IdWorker.BuildPickupCode();

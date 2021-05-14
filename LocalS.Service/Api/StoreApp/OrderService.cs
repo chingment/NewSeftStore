@@ -421,7 +421,7 @@ namespace LocalS.Service.Api.StoreApp
                     }
                     else
                     {
-                        c_Sku.IsOffSell = c_Sku.IsOffSell;
+                        c_Sku.IsOffSell = r_Sku.IsOffSell;
                     }
                     c_Skus.Add(c_Sku);
                 }
