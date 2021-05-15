@@ -28,13 +28,17 @@ namespace LocalS.Service.Api.Merch
                          (rup.OrderId == null || o.OrderIds.Contains(rup.OrderId)) &&
                               (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                                           (rup.PayPartnerPayTransId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerPayTransId)) &&
-                                          o.PayStatus == E_PayStatus.PaySuccess&&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
+                         select new { o.Id, o.StoreId, o.StoreName,o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.StoreId == rup.StoreId);
+            }
+
+            if(rup.PayStatus!= E_PayStatus.Unknow)
+            {
+                query = query.Where(m => m.PayStatus == rup.PayStatus);
             }
 
             int total = query.Count();

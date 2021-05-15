@@ -96,10 +96,18 @@ export default {
             type: 'warning'
           }).then(() => {
             setLevelSt(this.form).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.isEdit = false
                 this.init()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

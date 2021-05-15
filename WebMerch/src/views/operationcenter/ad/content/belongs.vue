@@ -216,9 +216,17 @@ export default {
         type: 'warning'
       }).then(() => {
         setContentBelongStatus({ id: item.id, status: status }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this.getListData(this.listQuery)
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       }).catch(() => {
@@ -264,18 +272,34 @@ export default {
       }).then(() => {
         if (this.formIsEdit) {
           editContentBelong(this.formByEdit).then(res => {
-            this.$message(res.message)
             if (res.result === 1) {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
               this.dialogByEditIsVisible = false
               this.getListData(this.listQuery)
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
           })
         } else {
           addContentBelong(this.formByEdit).then(res => {
-            this.$message(res.message)
             if (res.result === 1) {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
               this.dialogByEditIsVisible = false
               this.getListData(this.listQuery)
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
           })
         }

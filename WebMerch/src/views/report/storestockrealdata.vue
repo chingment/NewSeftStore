@@ -166,7 +166,10 @@ export default {
             this.$message('查询不到对应条件的数据')
           }
         } else {
-          this.$message(res.message)
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
         }
         this.loading = false
       })
@@ -212,7 +215,10 @@ export default {
         this.downloadLoading = false
       })
         } else {
-          this.$message(res.message)
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
         }
       })
     }

@@ -172,9 +172,17 @@ export default {
         type: 'warning'
       }).then(() => {
         removeCoupon({ couponStId: item.couponStId }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this._getListData()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       })
@@ -188,10 +196,18 @@ export default {
             type: 'warning'
           }).then(() => {
             addCoupon(this.formByAddCoupon).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogByAddCouponIsVisible = false
                 this._getListData()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

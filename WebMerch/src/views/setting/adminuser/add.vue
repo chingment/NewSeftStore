@@ -1,6 +1,6 @@
 <template>
   <div id="adminuser_add">
-    <page-header/>
+    <page-header />
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName" clearable />
@@ -132,9 +132,17 @@ export default {
             type: 'warning'
           }).then(() => {
             add(this.form).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 goBack(this)
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

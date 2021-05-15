@@ -12,6 +12,11 @@
         <el-form-item label="支付商交易号">
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
         </el-form-item>
+        <el-form-item label="交易状态">
+          <el-radio-group v-model="listQuery.payStatus">
+            <el-radio-button v-for="item in payStatuss" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         </el-form-item>
@@ -117,8 +122,17 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
+        payStatus: '0',
         userName: undefined
       },
+      payStatuss: [
+        { value: '0', label: '全部' },
+        { value: '1', label: '待支付' },
+        { value: '2', label: '支付中' },
+        { value: '3', label: '已支付' },
+        { value: '4', label: '已取消' },
+        { value: '5', label: '已超时' }
+      ],
       isDesktop: this.$store.getters.isDesktop
     }
   },

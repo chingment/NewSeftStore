@@ -122,10 +122,18 @@ export default {
             type: 'warning'
           }).then(() => {
             release(this.form).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.$router.push({
                   path: '/operationcenter/ad/contents?id=' + this.form.adSpaceId
+                })
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
                 })
               }
             })

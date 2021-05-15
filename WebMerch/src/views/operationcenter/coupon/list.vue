@@ -247,9 +247,17 @@ export default {
             type: 'warning'
           }).then(() => {
             send(this.formBySendCoupon).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogIsShowBySendCoupon = false
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

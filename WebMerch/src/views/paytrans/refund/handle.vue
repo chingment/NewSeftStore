@@ -379,10 +379,18 @@ export default {
             type: 'warning'
           }).then(() => {
             handle(_this.formByHandle).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.isHandle = false
                 this.getListData()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

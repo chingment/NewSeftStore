@@ -608,10 +608,18 @@ export default {
       }).then(() => {
         this.detailsLoading = true
         handleExByMachineSelfTake({ id: details.id, uniques: uniques, remark: _formByHandle.remark, isRefund: _formByHandle.isRefund, refundAmount: _formByHandle.refundAmount, refundMethod: _formByHandle.refundMethod, isRunning: false }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             _this.refreshDetails(details.id)
             _this.getListData()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
 
           this.detailsLoading = false

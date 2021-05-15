@@ -1,20 +1,17 @@
 <template>
   <div id="adminuser_add">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="优惠券">
-
-      </el-form-item>
+      <el-form-item label="优惠券" />
       <el-form-item label="数量">
-          <el-input-number v-model="form.quantity" :min="0" :max="20" style="width:160px" />
-        </el-form-item>
+        <el-input-number v-model="form.quantity" :min="0" :max="20" style="width:160px" />
+      </el-form-item>
       <el-form-item label="客户">
-      
-             <client-select  multiple :select-ids="selectIds" v-on:GetSelectIds="getClientUserIds" />
+
+        <client-select multiple :select-ids="selectIds" @GetSelectIds="getClientUserIds" />
 
       </el-form-item>
     </el-form>
 
-    
   </div>
 </template>
 
@@ -37,24 +34,23 @@ export default {
       form: {
         quantity: 0
       },
-      selectIds:['253395d25b344825a7c8bdbe191e8f45','55ca2c52278a4d9e8103dabde2956896'],
+      selectIds: ['253395d25b344825a7c8bdbe191e8f45', '55ca2c52278a4d9e8103dabde2956896'],
       rules: {
 
       }
     }
   },
   created() {
-   
+
   },
   methods: {
-  onSubmit(){
-  
-  console.log(JSON.stringify(this.selectIds))
-   },
-   getClientUserIds(ids){
-       console.log(JSON.stringify(ids))
-            this.selectIds=ids
-   }
+    onSubmit() {
+      console.log(JSON.stringify(this.selectIds))
+    },
+    getClientUserIds(ids) {
+      console.log(JSON.stringify(ids))
+      this.selectIds = ids
+    }
   }
 }
 </script>

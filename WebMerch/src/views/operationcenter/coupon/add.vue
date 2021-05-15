@@ -393,9 +393,17 @@ export default {
           })
             .then(() => {
               add(this.form).then(res => {
-                this.$message(res.message)
                 if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
                   goBack(this)
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
                 }
               })
             })

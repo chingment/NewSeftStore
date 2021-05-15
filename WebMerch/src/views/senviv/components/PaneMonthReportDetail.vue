@@ -558,9 +558,17 @@ export default {
         type: 'warning'
       }).then(() => {
         saveMonthReportSug(form).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this._getMonthReportSug()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       }).catch(() => {

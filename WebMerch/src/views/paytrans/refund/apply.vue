@@ -316,7 +316,10 @@ export default {
     },
     dialogOpenByRefundApply(row) {
       if (row.exStatus.value === 2) {
-        this.$message('该订单存在异常未有处理，请到订单中处理')
+        this.$message({
+          message: '该订单存在异常未有处理，请到订单中处理',
+          type: 'error'
+        })
         return
       }
 
@@ -345,11 +348,19 @@ export default {
             type: 'warning'
           }).then(() => {
             apply(_this.formByApply).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 var d = res.data
                 this.$router.push({
                   path: '/payRefund/query?payRefundId=' + d.payRefundId
+                })
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
                 })
               }
             })

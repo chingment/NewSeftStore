@@ -141,10 +141,18 @@ export default {
             type: 'warning'
           }).then(() => {
             editSalePriceOnStore(this.form).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogEditIsVisible = false
                 this.getListData()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

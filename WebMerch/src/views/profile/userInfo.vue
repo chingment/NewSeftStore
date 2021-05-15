@@ -103,9 +103,17 @@ export default {
       }).then(() => {
         var data = { password: this.form_change_pwd.password }
         changePassword(data).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this.isOpenEditPassword = false
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       }).catch(() => {

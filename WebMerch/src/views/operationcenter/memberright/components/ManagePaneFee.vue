@@ -128,10 +128,18 @@ export default {
             type: 'warning'
           }).then(() => {
             setFeeSt(this.formBySetting).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogBySettingIsVisible = false
                 this._getListData(this.listQuery)
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

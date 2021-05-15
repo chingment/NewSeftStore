@@ -322,7 +322,17 @@ export default {
             type: 'warning'
           }).then(() => {
             edit(_form).then(res => {
-              this.$message(res.message)
+              if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
+              }
             })
           })
         }

@@ -38,11 +38,11 @@
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onSysSetStatus()">
-          确定
+        <el-button size="small" @click="dialogSysSetStatusIsVisible = false">
+          取消
         </el-button>
-        <el-button @click="dialogSysSetStatusIsVisible = false">
-          关闭
+        <el-button type="primary" size="small" @click="onSysSetStatus()">
+          确定
         </el-button>
       </div>
     </el-dialog>
@@ -98,7 +98,10 @@ export default {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {
-            this.$message(res.message)
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       }).catch(() => {
@@ -114,7 +117,10 @@ export default {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {
-            this.$message(res.message)
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       }).catch(() => {
@@ -138,7 +144,10 @@ export default {
                 this.dialogSysSetStatusIsVisible = false
                 this.onQueryMsgStatus(res.data.msg_id)
               } else {
-                this.$message(res.message)
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {
@@ -156,7 +165,10 @@ export default {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {
-            this.$message(res.message)
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
           }
         })
       }).catch(() => {
@@ -176,7 +188,12 @@ export default {
         queryMsgPushResult({ machineId: _this.machineId, msg_id: msgId }).then(res => {
           if (res.result === 1) {
             loading.close()
-            _this.$message(res.message)
+
+            _this.$message({
+              message: res.message,
+              type: 'success'
+            })
+
             if (timeout != null) {
               window.clearInterval(interval)
               window.clearTimeout(timeout)

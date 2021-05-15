@@ -155,7 +155,10 @@ export default {
 
           // this.listData = res.data
         } else {
-          this.$message(res.message)
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
         }
         this.loading = false
       })
@@ -208,7 +211,10 @@ export default {
         this.downloadLoading = false
       })
         } else {
-          this.$message(res.message)
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
         }
       })
     }

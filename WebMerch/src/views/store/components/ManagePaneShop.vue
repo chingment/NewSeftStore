@@ -137,10 +137,18 @@ export default {
         type: 'warning'
       }).then(() => {
         addShop({ shopId: item.id, storeId: this.storeId }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this.dialogByShopIsVisible = false
             this.getListData(this.listQuery)
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       })
@@ -152,10 +160,18 @@ export default {
         type: 'warning'
       }).then(() => {
         removeShop({ shopId: item.id, storeId: this.storeId }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this.dialogByShopIsVisible = false
             this.getListData(this.listQuery)
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       })

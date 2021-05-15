@@ -281,9 +281,17 @@ export default {
         type: 'warning'
       }).then(() => {
         unBindShop({ machineId: item.id, storeId: item.storeId, shopId: item.shopId }).then(res => {
-          this.$message(res.message)
           if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
             this.getListData()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
           }
         })
       })
@@ -296,10 +304,18 @@ export default {
           type: 'warning'
         }).then(() => {
           bindShop({ machineId: item.id, storeId: this.storeId, shopId: this.shopId }).then(res => {
-            this.$message(res.message)
             if (res.result === 1) {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
               this.getListData()
               this.dialogByOpenSelectIsVisible = false
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
           })
         })

@@ -17,7 +17,7 @@
 
     <div class="rows">
 
-      <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')" style="max-width: 400px;">
+      <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
         <template v-for="(col,cindex) in row.cols">
           <div v-show="col.isShow" :key="cindex" class="col">
 
@@ -89,13 +89,22 @@
             可售库存"
           prop="sellQuantity"
         >
-          <el-input-number v-model="form.sellQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
+          <el-input-number v-model="form.sellQuantity" size="small" :disabled="true" :min="0" :max="20" style="width:160px" />
         </el-form-item>
         <el-form-item label="锁定库存" prop="lockQuantity">
-          <el-input-number v-model="form.lockQuantity" :disabled="true" :min="0" :max="20" style="width:160px" />
+          <el-input-number v-model="form.lockQuantity" size="small" :disabled="true" :min="0" :max="20" style="width:160px" />
         </el-form-item>
         <el-form-item label="总库存">
-          <el-input-number v-model="form.sumQuantity" :min="0" :max="20" style="width:160px" @change="sumQuantityChange" />
+          <el-input-number v-model="form.sumQuantity" size="small" :min="0" :max="20" style="width:160px" @change="sumQuantityChange" />
+        </el-form-item>
+        <el-form-item label="预留库存">
+          <el-input-number v-model="form.holdQuantity" size="small" :min="0" :max="20" style="width:160px" />
+        </el-form-item>
+        <el-form-item label="最大库存">
+          <el-input-number v-model="form.maxQuantity" size="small" :min="0" :max="20" style="width:160px" />
+        </el-form-item>
+        <el-form-item label="报警库存">
+          <el-input-number v-model="form.warnQuantity" size="small" :min="0" :max="20" style="width:160px" />
         </el-form-item>
         <el-form-item v-show="false" label="销售价" prop="salePrice">
           <el-input v-model="form.salePrice" style="width:160px" class="ip-prepend">
@@ -108,11 +117,11 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogEditIsVisible = false">
+        <el-button size="small" @click="dialogEditIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleEdit">
-          确定
+        <el-button type="primary" size="small" @click="handleEdit">
+          保存
         </el-button>
       </div>
     </el-dialog>
@@ -159,6 +168,9 @@ export default {
         name: '',
         sellQuantity: 0,
         lockQuantity: 0,
+        warnQuantity: 0,
+        maxQuantity: 0,
+        holdQuantity: 0,
         salePrice: 0,
         isOffSell: false,
         mainImgUrl: '',
@@ -230,6 +242,9 @@ export default {
       this.form.sellQuantity = sku.sellQuantity
       this.form.lockQuantity = sku.lockQuantity
       this.form.sumQuantity = sku.sumQuantity
+      this.form.maxQuantity = sku.maxQuantity
+      this.form.warnQuantity = sku.warnQuantity
+      this.form.holdQuantity = sku.holdQuantity
       this.form.salePrice = sku.salePrice
       this.form.isOffSell = sku.isOffSell
       this.form.mainImgUrl = sku.mainImgUrl
@@ -247,10 +262,18 @@ export default {
             type: 'warning'
           }).then(() => {
             manageStockEditStock(this.form).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogEditIsVisible = false
                 this.getListData(this.listQuery)
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {
@@ -268,6 +291,9 @@ export default {
 <style lang="scss" scoped>
 
 #machine_stock{
+.el-form-item {
+    margin-bottom: 5px;
+}
 
 .rows{
 .row{
@@ -295,7 +321,6 @@ export default {
 
   .col{
       margin-right: 10px;
-    flex: 1;
   }
 
   .col:last-child{

@@ -287,10 +287,18 @@ export default {
             type: 'warning'
           }).then(() => {
             editSku(this.formByEditSku).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogByEditSkuIsVisible = false
                 this._getListData()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {
@@ -307,10 +315,18 @@ export default {
             type: 'warning'
           }).then(() => {
             addSku(this.formByAddSku).then(res => {
-              this.$message(res.message)
               if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
                 this.dialogByAddSkuIsVisible = false
                 this._getListData()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
               }
             })
           }).catch(() => {

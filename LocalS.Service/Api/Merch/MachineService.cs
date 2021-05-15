@@ -380,7 +380,9 @@ namespace LocalS.Service.Api.Merch
                                     col.SumQuantity = slotStock.SumQuantity;
                                     col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
                                     col.SellQuantity = slotStock.SellQuantity;
-                                    col.MaxQuantity = 10;
+                                    col.WarnQuantity = slotStock.WarnQuantity;
+                                    col.MaxQuantity = slotStock.MaxQuantity;
+                                    col.HoldQuantity = slotStock.HoldQuantity;
                                     col.SalePrice = slotStock.SalePrice;
                                     col.IsOffSell = slotStock.IsOffSell;
                                     col.Version = slotStock.Version;
@@ -434,7 +436,9 @@ namespace LocalS.Service.Api.Merch
                                             col.SumQuantity = slotStock.SumQuantity;
                                             col.LockQuantity = slotStock.WaitPayLockQuantity + slotStock.WaitPickupLockQuantity;
                                             col.SellQuantity = slotStock.SellQuantity;
-                                            col.MaxQuantity = 10;
+                                            col.WarnQuantity = slotStock.WarnQuantity;
+                                            col.MaxQuantity = slotStock.MaxQuantity;
+                                            col.HoldQuantity = slotStock.HoldQuantity;
                                             col.SalePrice = slotStock.SalePrice;
                                             col.IsOffSell = slotStock.IsOffSell;
                                             col.Version = slotStock.Version;
@@ -466,7 +470,7 @@ namespace LocalS.Service.Api.Merch
 
             var machine = BizFactory.Machine.GetOne(rop.MachineId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Machine, merchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity,rop.MaxQuantity,rop.WarnQuantity,rop.HoldQuantity);
 
             if (result.Result == ResultType.Success)
             {

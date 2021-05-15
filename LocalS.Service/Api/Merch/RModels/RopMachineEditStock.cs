@@ -14,5 +14,8 @@ namespace LocalS.Service.Api.Merch
         public string SlotId { get; set; }
         public int SumQuantity { get; set; }
         public int Version { get; set; }
+        public int MaxQuantity { get; set; }
+        public int WarnQuantity { get; set; }
+        public int HoldQuantity { get; set; }
     }
 }

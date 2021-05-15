@@ -513,9 +513,17 @@ export default {
           })
             .then(() => {
               saveKind(this.kindForm).then(res => {
-                this.$message(res.message)
                 if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
                   this._getKinds()
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
                 }
               })
             })
@@ -534,10 +542,18 @@ export default {
             storeId: this.storeId,
             kindId: this.kindForm.kindId
           }).then(res => {
-            this.$message(res.message)
             if (res.result === 1) {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
               this._getKinds()
               this.dialogKindIsVisible = false
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
           })
         })
@@ -553,10 +569,18 @@ export default {
           })
             .then(() => {
               saveKindSpu(this.kindSpuForm).then(res => {
-                this.$message(res.message)
                 if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
                   this.dialogKindSpuIsVisible = false
                   this._getKindSpus()
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
                 }
               })
             })
@@ -576,10 +600,18 @@ export default {
             kindId: this.kindSpuForm.kindId,
             spuId: this.kindSpuForm.spuId
           }).then(res => {
-            this.$message(res.message)
             if (res.result === 1) {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
               this.dialogKindSpuIsVisible = false
               this._getKindSpus()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
           })
         })
