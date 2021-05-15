@@ -1,31 +1,25 @@
 <template>
   <div id="order_list">
     <div class="filter-container">
-
-      <el-row :gutter="12">
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="width: 100%" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
-        </el-col>
-        <el-col v-if="isShowClientUserNameInput" :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="width: 100%" class="filter-item" />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.orderStatus" clearable placeholder="全部状态" style="width: 100%">
-            <el-option
-              v-for="item in options_status"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="状态">
+          <el-radio-group v-model="listQuery.orderStatus" @change="handleFilter">
+            <el-radio-button v-for="item in options_status" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="isShowClientUserNameInput" label="下单用户">
+          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="max-width: 300px;" class="filter-item" />
+        </el-form-item>
+        <el-form-item label="异常">
           <el-checkbox v-model="listQuery.isHasEx">异常未处理</el-checkbox>
-          <el-button class="filter-item" type="primary" icon="el-icon-search" style="margin-left:20px;" @click="handleFilter">
-            查询
-          </el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+        <el-form-item label="订单号">
+          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="max-width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查 询</el-button>
+        </el-form-item>
+      </el-form>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
     </div>
     <el-table
@@ -452,6 +446,9 @@ export default {
         refundRecords: null
       },
       options_status: [{
+        value: '0',
+        label: '全部'
+      }, {
         value: '2000',
         label: '待支付'
       }, {
