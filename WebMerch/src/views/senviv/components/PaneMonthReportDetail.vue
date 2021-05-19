@@ -218,38 +218,20 @@
           </div>
           <el-card class="box-card" style="margin-bottom:10px">
             <div slot="header" class="clearfix">
-              <span>运动</span>
+              <span>健康总结</span>
             </div>
             <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByYd" type="textarea" />
-              <span v-if="formBySug.isSend">{{ formBySug.sugByYd }}</span>
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="10" type="textarea" show-word-limit />
+              <span v-if="formBySug.isSend">{{ formBySug.rptSummary }}</span>
             </div>
           </el-card>
           <el-card class="box-card" style="margin-bottom:10px">
             <div slot="header" class="clearfix">
-              <span>营养</span>
+              <span>健康建议</span>
             </div>
             <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByYy" type="textarea" />
-              <span v-if="formBySug.isSend">{{ formBySug.sugByYy }}</span>
-            </div>
-          </el-card>
-          <el-card class="box-card" style="margin-bottom:10px">
-            <div slot="header" class="clearfix">
-              <span>睡眠</span>
-            </div>
-            <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugBySm" type="textarea" />
-              <span v-if="formBySug.isSend">{{ formBySug.sugBySm }}</span>
-            </div>
-          </el-card>
-          <el-card class="box-card" style="margin-bottom:10px">
-            <div slot="header" class="clearfix">
-              <span>情绪压力</span>
-            </div>
-            <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.sugByQxyl" type="textarea" />
-              <span v-if="formBySug.isSend">{{ formBySug.sugByQxyl }}</span>
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="10" type="textarea" show-word-limit />
+              <span v-if="formBySug.isSend">{{ formBySug.rptSuggest }}</span>
             </div>
           </el-card>
         </div>
@@ -303,10 +285,8 @@ export default {
       },
       formBySug: {
         reportId: '',
-        sugByYd: '',
-        sugByYy: '',
-        sugBySm: '',
-        sugByQxyl: '',
+        rptSummary: '',
+        rptSuggest: '',
         isSend: false
       },
       isDesktop: this.$store.getters.isDesktop
@@ -530,10 +510,8 @@ export default {
         if (res.result === 1) {
           var d = res.data
 
-          this.formBySug.sugByYd = d.sugByYd
-          this.formBySug.sugByYy = d.sugByYy
-          this.formBySug.sugBySm = d.sugBySm
-          this.formBySug.sugByQxyl = d.sugByQxyl
+          this.formBySug.rptSummary = d.rptSummary
+          this.formBySug.rptSuggest = d.rptSuggest
           this.formBySug.isSend = d.isSend
         }
       })
@@ -547,10 +525,8 @@ export default {
       var form = {
         reportId: this.reportId,
         isSend: isSend,
-        sugByYd: this.formBySug.sugByYd,
-        sugByYy: this.formBySug.sugByYy,
-        sugBySm: this.formBySug.sugBySm,
-        sugByQxyl: this.formBySug.sugByQxyl
+        rptSuggest: this.formBySug.rptSuggest,
+        rptSummary: this.formBySug.rptSummary
       }
       MessageBox.confirm(tips, '提示', {
         confirmButtonText: '确定',

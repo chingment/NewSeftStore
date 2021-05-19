@@ -173,6 +173,8 @@ namespace LocalS.Entity
         public string SugByYy { get; set; }
         public string SugBySm { get; set; }
         public string SugByQxyl { get; set; }
+        public string RptSummary { get; set; }
+        public string RptSuggest { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

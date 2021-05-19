@@ -1,43 +1,38 @@
 <template>
   <div class="pg-monitor">
-
     <div class="pt1">
       <div class="cd">
         <div class="lf">
           <span class="signName">{{ userInfo.signName }}</span>
         </div>
         <div class="rf">
-          <div class="t1">   <img class="avatar" :src="userInfo.headImgurl" alt=""></div>
-          <div class="t2">  <span class="month">{{ rd.healthDate }}</span>    </div>
+          <div class="t1"><img class="avatar" :src="userInfo.headImgurl" alt=""></div>
+          <div class="t2"><span class="month">{{ rd.healthDate }}</span> <img class="more" src="@/assets/images/ts/arrow_right.png" alt="">  </div>
         </div>
       </div>
     </div>
     <div class="pt2">
       <div class="cd">
         <div class="lf">
-
           <div class="rd">
             <div class="st">
               <div class="score">{{ rd.totalScore }}</div>
               <div class="title">本月得分</div>
             </div>
           </div>
-
         </div>
         <div class="rf">
-          <div class="notic">全线通精准健康管理平台守护您的健康!
-          </div>
+          <div class="notic">全线通精准健康管理平台守护您的健康!</div>
         </div>
       </div>
     </div>
-
     <div class="pt3">
       <div class="cd">
         <div class="smtags">
           <template v-for="(item, index) in rd.smTags">
             <div v-if="index<=3" :key="index" :class="'item item_'+(index%2==0?'0':'1')">
               <div class="item-ct">
-                <div class="tl">{{ item.name }}</div>
+                <div class="tl"><span class="name">{{ item.name }} </span>  <img class="icon" style="display:none" src="@/assets/images/ts/极难入睡.png" alt=""></div>
                 <div class="rd">
                   <div class="st"> <span class="count"> {{ item.count }} </span> <span class="unit">次</span> </div>
                 </div>
@@ -47,20 +42,21 @@
         </div>
       </div>
     </div>
-
     <div class="pt4">
-      <div class="summary-title">本月健康报告总结</div>
-      <div class="summary-card">
-        <div class="summary-card__header">
-          <div class="ct">
-            <div> 总结</div>
-            <div>dasdasdda</div>
+      <div class="cd">
+        <div class="summary-title">本月健康报告总结</div>
+        <div class="summary-card">
+          <div class="summary-card__header">
+            <div class="ct">
+              <div class="title">总结：</div>
+              <div class="content">{{ rd.rptSummary }}</div>
+            </div>
           </div>
-        </div>
-        <div class="summary-card_body">
-          <div class="ct">
-            <div> 健康建议</div>
-            <div>dasdasdda</div>
+          <div class="summary-card_body">
+            <div class="ct">
+              <div class="title">健康建议：</div>
+              <div class="content">{{ rd.rptSuggest }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -93,7 +89,9 @@ export default {
         xlDcpjxl: { color: '', value: '', refRange: '' },
         hxZtcs: { color: '', value: '', refRange: '' },
         smTdcs: { color: '', value: '', refRange: '' },
-        hxZtahizs: { color: '', value: '', refRange: '' }
+        hxZtahizs: { color: '', value: '', refRange: '' },
+        rptSummary: '',
+        rptSuggest: ''
       }
     }
   },
@@ -147,12 +145,20 @@ export default {
           width: 50px;
           height: 50px;
           border-radius: 50%;
+          margin-right: 14px;
         }
         }
 
         .t2{
-          text-align: right;
-          color:#fff;
+          color: #fff;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+.more{
+      width: 18px;
+    height: 18px
+}
         }
       }
     }
@@ -190,6 +196,7 @@ export default {
       color:#ffbd73;
       font-size: 12px;
       margin-top: 8px;
+      font-weight: 600;
     }
 
       }
@@ -200,6 +207,7 @@ export default {
     align-items: center;
     line-height: 22px;
     font-weight: 600;
+    padding: 0px 20px;
 .notic{
    color:#ffbd73;
 }
@@ -211,7 +219,7 @@ export default {
    padding: 0px 20px 0px 20px;
     display: flex;
   .cd{
-
+width: 100%;
 .smtags{
 
   .item{
@@ -224,12 +232,22 @@ export default {
     background-image: url('~@/assets/images/ts/bg_smtag.png');
     background-size: 100% 100%;
     height: 180px;
-
+    max-width: 180px;
+    margin: auto;
     .tl{
       height: 50px;
-      line-height: 50px;
       margin-left: 10px;
-           font-size: 12px;
+      font-size: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+ color:#606060;
+.icon{
+      width: 18px;
+    height: 18px;
+    margin-left: 5px;
+}
+
     }
 .rd{
             width: 100px;
@@ -291,21 +309,45 @@ export default {
 }
 
 .summary-card__header{
-    height: 100px;
+    min-height: 100px;
     box-sizing: border-box;
-    background-image: url('~@/assets/images/ts/bg_summary-card__header.png');background-image: url('~@/assets/images/ts/bg_summary-card__header.png');
+    background-image: url('~@/assets/images/ts/bg_summary-card__header.png');
     background-size: 100% 100%;
 }
 
 .summary-card__header {
   .ct{
 padding: 20px;
+
+.title{
+    font-weight: 600;
+    line-height: 32px;
+    font-size: 16px
+}
+
+.content{
+    color: #616161;
+    font-size: 14px;
+    line-height: 21px;
+}
+
   }
 }
 .summary-card_body{
 
 .ct{
 padding: 20px;
+.title{
+    font-weight: 600;
+    line-height: 32px;
+    font-size: 16px
+}
+
+.content{
+    color: #616161;
+    font-size: 14px;
+    line-height: 21px;
+}
 }
 }
 

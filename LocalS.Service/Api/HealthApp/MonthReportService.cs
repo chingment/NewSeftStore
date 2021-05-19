@@ -67,6 +67,8 @@ namespace LocalS.Service.Api.HealthApp
                            u.VisitCount,
                            u.Status,
                            u.SvUserId,
+                           u.RptSummary,
+                           u.RptSuggest,
                            u.CreateTime
                        }).FirstOrDefault();
 
@@ -147,7 +149,9 @@ namespace LocalS.Service.Api.HealthApp
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
-                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs)
+                    SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
+                    RptSummary = rpt.RptSummary,
+                    RptSuggest = rpt.RptSuggest
                 }
             };
 

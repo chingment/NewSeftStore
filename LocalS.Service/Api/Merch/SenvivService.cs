@@ -1055,10 +1055,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                        select new
                        {
                            u.Id,
-                           u.SugByYy,
-                           u.SugByYd,
-                           u.SugBySm,
-                           u.SugByQxyl,
+                           u.RptSummary,
+                           u.RptSuggest,
                            u.IsSend,
                            u.Status,
                            u.CreateTime
@@ -1066,10 +1064,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var ret = new
             {
-                rpt.SugByYy,
-                rpt.SugByYd,
-                rpt.SugBySm,
-                rpt.SugByQxyl,
+                rpt.RptSummary,
+                rpt.RptSuggest,
                 rpt.IsSend
             };
 
@@ -1086,10 +1082,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var rpt = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
 
-            rpt.SugByYd = rop.SugByYd;
-            rpt.SugByQxyl = rop.SugByQxyl;
-            rpt.SugBySm = rop.SugBySm;
-            rpt.SugByYy = rop.SugByYy;
+            rpt.RptSummary = rop.RptSummary;
+            rpt.RptSuggest = rop.RptSuggest;
 
             if (rop.IsSend)
             {
