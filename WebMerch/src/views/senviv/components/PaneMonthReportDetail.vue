@@ -222,7 +222,7 @@
             </div>
             <div>
               <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="10" type="textarea" show-word-limit />
-              <span v-if="formBySug.isSend">{{ formBySug.rptSummary }}</span>
+              <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSummary }}</pre>
             </div>
           </el-card>
           <el-card class="box-card" style="margin-bottom:10px">
@@ -231,7 +231,7 @@
             </div>
             <div>
               <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="10" type="textarea" show-word-limit />
-              <span v-if="formBySug.isSend">{{ formBySug.rptSuggest }}</span>
+              <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSuggest }}</pre>
             </div>
           </el-card>
         </div>

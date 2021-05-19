@@ -49,13 +49,15 @@
           <div class="summary-card__header">
             <div class="ct">
               <div class="title">总结：</div>
-              <div class="content">{{ rd.rptSummary }}</div>
+              <div class="content">
+                <pre style="white-space: pre-line;">{{ rd.rptSummary }}</pre>
+              </div>
             </div>
           </div>
           <div class="summary-card_body">
             <div class="ct">
               <div class="title">健康建议：</div>
-              <div class="content">{{ rd.rptSuggest }}</div>
+              <div class="content"><pre style="white-space: pre-line;">{{ rd.rptSuggest }}</pre></div>
             </div>
           </div>
         </div>
