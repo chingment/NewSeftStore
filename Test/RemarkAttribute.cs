@@ -41,11 +41,6 @@ namespace System
     /// </summary>
     public static class EnumExtension
     {
-        /// <summary>
-        /// 获取枚举的备注信息
-        /// </summary>
-        /// <param name="em"></param>
-        /// <returns></returns>
         public static string GetCnName(this Enum em)
         {
 

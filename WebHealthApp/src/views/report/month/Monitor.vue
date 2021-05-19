@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="pt2">
-      <div class="cd">
+      <div class="cd" @click="goEnery()">
         <div class="lf">
           <div class="rd">
             <div class="st">
@@ -111,6 +111,9 @@ export default {
         }
         this.loading = false
       })
+    },
+    goEnery() {
+      this.$router.push('/report/month/energy?rptId=' + this.$route.query.rptId)
     }
   }
 }
@@ -125,7 +128,7 @@ export default {
 .pt1{
     background-image: url('~@/assets/images/ts/bg_pt1.png');
     height: 240px;
-    padding: 20px;
+    padding: 16px;
   background-size: 100% 100%;
     .cd{
       display: flex;
@@ -168,7 +171,7 @@ export default {
 
 .pt2{
     margin-top: -120px;
-    padding: 20px;
+    padding: 16px;
     .cd{
        background-color: #fff3e8;
         border-radius: 10px;
@@ -218,7 +221,7 @@ export default {
 }
 
 .pt3{
-   padding: 0px 20px 0px 20px;
+   padding: 0px 16px 0px 16px;
     display: flex;
   .cd{
 width: 100%;
@@ -287,7 +290,7 @@ width: 100%;
 }
 
 .pt4{
-     padding: 0px 20px 0px 20px;
+     padding: 0px 16px 0px 16px;
 }
 
 .summary-title{
@@ -313,8 +316,8 @@ width: 100%;
 .summary-card__header{
     min-height: 100px;
     box-sizing: border-box;
-    background-image: url('~@/assets/images/ts/bg_summary-card__header.png');
-    background-size: 100% 100%;
+    background: url('~@/assets/images/ts/bg_summary-card__header.png') no-repeat;;
+    background-size: cover;
 }
 
 .summary-card__header {
@@ -322,7 +325,7 @@ width: 100%;
 padding: 20px;
 
 .title{
-    font-weight: 600;
+    font-weight: bold;
     line-height: 32px;
     font-size: 16px
 }
@@ -340,7 +343,7 @@ padding: 20px;
 .ct{
 padding: 20px;
 .title{
-    font-weight: 600;
+    font-weight: bold;
     line-height: 32px;
     font-size: 16px
 }

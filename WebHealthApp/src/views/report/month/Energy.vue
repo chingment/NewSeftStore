@@ -1,37 +1,74 @@
 <template>
-  <div class="pg-energy">
+  <div class="pg-energy" style="height:500px">
 
-    <div class="dv-section">
-      <div ref="chart_BySmsc" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
-      <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smsc.png" alt="">
-
-          <span class="dv-name">日均睡觉时长</span>  <dv-item :value="rd.smSmsc" sign />  </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.smSmsc.refRange }}</span></div>
+    <div class="pt1">
+      <img class="pt1_t1" src="@/assets/images/ts/bg_energy_pt1_t1.png" alt="">
+      <img class="pt1_t2" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
+      <img class="pt1_t3" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
+      <div class="at1">
+        <div><span> 本月综合得分</span><span>52</span></div>
       </div>
-    </div>
+      <div class="at2" />
+      <div class="at3">
 
-    <div class="dv-section">
-      <div ref="chart_ByHrvxzznl" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
-      <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hrvxlzl.png" alt=""> <span class="dv-name">心脏总能量</span> <dv-item :value="rd.hrvXzznl" sign /> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hrvXzznl.refRange }}</span></div>
-      </div>
-    </div>
+        <div class="dvit">
+          <div class="dvit-head">
+            <div class="t1"><span>指标(日均)</span></div>
+            <div class="t2"><span>测量值</span></div>
+            <div class="t3"><span>参考值</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>睡眠时长</span></div>
+            <div class="t2"><dv-item :value="rd.smSmsc" sign /></div>
+            <div class="t3"><span>{{ rd.smSmsc.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>浅睡眠时长</span></div>
+            <div class="t2"><dv-item :value="rd.smQdsmsc" sign /></div>
+            <div class="t3"><span>{{ rd.smQdsmsc.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>深睡眠时长</span></div>
+            <div class="t2"><dv-item :value="rd.smSdsmsc" sign /></div>
+            <div class="t3"><span>{{ rd.smSdsmsc.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>REM睡眠时长</span></div>
+            <div class="t2"><dv-item :value="rd.smRemsmsc" sign /></div>
+            <div class="t3"><span>{{ rd.smRemsmsc.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>心脏总能量</span></div>
+            <div class="t2"><dv-item :value="rd.hrvXzznl" sign /></div>
+            <div class="t3"><span>{{ rd.hrvXzznl.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>平均呼吸</span></div>
+            <div class="t2"><dv-item :value="rd.hxDcpjhx" sign /></div>
+            <div class="t3"><span>{{ rd.hxDcpjhx.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>平均心率</span></div>
+            <div class="t2"><dv-item :value="rd.xlDcpjxl" sign /></div>
+            <div class="t3"><span>{{ rd.xlDcpjxl.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>呼吸暂停</span></div>
+            <div class="t2"><dv-item :value="rd.hxZtcs" sign /></div>
+            <div class="t3"><span>{{ rd.hxZtcs.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>体动</span></div>
+            <div class="t2"><dv-item :value="rd.smTdcs" sign /></div>
+            <div class="t3"><span>{{ rd.smTdcs.refRange }}</span></div>
+          </div>
+          <div class="dvit-item">
+            <div class="t1"><span>AHI指数</span></div>
+            <div class="t2"><dv-item :value="rd.hxZtahizs" sign /></div>
+            <div class="t3"><span>{{ rd.hxZtahizs.refRange }}</span></div>
+          </div>
+        </div>
 
-    <div class="dv-section">
-      <div ref="chart_ByHxztcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
-      <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_hxztcs.png" alt=""> <span class="dv-name">呼吸暂停次数</span> <dv-item :value="rd.hxZtcs" sign />  </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtcs.refRange }}</span></div>
-      </div>
-    </div>
-
-    <div class="dv-section">
-      <div ref="chart_ByHxdtcs" style="width:100%;height:200px;margin:auto;padding: 10px 20px;" />
-      <div class="desrb">
-        <div class="lf"><img class="dv-icon" src="@/assets/images/icon_energy_smdtcs.png" alt=""> <span class="dv-name">低通气次数</span>  <dv-item :value="rd.hxZtahizs" sign /> </div>
-        <div class="rf"><span class="dv-refRange1">参考范围</span><span class="dv-refRange2">{{ rd.hxZtahizs.refRange }}</span></div>
       </div>
     </div>
 
@@ -56,9 +93,16 @@ export default {
     return {
       loading: false,
       rd: {
-        hrvXzznl: { color: '', value: '', refRange: '' },
-        hxZtcs: { color: '', value: '', refRange: '' },
+        scoreRatio: '',
         smSmsc: { color: '', value: '', refRange: '' },
+        smQdsmsc: { color: '', value: '', refRange: '' },
+        smSdsmsc: { color: '', value: '', refRange: '' },
+        smRemsmsc: { color: '', value: '', refRange: '' },
+        hrvXzznl: { color: '', value: '', refRange: '' },
+        hxDcpjhx: { color: '', value: '', refRange: '' },
+        xlDcpjxl: { color: '', value: '', refRange: '' },
+        hxZtcs: { color: '', value: '', refRange: '' },
+        smTdcs: { color: '', value: '', refRange: '' },
         hxZtahizs: { color: '', value: '', refRange: '' },
         datePt: [0],
         hrvXzznlPt: [0],
@@ -295,55 +339,81 @@ export default {
 
 .pg-energy{
   padding: 10px;
+  background: linear-gradient(#ffb24f, #fff)
 }
 
-.dv-section{
-  background: #fff;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    border: 1px solid #ebeef5;
+.pt1{
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     background-color: #fff;
     color: #303133;
     -webkit-transition: .3s;
     transition: .3s;
-    border-radius: 4px;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    margin-top: 80px;
 }
 
-.desrb{
+.pt1_t1{
+width: 100px;
+height: 100px;
+position: absolute;
+right: 100px;
+top: 32px;
+}
+
+.pt1_t2{
+width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 100px;
+    top: 62px;
+}
+
+.pt1_t3{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    right: 20px;
+    top: 22px;
+}
+
+.at1{
+  height: 300px;
+  background: url('~@/assets/images/ts/bg_energy_pt1_at1.png') no-repeat;
+  background-size: contain;
+}
+
+.dvit{
+
+.dvit-head{
   display: flex;
-    padding: 10px 20px;
-        font-size: 14px;
-        color: #707070;
-  .lf{
-    display: flex;
-    align-items: center;
-        flex: 1;
-  }
+  color: #ffb24f;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 14px;
+}
 
-  .rf{
-       display: flex;
-      justify-content: flex-end;
-    align-items: center;
-    flex: 1;
-  }
+.dvit-item{
+  display: flex;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #707070;
+}
 
-  .dv-icon{
-    width: 22px;
-    height: 22px;
-  }
+.t1{
+  flex:1;
+  text-align: left;
+}
+.t2{
+  flex:1;
+  text-align: center;
+}
+.t3{
+  flex:1;
+  text-align: center;
+}
 
-  .dv-name{
-    margin-left: 5px;
-  }
-
-  .dv-value{
-    margin-left: 5px;
-  }
-
-  .dv-refRange2{
-    margin-left: 5px;
-  }
 }
 
 </style>
