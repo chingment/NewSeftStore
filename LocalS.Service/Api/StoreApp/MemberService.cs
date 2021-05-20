@@ -38,7 +38,7 @@ namespace LocalS.Service.Api.StoreApp
             var ret = new RetMemberPayLevelSt();
 
             ret.IsOptSaleOutlet = true;
-
+            ret.CurlevelSt = 2;
 
             var d_saleOutlet = CurrentDb.SaleOutlet.Where(m => m.MerchId == rup.MerchId && m.Id == rup.SaleOutletId).FirstOrDefault();
             if (d_saleOutlet == null)
@@ -67,6 +67,7 @@ namespace LocalS.Service.Api.StoreApp
                     m_levelSt1.Level = d_memberLevelSt_1.Level;
                     m_levelSt1.DetailsDes = d_memberLevelSt_1.DetailsDes;
                     m_levelSt1.CurFeeStIdx = 0;
+                    m_levelSt1.IsStop = d_memberLevelSt_1.IsStop;
                     foreach (var d_memberLevelSt_1_FeeSt in d_memberLevelSt_1_FeeSts)
                     {
                         var m_feeSt = new RetMemberPayLevelSt.FeeStModel();

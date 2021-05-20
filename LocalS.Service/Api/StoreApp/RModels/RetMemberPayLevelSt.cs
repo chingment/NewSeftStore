@@ -18,6 +18,9 @@ namespace LocalS.Service.Api.StoreApp
 
         public bool IsOptSaleOutlet { get; set; }
         public SaleOutletModel CurSaleOutlet { get; set; }
+
+        public int CurlevelSt { get; set; }
+
         public LevelStModel LevelSt1 { get; set; }
         public LevelStModel LevelSt2 { get; set; }
 
@@ -34,6 +37,7 @@ namespace LocalS.Service.Api.StoreApp
             public string DetailsDes { get; set; }
             public int CurFeeStIdx { get; set; }
             public List<FeeStModel> FeeSts { get; set; }
+            public bool IsStop { get; set; }
         }
         public class FeeStModel
         {

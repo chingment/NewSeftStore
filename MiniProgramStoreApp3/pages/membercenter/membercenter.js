@@ -71,6 +71,7 @@ Page({
         _this.setData({
           levelSt1: d.levelSt1,
           levelSt2: d.levelSt2,
+          curlevelSt:d.curlevelSt,
           isOptSaleOutlet: d.isOptSaleOutlet,
           curSaleOutlet: d.curSaleOutlet,
           pageIsReady: true
@@ -183,6 +184,10 @@ Page({
   clickToTabLevel(e) {
     var _this = this
     var level = e.currentTarget.dataset.replyLevel
+    var isStop = e.currentTarget.dataset.replyIsstop
+    
+    if(isStop)
+    return
 
     _this.setData({
       curlevelSt: level

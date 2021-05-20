@@ -21,5 +21,6 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+        public bool IsStop { get; set; }
     }
 }

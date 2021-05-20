@@ -45,22 +45,22 @@
       <view class="tab-double">
          <view class="tab-title">
             <view class="title-left {{curlevelSt==1?'selected':''}} skeleton-bg" bindtap="clickToTabLevel"
-               data-reply-level="1">
-               <view class="title">
-                  <image class='icon skeleton-circle' src='/content/default/images/icon_pan.png'></image>
-                  <text class="txt skeleton-rect">{{levelSt1.tag}}</text>
+               data-reply-level="1" data-reply-isstop="{{levelSt1.isStop}}">
+               <view class="title" >
+                  <image wx:if="{{!levelSt1.isStop}}" class='icon skeleton-circle' src='/content/default/images/icon_pan.png'></image>
+                  <text wx:if="{{!levelSt1.isStop}}" class="txt skeleton-rect">{{levelSt1.tag}}</text>
                </view>
                <view class="left-triangle">
                </view>
             </view>
             <view class="title-right {{curlevelSt==2?'selected':''}} skeleton-bg" bindtap="clickToTabLevel"
-               data-reply-level="2">
+               data-reply-level="2" data-reply-isstop="{{levelSt2.isStop}}">
                <view class="right-triangle">
 
                </view>
                <view class="title">
-                  <image class='icon skeleton-circle' src='/content/default/images/icon_diamen.png'></image>
-                  <text class="txt skeleton-rect">钻石会员</text>
+                  <image wx:if="{{!levelSt2.isStop}}" class='icon skeleton-circle' src='/content/default/images/icon_diamen.png'></image>
+                  <text wx:if="{{!levelSt2.isStop}}" class="txt skeleton-rect">钻石会员</text>
                </view>
             </view>
          </view>
