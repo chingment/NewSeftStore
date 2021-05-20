@@ -11,5 +11,7 @@ namespace LocalS.Service.Api.Merch
         public string LevelStId { get; set; }
 
         public decimal Discount { get; set; }
+
+        public bool IsStop { get; set; }
     }
 }

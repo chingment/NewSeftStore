@@ -75,7 +75,7 @@ namespace LocalS.Service.Api.Merch
 
             var d_MemberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.MerchId == merchId && m.Id == levelId).FirstOrDefault();
 
-            var ret = new { Id = d_MemberLevelSt.Id, Name = d_MemberLevelSt.Name, Discount = d_MemberLevelSt.Discount };
+            var ret = new { Id = d_MemberLevelSt.Id, Name = d_MemberLevelSt.Name, Discount = d_MemberLevelSt.Discount, IsStop = d_MemberLevelSt.IsStop };
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -104,6 +104,7 @@ namespace LocalS.Service.Api.Merch
 
             if (d_MemberLevelSt != null)
             {
+                d_MemberLevelSt.IsStop = rop.IsStop;
                 d_MemberLevelSt.Discount = rop.Discount;
                 CurrentDb.SaveChanges();
             }

@@ -15,6 +15,10 @@
         <span v-show="!isEdit">{{ temp.discount }}</span>
         <el-input v-show="isEdit" v-model="form.discount" placeholder="请输入内容" style="width:100px" />
       </el-form-item>
+      <el-form-item label="停用">
+        <span v-show="!isEdit">{{ temp.isStop==true?'是':'否' }}</span>
+        <el-switch v-show="isEdit" v-model="form.isStop" />
+      </el-form-item>
       <el-form-item>
         <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
         <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
@@ -46,11 +50,13 @@ export default {
         id: '',
         name: '',
         tag: '',
-        discount: ''
+        discount: '',
+        isStop: false
       },
       form: {
         id: '',
-        discount: ''
+        discount: '',
+        isStop: false
       },
       rules: {}
     }
@@ -74,8 +80,10 @@ export default {
             this.temp.name = d.name
             this.temp.tag = d.tag
             this.temp.discount = d.discount
+            this.temp.isStop = d.isStop
             this.form.levelStId = this.levelstId
             this.form.discount = d.discount
+            this.form.isStop = d.isStop
           }
           this.loading = false
         })
