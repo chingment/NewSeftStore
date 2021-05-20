@@ -315,3 +315,7 @@
   color: #ffbb0d;
   font-size: 21rpx;
 }
+
+.content-detailsdes{
+  margin-bottom: 180rpx;
+}

@@ -6,7 +6,7 @@
       <img class="pt1_t2" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <img class="pt1_t3" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <div class="at1">
-        <div><span> 本月综合得分</span><span>52</span></div>
+        <div class="at_a1"><span class="at_title"> 本月综合得分</span><span class="at_score">52</span></div>
       </div>
       <div class="at2" />
       <div class="at3">
@@ -167,15 +167,7 @@ export default {
         if (res.result === 1) {
           var d = res.data
 
-          this.rd.hrvXzznl = d.hrvXzznl
-          this.rd.hxZtcs = d.hxZtcs
-          this.rd.smSmsc = d.smSmsc
-          this.rd.hxZtahizs = d.hxZtahizs
-          this.rd.datePt = d.datePt
-          this.rd.hrvXzznlPt = d.hrvXzznlPt
-          this.rd.hxZtcsPt = d.hxZtcsPt
-          this.rd.smSmscPt = d.smSmscPt
-          this.rd.hxZtahizsPt = d.hxZtahizsPt
+          this.rd = d
 
           this.$nextTick(function() {
             this.getChartBySmsc()
@@ -338,7 +330,7 @@ export default {
 <style lang="scss" scoped>
 
 .pg-energy{
-  padding: 10px;
+  padding: 16px;
   background: linear-gradient(#ffb24f, #fff)
 }
 
@@ -382,6 +374,20 @@ width: 50px;
   height: 300px;
   background: url('~@/assets/images/ts/bg_energy_pt1_at1.png') no-repeat;
   background-size: contain;
+
+  .at_a1{
+        padding-top: 100px;
+    padding-left: 20px;
+    color:#ffbd73;
+
+  .at_title{
+      font-size: 21px;
+    }
+    .at_score{
+      font-size: 32px;
+      margin-left: 10px;
+    }
+  }
 }
 
 .dvit{
