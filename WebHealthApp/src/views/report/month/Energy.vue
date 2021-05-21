@@ -10,10 +10,10 @@
       </div>
       <div class="at2">
         <div class="dv-section">
-          <div ref="chart_ByTotalScore" style="width:100%;height:300px;margin:auto;padding: 10px 20px;" />
+          <div ref="chart_ByTotalScore" style="width:100%;height:300px;margin:auto;padding: 10px 5px;" />
         </div>
         <div class="dv-section">
-          <div ref="chart_BySm" style="width:100%;height:320px;margin:auto;padding: 10px 20px;" />
+          <div ref="chart_BySm" style="width:100%;height:320px;margin:auto;padding: 10px 5px;" />
         </div>
       </div>
       <div class="at3">
@@ -172,9 +172,9 @@ export default {
       var valuePt = this.rd.totalScorePt
       var option = {
         grid: [{
-          x: 25,
+          x: 45,
           y: 50,
-          x2: 25,
+          x2: 45,
           y2: 25
         }],
         title: {
@@ -209,9 +209,9 @@ export default {
       var valuePt2 = this.rd.jbfxXlscfxPt
       var option = {
         grid: [{
-          x: 25,
+          x: 45,
           y: 50,
-          x2: 25,
+          x2: 45,
           y2: 50
         }],
         title: {
@@ -300,7 +300,7 @@ width: 50px;
 .at1{
   height: 150px;
   background: url('~@/assets/images/ts/bg_energy_pt1_at1.png') no-repeat;
-  background-size: contain;
+  background-size: 100% 100%;
 
   .at_a1{
         padding-top: 100px;
