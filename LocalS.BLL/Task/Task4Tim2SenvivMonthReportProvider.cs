@@ -102,6 +102,7 @@ namespace LocalS.BLL.Task
                             d_MonthReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
 
 
+                            d_MonthReport.TotalScorePt = d_DayReports.Select(m => m.TotalScore).ToJsonString();
 
                             d_MonthReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
 

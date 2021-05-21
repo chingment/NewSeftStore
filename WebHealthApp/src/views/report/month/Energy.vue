@@ -6,9 +6,16 @@
       <img class="pt1_t2" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <img class="pt1_t3" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <div class="at1">
-        <div class="at_a1"><span class="at_title"> 本月综合得分</span><span class="at_score">52</span></div>
+        <div class="at_a1"><span class="at_title"> 本月综合得分</span><span class="at_score">{{ rd.totalScore }}</span></div>
       </div>
-      <div class="at2" />
+      <div class="at2">
+        <div class="dv-section">
+          <div ref="chart_ByTotalScore" style="width:100%;height:300px;margin:auto;padding: 10px 20px;" />
+        </div>
+        <div class="dv-section">
+          <div ref="chart_BySm" style="width:100%;height:320px;margin:auto;padding: 10px 20px;" />
+        </div>
+      </div>
       <div class="at3">
 
         <div class="dvit">
@@ -81,10 +88,8 @@ import { getEnergy } from '@/api/monthreport'
 import DvItem from '@/components/DvItem.vue'
 import echarts from 'echarts'
 
-var chartBySmsc
-var chartByHrvxzznl
-var chartByHxztcs
-var chartByHxdtcs
+var chartByTotalScore
+var chartBySm
 
 export default {
   name: 'Energy',
@@ -94,6 +99,7 @@ export default {
       loading: false,
       rd: {
         scoreRatio: '',
+        totalScore: '',
         smSmsc: { color: '', value: '', refRange: '' },
         smQdsmsc: { color: '', value: '', refRange: '' },
         smSdsmsc: { color: '', value: '', refRange: '' },
@@ -105,25 +111,18 @@ export default {
         smTdcs: { color: '', value: '', refRange: '' },
         hxZtahizs: { color: '', value: '', refRange: '' },
         datePt: [0],
+        totalScorePt: [0],
         hrvXzznlPt: [0],
-        hxZtcsPt: [0],
-        smSmscPt: [0],
-        hxZtahizsPt: [0]
+        JbfxXlscfxPt: [0]
       }
     }
   },
   mounted() {
-    if (!chartBySmsc) {
-      chartBySmsc = echarts.init(this.$refs.chart_BySmsc, null, { renderer: 'svg' })
+    if (!chartByTotalScore) {
+      chartByTotalScore = echarts.init(this.$refs.chart_ByTotalScore, null, { renderer: 'svg' })
     }
-    if (!chartByHrvxzznl) {
-      chartByHrvxzznl = echarts.init(this.$refs.chart_ByHrvxzznl, null, { renderer: 'svg' })
-    }
-    if (!chartByHxztcs) {
-      chartByHxztcs = echarts.init(this.$refs.chart_ByHxztcs, null, { renderer: 'svg' })
-    }
-    if (!chartByHxdtcs) {
-      chartByHxdtcs = echarts.init(this.$refs.chart_ByHxdtcs, null, { renderer: 'svg' })
+    if (!chartBySm) {
+      chartBySm = echarts.init(this.$refs.chart_BySm, null, { renderer: 'svg' })
     }
     window.addEventListener('beforeunload', this.clearChart)
   },
@@ -131,28 +130,16 @@ export default {
     this._getEnergy()
   },
   beforeDestroy() {
-    if (chartBySmsc) {
-      chartBySmsc.clear()
-      chartBySmsc.dispose()
-      chartBySmsc = null
+    if (chartByTotalScore) {
+      chartByTotalScore.clear()
+      chartByTotalScore.dispose()
+      chartByTotalScore = null
     }
 
-    if (chartByHrvxzznl) {
-      chartByHrvxzznl.clear()
-      chartByHrvxzznl.dispose()
-      chartByHrvxzznl = null
-    }
-
-    if (chartByHxztcs) {
-      chartByHxztcs.clear()
-      chartByHxztcs.dispose()
-      chartByHxztcs = null
-    }
-
-    if (chartByHxdtcs) {
-      chartByHxdtcs.clear()
-      chartByHxdtcs.dispose()
-      chartByHxdtcs = null
+    if (chartBySm) {
+      chartBySm.clear()
+      chartBySm.dispose()
+      chartBySm = null
     }
 
     // 清空 resize 事件处理函数
@@ -170,10 +157,8 @@ export default {
           this.rd = d
 
           this.$nextTick(function() {
-            this.getChartBySmsc()
-            this.getChartByHrvxzznl()
-            this.getChartByHxztcs()
-            this.getChartByHxdtcs()
+            this.getChartByTotalScore()
+            this.getChartBySm()
           }, 2000)
         }
         this.loading = false
@@ -182,16 +167,21 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    getChartBySmsc() {
+    getChartByTotalScore() {
       var datePt = this.rd.datePt
-      var valuePt = this.rd.smSmscPt
+      var valuePt = this.rd.totalScorePt
       var option = {
         grid: [{
           x: 25,
-          y: 25,
+          y: 50,
           x2: 25,
           y2: 25
         }],
+        title: {
+          text: '月度生命趋势图', // 主标题
+          x: 'center',
+          y: 'top'
+        },
         tooltip: {
           trigger: 'axis'
         },
@@ -204,124 +194,61 @@ export default {
         },
         series: [{
           type: 'line',
-          name: '日均睡觉时长',
+          name: '分数',
           showSymbol: false,
           data: valuePt
         }
         ]
       }
 
-      chartBySmsc.setOption(option, null)
+      chartByTotalScore.setOption(option, null)
     },
-    getChartByHrvxzznl() {
+    getChartBySm() {
       var datePt = this.rd.datePt
-      var valuePt = this.rd.hrvXzznlPt
+      var valuePt1 = this.rd.smSmscPt
+      var valuePt2 = this.rd.jbfxXlscfxPt
       var option = {
         grid: [{
           x: 25,
-          y: 25,
+          y: 50,
           x2: 25,
-          y2: 25
+          y2: 50
         }],
+        title: {
+          text: '月度检测趋势图势图',
+          x: 'center',
+          y: 'top'
+        },
         tooltip: {
           trigger: 'axis'
+        },
+        legend: {
+          data: ['心脏总能量', '心率失常风险指数'],
+          // y: 'bottom',
+          top: '90%'
         },
         xAxis: [{
           data: datePt,
           show: true
         }],
         yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: function(value) {
-              var texts = []
-              if (value == 0) {
-                texts.push('0')
-              } else if (value == 1000) {
-                texts.push('1')
-              } else if (value == 2000) {
-                texts.push('2')
-              } else if (value == 3000) {
-                texts.push('3')
-              } else if (value == 4000) {
-                texts.push('4')
-              }
-              return texts
-            }
-          }
+          type: 'value'
         },
         series: [{
           type: 'line',
           name: '心脏总能量',
           showSymbol: false,
-          data: valuePt
-        }
-        ]
-      }
-
-      chartByHrvxzznl.setOption(option, null)
-    },
-    getChartByHxztcs() {
-      var datePt = this.rd.datePt
-      var valuePt = this.rd.hxZtcsPt
-      var option = {
-        grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
-        }],
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: [{
-          data: datePt,
-          show: true
-        }],
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
+          data: valuePt1
+        }, {
           type: 'line',
-          name: '呼吸暂停次数',
+          name: '心率失常风险指数',
           showSymbol: false,
-          data: valuePt
+          data: valuePt2
         }
         ]
       }
 
-      chartByHxztcs.setOption(option, null)
-    },
-    getChartByHxdtcs() {
-      var datePt = this.rd.datePt
-      var valuePt = this.rd.hxZtahizsPt
-      var option = {
-        grid: [{
-          x: 25,
-          y: 25,
-          x2: 25,
-          y2: 25
-        }],
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: [{
-          data: datePt,
-          show: true
-        }],
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          type: 'line',
-          name: '低通气次数',
-          showSymbol: false,
-          data: valuePt
-        }
-        ]
-      }
-
-      chartByHxdtcs.setOption(option, null)
+      chartBySm.setOption(option, null)
     }
   }
 }
@@ -371,7 +298,7 @@ width: 50px;
 }
 
 .at1{
-  height: 300px;
+  height: 150px;
   background: url('~@/assets/images/ts/bg_energy_pt1_at1.png') no-repeat;
   background-size: contain;
 

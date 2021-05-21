@@ -150,6 +150,7 @@ namespace LocalS.Entity
         public decimal QxxlQxyj { get; set; }
 
         public string DatePt { get; set; }
+        public string TotalScorePt { get; set; }
         public string SmSmscPt { get; set; }
         public string XlDcjzxlPt { get; set; }
         public string XlCqjzxlPt { get; set; }
