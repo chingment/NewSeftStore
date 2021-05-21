@@ -205,7 +205,7 @@ export default {
     },
     getChartBySm() {
       var datePt = this.rd.datePt
-      var valuePt1 = this.rd.smSmscPt
+      var valuePt1 = this.rd.hrvXzznlPt
       var valuePt2 = this.rd.jbfxXlscfxPt
       var option = {
         grid: [{
