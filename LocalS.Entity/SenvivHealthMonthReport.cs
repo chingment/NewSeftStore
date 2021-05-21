@@ -20,6 +20,7 @@ namespace LocalS.Entity
     [Table("SenvivHealthMonthReport")]
     public class SenvivHealthMonthReport
     {
+        [Key]
         public string Id { get; set; }
         public string SvUserId { get; set; }
         public string HealthDate { get; set; }

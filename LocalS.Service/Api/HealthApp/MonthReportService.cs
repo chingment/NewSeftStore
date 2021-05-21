@@ -84,6 +84,15 @@ namespace LocalS.Service.Api.HealthApp
                 scoreRatio = Convert.ToInt32(r);
             }
 
+            var d_SmTags = CurrentDb.SenvivHealthMonthReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+
+            List<object> smTags = new List<object>();
+
+            foreach (var d_SmTag in d_SmTags)
+            {
+                smTags.Add(new { Id = d_SmTag.Id, Name = d_SmTag.TagName, Count = d_SmTag.TagCount });
+            }
+
             var ret = new
             {
                 Id = rpt.Id,
@@ -99,7 +108,7 @@ namespace LocalS.Service.Api.HealthApp
                     scoreRatio,
                     rpt.TotalScore,
                     rpt.HealthDate,
-                    SmTags = rpt.SmTags.ToJsonObject<List<object>>(),
+                    SmTags = smTags,
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
                     MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvDataJdUtil.GetMbGxbgk(rpt.MbGxbgk),
@@ -194,12 +203,20 @@ namespace LocalS.Service.Api.HealthApp
                        }).FirstOrDefault();
 
 
+            var d_SmTags = CurrentDb.SenvivHealthMonthReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+
+            List<object> smTags = new List<object>();
+
+            foreach (var d_SmTag in d_SmTags)
+            {
+                smTags.Add(new { Id = d_SmTag.Id, Name = d_SmTag.TagName, Count = d_SmTag.TagCount });
+            }
 
             var ret = new
             {
                 rpt.TotalScore,
                 rpt.HealthDate,
-                SmTags = rpt.SmTags.ToJsonObject<List<object>>(),
+                SmTags = smTags,
                 SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
                 SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
                 SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),

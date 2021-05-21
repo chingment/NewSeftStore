@@ -30,7 +30,7 @@
       <div class="cd">
         <div class="smtags">
           <template v-for="(item, index) in rd.smTags">
-            <div v-if="index<=3" :key="index" :class="'item item_'+(index%2==0?'0':'1')">
+            <div v-if="index<=3" :key="index" :class="'item item_'+(index%2==0?'0':'1')" @click="goAdvise(item.id)">
               <div class="item-ct">
                 <div class="tl"><span class="name">{{ item.name }} </span>  <img class="icon" style="display:none" src="@/assets/images/ts/极难入睡.png" alt=""></div>
                 <div class="rd">
@@ -114,6 +114,9 @@ export default {
     },
     goEnery() {
       this.$router.push('/report/month/energy?rptId=' + this.$route.query.rptId)
+    },
+    goAdvise(tagId) {
+      this.$router.push('/report/month/advise?tagId=' + tagId)
     }
   }
 }

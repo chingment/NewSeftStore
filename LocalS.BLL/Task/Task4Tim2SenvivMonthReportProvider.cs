@@ -38,6 +38,8 @@ namespace LocalS.BLL.Task
                         var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true && System.Data.Entity.DbFunctions.DiffMonths(m.HealthDate, DateTime.Now) == 1).ToList();
                         if (d_DayReports.Count > 0)
                         {
+                            d_MonthReport = new SenvivHealthMonthReport();
+                            d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
 
                             var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
 
@@ -51,9 +53,6 @@ namespace LocalS.BLL.Task
                                 }
                             }
 
-
-                            d_MonthReport = new SenvivHealthMonthReport();
-                            d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
                             d_MonthReport.HealthDate = month;
                             d_MonthReport.SvUserId = d_User.Id;
                             d_MonthReport.DayCount = d_DayReports.Count;
@@ -123,6 +122,26 @@ namespace LocalS.BLL.Task
                             d_MonthReport.JbfxXljslPt = d_DayReports.Select(m => m.JbfxXljsl).ToJsonString();//
 
                             var smTags_Count = smTags.GroupBy(s => s).Select(group => new { Name = group.Key, Count = group.Count() });
+
+
+                            foreach (var smTag in smTags_Count)
+                            {
+                                var d_smTag = new SenvivHealthMonthReportTag();
+                                d_smTag.Id = IdWorker.Build(IdType.NewGuid);
+                                d_smTag.SvUserId = d_User.Id;
+                                d_smTag.ReportId = d_MonthReport.Id;
+
+                                var d_tag = CurrentDb.SenvivHealthTag.Where(m => m.Name == smTag.Name).FirstOrDefault();
+                                if (d_tag != null)
+                                {
+                                    d_smTag.TagId = d_tag.Id;
+                                }
+
+                                d_smTag.TagName = smTag.Name;
+                                d_smTag.TagCount = smTag.Count;
+
+                                CurrentDb.SenvivHealthMonthReportTag.Add(d_smTag);
+                            }
 
                             d_MonthReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
 
