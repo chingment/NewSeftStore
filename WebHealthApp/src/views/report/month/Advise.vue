@@ -283,7 +283,7 @@ width: 50px;
 .explain-card__header{
     min-height: 100px;
     box-sizing: border-box;
-    background: url('~@/assets/images/ts/bg_explain-card__header.png') no-repeat;;
+    background: url('~@/assets/images/ts/bg_explain-card__header.png') no-repeat;
     background-size: cover;
 }
 
