@@ -24,6 +24,14 @@ export function getAdvise(params) {
   })
 }
 
+export function getTagAdvise(params) {
+  return request({
+    url: '/monthreport/GetTagAdvise',
+    method: 'get',
+    params
+  })
+}
+
 export function updateVisitCount(params) {
   return request({
     url: '/monthreport/updateVisitCount',
@@ -36,5 +44,6 @@ export default {
   getAdvise: getAdvise,
   getEnergy: getEnergy,
   getMonitor: getMonitor,
+  getTagAdvise: getTagAdvise,
   updateVisitCount: updateVisitCount
 }

@@ -86,6 +86,8 @@ namespace LocalS.DAL
 
         public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }
 
+        public IDbSet<SenvivHealthTagExplain> SenvivHealthTagExplain { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

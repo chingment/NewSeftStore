@@ -275,6 +275,46 @@ namespace LocalS.Service.Api.HealthApp
             return result;
         }
 
+        public CustomJsonResult GetTagAdvise(string operater, string tagId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rptTag = (from u in CurrentDb.SenvivHealthMonthReportTag
+                          where u.Id == tagId
+                          select new
+                          {
+                              u.Id,
+                              u.ReportId,
+                              u.TagId,
+                              u.TagName,
+                              u.TagCount
+                          }).FirstOrDefault();
+
+            var tagExplain = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagId == rptTag.TagId).FirstOrDefault();
+
+            string explain = "";
+            string suggest = "";
+
+            if (tagExplain != null)
+            {
+                explain = tagExplain.Explain;
+                suggest = tagExplain.Suggest;
+            }
+
+            var ret = new
+            {
+                TagName = rptTag.TagName,
+                TagCount = rptTag.TagCount,
+                Explain = explain,
+                Suggest = suggest
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
         public CustomJsonResult UpdateVisitCount(string operater, string rptId)
         {
 

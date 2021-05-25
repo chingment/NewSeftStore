@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Main_Index from '../views/report/month/Index.vue'
 import Main_Monitor from '../views/report/month/Monitor.vue'
 import Main_Energy from '../views/report/month/Energy.vue'
-import Main_Advise from '../views/report/month/Advise.vue'
+import Main_TagAdvise from '../views/report/month/TagAdvise.vue'
 
 Vue.use(VueRouter)
 
@@ -26,9 +26,9 @@ const routes = [
         component: Main_Energy
       },
       {
-        path: '/report/month/advise',
-        name: 'MainAdvise',
-        component: Main_Advise
+        path: '/report/month/tagadvise',
+        name: 'MainTagAdvise',
+        component: Main_TagAdvise
       }
     ]
   }

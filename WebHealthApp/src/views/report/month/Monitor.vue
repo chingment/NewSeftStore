@@ -116,7 +116,7 @@ export default {
       this.$router.push('/report/month/energy?rptId=' + this.$route.query.rptId)
     },
     goAdvise(tagId) {
-      this.$router.push('/report/month/advise?tagId=' + tagId)
+      this.$router.push('/report/month/tagadvise?tagId=' + tagId)
     }
   }
 }

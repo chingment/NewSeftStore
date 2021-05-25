@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    [Table("SenvivHealthTagExplain")]
     public class SenvivHealthTagExplain
     {
         [Key]

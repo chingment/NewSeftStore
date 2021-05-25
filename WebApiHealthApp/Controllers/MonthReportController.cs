@@ -33,6 +33,13 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetTagAdvise([FromUri]string tagId)
+        {
+            var result = HealthAppServiceFactory.MonthReport.GetTagAdvise(this.CurrentUserId, tagId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);
