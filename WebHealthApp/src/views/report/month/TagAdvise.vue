@@ -2,7 +2,7 @@
   <div class="pg-energy" style="height:500px">
     <div class="pt1">
       <div class="at1">
-        <div class="at_a1"><span class="at_title">{{ rd.tagName }}</span><span class="at_score">{{ rd.tagCount }}</span></div>
+        <div class="at_a1"><span class="at_title">{{ rd.tagName }}</span><span class="at_score">{{ rd.tagCount }}</span> <span class="at_unit">次</span> </div>
       </div>
       <div class="at2">
 
@@ -129,11 +129,16 @@ width: 50px;
       font-size: 32px;
       margin-left: 10px;
     }
+
+ .at_unit{
+      font-size: 21px;
+      margin-left: 10px;
+    }
+
   }
 }
 
 .explain-card{
-
     background-color: #fff;
     color: #303133;
     -webkit-transition: .3s;
