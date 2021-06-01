@@ -30,7 +30,7 @@
                 <image class="icon skeleton-circle"
                   src="http://file.17fanju.com/upload/membertheme/1/prom/ng_1.png?ts={{timespan}}"></image>
               </view>
-              <view class="title skeleton-rect"><text> 心晓智能
+              <view class="title skeleton-rect"><text> 全心智能
                   健康监测</text></view>
               <view class="tip skeleton-rect">AI科技为您护航</view>
             </view>
@@ -42,7 +42,7 @@
                   src="http://file.17fanju.com/upload/membertheme/1/prom/ng_2.png?ts={{timespan}}"></image>
               </view>
               <view class="title skeleton-rect">会员折扣</view>
-              <view class="tip skeleton-rect">7.8折起</view>
+              <view class="tip skeleton-rect">9折起</view>
             </view>
           </view>
           <view class="tui-col-3" bindtap="clickToNgItem" data-ischecklogin="true" data-right="3" data-title="免费讲座">

@@ -388,6 +388,11 @@ namespace LocalS.Service.Api.Account
             UserInfoModelByMinProramJsCode wxUserInfo = null;
             WxPhoneNumber wxPhoneNumber = null;
 
+            if (rop.UserInfoEp == null)
+            {
+                LogUtil.Info("rop.UserInfoEp=> is null");
+            }
+
             if (rop.UserInfoEp != null)
             {
                 wxUserInfo = SdkFactory.Wx.GetUserInfoByMinProramJsCode(wxAppInfoConfig, rop.UserInfoEp.EncryptedData, rop.UserInfoEp.Iv, rop.UserInfoEp.Code);
@@ -449,19 +454,22 @@ namespace LocalS.Service.Api.Account
             }
             else
             {
-                var avatarUrl = CreateWxAvatar(d_clientUser.Id, wxUserInfo.avatarUrl);
-
-                if (string.IsNullOrEmpty(avatarUrl))
+                if (wxUserInfo != null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败[04]");
-                }
+                    var avatarUrl = CreateWxAvatar(d_clientUser.Id, wxUserInfo.avatarUrl);
 
-                d_clientUser.NickName = wxUserInfo.nickName;
-                d_clientUser.Sex = wxUserInfo.gender;
-                d_clientUser.Province = wxUserInfo.province;
-                d_clientUser.City = wxUserInfo.city;
-                d_clientUser.Country = wxUserInfo.country;
-                d_clientUser.Avatar = avatarUrl;
+                    if (string.IsNullOrEmpty(avatarUrl))
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信用户信息认证失败[04]");
+                    }
+
+                    d_clientUser.NickName = wxUserInfo.nickName;
+                    d_clientUser.Sex = wxUserInfo.gender;
+                    d_clientUser.Province = wxUserInfo.province;
+                    d_clientUser.City = wxUserInfo.city;
+                    d_clientUser.Country = wxUserInfo.country;
+                    d_clientUser.Avatar = avatarUrl;
+                }
 
                 if (wxPhoneNumber != null)
                 {

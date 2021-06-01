@@ -72,6 +72,7 @@ Page({
         wx.reLaunch({ //关闭所有页面，打开到应用内的某个页面
           url: ownRequest.getReturnUrl()
         })
+
       } else {
 
         if (res.code == 2405) {
@@ -85,6 +86,7 @@ Page({
           toast.show({
             title: res.message
           })
+
         }
       }
     })
@@ -127,7 +129,6 @@ Page({
         iv: e.detail.iv,
         session_key: storeage.getSessionKey(),
       })
-
     } else {
       toast.show({
         title: '您点击了拒绝授权登录！'
@@ -139,5 +140,6 @@ Page({
     wx.navigateBack({
       delta: 1,
     })
+
   }
 })
