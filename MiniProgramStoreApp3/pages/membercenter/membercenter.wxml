@@ -60,7 +60,7 @@
                </view>
                <view class="title">
                   <image wx:if="{{!levelSt2.isStop}}" class='icon skeleton-circle' src='/content/default/images/icon_diamen.png'></image>
-                  <text wx:if="{{!levelSt2.isStop}}" class="txt skeleton-rect">钻石会员</text>
+                  <text wx:if="{{!levelSt2.isStop}}" class="txt skeleton-rect">{{levelSt2.tag}}</text>
                </view>
             </view>
          </view>
