@@ -341,6 +341,10 @@ page {
   
 }
 
+.prd-list-1 .pricesign {
+  color: #ffb101;
+}
+
 .prd-list-1 .saleprice {
   height: 62rpx;
   line-height: 62rpx;
@@ -465,6 +469,10 @@ page {
 .prd-list-2 .price {
   flex: 2;
   text-align: left;
+}
+
+.prd-list-2 .pricesign {
+  color: #ffb101;
 }
 
 .prd-list-2 .saleprice {

@@ -50,6 +50,7 @@
 										<text class="briefInfo font-gray skeleton-rect">{{item.briefDes}}</text>
 										<view class="area2">
 											<view class="price">
+												<text class="pricesign">¥</text>
 												<text class="saleprice font-black skeleton-rect">{{item.salePrice}}</text>
 												<text wx:if="{{item.isShowPrice}}" class="showprice font-gray">{{item.showPrice}}</text>
 											</view>

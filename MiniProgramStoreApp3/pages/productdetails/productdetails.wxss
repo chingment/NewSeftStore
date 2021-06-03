@@ -42,6 +42,10 @@ swiper {
   line-height: 62rpx;
 }
 
+.details-info1 .item-price .pricesign {
+  color: #f18d00;
+}
+
 .details-info1 .item-price .unitPrice {
   font-size: 38rpx;
   height: 62rpx;

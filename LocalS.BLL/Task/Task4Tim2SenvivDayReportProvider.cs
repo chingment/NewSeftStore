@@ -360,6 +360,7 @@ namespace LocalS.BLL.Task
 
                                 d_DayReport.HxZtahizs = hx.AHI;//AHI指数
                                 d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
+                                d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
                                 d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
                             }
                             #endregion
@@ -421,6 +422,7 @@ namespace LocalS.BLL.Task
                                 d_DayReport.SmLzcs = 0;
 
                                 d_DayReport.SmTdcs = sm.MoveCounts;//体动次数
+                                d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
                                 d_DayReport.SmPjtdsc = sm.MovingAverageLength;//平均体动时长
 
                             }

@@ -36,7 +36,9 @@
 												</view>
 												<view class="it-mr">
 													<text class='skuname font-black'>{{itemsku.name}}</text>
-													<text class='sumprice font-gray'>{{itemsku.salePrice}}</text>
+													<text class='sumprice font-gray'>
+                            	<text class="pricesign">¥</text><text class="unitPrice">{{itemsku.salePrice}}</text>
+                            </text>
 												</view>
 											</view>
 											<view class="it-r">
@@ -77,7 +79,8 @@
 					<text class='font-gray'>已选({{myCart.countBySelected}})</text>
 				</view>
 				<view class="it-m">
-					<text class="font-main" value="249" decimal="2">{{myCart.sumPriceBySelected}}</text>
+					<text class="pricesign">¥</text>
+					<text class="font-main sumprice" value="249" decimal="2">{{myCart.sumPriceBySelected}}</text>
 				</view>
 				<view bindtap="_immeBuy" class="bg-main it-r">
 					<text>下单</text>

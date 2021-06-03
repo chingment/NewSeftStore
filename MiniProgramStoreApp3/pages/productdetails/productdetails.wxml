@@ -44,6 +44,7 @@
 						</view>
 						<view wx:else>
 							<view wx:if="{{shopMethod==1}}" class="item-price">
+								<text class="pricesign">¥</text>
 								<text class="unitPrice">{{sku.salePrice}}</text>
 								<text wx:if="{{sku.isShowPrice}}" class="showPrice">{{sku.showPrice}}</text>
 							</view>

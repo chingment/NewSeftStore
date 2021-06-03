@@ -51,6 +51,9 @@ namespace LocalS.Entity
         public int SmSmzq { get; set; }
         //体动次数
         public int SmTdcs { get; set; }
+        //体动次数结构体
+        public string SmTdcsPoint { get; set; }
+
         //平均体动时长
         public int SmPjtdsc { get; set; }
 
@@ -92,6 +95,9 @@ namespace LocalS.Entity
         public long HxGmsc { get; set; }
         //呼吸暂停次数
         public int HxZtcs { get; set; }
+        //呼吸暂停次数结构体
+        public string HxZtcsPoint { get; set; }
+
         //呼吸暂停AHI指数
         public decimal HxZtahizs { get; set; }
         //呼吸暂停平均时长

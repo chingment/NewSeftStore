@@ -112,11 +112,20 @@
 
 .its-blocks .sumprice {
   display: block;
-  font-size: 32rpx;
   height: 40rpx;
   line-height: 40rpx;
   color: #f18d00;
 }
+
+.its-blocks .pricesign {
+  color: #f18d00;
+}
+
+.its-blocks .unitPrice {
+  font-size: 32rpx;
+  color: #f18d00;
+}
+
 
 .its-blocks .quantity {
   width: 50rpx;
@@ -159,10 +168,22 @@
   font-size: 30rpx;
 }
 
+
 .cart-bottom .it-m {
   flex: 1;
+}
+
+.cart-bottom .it-m .pricesign{
+  color: #f18d00;
+}
+
+.cart-bottom .it-m .sumprice{
+  color: #f18d00;
   font-size: 36rpx;
 }
+
+
+
 
 .cart-bottom .it-r {
   position: relative;

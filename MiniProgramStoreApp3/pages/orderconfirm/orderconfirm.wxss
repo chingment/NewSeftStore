@@ -104,6 +104,10 @@ page{
   font-size: 34rpx;
 }
 
+.its-odcskus .pricesign {
+  color: #f18d00;
+}
+
 
 .ord-block{
   margin-bottom: 104rpx;
