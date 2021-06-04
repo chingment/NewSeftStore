@@ -120,8 +120,19 @@ namespace Test
             return hour.ToString("0.00");
         }
 
+        public static DateTime TicksToDate(long time)
+        {
+            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
+
+        }
+
         static void Main(string[] args)
         {
+
+            var s22 = TicksToDate(1622741671000);
+
+            bool s77 =Lumos.CommonUtil.GetTimeSpan("2017-2-18 1:00:00", "23:00", "1:30");
+
            // double scoreRatio =3 / 22;
             double r = Math.Round((Convert.ToDouble(21) / Convert.ToDouble(22)), 2)*100;
             var scoreRatio = Convert.ToInt32(r);

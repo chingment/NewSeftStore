@@ -4,6 +4,7 @@ using Lumos.DbRelay;
 using Lumos.Redis;
 using MyWeiXinSdk;
 using Quartz;
+using SenvivSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,44 @@ namespace LocalS.BLL.Task
 {
     public class Task4Tim2SenvivMonthReportProvider : BaseService, IJob
     {
+        public int InTimeSpan(DateTime t1)
+        {
+            if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+            {
+                return 1;
+            }
+            else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+            {
+                return 1;
+            }
+            else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+            {
+                return 3;
+            }
+            else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+            {
+                return 4;
+            }
+            else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+            {
+                return 5;
+            }
+            else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+            {
+                return 6;
+            }
+            else
+            {
+                return 7;
+            }
+        }
+
+        public DateTime TicksToDate(long time)
+        {
+            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
+
+        }
+
         public void Execute(IJobExecutionContext context)
         {
 
@@ -38,8 +77,283 @@ namespace LocalS.BLL.Task
                         var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == d_User.Id && m.IsValid == true && System.Data.Entity.DbFunctions.DiffMonths(m.HealthDate, DateTime.Now) == 1).ToList();
                         if (d_DayReports.Count > 0)
                         {
+                            var t1BySccs = 0;
+                            var t2BySccs = 0;
+                            var t3BySccs = 0;
+                            var t4BySccs = 0;
+                            var t5BySccs = 0;
+                            var t6BySccs = 0;
+                            var t7BySccs = 0;
+
+                            var t1ByRscs = 0;
+                            var t2ByRscs = 0;
+                            var t3ByRscs = 0;
+                            var t4ByRscs = 0;
+                            var t5ByRscs = 0;
+                            var t6ByRscs = 0;
+                            var t7ByRscs = 0;
+
+                            var t1ByQxcs = 0;
+                            var t2ByQxcs = 0;
+                            var t3ByQxcs = 0;
+                            var t4ByQxcs = 0;
+                            var t5ByQxcs = 0;
+                            var t6ByQxcs = 0;
+                            var t7ByQxcs = 0;
+
+                            var t1ByLccs = 0;
+                            var t2ByLccs = 0;
+                            var t3ByLccs = 0;
+                            var t4ByLccs = 0;
+                            var t5ByLccs = 0;
+                            var t6ByLccs = 0;
+                            var t7ByLccs = 0;
+
+                            var t1ByHxZtcs = 0;
+                            var t2ByHxZtcs = 0;
+                            var t3ByHxZtcs = 0;
+                            var t4ByHxZtcs = 0;
+                            var t5ByHxZtcs = 0;
+                            var t6ByHxZtcs = 0;
+                            var t7ByHxZtcs = 0;
+
+                            var t1ByTdcs = 0;
+                            var t2ByTdcs = 0;
+                            var t3ByTdcs = 0;
+                            var t4ByTdcs = 0;
+                            var t5ByTdcs = 0;
+                            var t6ByTdcs = 0;
+                            var t7ByTdcs = 0;
+
+                            foreach (var dayReport in d_DayReports)
+                            {
+                                #region 上床时间
+                                if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "21:00", "23:00"))
+                                {
+                                    t1BySccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "23:00", "01:00"))
+                                {
+                                    t2BySccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "01:00", "03:00"))
+                                {
+                                    t3BySccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "03:00", "05:00"))
+                                {
+                                    t4BySccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "05:00", "07:00"))
+                                {
+                                    t5BySccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "07:00", "09:00"))
+                                {
+                                    t6BySccs++;
+                                }
+                                else
+                                {
+                                    t7BySccs++;
+                                }
+                                #endregion
+
+                                #region 入睡时间
+                                if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "21:00", "23:00"))
+                                {
+                                    t1ByRscs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "23:00", "01:00"))
+                                {
+                                    t2ByRscs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "01:00", "03:00"))
+                                {
+                                    t3ByRscs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "03:00", "05:00"))
+                                {
+                                    t4ByRscs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "05:00", "07:00"))
+                                {
+                                    t5ByRscs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "07:00", "09:00"))
+                                {
+                                    t6ByRscs++;
+                                }
+                                else
+                                {
+                                    t7ByRscs++;
+                                }
+                                #endregion
+
+                                #region 清醒时间
+
+                                if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "21:00", "23:00"))
+                                {
+                                    t1ByQxcs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "23:00", "01:00"))
+                                {
+                                    t2ByQxcs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "01:00", "03:00"))
+                                {
+                                    t3ByQxcs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "03:00", "05:00"))
+                                {
+                                    t4ByQxcs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "05:00", "07:00"))
+                                {
+                                    t5ByQxcs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "07:00", "09:00"))
+                                {
+                                    t6ByQxcs++;
+                                }
+                                else
+                                {
+                                    t7ByQxcs++;
+                                }
+
+                                #endregion
+
+                                #region 离床时间
+
+                                if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "21:00", "23:00"))
+                                {
+                                    t1ByLccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "23:00", "01:00"))
+                                {
+                                    t2ByLccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "01:00", "03:00"))
+                                {
+                                    t3ByLccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "03:00", "05:00"))
+                                {
+                                    t4ByLccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "05:00", "07:00"))
+                                {
+                                    t5ByLccs++;
+                                }
+                                else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "07:00", "09:00"))
+                                {
+                                    t6ByLccs++;
+                                }
+                                else
+                                {
+                                    t7ByLccs++;
+                                }
+
+                                #endregion
+
+                                #region 呼吸暂停
+                                var hxZtcsPoint = dayReport.HxZtcsPoint.ToJsonObject<List<ReportDetailListResult.D_ReportOfBreathPause>>();
+                                if (hxZtcsPoint != null)
+                                {
+                                    foreach (var item in hxZtcsPoint)
+                                    {
+                                        var t1 = TicksToDate(item.StartTime);
+
+                                        if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                        {
+                                            t1ByHxZtcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                        {
+                                            t2ByHxZtcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                        {
+                                            t3ByHxZtcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                        {
+                                            t4ByHxZtcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                        {
+                                            t5ByHxZtcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                        {
+                                            t6ByHxZtcs++;
+                                        }
+                                        else
+                                        {
+                                            t7ByHxZtcs++;
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                                #region 体动次数
+                                var smTdcsPoint = dayReport.SmTdcsPoint.ToJsonObject<List<ReportDetailListResult.D_Move>>();
+                                if (smTdcsPoint != null)
+                                {
+                                    foreach (var item in smTdcsPoint)
+                                    {
+                                        var t1 = TicksToDate(item.starttime);
+
+                                        if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                        {
+                                            t1ByTdcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                        {
+                                            t2ByTdcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                        {
+                                            t3ByTdcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                        {
+                                            t4ByTdcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                        {
+                                            t5ByTdcs++;
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                        {
+                                            t6ByTdcs++;
+
+                                        }
+                                        else
+                                        {
+                                            t7ByTdcs++;
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                            }
+
+                            var timeFrameStaPt = new
+                            {
+                                t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs },
+                                t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs },
+                                t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs },
+                                t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs },
+                                t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs },
+                                t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs },
+                                t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs },
+                            };
+
                             d_MonthReport = new SenvivHealthMonthReport();
                             d_MonthReport.Id = IdWorker.Build(IdType.NewGuid);
+                            d_MonthReport.TimeFrameStaPt = timeFrameStaPt.ToJsonString();
 
                             var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
 

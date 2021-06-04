@@ -349,5 +349,43 @@ namespace Lumos
             }
             return age < 0 ? 0 : age;
         }
+
+        public static bool GetTimeSpan(string timeStr, string time1, string time2)
+        {
+            DateTime t1 = Convert.ToDateTime(timeStr);
+
+            return GetTimeSpan(t1, time1, time2);
+
+        }
+
+        public static bool GetTimeSpan(DateTime timeStr, string time1, string time2)
+        {
+            //判断当前时间是否在工作时间段内
+            string _strWorkingDayAM = time1;//工作时间上午08:30
+            string _strWorkingDayPM = time2;
+            TimeSpan dspWorkingDayAM = DateTime.Parse(_strWorkingDayAM).TimeOfDay;
+            TimeSpan dspWorkingDayPM = DateTime.Parse(_strWorkingDayPM).TimeOfDay;
+
+            //string time1 = "2017-2-17 8:10:00";
+            DateTime t1 = timeStr;
+
+            TimeSpan dspNow = t1.TimeOfDay;
+            if (dspWorkingDayAM.Hours < dspWorkingDayPM.Hours)
+            {
+                if (dspNow > dspWorkingDayAM && dspNow < dspWorkingDayPM)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (dspNow < dspWorkingDayPM)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
