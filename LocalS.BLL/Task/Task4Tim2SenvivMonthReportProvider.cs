@@ -15,6 +15,13 @@ using System.Transactions;
 
 namespace LocalS.BLL.Task
 {
+    public class DateValuePoint
+    {
+        public List<long> DataTime { get; set; }
+
+        public List<int> DataValue { get; set; }
+    }
+
     public class Task4Tim2SenvivMonthReportProvider : BaseService, IJob
     {
         public int InTimeSpan(DateTime t1)
@@ -54,6 +61,7 @@ namespace LocalS.BLL.Task
             return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
 
         }
+
 
         public void Execute(IJobExecutionContext context)
         {
@@ -124,6 +132,22 @@ namespace LocalS.BLL.Task
                             var t5ByTdcs = 0;
                             var t6ByTdcs = 0;
                             var t7ByTdcs = 0;
+
+                            var t1ByPjXl = new List<int>();
+                            var t2ByPjXl = new List<int>();
+                            var t3ByPjXl = new List<int>();
+                            var t4ByPjXl = new List<int>();
+                            var t5ByPjXl = new List<int>();
+                            var t6ByPjXl = new List<int>();
+                            var t7ByPjXl = new List<int>();
+
+                            var t1ByPjHx = new List<int>();
+                            var t2ByPjHx = new List<int>();
+                            var t3ByPjHx = new List<int>();
+                            var t4ByPjHx = new List<int>();
+                            var t5ByPjHx = new List<int>();
+                            var t6ByPjHx = new List<int>();
+                            var t7ByPjHx = new List<int>();
 
                             foreach (var dayReport in d_DayReports)
                             {
@@ -338,17 +362,106 @@ namespace LocalS.BLL.Task
 
                                 #endregion
 
+                                #region 平均心率
+                                var xlPoint = dayReport.XlPoint.ToJsonObject<DateValuePoint>();
+
+                                if (xlPoint != null)
+                                {
+                                    if (xlPoint.DataTime != null)
+                                    {
+                                        for (int i = 0; i < xlPoint.DataTime.Count; i++)
+                                        {
+                                            DateTime t1 = TicksToDate(xlPoint.DataTime[i] * 1000);
+
+                                            if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                            {
+                                                t1ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                            {
+                                                t2ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                            {
+                                                t3ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                            {
+                                                t4ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                            {
+                                                t5ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                            {
+                                                t6ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                            else
+                                            {
+                                                t7ByPjXl.Add(xlPoint.DataValue[i]);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                                #region 平均呼吸
+                                var hxPoint = dayReport.HxPoint.ToJsonObject<DateValuePoint>();
+
+                                if (hxPoint != null)
+                                {
+                                    if (hxPoint.DataTime != null)
+                                    {
+                                        for (int i = 0; i < hxPoint.DataTime.Count; i++)
+                                        {
+                                            DateTime t1 = TicksToDate(hxPoint.DataTime[i] * 1000);
+
+                                            if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                            {
+                                                t1ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                            {
+                                                t2ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                            {
+                                                t3ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                            {
+                                                t4ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                            {
+                                                t5ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                            {
+                                                t6ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                            else
+                                            {
+                                                t7ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                #endregion
                             }
 
                             var timeFrameStaPt = new
                             {
-                                t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs },
-                                t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs },
-                                t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs },
-                                t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs },
-                                t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs },
-                                t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs },
-                                t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs },
+                                t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs, pjXl = t1ByPjXl.Count == 0 ? 0 : t1ByPjXl.Average(), pjHx = t1ByPjHx.Count == 0 ? 0 : t1ByPjHx.Average() },
+                                t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs, pjXl = t2ByPjXl.Count == 0 ? 0 : t2ByPjXl.Average(), pjHx = t2ByPjHx.Count == 0 ? 0 : t2ByPjHx.Average() },
+                                t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs, pjXl = t3ByPjXl.Count == 0 ? 0 : t3ByPjXl.Average(), pjHx = t3ByPjHx.Count == 0 ? 0 : t3ByPjHx.Average() },
+                                t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs, pjXl = t4ByPjXl.Count == 0 ? 0 : t4ByPjXl.Average(), pjHx = t4ByPjHx.Count == 0 ? 0 : t4ByPjHx.Average() },
+                                t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs, pjXl = t5ByPjXl.Count == 0 ? 0 : t5ByPjXl.Average(), pjHx = t5ByPjHx.Count == 0 ? 0 : t5ByPjHx.Average() },
+                                t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs, pjXl = t6ByPjXl.Count == 0 ? 0 : t6ByPjXl.Average(), pjHx = t6ByPjHx.Count == 0 ? 0 : t6ByPjHx.Average() },
+                                t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : t7ByPjXl.Average(), pjHx = t7ByPjHx.Count == 0 ? 0 : t7ByPjHx.Average() },
                             };
 
                             d_MonthReport = new SenvivHealthMonthReport();
