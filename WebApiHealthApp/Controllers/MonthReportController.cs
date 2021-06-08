@@ -33,7 +33,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetTagAdvise([FromUri]string tagId)
+        public OwnApiHttpResponse GetTagAdvise([FromUri]int tagId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetTagAdvise(this.CurrentUserId, tagId);
             return new OwnApiHttpResponse(result);

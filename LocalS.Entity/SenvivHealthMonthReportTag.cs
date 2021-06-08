@@ -11,7 +11,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string SvUserId { get; set; }
         public string ReportId { get; set; }
-        public string TagId{ get; set; }
+        public int TagId{ get; set; }
         public string TagName { get; set; }
         public int TagCount { get; set; }
 

@@ -8,6 +8,7 @@
             <el-menu-item index="/senviv/users">客户信息</el-menu-item>
             <el-menu-item index="/senviv/dayreport">健康报告（日）</el-menu-item>
             <el-menu-item index="/senviv/monthreport">健康报告（月）</el-menu-item>
+            <el-menu-item index="/senviv/tagexplain">标签解读</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>

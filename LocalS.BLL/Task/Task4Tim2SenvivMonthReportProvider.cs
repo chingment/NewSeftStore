@@ -558,10 +558,10 @@ namespace LocalS.BLL.Task
                                 d_smTag.SvUserId = d_User.Id;
                                 d_smTag.ReportId = d_MonthReport.Id;
 
-                                var d_tag = CurrentDb.SenvivHealthTag.Where(m => m.Name == smTag.Name).FirstOrDefault();
+                                var d_tag = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagName == smTag.Name).FirstOrDefault();
                                 if (d_tag != null)
                                 {
-                                    d_smTag.TagId = d_tag.Id;
+                                    d_smTag.TagId = d_tag.TagId;
                                 }
 
                                 d_smTag.TagName = smTag.Name;
