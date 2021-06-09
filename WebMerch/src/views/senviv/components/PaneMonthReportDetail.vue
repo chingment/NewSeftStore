@@ -17,6 +17,103 @@
         </el-badge>
       </template>
     </div>
+
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>时间段数据</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
+    <table class="clz" cellspacing="0" cellpadding="0" style="width:100%;">
+      <thead>
+        <tr>
+          <th />
+          <th>入睡</th>
+          <th>清醒</th>
+          <th>呼吸暂停</th>
+          <th>体动</th>
+          <th>平均呼吸</th>
+          <th>平均心率</th>
+          <th>深睡</th>
+          <th>浅睡</th>
+          <th>REM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>21:00~23:00</td>
+          <td>{{ rd.timeFrameStaPt.t1.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>23:00~01:00</td>
+          <td>{{ rd.timeFrameStaPt.t2.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>01:00~03:00</td>
+          <td>{{ rd.timeFrameStaPt.t3.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>03:00~05:00</td>
+          <td>{{ rd.timeFrameStaPt.t4.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>05:00~07:00</td>
+          <td>{{ rd.timeFrameStaPt.t5.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>07:00~09:00</td>
+          <td>{{ rd.timeFrameStaPt.t6.rscs }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.hxZtcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.tdcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.pjHx }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.pjXl }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="row-title clearfix">
       <div class="pull-left"> <h5>心率-呼吸变化趋势</h5>
       </div>
@@ -567,6 +664,7 @@ export default {
             background-color: #dedede;
                     border-right: 1px solid #666666;
         border-bottom: 1px solid #666666;
+
     }
 
     td{
