@@ -429,7 +429,7 @@ export default {
         limit: 10,
         clientName: undefined,
         orderId: undefined,
-        orderStatus: undefined,
+        orderStatus: '0',
         storeId: undefined,
         isHasEx: false,
         sellChannelRefId: undefined
