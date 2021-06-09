@@ -275,13 +275,13 @@ namespace LocalS.Service.Api.HealthApp
             return result;
         }
 
-        public CustomJsonResult GetTagAdvise(string operater, int tagId)
+        public CustomJsonResult GetTagAdvise(string operater, string tagId)
         {
 
             var result = new CustomJsonResult();
 
             var rptTag = (from u in CurrentDb.SenvivHealthMonthReportTag
-                          where u.TagId == tagId
+                          where u.Id == tagId
                           select new
                           {
                               u.Id,

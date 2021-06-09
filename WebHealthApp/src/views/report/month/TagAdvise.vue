@@ -11,7 +11,7 @@
             <div class="ct">
               <div class="title">解释</div>
               <div class="content">
-                <pre style="white-space: pre-line;">{{ rd.explain }}</pre>
+                <pre style="white-space: pre-line;">{{ rd.proExplain }}</pre>
               </div>
             </div>
           </div>
@@ -42,7 +42,8 @@ export default {
       rd: {
         tagName: '',
         tagCount: '',
-        explain: '',
+        proExplain: '',
+        tcmExplain: '',
         suggest: ''
       }
     }

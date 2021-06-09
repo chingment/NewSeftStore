@@ -44,7 +44,8 @@
       </el-table-column>
       <el-table-column label="建议" prop="suggest" align="left" min-width="20%">
         <template slot-scope="scope">
-          <span>{{ scope.row.suggest }}</span>
+          <pre style="white-space: pre-line;line-height: 23px;">{{ scope.row.suggest }}</pre>
+
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
