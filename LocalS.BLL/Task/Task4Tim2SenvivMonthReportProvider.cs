@@ -22,6 +22,23 @@ namespace LocalS.BLL.Task
         public List<int> DataValue { get; set; }
     }
 
+    public class SmPointModel
+    {
+        public long StartTime { get; set; }
+        public long EndTime { get; set; }
+
+        public List<DataValueModel> DataValue { get; set; }
+
+        public class DataValueModel
+        {
+            public long starttime { get; set; }
+
+            public long endtime { get; set; }
+
+            public int type { get; set; }
+        }
+    }
+
     public class Task4Tim2SenvivMonthReportProvider : BaseService, IJob
     {
         public int InTimeSpan(DateTime t1)
@@ -468,6 +485,209 @@ namespace LocalS.BLL.Task
                                             else
                                             {
                                                 t7ByPjHx.Add(hxPoint.DataValue[i]);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                                #region 深度，浅度，REM
+
+                                var smPoint = dayReport.SmPoint.ToJsonObject<SmPointModel>();
+                                if (smPoint != null)
+                                {
+                                    if (smPoint.DataValue != null)
+                                    {
+                                        if (smPoint.DataValue.Count > 0)
+                                        {
+                                            foreach (var item in smPoint.DataValue)
+                                            {
+                                                var t1 = TicksToDate(item.starttime);
+
+                                                if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t1ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t1ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t1BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t1ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t2ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t2ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t2BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t2ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t3ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t3ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t3BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t3ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t4ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t4ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t4BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t4ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t5ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t5ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t5BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t5ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                                {
+
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t6ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t6ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t6BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t6ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    switch (item.type)
+                                                    {
+                                                        case 0:
+                                                            break;
+                                                        case 1:
+                                                            t7ByQd++;
+                                                            break;
+                                                        case 2:
+                                                            break;
+                                                        case 3:
+                                                            break;
+                                                        case 4:
+                                                            t7ByRem++;
+                                                            break;
+                                                        case 5:
+                                                            t7BySd++;
+                                                            break;
+                                                        case 6:
+                                                            t7ByQd++;
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
