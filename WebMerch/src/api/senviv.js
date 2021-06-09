@@ -64,6 +64,22 @@ export function getMonthReportSug(params) {
   })
 }
 
+export function getTagExplains(params) {
+  return request({
+    url: '/senviv/getTagExplains',
+    method: 'get',
+    params
+  })
+}
+
+export function saveTagExplain(data) {
+  return request({
+    url: '/senviv/saveTagExplain',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getUsers: getUsers,
   getUserDetail: getUserDetail,
@@ -72,5 +88,7 @@ export default {
   getMonthReports: getMonthReports,
   getMonthReportDetail: getMonthReportDetail,
   saveMonthReportSug: saveMonthReportSug,
-  getMonthReportSug: getMonthReportSug
+  getMonthReportSug: getMonthReportSug,
+  getTagExplains: getTagExplains,
+  saveTagExplain: saveTagExplain
 }

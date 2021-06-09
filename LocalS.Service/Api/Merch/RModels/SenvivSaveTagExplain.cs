@@ -1,15 +1,15 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace LocalS.Entity
+namespace LocalS.Service.Api.Merch
 {
-    [Table("SenvivHealthTagExplain")]
-    public class SenvivHealthTagExplain
+    public class RopSenvivSaveTagExplain
     {
-        [Key]
         public int Id { get; set; }
-        public int TagId { get; set; }
+        public string TagId { get; set; }
         public string TagName { get; set; }
         public string ProExplain { get; set; }
         public string TcmExplain { get; set; }

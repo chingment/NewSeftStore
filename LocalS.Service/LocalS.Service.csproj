@@ -262,6 +262,7 @@
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetDayReports.cs" />
+    <Compile Include="Api\Merch\RModels\RupSenvivGetTags.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetUsers.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopStoreAddShop.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Api\Merch\RModels\RupStoreGetMachines.cs" />
     <Compile Include="Api\Merch\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Merch\RModels\SenvivSaveMonthReportSug.cs" />
+    <Compile Include="Api\Merch\RModels\SenvivSaveTagExplain.cs" />
     <Compile Include="Api\Merch\RopReportCheckRightExport.cs" />
     <Compile Include="Api\Merch\SenvivService.cs" />
     <Compile Include="Api\Merch\ShopService.cs" />

@@ -66,5 +66,19 @@ namespace WebApiMerch.Controllers
             var result = MerchServiceFactory.Senviv.SaveMonthReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetTagExplains([FromUri]RupSenvivGetTags rup)
+        {
+            var result = MerchServiceFactory.Senviv.GetTagExplains(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveTagExplain([FromBody]RopSenvivSaveTagExplain rop)
+        {
+            var result = MerchServiceFactory.Senviv.SaveTagExplain(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

@@ -1122,5 +1122,68 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
 
         }
+
+        public CustomJsonResult GetTagExplains(string operater, string merchId, RupSenvivGetTags rup)
+        {
+
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SenvivHealthTagExplain
+
+                         select new { u.Id, u.TagId, u.TagName, u.ProExplain, u.TcmExplain, u.Suggest });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderBy(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    TagId = item.TagId,
+                    TagName = item.TagName,
+                    ProExplain = item.ProExplain,
+                    TcmExplain = item.TcmExplain,
+                    Suggest = item.Suggest
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+
+        }
+
+        public CustomJsonResult SaveTagExplain(string operater, string merchId, RopSenvivSaveTagExplain rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            var tagExplain = CurrentDb.SenvivHealthTagExplain.Where(m => m.Id == rop.Id).FirstOrDefault();
+            if (tagExplain != null)
+            {
+                tagExplain.ProExplain = rop.ProExplain;
+                tagExplain.TcmExplain = rop.TcmExplain;
+                tagExplain.Suggest = rop.Suggest;
+                CurrentDb.SaveChanges();
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+
+        }
     }
 }

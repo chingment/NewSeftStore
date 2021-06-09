@@ -293,12 +293,14 @@ namespace LocalS.Service.Api.HealthApp
 
             var tagExplain = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagId == rptTag.TagId).FirstOrDefault();
 
-            string explain = "";
+            string proExplain = "";
+            string tcmExplain = "";
             string suggest = "";
 
             if (tagExplain != null)
             {
-                explain = tagExplain.Explain;
+                proExplain = tagExplain.ProExplain;
+                tcmExplain = tagExplain.TcmExplain;
                 suggest = tagExplain.Suggest;
             }
 
@@ -306,7 +308,8 @@ namespace LocalS.Service.Api.HealthApp
             {
                 TagName = rptTag.TagName,
                 TagCount = rptTag.TagCount,
-                Explain = explain,
+                ProExplain = proExplain,
+                TcmExplain = tcmExplain,
                 Suggest = suggest
             };
 
