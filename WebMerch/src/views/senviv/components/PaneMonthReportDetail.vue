@@ -47,9 +47,9 @@
           <td>{{ rd.timeFrameStaPt.t1.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t1.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t1.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.rem }}</td>
         </tr>
         <tr>
           <td>23:00~01:00</td>
@@ -59,9 +59,9 @@
           <td>{{ rd.timeFrameStaPt.t2.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t2.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t2.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.rem }}</td>
         </tr>
         <tr>
           <td>01:00~03:00</td>
@@ -71,9 +71,9 @@
           <td>{{ rd.timeFrameStaPt.t3.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t3.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t3.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.rem }}</td>
         </tr>
         <tr>
           <td>03:00~05:00</td>
@@ -83,9 +83,9 @@
           <td>{{ rd.timeFrameStaPt.t4.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t4.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t4.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.rem }}</td>
         </tr>
         <tr>
           <td>05:00~07:00</td>
@@ -95,9 +95,9 @@
           <td>{{ rd.timeFrameStaPt.t5.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t5.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t5.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.rem }}</td>
         </tr>
         <tr>
           <td>07:00~09:00</td>
@@ -107,9 +107,9 @@
           <td>{{ rd.timeFrameStaPt.t6.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.pjHx }}</td>
           <td>{{ rd.timeFrameStaPt.t6.pjXl }}</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ rd.timeFrameStaPt.t6.sd }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.qd }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.rem }}</td>
         </tr>
       </tbody>
     </table>

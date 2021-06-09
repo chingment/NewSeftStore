@@ -149,6 +149,29 @@ namespace LocalS.BLL.Task
                             var t6ByPjHx = new List<int>();
                             var t7ByPjHx = new List<int>();
 
+                            var t1ByQd = 0;
+                            var t2ByQd = 0;
+                            var t3ByQd = 0;
+                            var t4ByQd = 0;
+                            var t5ByQd = 0;
+                            var t6ByQd = 0;
+                            var t7ByQd = 0;
+
+                            var t1BySd = 0;
+                            var t2BySd = 0;
+                            var t3BySd = 0;
+                            var t4BySd = 0;
+                            var t5BySd = 0;
+                            var t6BySd = 0;
+                            var t7BySd = 0;
+
+                            var t1ByRem = 0;
+                            var t2ByRem = 0;
+                            var t3ByRem = 0;
+                            var t4ByRem = 0;
+                            var t5ByRem = 0;
+                            var t6ByRem = 0;
+                            var t7ByRem = 0;
                             foreach (var dayReport in d_DayReports)
                             {
                                 #region 上床时间
@@ -455,13 +478,13 @@ namespace LocalS.BLL.Task
 
                             var timeFrameStaPt = new
                             {
-                                t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs, pjXl = t1ByPjXl.Count == 0 ? 0 : Math.Round(t1ByPjXl.Average(), 2), pjHx = t1ByPjHx.Count == 0 ? 0 : Math.Round(t1ByPjHx.Average(), 2) },
-                                t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs, pjXl = t2ByPjXl.Count == 0 ? 0 : Math.Round(t2ByPjXl.Average(), 2), pjHx = t2ByPjHx.Count == 0 ? 0 : Math.Round(t2ByPjHx.Average(), 2) },
-                                t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs, pjXl = t3ByPjXl.Count == 0 ? 0 : Math.Round(t3ByPjXl.Average(), 2), pjHx = t3ByPjHx.Count == 0 ? 0 : Math.Round(t3ByPjHx.Average(), 2) },
-                                t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs, pjXl = t4ByPjXl.Count == 0 ? 0 : Math.Round(t4ByPjXl.Average(), 2), pjHx = t4ByPjHx.Count == 0 ? 0 : Math.Round(t4ByPjHx.Average(), 2) },
-                                t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs, pjXl = t5ByPjXl.Count == 0 ? 0 : Math.Round(t5ByPjXl.Average(), 2), pjHx = t5ByPjHx.Count == 0 ? 0 : Math.Round(t5ByPjHx.Average(), 2) },
-                                t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs, pjXl = t6ByPjXl.Count == 0 ? 0 : Math.Round(t6ByPjXl.Average(), 2), pjHx = t6ByPjHx.Count == 0 ? 0 : Math.Round(t6ByPjHx.Average(), 2) },
-                                t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : Math.Round(t7ByPjXl.Average(), 2), pjHx = t7ByPjHx.Count == 0 ? 0 : Math.Round(t7ByPjHx.Average(), 2) },
+                                t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs, pjXl = t1ByPjXl.Count == 0 ? 0 : Math.Round(t1ByPjXl.Average(), 2), pjHx = t1ByPjHx.Count == 0 ? 0 : Math.Round(t1ByPjHx.Average(), 2), qd = t1ByQd, sd = t1BySd, rem = t1ByRem },
+                                t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs, pjXl = t2ByPjXl.Count == 0 ? 0 : Math.Round(t2ByPjXl.Average(), 2), pjHx = t2ByPjHx.Count == 0 ? 0 : Math.Round(t2ByPjHx.Average(), 2), qd = t2ByQd, sd = t2BySd, rem = t2ByRem },
+                                t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs, pjXl = t3ByPjXl.Count == 0 ? 0 : Math.Round(t3ByPjXl.Average(), 2), pjHx = t3ByPjHx.Count == 0 ? 0 : Math.Round(t3ByPjHx.Average(), 2), qd = t3ByQd, sd = t3BySd, rem = t3ByRem },
+                                t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs, pjXl = t4ByPjXl.Count == 0 ? 0 : Math.Round(t4ByPjXl.Average(), 2), pjHx = t4ByPjHx.Count == 0 ? 0 : Math.Round(t4ByPjHx.Average(), 2), qd = t4ByQd, sd = t4BySd, rem = t4ByRem },
+                                t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs, pjXl = t5ByPjXl.Count == 0 ? 0 : Math.Round(t5ByPjXl.Average(), 2), pjHx = t5ByPjHx.Count == 0 ? 0 : Math.Round(t5ByPjHx.Average(), 2), qd = t5ByQd, sd = t5BySd, rem = t5ByRem },
+                                t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs, pjXl = t6ByPjXl.Count == 0 ? 0 : Math.Round(t6ByPjXl.Average(), 2), pjHx = t6ByPjHx.Count == 0 ? 0 : Math.Round(t6ByPjHx.Average(), 2), qd = t6ByQd, sd = t6BySd, rem = t6ByRem },
+                                t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : Math.Round(t7ByPjXl.Average(), 2), pjHx = t7ByPjHx.Count == 0 ? 0 : Math.Round(t7ByPjHx.Average(), 2), qd = t7ByQd, sd = t7BySd, rem = t7ByRem },
                             };
 
                             d_MonthReport = new SenvivHealthMonthReport();
