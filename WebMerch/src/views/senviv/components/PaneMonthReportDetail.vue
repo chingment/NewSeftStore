@@ -23,7 +23,7 @@
       </div>
       <div class="pull-right" />
     </div>
-    <table class="clz" cellspacing="0" cellpadding="0" style="width:100%;">
+    <table v-if="rd!=null&&rd.timeFrameStaPt!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%;">
       <thead>
         <tr>
           <th />
