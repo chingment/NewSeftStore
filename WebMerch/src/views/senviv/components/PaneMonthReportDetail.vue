@@ -26,16 +26,16 @@
     <table v-if="rd!=null&&rd.timeFrameStaPt!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%;">
       <thead>
         <tr>
-          <th />
-          <th>入睡</th>
-          <th>清醒</th>
-          <th>呼吸暂停</th>
-          <th>体动</th>
-          <th>平均呼吸</th>
-          <th>平均心率</th>
-          <th>深睡</th>
-          <th>浅睡</th>
-          <th>REM</th>
+          <th style="width:10%" />
+          <th style="width:10%">入睡</th>
+          <th style="width:10%">清醒</th>
+          <th style="width:10%">呼吸暂停</th>
+          <th style="width:10%">体动</th>
+          <th style="width:10%">平均呼吸</th>
+          <th style="width:10%">平均心率</th>
+          <th style="width:10%">深睡</th>
+          <th style="width:10%">浅睡</th>
+          <th style="width:10%">REM</th>
         </tr>
       </thead>
       <tbody>
@@ -297,12 +297,9 @@
       <div
         v-loading="loadingBySug"
         class="drawer__content"
-        style="padding:8px 20px;
-            display: flex;
-    flex-direction: column;
-    height: 100%;"
+        style=" display: flex; flex-direction: column;height: 100%;"
       >
-        <div style="flex:1">
+        <div style="flex:1;margin-bottom: 100px; padding: 0px 20px;">
 
           <div style="margin-bottom:10px">
             <el-tag v-if="formBySug.isSend" type="success">
@@ -332,7 +329,7 @@
             </div>
           </el-card>
         </div>
-        <div style="display:flex" class="drawer__footer">
+        <div style="display: flex;position: absolute; bottom: 0;width: 100%;padding: 10px 20px;    background: #fff;" class="drawer__footer">
           <el-button style="flex:1" @click="handleCloseByDrawerBySug">取 消</el-button>
           <el-button v-if="!formBySug.isSend" style="flex:1" type="primary" @click="handleSaveSug(false)">暂 存</el-button>
           <el-button v-if="!formBySug.isSend" style="flex:1" type="success" @click="handleSaveSug(true)">保存并发送</el-button>
@@ -694,4 +691,7 @@ export default {
     line-height: 80px;
  }
 
+.el-drawer__body{
+      overflow: auto;
+}
 </style>

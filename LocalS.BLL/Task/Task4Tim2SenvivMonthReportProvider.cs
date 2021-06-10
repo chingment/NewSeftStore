@@ -503,7 +503,9 @@ namespace LocalS.BLL.Task
                                         {
                                             foreach (var item in smPoint.DataValue)
                                             {
-                                                var t1 = TicksToDate(item.starttime);
+                                                var t1 = TicksToDate(item.starttime * 1000);
+
+                                                //LogUtil.Info("datatime=>:" + t1.ToUnifiedFormatDateTime() + "type=>:" + item.type);
 
                                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                                 {
