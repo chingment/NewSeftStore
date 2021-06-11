@@ -687,8 +687,8 @@ export default {
     bottom: 0;
     right: 0;
     background: #fff;
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
  }
 
 .el-drawer__body{
