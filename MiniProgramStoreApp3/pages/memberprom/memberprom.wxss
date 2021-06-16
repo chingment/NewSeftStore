@@ -60,7 +60,8 @@
 
 .bg-3 {
   width: 100%;
-  height: 3116rpx;
+  height: 2200rpx;
+  margin-bottom: 200rpx;
 }
 
 .bg-2 .section {
