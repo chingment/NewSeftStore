@@ -110,7 +110,7 @@
         <table class="list-tb" cellpadding="0" cellspacing="0">
           <thead>
             <tr>
-              <th>规格</th>
+              <th v-for="(item,y) in form.specItems" :key="y">{{ item.name }}</th>
               <th style="width:180px">编码</th>
               <th style="width:180px">条形码</th>
               <th style="width:100px">价格</th>
@@ -119,9 +119,13 @@
           </thead>
           <tbody>
             <tr v-for="(item,x) in form.skus" :key="x">
-              <td>
-                <span v-for="(specDes,y) in item.specDes" :key="y">{{ specDes.value }}</span>
+
+              <td v-for="(specDes,y) in item.specDes" :key="y">
+
+                <el-input v-model="specDes.value" clearable style="width:90%" />
+
               </td>
+
               <td>
                 <el-input v-model="item.cumCode" clearable style="width:90%" />
               </td>
@@ -198,6 +202,7 @@ export default {
         subjectIds: [],
         detailsDes: [],
         charTags: [],
+        specItems: [],
         isMavkBuy: false,
         isTrgVideoService: false,
         isRevService: false,
@@ -254,6 +259,7 @@ export default {
           this.form.detailsDes = d.detailsDes
           this.form.briefDes = d.briefDes
           this.form.displayImgUrls = d.displayImgUrls
+          this.form.specItems = d.specItems
           this.form.skus = d.skus
           this.form.isMavkBuy = d.isMavkBuy
           this.form.isTrgVideoService = d.isTrgVideoService
@@ -305,6 +311,7 @@ export default {
           _form.spuCode = this.form.spuCode
           _form.kindIds = this.form.kindIds
           _form.detailsDes = this.form.detailsDes
+          _form.specDes = this.form.specDes
           _form.briefDes = this.form.briefDes
           _form.displayImgUrls = this.form.displayImgUrls
           _form.isUnifyUpdateSalePrice = this.form.isUnifyUpdateSalePrice

@@ -299,6 +299,7 @@ namespace LocalS.Service.Api.Merch
                 ret.Id = d_Spu.Id;
                 ret.Name = d_Spu.Name;
                 ret.SpuCode = d_Spu.SpuCode;
+                ret.SpecItems = d_Spu.SpecItems.ToJsonObject<List<SpecItem>>();
                 ret.DetailsDes = d_Spu.DetailsDes.ToJsonObject<List<ImgSet>>();
                 ret.BriefDes = d_Spu.BriefDes;
                 ret.KindIds = string.IsNullOrEmpty(d_Spu.KindIds) ? new List<string>() : d_Spu.KindIds.Split(',').ToList();
@@ -385,6 +386,33 @@ namespace LocalS.Service.Api.Merch
                 d_Spu.SupReceiveMode = rop.SupReceiveMode;
                 d_Spu.CharTags = rop.CharTags.ToJsonString();
                 d_Spu.SupplierId = rop.SupplierId;
+
+                List<SpecItem> specItems = new List<BLL.SpecItem>();
+                foreach (var item in rop.Skus)
+                {
+                    foreach (var item2 in item.SpecDes)
+                    {
+                        var specItem = specItems.Where(m => m.Name == item2.Name).FirstOrDefault();
+                        if (specItem == null)
+                        {
+                            specItem = new SpecItem();
+                            specItem.Name = item2.Name;
+                            specItem.Value.Add(new SpecItemValue { Name = item2.Value });
+                            specItems.Add(specItem);
+                        }
+                        else
+                        {
+                            var value = specItem.Value.Where(m => m.Name == item2.Value).FirstOrDefault();
+                            if (value == null)
+                            {
+                                specItem.Value.Add(new SpecItemValue { Name = item2.Value });
+                            }
+                        }
+                    }
+                }
+
+                d_Spu.SpecItems = specItems.ToJsonString();
+
                 d_Spu.Mender = operater;
                 d_Spu.MendTime = DateTime.Now;
 
@@ -407,6 +435,8 @@ namespace LocalS.Service.Api.Merch
                     {
                         d_Sku.Name = GetSkuSpecCombineName(d_Spu.Name, d_Sku.SpecDes.ToJsonObject<List<SpecDes>>());
                         d_Sku.PinYinIndex = CommonUtil.GetPingYinIndex(d_Sku.Name);
+                        d_Sku.SpecDes = sku.SpecDes.ToJsonString();
+                        d_Sku.SpecIdx= string.Join(",", sku.SpecDes.Select(m => m.Value));
                         d_Sku.CumCode = sku.CumCode;
                         d_Sku.BarCode = sku.BarCode;
                         d_Sku.SalePrice = sku.SalePrice;

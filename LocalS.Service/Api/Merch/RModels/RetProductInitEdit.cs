@@ -1,4 +1,5 @@
-﻿using LocalS.Entity;
+﻿using LocalS.BLL;
+using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
 using System;
@@ -20,7 +21,7 @@ namespace LocalS.Service.Api.Merch
         public string Id { get; set; }
 
         public string Name { get; set; }
-
+        public List<SpecItem> SpecItems { get; set; }
         public string SpuCode { get; set; }
         public string BarCode { get; set; }
 
