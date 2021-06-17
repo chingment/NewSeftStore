@@ -240,7 +240,7 @@ namespace LocalS.BLL
             var user = CurrentDb.SenvivUser.Where(m => m.Id == report.SvUserId).FirstOrDefault();
 
             //var opendId = user.WechatId;
-            var opendId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            var opendId = "on0dM57Q4XOgdHHx-vqmiibI547M";
             var deptId = user.DeptId;
             var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
             var healthDate = report.HealthDate;
