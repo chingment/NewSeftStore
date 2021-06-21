@@ -757,6 +757,9 @@ namespace LocalS.BLL.Task
                             d_MonthReport.HxCqjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxCqjzhx).Average().ToString());//
                             d_MonthReport.XlDcpjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
                             d_MonthReport.XlDcjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcjzxl).Average().ToString());//
+
+                            d_MonthReport.XlCqjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlCqjzxl).Average().ToString());//
+
                             d_MonthReport.HxZtahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
                             d_MonthReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
 
