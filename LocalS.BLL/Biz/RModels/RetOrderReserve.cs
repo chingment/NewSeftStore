@@ -19,6 +19,8 @@ namespace LocalS.BLL.Biz
         public class Order
         {
             public string Id { get; set; }
+
+            public string CumId { get; set; }
             public string ChargeAmount { get; set; }
         }
     }

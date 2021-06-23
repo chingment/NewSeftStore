@@ -621,10 +621,20 @@ namespace LocalS.BLL.Biz
 
                     foreach (var buildOrder in buildOrders)
                     {
+                        if (!string.IsNullOrEmpty(rop.CumOrderId))
+                        {
+                            var d_CumOrder = CurrentDb.Order.Where(m => m.CumId == rop.CumOrderId).FirstOrDefault();
+                            if (d_CumOrder != null)
+                            {
+                                return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "商户订单编号已经存在", null);
+                            }
+                        }
+
                         var d_Order = new Order();
                         d_Order.Id = IdWorker.Build(IdType.OrderId);
                         d_Order.UnId = unId;
                         d_Order.PId = rop.POrderId;
+                        d_Order.CumId = rop.CumOrderId;
                         d_Order.ClientUserId = rop.ClientUserId;
                         d_Order.ClientUserName = clientUserName;
                         d_Order.MerchId = store.MerchId;
@@ -886,7 +896,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var s_Order in s_Orders)
                     {
-                        ret.Orders.Add(new RetOrderReserve.Order { Id = s_Order.Id, ChargeAmount = s_Order.ChargeAmount.ToF2Price() });
+                        ret.Orders.Add(new RetOrderReserve.Order { Id = s_Order.Id, CumId = s_Order.CumId, ChargeAmount = s_Order.ChargeAmount.ToF2Price() });
 
                         Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckReservePay, s_Order.Id, s_Order.PayExpireTime.Value, new Order2CheckPayModel { Id = s_Order.Id, MerchId = s_Order.MerchId });
 

@@ -68,6 +68,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string PId { get; set; }
         public string UnId { get; set; }
+
+        public string CumId { get; set; }
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
         public string MerchName { get; set; }

@@ -17,6 +17,7 @@ namespace LocalS.BLL.Biz
 
         public string ReffSign { get; set; }
         public string POrderId { get; set; }
+        public string CumOrderId { get; set; }
         public string AppId { get; set; }
         public string StoreId { get; set; }
         public string ClientUserId { get; set; }
