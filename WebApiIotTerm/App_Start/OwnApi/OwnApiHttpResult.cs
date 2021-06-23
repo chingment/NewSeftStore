@@ -6,7 +6,6 @@ using System.Text;
 
 namespace WebApiIotTerm
 {
-
     public class OwnApiHttpResult : IResult2
     {
         private string _code = "";

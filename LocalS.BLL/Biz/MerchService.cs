@@ -209,14 +209,14 @@ namespace LocalS.BLL.Biz
             return shop.Name;
         }
 
-        public string GetAppSecret(string merchId,string appId)
+        public string GetIotApiSecret(string merchId)
         {
             var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
             if (merch == null)
                 return null;
 
-            return merch.Name;
+            return merch.IotApiSecret;
         }
     }
 }

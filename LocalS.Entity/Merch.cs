@@ -72,5 +72,7 @@ namespace LocalS.Entity
 
 
         public string SenvivDepts { get; set; }
+
+        public string IotApiSecret { get; set; }
     }
 }

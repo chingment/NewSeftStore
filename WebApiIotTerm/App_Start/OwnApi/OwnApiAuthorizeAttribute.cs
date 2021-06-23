@@ -11,12 +11,15 @@ using Lumos;
 using System.Web.Http;
 using System.Linq;
 using LocalS.Service.Api.StoreTerm;
+using System.Security.Cryptography;
 
 namespace WebApiIotTerm
 {
 
     public class OwnApiAuthorizeAttribute : ActionFilterAttribute
     {
+        public const short MaxTimeDiff = 30;
+
         private DateTime GetDateTimeTolerance(long timestamp)
         {
             DateTime dt = DateTime.Parse(DateTime.Now.ToString("1970-01-01 00:00:00")).AddSeconds(timestamp);
@@ -42,7 +45,7 @@ namespace WebApiIotTerm
                 {
                     arr_auth[0] = keyvalue[1];
                 }
-                else if(keyvalue[0] == "timestamp")
+                else if (keyvalue[0] == "timestamp")
                 {
                     arr_auth[1] = keyvalue[1];
                 }
@@ -125,33 +128,34 @@ namespace WebApiIotTerm
 
 
                 //检查key是否在数据库中存在
-                //string app_secret = LocalS.BLL.Biz.BizFactory.Merch.GetAppSecretByAppKey(app_id, app_key);
+                string api_secret = LocalS.BLL.Biz.BizFactory.Merch.GetIotApiSecret(arr_auth[0]);
+                if (string.IsNullOrEmpty(api_secret))
+                {
+                    OwnApiHttpResult result = new OwnApiHttpResult(ResultCode.Failure2Sign, "应用程序Key,存在错误");
+                    actionContext.Response = new OwnApiHttpResponse(result);
+                    return;
+                }
 
-                //if (app_secret == null)
-                //{
-                //    OwnApiHttpResult result = new OwnApiHttpResult(ResultCode.Failure2Sign, "应用程序Key,存在错误");
-                //    actionContext.Response = new OwnApiHttpResponse(result);
-                //    return;
-                //}
+                long timestamp = long.Parse(arr_auth[1]);
 
-                //long app_timestamp = long.Parse(app_timestamp_s);
+                if (IsRequestTimeout(timestamp))
+                {
+                    OwnApiHttpResult result = new OwnApiHttpResult(ResultCode.Failure2Sign, "请求已超时");
+                    actionContext.Response = new OwnApiHttpResponse(result);
+                    return;
+                }
 
-                //string signStr = Signature.Compute(app_id, app_key, app_secret, app_timestamp, app_data);
 
-                //if (Signature.IsRequestTimeout(app_timestamp))
-                //{
-                //    OwnApiHttpResult result = new OwnApiHttpResult(ResultType.Failure, ResultCode.Failure2Sign, "请求已超时");
-                //    actionContext.Response = new OwnApiHttpResponse(result);
-                //    return;
-                //}
+                string signStr = GetSign(arr_auth[0], api_secret, timestamp, post_data);
 
-                //if (signStr != app_sign)
-                //{
-                //    LogUtil.Warn("API签名错误");
-                //    OwnApiHttpResult result = new OwnApiHttpResult(ResultType.Failure, ResultCode.Failure2Sign, "签名错误");
-                //    actionContext.Response = new OwnApiHttpResponse(result);
-                //    return;
-                //}
+
+                if (signStr != arr_auth[2])
+                {
+                    LogUtil.Warn("API签名错误");
+                    OwnApiHttpResult result = new OwnApiHttpResult(ResultCode.Failure2Sign, "签名错误");
+                    actionContext.Response = new OwnApiHttpResponse(result);
+                    return;
+                }
 
                 base.OnActionExecuting(actionContext);
             }
@@ -163,6 +167,45 @@ namespace WebApiIotTerm
                 return;
             }
 
+        }
+
+        public bool IsRequestTimeout(long app_timestamp)
+        {
+            System.DateTime time = System.DateTime.MinValue;
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime app_requestTime = startTime.AddSeconds(app_timestamp);
+
+            var ts = DateTime.Now - app_requestTime;
+            if (System.Math.Abs(ts.TotalMinutes) > MaxTimeDiff)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GetSign(string merch_id, string secret, long timespan, string data)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(merch_id);
+            sb.Append(secret);
+            sb.Append(timespan.ToString());
+            sb.Append(data);
+
+            var material = string.Concat(sb.ToString().OrderBy(c => c));
+
+            var input = Encoding.UTF8.GetBytes(material);
+
+            var hash = SHA256Managed.Create().ComputeHash(input);
+
+            StringBuilder sb2 = new StringBuilder();
+            foreach (byte b in hash)
+                sb2.Append(b.ToString("x2"));
+
+            string str = sb2.ToString();
+
+            return str;
         }
     }
 }
