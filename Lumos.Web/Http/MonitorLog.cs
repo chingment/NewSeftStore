@@ -73,6 +73,11 @@ namespace Lumos.Web.Http
                      sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
                  }
 
+                 if (headers["Authorization"] != null)
+                 {
+                     sb.Append("Header.Authorization: " + headers["Authorization"] + Environment.NewLine);
+                 }
+
                  if (myRequest.ContentType.IndexOf("application/json") > -1)
                  {
                      sb.Append("PostData: " + GetPostData(myRequest.InputStream) + Environment.NewLine);

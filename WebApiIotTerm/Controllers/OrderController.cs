@@ -8,12 +8,12 @@ using System.Web.Http;
 
 namespace WebApiIotTerm.Controllers
 {
-    public class OrderController : ApiController
+    public class OrderController : OwnApiBaseController
     {
         [HttpPost]
         public OwnApiHttpResponse Reserve(RopOrderReserve rop)
         {
-            var result = IotTermServiceFactory.Order.Reserve(rop);
+            var result = IotTermServiceFactory.Order.Reserve(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -21,7 +21,7 @@ namespace WebApiIotTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Cancle(RopOrderCancle rop)
         {
-            var result = IotTermServiceFactory.Order.Cancle(rop);
+            var result = IotTermServiceFactory.Order.Cancle(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -29,7 +29,7 @@ namespace WebApiIotTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Query(RopOrderQuery rop)
         {
-            var result = IotTermServiceFactory.Order.Query(rop);
+            var result = IotTermServiceFactory.Order.Query(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }

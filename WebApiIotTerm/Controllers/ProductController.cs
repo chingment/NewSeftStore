@@ -8,12 +8,12 @@ using System.Web.Http;
 
 namespace WebApiIotTerm.Controllers
 {
-    public class ProductController : ApiController
+    public class ProductController : OwnApiBaseController
     {
         [HttpPost]
         public OwnApiHttpResponse Add(RopProductAdd rop)
         {
-            var result = IotTermServiceFactory.Product.Add(rop);
+            var result = IotTermServiceFactory.Product.Add(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -21,7 +21,7 @@ namespace WebApiIotTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Edit(RopProductEdit rop)
         {
-            var result = IotTermServiceFactory.Product.Edit(rop);
+            var result = IotTermServiceFactory.Product.Edit(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }

@@ -13,7 +13,7 @@ namespace WebApiIotTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse List(RopDeviceList rop)
         {
-            var result = IotTermServiceFactory.Device.List(rop);
+            var result = IotTermServiceFactory.Device.List(this.CurrentMerchId, rop);
 
             return new OwnApiHttpResponse(result);
         }
@@ -21,9 +21,9 @@ namespace WebApiIotTerm.Controllers
         [HttpPost]
         public OwnApiHttpResponse Stock(RopDeviceStock rop)
         {
-            var result = IotTermServiceFactory.Device.Stock(rop);
+            var result = IotTermServiceFactory.Device.Stock(this.CurrentMerchId, rop);
 
-            return new OwnApiHttpResponse(null);
+            return new OwnApiHttpResponse(result);
         }
     }
 }

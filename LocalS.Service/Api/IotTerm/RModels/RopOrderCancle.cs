@@ -8,5 +8,6 @@ namespace LocalS.Service.Api.IotTerm
 {
     public class RopOrderCancle
     {
+        public string low_order_id { get; set; }
     }
 }

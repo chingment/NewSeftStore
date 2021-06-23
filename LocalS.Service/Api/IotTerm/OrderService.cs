@@ -9,17 +9,17 @@ namespace LocalS.Service.Api.IotTerm
 {
     public class OrderService
     {
-        public CustomJsonResult2 Reserve(RopOrderReserve rop)
+        public CustomJsonResult2 Reserve(string merchId, RopOrderReserve rop)
         {
             return null;
         }
 
-        public CustomJsonResult2 Cancle(RopOrderCancle rop)
+        public CustomJsonResult2 Cancle(string merchId, RopOrderCancle rop)
         {
             return null;
         }
 
-        public CustomJsonResult2 Query(RopOrderQuery rop)
+        public CustomJsonResult2 Query(string merchId, RopOrderQuery rop)
         {
             return null;
         }

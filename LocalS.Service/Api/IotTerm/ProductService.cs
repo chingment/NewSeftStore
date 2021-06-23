@@ -10,12 +10,12 @@ namespace LocalS.Service.Api.IotTerm
     public class ProductService
     {
 
-        public CustomJsonResult2 Add(RopProductAdd rop)
+        public CustomJsonResult2 Add(string merchId, RopProductAdd rop)
         {
             return null;
         }
 
-        public CustomJsonResult2 Edit(RopProductEdit rop)
+        public CustomJsonResult2 Edit(string merchId, RopProductEdit rop)
         {
             return null;
         }

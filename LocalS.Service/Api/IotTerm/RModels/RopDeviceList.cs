@@ -8,5 +8,9 @@ namespace LocalS.Service.Api.IotTerm
 {
     public class RopDeviceList
     {
+        public int page { get; set; }
+        public int limit { get; set; }
+
+        public string device_id { get; set; }
     }
 }

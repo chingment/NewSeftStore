@@ -41,5 +41,41 @@ namespace WebApiIotTerm
 
             return new OwnApiHttpResponse(_result);
         }
+
+
+        public string CurrentMerchId
+        {
+            get
+            {
+                string merchId = null;
+
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+
+                var str_auth = request.Headers["Authorization"];
+                if (str_auth != null)
+                {
+                    str_auth = request.Headers["Authorization"].ToString();
+
+                    string[] arr_auth2 = str_auth.Split(',');
+
+                    foreach (var item in arr_auth2)
+                    {
+                        string[] keyvalue = item.Split('=');
+
+                        if (keyvalue[0] == "merch_id")
+                        {
+                            merchId = keyvalue[1];
+                        }
+                    }
+
+                }
+
+                return merchId;
+
+            }
+
+        }
+
+
     }
 }

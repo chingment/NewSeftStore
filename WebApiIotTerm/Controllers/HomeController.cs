@@ -20,38 +20,43 @@ namespace WebApiIotTerm.Controllers
 {
     public class HomeController : Controller
     {
-        private string merch_id = "test";
+        private string merch_id = "d17df2252133478c99104180e8062230";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
-       // private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private long timespan = 1620465964;
+        private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        //private long timespan = 1620465964;
 
-        private string host = "http://localhost:18675";
+        private string host = "http://api.iot.17fanju.com";
 
         Dictionary<string, string> model = new Dictionary<string, string>();
 
         public ActionResult Index()
         {
-            OrderConfirm();
+            model.Add("设备信息", DeviceList());
+            model.Add("设备库存", DeviceStock());
 
             return View(model);
         }
 
-        public string OrderConfirm()
+        public string DeviceList()
         {
-
-
-            string data = "{\"device_id\":\"202101200206\",\"data_format\":\"slot\",\"cabinet_id\":\"dsx01n01\",\"is_need_detail\":false}";
-
+            string data = "{\"page\":0,\"limit\":10}";
             string sign = GetSign(data);
-
-
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/device/list", data, headers);
-
             return result;
+        }
 
+        public string DeviceStock()
+        {
+            string data = "{\"device_id\":\"202004220056\",\"data_format\":\"sku\", \"cabinet_id\":\"\", \"is_need_detail\":true }";
+            string sign = GetSign(data);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/device/stock", data, headers);
+            return result;
         }
 
         public string GetSign(string data)
