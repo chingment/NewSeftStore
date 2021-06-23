@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncyCastle.cs" />
+    <Compile Include="CustomJsonResult\CustomJsonResult2.cs" />
+    <Compile Include="CustomJsonResult\IResult2.cs" />
     <Compile Include="Extensions\DateTimeUtil.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

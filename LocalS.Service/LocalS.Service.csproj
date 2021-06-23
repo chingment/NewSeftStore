@@ -187,6 +187,17 @@
     <Compile Include="Api\Agent\UserService.cs" />
     <Compile Include="Api\Agent\RModels\RupBaseGetList.cs" />
     <Compile Include="Api\Agent\RModels\RupUserGetList.cs" />
+    <Compile Include="Api\IotTerm\DeviceService.cs" />
+    <Compile Include="Api\IotTerm\IotTermServiceFactory.cs" />
+    <Compile Include="Api\IotTerm\OrderService.cs" />
+    <Compile Include="Api\IotTerm\ProductService.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopDeviceList.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopDeviceStock.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopOrderCancle.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopOrderQuery.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopOrderReserve.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopProductAdd.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopProductEdit.cs" />
     <Compile Include="Api\Merch\AdService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\CommonService.cs" />

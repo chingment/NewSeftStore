@@ -144,7 +144,7 @@ namespace WebApiStoreApp.Controllers
 
         //    string a1 = JsonConvert.SerializeObject(model);
 
-        //    string signStr = Signature.Compute(key, secret, timespan, a1);
+         //  string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
         //    Dictionary<string, string> headers = new Dictionary<string, string>();
@@ -172,7 +172,7 @@ namespace WebApiStoreApp.Controllers
 
         //    string a1 = JsonConvert.SerializeObject(model);
 
-        //    string signStr = Signature.Compute(key, secret, timespan, a1);
+         //  string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
         //    Dictionary<string, string> headers = new Dictionary<string, string>();

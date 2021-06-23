@@ -1,0 +1,29 @@
+﻿using LocalS.Service.Api.IotTerm;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace WebApiIotTerm.Controllers
+{
+    public class ProductController : ApiController
+    {
+        [HttpPost]
+        public OwnApiHttpResponse Add(RopProductAdd rop)
+        {
+            var result = IotTermServiceFactory.Product.Add(rop);
+
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Edit(RopProductEdit rop)
+        {
+            var result = IotTermServiceFactory.Product.Edit(rop);
+
+            return new OwnApiHttpResponse(result);
+        }
+    }
+}
