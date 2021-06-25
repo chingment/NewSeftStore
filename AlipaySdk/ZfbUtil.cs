@@ -82,7 +82,7 @@ namespace MyAlipaySdk
             }
             else
             {
-                LogUtil.Info("Error:" + response.Msg);
+                LogUtil.Info("Error:" + Newtonsoft.Json.JsonConvert.SerializeObject(response));
             }
 
             LogUtil.Info("CodeUrl:" + rt.CodeUrl);
