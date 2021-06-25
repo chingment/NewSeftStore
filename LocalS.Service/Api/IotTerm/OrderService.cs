@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.IotTerm
 
     public class OrderService : BaseService
     {
-        public CustomJsonResult2 Reserve(string merchId, RopOrderReserve rop)
+        public IResult2 Reserve(string merchId, RopOrderReserve rop)
         {
             var result = new CustomJsonResult2();
 
@@ -130,12 +130,12 @@ namespace LocalS.Service.Api.IotTerm
             return result;
         }
 
-        public CustomJsonResult2 Cancle(string merchId, RopOrderCancle rop)
+        public IResult2 Cancle(string merchId, RopOrderCancle rop)
         {
             return null;
         }
 
-        public CustomJsonResult2 Query(string merchId, RopOrderQuery rop)
+        public IResult2 Query(string merchId, RopOrderQuery rop)
         {
             return null;
         }

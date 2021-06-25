@@ -10,7 +10,7 @@ namespace LocalS.Service.Api.IotTerm
 {
     public class DeviceService : BaseService
     {
-        public CustomJsonResult2 List(string merchId, RopDeviceList rop)
+        public IResult2 List(string merchId, RopDeviceList rop)
         {
             var result = new CustomJsonResult2();
 
@@ -60,7 +60,7 @@ namespace LocalS.Service.Api.IotTerm
             return result;
         }
 
-        public CustomJsonResult2 Stock(string merchId, RopDeviceStock rop)
+        public IResult2 Stock(string merchId, RopDeviceStock rop)
         {
             var result = new CustomJsonResult2();
 
