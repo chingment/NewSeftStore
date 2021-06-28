@@ -31,11 +31,12 @@ namespace WebApiIotTerm.Controllers
 
         public ActionResult Index()
         {
-            model.Add("设备信息", DeviceList());
-            model.Add("设备库存", DeviceStock());
-            model.Add("订单下单", OrderReserve());
-            model.Add("订单查看", OrderQuery());
-            model.Add("订单取消", OrderCancle());
+            //model.Add("设备信息", DeviceList());
+            //model.Add("设备库存", DeviceStock());
+            //model.Add("订单下单", OrderReserve());
+            //model.Add("订单查看", OrderQuery());
+            //model.Add("订单取消", OrderCancle());
+            model.Add("商品添加", ProductAdd());
             return View(model);
         }
 
@@ -91,6 +92,17 @@ namespace WebApiIotTerm.Controllers
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/order/cancle", data, headers);
+            return result;
+        }
+
+        public string ProductAdd()
+        {
+            string data = "{\"name\":\"格力高百醇（草莓味）\",\"spu_code\":\"00210526021\",\"spec_items\":[\"份量\"],\"spec_skus\":[{\"cum_code\":\"YC024\",\"bar_code\":\"1233211234567\",\"sale_price\":6.00,\"spec_val\":[\"大份\"]},{\"cum_code\":\"YC025\",\"bar_code\":\"1233211234568\",\"sale_price\":4.00,\"spec_val\":[\"小份\"]}],\"kind_ids\":[101,10104,1010401],\"brief_des\":\"外层香脆，内芯柔软\",\"display_img_urls\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"],\"details_des\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"]}";
+            string sign = GetSign(data);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/product/add", data, headers);
             return result;
         }
 

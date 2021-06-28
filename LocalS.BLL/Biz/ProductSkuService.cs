@@ -550,5 +550,18 @@ namespace LocalS.BLL.Biz
             }
             return result;
         }
+
+        public string GetSkuSpecCombineName(string productName, List<SpecDes> specDess)
+        {
+            string str_Spec = "";
+            foreach (var spec in specDess)
+            {
+                str_Spec += spec.Value + " ";
+            }
+
+            string name = productName + " " + str_Spec.Trim2();
+
+            return name;
+        }
     }
 }

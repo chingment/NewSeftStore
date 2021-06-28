@@ -162,18 +162,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public string GetSkuSpecCombineName(string productName, List<SpecDes> specDess)
-        {
-            string str_Spec = "";
-            foreach (var spec in specDess)
-            {
-                str_Spec += spec.Value + " ";
-            }
-
-            string name = productName + " " + str_Spec.Trim2();
-
-            return name;
-        }
 
         public CustomJsonResult Add(string operater, string merchId, RopProductAdd rop)
         {
@@ -260,7 +248,7 @@ namespace LocalS.Service.Api.Merch
                     d_Sku.SpuId = d_Spu.Id;
                     d_Sku.BarCode = sku.BarCode.Trim2();
                     d_Sku.CumCode = sku.CumCode.Trim2();
-                    d_Sku.Name = GetSkuSpecCombineName(d_Spu.Name, sku.SpecDes);
+                    d_Sku.Name = BizFactory.ProductSku.GetSkuSpecCombineName(d_Spu.Name, sku.SpecDes);
                     d_Sku.PinYinIndex = CommonUtil.GetPingYinIndex(d_Sku.Name);
                     d_Sku.SpecDes = sku.SpecDes.ToJsonString();
                     d_Sku.SpecIdx = string.Join(",", sku.SpecDes.Select(m => m.Value));
@@ -433,7 +421,7 @@ namespace LocalS.Service.Api.Merch
                     var d_Sku = CurrentDb.PrdSku.Where(m => m.Id == sku.Id).FirstOrDefault();
                     if (d_Sku != null)
                     {
-                        d_Sku.Name = GetSkuSpecCombineName(d_Spu.Name, d_Sku.SpecDes.ToJsonObject<List<SpecDes>>());
+                        d_Sku.Name = BizFactory.ProductSku.GetSkuSpecCombineName(d_Spu.Name, d_Sku.SpecDes.ToJsonObject<List<SpecDes>>());
                         d_Sku.PinYinIndex = CommonUtil.GetPingYinIndex(d_Sku.Name);
                         d_Sku.SpecDes = sku.SpecDes.ToJsonString();
                         d_Sku.SpecIdx= string.Join(",", sku.SpecDes.Select(m => m.Value));
