@@ -120,7 +120,7 @@ namespace LocalS.Service.Api.IotTerm
             {
                 var order = bizResult.Data.Orders[0];
 
-                result = new CustomJsonResult2(ResultCode.Success, "操作成功", new { low_order_id = order.CumId, up_order_id = order.Id });
+                result = new CustomJsonResult2(ResultCode.Success, "", new { low_order_id = order.CumId, up_order_id = order.Id });
             }
             else
             {
