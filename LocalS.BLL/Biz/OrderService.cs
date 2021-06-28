@@ -1438,7 +1438,7 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public CustomJsonResult Cancle(string operater, string orderId, E_OrderCancleType cancleType, string cancelReason)
+        public CustomJsonResult Cancle(string operater, string orderId, string orderCumId, E_OrderCancleType cancleType, string cancelReason)
         {
             var result = new CustomJsonResult();
 
@@ -1446,8 +1446,21 @@ namespace LocalS.BLL.Biz
             {
 
                 List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
+                Order d_Order = null;
 
-                var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+                if (string.IsNullOrEmpty(orderId) && string.IsNullOrEmpty(orderCumId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单号和商户订单号不能同时为空");
+                }
+
+                if (string.IsNullOrEmpty(orderId))
+                {
+                    d_Order = CurrentDb.Order.Where(m => m.CumId == orderCumId).FirstOrDefault();
+                }
+                else
+                {
+                    d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+                }
 
                 if (d_Order == null)
                 {

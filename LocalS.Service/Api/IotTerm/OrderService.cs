@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -132,12 +133,54 @@ namespace LocalS.Service.Api.IotTerm
 
         public IResult2 Cancle(string merchId, RopOrderCancle rop)
         {
-            return null;
+            var result = BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), null, rop.low_order_id, E_OrderCancleType.PayCancle, "订单支付取消");
+
+            return new CustomJsonResult2(result.Code, result.Message, result.Data);
         }
 
         public IResult2 Query(string merchId, RopOrderQuery rop)
         {
-            return null;
+            var result = new CustomJsonResult2();
+
+            var d_Order = CurrentDb.Order.Where(m => m.CumId == rop.low_order_id).FirstOrDefault();
+
+            if (d_Order == null)
+            {
+                return new CustomJsonResult2(ResultCode.Failure, "该商户订单号信息不存在");
+            }
+
+            var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+
+            var sku_Ships = new List<object>();
+
+            foreach (var item in d_OrderSubs)
+            {
+                sku_Ships.Add(new
+                {
+                    unique_id = item.Id,
+                    cabinet_id = item.CabinetId,
+                    slot_id = item.SlotId,
+                    sku_id = item.SkuId,
+                    sku_cum_code = item.SkuCumCode,
+                    status = item.PickupStatus,
+                    tips = item.ExPickupReason,
+                });
+            }
+
+            var ret = new
+            {
+                low_order_id = d_Order.CumId,
+                up_order_id = d_Order.Id,
+                business_type = "shipment",
+                detail = new
+                {
+                    sku_ships = sku_Ships
+                }
+            };
+
+            result = new CustomJsonResult2(ResultCode.Success, "", ret);
+
+            return result;
         }
     }
 }

@@ -950,7 +950,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Cancle(string operater, string clientUserId, RopOrderCancle rop)
         {
-            var result = BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, E_OrderCancleType.PayCancle, "用户取消");
+            var result = BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id,"", E_OrderCancleType.PayCancle, "用户取消");
 
             return result;
         }

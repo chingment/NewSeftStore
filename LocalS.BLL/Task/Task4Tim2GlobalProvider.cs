@@ -96,7 +96,7 @@ namespace LocalS.BLL.Task
                                 if (m.ExpireTime.AddMinutes(1) < DateTime.Now)
                                 {
                                     LogUtil.Info(TAG, string.Format("订单号：{0},订单支付有效时间过期", order.Id));
-                                    BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
+                                    BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), order.Id, null, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
                                 }
                                 LogUtil.Info(TAG, string.Format("结束执行订单查询,时间:{0}", DateTime.Now));
                                 #endregion            
@@ -169,7 +169,7 @@ namespace LocalS.BLL.Task
                                     Task4Factory.Tim2Global.Exit(Task4TimType.PayTrans2CheckStatus, payTrans.Id);
                                     foreach (var orderId in payTrans.OrderIds)
                                     {
-                                        BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), orderId, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
+                                        BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), orderId, null, E_OrderCancleType.PayTimeout, "订单支付有效时间过期");
                                     }
                                 }
                                 LogUtil.Info(TAG, string.Format("结束执行交易查询,时间:{0}", DateTime.Now));
