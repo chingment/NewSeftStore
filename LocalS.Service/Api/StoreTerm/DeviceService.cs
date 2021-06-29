@@ -50,8 +50,8 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
             }
 
-            d_Device.MacAddress = rop.MacAddress;
-            d_Device.ImeiId = rop.ImeiId;
+            //d_Device.MacAddress = rop.MacAddress;
+            //d_Device.ImeiId = rop.ImeiId;
             d_Device.AppVersionCode = rop.AppVersionCode;
             d_Device.AppVersionName = rop.AppVersionName;
             d_Device.CtrlSdkVersionCode = rop.CtrlSdkVersionCode;

@@ -28,7 +28,7 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse CheckUpdate([FromUri]RopDeviceCheckUpdate rup)
         {
@@ -43,7 +43,7 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
+        [HttpPost]
         public OwnApiHttpResponse GetRunExHandleItems([FromBody]RopDeviceGetRunExHandleItems rup)
         {
             var result = StoreTermServiceFactory.Device.GetRunExHandleItems(this.CurrentUserId, rup);

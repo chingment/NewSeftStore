@@ -34,36 +34,46 @@ namespace WebApiStoreTerm.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public OwnApiHttpResponse LoginByFingerVein([FromBody]LocalS.Service.Api.Account.RopOwnLoginByFingerVein rop)
+        public OwnApiHttpResponse LoginByFingerVein([FromBody]LocalS.Service.Api.StoreTerm.RopOwnLoginByFingerVein rop)
         {
-            rop.Ip = CommonUtil.GetIP();
-            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(rop);
+            var _rop = new LocalS.Service.Api.Account.RopOwnLoginByFingerVein();
+            _rop.VeinData = rop.VeinData;
+            _rop.LoginWay = rop.LoginWay;
+            _rop.AppId = rop.AppId;
+            _rop.Ip = CommonUtil.GetIP();
+            _rop.LoginPms.Add("deviceId", rop.DeviceId);
+
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByFingerVein(_rop);
             return new OwnApiHttpResponse(result);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.Account.RopOwnLoginByAccount rop)
+        public OwnApiHttpResponse LoginByAccount([FromBody]LocalS.Service.Api.StoreTerm.RopOwnLoginByAccount rop)
         {
-
-            rop.Ip = CommonUtil.GetIP();
-
-            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(rop);
+            var _rop = new LocalS.Service.Api.Account.RopOwnLoginByAccount();
+            _rop.UserName = rop.UserName;
+            _rop.Password = rop.Password;
+            _rop.LoginWay = rop.LoginWay;
+            _rop.AppId = rop.AppId;
+            _rop.Ip = CommonUtil.GetIP();
+            _rop.LoginPms.Add("deviceId", rop.DeviceId);
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.LoginByAccount(_rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse Logout([FromBody]LocalS.Service.Api.Account.RopOwnLogout rop)
+        public OwnApiHttpResponse Logout([FromBody]LocalS.Service.Api.StoreTerm.RopOwnLogout rop)
         {
-            if (rop == null)
-            {
-                rop = new LocalS.Service.Api.Account.RopOwnLogout();
-            }
-            rop.Ip = CommonUtil.GetIP();
-            rop.AppId = AppId.STORETERM;
-            rop.Token = this.Token;
+            var _rop = new LocalS.Service.Api.Account.RopOwnLogout();
 
-            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, rop);
+            _rop.Ip = CommonUtil.GetIP();
+            _rop.AppId = AppId.STORETERM;
+            _rop.Token = this.Token;
+            _rop.LoginPms.Add("deviceId", rop.DeviceId);
+            _rop.BelongId = rop.DeviceId;
+
+            var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.Logout(this.CurrentUserId, this.CurrentUserId, _rop);
             return new OwnApiHttpResponse(result);
         }
 
