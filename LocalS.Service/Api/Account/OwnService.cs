@@ -42,7 +42,7 @@ namespace LocalS.Service.Api.Account
                         //M多店铺
                         //S单店铺
                         //线上商城 F
-                        //线下机器 K
+                        //线下设备 K
 
 
                         mctMode = (mctMode.Replace("M", "")).Replace("S", "");
@@ -201,7 +201,7 @@ namespace LocalS.Service.Api.Account
 
         public CustomJsonResult LoginByAccount(RopOwnLoginByAccount rop)
         {
-            string machineId = "";
+            string deviceId = "";
 
             if (string.IsNullOrEmpty(rop.AppId))
             {
@@ -215,12 +215,12 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms");
                 }
 
-                if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
+                if (!rop.LoginPms.ContainsKey("deviceId") || string.IsNullOrEmpty(rop.LoginPms["deviceId"].ToString()))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.machineId");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.deviceId");
                 }
 
-                machineId = rop.LoginPms["machineId"].ToString();
+                deviceId = rop.LoginPms["deviceId"].ToString();
 
             }
 
@@ -282,21 +282,21 @@ namespace LocalS.Service.Api.Account
             {
                 #region STORETERM
 
-                var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-                if (machine == null)
+                var device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
+                if (device == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未登记");
                 }
 
-                if (string.IsNullOrEmpty(machine.CurUseMerchId))
+                if (string.IsNullOrEmpty(device.CurUseMerchId))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未绑定商家");
                 }
 
-                if (string.IsNullOrEmpty(machine.CurUseStoreId))
+                if (string.IsNullOrEmpty(device.CurUseStoreId))
                 {
 
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定店铺");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未绑定店铺");
                 }
 
                 var storeTermUser = CurrentDb.SysMerchUser.Where(m => m.Id == sysUser.Id).FirstOrDefault();
@@ -306,13 +306,13 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该用户不属于该站点");
                 }
 
-                if (machine.CurUseMerchId != storeTermUser.MerchId)
+                if (device.CurUseMerchId != storeTermUser.MerchId)
                 {
 
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "帐号与商户不对应");
                 }
 
-                MqFactory.Global.PushEventNotify(sysUser.Id, AppId.STORETERM, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+                MqFactory.Global.PushEventNotify(sysUser.Id, AppId.STORETERM, deviceId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
@@ -526,7 +526,7 @@ namespace LocalS.Service.Api.Account
         public CustomJsonResult LoginByFingerVein(RopOwnLoginByFingerVein rop)
         {
 
-            string machineId = "";
+            string deviceId = "";
             Enumeration.BelongType belongType = Enumeration.BelongType.Unknow;
             string belongId = "";
             if (string.IsNullOrEmpty(rop.AppId))
@@ -541,36 +541,36 @@ namespace LocalS.Service.Api.Account
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms");
                 }
 
-                if (!rop.LoginPms.ContainsKey("machineId") || string.IsNullOrEmpty(rop.LoginPms["machineId"].ToString()))
+                if (!rop.LoginPms.ContainsKey("deviceId") || string.IsNullOrEmpty(rop.LoginPms["deviceId"].ToString()))
                 {
 
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.machineId");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，缺少参数loginPms.deviceId");
                 }
                 else
                 {
-                    machineId = rop.LoginPms["machineId"].ToString();
+                    deviceId = rop.LoginPms["deviceId"].ToString();
                 }
 
-                var machine = BizFactory.Machine.GetOne(machineId);
-                if (machine == null)
+                var device = BizFactory.Device.GetOne(deviceId);
+                if (device == null)
                 {
 
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未登记");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未登记");
                 }
 
-                if (string.IsNullOrEmpty(machine.MerchId))
+                if (string.IsNullOrEmpty(device.MerchId))
                 {
 
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定商家");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未绑定商家");
                 }
 
-                if (string.IsNullOrEmpty(machine.StoreId))
+                if (string.IsNullOrEmpty(device.StoreId))
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该机器未绑定店铺");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "登录失败，该设备未绑定店铺");
                 }
 
                 belongType = Enumeration.BelongType.Merch;
-                belongId = machine.MerchId;
+                belongId = device.MerchId;
             }
             else
             {
@@ -657,7 +657,7 @@ namespace LocalS.Service.Api.Account
                     }
 
 
-                    MqFactory.Global.PushEventNotify(userId, AppId.STORETERM, machineId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
+                    MqFactory.Global.PushEventNotify(userId, AppId.STORETERM, deviceId, EventCode.Login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.FingerVein, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay });
 
                     #endregion
                 }
@@ -794,16 +794,16 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "静指脉数据为空");
             }
 
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (machine == null)
+            if (l_Device == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(l_Device.MerchId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
             using (TransactionScope ts = new TransactionScope())
@@ -824,7 +824,7 @@ namespace LocalS.Service.Api.Account
                 bool isMachSuccess = false;
                 try
                 {
-                    var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.BelongId == machine.MerchId && m.BelongType == Enumeration.BelongType.Merch).ToList();
+                    var sysUserFingerVeins = CurrentDb.SysUserFingerVein.Where(m => m.BelongId == l_Device.MerchId && m.BelongType == Enumeration.BelongType.Merch).ToList();
                     byte[] matchFeature = Convert.FromBase64String(rop.VeinData);
                     foreach (var item in sysUserFingerVeins)
                     {
@@ -853,7 +853,7 @@ namespace LocalS.Service.Api.Account
                 sysUserFingerVein.Id = IdWorker.Build(IdType.NewGuid);
                 sysUserFingerVein.UserId = userId;
                 sysUserFingerVein.BelongType = Enumeration.BelongType.Merch;
-                sysUserFingerVein.BelongId = machine.MerchId;
+                sysUserFingerVein.BelongId = l_Device.MerchId;
                 sysUserFingerVein.VeinData = Convert.FromBase64String(rop.VeinData);
                 sysUserFingerVein.CreateTime = DateTime.Now;
                 sysUserFingerVein.Creator = operater;

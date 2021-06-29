@@ -256,8 +256,8 @@ namespace LocalS.BLL.Biz
                 case E_OrderSource.Wxmp:
                     name = "微信小程序";
                     break;
-                case E_OrderSource.Machine:
-                    name = "终端机器";
+                case E_OrderSource.Device:
+                    name = "终端设备";
                     break;
             }
             return name;
@@ -441,7 +441,7 @@ namespace LocalS.BLL.Biz
                     {
                         foreach (var sku in block.Skus)
                         {
-                            buildOrderTool.AddSku(sku.Id, sku.Quantity, sku.CartId, sku.ShopMode, rop.ShopMethod, block.ReceiveMode, sku.ShopId, sku.MachineIds);
+                            buildOrderTool.AddSku(sku.Id, sku.Quantity, sku.CartId, sku.ShopMode, rop.ShopMethod, block.ReceiveMode, sku.ShopId, sku.DeviceIds);
                         }
                     }
 
@@ -643,11 +643,11 @@ namespace LocalS.BLL.Biz
                         d_Order.StoreName = store.Name;
                         d_Order.ShopId = buildOrder.ShopId;
 
-                        string machineCumCode = null;
-                        var merchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == store.MerchId && m.MachineId == buildOrder.MachineId).FirstOrDefault();
-                        if (merchMachine != null)
+                        string deviceCumCode = null;
+                        var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == store.MerchId && m.DeviceId == buildOrder.DeviceId).FirstOrDefault();
+                        if (d_MerchDevice != null)
                         {
-                            machineCumCode = merchMachine.CumCode;
+                            deviceCumCode = d_MerchDevice.CumCode;
                         }
 
                         var shop = CurrentDb.Shop.Where(m => m.Id == buildOrder.ShopId).FirstOrDefault();
@@ -657,8 +657,8 @@ namespace LocalS.BLL.Biz
                         }
                         d_Order.ShopMode = buildOrder.ShopMode;
                         d_Order.ShopId = buildOrder.ShopId;
-                        d_Order.MachineId = buildOrder.MachineId;
-                        d_Order.MachineCumCode = machineCumCode;
+                        d_Order.DeviceId = buildOrder.DeviceId;
+                        d_Order.DeviceCumCode = deviceCumCode;
                         d_Order.SaleOutletId = rop.SaleOutletId;
                         d_Order.PayExpireTime = DateTime.Now.AddSeconds(300);
                         d_Order.PickupCode = IdWorker.BuildPickupCode();
@@ -750,30 +750,30 @@ namespace LocalS.BLL.Biz
 
                                 #endregion
                                 break;
-                            case E_ReceiveMode.SelfTakeByMachine:
-                                #region MachineSelfTake
+                            case E_ReceiveMode.SelfTakeByDevice:
+                                #region DeviceSelfTake
 
                                 if (d_Order.PickupCode == null)
                                 {
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[08]，取货码生成失败", null);
                                 }
 
-                                var rm_MachineSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).FirstOrDefault();
+                                var rm_DeviceSelfTake = rop.Blocks.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByDevice).FirstOrDefault();
 
-                                if (rm_MachineSelfTake == null || rm_MachineSelfTake.SelfTake == null)
+                                if (rm_DeviceSelfTake == null || rm_DeviceSelfTake.SelfTake == null)
                                 {
                                     return new CustomJsonResult<RetOrderReserve>(ResultType.Failure, ResultCode.Failure, "预定失败[09]，自提地址为空", null);
                                 }
 
-                                d_Order.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-                                d_Order.ReceiveModeName = "机器自提";
-                                d_Order.Receiver = rm_MachineSelfTake.SelfTake.Contact.Consignee;
-                                d_Order.ReceiverPhoneNumber = rm_MachineSelfTake.SelfTake.Contact.PhoneNumber;
-                                d_Order.ReceptionId = rm_MachineSelfTake.SelfTake.Mark.Id;
-                                d_Order.ReceptionAreaCode = rm_MachineSelfTake.SelfTake.Mark.AreaCode;
-                                d_Order.ReceptionAreaName = rm_MachineSelfTake.SelfTake.Mark.AreaName;
-                                d_Order.ReceptionAddress = rm_MachineSelfTake.SelfTake.Mark.Address;
-                                d_Order.ReceptionMarkName = rm_MachineSelfTake.SelfTake.Mark.Name;
+                                d_Order.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
+                                d_Order.ReceiveModeName = "设备自提";
+                                d_Order.Receiver = rm_DeviceSelfTake.SelfTake.Contact.Consignee;
+                                d_Order.ReceiverPhoneNumber = rm_DeviceSelfTake.SelfTake.Contact.PhoneNumber;
+                                d_Order.ReceptionId = rm_DeviceSelfTake.SelfTake.Mark.Id;
+                                d_Order.ReceptionAreaCode = rm_DeviceSelfTake.SelfTake.Mark.AreaCode;
+                                d_Order.ReceptionAreaName = rm_DeviceSelfTake.SelfTake.Mark.AreaName;
+                                d_Order.ReceptionAddress = rm_DeviceSelfTake.SelfTake.Mark.Address;
+                                d_Order.ReceptionMarkName = rm_DeviceSelfTake.SelfTake.Mark.Name;
                                 #endregion
                                 break;
                             case E_ReceiveMode.FeeByRent:
@@ -828,8 +828,8 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.ShopMode = d_Order.ShopMode;
                             d_OrderSub.ShopId = d_Order.ShopId;
                             d_OrderSub.ShopName = d_Order.ShopName;
-                            d_OrderSub.MachineId = d_Order.MachineId;
-                            d_OrderSub.MachineCumCode = d_Order.MachineCumCode;
+                            d_OrderSub.DeviceId = d_Order.DeviceId;
+                            d_OrderSub.DeviceCumCode = d_Order.DeviceCumCode;
                             d_OrderSub.ReceiveModeName = d_Order.ReceiveModeName;
                             d_OrderSub.ReceiveMode = d_Order.ReceiveMode;
                             d_OrderSub.CabinetId = buildOrderSub.CabinetId;
@@ -876,7 +876,7 @@ namespace LocalS.BLL.Biz
                             //购物或租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
 
                                 if (ret_OperateStock.Result != ResultType.Success)
                                 {
@@ -911,7 +911,7 @@ namespace LocalS.BLL.Biz
             {
                 if (rop.AppId == AppId.STORETERM)
                 {
-                    trgerId = s_Orders[0].MachineId;
+                    trgerId = s_Orders[0].DeviceId;
                 }
                 else if (rop.AppId == AppId.WXMINPRAGROM)
                 {
@@ -1095,9 +1095,9 @@ namespace LocalS.BLL.Biz
                                 d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_Order.ReceptionMarkName, d_Order.PickupCode);
                                 d_Order.PickupFlowLastTime = DateTime.Now;
                                 break;
-                            case E_ReceiveMode.SelfTakeByMachine:
+                            case E_ReceiveMode.SelfTakeByDevice:
                                 d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到机器【{1}】,在取货界面输入取货码【{2}】", d_Order.ReceptionMarkName, d_Order.MachineId, d_Order.PickupCode);
+                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到设备【{1}】,在取货界面输入取货码【{2}】", d_Order.ReceptionMarkName, d_Order.DeviceId, d_Order.PickupCode);
                                 d_Order.PickupFlowLastTime = DateTime.Now;
                                 break;
                             case E_ReceiveMode.FeeByMember:
@@ -1267,7 +1267,7 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -1330,7 +1330,7 @@ namespace LocalS.BLL.Biz
                         d_orderPickupLog.MerchId = d_Order.MerchId;
                         d_orderPickupLog.StoreId = d_Order.StoreId;
                         d_orderPickupLog.ShopId = d_Order.ShopId;
-                        d_orderPickupLog.MachineId = d_Order.MachineId;
+                        d_orderPickupLog.DeviceId = d_Order.DeviceId;
                         d_orderPickupLog.UniqueId = d_Order.Id;
                         d_orderPickupLog.UniqueType = E_UniqueType.Order;
                         d_orderPickupLog.ActionRemark = d_Order.PickupFlowLastDesc;
@@ -1390,7 +1390,7 @@ namespace LocalS.BLL.Biz
                     string trgerId = "";
                     if (d_Orders[0].AppId == AppId.STORETERM)
                     {
-                        trgerId = d_Orders[0].MachineId;
+                        trgerId = d_Orders[0].DeviceId;
                     }
                     else if (d_Orders[0].AppId == AppId.WXMINPRAGROM)
                     {
@@ -1526,7 +1526,7 @@ namespace LocalS.BLL.Biz
                         //购物货租赁进行库存操作
                         if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                         {
-                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                             if (result_OperateStock.Result != ResultType.Success)
                             {
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -1575,7 +1575,7 @@ namespace LocalS.BLL.Biz
                     string trgerId = "";
                     if (d_Order.AppId == AppId.STORETERM)
                     {
-                        trgerId = d_Order.MachineId;
+                        trgerId = d_Order.DeviceId;
                     }
                     else if (d_Order.AppId == AppId.WXMINPRAGROM)
                     {
@@ -2030,15 +2030,15 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public List<OrderSkuByPickupModel> GetOrderSkuByPickup(string orderId, string machineId)
+        public List<OrderSkuByPickupModel> GetOrderSkuByPickup(string orderId, string deviceId)
         {
             var models = new List<OrderSkuByPickupModel>();
 
-            var order = CurrentDb.Order.Where(m => m.Id == orderId && m.MachineId == machineId).FirstOrDefault();
-            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.MachineId == machineId).ToList();
+            var order = CurrentDb.Order.Where(m => m.Id == orderId && m.DeviceId == deviceId).FirstOrDefault();
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == orderId && m.DeviceId == deviceId).ToList();
 
             LogUtil.Info("orderId:" + orderId);
-            LogUtil.Info("machineId:" + machineId);
+            LogUtil.Info("DeviceId:" + deviceId);
             LogUtil.Info("orderSubs.Count:" + orderSubs.Count);
 
 
@@ -2082,7 +2082,7 @@ namespace LocalS.BLL.Biz
 
             return models;
         }
-        public CustomJsonResult HandleExByMachineSelfTake(string operater, RopOrderHandleExByMachineSelfTake rop)
+        public CustomJsonResult HandleExByDeviceSelfTake(string operater, RopOrderHandleExByDeviceSelfTake rop)
         {
             var result = new CustomJsonResult();
 
@@ -2189,7 +2189,7 @@ namespace LocalS.BLL.Biz
 
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，扣减库存失败");
@@ -2207,11 +2207,11 @@ namespace LocalS.BLL.Biz
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = d_OrderSub.OrderId;
-                            orderPickupLog.ShopMode = E_ShopMode.Machine;
+                            orderPickupLog.ShopMode = E_ShopMode.Device;
                             orderPickupLog.MerchId = d_OrderSub.MerchId;
                             orderPickupLog.StoreId = d_OrderSub.StoreId;
                             orderPickupLog.ShopId = d_OrderSub.ShopId;
-                            orderPickupLog.MachineId = d_OrderSub.MachineId;
+                            orderPickupLog.DeviceId = d_OrderSub.DeviceId;
                             orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                             orderPickupLog.SkuId = d_OrderSub.SkuId;
@@ -2228,7 +2228,7 @@ namespace LocalS.BLL.Biz
                         {
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Machine, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
 
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
@@ -2246,10 +2246,10 @@ namespace LocalS.BLL.Biz
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
                             orderPickupLog.OrderId = d_OrderSub.OrderId;
-                            orderPickupLog.ShopMode = E_ShopMode.Machine;
+                            orderPickupLog.ShopMode = E_ShopMode.Device;
                             orderPickupLog.MerchId = d_OrderSub.MerchId;
                             orderPickupLog.StoreId = d_OrderSub.StoreId;
-                            orderPickupLog.MachineId = d_OrderSub.MachineId;
+                            orderPickupLog.DeviceId = d_OrderSub.DeviceId;
                             orderPickupLog.UniqueId = d_OrderSub.Id;
                             orderPickupLog.UniqueType = E_UniqueType.OrderSub;
                             orderPickupLog.SkuId = d_OrderSub.SkuId;
@@ -2280,19 +2280,19 @@ namespace LocalS.BLL.Biz
 
                 if (rop.IsRunning)
                 {
-                    if (string.IsNullOrEmpty(rop.MachineId))
+                    if (string.IsNullOrEmpty(rop.DeviceId))
                     {
-                        var machineIds = s_Orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine).Select(m => m.MachineId).ToArray();
+                        var deviceIds = s_Orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByDevice).Select(m => m.DeviceId).ToArray();
 
-                        foreach (var machineId in machineIds)
+                        foreach (var deviceId in deviceIds)
                         {
-                            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
-                            if (machine != null)
+                            var device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
+                            if (device != null)
                             {
-                                machine.RunStatus = E_MachineRunStatus.Running;
-                                machine.ExIsHas = false;
-                                machine.MendTime = DateTime.Now;
-                                machine.Mender = operater;
+                                device.RunStatus = E_DeviceRunStatus.Running;
+                                device.ExIsHas = false;
+                                device.MendTime = DateTime.Now;
+                                device.Mender = operater;
                                 CurrentDb.SaveChanges();
                             }
                         }
@@ -2300,13 +2300,13 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-                        if (machine != null)
+                        var device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
+                        if (device != null)
                         {
-                            machine.RunStatus = E_MachineRunStatus.Running;
-                            machine.ExIsHas = false;
-                            machine.MendTime = DateTime.Now;
-                            machine.Mender = operater;
+                            device.RunStatus = E_DeviceRunStatus.Running;
+                            device.ExIsHas = false;
+                            device.MendTime = DateTime.Now;
+                            device.Mender = operater;
                             CurrentDb.SaveChanges();
                         }
                     }
@@ -2324,7 +2324,7 @@ namespace LocalS.BLL.Biz
                 string trgerId = "";
                 if (rop.AppId == AppId.STORETERM)
                 {
-                    trgerId = rop.MachineId;
+                    trgerId = rop.DeviceId;
                 }
                 else if (rop.AppId == AppId.MERCH)
                 {

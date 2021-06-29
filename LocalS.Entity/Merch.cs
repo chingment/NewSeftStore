@@ -37,7 +37,7 @@ namespace LocalS.Entity
         public string XrtPayResultNotifyUrl { get; set; }
 
         /// <summary>
-        /// 终端机器，构建生成二维码的选项，1：，微信，2：支付宝，3：银联，4：京东钱包，5：掌上生活，9：聚合支付，当不是使用聚合支付 99：聚合一码 不显示
+        /// 终端设备，构建生成二维码的选项，1：，微信，2：支付宝，3：银联，4：京东钱包，5：掌上生活，9：聚合支付，当不是使用聚合支付 99：聚合一码 不显示
         /// </summary>
         public string TermAppPayOptions { get; set; }
         public string WxmpAppPayOptions { get; set; }
@@ -57,10 +57,10 @@ namespace LocalS.Entity
         //商户模式
         //线上商城，单店铺 FS
         //线上商城，多店铺 FM
-        //线下机器，单店铺 KS
-        //线下机器，多店铺 KM
-        //线上商城+线下机器，单店铺 FKS
-        //线上商城+线下机器，多店铺 FKM
+        //线下设备，单店铺 KS
+        //线下设备，多店铺 KM
+        //线上商城+线下设备，单店铺 FKS
+        //线上商城+线下设备，多店铺 FKM
         public string MctMode { get; set; }
 
         //单店铺模式下，指定的店铺ID

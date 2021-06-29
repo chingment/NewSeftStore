@@ -33,7 +33,6 @@ namespace LocalS.Service.Api.Merch
         public List<string> CharTags { get; set; }
         public List<Sku> Skus { get; set; }
         public List<SpecItem> SpecItems { get; set; }
-
         public string SupplierId { get; set; }
         public class Sku
         {
@@ -42,8 +41,6 @@ namespace LocalS.Service.Api.Merch
             public string BarCode { get; set; }
             public List<SpecDes> SpecDes { get; set; }
             public decimal SalePrice { get; set; }
-
-
         }
     }
 }

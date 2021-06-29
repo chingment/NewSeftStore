@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (order.PayStatus == E_PayStatus.PaySuccess)
             {
-                if (order.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
+                if (order.ReceiveMode == E_ReceiveMode.SelfTakeByDevice)
                 {
                     block.Tag.Desc = new FsField("取货码", "", order.PickupCode, "#f18d00");
                     block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "扫码枪扫一扫" };
@@ -42,7 +42,7 @@ namespace LocalS.Service.Api.StoreApp
                     block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(order.PickupCode), Url = "", Remark = "出示给店员扫一扫" };
                 }
 
-                if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || order.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
+                if (order.ReceiveMode == E_ReceiveMode.Delivery || order.ReceiveMode == E_ReceiveMode.SelfTakeByDevice || order.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
                 {
                     block.ReceiptInfo = new FsReceiptInfo { LastTime = order.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = order.PickupFlowLastDesc };
 
@@ -169,7 +169,7 @@ namespace LocalS.Service.Api.StoreApp
             decimal amount_couponByShop = 0;//购物优惠总额
             decimal amount_couponByRent = 0;//租金优惠总额
             decimal amount_couponByDeposit = 0;//押金优惠总额
-            StoreInfoModel store;
+            BLL.Biz.StoreModel store;
             DeliveryModel dliveryModel = new DeliveryModel();
             SelfTakeModel selfTakeModel = new SelfTakeModel();
 
@@ -392,7 +392,7 @@ namespace LocalS.Service.Api.StoreApp
 
                 foreach (var orderSub in orderSubs)
                 {
-                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.MachineId }, orderSub.SkuId);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(orderSub.ShopMode, store.MerchId, store.StoreId, orderSub.ShopId, new string[] { orderSub.DeviceId }, orderSub.SkuId);
 
                     var c_Sku = new BuildSku();
                     c_Sku.Id = orderSub.SkuId;
@@ -414,7 +414,7 @@ namespace LocalS.Service.Api.StoreApp
                     c_Sku.DepositAmount = orderSub.DepositAmount;
                     c_Sku.KindId3 = orderSub.KindId3;
                     c_Sku.ShopId = orderSub.ShopId;
-                    c_Sku.MachineIds = new string[] { orderSub.MachineId };
+                    c_Sku.DeviceIds = new string[] { orderSub.DeviceId };
                     if (orderSub.ShopMethod == E_ShopMethod.MemberFee)
                     {
                         c_Sku.IsOffSell = false;
@@ -429,7 +429,7 @@ namespace LocalS.Service.Api.StoreApp
                 var d_shippingAddress = CurrentDb.ClientDeliveryAddress.Where(m => m.ClientUserId == clientUserId && m.IsDefault == true).FirstOrDefault();
 
                 var delivery = orders.Where(m => m.ReceiveMode == E_ReceiveMode.Delivery).FirstOrDefault();
-                var selfTake = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
+                var selfTake = orders.Where(m => m.ReceiveMode == E_ReceiveMode.SelfTakeByDevice || m.ReceiveMode == E_ReceiveMode.SelfTakeByStore).FirstOrDefault();
 
                 if (delivery == null)
                 {
@@ -657,25 +657,25 @@ namespace LocalS.Service.Api.StoreApp
 
             }
 
-            var skus_SelfTakeByMachines = (from u in c_Skus where u.ShopMode == E_ShopMode.Machine select new { u.ShopMode, u.ShopId }).Distinct().ToList();
+            var skus_SelfTakeByDevices = (from u in c_Skus where u.ShopMode == E_ShopMode.Device select new { u.ShopMode, u.ShopId }).Distinct().ToList();
 
-            if (skus_SelfTakeByMachines.Count > 0)
+            if (skus_SelfTakeByDevices.Count > 0)
             {
-                foreach (var skus_SelfTakeByMachine in skus_SelfTakeByMachines)
+                foreach (var skus_SelfTakeByDevice in skus_SelfTakeByDevices)
                 {
-                    var shop = CurrentDb.Shop.Where(m => m.Id == skus_SelfTakeByMachine.ShopId).FirstOrDefault();
+                    var shop = CurrentDb.Shop.Where(m => m.Id == skus_SelfTakeByDevice.ShopId).FirstOrDefault();
 
-                    var l_skus = c_Skus.Where(m => m.ShopId == skus_SelfTakeByMachine.ShopId && m.ShopMode == E_ShopMode.Machine).ToList();
+                    var l_skus = c_Skus.Where(m => m.ShopId == skus_SelfTakeByDevice.ShopId && m.ShopMode == E_ShopMode.Device).ToList();
 
-                    var ob_SelfTakeByMachine = new RetOrderConfirm.BlockModel();
-                    ob_SelfTakeByMachine.TagName = "线下机器";
-                    ob_SelfTakeByMachine.Skus = l_skus;
-                    ob_SelfTakeByMachine.TabMode = E_TabMode.SelfTakeByMachine;
-                    ob_SelfTakeByMachine.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-                    ob_SelfTakeByMachine.SelfTake.Mark.Id = shop.Id;
-                    ob_SelfTakeByMachine.SelfTake.Mark.Name = shop.Name;
-                    ob_SelfTakeByMachine.SelfTake.Mark.Address = shop.Address;
-                    orderBlock.Add(ob_SelfTakeByMachine);
+                    var ob_SelfTakeByDevice = new RetOrderConfirm.BlockModel();
+                    ob_SelfTakeByDevice.TagName = "线下设备";
+                    ob_SelfTakeByDevice.Skus = l_skus;
+                    ob_SelfTakeByDevice.TabMode = E_TabMode.SelfTakeByDevice;
+                    ob_SelfTakeByDevice.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
+                    ob_SelfTakeByDevice.SelfTake.Mark.Id = shop.Id;
+                    ob_SelfTakeByDevice.SelfTake.Mark.Name = shop.Name;
+                    ob_SelfTakeByDevice.SelfTake.Mark.Address = shop.Address;
+                    orderBlock.Add(ob_SelfTakeByDevice);
                 }
             }
 
@@ -780,13 +780,13 @@ namespace LocalS.Service.Api.StoreApp
 
                 if (item.PayStatus == E_PayStatus.PaySuccess)
                 {
-                    if (item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine)
+                    if (item.ReceiveMode == E_ReceiveMode.SelfTakeByDevice)
                     {
                         block.Tag.Desc = new FsField("取货码", "", item.PickupCode, "#f18d00");
                         //block.Qrcode = new FsQrcode { Code = MyDESCryptoUtil.BuildQrcode2PickupCode(item.PickupCode), Url = "", Remark = string.Format("扫码枪扫一扫", item.ma) };
                     }
 
-                    if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.SelfTakeByMachine || item.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
+                    if (item.ReceiveMode == E_ReceiveMode.Delivery || item.ReceiveMode == E_ReceiveMode.SelfTakeByDevice || item.ReceiveMode == E_ReceiveMode.SelfTakeByStore)
                     {
                         block.ReceiptInfo = new FsReceiptInfo { LastTime = item.PickupFlowLastTime.ToUnifiedFormatDateTime(), Description = item.PickupFlowLastDesc };
 
@@ -950,7 +950,7 @@ namespace LocalS.Service.Api.StoreApp
 
         public CustomJsonResult Cancle(string operater, string clientUserId, RopOrderCancle rop)
         {
-            var result = BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id,"", E_OrderCancleType.PayCancle, "用户取消");
+            var result = BLL.Biz.BizFactory.Order.Cancle(operater, rop.Id, "", E_OrderCancleType.PayCancle, "用户取消");
 
             return result;
         }
@@ -1005,7 +1005,7 @@ namespace LocalS.Service.Api.StoreApp
                         ret.RecordTop.CircleText = "自";
                         ret.RecordTop.Description = order.ReceptionAddress;
                         break;
-                    case E_ReceiveMode.SelfTakeByMachine:
+                    case E_ReceiveMode.SelfTakeByDevice:
                         ret.Top.CircleText = "提";
                         ret.Top.Field1 = order.ReceptionMarkName;
                         ret.Top.Field2 = order.ReceptionAddress;

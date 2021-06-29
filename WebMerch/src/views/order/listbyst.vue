@@ -382,7 +382,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetailsByMachineSelfTake, handleExByMachineSelfTake } from '@/api/order'
+import { getList, getDetailsByDevcieSelfTake, handleExByDeviceSelfTake } from '@/api/order'
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -553,7 +553,7 @@ export default {
     },
     refreshDetails(id) {
       this.detailsLoading = true
-      getDetailsByMachineSelfTake({ id: id }).then(res => {
+      getDetailsByDeviceSelfTake({ id: id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }
@@ -563,7 +563,7 @@ export default {
     dialogDetailsOpen(row) {
       this.detailsLoading = true
       this.formByHandle.remark = ''
-      getDetailsByMachineSelfTake({ id: row.id }).then(res => {
+      getDetailsByDeviceSelfTake({ id: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }
@@ -604,7 +604,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.detailsLoading = true
-        handleExByMachineSelfTake({ id: details.id, uniques: uniques, remark: _formByHandle.remark, isRefund: _formByHandle.isRefund, refundAmount: _formByHandle.refundAmount, refundMethod: _formByHandle.refundMethod, isRunning: false }).then(res => {
+        handleExByDeviceSelfTake({ id: details.id, uniques: uniques, remark: _formByHandle.remark, isRefund: _formByHandle.isRefund, refundAmount: _formByHandle.refundAmount, refundMethod: _formByHandle.refundMethod, isRunning: false }).then(res => {
           if (res.result === 1) {
             this.$message({
               message: res.message,

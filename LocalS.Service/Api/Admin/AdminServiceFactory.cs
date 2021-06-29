@@ -56,11 +56,11 @@ namespace LocalS.Service.Api.Admin
             }
         }
 
-        public static MerchMachineService MerchMachine
+        public static MerchDeviceService MerchDevice
         {
             get
             {
-                return new MerchMachineService();
+                return new MerchDeviceService();
             }
         }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="memberright_manage">
     <page-header />
-    <div class="cur-machine cur-tab">
+    <div class="cur-device cur-tab">
       <div class="it-name">
         <span class="title">当前会员:</span><span class="name">{{ activeDropdown.name }}</span>
       </div>

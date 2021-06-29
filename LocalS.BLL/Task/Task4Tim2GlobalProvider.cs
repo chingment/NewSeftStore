@@ -20,7 +20,7 @@ namespace LocalS.BLL.Task
         Order2CheckPickupTimeout = 2,
         PayTrans2CheckStatus = 3,
         PayRefundCheckStatus = 4,
-        MachineRunInfo = 5,
+        DeviceRunInfo = 5,
         RentOrder2CheckExpire = 6
     }
 
@@ -258,9 +258,9 @@ namespace LocalS.BLL.Task
         {
             using (TransactionScope ts = new TransactionScope())
             {
-                var machine = CurrentDb.Machine.Where(m => m.Id == model.MachineId).FirstOrDefault();
+                var device = CurrentDb.Device.Where(m => m.Id == model.DeviceId).FirstOrDefault();
                 var order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.MachineId == model.MachineId).ToList();
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.DeviceId == model.DeviceId).ToList();
 
                 if (order != null)
                 {
@@ -289,12 +289,12 @@ namespace LocalS.BLL.Task
                     }
                 }
 
-                if (machine != null)
+                if (device != null)
                 {
-                    machine.ExIsHas = true;
-                    machine.ExReason = "后台检查，取货动作发生超时";
-                    machine.MendTime = DateTime.Now;
-                    machine.Mender = IdWorker.Build(IdType.EmptyGuid);
+                    device.ExIsHas = true;
+                    device.ExReason = "后台检查，取货动作发生超时";
+                    device.MendTime = DateTime.Now;
+                    device.Mender = IdWorker.Build(IdType.EmptyGuid);
                 }
 
                 CurrentDb.SaveChanges();
@@ -333,7 +333,7 @@ namespace LocalS.BLL.Task
                             var hisRecordCount = CurrentDb.SellChannelStockDateHis.Where(m => m.MerchId == merch.Id && m.StockDate == stockDate).Count();
                             if (hisRecordCount == 0)
                             {
-                                string sql = "INSERT INTO SellChannelStockDateHis(Id, MerchId, StoreId, ShopMode, ShopId,MachineId,CabinetId, SlotId, SpuId, SkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, IsOffSell, MaxQuantity,[Version],StockDate, Creator, CreateTime)select LOWER(REPLACE(LTRIM(NEWID()), '-', '')), MerchId, StoreId, ShopMode, ShopId,MachineId, CabinetId, SlotId, SpuId, SkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, IsOffSell, MaxQuantity,[Version],'" + stockDate + "', '00000000000000000000000000000000', getdate()  from SellChannelStock where merchId='" + merch.Id + "' ";
+                                string sql = "INSERT INTO SellChannelStockDateHis(Id, MerchId, StoreId, ShopMode, ShopId,DeviceId,CabinetId, SlotId, SpuId, SkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, IsOffSell, MaxQuantity,[Version],StockDate, Creator, CreateTime)select LOWER(REPLACE(LTRIM(NEWID()), '-', '')), MerchId, StoreId, ShopMode, ShopId,DeviceId, CabinetId, SlotId, SpuId, SkuId, SellQuantity, WaitPayLockQuantity, WaitPickupLockQuantity,SumQuantity, SalePrice, IsOffSell, MaxQuantity,[Version],'" + stockDate + "', '00000000000000000000000000000000', getdate()  from SellChannelStock where merchId='" + merch.Id + "' ";
                                 int rows = DatabaseFactory.GetIDBOptionBySql().ExecuteSql(sql);
                             }
                         }

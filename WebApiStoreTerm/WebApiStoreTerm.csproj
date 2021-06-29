@@ -141,9 +141,9 @@
     <Compile Include="App_Start\OwnApi\OwnStatisticsTrackerAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImServiceController.cs" />
-    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OwnController.cs" />
     <Compile Include="Controllers\ProductController.cs" />

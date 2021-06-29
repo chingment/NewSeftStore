@@ -20,34 +20,34 @@ namespace LocalS.Service.Api.StoreTerm
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var d_machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
+            var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
 
-            if (d_machine == null)
+            if (d_Device == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseMerchId))
+            if (string.IsNullOrEmpty(d_Device.CurUseMerchId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
+            if (string.IsNullOrEmpty(d_Device.CurUseStoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseShopId))
+            if (string.IsNullOrEmpty(d_Device.CurUseShopId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
             }
 
-            if (d_machine.RunStatus != E_MachineRunStatus.Running)
+            if (d_Device.RunStatus != E_DeviceRunStatus.Running)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器在维护状态");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备在维护状态");
             }
 
-            var shop = CurrentDb.Shop.Where(m => m.Id == d_machine.CurUseShopId).FirstOrDefault();
+            var shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
 
             if (shop == null)
             {
@@ -56,15 +56,15 @@ namespace LocalS.Service.Api.StoreTerm
 
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.STORETERM;
-            bizRop.Source = E_OrderSource.Machine;
-            bizRop.StoreId = d_machine.CurUseStoreId;
+            bizRop.Source = E_OrderSource.Device;
+            bizRop.StoreId = d_Device.CurUseStoreId;
             bizRop.ShopMethod = E_ShopMethod.Buy;
-            bizRop.IsTestMode = d_machine.IsTestMode;
+            bizRop.IsTestMode = d_Device.IsTestMode;
 
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
-            block.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-            block.SelfTake.Mark.Id = d_machine.CurUseShopId;
+            block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
+            block.SelfTake.Mark.Id = d_Device.CurUseShopId;
             block.SelfTake.Mark.Name = shop.Name;
             block.SelfTake.Mark.Address = shop.Address;
             block.SelfTake.Mark.AreaCode = shop.AreaCode;
@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var sku in rop.Skus)
             {
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.SkuModel() { Id = sku.SkuId, Quantity = sku.Quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.MachineId }, SvcConsulterId = sku.SvcConsulterId });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.SkuModel() { Id = sku.SkuId, Quantity = sku.Quantity, ShopMode = E_ShopMode.Device, ShopId = d_Device.CurUseShopId, DeviceIds = new string[] { rop.DeviceId }, SvcConsulterId = sku.SvcConsulterId });
             }
 
             bizRop.Blocks.Add(block);
@@ -95,12 +95,12 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
-        public CustomJsonResult<RetOrderPayStatusQuery> PayStatusQuery(RupOrderPayStatusQuery rup)
+        public CustomJsonResult<RetOrderPayStatusQuery> PayStatusQuery(RopOrderPayStatusQuery rup)
         {
             CustomJsonResult<RetOrderPayStatusQuery> ret = new CustomJsonResult<RetOrderPayStatusQuery>();
 
 
-            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayTransResultQuery(rup.MachineId, rup.PayTransId);
+            var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayTransResultQuery(rup.DeviceId, rup.PayTransId);
 
             ret.Result = ret_Biz.Result;
             ret.Code = ret_Biz.Code;
@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.StoreTerm
                 if (ret_Biz.Data.PayStatus == E_PayStatus.PaySuccess)
                 {
                     ret.Data.OrderId = ret_Biz.Data.OrderIds[0];
-                    ret.Data.Skus = BizFactory.Order.GetOrderSkuByPickup(ret_Biz.Data.OrderIds[0], rup.MachineId);
+                    ret.Data.Skus = BizFactory.Order.GetOrderSkuByPickup(ret_Biz.Data.OrderIds[0], rup.DeviceId);
                 }
             }
 
@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult SearchByPickupCode(RupOrderSearchByPickupCode rup)
+        public CustomJsonResult SearchByPickupCode(RopOrderSearchByPickupCode rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -155,7 +155,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             LogUtil.Info("PickupCode2=>>" + pickupCode);
 
-            var order = CurrentDb.Order.Where(m => m.MachineId == rup.MachineId && m.PickupCode == pickupCode).FirstOrDefault();
+            var order = CurrentDb.Order.Where(m => m.DeviceId == rup.DeviceId && m.PickupCode == pickupCode).FirstOrDefault();
 
             if (order == null)
             {
@@ -177,13 +177,13 @@ namespace LocalS.Service.Api.StoreTerm
             ret.OrderId = order.Id;
 
 
-            ret.Skus = BizFactory.Order.GetOrderSkuByPickup(order.Id, rup.MachineId);
+            ret.Skus = BizFactory.Order.GetOrderSkuByPickup(order.Id, rup.DeviceId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
         }
 
-        public CustomJsonResult PickupStatusQuery(RupOrderPickupStatusQuery rup)
+        public CustomJsonResult PickupStatusQuery(RopOrderPickupStatusQuery rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 

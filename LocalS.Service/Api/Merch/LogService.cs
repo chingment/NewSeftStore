@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SellChannelStockLog
                          where
                          u.MerchId == merchId
-                         select new { u.Id, u.SkuId, u.MerchId, u.StoreName, u.ShopMode, u.ShopName, u.SkuName, u.StoreId, u.ShopId, u.MachineId, u.CabinetId, u.SlotId, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.SkuId, u.MerchId, u.StoreName, u.ShopMode, u.ShopName, u.SkuName, u.StoreId, u.ShopId, u.DeviceId, u.CabinetId, u.SlotId, u.EventCode, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
             if (!string.IsNullOrEmpty(rup.SkuName))
             {
@@ -132,9 +132,9 @@ namespace LocalS.Service.Api.Merch
                 {
                     sellChannelName = string.Format("{0}/{1}", item.StoreName, item.ShopName);
                 }
-                else if (item.ShopMode == Entity.E_ShopMode.Machine)
+                else if (item.ShopMode == Entity.E_ShopMode.Device)
                 {
-                    sellChannelName = string.Format("{0}/{1}/{2}", item.StoreName, item.ShopName, item.MachineId);
+                    sellChannelName = string.Format("{0}/{1}/{2}", item.StoreName, item.ShopName, item.DeviceId);
                 }
 
                 olist.Add(new
@@ -172,7 +172,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          u.MerchId == merchId && u.SkuId == rup.SkuId &&
                          u.StoreId == rup.StoreId
-                         select new { u.Id, u.SkuName, u.ShopId, u.StoreName, u.CabinetId, u.SlotId, u.EventCode, u.ShopMode, u.ShopName, u.MachineId, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
+                         select new { u.Id, u.SkuName, u.ShopId, u.StoreName, u.CabinetId, u.SlotId, u.EventCode, u.ShopMode, u.ShopName, u.DeviceId, u.EventName, u.ChangeQuantity, u.Remark, u.SellQuantity, u.WaitPayLockQuantity, u.WaitPickupLockQuantity, u.SumQuantity, u.CreateTime });
 
 
             if (!string.IsNullOrEmpty(rup.ShopId))
@@ -180,9 +180,9 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.ShopId == rup.ShopId);
             }
 
-            if (!string.IsNullOrEmpty(rup.MachineId))
+            if (!string.IsNullOrEmpty(rup.DeviceId))
             {
-                query = query.Where(m => m.MachineId == rup.MachineId);
+                query = query.Where(m => m.DeviceId == rup.DeviceId);
             }
 
             if (!string.IsNullOrEmpty(rup.CabinetId))
@@ -216,9 +216,9 @@ namespace LocalS.Service.Api.Merch
                 {
                     sellChannelName = string.Format("{0}/{1}", item.StoreName, item.ShopName);
                 }
-                else if (item.ShopMode == Entity.E_ShopMode.Machine)
+                else if (item.ShopMode == Entity.E_ShopMode.Device)
                 {
-                    sellChannelName = string.Format("{0}/{1}/{2}", item.StoreName, item.ShopName, item.MachineId);
+                    sellChannelName = string.Format("{0}/{1}/{2}", item.StoreName, item.ShopName, item.DeviceId);
                 }
 
                 olist.Add(new

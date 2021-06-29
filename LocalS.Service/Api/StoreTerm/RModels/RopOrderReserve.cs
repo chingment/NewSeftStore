@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.StoreTerm
             this.Skus = new List<SkuModel>();
         }
 
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public List<SkuModel> Skus { get; set; }
 
         public class SkuModel

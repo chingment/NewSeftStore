@@ -12,7 +12,7 @@ namespace LocalS.BLL.Biz
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string ShopId { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string SkuId { get; set; }

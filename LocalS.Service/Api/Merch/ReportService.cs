@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportMachineStockRealDataInit();
+            var ret = new RetReportDeviceStockRealDataInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
@@ -32,18 +32,7 @@ namespace LocalS.Service.Api.Merch
                 optionsStores.Value = store.Id;
                 optionsStores.Label = store.Name;
 
-                //var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
-                //if (storeMachines.Count > 0)
-                //{
-                //    optionsSellChannel.Children = new List<OptionNode>();
 
-                //    foreach (var storeMachine in storeMachines)
-                //    {
-                //        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
-                //    }
-
-                //    ret.OptionsSellChannels.Add(optionsSellChannel);
-                //}
 
                 ret.OptionsStores.Add(optionsStores);
             }
@@ -51,7 +40,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreStockRealDataGet(string operater, string merchId, RopReportMachineStockRealDataGet rop)
+        public CustomJsonResult StoreStockRealDataGet(string operater, string merchId, RopReportStoreStockRealDataGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -70,7 +59,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId)
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.MachineId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
@@ -90,10 +79,10 @@ namespace LocalS.Service.Api.Merch
                 {
                     sellChannelRefName = "线上商城";
                 }
-                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Machine)
+                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Device)
                 {
-                    sellChannelRefName = "线下机器";
-                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);
+                    sellChannelRefName = "线下设备";
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.DeviceId, sellChannelStock.SlotId);
                 }
 
                 olist.Add(new
@@ -129,7 +118,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetReportMachineStockRealDataInit();
+            var ret = new RetReportDeviceStockRealDataInit();
 
             var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
@@ -141,18 +130,6 @@ namespace LocalS.Service.Api.Merch
                 optionsStore.Value = store.Id;
                 optionsStore.Label = store.Name;
 
-                //var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
-                //if (storeMachines.Count > 0)
-                //{
-                //    optionsSellChannel.Children = new List<OptionNode>();
-
-                //    foreach (var storeMachine in storeMachines)
-                //    {
-                //        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
-                //    }
-
-                //    ret.OptionsSellChannels.Add(optionsSellChannel);
-                //}
 
                 ret.OptionsStores.Add(optionsStore);
             }
@@ -160,7 +137,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreStockDateHisGet(string operater, string merchId, RopReportMachineStockDateHisGet rop)
+        public CustomJsonResult StoreStockDateHisGet(string operater, string merchId, RopReporStoreStockDateHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -185,7 +162,7 @@ namespace LocalS.Service.Api.Merch
                          m.MerchId == merchId
                          && rop.StoreIds.Contains(m.StoreId) &&
                          m.StockDate == rop.StockDate
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.MachineId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.DeviceId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             if (rop.ShopMode != Entity.E_ShopMode.Unknow)
             {
@@ -206,10 +183,10 @@ namespace LocalS.Service.Api.Merch
                 {
                     sellChannelRefName = "线上商城";
                 }
-                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Machine)
+                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Device)
                 {
-                    sellChannelRefName = "线下机器";
-                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.MachineId, sellChannelStock.SlotId);
+                    sellChannelRefName = "线下设备";
+                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.DeviceId, sellChannelStock.SlotId);
                 }
 
                 olist.Add(new
@@ -257,18 +234,6 @@ namespace LocalS.Service.Api.Merch
                 optionsStore.Value = store.Id;
                 optionsStore.Label = store.Name;
 
-                //var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
-                //if (storeMachines.Count > 0)
-                //{
-                //    optionsSellChannel.Children = new List<OptionNode>();
-
-                //    foreach (var storeMachine in storeMachines)
-                //    {
-                //        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
-                //    }
-
-                //    ret.OptionsSellChannels.Add(optionsSellChannel);
-                //}
 
                 ret.OptionsStores.Add(optionsStore);
             }
@@ -312,7 +277,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.MachineId, u.MachineCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.DeviceId, u.DeviceCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -341,7 +306,6 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
-            //var machine = BizFactory.Machine.GetOne(rup.MachineId);
 
             List<object> olist = new List<object>();
 
@@ -369,9 +333,9 @@ namespace LocalS.Service.Api.Merch
 
                 var receiveRemark = "";
 
-                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByMachine)
+                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByDevice)
                 {
-                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode));
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode));
                 }
 
 
@@ -418,18 +382,6 @@ namespace LocalS.Service.Api.Merch
                 optionsStore.Value = store.Id;
                 optionsStore.Label = store.Name;
 
-                //var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
-                //if (storeMachines.Count > 0)
-                //{
-                //    optionsSellChannel.Children = new List<OptionNode>();
-
-                //    foreach (var storeMachine in storeMachines)
-                //    {
-                //        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
-                //    }
-
-                //    ret.OptionsStores.Add(optionsSellChannel);
-                //}
 
                 ret.OptionsStores.Add(optionsStore);
             }
@@ -466,7 +418,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess &&
                          u.IsTestMode == false
-                         select new { u.Id, u.StoreName, u.ShopName, u.StoreId, u.MachineId, u.MachineCumCode, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
+                         select new { u.Id, u.StoreName, u.ShopName, u.StoreId, u.DeviceId, u.DeviceCumCode, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
@@ -488,9 +440,9 @@ namespace LocalS.Service.Api.Merch
             {
                 var receiveRemark = "";
 
-                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByMachine)
+                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByDevice)
                 {
-                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode));
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode));
                 }
 
                 olist.Add(new
@@ -528,14 +480,14 @@ namespace LocalS.Service.Api.Merch
                 optionsSellChannel.Value = store.Id;
                 optionsSellChannel.Label = store.Name;
 
-                var storeMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
-                if (storeMachines.Count > 0)
+                var storeDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                if (storeDevices.Count > 0)
                 {
                     optionsSellChannel.Children = new List<OptionNode>();
 
-                    foreach (var storeMachine in storeMachines)
+                    foreach (var storeDevice in storeDevices)
                     {
-                        optionsSellChannel.Children.Add(new OptionNode { Value = storeMachine.MachineId, Label = storeMachine.Name });
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeDevice.DeviceId, Label = storeDevice.Name });
                     }
 
                     ret.OptionsStores.Add(optionsSellChannel);

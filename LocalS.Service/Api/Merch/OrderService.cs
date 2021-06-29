@@ -114,7 +114,7 @@ namespace LocalS.Service.Api.Merch
                          &&
                          (rup.OrderId == null || o.Id.Contains(rup.OrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.IsTestMode, o.MachineCumCode, o.MachineId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+                         select new { o.Id, o.StoreId, o.IsTestMode, o.DeviceCumCode, o.DeviceId, o.StoreName, o.PickupIsTrg, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
             if (rup.OrderStatus != Entity.E_OrderStatus.Unknow)
             {
@@ -152,7 +152,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.SellChannelRefId))
             {
-                query = query.Where(m => m.MachineId == rup.SellChannelRefId);
+                query = query.Where(m => m.DeviceId == rup.SellChannelRefId);
             }
 
             int total = query.Count();
@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.Merch
                     ClientUserName = item.ClientUserName,
                     ClientUserId = item.ClientUserId,
                     StoreName = item.StoreName,
-                    MachineCode = MerchServiceFactory.Machine.GetCode(item.MachineId, item.MachineCumCode),
+                    DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
                     SubmittedTime = item.SubmittedTime.ToUnifiedFormatDateTime(),
                     ChargeAmount = item.ChargeAmount.ToF2Price(),
                     DiscountAmount = item.DiscountAmount.ToF2Price(),
@@ -249,11 +249,11 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetDetailsByMachineSelfTake(string operater, string merchId, string orderId)
+        public CustomJsonResult GetDetailsByDeviceSelfTake(string operater, string merchId, string orderId)
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetOrderDetailsByMachineSelfTake();
+            var ret = new RetOrderDetailsByDeviceSelfTake();
 
             var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
             if (order == null)
@@ -307,18 +307,18 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            var receiveMode = new RetOrderDetailsByMachineSelfTake.ReceiveMode();
+            var receiveMode = new RetOrderDetailsByDeviceSelfTake.ReceiveMode();
             receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Machine.GetCode(order.MachineId, order.MachineCumCode));
+            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode));
             receiveMode.Type = 1;
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-            var pickupSkus = new List<RetOrderDetailsByMachineSelfTake.PickupSku>();
+            var pickupSkus = new List<RetOrderDetailsByDeviceSelfTake.PickupSku>();
             foreach (var orderSub in orderSubs)
             {
                 var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.CreateTime).ToList();
 
-                List<RetOrderDetailsByMachineSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByMachineSelfTake.PickupLog>();
+                List<RetOrderDetailsByDeviceSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByDeviceSelfTake.PickupLog>();
 
                 foreach (var orderPickupLog in orderPickupLogs)
                 {
@@ -338,10 +338,10 @@ namespace LocalS.Service.Api.Merch
                     {
                         imgUrls.Add(imgUrl3);
                     }
-                    pickupLogs.Add(new RetOrderDetailsByMachineSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                    pickupLogs.Add(new RetOrderDetailsByDeviceSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                 }
 
-                receiveMode.Items.Add(new RetOrderDetailsByMachineSelfTake.PickupSku
+                receiveMode.Items.Add(new RetOrderDetailsByDeviceSelfTake.PickupSku
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
@@ -361,16 +361,16 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult HandleExByMachineSelfTake(string operater, string merchId, RopOrderHandleExByMachineSelfTake rop)
+        public CustomJsonResult HandleExByDeviceSelfTake(string operater, string merchId, RopOrderHandleExByDeviceSelfTake rop)
         {
-            var bizRop = new BLL.Biz.RopOrderHandleExByMachineSelfTake();
+            var bizRop = new BLL.Biz.RopOrderHandleExByDeviceSelfTake();
             bizRop.AppId = rop.AppId;
             bizRop.MerchId = merchId;
-            bizRop.MachineId = rop.MachineId;
+            bizRop.DeviceId = rop.DeviceId;
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
             bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
-            var result = BizFactory.Order.HandleExByMachineSelfTake(operater, bizRop);
+            var result = BizFactory.Order.HandleExByDeviceSelfTake(operater, bizRop);
             return result;
         }
     }

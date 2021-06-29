@@ -16,7 +16,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Mall = 1,//商城库存
         Shop = 2,//门店库存
-        Machine = 3,//机器库存
+        Device = 3,//设备库存
     }
 
     public enum E_ReceiveMode
@@ -24,7 +24,7 @@ namespace LocalS.Entity
         Unknow = 0,
         Delivery = 1,
         SelfTakeByStore = 2,
-        SelfTakeByMachine = 4,
+        SelfTakeByDevice = 4,
         FeeByMember = 5,
         ConsumeByStore = 6,
         FeeByDeposit = 7,
@@ -40,7 +40,7 @@ namespace LocalS.Entity
         public string StoreId { get; set; }
         public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string SpuId { get; set; }

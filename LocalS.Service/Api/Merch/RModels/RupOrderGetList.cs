@@ -13,7 +13,7 @@ namespace LocalS.Service.Api.Merch
         public string StoreId { get; set; }
         public string OrderId { get; set; }
         public E_OrderStatus OrderStatus { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public string ClientUserId { get; set; }
         public bool IsHasEx { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }

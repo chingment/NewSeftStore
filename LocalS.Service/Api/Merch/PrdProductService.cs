@@ -285,11 +285,11 @@ namespace LocalS.Service.Api.Merch
             if (d_Spu != null)
             {
                 ret.Id = d_Spu.Id;
-                ret.Name = d_Spu.Name;
-                ret.SpuCode = d_Spu.SpuCode;
+                ret.Name = d_Spu.Name.NullToEmpty();
+                ret.SpuCode = d_Spu.SpuCode.NullToEmpty();
                 ret.SpecItems = d_Spu.SpecItems.ToJsonObject<List<SpecItem>>();
                 ret.DetailsDes = d_Spu.DetailsDes.ToJsonObject<List<ImgSet>>();
-                ret.BriefDes = d_Spu.BriefDes;
+                ret.BriefDes = d_Spu.BriefDes.NullToEmpty();
                 ret.KindIds = string.IsNullOrEmpty(d_Spu.KindIds) ? new List<string>() : d_Spu.KindIds.Split(',').ToList();
                 ret.CharTags = d_Spu.CharTags.ToJsonObject<List<string>>();
                 ret.DisplayImgUrls = d_Spu.DisplayImgUrls.ToJsonObject<List<ImgSet>>();

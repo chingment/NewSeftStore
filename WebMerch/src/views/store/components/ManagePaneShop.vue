@@ -21,7 +21,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByMachine(item)">({{ item.machineCount }}台)机器</el-button></li>
+                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByDevice(item)">({{ item.deviceCount }}台)机器</el-button></li>
                 <!-- <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li> -->
               </ul>
             </div>
@@ -41,9 +41,9 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByMachineIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByMachineIsVisible" @close="getListData(listQuery)">
+    <el-dialog v-if="dialogByDeviceIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="getListData(listQuery)">
       <div style="width:100%;height:600px">
-        <manage-pane-machine op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
+        <manage-pane-device op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
       </div>
     </el-dialog>
 
@@ -62,10 +62,10 @@ import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 import { all } from 'q'
 import managePaneShop from '@/views/shop/select'
-import managePaneMachine from '@/views/machine/list'
+import managePaneDevice from '@/views/device/list'
 export default {
-  name: 'ManagePaneMachine',
-  components: { managePaneShop, managePaneMachine },
+  name: 'ManagePaneDevice',
+  components: { managePaneShop, managePaneDevice },
   props: {
     storeId: {
       type: String,
@@ -81,10 +81,10 @@ export default {
         name: undefined
       },
       listData: [],
-      listDataByMachine: [],
+      listDataByDevice: [],
       shopId: '',
       dialogByShopIsVisible: false,
-      dialogByMachineIsVisible: false
+      dialogByDeviceIsVisible: false
     }
   },
   watch: {
@@ -126,9 +126,9 @@ export default {
     dialogOpenByShop() {
       this.dialogByShopIsVisible = true
     },
-    dialogOpenByMachine(item) {
+    dialogOpenByDevice(item) {
       this.shopId = item.id
-      this.dialogByMachineIsVisible = true
+      this.dialogByDeviceIsVisible = true
     },
     handleAddShop(item) {
       MessageBox.confirm('确定要选择该门店？', '提示', {

@@ -29,17 +29,17 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetDetailsByMachineSelfTake(string id)
+        public OwnApiHttpResponse GetDetailsByDeviceSelfTake(string id)
         {
-            var result = MerchServiceFactory.Order.GetDetailsByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
+            var result = MerchServiceFactory.Order.GetDetailsByDeviceSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse HandleExByMachineSelfTake(RopOrderHandleExByMachineSelfTake rop)
+        public OwnApiHttpResponse HandleExByDeviceSelfTake(RopOrderHandleExByDeviceSelfTake rop)
         {
             rop.AppId = AppId.MERCH;
-            var result = MerchServiceFactory.Order.HandleExByMachineSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Order.HandleExByDeviceSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

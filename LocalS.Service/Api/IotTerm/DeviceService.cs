@@ -14,13 +14,13 @@ namespace LocalS.Service.Api.IotTerm
         {
             var result = new CustomJsonResult2();
 
-            var query = (from u in CurrentDb.MerchMachine
-                         join m in CurrentDb.Machine on u.MachineId equals m.Id into temp
+            var query = (from u in CurrentDb.MerchDevice
+                         join m in CurrentDb.Device on u.DeviceId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
-                         where ((rop.device_id == null || u.MachineId.Contains(rop.device_id)))
+                         where ((rop.device_id == null || u.DeviceId.Contains(rop.device_id)))
                          &&
                          u.MerchId == merchId
-                         select new { u.MachineId, u.Name, u.CumCode, tt.Lat, tt.Lng, tt.RunStatus });
+                         select new { u.DeviceId, u.Name, u.CumCode, tt.Lat, tt.Lng, tt.RunStatus });
 
 
             int total = query.Count();
@@ -29,7 +29,7 @@ namespace LocalS.Service.Api.IotTerm
 
             int pageSize = rop.limit;
 
-            query = query.OrderByDescending(r => r.MachineId).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.DeviceId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -37,11 +37,11 @@ namespace LocalS.Service.Api.IotTerm
 
             foreach (var r in list)
             {
-                var d_cabinets = CurrentDb.MachineCabinet.Where(m => m.CabinetId == r.MachineId && m.IsUse == true).Select(m => m.CabinetId).ToList();
+                var d_cabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == r.DeviceId && m.IsUse == true).Select(m => m.CabinetId).ToList();
 
                 items.Add(new
                 {
-                    device_id = r.MachineId,
+                    device_id = r.DeviceId,
                     name = r.Name,
                     cum_code = r.CumCode,
                     lat = r.Lat,
@@ -64,22 +64,22 @@ namespace LocalS.Service.Api.IotTerm
         {
             var result = new CustomJsonResult2();
 
-            var d_machine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == rop.device_id).FirstOrDefault();
+            var d_Device = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId == rop.device_id).FirstOrDefault();
 
-            if (d_machine == null)
+            if (d_Device == null)
                 return new CustomJsonResult2(ResultCode.Failure, "设备不存在");
 
 
-            if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
+            if (string.IsNullOrEmpty(d_Device.CurUseStoreId))
                 return new CustomJsonResult2(ResultCode.Failure, "该设备未绑定店铺");
 
-            if (string.IsNullOrEmpty(d_machine.CurUseShopId))
+            if (string.IsNullOrEmpty(d_Device.CurUseShopId))
                 return new CustomJsonResult2(ResultCode.Failure, "该设备未绑定门店");
 
 
             var query = (from m in CurrentDb.SellChannelStock
                          where
-                         m.MerchId == merchId && m.StoreId == d_machine.CurUseStoreId && m.ShopId == d_machine.CurUseShopId && m.MachineId == rop.device_id
+                         m.MerchId == merchId && m.StoreId == d_Device.CurUseStoreId && m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.device_id
                          select new { m.CabinetId, m.SlotId, m.SkuId, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.SellQuantity, m.IsOffSell });
 
             if (!string.IsNullOrEmpty(rop.cabinet_id))

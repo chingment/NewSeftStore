@@ -16,33 +16,33 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class StockSettingService : BaseService
     {
-        public CustomJsonResult GetCabinetSlots(string operater, RupStockSettingGetCabinetSlots rup)
+        public CustomJsonResult GetCabinetSlots(string operater, RopStockSettingGetCabinetSlots rop)
         {
             var ret = new RetStockSettingGetSlots();
 
-            var machine = BizFactory.Machine.GetOne(rup.MachineId);
+            var device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (machine == null)
+            if (device == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(device.MerchId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(device.StoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺");
             }
 
-            if (string.IsNullOrEmpty(machine.ShopId))
+            if (string.IsNullOrEmpty(device.ShopId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定门店");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
             }
 
-            var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rup.MachineId && m.CabinetId == rup.CabinetId && m.IsUse == true).FirstOrDefault();
+            var cabinet = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId && m.IsUse == true).FirstOrDefault();
 
             if (cabinet == null)
             {
@@ -51,13 +51,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(cabinet.RowColLayout))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未识别到行列布局，请点击扫描按钮");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未识别到行列布局，请点击扫描按钮");
             }
 
             ret.RowColLayout = cabinet.RowColLayout;
-            var machineStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == machine.MerchId && m.StoreId == machine.StoreId && m.ShopId == machine.ShopId && m.CabinetId == rup.CabinetId && m.MachineId == rup.MachineId).ToList();
 
-            foreach (var item in machineStocks)
+            var d_DeviceStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == device.MerchId && m.StoreId == device.StoreId && m.ShopId == device.ShopId && m.CabinetId == rop.CabinetId && m.DeviceId == rop.DeviceId).ToList();
+
+            foreach (var item in d_DeviceStocks)
             {
                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.SkuId);
 
@@ -85,7 +86,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rup.MachineId, EventCode.MachineCabinetGetSlots, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，查看库存", machine.StoreName, machine.ShopName, machine.MachineId, rup.CabinetId), rup);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetGetSlots, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", device.StoreName, device.ShopName, device.DeviceId, rop.CabinetId), rop);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -95,40 +96,40 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult<RetOperateSlot>();
 
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (machine == null)
+            if (l_Device == null)
             {
-                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未登记", null);
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未登记", null);
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(l_Device.MerchId))
             {
-                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定商户", null);
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定商户", null);
             }
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(l_Device.StoreId))
             {
-                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定店铺", null);
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺", null);
             }
 
-            if (string.IsNullOrEmpty(machine.ShopId))
+            if (string.IsNullOrEmpty(l_Device.ShopId))
             {
-                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "机器未绑定门店", null);
+                return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定门店", null);
             }
 
             if (string.IsNullOrEmpty(rop.SkuId))
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotRemove, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotRemove, l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId);
             }
             else
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.MachineCabinetSlotSave, machine.MerchId, machine.StoreId, machine.ShopId, rop.MachineId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotSave, l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
             }
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，机器：{2}，机柜：{3}，货道：{4}，{5}", machine.StoreName, machine.ShopName, machine.MachineId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，{5}", l_Device.StoreName, l_Device.ShopName, l_Device.DeviceId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
             }
 
             return result;
@@ -140,7 +141,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
-            var machine = BizFactory.Machine.GetOne(rop.MachineId);
+            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
             switch (rop.CabinetId)
             {
@@ -174,17 +175,17 @@ namespace LocalS.Service.Api.StoreTerm
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，解释新布局格式错误");
                 }
 
-                var machine = CurrentDb.Machine.Where(m => m.Id == rop.MachineId).FirstOrDefault();
-                var cabinet = CurrentDb.MachineCabinet.Where(m => m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).FirstOrDefault();
-                if (cabinet == null)
+                var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
+                var d_DeviceCabinet = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId).FirstOrDefault();
+                if (d_Device == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，机器未配置机柜");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，设备未配置机柜");
                 }
 
                 CabinetRowColLayoutByDSModel oldRowColLayout = null;
-                if (!string.IsNullOrEmpty(cabinet.RowColLayout))
+                if (!string.IsNullOrEmpty(d_DeviceCabinet.RowColLayout))
                 {
-                    oldRowColLayout = cabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
+                    oldRowColLayout = d_DeviceCabinet.RowColLayout.ToJsonObject<CabinetRowColLayoutByDSModel>();
                     if (oldRowColLayout == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，解释旧布局格式错误");
@@ -209,7 +210,7 @@ namespace LocalS.Service.Api.StoreTerm
                         }
                     }
 
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == machine.CurUseMerchId && m.StoreId == machine.CurUseStoreId & m.ShopId == machine.CurUseShopId && m.MachineId == rop.MachineId && m.CabinetId == rop.CabinetId).ToList();
+                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == d_Device.CurUseMerchId && m.StoreId == d_Device.CurUseStoreId & m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId).ToList();
 
                     for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                     {
@@ -237,7 +238,7 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.MachineCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.MachineId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
+                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.DeviceCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.DeviceId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
 
                         if (resultOperateSlot.Result != ResultType.Success)
                         {
@@ -248,18 +249,18 @@ namespace LocalS.Service.Api.StoreTerm
                     }
                 }
 
-                cabinet.RowColLayout = newRowColLayout.ToJsonString();
-                cabinet.MendTime = DateTime.Now;
-                cabinet.Mender = operater;
+                d_DeviceCabinet.RowColLayout = newRowColLayout.ToJsonString();
+                d_DeviceCabinet.MendTime = DateTime.Now;
+                d_DeviceCabinet.Mender = operater;
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功", new { RowColLayout = cabinet.RowColLayout });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功", new { RowColLayout = d_DeviceCabinet.RowColLayout });
 
                 if (result.Result == ResultType.Success)
                 {
-                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.MachineId, EventCode.MachineScanSlot, "机器扫描货道成功", new { Rop = rop, StockChangeRecords = m_StockChangeRecords });
+                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceScanSlot, "设备扫描货道成功", new { Rop = rop, StockChangeRecords = m_StockChangeRecords });
                 }
             }
 

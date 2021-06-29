@@ -11,8 +11,8 @@ namespace WebApiStoreTerm.Controllers
 {
     public class OwnController : OwnApiBaseController
     {
-        [HttpGet]
-        public OwnApiHttpResponse GetInfo([FromUri]LocalS.Service.Api.Account.RupOwnGetInfo rup)
+        [HttpPost]
+        public OwnApiHttpResponse GetInfo([FromBody]LocalS.Service.Api.Account.RupOwnGetInfo rup)
         {
             var result = LocalS.Service.Api.Account.AccountServiceFactory.Own.GetInfo(this.CurrentUserId, this.CurrentUserId, rup);
             return new OwnApiHttpResponse(result);

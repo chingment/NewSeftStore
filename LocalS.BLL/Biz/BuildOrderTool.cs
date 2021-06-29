@@ -47,7 +47,7 @@ namespace LocalS.BLL.Biz
         public decimal CouponAmountByDeposit { get; set; }
         public decimal CouponAmountByRent { get; set; }
         public string ShopId { get; set; }
-        public string[] MachineIds { get; set; }
+        public string[] DeviceIds { get; set; }
         public bool IsOffSell
         {
             get
@@ -69,7 +69,7 @@ namespace LocalS.BLL.Biz
         }
         public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public int Quantity { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal SaleAmount { get; set; }
@@ -93,7 +93,7 @@ namespace LocalS.BLL.Biz
             public decimal ChargeAmount { get; set; }
 
             public string ShopId { get; set; }
-            public string MachineId { get; set; }
+            public string DeviceId { get; set; }
             public string CabinetId { get; set; }
             public string SlotId { get; set; }
             public E_RentTermUnit RentTermUnit { get; set; }
@@ -171,9 +171,9 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public void AddSku(string id, int quantity, string cartId, E_ShopMode shopMode, E_ShopMethod shopMethod, E_ReceiveMode receiveMode, string shopId, string[] machineIds)
+        public void AddSku(string id, int quantity, string cartId, E_ShopMode shopMode, E_ShopMethod shopMethod, E_ReceiveMode receiveMode, string shopId, string[] deviceIds)
         {
-            _buildSkus.Add(new BuildSku { Id = id, Quantity = quantity, CartId = cartId, ShopMode = shopMode, ShopMethod = shopMethod, ReceiveMode = receiveMode, ShopId = shopId, MachineIds = machineIds });
+            _buildSkus.Add(new BuildSku { Id = id, Quantity = quantity, CartId = cartId, ShopMode = shopMode, ShopMethod = shopMethod, ReceiveMode = receiveMode, ShopId = shopId, DeviceIds = deviceIds });
         }
 
         public List<BuildSku> BuildSkus()
@@ -199,7 +199,7 @@ namespace LocalS.BLL.Biz
                 {
                     #region Shop
 
-                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(buildSku.ShopMode, _merchId, _storeId, buildSku.ShopId, buildSku.MachineIds, buildSku.Id);
+                    var r_Sku = CacheServiceFactory.Product.GetSkuStock(buildSku.ShopMode, _merchId, _storeId, buildSku.ShopId, buildSku.DeviceIds, buildSku.Id);
 
                     if (r_Sku == null)
                     {
@@ -429,7 +429,7 @@ namespace LocalS.BLL.Biz
                         var stock = new SkuStockModel();
                         stock.ShopMode = E_ShopMode.Mall;
                         stock.ShopId = "0";
-                        stock.MachineId = "0";
+                        stock.DeviceId = "0";
                         stock.CabinetId = "0";
                         stock.SlotId = "0";
                         stock.SumQuantity = 0;
@@ -601,7 +601,7 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.SkuId = buildSku.Id;
                         buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                         buildOrderChild.ShopId = sku_Stocks[0].ShopId;
-                        buildOrderChild.MachineId = sku_Stocks[0].MachineId;
+                        buildOrderChild.DeviceId = sku_Stocks[0].DeviceId;
                         buildOrderChild.CabinetId = sku_Stocks[0].CabinetId;
                         buildOrderChild.SlotId = sku_Stocks[0].SlotId;
                         buildOrderChild.Quantity = buildSku.Quantity;
@@ -620,7 +620,7 @@ namespace LocalS.BLL.Biz
                         buildOrderChild.ChargeAmount = buildSku.SaleAmount - buildSku.CouponAmountByDeposit - buildSku.CouponAmountByShop - buildSku.CouponAmountByRent;
                         buildOrderChilds.Add(buildOrderChild);
                     }
-                    else if (d_s_order.ShopMode == E_ShopMode.Machine)
+                    else if (d_s_order.ShopMode == E_ShopMode.Device)
                     {
                         foreach (var item in sku_Stocks)
                         {
@@ -638,7 +638,7 @@ namespace LocalS.BLL.Biz
                                     var buildOrderChild = new BuildOrder.Child();
                                     buildOrderChild.ShopMode = item.ShopMode;
                                     buildOrderChild.ShopId = item.ShopId;
-                                    buildOrderChild.MachineId = item.MachineId;
+                                    buildOrderChild.DeviceId = item.DeviceId;
                                     buildOrderChild.SkuId = buildSku.Id;
                                     buildOrderChild.ReceiveMode = d_s_order.ReceiveMode;
                                     buildOrderChild.CabinetId = item.CabinetId;
@@ -696,7 +696,7 @@ namespace LocalS.BLL.Biz
                                  {
                                      c.ShopMode,
                                      c.ShopId,
-                                     c.MachineId,
+                                     c.DeviceId,
                                      c.ReceiveMode,
                                  }).Distinct().ToList();
 
@@ -707,16 +707,16 @@ namespace LocalS.BLL.Biz
                 buildOrder.ShopMode = l_buildOrder.ShopMode;
                 buildOrder.ReceiveMode = l_buildOrder.ReceiveMode;
                 buildOrder.ShopId = l_buildOrder.ShopId;
-                buildOrder.MachineId = l_buildOrder.MachineId;
-                buildOrder.Quantity = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.Quantity);
-                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.SaleAmount);
-                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.OriginalAmount);
-                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.DiscountAmount);
-                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.ChargeAmount);
-                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByDeposit);
-                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByRent);
-                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByShop);
-                buildOrder.Childs = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.MachineId == l_buildOrder.MachineId && m.ReceiveMode == l_buildOrder.ReceiveMode).ToList();
+                buildOrder.DeviceId = l_buildOrder.DeviceId;
+                buildOrder.Quantity = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.Quantity);
+                buildOrder.SaleAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.SaleAmount);
+                buildOrder.OriginalAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.OriginalAmount);
+                buildOrder.DiscountAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.DiscountAmount);
+                buildOrder.ChargeAmount = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.ChargeAmount);
+                buildOrder.CouponAmountByDeposit = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByDeposit);
+                buildOrder.CouponAmountByRent = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByRent);
+                buildOrder.CouponAmountByShop = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).Sum(m => m.CouponAmountByShop);
+                buildOrder.Childs = buildOrderChilds.Where(m => m.ShopMode == l_buildOrder.ShopMode && m.ShopId == l_buildOrder.ShopId && m.DeviceId == l_buildOrder.DeviceId && m.ReceiveMode == l_buildOrder.ReceiveMode).ToList();
                 buildOrders.Add(buildOrder);
             }
 

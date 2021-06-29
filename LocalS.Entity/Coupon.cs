@@ -53,7 +53,7 @@ namespace LocalS.Entity
 
         Unknow = 0,
         Mall = 1,
-        Machine = 3
+        Device = 3
     }
     public enum E_Coupon_UseTimeType
     {

@@ -104,7 +104,7 @@ namespace LocalS.BLL
             return r_Spu;
         }
 
-        public SkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] machineIds, string skuId)
+        public SkuInfoModel GetSkuStock(E_ShopMode shopMode, string merchId, string storeId, string shopId, string[] deviceIds, string skuId)
         {
             var m_SkuInfo = GetSkuInfo(merchId, skuId);
 
@@ -114,21 +114,21 @@ namespace LocalS.BLL
 
             if (shopMode == E_ShopMode.Mall)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.MachineId == "0" && m.SkuId == skuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Mall && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == "0" && m.DeviceId == "0" && m.SkuId == skuId).ToList();
             }
             else if (shopMode == E_ShopMode.Shop)
             {
-                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.MachineId == "0" && m.SkuId == skuId).ToList();
+                sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Shop && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == "0" && m.SkuId == skuId).ToList();
             }
-            else if (shopMode == E_ShopMode.Machine)
+            else if (shopMode == E_ShopMode.Device)
             {
-                if (machineIds == null || machineIds.Length == 0)
+                if (deviceIds == null || deviceIds.Length == 0)
                 {
-                    machineIds = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == storeId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
+                    deviceIds = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == storeId && m.CurUseShopId == shopId).Select(m => m.Id).Distinct().ToArray();
                 }
-                if (machineIds != null && machineIds.Length > 0)
+                if (deviceIds != null && deviceIds.Length > 0)
                 {
-                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Machine && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && machineIds.Contains(m.MachineId) && m.SkuId == skuId).ToList();
+                    sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && deviceIds.Contains(m.DeviceId) && m.SkuId == skuId).ToList();
                 }
             }
 
@@ -137,7 +137,7 @@ namespace LocalS.BLL
                 var m_SkuStock = new SkuStockModel();
                 m_SkuStock.ShopMode = sellChannelStock.ShopMode;
                 m_SkuStock.ShopId = sellChannelStock.ShopId;
-                m_SkuStock.MachineId = sellChannelStock.MachineId;
+                m_SkuStock.DeviceId = sellChannelStock.DeviceId;
                 m_SkuStock.CabinetId = sellChannelStock.CabinetId;
                 m_SkuStock.SlotId = sellChannelStock.SlotId;
                 m_SkuStock.SumQuantity = sellChannelStock.SumQuantity;

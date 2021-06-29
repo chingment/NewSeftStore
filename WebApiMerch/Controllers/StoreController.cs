@@ -33,9 +33,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetMachines([FromUri]RupStoreGetMachines rup)
+        public OwnApiHttpResponse GetDevices([FromUri]RupStoreGetDevices rup)
         {
-            var result = MerchServiceFactory.Store.GetMachines(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Store.GetDevices(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 

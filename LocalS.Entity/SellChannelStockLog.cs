@@ -31,7 +31,7 @@ namespace LocalS.Entity
         public string StoreName { get; set; }
         public string ShopId { get; set; }
         public string ShopName { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public string CabinetId { get; set; }
         public string SlotId { get; set; }
         public string SpuId { get; set; }

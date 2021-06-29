@@ -181,7 +181,7 @@ export default {
       this.dialogRelStockListQuery.skuId = row.skuId
       this.dialogRelStockListQuery.storeId = row.storeId
       this.dialogRelStockListQuery.shopId = row.shopId
-      this.dialogRelStockListQuery.machineId = row.machineId
+      this.dialogRelStockListQuery.deviceId = row.deviceId
       this.dialogRelStockListQuery.cabinetId = row.cabinetId
       this.dialogRelStockListQuery.slotId = row.slotId
 

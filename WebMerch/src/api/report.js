@@ -89,7 +89,7 @@ export function checkRightExport(data) {
 }
 
 export default {
-  storemachineStockRealDataInit: storeStockRealDataInit,
+  storeStockRealDataInit: storeStockRealDataInit,
   storehStockRealDataGet: storeStockRealDataGet,
   skuSalesDateHisInit: skuSalesDateHisInit,
   skuSalesDateHisGet: skuSalesDateHisGet,

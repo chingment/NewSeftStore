@@ -54,39 +54,39 @@ namespace LocalS.BLL.Biz
             }
             else if (model.AppId == AppId.STORETERM)
             {
-                var machine = BizFactory.Machine.GetOne(model.TrgerId);
-                if (machine != null)
+                var l_Device = BizFactory.Device.GetOne(model.TrgerId);
+                if (l_Device != null)
                 {
-                    merchName = machine.MerchName;
-                    merchId = machine.MerchId;
-                    trgerName = machine.MachineId;
+                    merchName = l_Device.MerchName;
+                    merchId = l_Device.MerchId;
+                    trgerName = l_Device.DeviceId;
                 }
             }
 
-            var merchOperateLog = new MerchOperateLog();
-            merchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
-            merchOperateLog.AppId = model.AppId;
-            merchOperateLog.TrgerId = model.TrgerId;
-            merchOperateLog.TrgerName = trgerName;
-            merchOperateLog.MerchId = merchId;
-            merchOperateLog.MerchName = merchName;
-            merchOperateLog.OperateUserId = model.Operater;
-            merchOperateLog.OperateUserName = BizFactory.Merch.GetOperaterUserName(merchId, model.Operater);
-            merchOperateLog.EventCode = model.EventCode;
-            merchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
-            merchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);
-            merchOperateLog.Remark = model.EventRemark;
-            merchOperateLog.EventData = model.EventData.ToJsonString();
-            merchOperateLog.Creator = model.Operater;
-            merchOperateLog.CreateTime = DateTime.Now;
-            CurrentDb.MerchOperateLog.Add(merchOperateLog);
+            var d_MerchOperateLog = new MerchOperateLog();
+            d_MerchOperateLog.Id = IdWorker.Build(IdType.NewGuid);
+            d_MerchOperateLog.AppId = model.AppId;
+            d_MerchOperateLog.TrgerId = model.TrgerId;
+            d_MerchOperateLog.TrgerName = trgerName;
+            d_MerchOperateLog.MerchId = merchId;
+            d_MerchOperateLog.MerchName = merchName;
+            d_MerchOperateLog.OperateUserId = model.Operater;
+            d_MerchOperateLog.OperateUserName = BizFactory.Merch.GetOperaterUserName(merchId, model.Operater);
+            d_MerchOperateLog.EventCode = model.EventCode;
+            d_MerchOperateLog.EventName = EventCode.GetEventName(model.EventCode);
+            d_MerchOperateLog.EventLevel = EventCode.GetEventLevel(model.EventCode);
+            d_MerchOperateLog.Remark = model.EventRemark;
+            d_MerchOperateLog.EventData = model.EventData.ToJsonString();
+            d_MerchOperateLog.Creator = model.Operater;
+            d_MerchOperateLog.CreateTime = DateTime.Now;
+            CurrentDb.MerchOperateLog.Add(d_MerchOperateLog);
             CurrentDb.SaveChanges();
 
-            if (!string.IsNullOrEmpty(merchOperateLog.EventData))
+            if (!string.IsNullOrEmpty(d_MerchOperateLog.EventData))
             {
-                if (merchOperateLog.EventData.Contains("stockChangeRecords"))
+                if (d_MerchOperateLog.EventData.Contains("stockChangeRecords"))
                 {
-                    var jToken = JToken.Parse(merchOperateLog.EventData);
+                    var jToken = JToken.Parse(d_MerchOperateLog.EventData);
                     if (jToken["stockChangeRecords"] != null)
                     {
                         var m_ChangeRecords = jToken["stockChangeRecords"].ToObject<List<StockChangeRecordModel>>();
@@ -102,7 +102,7 @@ namespace LocalS.BLL.Biz
                             d_SellChannelStockLog.StoreId = m_ChangeRecord.StoreId;
                             d_SellChannelStockLog.StoreName = storeName;
                             d_SellChannelStockLog.ShopId = m_ChangeRecord.ShopId;
-                            d_SellChannelStockLog.MachineId = m_ChangeRecord.MachineId;
+                            d_SellChannelStockLog.DeviceId = m_ChangeRecord.DeviceId;
                             d_SellChannelStockLog.ShopMode = m_ChangeRecord.ShopMode;
                             d_SellChannelStockLog.CabinetId = m_ChangeRecord.CabinetId;
                             d_SellChannelStockLog.SlotId = m_ChangeRecord.SlotId;

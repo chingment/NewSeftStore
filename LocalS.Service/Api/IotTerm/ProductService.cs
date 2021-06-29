@@ -64,15 +64,15 @@ namespace LocalS.Service.Api.IotTerm
                 //d_Spu.KindId2 = rop.KindIds[1];
                 //d_Spu.KindId3 = rop.KindIds[2];
                 d_Spu.PinYinIndex = CommonUtil.GetPingYinIndex(d_Spu.Name);
-                d_Spu.DisplayImgUrls = rop.display_img_urls.ToJsonString();
+                d_Spu.DisplayImgUrls = ImgSet.Convert(rop.display_img_urls).ToJsonString();
                 d_Spu.MainImgUrl = ImgSet.GetMain_O(d_Spu.DisplayImgUrls);
-                d_Spu.DetailsDes = rop.details_des.ToJsonString();
+                d_Spu.DetailsDes = ImgSet.Convert(rop.details_des).ToJsonString();
                 d_Spu.BriefDes = rop.brief_des.Trim2();
                 d_Spu.IsTrgVideoService = false;
                 d_Spu.IsRevService = false;
                 d_Spu.IsSupRentService = false;
                 d_Spu.IsMavkBuy = false;//[{"name":"单规格","value":[{"name":"规格"}]}]
-                d_Spu.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
+                d_Spu.SupReceiveMode = E_SupReceiveMode.SelfTakeByDevice;
                 //d_Spu.CharTags = rop.CharTags.ToJsonString();
 
                 List<object> spec_items = new List<object>();

@@ -35,11 +35,11 @@ namespace LocalS.BLL.Push
             return pushService;
         }
 
-        public CustomJsonResult Send(string operater, string appId, string merchId, string machineId, string cmd, object content)
+        public CustomJsonResult Send(string operater, string appId, string merchId, string deviceId, string cmd, object content)
         {
             LogUtil.Info("Send1");
             var result = new CustomJsonResult();
-            result = GetInstance().push.Send(machineId, cmd, content);
+            result = GetInstance().push.Send(deviceId, cmd, content);
 
             return result;
         }
@@ -68,66 +68,66 @@ namespace LocalS.BLL.Push
             LogUtil.Info(TAG, "接收到消息>>主题:" + topic + ",内容:" + payload);
         }
 
-        public static CustomJsonResult SendStock(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendStock(string operater, string appId, string merchId, string deviceId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateSkuStock, content);
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdUpdateSkuStock, content);
             return result;
         }
 
-        public static CustomJsonResult SendAds(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendAds(string operater, string appId, string merchId, string deviceId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateAds, content);
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdUpdateAds, content);
             return result;
         }
 
-        public static CustomJsonResult SendHomeLogo(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendHomeLogo(string operater, string appId, string merchId, string deviceId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdUpdateHomeLogo, content);
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdUpdateHomeLogo, content);
             return result;
         }
 
-        public static CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string machineId)
+        public static CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string deviceId)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdSysReboot, "重启系统");
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdSysReboot, "重启系统");
             return result;
         }
 
-        public static CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string machineId)
+        public static CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string deviceId)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdSysShutdown, "关闭系统");
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdSysShutdown, "关闭系统");
             return result;
         }
 
-        public static CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string deviceId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdSysSetStatus, content);
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdSysSetStatus, content);
             return result;
         }
 
-        public static CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string machineId)
+        public static CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string deviceId)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdDsx01OpenPickupDoor, "打开取货门");
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdDsx01OpenPickupDoor, "打开取货门");
             return result;
         }
 
-        public static CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string machineId, object content)
+        public static CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string deviceId, object content)
         {
             var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, machineId, EventCode.MCmdPaySuccess, content);
+            result = GetInstance().Send(operater, appId, merchId, deviceId, EventCode.MCmdPaySuccess, content);
             return result;
         }
 
-        public static CustomJsonResult QueryStatus(string operater, string appId, string merchId, string machineId, string messageId)
+        public static CustomJsonResult QueryStatus(string operater, string appId, string merchId, string deviceId, string messageId)
         {
             var result = new CustomJsonResult();
-            var machine = BizFactory.Machine.GetOne(machineId);
+            var lDevice = BizFactory.Device.GetOne(deviceId);
             result = GetInstance().push.QueryStatus("", messageId);
             return result;
         }

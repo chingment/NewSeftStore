@@ -32,11 +32,11 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        public static MachineService Machine
+        public static DeviceService Device
         {
             get
             {
-                return new MachineService();
+                return new DeviceService();
             }
         }
 

@@ -11,7 +11,7 @@ namespace LocalS.BLL
 
     public interface IPaySdkProvider<T>
     {
-        PayBuildQrCodeResult PayBuildQrCode(T config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire);
+        PayBuildQrCodeResult PayBuildQrCode(T config, E_PayCaller payCaller, string merch_id, string store_id, string device_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire);
         string PayTransQuery(T config, string order_sn);
         PayTransResult Convert2PayTransResultByQuery(T config, string content);
         PayTransResult Convert2PayTransResultByNotifyUrl(T config, string content);

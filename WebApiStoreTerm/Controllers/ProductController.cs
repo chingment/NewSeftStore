@@ -12,8 +12,8 @@ namespace WebApiStoreTerm.Controllers
     [OwnApiAuthorize]
     public class ProductController : OwnApiBaseController
     {
-        [HttpGet]
-        public OwnApiHttpResponse SearchSku([FromUri]RupProductSearchSku rup)
+        [HttpPost]
+        public OwnApiHttpResponse SearchSku([FromBody]RopProductSearchSku rup)
         {
 
             var result = StoreTermServiceFactory.Product.SearchSku(rup);

@@ -20,7 +20,7 @@ namespace LocalS.DAL
         public IDbSet<InsCarModelInfo> InsCarModelInfo { get; set; }
         public IDbSet<Agent> Agent { get; set; }
         public IDbSet<Merch>  Merch { get; set; }
-        public IDbSet<MerchMachine> MerchMachine { get; set; }
+        public IDbSet<MerchDevice> MerchDevice { get; set; }
         public IDbSet<PrdKind> PrdKind { get; set; }
         //public IDbSet<PrdSubject> PrdSubject { get; set; }
         public IDbSet<PrdSpu> PrdSpu { get; set; }
@@ -45,10 +45,10 @@ namespace LocalS.DAL
         public IDbSet<PayRefund> PayRefund { get; set; }
         public IDbSet<PayNotifyLog> PayNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
-        public IDbSet<Machine> Machine { get; set; }
-        public IDbSet<MachineCabinet> MachineCabinet { get; set; }
+        public IDbSet<Device> Device { get; set; }
+        public IDbSet<DeviceCabinet> DeviceCabinet { get; set; }
         public IDbSet<MerchOperateLog> MerchOperateLog { get; set; }
-        public IDbSet<MachineBindLog> MachineBindLog { get; set; }
+        public IDbSet<DeviceBindLog> DeviceBindLog { get; set; }
         public IDbSet<OrderPickupLog> OrderPickupLog { get; set; }
         public IDbSet<StoreKind> StoreKind { get; set; }
         public IDbSet<StoreKindSpu> StoreKindSpu { get; set; }

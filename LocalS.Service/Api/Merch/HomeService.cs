@@ -26,9 +26,9 @@ namespace LocalS.Service.Api.Merch
             int storeCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql1.ToString()).ToString());
 
             StringBuilder sql2 = new StringBuilder();
-            sql2.Append(" select count(*) from MerchMachine where IsStopUse=0 and merchId='" + merchId + "' ");
+            sql2.Append(" select count(*) from MerchDevice where IsStopUse=0 and merchId='" + merchId + "' ");
 
-            int machineCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql2.ToString()).ToString());
+            int deviceCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql2.ToString()).ToString());
 
             StringBuilder sql3 = new StringBuilder();
             sql3.Append(" select ISNULL(sum(ChargeAmount),0) from [Order] where  payStatus='3' and IsTestMode=0 and merchId='" + merchId + "' ");
@@ -42,11 +42,11 @@ namespace LocalS.Service.Api.Merch
 
 
             StringBuilder sql5 = new StringBuilder();
-            sql5.Append(" select count(*) from Machine where (ExIsHas=1 or  datediff(MINUTE,LastRequestTime,GETDATE())>15) AND CurUseStoreId IS NOT NULL and CurUseMerchId='" + merchId + "' ");
+            sql5.Append(" select count(*) from Device where (ExIsHas=1 or  datediff(MINUTE,LastRequestTime,GETDATE())>15) AND CurUseStoreId IS NOT NULL and CurUseMerchId='" + merchId + "' ");
 
-            int machineExCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql5.ToString()).ToString());
+            int deviceExCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql5.ToString()).ToString());
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { storeCount = storeCount, machineCount = machineCount, machineExCount = machineExCount, sumTradeAmount = sumTradeAmount, replenishCount = replenishCount });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { storeCount = storeCount, deviceCount = deviceCount, deviceExCount = deviceExCount, sumTradeAmount = sumTradeAmount, replenishCount = replenishCount });
 
 
             return result;
@@ -62,9 +62,9 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" select COUNT(*) from dbo.[Order] where ReceiveMode=4 and ExIsHappen=1 and ExIsHandle=0 and merchId='" + merchId + "' ");
 
 
-            int sumExHdByMachineSelfTake = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());
+            int sumExHdByDeviceSelfTake = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql.ToString()).ToString());
 
-            retRptTodaySummary.SumExHdByMachineSelfTake = sumExHdByMachineSelfTake;
+            retRptTodaySummary.SumExHdByDeviceSelfTake = sumExHdByDeviceSelfTake;
 
             string date = DateTime.Now.ToString("yyyy-MM") + "-01";
 

@@ -74,7 +74,7 @@ namespace LocalS.BLL.Biz
                 public E_ShopMode ShopMode { get; set; }
                 public string SvcConsulterId { get; set; }
                 public string ShopId { get; set; }
-                public string[] MachineIds { get; set; }
+                public string[] DeviceIds { get; set; }
             }
             public class BookTimeModel
             {

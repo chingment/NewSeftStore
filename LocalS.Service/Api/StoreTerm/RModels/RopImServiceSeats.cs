@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class RopImServiceSeats
     {
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
         public List<SkuModel> Skus { get; set; }
         public class SkuModel
         {

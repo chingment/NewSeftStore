@@ -87,7 +87,7 @@ namespace LocalS.BLL
             return jsApiTicket;
 
         }
-        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(WxAppInfoConfig config, string merch_id, string store_id, string machine_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(WxAppInfoConfig config, string merch_id, string store_id, string device_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
             var result = new PayBuildWxJsPayInfoResult();
 
@@ -136,7 +136,7 @@ namespace LocalS.BLL
             return result;
 
         }
-        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string machine_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string device_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
         {
 
             var result = new PayBuildQrCodeResult();

@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Merch
             this.LastMonthGmvRl = new GmvRlModel();
         }
 
-        public int SumExHdByMachineSelfTake { get; set; }
+        public int SumExHdByDeviceSelfTake { get; set; }
 
         public GmvRlModel TodayGmvRl { get; set; }
 

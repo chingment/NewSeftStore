@@ -19,7 +19,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse StoreStockRealDataGet([FromBody]RopReportMachineStockRealDataGet rop)
+        public OwnApiHttpResponse StoreStockRealDataGet([FromBody]RopReportStoreStockRealDataGet rop)
         {
             var result = MerchServiceFactory.Report.StoreStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
@@ -34,7 +34,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse StoreStockDateHisGet([FromBody]RopReportMachineStockDateHisGet rop)
+        public OwnApiHttpResponse StoreStockDateHisGet([FromBody]RopReporStoreStockDateHisGet rop)
         {
             var result = MerchServiceFactory.Report.StoreStockDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);

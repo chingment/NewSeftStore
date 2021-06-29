@@ -48,11 +48,11 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
-        public static MachineService Machine
+        public static DeviceService Device
         {
             get
             {
-                return new MachineService();
+                return new DeviceService();
             }
         }
 

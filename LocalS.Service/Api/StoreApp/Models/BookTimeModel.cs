@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.StoreApp
         Delivery = 1,
         SelfTakeByStore = 2,
         DeliveryOrSelfTakeByStore = 3,
-        SelfTakeByMachine = 4,
+        SelfTakeByDevice = 4,
         FeeByMember = 5,
         FeeByRent = 6
     }

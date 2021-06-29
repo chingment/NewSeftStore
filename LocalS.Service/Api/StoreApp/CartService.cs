@@ -75,9 +75,9 @@ namespace LocalS.Service.Api.StoreApp
                     case E_ShopMode.Mall:
                         m_carBlock.TagName = "线上商城";
                         break;
-                    case E_ShopMode.Machine:
+                    case E_ShopMode.Device:
                         var shop = CurrentDb.Shop.Where(m => m.Id == m_shop.ShopId).FirstOrDefault();
-                        m_carBlock.TagName = string.Format("门店[{0}]/线下机器", shop.Name);
+                        m_carBlock.TagName = string.Format("门店[{0}]/线下设备", shop.Name);
                         break;
                 }
 

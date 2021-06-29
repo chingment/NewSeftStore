@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetIndexSugProducts();
 
-            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.MachineId == "0" && m.ShopMode == E_ShopMode.Mall && m.IsUseRent == true).Take(2).ToList();
+            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.DeviceId == "0" && m.ShopMode == E_ShopMode.Mall && m.IsUseRent == true).Take(2).ToList();
 
             var m_pdRent = new PdRentModel();
 

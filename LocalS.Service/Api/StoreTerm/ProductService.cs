@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ProductService : BaseService
     {
-        public PageEntity<SkuModel> GetSkus(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string machineId)
+        public PageEntity<SkuModel> GetSkus(int pageIndex, int pageSize, string merchId, string storeId, string shopId, string deviceId)
         {
             var pageEntiy = new PageEntity<SkuModel>();
 
@@ -22,14 +22,14 @@ namespace LocalS.Service.Api.StoreTerm
             LogUtil.Info("merchId:" + merchId);
             LogUtil.Info("storeId:" + storeId);
             LogUtil.Info("shopId:" + shopId);
-            LogUtil.Info("MachineId:" + machineId);
+            LogUtil.Info("DeviceId:" + deviceId);
             var query = (from m in CurrentDb.SellChannelStock
                          where (
 m.MerchId == merchId &&
 m.StoreId == storeId &&
 m.ShopId == shopId &&
-m.MachineId == machineId &&
-m.ShopMode == Entity.E_ShopMode.Machine)
+m.DeviceId == deviceId &&
+m.ShopMode == Entity.E_ShopMode.Device)
                          orderby m.CreateTime
                          select new { m.SkuId }).Distinct();
 
@@ -43,7 +43,7 @@ m.ShopMode == Entity.E_ShopMode.Machine)
 
             foreach (var item in list)
             {
-                var r_Sku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Machine, merchId, storeId, shopId, new string[] { machineId }, item.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(Entity.E_ShopMode.Device, merchId, storeId, shopId, new string[] { deviceId }, item.SkuId);
 
                 var m_Sku = new SkuModel();
                 m_Sku.SkuId = r_Sku.Id;
@@ -74,31 +74,31 @@ m.ShopMode == Entity.E_ShopMode.Machine)
 
         }
 
-        public CustomJsonResult SearchSku(RupProductSearchSku rup)
+        public CustomJsonResult SearchSku(RopProductSearchSku rop)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetSkuSearch();
 
-            var machine = BizFactory.Machine.GetOne(rup.MachineId);
+            var device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (machine == null)
+            if (device == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(machine.MerchId))
+            if (string.IsNullOrEmpty(device.MerchId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(machine.StoreId))
+            if (string.IsNullOrEmpty(device.StoreId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未绑定商户店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户店铺");
             }
 
 
-            ret.Skus = CacheServiceFactory.Product.SearchSku(machine.MerchId, "All", rup.Key);
+            ret.Skus = CacheServiceFactory.Product.SearchSku(device.MerchId, "All", rop.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

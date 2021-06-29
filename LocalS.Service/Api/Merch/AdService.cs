@@ -79,7 +79,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!merch.MctMode.Contains("K"))
             {
-                query = query.Where(m => m.Id != E_AdSpaceId.MachineHomeBanner);
+                query = query.Where(m => m.Id != E_AdSpaceId.DeviceHomeBanner);
             }
 
             if (!merch.MctMode.Contains("F"))
@@ -143,22 +143,22 @@ namespace LocalS.Service.Api.Merch
                         ret.Belongs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
                     }
                 }
-                else if (adSpace.BelongType == E_AdSpaceBelongType.Machine)
+                else if (adSpace.BelongType == E_AdSpaceBelongType.Device)
                 {
-                    var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
+                    var merchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
 
-                    foreach (var merchMachine in merchMachines)
+                    foreach (var merchDevice in merchDevices)
                     {
                         string storeName = "未绑定店铺";
-                        var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+                        var store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
                         if (store != null)
                         {
                             storeName = store.Name;
                         }
 
-                        string code = MerchServiceFactory.Machine.GetCode(merchMachine.MachineId, merchMachine.CumCode);
+                        string code = MerchServiceFactory.Device.GetCode(merchDevice.DeviceId, merchDevice.CumCode);
 
-                        ret.Belongs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", code, storeName) });
+                        ret.Belongs.Add(new { Id = merchDevice.DeviceId, Name = string.Format("[设备]{0}({1}))", code, storeName) });
                     }
                 }
             }
@@ -204,24 +204,24 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
             }
-            else if (d_AdContent.BelongType == E_AdSpaceBelongType.Machine)
+            else if (d_AdContent.BelongType == E_AdSpaceBelongType.Device)
             {
-                var merchMachines = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
+                var merchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
 
-                foreach (var merchMachine in merchMachines)
+                foreach (var merchDevice in merchDevices)
                 {
                     string storeName = "未绑定店铺";
-                    var store = BizFactory.Store.GetOne(merchMachine.CurUseStoreId);
+                    var store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
                     if (store != null)
                     {
                         storeName = store.Name;
                     }
 
-                    if (!d_AdContentBelongIds.Contains(merchMachine.MachineId))
+                    if (!d_AdContentBelongIds.Contains(merchDevice.DeviceId))
                     {
-                        var code = MerchServiceFactory.Machine.GetCode(merchMachine.MachineId, merchMachine.CumCode);
+                        var code = MerchServiceFactory.Device.GetCode(merchDevice.DeviceId, merchDevice.CumCode);
 
-                        objs.Add(new { Id = merchMachine.MachineId, Name = string.Format("[机器]{0}({1}))", code, storeName) });
+                        objs.Add(new { Id = merchDevice.DeviceId, Name = string.Format("[设备]{0}({1}))", code, storeName) });
 
                     }
                 }
@@ -252,7 +252,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            List<string> machineIds = new List<string>();
+            List<string> deviceIds = new List<string>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -293,9 +293,9 @@ namespace LocalS.Service.Api.Merch
                     d_AdContentBelong.CreateTime = DateTime.Now;
                     CurrentDb.AdContentBelong.Add(d_AdContentBelong);
 
-                    if (rop.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+                    if (rop.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
                     {
-                        machineIds.Add(belongId);
+                        deviceIds.Add(belongId);
                     }
                 }
 
@@ -309,7 +309,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
 
             }
 
@@ -371,7 +371,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            List<string> machineIds = new List<string>();
+            List<string> deviceIds = new List<string>();
 
             var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == rop.Id && m.MerchId == merchId).FirstOrDefault();
 
@@ -385,9 +385,9 @@ namespace LocalS.Service.Api.Merch
             d_AdContent.Mender = operater;
             d_AdContent.MendTime = DateTime.Now;
 
-            if (d_AdContent.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+            if (d_AdContent.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
             {
-                machineIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.MachineHomeBanner && m.AdContentId == d_AdContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Machine).Select(m => m.BelongId).Distinct().ToList();
+                deviceIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.DeviceHomeBanner && m.AdContentId == d_AdContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Device).Select(m => m.BelongId).Distinct().ToList();
             }
 
             CurrentDb.SaveChanges();
@@ -402,7 +402,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
             }
 
             return result;
@@ -433,14 +433,14 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 string belongName = "";
-                if (item.BelongType == E_AdSpaceBelongType.Machine)
+                if (item.BelongType == E_AdSpaceBelongType.Device)
                 {
                     var code = item.BelongId;
 
-                    var d_MerchMachine = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.MachineId == item.BelongId).FirstOrDefault();
-                    if (d_MerchMachine != null)
+                    var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId == item.BelongId).FirstOrDefault();
+                    if (d_MerchDevice != null)
                     {
-                        code = MerchServiceFactory.Machine.GetCode(d_MerchMachine.MachineId, d_MerchMachine.CumCode);
+                        code = MerchServiceFactory.Device.GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode);
                     }
 
                     belongName = string.Format("终端: {0}", code);
@@ -482,7 +482,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            List<string> machineIds = new List<string>();
+            List<string> deviceIds = new List<string>();
 
             var d_AdContentBelong = CurrentDb.AdContentBelong.Where(m => m.Id == rop.Id).FirstOrDefault();
 
@@ -491,9 +491,9 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设置失败");
             }
 
-            if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+            if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
             {
-                machineIds.Add(d_AdContentBelong.BelongId);
+                deviceIds.Add(d_AdContentBelong.BelongId);
             }
 
             d_AdContentBelong.Status = rop.Status;
@@ -506,7 +506,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
             }
 
             return result;
@@ -517,7 +517,7 @@ namespace LocalS.Service.Api.Merch
 
             var result = new CustomJsonResult();
 
-            List<string> machineIds = new List<string>();
+            List<string> deviceIds = new List<string>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -559,9 +559,9 @@ namespace LocalS.Service.Api.Merch
                         d_AdContentBelong.CreateTime = DateTime.Now;
                         CurrentDb.AdContentBelong.Add(d_AdContentBelong);
 
-                        if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.MachineHomeBanner)
+                        if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
                         {
-                            machineIds.Add(belongId);
+                            deviceIds.Add(belongId);
                         }
                     }
                 }
@@ -575,7 +575,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
             }
 
             return result;
@@ -585,7 +585,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            List<string> machineIds = new List<string>();
+            List<string> deviceIds = new List<string>();
 
             using (TransactionScope ts = new TransactionScope())
             {
@@ -624,7 +624,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Machine.SendAds(operater, AppId.MERCH, merchId, machineIds.ToArray());
+                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
             }
 
             return result;

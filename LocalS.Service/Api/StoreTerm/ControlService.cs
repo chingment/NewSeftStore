@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ControlService
     {
-        public CustomJsonResult OpenPickupDoor(string machineId)
+        public CustomJsonResult OpenPickupDoor(string DeviceId)
         {
             CustomJsonResult result = new CustomJsonResult();
 

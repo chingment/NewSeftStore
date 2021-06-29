@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (store == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
 

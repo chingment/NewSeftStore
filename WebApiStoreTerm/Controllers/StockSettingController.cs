@@ -11,8 +11,8 @@ namespace WebApiStoreTerm.Controllers
     [OwnApiAuthorize]
     public class StockSettingController : OwnApiBaseController
     {
-        [HttpGet]
-        public OwnApiHttpResponse GetCabinetSlots([FromUri]RupStockSettingGetCabinetSlots rup)
+        [HttpPost]
+        public OwnApiHttpResponse GetCabinetSlots([FromBody]RopStockSettingGetCabinetSlots rup)
         {
             var result = StoreTermServiceFactory.StockSetting.GetCabinetSlots(this.CurrentUserId,rup);
             return new OwnApiHttpResponse(result);

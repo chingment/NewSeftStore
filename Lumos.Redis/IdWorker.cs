@@ -8,7 +8,7 @@ namespace Lumos.Redis
     {
         Unknow = 0,
         OrderId = 1,
-        MachineId = 2,
+        DeviceId = 2,
         NewGuid = 3,
         EmptyGuid = 4,
         PayTransId = 5,
@@ -73,12 +73,12 @@ namespace Lumos.Redis
                     part2 = GetIncrNum().ToString().PadLeft(5, '0');
                     id = prefix + part2 + part1 + part0;
                     break;
-                case IdType.MachineId:
-                    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_MACHINEID, 1);
-                    part1 = DateTime.Now.ToString("yyyyMMdd");
-                    part2 = incr.ToString().PadLeft(4, '0');
-                    id = prefix + part1 + part2;
-                    break;
+                //case IdType.DeviceId:
+                //    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_DEVICEID, 1);
+                //    part1 = DateTime.Now.ToString("yyyyMMdd");
+                //    part2 = incr.ToString().PadLeft(4, '0');
+                //    id = prefix + part1 + part2;
+                //    break;
                 case IdType.NewGuid:
                     id = Guid.NewGuid().ToString().Replace("-", ""); ;
                     break;

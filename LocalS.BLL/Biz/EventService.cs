@@ -28,18 +28,17 @@ namespace LocalS.BLL.Biz
                     var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
                     HandleByLogout(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
-                case EventCode.MachineStatus:
-                    LogUtil.Info(">>>>>MachineStatus");
-                    var machineStatusModel = model.EventContent.ToJsonObject<MachineEventByMachineStatusModel>();
-                    HandleByMachineStatus(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, machineStatusModel);
+                case EventCode.DeviceStatus:
+                    var deviceStatusModel = model.EventContent.ToJsonObject<DeviceEventByDeviceStatusModel>();
+                    HandleByDeviceStatus(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, deviceStatusModel);
                     break;
-                case EventCode.Pickup:
-                    var pickupModel = model.EventContent.ToJsonObject<MachineEventByPickupModel>();
-                    HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupModel);
+                case EventCode.DevicePickup:
+                    var devicePickupModel = model.EventContent.ToJsonObject<DeviceEventByPickupModel>();
+                    HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupModel);
                     break;
-                case EventCode.PickupTest:
-                    var pickupTestModel = model.EventContent.ToJsonObject<MachineEventByPickupTestModel>();
-                    HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, pickupTestModel);
+                case EventCode.DevicePickupTest:
+                    var devicePickupTestModel = model.EventContent.ToJsonObject<DeviceEventByPickupTestModel>();
+                    HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupTestModel);
                     break;
             }
         }
@@ -94,21 +93,21 @@ namespace LocalS.BLL.Biz
             }
 
         }
-        private void HandleByMachineStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByMachineStatusModel model)
+        private void HandleByDeviceStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByDeviceStatusModel model)
         {
-            LogUtil.Info(">>>>>EventHandleByMachineStatus");
+            LogUtil.Info(">>>>>HandleByDeviceStatus");
 
-            string machineId = trgerId;
-            var machine = CurrentDb.Machine.Where(m => m.Id == trgerId).FirstOrDefault();
+            string deviceId = trgerId;
+            var device = CurrentDb.Device.Where(m => m.Id == trgerId).FirstOrDefault();
 
-            if (machine == null)
+            if (device == null)
                 return;
 
-            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-            string shopName = BizFactory.Merch.GetShopName(machine.CurUseMerchId, machine.CurUseShopId);
-            string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
+            string storeName = BizFactory.Merch.GetStoreName(device.CurUseMerchId, device.CurUseStoreId);
+            string shopName = BizFactory.Merch.GetShopName(device.CurUseMerchId, device.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(device.CurUseMerchId, operater);
 
-            machine.LastRequestTime = DateTime.Now;
+            device.LastRequestTime = DateTime.Now;
 
             bool isLog = false;
             switch (model.Status)
@@ -116,33 +115,33 @@ namespace LocalS.BLL.Biz
                 case "running":
                     eventRemark = "运行正常";
 
-                    if (machine.RunStatus != E_MachineRunStatus.Running)
+                    if (device.RunStatus != E_DeviceRunStatus.Running)
                     {
                         isLog = true;
                     }
 
-                    machine.RunStatus = E_MachineRunStatus.Running;
+                    device.RunStatus = E_DeviceRunStatus.Running;
                     break;
                 case "setting":
                     eventRemark = "维护中";
 
-                    if (machine.RunStatus != E_MachineRunStatus.Setting)
+                    if (device.RunStatus != E_DeviceRunStatus.Setting)
                     {
                         isLog = true;
                     }
 
-                    machine.RunStatus = E_MachineRunStatus.Setting;
+                    device.RunStatus = E_DeviceRunStatus.Setting;
                     break;
                 case "excepition":
 
                     eventRemark = "异常";
 
-                    if (machine.RunStatus != E_MachineRunStatus.Excepition)
+                    if (device.RunStatus != E_DeviceRunStatus.Excepition)
                     {
                         isLog = true;
                     }
 
-                    machine.RunStatus = E_MachineRunStatus.Excepition;
+                    device.RunStatus = E_DeviceRunStatus.Excepition;
 
                     break;
                 default:
@@ -154,10 +153,10 @@ namespace LocalS.BLL.Biz
 
             if (isLog)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.MachineStatus, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machineId, eventRemark), model);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DeviceStatus, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, deviceId, eventRemark), model);
             }
         }
-        private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupModel model)
+        private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupModel model)
         {
             if (model == null)
                 return;
@@ -175,22 +174,22 @@ namespace LocalS.BLL.Biz
                 if (d_OrderPickupLog != null)
                     return;
 
-                string machineId = trgerId;
-                var d_Machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+                string deviceId = trgerId;
+                var d_Device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
 
-                if (d_Machine == null)
+                if (d_Device == null)
                     return;
 
-                string storeName = BizFactory.Merch.GetStoreName(d_Machine.CurUseMerchId, d_Machine.CurUseStoreId);
-                string shopName = BizFactory.Merch.GetShopName(d_Machine.CurUseMerchId, d_Machine.CurUseShopId);
-                string operaterUserName = BizFactory.Merch.GetOperaterUserName(d_Machine.CurUseMerchId, operater);
+                string storeName = BizFactory.Merch.GetStoreName(d_Device.CurUseMerchId, d_Device.CurUseStoreId);
+                string shopName = BizFactory.Merch.GetShopName(d_Device.CurUseMerchId, d_Device.CurUseShopId);
+                string operaterUserName = BizFactory.Merch.GetOperaterUserName(d_Device.CurUseMerchId, operater);
 
-                d_Machine.LastRequestTime = DateTime.Now;
+                d_Device.LastRequestTime = DateTime.Now;
 
                 StringBuilder remark = new StringBuilder("");
 
                 string skuName = "";
-                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Machine.CurUseMerchId, model.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Device.CurUseMerchId, model.SkuId);
                 if (r_Sku != null)
                 {
                     skuName = r_Sku.Name;
@@ -219,7 +218,7 @@ namespace LocalS.BLL.Biz
 
                     if (d_Order.Status != E_OrderStatus.Completed && !d_Order.ExIsHappen)
                     {
-                        var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.ShopMode == E_ShopMode.Machine && m.MachineId == d_Machine.Id).ToList();
+                        var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.ShopMode == E_ShopMode.Device && m.DeviceId == d_Device.Id).ToList();
 
 
                         //是否触发过取货
@@ -232,17 +231,17 @@ namespace LocalS.BLL.Biz
 
                             int timoutM = d_Order.Quantity * 5;
 
-                            Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, d_Order.Id, DateTime.Now.AddMinutes(timoutM), new Order2CheckPickupTimeoutModel { OrderId = d_Order.Id, MachineId = d_Order.MachineId });
+                            Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, d_Order.Id, DateTime.Now.AddMinutes(timoutM), new Order2CheckPickupTimeoutModel { OrderId = d_Order.Id, DeviceId = d_Order.DeviceId });
                         }
 
                         d_OrderPickupLog = new OrderPickupLog();
                         d_OrderPickupLog.Id = model.SignId;
                         d_OrderPickupLog.OrderId = model.OrderId;
                         d_OrderPickupLog.MerchId = d_Order.MerchId;
-                        d_OrderPickupLog.ShopMode = E_ShopMode.Machine;
+                        d_OrderPickupLog.ShopMode = E_ShopMode.Device;
                         d_OrderPickupLog.StoreId = d_Order.StoreId;
                         d_OrderPickupLog.ShopId = d_Order.ShopId;
-                        d_OrderPickupLog.MachineId = d_Order.MachineId;
+                        d_OrderPickupLog.DeviceId = d_Order.DeviceId;
                         d_OrderPickupLog.UniqueId = model.UniqueId;
                         d_OrderPickupLog.UniqueType = E_UniqueType.OrderSub;
                         d_OrderPickupLog.SkuId = model.SkuId;
@@ -307,8 +306,8 @@ namespace LocalS.BLL.Biz
 
                             }
 
-                            d_Machine.ExIsHas = true;
-                            d_Machine.ExReason = "取货动作发生异常";
+                            d_Device.ExIsHas = true;
+                            d_Device.ExReason = "取货动作发生异常";
 
                             Task4Factory.Tim2Global.Exit(Task4TimType.Order2CheckPickupTimeout, d_Order.Id);
                         }
@@ -327,7 +326,7 @@ namespace LocalS.BLL.Biz
                                     {
                                         if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                         {
-                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.MachineId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                             if (resultOperateStock.Result != ResultType.Success)
                                             {
                                                 return;
@@ -376,33 +375,33 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.Pickup, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, d_Machine.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickup, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
 
                 
             }
         }
-        private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, MachineEventByPickupTestModel model)
+        private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupTestModel model)
         {
             if (model == null)
                 return;
 
-            string machineId = trgerId;
-            var machine = CurrentDb.Machine.Where(m => m.Id == machineId).FirstOrDefault();
+            string deviceId = trgerId;
+            var device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
 
-            if (machine == null)
+            if (device == null)
                 return;
 
-            machine.LastRequestTime = DateTime.Now;
+            device.LastRequestTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            string storeName = BizFactory.Merch.GetStoreName(machine.CurUseMerchId, machine.CurUseStoreId);
-            string shopName = BizFactory.Merch.GetShopName(machine.CurUseMerchId, machine.CurUseShopId);
-            string operaterUserName = BizFactory.Merch.GetOperaterUserName(machine.CurUseMerchId, operater);
+            string storeName = BizFactory.Merch.GetStoreName(device.CurUseMerchId, device.CurUseStoreId);
+            string shopName = BizFactory.Merch.GetShopName(device.CurUseMerchId, device.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(device.CurUseMerchId, operater);
 
             StringBuilder remark = new StringBuilder("");
             string skuName = "[测试]";
 
-            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(machine.CurUseMerchId, model.SkuId);
+            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(device.CurUseMerchId, model.SkuId);
 
             if (r_Sku != null)
             {
@@ -426,7 +425,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, machineId, EventCode.PickupTest, string.Format("店铺：{0}，门店：{1}，机器：{2}，{3}", storeName, shopName, machine.Id, remark.ToString()), model);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickupTest, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, device.Id, remark.ToString()), model);
 
         }
     }

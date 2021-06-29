@@ -136,12 +136,12 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetMachines(string operater, string merchId, RupStoreGetMachines rup)
+        public CustomJsonResult GetDevices(string operater, string merchId, RupStoreGetDevices rup)
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.MerchMachine
-                         join m in CurrentDb.Machine on u.MachineId equals m.Id into temp
+            var query = (from u in CurrentDb.MerchDevice
+                         join m in CurrentDb.Device on u.DeviceId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where
                          u.MerchId == merchId
@@ -149,7 +149,7 @@ namespace LocalS.Service.Api.Merch
                          u.CurUseStoreId == rup.StoreId
                          &&
                          u.CurUseShopId == rup.ShopId
-                         select new { u.Id, u.MachineId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.DeviceId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
 
             var list = query.OrderBy(m => m.IsStopUse).ToList();
 
@@ -157,14 +157,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var machine = CurrentDb.Machine.Where(m => m.Id == item.MachineId).FirstOrDefault();
-                if (machine != null)
+                var l_Device = CurrentDb.Device.Where(m => m.Id == item.DeviceId).FirstOrDefault();
+                if (l_Device != null)
                 {
                     olist.Add(new
                     {
-                        Id = item.MachineId,
-                        Name = item.MachineId,
-                        MainImgUrl = machine.MainImgUrl
+                        Id = item.DeviceId,
+                        Name = item.DeviceId,
+                        MainImgUrl = l_Device.MainImgUrl
                     });
                 }
             }
@@ -366,7 +366,7 @@ namespace LocalS.Service.Api.Merch
                             sellChannelStock.StoreId = rop.StoreId;
                             sellChannelStock.ShopMode = E_ShopMode.Mall;
                             sellChannelStock.ShopId = "0";
-                            sellChannelStock.MachineId = "0";
+                            sellChannelStock.DeviceId = "0";
                             sellChannelStock.CabinetId = "0";
                             sellChannelStock.SlotId = "0";
                             sellChannelStock.SpuId = rop.SpuId;
@@ -566,7 +566,7 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var machineCount = CurrentDb.Machine.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == rup.StoreId && m.CurUseShopId == item.Id).Count();
+                var l_DeviceCount = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.CurUseStoreId == rup.StoreId && m.CurUseShopId == item.Id).Count();
 
                 olist.Add(new
                 {
@@ -577,7 +577,7 @@ namespace LocalS.Service.Api.Merch
                     Address = item.Address,
                     Status = MerchServiceFactory.Shop.GetStatus(item.IsOpen),
                     StcMode = d_Store.SctMode,
-                    MachineCount = machineCount,
+                    DeviceCount = l_DeviceCount,
                     CreateTime = item.CreateTime,
                 });
             }
@@ -594,11 +594,11 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
 
-            var d_StoreShopMachine_Count = CurrentDb.MerchMachine.Where(m => m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).Count();
+            var d_StoreShopDevice_Count = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).Count();
 
-            if (d_StoreShopMachine_Count > 0)
+            if (d_StoreShopDevice_Count > 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请先解绑关联的机器");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请先解绑关联的设备");
             }
 
             var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();

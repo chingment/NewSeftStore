@@ -24,9 +24,9 @@ export function initManageBaseInfo(params) {
   })
 }
 
-export function getMachines(params) {
+export function getDevices(params) {
   return request({
-    url: '/store/getMachines',
+    url: '/store/getDevices',
     method: 'get',
     params
   })
@@ -134,5 +134,5 @@ export default {
   getShops: getShops,
   addShop: addShop,
   removeShop: removeShop,
-  getMachines: getMachines
+  getDevices: getDevices
 }

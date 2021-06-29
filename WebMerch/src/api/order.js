@@ -24,17 +24,17 @@ export function getListByStoreSelfTake(params) {
   })
 }
 
-export function getListByMachineSelfTake(params) {
+export function getListByDeviceSelfTake(params) {
   return request({
-    url: '/order/GetListByMachineSelfTake',
+    url: '/order/GetListByDeviceSelfTake',
     method: 'get',
     params
   })
 }
 
-export function getDetailsByMachineSelfTake(params) {
+export function getDetailsByDeviceSelfTake(params) {
   return request({
-    url: '/order/getDetailsByMachineSelfTake',
+    url: '/order/getDetailsByDeviceSelfTake',
     method: 'get',
     params
   })
@@ -48,9 +48,9 @@ export function pickupExceptionHandle(data) {
   })
 }
 
-export function handleExByMachineSelfTake(data) {
+export function handleExByDeviceSelfTake(data) {
   return request({
-    url: '/order/handleExByMachineSelfTake',
+    url: '/order/handleExByDeviceSelfTake',
     method: 'post',
     data
   })
@@ -59,8 +59,8 @@ export function handleExByMachineSelfTake(data) {
 export default {
   getList: getList,
   getListByDelivery: getListByDelivery,
-  getListByMachineSelfTake: getListByMachineSelfTake,
+  getListByDeviceSelfTake: getListByDeviceSelfTake,
   getListByStoreSelfTake: getListByStoreSelfTake,
-  getDetailsByMachineSelfTake: getDetailsByMachineSelfTake,
-  handleExByMachineSelfTake: handleExByMachineSelfTake
+  getDetailsByDeviceSelfTake: getDetailsByDeviceSelfTake,
+  handleExByDeviceSelfTake: handleExByDeviceSelfTake
 }

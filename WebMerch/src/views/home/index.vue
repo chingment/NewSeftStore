@@ -16,7 +16,7 @@
         </div>
       </el-col>
       <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleMachineCount('messages')">
+        <div class="card-panel" @click="handleDeviceCount('messages')">
           <div class="card-panel-icon-wrapper icon-select">
             <svg-icon icon-class="t_machine" class-name="card-panel-icon" />
           </div>
@@ -27,11 +27,11 @@
             <div style="display:flex">
               <div style="margin-right:10px;display:flex; align-items: center;">
                 台数：
-                <count-to :start-val="0" :end-val="machineCount" :duration="3000" class="card-panel-num" />
+                <count-to :start-val="0" :end-val="deviceCount" :duration="3000" class="card-panel-num" />
               </div>
               <div style="display:flex; align-items: center;">
                 异常：
-                <count-to :start-val="0" :end-val="machineExCount" :duration="3000" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
+                <count-to :start-val="0" :end-val="deviceExCount" :duration="3000" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
               </div>
             </div>
 
@@ -87,7 +87,7 @@
               <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
             </div>
             <div v-if="mctMode.indexOf('M')>-1" class="it">
-              <div class="t1" @click="sumExHdByMachineSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByMachineSelfTake }}</span><br> <span class="d1">机器异常订单</span></div>
+              <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">机器异常订单</span></div>
             </div>
           </div>
         </el-card>
@@ -239,12 +239,12 @@ export default {
   data() {
     return {
       storeCount: 0,
-      machineCount: 0,
-      machineExCount: 0,
+      deviceCount: 0,
+      deviceExCount: 0,
       sumTradeAmount: 0,
       replenishCount: 0,
       todaySummary: {
-        sumExHdByMachineSelfTake: 0,
+        sumExHdByDeviceSelfTake: 0,
         todayGmvRl: {
           sumCount: 0,
           sumQuantity: 0,
@@ -279,10 +279,10 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.storeCount = d.storeCount
-          this.machineCount = d.machineCount
+          this.deviceCount = d.deviceCount
           this.sumTradeAmount = d.sumTradeAmount
           this.replenishCount = d.replenishCount
-          this.machineExCount = d.machineExCount
+          this.deviceExCount = d.deviceExCount
         }
       })
     },
@@ -290,7 +290,7 @@ export default {
       getTodaySummary().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.todaySummary.sumExHdByMachineSelfTake = d.sumExHdByMachineSelfTake
+          this.todaySummary.sumExHdByDeviceSelfTake = d.sumExHdByDeviceSelfTake
           // this.todayGmv = res.data.days[0]
         }
       })
@@ -324,7 +324,7 @@ export default {
         }
       })
     },
-    sumExHdByMachineSelfTakeClick() {
+    sumExHdByDeviceSelfTakeClick() {
       this.$cookies.set('isHasEx', '1')
       this.$router.push({
         path: '/order/listbymt'
@@ -342,9 +342,9 @@ export default {
         path: '/store/list'
       })
     },
-    handleMachineCount() {
+    handleDeviceCount() {
       this.$router.push({
-        path: '/machine/list'
+        path: '/device/list'
       })
     },
     handleSumTradeAmount() {

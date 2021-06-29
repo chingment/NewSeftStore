@@ -12,22 +12,22 @@ namespace LocalS.Entity
         public const string Login = "Login";
         [EventCodeRemark("A", "系统退出")]
         public const string Logout = "Logout";
-        [EventCodeRemark("D", "机器心跳包")]
-        public const string MachineStatus = "MachineStatus";
-        [EventCodeRemark("A", "机器扫描货道")]
-        public const string MachineScanSlot = "MachineScanSlot";
-        [EventCodeRemark("D", "机器商品取货")]
-        public const string Pickup = "Pickup";
-        [EventCodeRemark("D", "机器商品测试取货")]
-        public const string PickupTest = "PickupTest";
-        [EventCodeRemark("A", "机器货道商品保存")]
-        public const string MachineCabinetSlotSave = "MachineCabinetSlotSave";
-        [EventCodeRemark("A", "机器货道商品移除")]
-        public const string MachineCabinetSlotRemove = "MachineCabinetSlotRemove";
-        [EventCodeRemark("A", "机器商品库存查看")]
-        public const string MachineCabinetGetSlots = "MachineCabinetGetSlots";
-        [EventCodeRemark("A", "机器货道商品调整价格")]
-        public const string MachineAdjustStockSalePrice = "MachineAdjustStockSalePrice";
+        [EventCodeRemark("D", "设备心跳包")]
+        public const string DeviceStatus = "DeviceStatus";
+        [EventCodeRemark("A", "设备扫描货道")]
+        public const string DeviceScanSlot = "DeviceScanSlot";
+        [EventCodeRemark("D", "设备商品取货")]
+        public const string DevicePickup = "DevicePickup";
+        [EventCodeRemark("D", "设备商品测试取货")]
+        public const string DevicePickupTest = "DevicePickupTest";
+        [EventCodeRemark("A", "设备货道商品保存")]
+        public const string DeviceCabinetSlotSave = "DeviceCabinetSlotSave";
+        [EventCodeRemark("A", "设备货道商品移除")]
+        public const string DeviceCabinetSlotRemove = "DeviceCabinetSlotRemove";
+        [EventCodeRemark("A", "设备商品库存查看")]
+        public const string DeviceCabinetGetSlots = "DeviceCabinetGetSlots";
+        [EventCodeRemark("A", "设备货道商品调整价格")]
+        public const string DeviceAdjustStockSalePrice = "DeviceAdjustStockSalePrice";
         [EventCodeRemark("A", "订单商品取货未完成人工标记未取状态")]
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         [EventCodeRemark("A", "订单商品取货已完成人工标记未取状态")]
@@ -54,16 +54,16 @@ namespace LocalS.Entity
         public const string AdRelease = "AdRelease";
         [EventCodeRemark("A", "删除广告")]
         public const string AdDeleteContent = "AdDeleteContent";
-        [EventCodeRemark("A", "保存机器信息")]
-        public const string MachineEdit = "MachineEdit";
+        [EventCodeRemark("A", "保存设备信息")]
+        public const string DeviceEdit = "DeviceEdit";
         [EventCodeRemark("A", "导出Excel")]
         public const string ExportExcel = "ExportExcel";
-        [EventCodeRemark("A", "解绑门店机器")]
-        public const string MachineUnBindShop = "MachineUnBindShop";
-        [EventCodeRemark("A", "绑定门店机器")]
-        public const string MachineBindShop = "MachineBindShop";
-        [EventCodeRemark("A", "保存机器货道库存")]
-        public const string MachineAdjustStockQuantity = "MachineAdjustStockQuantity";
+        [EventCodeRemark("A", "解绑门店设备")]
+        public const string DeviceUnBindShop = "DeviceUnBindShop";
+        [EventCodeRemark("A", "绑定门店设备")]
+        public const string DeviceBindShop = "DeviceBindShop";
+        [EventCodeRemark("A", "保存设备货道库存")]
+        public const string DeviceAdjustStockQuantity = "DeviceAdjustStockQuantity";
         [EventCodeRemark("A", "新增商品分类信息")]
         public const string PrdKindAdd = "PrdKindAdd";
         [EventCodeRemark("A", "修改商品分类信息")]
@@ -88,19 +88,19 @@ namespace LocalS.Entity
         public const string StoreRemoveKind = "StoreRemoveKind";
         [EventCodeRemark("A", "保存门店信息")]
         public const string ShopSave = "ShopSave";
-        [EventCodeRemark("A", "店铺绑定机器")]
-        public const string StoreAddMachine = "StoreAddMachine";
-        [EventCodeRemark("A", "店铺移除机器")]
-        public const string StoreRemoveMachine = "StoreRemoveMachine";
+        [EventCodeRemark("A", "店铺绑定设备")]
+        public const string StoreAddDevice = "StoreAddDevice";
+        [EventCodeRemark("A", "店铺移除设备")]
+        public const string StoreRemoveDevice = "StoreRemoveDevice";
         [EventCodeRemark("A", "新建优惠券")]
         public const string CouponAdd = "CouponAdd";
         [EventCodeRemark("A", "修改优惠券信息")]
         public const string CouponEdit = "CouponEdit";
-        [EventCodeRemark("B", "更新机器库存信息命令")]
+        [EventCodeRemark("B", "更新设备库存信息命令")]
         public const string MCmdUpdateSkuStock = "MCmdUpdateSkuStock";
-        [EventCodeRemark("C", "更新机器广告")]
+        [EventCodeRemark("C", "更新设备广告")]
         public const string MCmdUpdateAds = "MCmdUpdateAds";
-        [EventCodeRemark("C", "更新机器LOGO命令")]
+        [EventCodeRemark("C", "更新设备LOGO命令")]
         public const string MCmdUpdateHomeLogo = "MCmdUpdateHomeLogo";
         [EventCodeRemark("A", "重启系统命令")]
         public const string MCmdSysReboot = "MCmdSysReboot";
@@ -155,19 +155,19 @@ namespace LocalS.Entity
             //    case EventCode.Pickup:
             //        name = "商品取货";
             //        break;
-            //    case EventCode.MachineCabinetSlotAdjustStockQuantity:
+            //    case EventCode.DeviceCabinetSlotAdjustStockQuantity:
             //        name = "商品库存调整";
             //        break;
-            //    case EventCode.MachineAdjustStockSalePrice:
+            //    case EventCode.DeviceAdjustStockSalePrice:
             //        name = "商品价格调整";
             //        break;
-            //    case EventCode.MachineCabinetSlotSave:
+            //    case EventCode.DeviceCabinetSlotSave:
             //        name = "商品货道保存";
             //        break;
-            //    case EventCode.MachineCabinetSlotRemove:
+            //    case EventCode.DeviceCabinetSlotRemove:
             //        name = "商品货道移除";
             //        break;
-            //    case EventCode.MachineCabinetGetSlots:
+            //    case EventCode.DeviceCabinetGetSlots:
             //        name = "查看商品货道";
             //        break;
             //    case EventCode.OrderCancle:
@@ -188,8 +188,8 @@ namespace LocalS.Entity
             //    case EventCode.OrderPickupOneSysMadeSignTake:
             //        name = "系统标识已取";
             //        break;
-            //    case EventCode.MachineHandleRunEx:
-            //        name = "机器异常处理";
+            //    case EventCode.DeviceHandleRunEx:
+            //        name = "设备异常处理";
             //        break;
             //    case EventCode.AdminUserAdd:
             //        name = "新建管理账号";
@@ -203,8 +203,8 @@ namespace LocalS.Entity
             //    case EventCode.AdSpaceDeleteAdContent:
             //        name = "广告删除";
             //        break;
-            //    case EventCode.MachineEdit:
-            //        name = "保存机器信息";
+            //    case EventCode.DeviceEdit:
+            //        name = "保存设备信息";
             //        break;
             //    case EventCode.PrdKindAdd:
             //        name = "新建商品分类";
@@ -224,11 +224,11 @@ namespace LocalS.Entity
             //    case EventCode.StoreEdit:
             //        name = "保存店铺信息";
             //        break;
-            //    case EventCode.StoreAddMachine:
-            //        name = "机器绑定店铺";
+            //    case EventCode.StoreAddDevice:
+            //        name = "设备绑定店铺";
             //        break;
-            //    case EventCode.StoreRemoveMachine:
-            //        name = "机器解绑店铺";
+            //    case EventCode.StoreRemoveDevice:
+            //        name = "设备解绑店铺";
             //        break;
             //}
 

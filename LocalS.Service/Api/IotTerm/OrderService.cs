@@ -23,31 +23,31 @@ namespace LocalS.Service.Api.IotTerm
                 return new CustomJsonResult2(ResultCode.Failure, "设备Id不能为空");
             }
 
-            var d_machine = CurrentDb.Machine.Where(m => m.Id == rop.device_id).FirstOrDefault();
+            var d_Device = CurrentDb.Device.Where(m => m.Id == rop.device_id).FirstOrDefault();
 
-            if (d_machine == null)
+            if (d_Device == null)
             {
-                return new CustomJsonResult2(ResultCode.Failure, "机器未登记");
+                return new CustomJsonResult2(ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseMerchId))
+            if (string.IsNullOrEmpty(d_Device.CurUseMerchId))
             {
-                return new CustomJsonResult2(ResultCode.Failure, "机器未绑定商户");
+                return new CustomJsonResult2(ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseStoreId))
+            if (string.IsNullOrEmpty(d_Device.CurUseStoreId))
             {
-                return new CustomJsonResult2(ResultCode.Failure, "机器未绑定店铺");
+                return new CustomJsonResult2(ResultCode.Failure, "设备未绑定店铺");
             }
 
-            if (string.IsNullOrEmpty(d_machine.CurUseShopId))
+            if (string.IsNullOrEmpty(d_Device.CurUseShopId))
             {
-                return new CustomJsonResult2(ResultCode.Failure, "机器未绑定门店");
+                return new CustomJsonResult2(ResultCode.Failure, "设备未绑定门店");
             }
 
-            if (d_machine.RunStatus != E_MachineRunStatus.Running)
+            if (d_Device.RunStatus != E_DeviceRunStatus.Running)
             {
-                return new CustomJsonResult2(ResultCode.Failure, "机器在维护状态");
+                return new CustomJsonResult2(ResultCode.Failure, "设备在维护状态");
             }
 
 
@@ -66,7 +66,7 @@ namespace LocalS.Service.Api.IotTerm
                 return new CustomJsonResult2(ResultCode.Failure, "通知URL不能为空");
             }
 
-            var shop = CurrentDb.Shop.Where(m => m.Id == d_machine.CurUseShopId).FirstOrDefault();
+            var shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
 
             if (shop == null)
             {
@@ -76,15 +76,15 @@ namespace LocalS.Service.Api.IotTerm
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Api;
-            bizRop.StoreId = d_machine.CurUseStoreId;
+            bizRop.StoreId = d_Device.CurUseStoreId;
             bizRop.ShopMethod = E_ShopMethod.Buy;
-            bizRop.IsTestMode = d_machine.IsTestMode;
+            bizRop.IsTestMode = d_Device.IsTestMode;
             bizRop.CumOrderId = rop.low_order_id;
 
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
-            block.ReceiveMode = E_ReceiveMode.SelfTakeByMachine;
-            block.SelfTake.Mark.Id = d_machine.CurUseShopId;
+            block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
+            block.SelfTake.Mark.Id = d_Device.CurUseShopId;
             block.SelfTake.Mark.Name = shop.Name;
             block.SelfTake.Mark.Address = shop.Address;
             block.SelfTake.Mark.AreaCode = shop.AreaCode;
@@ -109,7 +109,7 @@ namespace LocalS.Service.Api.IotTerm
                     }
                 }
 
-                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.SkuModel() { Id = detail.sku_id, Quantity = detail.quantity, ShopMode = E_ShopMode.Machine, ShopId = d_machine.CurUseShopId, MachineIds = new string[] { rop.device_id }, SvcConsulterId = "" });
+                block.Skus.Add(new LocalS.BLL.Biz.RopOrderReserve.BlockModel.SkuModel() { Id = detail.sku_id, Quantity = detail.quantity, ShopMode = E_ShopMode.Device, ShopId = d_Device.CurUseShopId, DeviceIds = new string[] { rop.device_id }, SvcConsulterId = "" });
             }
 
             bizRop.Blocks.Add(block);

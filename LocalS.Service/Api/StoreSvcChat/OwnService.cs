@@ -33,14 +33,14 @@ namespace LocalS.Service.Api.StoreSvcChat
             }
 
 
-            var machines = CurrentDb.Machine.Where(m => rop.UserNames.Contains(m.ImUserName) && m.ImUserName != null).ToList();
+            var d_Devices = CurrentDb.Device.Where(m => rop.UserNames.Contains(m.ImUserName) && m.ImUserName != null).ToList();
 
-            foreach (var machine in machines)
+            foreach (var d_Device in d_Devices)
             {
-                var isExt = ret.Contacts.Where(m => m.Username == machine.ImUserName).FirstOrDefault();
+                var isExt = ret.Contacts.Where(m => m.Username == d_Device.ImUserName).FirstOrDefault();
                 if (isExt == null)
                 {
-                    ret.Contacts.Add(new RetOwnGetContactInfos.ContactModel { Username = machine.ImUserName, Nickname = "[机器]" + machine.Id, Avatar = machine.LogoImgUrl });
+                    ret.Contacts.Add(new RetOwnGetContactInfos.ContactModel { Username = d_Device.ImUserName, Nickname = "[设备]" + d_Device.Id, Avatar = d_Device.LogoImgUrl });
                 }
             }
 

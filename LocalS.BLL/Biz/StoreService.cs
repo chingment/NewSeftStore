@@ -10,9 +10,9 @@ namespace LocalS.BLL.Biz
 {
     public class StoreService : BaseService
     {
-        public StoreInfoModel GetOne(string id)
+        public StoreModel GetOne(string id)
         {
-            var model = new StoreInfoModel();
+            var model = new StoreModel();
 
             var store = CurrentDb.Store.Where(m => m.Id == id).FirstOrDefault();
 

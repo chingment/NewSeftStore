@@ -10,6 +10,6 @@ namespace LocalS.BLL.Task
     {
         public string OrderId { get; set; }
         public string OrderSubId { get; set; }
-        public string MachineId { get; set; }
+        public string DeviceId { get; set; }
     }
 }

@@ -31,8 +31,8 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public bool IsTestMode { get; set; }
         //线上商城 F
-        //线下机器 K
-        //线上商城+线下机器 FK
+        //线下设备 K
+        //线上商城+线下设备 FK
         public string SctMode { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace LocalS.Entity
     public enum E_OrderSource
     {
         Unknow = 0,
-        Machine = 1,
+        Device = 1,
         Api = 2,
         Wxmp = 3
     }
@@ -78,8 +78,8 @@ namespace LocalS.Entity
         public E_ShopMode ShopMode { get; set; }
         public string ShopId { get; set; }
         public string ShopName { get; set; }
-        public string MachineId { get; set; }
-        public string MachineCumCode { get; set; }
+        public string DeviceId { get; set; }
+        public string DeviceCumCode { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public string ReceiveModeName { get; set; }
         public string Receiver { get; set; }

@@ -124,9 +124,9 @@ namespace LocalS.Service.Api.StoreApp
                 }
 
 
-                if (shopMode == E_ShopMode.Machine)
+                if (shopMode == E_ShopMode.Device)
                 {
-                    m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
+                    m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByDevice;
                 }
                 else
                 {
@@ -181,9 +181,9 @@ namespace LocalS.Service.Api.StoreApp
                 m_Sku.IsMavkBuy = r_Sku.IsMavkBuy;
             }
 
-            if (rup.ShopMode == E_ShopMode.Machine)
+            if (rup.ShopMode == E_ShopMode.Device)
             {
-                m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByMachine;
+                m_Sku.SupReceiveMode = E_SupReceiveMode.SelfTakeByDevice;
             }
             else
             {

@@ -16,11 +16,11 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
-        public static MachineService Machine
+        public static DeviceService Device
         {
             get
             {
-                return new MachineService();
+                return new DeviceService();
             }
         }
 
