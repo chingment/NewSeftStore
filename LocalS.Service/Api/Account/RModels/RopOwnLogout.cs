@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.Account
     {
         public RopOwnLogout()
         {
-
+            this.LoginPms = new Dictionary<string, string>();
         }
 
         public string AppId { get; set; }
