@@ -103,6 +103,8 @@ namespace LocalS.Service.Api.IotTerm
                 d_Spu.Creator = merchId;
                 d_Spu.CreateTime = DateTime.Now;
 
+                List<object> spec_skus = new List<object>();
+
                 foreach (var sku in rop.spec_skus)
                 {
                     if (string.IsNullOrEmpty(sku.cum_code))
@@ -152,6 +154,8 @@ namespace LocalS.Service.Api.IotTerm
                     CurrentDb.SaveChanges();
 
                     skuIds.Add(d_Sku.Id);
+
+                    spec_skus.Add(new { sku_id = d_Sku.Id, cum_code = d_Sku.CumCode });
                 }
 
 
@@ -159,7 +163,8 @@ namespace LocalS.Service.Api.IotTerm
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult2(ResultCode.Success, "保存成功");
+                var ret = new { spu_id = d_Spu.Id, spec_skus = spec_skus };
+                result = new CustomJsonResult2(ResultCode.Success, "保存成功", ret);
             }
 
             if (result.Code == ResultCode.Success)

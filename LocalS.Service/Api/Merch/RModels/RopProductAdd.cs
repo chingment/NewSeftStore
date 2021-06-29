@@ -36,7 +36,6 @@ namespace LocalS.Service.Api.Merch
         public string SupplierId { get; set; }
         public class Sku
         {
-            public string Id { get; set; }
             public string CumCode { get; set; }
             public string BarCode { get; set; }
             public List<SpecDes> SpecDes { get; set; }

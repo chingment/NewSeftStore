@@ -17,55 +17,55 @@ namespace LocalS.BLL.Biz
     {
         public DeviceModel GetOne(string id)
         {
-            var model = new DeviceModel();
+            var m_Device = new DeviceModel();
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == id).FirstOrDefault();
 
             if (d_Device == null)
                 return null;
 
-            model.DeviceId = d_Device.Id;
-            model.Name = d_Device.Name;
-            model.MainImgUrl = d_Device.MainImgUrl;
-            model.LogoImgUrl = d_Device.LogoImgUrl;
-            model.RunStatus = d_Device.RunStatus;
-            model.LastRequestTime = d_Device.LastRequestTime;
-            model.AppVersion = d_Device.AppVersionName;
-            model.CtrlSdkVersion = d_Device.CtrlSdkVersionCode;
-            model.KindIsHidden = d_Device.KindIsHidden;
-            model.KindRowCellSize = d_Device.KindRowCellSize;
-            model.IsTestMode = d_Device.IsTestMode;
-            model.CameraByChkIsUse = d_Device.CameraByChkIsUse;
-            model.CameraByJgIsUse = d_Device.CameraByJgIsUse;
-            model.CameraByRlIsUse = d_Device.CameraByRlIsUse;
-            model.ExIsHas = d_Device.ExIsHas;
-            model.OstVern = d_Device.OstVern;
-            model.MstVern = d_Device.MstVern;
-            model.ImIsUse = d_Device.ImIsUse;
-            model.ImPartner = d_Device.ImPartner;
-            model.ImUserName = d_Device.ImUserName;
-            model.ImPassword = d_Device.ImPassword;
+            m_Device.DeviceId = d_Device.Id;
+            m_Device.Name = d_Device.Name;
+            m_Device.MainImgUrl = d_Device.MainImgUrl;
+            m_Device.LogoImgUrl = d_Device.LogoImgUrl;
+            m_Device.RunStatus = d_Device.RunStatus;
+            m_Device.LastRequestTime = d_Device.LastRequestTime;
+            m_Device.AppVersion = d_Device.AppVersionName;
+            m_Device.CtrlSdkVersion = d_Device.CtrlSdkVersionCode;
+            m_Device.KindIsHidden = d_Device.KindIsHidden;
+            m_Device.KindRowCellSize = d_Device.KindRowCellSize;
+            m_Device.IsTestMode = d_Device.IsTestMode;
+            m_Device.CameraByChkIsUse = d_Device.CameraByChkIsUse;
+            m_Device.CameraByJgIsUse = d_Device.CameraByJgIsUse;
+            m_Device.CameraByRlIsUse = d_Device.CameraByRlIsUse;
+            m_Device.ExIsHas = d_Device.ExIsHas;
+            m_Device.OstVern = d_Device.OstVern;
+            m_Device.MstVern = d_Device.MstVern;
+            m_Device.ImIsUse = d_Device.ImIsUse;
+            m_Device.ImPartner = d_Device.ImPartner;
+            m_Device.ImUserName = d_Device.ImUserName;
+            m_Device.ImPassword = d_Device.ImPassword;
 
             var d_Cabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == id && m.IsUse == true).OrderByDescending(m => m.Priority).ToList();
 
             foreach (var d_Cabinet in d_Cabinets)
             {
-                var cabinet = new CabinetModel();
-                cabinet.CabinetId = d_Cabinet.CabinetId;
-                cabinet.Name = d_Cabinet.CabinetName;
-                cabinet.RowColLayout = d_Cabinet.RowColLayout;
-                cabinet.Priority = d_Cabinet.Priority;
-                cabinet.ComId = d_Cabinet.ComId;
-                model.Cabinets.Add(cabinet.CabinetId, cabinet);
+                var m_Cabinet = new CabinetModel();
+                m_Cabinet.CabinetId = d_Cabinet.CabinetId;
+                m_Cabinet.Name = d_Cabinet.CabinetName;
+                m_Cabinet.RowColLayout = d_Cabinet.RowColLayout;
+                m_Cabinet.Priority = d_Cabinet.Priority;
+                m_Cabinet.ComId = d_Cabinet.ComId;
+                m_Device.Cabinets.Add(m_Cabinet.CabinetId, m_Cabinet);
             }
 
 
-            model.FingerVeinner.FingerVeinnerId = "FV";
-            model.FingerVeinner.IsUse = d_Device.FingerVeinnerIsUse;
+            m_Device.FingerVeinner.FingerVeinnerId = "FV";
+            m_Device.FingerVeinner.IsUse = d_Device.FingerVeinnerIsUse;
 
-            model.Scanner.ScannerId = "SC";
-            model.Scanner.IsUse = d_Device.SannerIsUse;
-            model.Scanner.ComId = d_Device.SannerComId;
+            m_Device.Scanner.ScannerId = "SC";
+            m_Device.Scanner.IsUse = d_Device.SannerIsUse;
+            m_Device.Scanner.ComId = d_Device.SannerComId;
 
 
 
@@ -73,77 +73,78 @@ namespace LocalS.BLL.Biz
 
             if (d_Merch != null)
             {
-                model.MerchId = d_Merch.Id;
-                model.MerchName = d_Merch.Name;
-                model.CsrQrCode = d_Merch.CsrQrCode;
-                model.CsrPhoneNumber = d_Merch.CsrPhoneNumber;
-                model.CsrHelpTip = d_Merch.CsrHelpTip;
+                m_Device.MerchId = d_Merch.Id;
+                m_Device.MerchName = d_Merch.Name;
+                m_Device.CsrQrCode = d_Merch.CsrQrCode;
+                m_Device.CsrPhoneNumber = d_Merch.CsrPhoneNumber;
+                m_Device.CsrHelpTip = d_Merch.CsrHelpTip;
 
-                model.PayOptions = d_Merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
+                m_Device.PayOptions = d_Merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
 
                 var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == d_Device.CurUseMerchId && m.DeviceId == id).FirstOrDefault();
                 if (d_MerchDevice != null)
                 {
-                    model.Name = d_MerchDevice.Name;
-                    model.LogoImgUrl = d_MerchDevice.LogoImgUrl;
+                    m_Device.Name = d_MerchDevice.Name;
+                    m_Device.LogoImgUrl = d_MerchDevice.LogoImgUrl;
                 }
 
                 var d_Store = CurrentDb.Store.Where(m => m.Id == d_Device.CurUseStoreId).FirstOrDefault();
                 if (d_Store != null)
                 {
-                    model.StoreId = d_Store.Id;
-                    model.StoreName = d_Store.Name;
+                    m_Device.StoreId = d_Store.Id;
+                    m_Device.StoreName = d_Store.Name;
                 }
 
                 var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
                 if (d_Shop != null)
                 {
-                    model.ShopId = d_Shop.Id;
-                    model.ShopName = d_Shop.Name;
-                    model.ShopAddress = d_Shop.Address;
+                    m_Device.ShopId = d_Shop.Id;
+                    m_Device.ShopName = d_Shop.Name;
+                    m_Device.ShopAddress = d_Shop.Address;
                 }
             }
 
-            return model;
+            return m_Device;
         }
 
         public Dictionary<string, AdModel> GetAds(string id)
         {
-            var ads = new Dictionary<string, AdModel>();
+            var m_Ads = new Dictionary<string, AdModel>();
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == id).FirstOrDefault();
 
             if (d_Device == null)
-                return ads;
+                return m_Ads;
 
             if (string.IsNullOrEmpty(d_Device.CurUseMerchId))
-                return ads;
+                return m_Ads;
 
-            var adSpaces = CurrentDb.AdSpace.Where(m => m.Id == E_AdSpaceId.DeviceHomeBanner).ToList();
+            var d_AdSpaces = CurrentDb.AdSpace.Where(m => m.Id == E_AdSpaceId.DeviceHomeBanner).ToList();
 
-            foreach (var adSpace in adSpaces)
+            foreach (var d_AdSpace in d_AdSpaces)
             {
-                var ad = new AdModel();
-                ad.AdId = adSpace.Id;
-                ad.Name = adSpace.Name;
-                var adContentIds = CurrentDb.AdContentBelong.Where(m => m.Status == E_AdContentBelongStatus.Normal && m.MerchId == d_Device.CurUseMerchId && m.AdSpaceId == adSpace.Id && m.BelongType == E_AdSpaceBelongType.Device && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+                var m_Ad = new AdModel();
+                m_Ad.AdId = d_AdSpace.Id;
+                m_Ad.Name = d_AdSpace.Name;
 
-                if (adContentIds != null && adContentIds.Length > 0)
+                var l_AdContentIds = CurrentDb.AdContentBelong.Where(m => m.Status == E_AdContentBelongStatus.Normal && m.MerchId == d_Device.CurUseMerchId && m.AdSpaceId == d_AdSpace.Id && m.BelongType == E_AdSpaceBelongType.Device && m.BelongId == id).Select(m => m.AdContentId).ToArray();
+
+                if (l_AdContentIds != null && l_AdContentIds.Length > 0)
                 {
-                    var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
+                    var d_AdContents = CurrentDb.AdContent.Where(m => l_AdContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 
-                    foreach (var item in adContents)
+                    foreach (var d_AdContent in d_AdContents)
                     {
-                        ad.Contents.Add(new AdModel.ContentModel { DataType = "image", DataUrl = item.Url });
+                        m_Ad.Contents.Add(new AdModel.ContentModel { DataType = "image", DataUrl = d_AdContent.Url });
                     }
                 }
 
-                ads.Add(((int)adSpace.Id).ToString(), ad);
+                m_Ads.Add(((int)d_AdSpace.Id).ToString(), m_Ad);
             }
 
 
 
-            return ads;
+            return m_Ads;
         }
 
         public bool IsStopUse(string merchId, string deviceId)

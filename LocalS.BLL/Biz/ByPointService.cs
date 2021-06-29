@@ -16,17 +16,17 @@ namespace LocalS.BLL
         {
             var result = new CustomJsonResult();
 
-            var m_AppTraceLog = new BI_AppTraceLog();
-            m_AppTraceLog.Id= IdWorker.Build(IdType.NewGuid);
-            m_AppTraceLog.AppId = rop.AppId;
-            m_AppTraceLog.Page = rop.Page;
-            m_AppTraceLog.Action = rop.Action;
-            m_AppTraceLog.Param = rop.Param.ToJsonString();
-            m_AppTraceLog.UsrSign = rop.UsrSign;
-            m_AppTraceLog.Creator = rop.UsrSign;
-            m_AppTraceLog.CreateTime = DateTime.Now;
+            var d_AppTraceLog = new BI_AppTraceLog();
+            d_AppTraceLog.Id= IdWorker.Build(IdType.NewGuid);
+            d_AppTraceLog.AppId = rop.AppId;
+            d_AppTraceLog.Page = rop.Page;
+            d_AppTraceLog.Action = rop.Action;
+            d_AppTraceLog.Param = rop.Param.ToJsonString();
+            d_AppTraceLog.UsrSign = rop.UsrSign;
+            d_AppTraceLog.Creator = rop.UsrSign;
+            d_AppTraceLog.CreateTime = DateTime.Now;
 
-            CurrentDb.BI_AppTraceLog.Add(m_AppTraceLog);
+            CurrentDb.BI_AppTraceLog.Add(d_AppTraceLog);
             CurrentDb.SaveChanges();
 
 

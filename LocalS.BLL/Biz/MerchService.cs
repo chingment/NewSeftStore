@@ -15,45 +15,42 @@ namespace LocalS.BLL.Biz
         public WxAppInfoConfig GetWxMpAppInfoConfig(string merchId)
         {
 
-            var config = new WxAppInfoConfig();
+            var m_Config = new WxAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            if (merch == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (d_Merch == null)
                 return null;
 
 
-            config.AppId = merch.WxMpAppId;
-            config.AppSecret = merch.WxMpAppSecret;
-            config.PayMchId = merch.WxPayMchId;
-            config.PayKey = merch.WxPayKey;
-            config.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
+            m_Config.AppId = d_Merch.WxMpAppId;
+            m_Config.AppSecret = d_Merch.WxMpAppSecret;
+            m_Config.PayMchId = d_Merch.WxPayMchId;
+            m_Config.PayKey = d_Merch.WxPayKey;
+            m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
 
-            return config;
+            return m_Config;
         }
 
         public WxAppInfoConfig GetWxMpAppInfoConfigByAppId(string appId)
         {
 
-            var config = new WxAppInfoConfig();
+            var m_Config = new WxAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.WxMpAppId == appId).FirstOrDefault();
-            if (merch == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.WxMpAppId == appId).FirstOrDefault();
+            if (d_Merch == null)
                 return null;
 
 
-            config.AppId = merch.WxMpAppId;
-            config.AppSecret = merch.WxMpAppSecret;
-            config.PayMchId = merch.WxPayMchId;
-            config.PayKey = merch.WxPayKey;
-            config.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-
-            config.MyMerchId = merch.Id;
-
-
-            config.MyStoreId = merch.MctStoreId;
+            m_Config.AppId = d_Merch.WxMpAppId;
+            m_Config.AppSecret = d_Merch.WxMpAppSecret;
+            m_Config.PayMchId = d_Merch.WxPayMchId;
+            m_Config.PayKey = d_Merch.WxPayKey;
+            m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
+            m_Config.MyMerchId = d_Merch.Id;
+            m_Config.MyStoreId = d_Merch.MctStoreId;
 
 
-            return config;
+            return m_Config;
         }
 
         //public WxAppInfoConfig GetWxPaAppInfoConfig(string merchId)
@@ -78,63 +75,63 @@ namespace LocalS.BLL.Biz
         public ZfbAppInfoConfig GetZfbMpAppInfoConfig(string merchId)
         {
 
-            var config = new ZfbAppInfoConfig();
+            var m_Config = new ZfbAppInfoConfig();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            if (merch == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (d_Merch == null)
                 return null;
 
 
-            config.AppId = merch.ZfbMpAppId;
-            config.AppPrivateKey = merch.ZfbMpAppPrivateSecret;
-            config.ZfbPublicKey = merch.ZfbPublicSecret;
-            config.PayResultNotifyUrl = merch.ZfbResultNotifyUrl;
+            m_Config.AppId = d_Merch.ZfbMpAppId;
+            m_Config.AppPrivateKey = d_Merch.ZfbMpAppPrivateSecret;
+            m_Config.ZfbPublicKey = d_Merch.ZfbPublicSecret;
+            m_Config.PayResultNotifyUrl = d_Merch.ZfbResultNotifyUrl;
 
-            return config;
+            return m_Config;
         }
 
         public TgPayInfoConfg GetTgPayInfoConfg(string merchId)
         {
 
-            var config = new TgPayInfoConfg();
+            var m_Confg = new TgPayInfoConfg();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            if (merch == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (d_Merch == null)
                 return null;
 
 
-            config.Account = merch.TgPayAccount;
-            config.Key = merch.TgPayKey;
-            config.PayResultNotifyUrl = merch.TgPayResultNotifyUrl;
+            m_Confg.Account = d_Merch.TgPayAccount;
+            m_Confg.Key = d_Merch.TgPayKey;
+            m_Confg.PayResultNotifyUrl = d_Merch.TgPayResultNotifyUrl;
 
-            return config;
+            return m_Confg;
         }
 
         public XrtPayInfoConfg GetXrtPayInfoConfg(string merchId)
         {
-            var config = new XrtPayInfoConfg();
+            var m_Config = new XrtPayInfoConfg();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            if (merch == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            if (d_Merch == null)
                 return null;
 
 
-            config.Mch_id = merch.XrtPayMchId;
-            config.Key = merch.XrtPayKey;
-            config.PayResultNotifyUrl = merch.XrtPayResultNotifyUrl;
+            m_Config.Mch_id = d_Merch.XrtPayMchId;
+            m_Config.Key = d_Merch.XrtPayKey;
+            m_Config.PayResultNotifyUrl = d_Merch.XrtPayResultNotifyUrl;
 
-            return config;
+            return m_Config;
         }
 
         public string GetMerchName(string merchId)
         {
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
-            if (merch == null)
+            if (d_Merch == null)
                 return null;
 
-            return merch.Name;
+            return d_Merch.Name;
         }
 
         public string GetClientName(string merchId, string userId)
@@ -190,33 +187,33 @@ namespace LocalS.BLL.Biz
         public string GetStoreName(string merchId, string storeId)
         {
 
-            var store = CurrentDb.Store.Where(m => m.Id == storeId && m.MerchId == merchId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == storeId && m.MerchId == merchId).FirstOrDefault();
 
-            if (store == null)
+            if (d_Store == null)
                 return null;
 
-            return store.Name;
+            return d_Store.Name;
         }
 
         public string GetShopName(string merchId, string shopId)
         {
 
-            var shop = CurrentDb.Shop.Where(m => m.Id == shopId && m.MerchId == merchId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == shopId && m.MerchId == merchId).FirstOrDefault();
 
-            if (shop == null)
+            if (d_Shop == null)
                 return null;
 
-            return shop.Name;
+            return d_Shop.Name;
         }
 
         public string GetIotApiSecret(string merchId)
         {
-            var merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
-            if (merch == null)
+            if (d_Merch == null)
                 return null;
 
-            return merch.IotApiSecret;
+            return d_Merch.IotApiSecret;
         }
     }
 }

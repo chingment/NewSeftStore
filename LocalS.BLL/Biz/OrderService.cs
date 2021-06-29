@@ -23,28 +23,28 @@ namespace LocalS.BLL.Biz
     {
         public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
         {
-            var statusModel = new StatusModel();
+            var m_Status = new StatusModel();
 
             if (isHasEx)
             {
                 if (isHandleComplete)
                 {
-                    statusModel.Value = 0;
-                    statusModel.Text = "异常，已处理";
+                    m_Status.Value = 0;
+                    m_Status.Text = "异常，已处理";
                 }
                 else
                 {
-                    statusModel.Value = 2;
-                    statusModel.Text = "异常，未处理";
+                    m_Status.Value = 2;
+                    m_Status.Text = "异常，未处理";
                 }
             }
             else
             {
-                statusModel.Value = 0;
-                statusModel.Text = "否";
+                m_Status.Value = 0;
+                m_Status.Text = "否";
             }
 
-            return statusModel;
+            return m_Status;
         }
 
         public bool GetCanHandleEx(bool isHappen, bool isHandle)
@@ -57,192 +57,192 @@ namespace LocalS.BLL.Biz
 
         public StatusModel GetStatus(E_OrderStatus orderStatus)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             switch (orderStatus)
             {
                 case E_OrderStatus.Submitted:
-                    status.Value = 1000;
-                    status.Text = "已提交";
+                    m_Status.Value = 1000;
+                    m_Status.Text = "已提交";
                     break;
                 case E_OrderStatus.WaitPay:
-                    status.Value = 2000;
-                    status.Text = "待支付";
+                    m_Status.Value = 2000;
+                    m_Status.Text = "待支付";
                     break;
                 case E_OrderStatus.Payed:
-                    status.Value = 3000;
-                    status.Text = "已支付";
+                    m_Status.Value = 3000;
+                    m_Status.Text = "已支付";
                     break;
                 case E_OrderStatus.Completed:
-                    status.Value = 4000;
-                    status.Text = "已完成";
+                    m_Status.Value = 4000;
+                    m_Status.Text = "已完成";
                     break;
                 case E_OrderStatus.Canceled:
-                    status.Value = 5000;
-                    status.Text = "已取消";
+                    m_Status.Value = 5000;
+                    m_Status.Text = "已取消";
                     break;
             }
-            return status;
+            return m_Status;
         }
 
         public StatusModel GetPickupStatus(E_OrderPickupStatus pickupStatus)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             switch (pickupStatus)
             {
                 case E_OrderPickupStatus.Submitted:
-                    status.Value = 1000;
-                    status.Text = "已提交";
+                    m_Status.Value = 1000;
+                    m_Status.Text = "已提交";
                     break;
                 case E_OrderPickupStatus.WaitPay:
-                    status.Value = 2000;
-                    status.Text = "待支付";
+                    m_Status.Value = 2000;
+                    m_Status.Text = "待支付";
                     break;
                 //case E_OrderDetailsChildSonStatus.Payed:
                 //    status.Value = 3000;
                 //    status.Text = "已支付";
                 //    break;
                 case E_OrderPickupStatus.WaitPickup:
-                    status.Value = 3010;
-                    status.Text = "待取货";
+                    m_Status.Value = 3010;
+                    m_Status.Text = "待取货";
                     break;
                 case E_OrderPickupStatus.SendPickupCmd:
-                    status.Value = 3011;
-                    status.Text = "取货中";
+                    m_Status.Value = 3011;
+                    m_Status.Text = "取货中";
                     break;
                 case E_OrderPickupStatus.Pickuping:
-                    status.Value = 3012;
-                    status.Text = "取货中";
+                    m_Status.Value = 3012;
+                    m_Status.Text = "取货中";
                     break;
                 case E_OrderPickupStatus.Taked:
-                    status.Value = 4000;
-                    status.Text = "已完成";
+                    m_Status.Value = 4000;
+                    m_Status.Text = "已完成";
                     break;
                 case E_OrderPickupStatus.Canceled:
-                    status.Value = 5000;
-                    status.Text = "已取消";
+                    m_Status.Value = 5000;
+                    m_Status.Text = "已取消";
                     break;
                 case E_OrderPickupStatus.Exception:
-                    status.Value = 6000;
-                    status.Text = "异常未处理";
+                    m_Status.Value = 6000;
+                    m_Status.Text = "异常未处理";
                     break;
                 case E_OrderPickupStatus.ExPickupSignTaked:
-                    status.Value = 6010;
-                    status.Text = "异常已处理，标记为已取货";
+                    m_Status.Value = 6010;
+                    m_Status.Text = "异常已处理，标记为已取货";
                     break;
                 case E_OrderPickupStatus.ExPickupSignUnTaked:
-                    status.Value = 6011;
-                    status.Text = "异常已处理，标记为未取货";
+                    m_Status.Value = 6011;
+                    m_Status.Text = "异常已处理，标记为未取货";
                     break;
             }
-            return status;
+            return m_Status;
         }
 
         public StatusModel GetPayStatus(E_PayStatus payStatus)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             switch (payStatus)
             {
                 case E_PayStatus.WaitPay:
-                    status.Value = 1;
-                    status.Text = "待支付";
+                    m_Status.Value = 1;
+                    m_Status.Text = "待支付";
                     break;
                 case E_PayStatus.Paying:
-                    status.Value = 2;
-                    status.Text = "支付中";
+                    m_Status.Value = 2;
+                    m_Status.Text = "支付中";
                     break;
                 case E_PayStatus.PaySuccess:
-                    status.Value = 3;
-                    status.Text = "已支付";
+                    m_Status.Value = 3;
+                    m_Status.Text = "已支付";
                     break;
                 case E_PayStatus.PayCancle:
-                    status.Value = 4;
-                    status.Text = "已取消";
+                    m_Status.Value = 4;
+                    m_Status.Text = "已取消";
                     break;
                 case E_PayStatus.PayTimeout:
-                    status.Value = 5;
-                    status.Text = "已超时";
+                    m_Status.Value = 5;
+                    m_Status.Text = "已超时";
                     break;
                 default:
-                    status.Value = 0;
-                    status.Text = "未知";
+                    m_Status.Value = 0;
+                    m_Status.Text = "未知";
                     break;
             }
-            return status;
+            return m_Status;
         }
 
         public StatusModel GetPayWay(E_PayWay payWay)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             switch (payWay)
             {
                 case E_PayWay.Wx:
-                    status.Value = 1;
-                    status.Text = "微信支付";
+                    m_Status.Value = 1;
+                    m_Status.Text = "微信支付";
                     break;
                 case E_PayWay.Zfb:
-                    status.Value = 2;
-                    status.Text = "支付宝";
+                    m_Status.Value = 2;
+                    m_Status.Text = "支付宝";
                     break;
                 default:
-                    status.Value = 0;
-                    status.Text = "未知";
+                    m_Status.Value = 0;
+                    m_Status.Text = "未知";
                     break;
             }
-            return status;
+            return m_Status;
 
         }
 
         public StatusModel GetPayPartner(E_PayPartner payPartner)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             switch (payPartner)
             {
                 case E_PayPartner.Wx:
-                    status.Value = 1;
-                    status.Text = "微信支付";
+                    m_Status.Value = 1;
+                    m_Status.Text = "微信支付";
                     break;
                 case E_PayPartner.Zfb:
-                    status.Value = 2;
-                    status.Text = "支付宝";
+                    m_Status.Value = 2;
+                    m_Status.Text = "支付宝";
                     break;
                 case E_PayPartner.Tg:
-                    status.Value = 91;
-                    status.Text = "通莞";
+                    m_Status.Value = 91;
+                    m_Status.Text = "通莞";
                     break;
                 case E_PayPartner.Xrt:
-                    status.Value = 92;
-                    status.Text = "深银联";
+                    m_Status.Value = 92;
+                    m_Status.Text = "深银联";
                     break;
                 default:
-                    status.Value = 0;
-                    status.Text = "未知";
+                    m_Status.Value = 0;
+                    m_Status.Text = "未知";
                     break;
             }
-            return status;
+            return m_Status;
 
         }
 
         public StatusModel GetPickupTrgStatus(E_ReceiveMode receiveMode, bool pickupIsTrg)
         {
-            var status = new StatusModel();
+            var m_Status = new StatusModel();
 
             if (pickupIsTrg)
             {
-                status.Value = 1;
-                status.Text = "已触发";
+                m_Status.Value = 1;
+                m_Status.Text = "已触发";
             }
             else
             {
-                status.Value = 0;
-                status.Text = "未触发";
+                m_Status.Value = 0;
+                m_Status.Text = "未触发";
             }
 
-            return status;
+            return m_Status;
         }
 
         public string GetSourceName(E_OrderSource orderSource)

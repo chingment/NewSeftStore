@@ -386,22 +386,22 @@ namespace LocalS.BLL.Biz
                 return;
 
             string deviceId = trgerId;
-            var device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
+            var d_Device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
 
-            if (device == null)
+            if (d_Device == null)
                 return;
 
-            device.LastRequestTime = DateTime.Now;
+            d_Device.LastRequestTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            string storeName = BizFactory.Merch.GetStoreName(device.CurUseMerchId, device.CurUseStoreId);
-            string shopName = BizFactory.Merch.GetShopName(device.CurUseMerchId, device.CurUseShopId);
-            string operaterUserName = BizFactory.Merch.GetOperaterUserName(device.CurUseMerchId, operater);
+            string storeName = BizFactory.Merch.GetStoreName(d_Device.CurUseMerchId, d_Device.CurUseStoreId);
+            string shopName = BizFactory.Merch.GetShopName(d_Device.CurUseMerchId, d_Device.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(d_Device.CurUseMerchId, operater);
 
             StringBuilder remark = new StringBuilder("");
             string skuName = "[测试]";
 
-            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(device.CurUseMerchId, model.SkuId);
+            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Device.CurUseMerchId, model.SkuId);
 
             if (r_Sku != null)
             {
@@ -425,7 +425,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickupTest, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, device.Id, remark.ToString()), model);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickupTest, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), model);
 
         }
     }

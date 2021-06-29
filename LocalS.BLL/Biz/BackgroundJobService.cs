@@ -13,19 +13,19 @@ namespace LocalS.BLL.Biz
     {
         public CustomJsonResult SetStartOrStop(string operater, string id)
         {
-            CustomJsonResult result = new CustomJsonResult();
-            var backgroundJob = CurrentDb.BackgroundJob.Where(m => m.Id == id).FirstOrDefault();
+            var result = new CustomJsonResult();
+            var d_BackgroundJob = CurrentDb.BackgroundJob.Where(m => m.Id == id).FirstOrDefault();
 
-            if (backgroundJob == null)
+            if (d_BackgroundJob == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该任务");
             }
 
-            if (backgroundJob.Status == E_BackgroundJobStatus.Runing)
+            if (d_BackgroundJob.Status == E_BackgroundJobStatus.Runing)
             {
                 SetStatus(operater, id, E_BackgroundJobStatus.Stoping);
             }
-            else if (backgroundJob.Status == E_BackgroundJobStatus.Stoped)
+            else if (d_BackgroundJob.Status == E_BackgroundJobStatus.Stoped)
             {
                 SetStatus(operater, id, E_BackgroundJobStatus.Starting);
             }

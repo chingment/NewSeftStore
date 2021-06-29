@@ -19,17 +19,17 @@ namespace LocalS.BLL.Biz
         public void Handle(OperateLogModel model)
         {
 
-            var sysUserOperateLog = new SysUserOperateLog();
-            sysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
-            sysUserOperateLog.UserId = model.Operater;
-            sysUserOperateLog.EventCode = model.EventCode;
-            sysUserOperateLog.EventName = EventCode.GetEventName(model.EventCode);
-            sysUserOperateLog.EventData = model.EventData.ToJsonString();
-            sysUserOperateLog.AppId = model.AppId;
-            sysUserOperateLog.Remark = model.EventRemark;
-            sysUserOperateLog.CreateTime = DateTime.Now;
-            sysUserOperateLog.Creator = model.Operater;
-            CurrentDb.SysUserOperateLog.Add(sysUserOperateLog);
+            var d_SysUserOperateLog = new SysUserOperateLog();
+            d_SysUserOperateLog.Id = IdWorker.Build(IdType.NewGuid);
+            d_SysUserOperateLog.UserId = model.Operater;
+            d_SysUserOperateLog.EventCode = model.EventCode;
+            d_SysUserOperateLog.EventName = EventCode.GetEventName(model.EventCode);
+            d_SysUserOperateLog.EventData = model.EventData.ToJsonString();
+            d_SysUserOperateLog.AppId = model.AppId;
+            d_SysUserOperateLog.Remark = model.EventRemark;
+            d_SysUserOperateLog.CreateTime = DateTime.Now;
+            d_SysUserOperateLog.Creator = model.Operater;
+            CurrentDb.SysUserOperateLog.Add(d_SysUserOperateLog);
             CurrentDb.SaveChanges();
 
             string trgerName = "";
