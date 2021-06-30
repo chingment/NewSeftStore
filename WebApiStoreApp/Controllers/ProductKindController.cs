@@ -13,11 +13,11 @@ namespace WebApiStoreApp.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public OwnApiHttpResponse<RetProductKindPageData> PageData([FromUri]RupProductKindPageData rup)
+        public OwnApiHttpResponse PageData([FromUri]RupProductKindPageData rup)
         {
             var result = StoreAppServiceFactory.ProductKind.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
-            return new OwnApiHttpResponse<RetProductKindPageData>(result);
+            return new OwnApiHttpResponse(result);
         }
     }
 }

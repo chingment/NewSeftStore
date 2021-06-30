@@ -9,10 +9,10 @@ namespace WebApiStoreApp.Controllers
     public class CouponController : OwnApiBaseController
     {
         [HttpPost]
-        public OwnApiHttpResponse<RetCouponMy> My([FromBody]RopCouponMy rop)
+        public OwnApiHttpResponse My([FromBody]RopCouponMy rop)
         {
             var result = StoreAppServiceFactory.Coupon.My(this.CurrentUserId, this.CurrentUserId, rop);
-            return new OwnApiHttpResponse<RetCouponMy>(result);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]

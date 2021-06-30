@@ -17,10 +17,10 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse<RetOrderPayStatusQuery> PayStatusQuery([FromBody]RopOrderPayStatusQuery rup)
+        public OwnApiHttpResponse PayStatusQuery([FromBody]RopOrderPayStatusQuery rup)
         {
             var result = StoreTermServiceFactory.Order.PayStatusQuery(rup);
-            return new OwnApiHttpResponse<RetOrderPayStatusQuery>(result);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]

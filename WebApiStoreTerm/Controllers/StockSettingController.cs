@@ -19,10 +19,10 @@ namespace WebApiStoreTerm.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse<RetOperateSlot> SaveCabinetSlot([FromBody]RopStockSettingSaveCabinetSlot rop)
+        public OwnApiHttpResponse SaveCabinetSlot([FromBody]RopStockSettingSaveCabinetSlot rop)
         {
             var result = StoreTermServiceFactory.StockSetting.SaveCabinetSlot(this.CurrentUserId, rop);
-            return new OwnApiHttpResponse<RetOperateSlot>(result);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]

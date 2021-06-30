@@ -12,6 +12,12 @@ namespace WebApiStoreTerm
             StringContent content=new StringContent(apiResult.ToString(), Encoding.GetEncoding("UTF-8"), "application/json");
             this.Content=content;
         }
+
+        public OwnApiHttpResponse(object apiResult)
+        {
+            StringContent content = new StringContent(apiResult.ToString(), Encoding.GetEncoding("UTF-8"), "application/json");
+            this.Content = content;
+        }
     }
 
     public class OwnApiHttpResponse<T> : HttpResponseMessage
@@ -22,4 +28,6 @@ namespace WebApiStoreTerm
             this.Content = content;
         }
     }
+
+
 }

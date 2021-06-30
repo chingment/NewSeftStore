@@ -18,11 +18,11 @@ namespace WebApiStoreApp.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse<RetCartPageData> PageData([FromUri]RupCartPageData rup)
+        public OwnApiHttpResponse PageData([FromUri]RupCartPageData rup)
         {
             var result = StoreAppServiceFactory.Cart.PageData(this.CurrentUserId, this.CurrentUserId, rup);
 
-            return new OwnApiHttpResponse<RetCartPageData>(result);
+            return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
