@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class StockSettingService : BaseService
     {
-        public CustomJsonResult GetCabinetSlots(string operater, RopStockSettingGetCabinetSlots rop)
+        public IResult GetCabinetSlots(string operater, RopStockSettingGetCabinetSlots rop)
         {
             var ret = new RetStockSettingGetSlots();
 
@@ -86,13 +86,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetGetSlots, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", device.StoreName, device.ShopName, device.DeviceId, rop.CabinetId), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetGetSlots, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId), rop);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult<RetOperateSlot> SaveCabinetSlot(string operater, RopStockSettingSaveCabinetSlot rop)
+        public IResult<RetOperateSlot> SaveCabinetSlot(string operater, RopStockSettingSaveCabinetSlot rop)
         {
             var result = new CustomJsonResult<RetOperateSlot>();
 
@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，{5}", l_Device.StoreName, l_Device.ShopName, l_Device.DeviceId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，{5}", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
             }
 
             return result;

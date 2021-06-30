@@ -11,7 +11,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class ImService : BaseService
     {
-        public CustomJsonResult Seats(RopImServiceSeats rop)
+        public IResult Seats(RopImServiceSeats rop)
         {
             var result = new CustomJsonResult();
 

@@ -17,7 +17,7 @@ namespace LocalS.Service.Api.StoreTerm
 {
     public class DeviceService : BaseService
     {
-        public CustomJsonResult InitData(RopDeviceInitData rop)
+        public IResult InitData(RopDeviceInitData rop)
         {
             var result = new CustomJsonResult();
 
@@ -165,7 +165,7 @@ namespace LocalS.Service.Api.StoreTerm
             return l_kinds;
         }
 
-        public CustomJsonResult CheckUpdate(RopDeviceCheckUpdate rup)
+        public IResult CheckUpdate(RopDeviceCheckUpdate rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -190,14 +190,14 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", model);
         }
 
-        public CustomJsonResult EventNotify(string operater, RopDeviceEventNotify rop)
+        public IResult EventNotify(string operater, RopDeviceEventNotify rop)
         {
             BizFactory.Device.EventNotify(operater, AppId.STORETERM, rop.DeviceId, rop.EventCode, rop.EventRemark, rop.Content);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
 
-        public CustomJsonResult GetRunExHandleItems(string operater, RopDeviceGetRunExHandleItems rop)
+        public IResult GetRunExHandleItems(string operater, RopDeviceGetRunExHandleItems rop)
         {
             var result = new CustomJsonResult();
 
@@ -247,7 +247,7 @@ namespace LocalS.Service.Api.StoreTerm
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult HandleRunExItems(string operater, RopDeviceHandleRunExItems rop)
+        public IResult HandleRunExItems(string operater, RopDeviceHandleRunExItems rop)
         {
             var result = new CustomJsonResult();
 

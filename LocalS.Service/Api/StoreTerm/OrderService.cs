@@ -16,9 +16,9 @@ namespace LocalS.Service.Api.StoreTerm
 
     public class OrderService : BaseService
     {
-        public CustomJsonResult Reserve(RopOrderReserve rop)
+        public IResult Reserve(RopOrderReserve rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
+            var result = new CustomJsonResult();
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
 
@@ -95,9 +95,9 @@ namespace LocalS.Service.Api.StoreTerm
 
         }
 
-        public CustomJsonResult<RetOrderPayStatusQuery> PayStatusQuery(RopOrderPayStatusQuery rup)
+        public IResult<RetOrderPayStatusQuery> PayStatusQuery(RopOrderPayStatusQuery rup)
         {
-            CustomJsonResult<RetOrderPayStatusQuery> ret = new CustomJsonResult<RetOrderPayStatusQuery>();
+            var ret = new CustomJsonResult<RetOrderPayStatusQuery>();
 
 
             var ret_Biz = LocalS.BLL.Biz.BizFactory.Order.PayTransResultQuery(rup.DeviceId, rup.PayTransId);
@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.StoreTerm
             return ret;
         }
 
-        public CustomJsonResult Cancle(RopOrderCancle rop)
+        public IResult Cancle(RopOrderCancle rop)
         {
 
             var result = LocalS.BLL.Biz.BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), rop.OrderId, "", rop.Type, rop.Reason);
@@ -129,7 +129,7 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult SearchByPickupCode(RopOrderSearchByPickupCode rup)
+        public IResult SearchByPickupCode(RopOrderSearchByPickupCode rup)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -183,9 +183,9 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult PickupStatusQuery(RopOrderPickupStatusQuery rup)
+        public IResult PickupStatusQuery(RopOrderPickupStatusQuery rup)
         {
-            CustomJsonResult result = new CustomJsonResult();
+            var result = new CustomJsonResult();
 
             var ret = new RetOrderPickupStatusQuery();
 
@@ -204,7 +204,7 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
-        public CustomJsonResult BuildPayParams(RopOrderBuildPayParams rop)
+        public IResult BuildPayParams(RopOrderBuildPayParams rop)
         {
             LocalS.BLL.Biz.RopOrderBuildPayParams bizRop = new LocalS.BLL.Biz.RopOrderBuildPayParams();
             bizRop.OrderIds.Add(rop.OrderId);

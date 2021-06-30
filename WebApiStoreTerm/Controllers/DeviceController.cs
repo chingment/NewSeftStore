@@ -30,7 +30,7 @@ namespace WebApiStoreTerm.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public OwnApiHttpResponse CheckUpdate([FromUri]RopDeviceCheckUpdate rup)
+        public OwnApiHttpResponse CheckUpdate([FromBody]RopDeviceCheckUpdate rup)
         {
             var result = StoreTermServiceFactory.Device.CheckUpdate(rup);
             return new OwnApiHttpResponse(result);

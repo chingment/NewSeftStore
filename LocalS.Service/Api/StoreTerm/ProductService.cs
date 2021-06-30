@@ -74,7 +74,7 @@ m.ShopMode == Entity.E_ShopMode.Device)
 
         }
 
-        public CustomJsonResult SearchSku(RopProductSearchSku rop)
+        public IResult SearchSku(RopProductSearchSku rop)
         {
             var result = new CustomJsonResult();
 
