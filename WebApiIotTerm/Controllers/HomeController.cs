@@ -37,6 +37,7 @@ namespace WebApiIotTerm.Controllers
             //model.Add("订单查看", OrderQuery());
             //model.Add("订单取消", OrderCancle());
             model.Add("商品添加", ProductAdd());
+            model.Add("商品修改", ProductEdit());
             return View(model);
         }
 
@@ -97,12 +98,23 @@ namespace WebApiIotTerm.Controllers
 
         public string ProductAdd()
         {
-            string data = "{\"name\":\"格力高百醇（草莓味）\",\"spu_code\":\"00210526021x\",\"spec_items\":[\"份量\"],\"spec_skus\":[{\"cum_code\":\"YC024xx\",\"bar_code\":\"1233211234567\",\"sale_price\":6.00,\"spec_val\":[\"大份\"]},{\"cum_code\":\"YC025xx\",\"bar_code\":\"1233211234568\",\"sale_price\":4.00,\"spec_val\":[\"小份\"]}],\"kind_ids\":[101,10104,1010401],\"brief_des\":\"外层香脆，内芯柔软\",\"display_img_urls\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"],\"details_des\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"]}";
+            string data = "{\"name\":\"格力高百醇（草莓味）\",\"spu_code\":\"00210526021xx\",\"spec_items\":[\"份量\"],\"spec_skus\":[{\"cum_code\":\"YC024xxaa\",\"bar_code\":\"1233211234567\",\"sale_price\":6.00,\"spec_val\":[\"大份\"]},{\"cum_code\":\"YC025xxx\",\"bar_code\":\"1233211234568\",\"sale_price\":4.00,\"spec_val\":[\"小份\"]}],\"kind_ids\":[101,10104,1010401],\"brief_des\":\"外层香脆，内芯柔软\",\"display_img_urls\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"],\"details_des\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"]}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/product/add", data, headers);
+            return result;
+        }
+
+        public string ProductEdit()
+        {
+            string data = "{\"spu_id\":\"e63ee7723c57496a8935bb5e557b545f\", \"name\":\"格力高百醇（草莓味）\",\"spu_code\":\"00210526021x\",\"spec_items\":[\"份量\"],\"spec_skus\":[{\"sku_id\":\"95822e1a77cb47c3b2b31f6b992aa7c1\",\"cum_code\":\"YC024xxaffff\",\"bar_code\":\"1233211234567\",\"sale_price\":6.00,\"spec_val\":[\"大份\"]},{\"sku_id\":\"418f480e539d4235abdfce81ed07a5db\",\"cum_code\":\"YC025xxfffx\",\"bar_code\":\"1233211234568\",\"sale_price\":4.00,\"spec_val\":[\"小份\"]}],\"kind_ids\":[101,10104,1010401],\"brief_des\":\"外层香脆，内芯柔软\",\"display_img_urls\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"],\"details_des\":[\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\",\"https://file.17fanju.com/Upload/product/58378e81-a947-463c-8c11-8642f1982da6_O.jpg\"]}";
+            string sign = GetSign(data);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/product/edit", data, headers);
             return result;
         }
 

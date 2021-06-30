@@ -113,24 +113,5 @@ namespace Lumos
             return imgUrl;
         }
 
-
-        public static List<ImgSet> Convert(List<string> imgs)
-        {
-            List<ImgSet> imgSets = new List<ImgSet>();
-
-            for (var i = 0; i < imgs.Count; i++)
-            {
-                var imgSet = new ImgSet();
-                if (i == 0)
-                {
-                    imgSet.IsMain = true;
-                }
-                imgSet.Name = "";
-                imgSet.Url = imgs[i];
-
-                imgSets.Add(imgSet);
-            }
-            return imgSets;
-        }
     }
 }

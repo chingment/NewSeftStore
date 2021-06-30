@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.IotTerm
 {
+    public class spec_sku
+    {
+        public string sku_id { get; set; }
+        public string cum_code { get; set; }
+        public string bar_code { get; set; }
+        public decimal sale_price { get; set; }
+        public List<string> spec_val { get; set; }
+    }
+
     public class RopProductAdd
     {
         public string name { get; set; }
@@ -16,12 +25,5 @@ namespace LocalS.Service.Api.IotTerm
         public string brief_des { get; set; }
         public List<string> display_img_urls { get; set; }
         public List<string> details_des { get; set; }
-        public class spec_sku
-        {
-            public string cum_code { get; set; }
-            public string bar_code { get; set; }
-            public decimal sale_price { get; set; }
-            public List<string> spec_val { get; set; }
-        }
     }
 }
