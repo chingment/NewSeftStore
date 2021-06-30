@@ -47,9 +47,9 @@ namespace LocalS.Service.Api.StoreTerm
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备在维护状态");
             }
 
-            var shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
 
-            if (shop == null)
+            if (d_Shop == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "门店信息异常");
             }
@@ -65,10 +65,10 @@ namespace LocalS.Service.Api.StoreTerm
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
             block.SelfTake.Mark.Id = d_Device.CurUseShopId;
-            block.SelfTake.Mark.Name = shop.Name;
-            block.SelfTake.Mark.Address = shop.Address;
-            block.SelfTake.Mark.AreaCode = shop.AreaCode;
-            block.SelfTake.Mark.AreaName = shop.AreaName;
+            block.SelfTake.Mark.Name = d_Shop.Name;
+            block.SelfTake.Mark.Address = d_Shop.Address;
+            block.SelfTake.Mark.AreaCode = d_Shop.AreaCode;
+            block.SelfTake.Mark.AreaName = d_Shop.AreaName;
 
             foreach (var sku in rop.Skus)
             {
@@ -155,29 +155,29 @@ namespace LocalS.Service.Api.StoreTerm
 
             LogUtil.Info("PickupCode2=>>" + pickupCode);
 
-            var order = CurrentDb.Order.Where(m => m.DeviceId == rup.DeviceId && m.PickupCode == pickupCode).FirstOrDefault();
+            var d_Order = CurrentDb.Order.Where(m => m.DeviceId == rup.DeviceId && m.PickupCode == pickupCode).FirstOrDefault();
 
-            if (order == null)
+            if (d_Order == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
             }
 
-            if (order.PayStatus != E_PayStatus.PaySuccess)
+            if (d_Order.PayStatus != E_PayStatus.PaySuccess)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未支付");
             }
 
-            if (order.PickupIsTrg)
+            if (d_Order.PickupIsTrg)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经取货");
             }
 
             var ret = new RetOrderSearchByPickupCode();
 
-            ret.OrderId = order.Id;
+            ret.OrderId = d_Order.Id;
 
 
-            ret.Skus = BizFactory.Order.GetOrderSkuByPickup(order.Id, rup.DeviceId);
+            ret.Skus = BizFactory.Order.GetOrderSkuByPickup(d_Order.Id, rup.DeviceId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -189,14 +189,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetOrderPickupStatusQuery();
 
-            var orderSub = CurrentDb.OrderSub.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
+            var d_OrderSub = CurrentDb.OrderSub.Where(m => m.Id == rup.UniqueId).FirstOrDefault();
 
-            if (orderSub != null)
+            if (d_OrderSub != null)
             {
-                ret.SkuId = orderSub.SkuId;
-                ret.SlotId = orderSub.SlotId;
-                ret.UniqueId = orderSub.Id;
-                ret.Status = orderSub.PickupStatus;
+                ret.SkuId = d_OrderSub.SkuId;
+                ret.SlotId = d_OrderSub.SlotId;
+                ret.UniqueId = d_OrderSub.Id;
+                ret.Status = d_OrderSub.PickupStatus;
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             }

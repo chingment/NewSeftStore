@@ -17,12 +17,12 @@ namespace LocalS.Service.Api.StoreTerm
 
             var ret = new RetImServiceSeats();
 
-            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (l_Device == null || l_Device.MerchId == null)
+            if (m_Device == null || m_Device.MerchId == null)
                 return new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
 
-            var imUsers = CurrentDb.SysMerchUser.Where(m => m.MerchId == l_Device.MerchId && m.IsDelete == false && m.ImIsUse == true).ToList();
+            var imUsers = CurrentDb.SysMerchUser.Where(m => m.MerchId == m_Device.MerchId && m.IsDelete == false && m.ImIsUse == true).ToList();
 
             foreach (var imUser in imUsers)
             {

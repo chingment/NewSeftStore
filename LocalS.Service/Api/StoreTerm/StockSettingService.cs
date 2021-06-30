@@ -20,68 +20,68 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var ret = new RetStockSettingGetSlots();
 
-            var device = BizFactory.Device.GetOne(rop.DeviceId);
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (device == null)
+            if (m_Device == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(device.MerchId))
+            if (string.IsNullOrEmpty(m_Device.MerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(device.StoreId))
+            if (string.IsNullOrEmpty(m_Device.StoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺");
             }
 
-            if (string.IsNullOrEmpty(device.ShopId))
+            if (string.IsNullOrEmpty(m_Device.ShopId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
             }
 
-            var cabinet = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId && m.IsUse == true).FirstOrDefault();
+            var d_DeviceCabinet = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId && m.IsUse == true).FirstOrDefault();
 
-            if (cabinet == null)
+            if (d_DeviceCabinet == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "未配置对应的机柜，请联系管理员");
             }
 
-            if (string.IsNullOrEmpty(cabinet.RowColLayout))
+            if (string.IsNullOrEmpty(d_DeviceCabinet.RowColLayout))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未识别到行列布局，请点击扫描按钮");
             }
 
-            ret.RowColLayout = cabinet.RowColLayout;
+            ret.RowColLayout = d_DeviceCabinet.RowColLayout;
 
-            var d_DeviceStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == device.MerchId && m.StoreId == device.StoreId && m.ShopId == device.ShopId && m.CabinetId == rop.CabinetId && m.DeviceId == rop.DeviceId).ToList();
+            var d_DeviceStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.CabinetId == rop.CabinetId && m.DeviceId == rop.DeviceId).ToList();
 
-            foreach (var item in d_DeviceStocks)
+            foreach (var d_DeviceStock in d_DeviceStocks)
             {
-                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_DeviceStock.MerchId, d_DeviceStock.SkuId);
 
                 if (r_Sku != null)
                 {
-                    var slot = new SlotModel();
-                    slot.SlotId = item.SlotId;
-                    slot.StockId = item.Id;
-                    slot.CabinetId = item.CabinetId;
-                    slot.SkuId = r_Sku.Id;
-                    slot.SkuCumCode = r_Sku.CumCode;
-                    slot.SkuName = r_Sku.Name;
-                    slot.SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl);
-                    slot.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
-                    slot.SumQuantity = item.SumQuantity;
-                    slot.LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity;
-                    slot.SellQuantity = item.SellQuantity;
-                    slot.MaxQuantity = item.MaxQuantity;
-                    slot.WarnQuantity = item.WarnQuantity;
-                    slot.HoldQuantity = item.HoldQuantity;
-                    slot.IsCanAlterMaxQuantity = true;
-                    slot.Version = item.Version;
-                    ret.Slots.Add(item.SlotId, slot);
+                    var m_Slot = new SlotModel();
+                    m_Slot.SlotId = d_DeviceStock.SlotId;
+                    m_Slot.StockId = d_DeviceStock.Id;
+                    m_Slot.CabinetId = d_DeviceStock.CabinetId;
+                    m_Slot.SkuId = r_Sku.Id;
+                    m_Slot.SkuCumCode = r_Sku.CumCode;
+                    m_Slot.SkuName = r_Sku.Name;
+                    m_Slot.SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl);
+                    m_Slot.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
+                    m_Slot.SumQuantity = d_DeviceStock.SumQuantity;
+                    m_Slot.LockQuantity = d_DeviceStock.WaitPayLockQuantity + d_DeviceStock.WaitPickupLockQuantity;
+                    m_Slot.SellQuantity = d_DeviceStock.SellQuantity;
+                    m_Slot.MaxQuantity = d_DeviceStock.MaxQuantity;
+                    m_Slot.WarnQuantity = d_DeviceStock.WarnQuantity;
+                    m_Slot.HoldQuantity = d_DeviceStock.HoldQuantity;
+                    m_Slot.IsCanAlterMaxQuantity = true;
+                    m_Slot.Version = d_DeviceStock.Version;
+                    ret.Slots.Add(d_DeviceStock.SlotId, m_Slot);
                 }
             }
 
@@ -96,35 +96,35 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult<RetOperateSlot>();
 
-            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (l_Device == null)
+            if (m_Device == null)
             {
                 return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未登记", null);
             }
 
-            if (string.IsNullOrEmpty(l_Device.MerchId))
+            if (string.IsNullOrEmpty(m_Device.MerchId))
             {
                 return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定商户", null);
             }
 
-            if (string.IsNullOrEmpty(l_Device.StoreId))
+            if (string.IsNullOrEmpty(m_Device.StoreId))
             {
                 return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺", null);
             }
 
-            if (string.IsNullOrEmpty(l_Device.ShopId))
+            if (string.IsNullOrEmpty(m_Device.ShopId))
             {
                 return new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "设备未绑定门店", null);
             }
 
             if (string.IsNullOrEmpty(rop.SkuId))
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotRemove, l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotRemove, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId);
             }
             else
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotSave, l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotSave, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
             }
 
             if (result.Result == ResultType.Success)
@@ -141,7 +141,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
-            var l_Device = BizFactory.Device.GetOne(rop.DeviceId);
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
             switch (rop.CabinetId)
             {

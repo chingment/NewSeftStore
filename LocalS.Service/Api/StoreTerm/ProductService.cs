@@ -80,25 +80,25 @@ m.ShopMode == Entity.E_ShopMode.Device)
 
             var ret = new RetSkuSearch();
 
-            var device = BizFactory.Device.GetOne(rop.DeviceId);
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            if (device == null)
+            if (m_Device == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(device.MerchId))
+            if (string.IsNullOrEmpty(m_Device.MerchId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
             }
 
-            if (string.IsNullOrEmpty(device.StoreId))
+            if (string.IsNullOrEmpty(m_Device.StoreId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户店铺");
             }
 
 
-            ret.Skus = CacheServiceFactory.Product.SearchSku(device.MerchId, "All", rop.Key);
+            ret.Skus = CacheServiceFactory.Product.SearchSku(m_Device.MerchId, "All", rop.Key);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
