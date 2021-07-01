@@ -56,7 +56,7 @@ namespace WebApiStoreTerm
                         return;
                     }
 
-                    if (httpMethod.ToUpper() != "post")
+                    if (httpMethod != "post")
                     {
                         OwnApiHttpResult result = new OwnApiHttpResult(ResultType.Failure, ResultCode.Exception, "只允许POST方式");
                         actionContext.Response = new OwnApiHttpResponse(result);

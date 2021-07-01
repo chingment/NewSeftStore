@@ -89,6 +89,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Device.Mqtt.Host = "tcp://112.74.179.185:1883";
             ret.Device.Mqtt.UserName = "admin";
             ret.Device.Mqtt.Password = "public";
+            ret.Device.Mqtt.ClientId = m_Device.DeviceId;
 
             ret.Device.PicInSampleSize = 8;
 
