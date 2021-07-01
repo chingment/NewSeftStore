@@ -92,8 +92,9 @@
             <el-button type="text" size="small">
               操作<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
+
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="'payRefund-'+scope.row.id">退款</el-dropdown-item>
+              <el-dropdown-item :command="'payRefund-'+scope.row.id" :disabled="scope.row.payStatus.value==3?false:true">退款</el-dropdown-item>
 
             </el-dropdown-menu>
           </el-dropdown>
