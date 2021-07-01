@@ -59,44 +59,51 @@ namespace LocalS.Service.Api.StoreTerm
             d_Device.Mender = IdWorker.Build(IdType.EmptyGuid);
             CurrentDb.SaveChanges();
 
-            var l_Device = BizFactory.Device.GetOne(d_Device.Id);
+            var m_Device = BizFactory.Device.GetOne(d_Device.Id);
 
-            ret.Device.DeviceId = l_Device.DeviceId;
-            ret.Device.Name = l_Device.Name;
-            ret.Device.LogoImgUrl = l_Device.LogoImgUrl;
-            ret.Device.MerchName = l_Device.MerchName;
-            ret.Device.StoreName = l_Device.StoreName;
-            ret.Device.ShopName = l_Device.ShopName;
-            ret.Device.ShopAddress = l_Device.ShopAddress;
-            ret.Device.CsrQrCode = l_Device.CsrQrCode;
-            ret.Device.CsrPhoneNumber = l_Device.CsrPhoneNumber;
-            ret.Device.CsrHelpTip = l_Device.CsrHelpTip;
-            ret.Device.Cabinets = l_Device.Cabinets;
-            ret.Device.IsHiddenKind = l_Device.KindIsHidden;
-            ret.Device.KindRowCellSize = l_Device.KindRowCellSize;
-            ret.Device.PayOptions = l_Device.PayOptions;
-            ret.Device.CameraByChkIsUse = l_Device.CameraByChkIsUse;
-            ret.Device.CameraByJgIsUse = l_Device.CameraByJgIsUse;
-            ret.Device.CameraByRlIsUse = l_Device.CameraByRlIsUse;
-            ret.Device.MaxBuyNumber = 10;
-            ret.Device.ExIsHas = l_Device.ExIsHas;
-            ret.Device.OstVern = l_Device.OstVern;
-            ret.Device.MstVern = l_Device.MstVern;
-            ret.Device.Scanner = l_Device.Scanner;
-            ret.Device.FingerVeinner = l_Device.FingerVeinner;
-            ret.Device.Im.IsUse = l_Device.ImIsUse;
-            ret.Device.Im.Partner = l_Device.ImPartner;
-            ret.Device.Im.UserName = l_Device.ImUserName;
-            ret.Device.Im.Password = l_Device.ImPassword;
+            ret.Device.DeviceId = m_Device.DeviceId;
+            ret.Device.Name = m_Device.Name;
+            ret.Device.Type = m_Device.Type;
+            ret.Device.LogoImgUrl = m_Device.LogoImgUrl;
+            ret.Device.MerchName = m_Device.MerchName;
+            ret.Device.StoreName = m_Device.StoreName;
+            ret.Device.ShopName = m_Device.ShopName;
+            ret.Device.ShopAddress = m_Device.ShopAddress;
+            ret.Device.Consult.CsrQrCode = m_Device.CsrQrCode;
+            ret.Device.Consult.CsrPhoneNumber = m_Device.CsrPhoneNumber;
+            ret.Device.Consult.CsrHelpTip = m_Device.CsrHelpTip;
+            ret.Device.Cabinets = m_Device.Cabinets;
+            ret.Device.PayOptions = m_Device.PayOptions;
+            ret.Device.CameraByChkIsUse = m_Device.CameraByChkIsUse;
+            ret.Device.CameraByJgIsUse = m_Device.CameraByJgIsUse;
+            ret.Device.CameraByRlIsUse = m_Device.CameraByRlIsUse;
+            ret.Device.ExIsHas = m_Device.ExIsHas;
+            ret.Device.OstVern = m_Device.OstVern;
+            ret.Device.MstVern = m_Device.MstVern;
+            ret.Device.Scanner = m_Device.Scanner;
+            ret.Device.FingerVeinner = m_Device.FingerVeinner;
+            ret.Device.Im.IsUse = m_Device.ImIsUse;
+            ret.Device.Im.Partner = m_Device.ImPartner;
+            ret.Device.Im.UserName = m_Device.ImUserName;
+            ret.Device.Im.Password = m_Device.ImPassword;
             ret.Device.Mqtt.Host = "tcp://112.74.179.185:1883";
             ret.Device.Mqtt.UserName = "admin";
             ret.Device.Mqtt.Password = "public";
+
             ret.Device.PicInSampleSize = 8;
 
-            ret.Ads = BizFactory.Device.GetAds(l_Device.DeviceId);
-            ret.Kinds = GetKinds(l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, l_Device.DeviceId);
-            ret.Skus = GetSkus(l_Device.MerchId, l_Device.StoreId, l_Device.ShopId, l_Device.DeviceId);
-
+            if (m_Device.Type == "vending")
+            {
+                ret.CustomData = new
+                {
+                    MaxBuyNumber = 10,
+                    IsHiddenKind = m_Device.KindIsHidden,
+                    KindRowCellSize = m_Device.KindRowCellSize,
+                    Ads = BizFactory.Device.GetAds(m_Device.DeviceId),
+                    Kinds = GetKinds(m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, m_Device.DeviceId),
+                    Skus = GetSkus(m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, m_Device.DeviceId)
+                };
+            }
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 

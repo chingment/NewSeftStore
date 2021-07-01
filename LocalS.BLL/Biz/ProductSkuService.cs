@@ -74,7 +74,7 @@ namespace LocalS.BLL.Biz
                     };
 
                     ret.ChangeRecords.Add(record);
-                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "货道删除成功", ret);
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "删除成功", ret);
                     #endregion DeviceCabinetSlotRemove
                 }
                 else if (operateEvent == EventCode.DeviceCabinetSlotSave)
@@ -216,12 +216,12 @@ namespace LocalS.BLL.Biz
                     ret.Version = d_SellChannelStock.Version;
                     ret.IsCanAlterMaxQuantity = true;
 
-                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "库存保存成功", ret);
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "保存成功", ret);
                     #endregion
                 }
                 else
                 {
-                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "库存保存失败，未知操作类型", ret);
+                    result = new CustomJsonResult<RetOperateSlot>(ResultType.Failure, ResultCode.Failure, "保存失败，未知操作类型", ret);
                 }
 
             }

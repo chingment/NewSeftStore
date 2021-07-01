@@ -20,6 +20,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         [MaxLength(128)]
         public string Name { get; set; }
+
+        public string Type { get; set; }
         public string ImeiId { get; set; }
         public string CharTags { get; set; }
         //public string DeviceId { get; set; }

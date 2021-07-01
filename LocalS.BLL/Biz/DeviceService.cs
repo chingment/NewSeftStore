@@ -26,6 +26,7 @@ namespace LocalS.BLL.Biz
 
             m_Device.DeviceId = d_Device.Id;
             m_Device.Name = d_Device.Name;
+            m_Device.Type = d_Device.Type;
             m_Device.MainImgUrl = d_Device.MainImgUrl;
             m_Device.LogoImgUrl = d_Device.LogoImgUrl;
             m_Device.RunStatus = d_Device.RunStatus;

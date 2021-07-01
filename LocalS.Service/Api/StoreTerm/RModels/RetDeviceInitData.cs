@@ -22,5 +22,7 @@ namespace LocalS.Service.Api.StoreTerm
         public Dictionary<string, SkuModel> Skus { get; set; }
         public List<KindModel> Kinds { get; set; }
         public Dictionary<string, AdModel> Ads { get; set; }
+
+        public object CustomData { get; set; }
     }
 }

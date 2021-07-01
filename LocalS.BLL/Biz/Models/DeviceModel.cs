@@ -17,6 +17,8 @@ namespace LocalS.BLL.Biz
         }
 
         public string DeviceId { get; set; }
+
+        public string Type { get; set; }
         public string Name { get; set; }
         public string LogoImgUrl { get; set; }
         public string MerchId { get; set; }

@@ -17,25 +17,22 @@ namespace LocalS.Service.Api.StoreTerm
             this.Im = new ImModel();
             this.Mqtt = new MqttModel();
             this.FingerVeinner = new FingerVeinnerModel();
+            this.Consult = new ConsultModel();
             this.Cabinets = new Dictionary<string, CabinetModel>();
         }
         public string DeviceId { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public string MerchName { get; set; }
         public string StoreName { get; set; }
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string LogoImgUrl { get; set; }
-        public string CsrQrCode { get; set; }
-        public string CsrPhoneNumber { get; set; }
-        public string CsrHelpTip { get; set; }
-        public bool IsHiddenKind { get; set; }
-        public int KindRowCellSize { get; set; }
+        public ConsultModel Consult { get; set; }
         public List<PayOption> PayOptions { get; set; }
         public bool CameraByChkIsUse { get; set; }
         public bool CameraByJgIsUse { get; set; }
         public bool CameraByRlIsUse { get; set; }
-        public int MaxBuyNumber { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetModel> Cabinets { get; set; }
         public ScannerModel Scanner { get; set; }
