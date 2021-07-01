@@ -4,7 +4,7 @@
       <el-aside class="my-aside">
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
-            <template slot="title">机器</template>
+            <template slot="title">设备</template>
             <el-menu-item index="/device/list">自助售卖机</el-menu-item>
           </el-menu-item-group>
         </el-menu>

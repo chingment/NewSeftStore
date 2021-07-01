@@ -175,7 +175,7 @@ export default {
       }],
       optionsReceiveModes: [{
         value: '4',
-        label: '机器自提'
+        label: '设备自提'
       }, {
         value: '2',
         label: '店铺自取'

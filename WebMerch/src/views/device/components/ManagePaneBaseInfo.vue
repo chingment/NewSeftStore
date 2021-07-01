@@ -2,14 +2,14 @@
   <div id="device_baseinfo" v-loading="loading">
 
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px" :hide-required-asterisk="!isEdit">
-      <el-form-item label="机器编号">
+      <el-form-item label="设备编号">
         {{ temp.id }}
       </el-form-item>
       <el-form-item label="自定义编号">
         <el-input v-show="isEdit" v-model="form.cumCode" clearable />
         <span v-show="!isEdit">{{ temp.cumCode }}</span>
       </el-form-item>
-      <el-form-item label="机器Logo">
+      <el-form-item label="设备Logo">
         <img v-show="!isEdit" :src="temp.logoImgUrl" class="singlepic-device-banner">
 
         <el-upload
@@ -34,7 +34,7 @@
       <el-form-item label="应用程序号">
         {{ temp.appVersion }}
       </el-form-item>
-      <el-form-item label="机器状态">
+      <el-form-item label="设备状态">
         {{ temp.status.text }}
       </el-form-item>
       <el-form-item label="最后运行时间">

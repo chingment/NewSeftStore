@@ -6,7 +6,7 @@
           <el-menu-item-group>
             <template slot="title">订单中心</template>
             <el-menu-item index="/order/list">全部订单</el-menu-item>
-            <el-menu-item index="/order/listbymt">机器自提</el-menu-item>
+            <el-menu-item index="/order/listbymt">设备自提</el-menu-item>
             <el-menu-item index="/order/listbyst">店铺自提</el-menu-item>
             <el-menu-item index="/order/listbyet">配送到手</el-menu-item>
           </el-menu-item-group>

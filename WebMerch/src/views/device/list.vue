@@ -10,7 +10,7 @@
 
       <el-row :gutter="24">
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px">
-          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="机器编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编号" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px;display:flex;">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -56,7 +56,7 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
-            <el-button type="text">暂无机器，请联系您的客户经理绑定！</el-button>
+            <el-button type="text">暂无设备，请联系您的客户经理绑定！</el-button>
           </div>
           <div class="it-component">
 
@@ -70,7 +70,7 @@
     <div v-show="listData.length<=0&&deviceCount>0" class="list-empty">
       <span>暂无数据</span>
     </div>
-    <el-dialog v-if="dialogByOpenSelectIsVisible" :title="'选择机器'" width="600px" :visible.sync="dialogByOpenSelectIsVisible" append-to-body>
+    <el-dialog v-if="dialogByOpenSelectIsVisible" :title="'选择设备'" width="600px" :visible.sync="dialogByOpenSelectIsVisible" append-to-body>
       <div style="width:100%;height:400px">
 
         <div class="filter-container">

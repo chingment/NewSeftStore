@@ -134,7 +134,7 @@ export default {
         label: '线上商城'
       }, {
         value: '3',
-        label: '线下机器'
+        label: '线下设备'
       }],
       isDesktop: this.$store.getters.isDesktop
     }

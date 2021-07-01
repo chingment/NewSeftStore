@@ -93,7 +93,7 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="机器" prop="deviceCode" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="设备" prop="deviceCode" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceCode }}</span>
         </template>
@@ -468,7 +468,7 @@ export default {
         }],
       options_ReceiveModes: [{
         value: '4',
-        label: '机器自提'
+        label: '设备自提'
       }, {
         value: '2',
         label: '店铺自取'
@@ -602,7 +602,7 @@ export default {
         }
       }
 
-      MessageBox.confirm('确定要处理,慎重操作，会影响机器实际库存', '提示', {
+      MessageBox.confirm('确定要处理,慎重操作，会影响设备实际库存', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         dangerouslyUseHTMLString: true,

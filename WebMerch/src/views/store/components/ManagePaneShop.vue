@@ -21,7 +21,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByDevice(item)">({{ item.deviceCount }}台)机器</el-button></li>
+                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByDevice(item)">({{ item.deviceCount }}台)设备</el-button></li>
                 <!-- <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li> -->
               </ul>
             </div>
@@ -41,7 +41,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByDeviceIsVisible" :title="'机器管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="getListData(listQuery)">
+    <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="getListData(listQuery)">
       <div style="width:100%;height:600px">
         <manage-pane-device op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
       </div>

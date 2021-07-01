@@ -3,7 +3,7 @@
     <page-header />
     <div class="cur-device cur-tab">
       <div class="it-name">
-        <span class="title">当前机器:</span><span class="name">{{ activeDropdown.name }}</span>
+        <span class="title">当前设备:</span><span class="name">{{ activeDropdown.name }}</span>
       </div>
       <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
         <span class="el-dropdown-link">

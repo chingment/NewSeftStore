@@ -145,7 +145,7 @@ export default {
         label: '线上商城'
       }, {
         value: '3',
-        label: '线下机器'
+        label: '线下设备'
       }],
       datePickerOptionsStockDate: {
         disabledDate(time) {

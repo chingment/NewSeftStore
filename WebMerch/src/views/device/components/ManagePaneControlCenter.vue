@@ -24,7 +24,7 @@
       <div>
 
         <el-form ref="formBySysSetStatus" :model="formBySysSetStatus" :rules="formBySysSetStatusRules" label-width="80px">
-          <el-form-item label="机器编码">
+          <el-form-item label="设备编码">
             <span>{{ deviceId }}</span>
           </el-form-item>
           <el-form-item label="状态" prop="status">
@@ -68,7 +68,7 @@ export default {
       isDesktop: this.$store.getters.isDesktop,
       formBySysSetStatus: {
         status: undefined,
-        helpTip: '机器设备正在维护中'
+        helpTip: '设备正在维护中'
       },
       formBySysSetStatusRules: {
         status: [{ required: true, message: '请选择状态', trigger: 'change' }],
@@ -89,7 +89,7 @@ export default {
 
     },
     onSysReboot() {
-      MessageBox.confirm('确定要重启系统？请确保机器在空闲状态中，否则会影响机器正常运行！', '提示', {
+      MessageBox.confirm('确定要重启系统？请确保设备在空闲状态中，否则会影响设备正常运行！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -108,7 +108,7 @@ export default {
       })
     },
     onSysShutDown() {
-      MessageBox.confirm('确定要关闭系统？关闭系统需要人工前往机器开启！', '提示', {
+      MessageBox.confirm('确定要关闭系统？关闭系统需要人工前往设备开启！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -128,7 +128,7 @@ export default {
     },
     onOpenDialogSysSetStatus() {
       this.formBySysSetStatus.status = undefined
-      this.formBySysSetStatus.helpTip = '机器设备正在维护中'
+      this.formBySysSetStatus.helpTip = '设备正在维护中'
       this.dialogSysSetStatusIsVisible = true
     },
     onSysSetStatus() {

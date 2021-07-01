@@ -22,7 +22,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              机器
+              设备
             </div>
             <div style="display:flex">
               <div style="margin-right:10px;display:flex; align-items: center;">
@@ -87,7 +87,7 @@
               <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
             </div>
             <div v-if="mctMode.indexOf('M')>-1" class="it">
-              <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">机器异常订单</span></div>
+              <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">设备异常订单</span></div>
             </div>
           </div>
         </el-card>
