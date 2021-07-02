@@ -74,6 +74,7 @@
     <Compile Include="MerchOperateLog.cs" />
     <Compile Include="MerchDevice.cs" />
     <Compile Include="DeviceBindLog.cs" />
+    <Compile Include="DeviceMqttMessage.cs" />
     <Compile Include="PayRefund.cs" />
     <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />

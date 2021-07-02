@@ -63,25 +63,25 @@ export function manageStockEditStock(data) {
   })
 }
 
-export function sysReboot(data) {
+export function rebootSys(data) {
   return request({
-    url: '/device/sysReboot',
+    url: '/device/rebootSys',
     method: 'post',
     data
   })
 }
 
-export function sysShutdown(data) {
+export function shutdownSys(data) {
   return request({
-    url: '/device/sysShutdown',
+    url: '/device/shutdownSys',
     method: 'post',
     data
   })
 }
 
-export function sysSetStatus(data) {
+export function setSysStatus(data) {
   return request({
-    url: '/device/sysSetStatus',
+    url: '/device/setSysStatus',
     method: 'post',
     data
   })
@@ -95,9 +95,9 @@ export function queryMsgPushResult(data) {
   })
 }
 
-export function dsx01OpenPickupDoor(data) {
+export function openPickupDoor(data) {
   return request({
-    url: '/device/dsx01OpenPickupDoor',
+    url: '/device/openPickupDoor',
     method: 'post',
     data
   })
@@ -128,11 +128,11 @@ export default {
   initManageStock: initManageStock,
   manageStockGetStocks: manageStockGetStocks,
   manageStockEditStock: manageStockEditStock,
-  sysReboot: sysReboot,
-  sysShutdown: sysShutdown,
-  sysSetStatus: sysSetStatus,
+  rebootSys: rebootSys,
+  shutdownSys: shutdownSys,
+  setSysStatus: setSysStatus,
   queryMsgPushResult: queryMsgPushResult,
-  dsx01OpenPickupDoor: dsx01OpenPickupDoor,
+  openPickupDoor: openPickupDoor,
   bindShop: bindShop,
   unBindShop: unBindShop
 }

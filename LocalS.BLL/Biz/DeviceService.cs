@@ -163,7 +163,7 @@ namespace LocalS.BLL.Biz
 
         public void SendStock(string operater, string appId, string merchId, string deviceId, List<DeviceSkuStockModel> contents)
         {
-            PushService.SendStock(operater, appId, merchId, deviceId, contents);
+            PushService.SendUpdateStock(operater, appId, merchId, deviceId, contents);
         }
 
         public void SendStock(string operater, string appId, string merchId, string deviceId, DeviceSkuStockModel content)
@@ -185,7 +185,7 @@ namespace LocalS.BLL.Biz
                 foreach (var deviceId in deviceIds)
                 {
                     var ads = BizFactory.Device.GetAds(deviceId);
-                    PushService.SendAds(operater, appId, merchId, deviceId, ads);
+                    PushService.SendUpdateAds(operater, appId, merchId, deviceId, ads);
                 }
             });
         }
@@ -193,30 +193,30 @@ namespace LocalS.BLL.Biz
         public void SendHomeLogo(string operater, string appId, string merchId, string deviceId, string logoImgUrl)
         {
             var content = new { url = logoImgUrl };
-            PushService.SendHomeLogo(operater, appId, merchId, deviceId, content);
+            PushService.SendUpdateHomeLogo(operater, appId, merchId, deviceId, content);
         }
 
-        public CustomJsonResult SendSysReboot(string operater, string appId, string merchId, string deviceId)
+        public CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string deviceId)
         {
             if (IsStopUse(merchId, deviceId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.SendSysReboot(operater, appId, merchId, deviceId);
+            return PushService.SendRebootSys(operater, appId, merchId, deviceId);
         }
 
-        public CustomJsonResult SendSysShutdown(string operater, string appId, string merchId, string deviceId)
+        public CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string deviceId)
         {
             if (IsStopUse(merchId, deviceId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.SendSysShutdown(operater, appId, merchId, deviceId);
+            return PushService.SendShutdownSys(operater, appId, merchId, deviceId);
         }
 
-        public CustomJsonResult SendSysSetStatus(string operater, string appId, string merchId, string deviceId, int status, string helpTip)
+        public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string deviceId, int status, string helpTip)
         {
             if (IsStopUse(merchId, deviceId))
             {
@@ -224,17 +224,17 @@ namespace LocalS.BLL.Biz
             }
 
             var content = new { status = status, helpTip = helpTip };
-            return PushService.SendSysSetStatus(operater, appId, merchId, deviceId, content);
+            return PushService.SendSetSysStatus(operater, appId, merchId, deviceId, content);
         }
 
-        public CustomJsonResult SendDsx01OpenPickupDoor(string operater, string appId, string merchId, string deviceId)
+        public CustomJsonResult SendOpenPickupDoor(string operater, string appId, string merchId, string deviceId)
         {
             if (IsStopUse(merchId, deviceId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.SendDsx01OpenPickupDoor(operater, appId, merchId, deviceId);
+            return PushService.SendOpenPickupDoor(operater, appId, merchId, deviceId);
         }
 
         public CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string deviceId, string messageId)

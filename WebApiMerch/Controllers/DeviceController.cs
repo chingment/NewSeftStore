@@ -70,33 +70,31 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SysReboot([FromBody]RopDeviceRebootSys rop)
+        public OwnApiHttpResponse RebootSys([FromBody]RopDeviceRebootSys rop)
         {
-            //SdkFactory.Wx.GiftvoucherActivityNotifyPick("dad", "otakHv019rDPK-sMjbBUj8khGgAE", "1212122122", "test", "33311231", "test", DateTime.Now, "http://www.17fanju.com");
-
-            var result = MerchServiceFactory.Device.SysReboot(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Device.RebootSys(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SysShutdown([FromBody]RopDeviceShutdownSys rop)
+        public OwnApiHttpResponse ShutdownSys([FromBody]RopDeviceShutdownSys rop)
         {
-            var result = MerchServiceFactory.Device.SysShutdown(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Device.ShutdownSys(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SysSetStatus([FromBody]RopDeviceSetSysStatus rop)
+        public OwnApiHttpResponse SetSysStatus([FromBody]RopDeviceSetSysStatus rop)
         {
-            var result = MerchServiceFactory.Device.SysSetStatus(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Device.SetSysStatus(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
 
         [HttpPost]
-        public OwnApiHttpResponse Dsx01OpenPickupDoor([FromBody]RopDeviceShutdownSys rop)
+        public OwnApiHttpResponse OpenPickupDoor([FromBody]RopDeviceOpenPickupDoor rop)
         {
-            var result = MerchServiceFactory.Device.Dsx01OpenPickupDoor(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Device.OpenPickupDoor(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

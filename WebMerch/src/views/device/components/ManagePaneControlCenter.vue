@@ -5,9 +5,9 @@
       </div>
       <div class="content">
 
-        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;" @click="onOpenDialogSysSetStatus">设置状态</el-button>
-        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onSysReboot">重启系统</el-button>
-        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onSysShutDown">关闭系统</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;" @click="onOpenDialogSetSysStatus">设置状态</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onRebootSys">重启系统</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onShutDownSys">关闭系统</el-button>
 
       </div>
     </div>
@@ -16,32 +16,32 @@
       <div class="title"><span>DS设备相关</span>
       </div>
       <div class="content">
-        <el-button type="primary" @click="onDsx01OpenPickupDoor">打开设备取货门</el-button>
+        <el-button type="primary" @click="onOpenPickupDoor">打开取货口</el-button>
       </div>
     </div>
 
-    <el-dialog title="设置状态" :visible.sync="dialogSysSetStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
+    <el-dialog title="设置状态" :visible.sync="dialogSetSysStatusIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div>
 
-        <el-form ref="formBySysSetStatus" :model="formBySysSetStatus" :rules="formBySysSetStatusRules" label-width="80px">
+        <el-form ref="formBySetSysStatus" :model="formBySetSysStatus" :rules="formBySetSysStatusRules" label-width="80px">
           <el-form-item label="设备编码">
             <span>{{ deviceId }}</span>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-radio v-model="formBySysSetStatus.status" label="1">正常</el-radio>
-            <el-radio v-model="formBySysSetStatus.status" label="2">维护中</el-radio>
+            <el-radio v-model="formBySetSysStatus.status" label="1">正常</el-radio>
+            <el-radio v-model="formBySetSysStatus.status" label="2">维护中</el-radio>
           </el-form-item>
           <el-form-item label="描述" prop="helpTip">
-            <el-input v-model="formBySysSetStatus.helpTip" type="textarea" :rows="5" />
+            <el-input v-model="formBySetSysStatus.helpTip" type="textarea" :rows="5" />
           </el-form-item>
         </el-form>
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="dialogSysSetStatusIsVisible = false">
+        <el-button size="small" @click="dialogSetSysStatusIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" size="small" @click="onSysSetStatus()">
+        <el-button type="primary" size="small" @click="onSetSysStatus()">
           确定
         </el-button>
       </div>
@@ -51,8 +51,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getUrlParam } from '@/utils/commonUtil'
-import { sysReboot, sysShutdown, sysSetStatus, queryMsgPushResult, dsx01OpenPickupDoor } from '@/api/device'
+import { rebootSys, shutdownSys, setSysStatus, openPickupDoor, queryMsgPushResult } from '@/api/device'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -64,13 +63,13 @@ export default {
   },
   data() {
     return {
-      dialogSysSetStatusIsVisible: false,
+      dialogSetSysStatusIsVisible: false,
       isDesktop: this.$store.getters.isDesktop,
-      formBySysSetStatus: {
+      formBySetSysStatus: {
         status: undefined,
         helpTip: '设备正在维护中'
       },
-      formBySysSetStatusRules: {
+      formBySetSysStatusRules: {
         status: [{ required: true, message: '请选择状态', trigger: 'change' }],
         helpTip: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }]
       }
@@ -88,13 +87,13 @@ export default {
     init() {
 
     },
-    onSysReboot() {
+    onRebootSys() {
       MessageBox.confirm('确定要重启系统？请确保设备在空闲状态中，否则会影响设备正常运行！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        sysReboot({ id: this.deviceId }).then(res => {
+        rebootSys({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {
@@ -107,13 +106,13 @@ export default {
       }).catch(() => {
       })
     },
-    onSysShutDown() {
+    onShutDownSys() {
       MessageBox.confirm('确定要关闭系统？关闭系统需要人工前往设备开启！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        sysShutdown({ id: this.deviceId }).then(res => {
+        shutdownSys({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {
@@ -126,22 +125,22 @@ export default {
       }).catch(() => {
       })
     },
-    onOpenDialogSysSetStatus() {
-      this.formBySysSetStatus.status = undefined
-      this.formBySysSetStatus.helpTip = '设备正在维护中'
-      this.dialogSysSetStatusIsVisible = true
+    onOpenDialogSetSysStatus() {
+      this.formBySetSysStatus.status = undefined
+      this.formBySetSysStatus.helpTip = '设备正在维护中'
+      this.dialogSetSysStatusIsVisible = true
     },
-    onSysSetStatus() {
-      this.$refs['formBySysSetStatus'].validate((valid) => {
+    onSetSysStatus() {
+      this.$refs['formBySetSysStatus'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要设置状态？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            sysSetStatus({ id: this.deviceId, status: this.formBySysSetStatus.status, helpTip: this.formBySysSetStatus.helpTip }).then(res => {
+            setSysStatus({ id: this.deviceId, status: this.formBySetSysStatus.status, helpTip: this.formBySetSysStatus.helpTip }).then(res => {
               if (res.result === 1) {
-                this.dialogSysSetStatusIsVisible = false
+                this.dialogSetSysStatusIsVisible = false
                 this.onQueryMsgStatus(res.data.msg_id)
               } else {
                 this.$message({
@@ -155,13 +154,13 @@ export default {
         }
       })
     },
-    onDsx01OpenPickupDoor() {
+    onOpenPickupDoor() {
       MessageBox.confirm('确定要打开设备型号DSX01的取货门', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        dsx01OpenPickupDoor({ id: this.deviceId }).then(res => {
+        openPickupDoor({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
             this.onQueryMsgStatus(res.data.msg_id)
           } else {

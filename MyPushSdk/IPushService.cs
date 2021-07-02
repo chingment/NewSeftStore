@@ -10,8 +10,8 @@ namespace MyPushSdk
 
     public interface IPushService
     {
-        CustomJsonResult Send(string registrationid, string cmd, object content);
+        CustomJsonResult Send(string deviceId, string msgId, string method, object pms);
 
-        CustomJsonResult QueryStatus(string registrationid, string msgId);
+        CustomJsonResult QueryStatus(string deviceId, string msgId);
     }
 }

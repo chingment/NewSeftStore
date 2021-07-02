@@ -65,9 +65,9 @@ namespace MyPushSdk
             }
         }
 
-        public CustomJsonResult Send(string registrationid, string type, object content)
+        public CustomJsonResult Send(string deviceId, string msgId, string method, object pms)
         {
-            LogUtil.Info("Send2");
+            LogUtil.Info(TAG, "开始发送命令");
 
             if (mqttClient == null)
             {
@@ -82,17 +82,20 @@ namespace MyPushSdk
             if (!mqttClient.IsConnected)
             {
                 LogUtil.Info(TAG, "连接失败");
+
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "消息服务器连接失败");
             }
 
             var result = new CustomJsonResult();
 
-            string msg_id = Guid.NewGuid().ToString().Replace("-", "");
-            string msg_type = type;
+            var obj_payload = new { Id = msgId, Method = method, Params = pms };
+            var str_payload = JsonConvertUtil.SerializeObject(obj_payload);
 
-            var msg = new { msg_id = msg_id, type = msg_type, content = content };
+            var topic = "/topic_s_mch/" + deviceId;
 
-            var appMsg = new MqttApplicationMessage("topic_s_mch/" + registrationid, Encoding.UTF8.GetBytes(JsonConvertUtil.SerializeObject(msg)), MqttQualityOfServiceLevel.AtMostOnce, false);
+            LogUtil.Info(TAG, "topic:" + topic);
 
+            var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.AtMostOnce, false);
             var publish = mqttClient.PublishAsync(appMsg);
 
             //if (!publish.IsCompleted)
@@ -101,13 +104,9 @@ namespace MyPushSdk
             //}
 
 
-            var ret = new SendResult();
+            RedisManager.Db.StringSet("mqtt_msg:" + msgId, 0, new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
 
-            ret.msg_id = msg_id;
-
-            RedisManager.Db.StringSet("msg:" + msg_id, "0", new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已发送，待确认", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已发送，待确认", new { msgId = msgId });
 
             return result;
         }
@@ -116,10 +115,12 @@ namespace MyPushSdk
         {
             var result = new CustomJsonResult();
 
-            string msg = RedisManager.Db.StringGet("msg:" + msgId);
+            string msg = RedisManager.Db.StringGet("mqtt_msg:" + msgId);
 
             if (msg == null)
+            {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");
+            }
 
             if (msg != "1")
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");

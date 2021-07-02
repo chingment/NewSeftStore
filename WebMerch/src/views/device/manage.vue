@@ -17,7 +17,7 @@
     <el-tabs v-model="activeTab" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :device-id="activeDropdown.id" /></el-tab-pane>
       <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :device-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :devcie-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :device-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>

@@ -258,13 +258,13 @@ namespace LocalS.Service.Api.Merch
             var ret = new RetDeviceInitManageBaseInfo();
 
             var d_Device = (from s in CurrentDb.MerchDevice
-                             join m in CurrentDb.Device on s.DeviceId equals m.Id into temp
-                             from u in temp.DefaultIfEmpty()
-                             where
-                             s.MerchId == merchId
-                             &&
-                             s.DeviceId == deviceId
-                             select new { s.DeviceId, u.AppVersionCode, u.CtrlSdkVersionCode, s.CumCode, s.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
+                            join m in CurrentDb.Device on s.DeviceId equals m.Id into temp
+                            from u in temp.DefaultIfEmpty()
+                            where
+                            s.MerchId == merchId
+                            &&
+                            s.DeviceId == deviceId
+                            select new { s.DeviceId, u.AppVersionCode, u.CtrlSdkVersionCode, s.CumCode, s.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
 
             ret.Id = d_Device.DeviceId;
             ret.Name = d_Device.Name;
@@ -470,7 +470,7 @@ namespace LocalS.Service.Api.Merch
 
             var device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Device, merchId, device.StoreId, device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity,rop.MaxQuantity,rop.WarnQuantity,rop.HoldQuantity);
+            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Device, merchId, device.StoreId, device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
 
             if (result.Result == ResultType.Success)
             {
@@ -514,25 +514,25 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult SysReboot(string operater, string merchId, RopDeviceRebootSys rop)
+        public CustomJsonResult RebootSys(string operater, string merchId, RopDeviceRebootSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Device.SendSysReboot(operater, AppId.MERCH, merchId, rop.Id);
+            result = BizFactory.Device.SendRebootSys(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
 
-        public CustomJsonResult SysShutdown(string operater, string merchId, RopDeviceShutdownSys rop)
+        public CustomJsonResult ShutdownSys(string operater, string merchId, RopDeviceShutdownSys rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Device.SendSysShutdown(operater, AppId.MERCH, merchId, rop.Id);
+            result = BizFactory.Device.SendShutdownSys(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
 
-        public CustomJsonResult SysSetStatus(string operater, string merchId, RopDeviceSetSysStatus rop)
+        public CustomJsonResult SetSysStatus(string operater, string merchId, RopDeviceSetSysStatus rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -556,16 +556,16 @@ namespace LocalS.Service.Api.Merch
 
             CurrentDb.SaveChanges();
 
-            result = BizFactory.Device.SendSysSetStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
+            result = BizFactory.Device.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
 
             return result;
         }
 
-        public CustomJsonResult Dsx01OpenPickupDoor(string operater, string merchId, RopDeviceShutdownSys rop)
+        public CustomJsonResult OpenPickupDoor(string operater, string merchId, RopDeviceOpenPickupDoor rop)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Device.SendDsx01OpenPickupDoor(operater, AppId.MERCH, merchId, rop.Id);
+            result = BizFactory.Device.SendOpenPickupDoor(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
