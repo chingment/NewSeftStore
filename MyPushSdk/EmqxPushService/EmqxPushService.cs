@@ -104,7 +104,7 @@ namespace MyPushSdk
             //}
 
 
-            RedisManager.Db.StringSet("mqtt_msg:" + msgId, 0, new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
+            RedisManager.Db.StringSet("mqtt_msg:" + msgId, "0", new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已发送，待确认", new { msgId = msgId });
 

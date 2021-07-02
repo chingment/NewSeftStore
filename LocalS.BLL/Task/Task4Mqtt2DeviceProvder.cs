@@ -63,25 +63,46 @@ namespace LocalS.BLL.Task
             push.Connect();
         }
 
+        public static readonly object _lock = new object();
+
         private void MessageReceivedEvent(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            string topic = e.ApplicationMessage.Topic;
-            string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
-            LogUtil.Info(TAG, "接收到消息>>主题:" + topic + ",内容:" + payload);
-
-            //服务器推送的消息到设备，到达确认
-            if (topic.Contains("/topic_p_mch"))
+            try
             {
-                Dictionary<string, object> obj_Payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(payload);
-                string id = obj_Payload["id"].ToString();
-                string method = obj_Payload["method"].ToString();
-                switch (method)
+                string topic = e.ApplicationMessage.Topic;
+                string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+
+                LogUtil.Info(TAG, "接收到消息>>主题:" + topic + ",内容:" + payload);
+
+                //服务器推送的消息到设备，到达确认
+                if (topic.Contains("/topic_p_mch"))
                 {
-                    case "msg_arrive":
-                        msg_arrive(id);
-                        break;
+                    Dictionary<string, object> obj_Payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(payload);
+                    string id = obj_Payload["id"].ToString();
+                    string method = obj_Payload["method"].ToString();
+
+                   
+
+                    //BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", content);
+
+                    switch (method)
+                    {
+                        case "msg_arrive":
+                            msg_arrive(id);
+                            break;
+                        case "msg_exec_start":
+                            msg_exec_start(id);
+                            break;
+                        case "msg_exec_end":
+                            msg_exec_end(id);
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error(TAG, ex);
             }
 
             ////设备推送的消息到服务，消息处理
@@ -108,16 +129,49 @@ namespace LocalS.BLL.Task
             //        }
             //    }
             //}
+
         }
 
         public void msg_arrive(string id)
         {
+            LogUtil.Info(TAG, "msg_arrive:" + id);
+
             var m_DeviceMqttMessage = CurrentDb.DeviceMqttMessage.Where(m => m.Id == id).FirstOrDefault();
             if (m_DeviceMqttMessage != null)
             {
                 m_DeviceMqttMessage.IsArried = true;
                 CurrentDb.SaveChanges();
-                RedisManager.Db.StringSet("mqtt_msg:" + id, 1, new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
+                RedisManager.Db.StringSet("mqtt_msg:" + id, "1", new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
+
+                LogUtil.Info(TAG, "msg_arrive:" + id + ",SaveChanges");
+            }
+        }
+
+        public void msg_exec_start(string id)
+        {
+            LogUtil.Info(TAG, "msg_exec_start:" + id);
+
+            var m_DeviceMqttMessage = CurrentDb.DeviceMqttMessage.Where(m => m.Id == id).FirstOrDefault();
+            if (m_DeviceMqttMessage != null)
+            {
+                m_DeviceMqttMessage.IsExecStart = true;
+                CurrentDb.SaveChanges();
+
+                LogUtil.Info(TAG, "msg_exec_start:" + id + ",SaveChanges");
+            }
+        }
+
+        public void msg_exec_end(string id)
+        {
+            LogUtil.Info(TAG, "msg_exec_end:" + id);
+
+            var m_DeviceMqttMessage = CurrentDb.DeviceMqttMessage.Where(m => m.Id == id).FirstOrDefault();
+            if (m_DeviceMqttMessage != null)
+            {
+                m_DeviceMqttMessage.IsExecEnd = true;
+                CurrentDb.SaveChanges();
+
+                LogUtil.Info(TAG, "msg_exec_end:" + id + ",SaveChanges");
             }
         }
     }

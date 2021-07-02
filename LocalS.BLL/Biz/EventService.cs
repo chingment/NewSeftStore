@@ -17,7 +17,6 @@ namespace LocalS.BLL.Biz
     {
         public void Handle(EventNotifyModel model)
         {
-
             switch (model.EventCode)
             {
                 case EventCode.Login:

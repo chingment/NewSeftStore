@@ -95,7 +95,7 @@ export default {
       }).then(() => {
         rebootSys({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msg_id)
+            this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -114,7 +114,7 @@ export default {
       }).then(() => {
         shutdownSys({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msg_id)
+            this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -141,7 +141,7 @@ export default {
             setSysStatus({ id: this.deviceId, status: this.formBySetSysStatus.status, helpTip: this.formBySetSysStatus.helpTip }).then(res => {
               if (res.result === 1) {
                 this.dialogSetSysStatusIsVisible = false
-                this.onQueryMsgStatus(res.data.msg_id)
+                this.onQueryMsgStatus(res.data.msgId)
               } else {
                 this.$message({
                   message: res.message,
@@ -162,7 +162,7 @@ export default {
       }).then(() => {
         openPickupDoor({ id: this.deviceId }).then(res => {
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msg_id)
+            this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -184,7 +184,7 @@ export default {
 
       var timeout = null
       var interval = window.setInterval(function() {
-        queryMsgPushResult({ deviceId: _this.deviceId, msg_id: msgId }).then(res => {
+        queryMsgPushResult({ deviceId: _this.deviceId, msgId: msgId }).then(res => {
           if (res.result === 1) {
             loading.close()
 
@@ -204,7 +204,7 @@ export default {
       timeout = window.setTimeout(() => {
         loading.close()
         window.clearInterval(interval)
-        queryMsgPushResult({ deviceId: _this.deviceId, msg_id: msgId }).then(res => {
+        queryMsgPushResult({ deviceId: _this.deviceId, msgId: msgId }).then(res => {
           _this.$message(res.message)
         })
       }, 10000)

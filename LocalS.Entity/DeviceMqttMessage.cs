@@ -14,7 +14,8 @@ namespace LocalS.Entity
         public string Params { get; set; }
         public string Version { get; set; }
         public bool IsArried { get; set; }
-
+        public bool IsExecStart { get; set; }
+        public bool IsExecEnd { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

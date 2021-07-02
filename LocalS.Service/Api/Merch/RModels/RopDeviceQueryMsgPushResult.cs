@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopDeviceQueryMsgPushResult
     {
-        public string msg_id { get; set; }
+        public string MsgId { get; set; }
 
         public string DeviceId { get; set; }
     }

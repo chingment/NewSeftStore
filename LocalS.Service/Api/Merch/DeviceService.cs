@@ -560,7 +560,7 @@ namespace LocalS.Service.Api.Merch
         public CustomJsonResult QueryMsgPushResult(string operater, string merchId, RopDeviceQueryMsgPushResult rop)
         {
 
-            var result = BizFactory.Device.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.DeviceId, rop.msg_id);
+            var result = BizFactory.Device.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.DeviceId, rop.MsgId);
 
             return result;
         }
