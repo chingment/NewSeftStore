@@ -161,21 +161,16 @@ namespace LocalS.BLL.Biz
             return d_MerchDevice.IsStopUse;
         }
 
-        public void SendStock(string operater, string appId, string merchId, string deviceId, List<DeviceSkuStockModel> contents)
+        public void SendUpdateStock(string operater, string appId, string merchId, string deviceId, List<DeviceSkuStockModel> pms)
         {
-            PushService.SendUpdateStock(operater, appId, merchId, deviceId, contents);
+            SendCommand(operater, appId, merchId, deviceId, "update_stock", pms);
         }
 
-        public void SendStock(string operater, string appId, string merchId, string deviceId, DeviceSkuStockModel content)
+        public void SendSendUpdateStock(string operater, string appId, string merchId, string deviceId, DeviceSkuStockModel content)
         {
             List<DeviceSkuStockModel> contents = new List<DeviceSkuStockModel>();
             contents.Add(content);
-            SendStock(operater, appId, merchId, deviceId, contents);
-        }
-
-        public void SendStock(string operater, string appId, string merchId, string deviceId)
-        {
-            //PushService.SendStock(operater, appId, merchId, deviceId);
+            SendUpdateStock(operater, appId, merchId, deviceId, contents);
         }
 
         public void SendAds(string operater, string appId, string merchId, string[] deviceIds)
@@ -185,56 +180,46 @@ namespace LocalS.BLL.Biz
                 foreach (var deviceId in deviceIds)
                 {
                     var ads = BizFactory.Device.GetAds(deviceId);
-                    PushService.SendUpdateAds(operater, appId, merchId, deviceId, ads);
+                    SendCommand(operater, appId, merchId, deviceId, "update_ads", ads);
                 }
             });
         }
 
-        public void SendHomeLogo(string operater, string appId, string merchId, string deviceId, string logoImgUrl)
+        public CustomJsonResult SendUpdateHomeLogo(string operater, string appId, string merchId, string deviceId, string logoImgUrl)
         {
-            var content = new { url = logoImgUrl };
-            PushService.SendUpdateHomeLogo(operater, appId, merchId, deviceId, content);
+            return SendCommand(operater, appId, merchId, deviceId, "update_home_logo", new { logoImgUrl = logoImgUrl });
         }
 
         public CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string deviceId)
         {
-            if (IsStopUse(merchId, deviceId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
-            }
-
-            return PushService.SendRebootSys(operater, appId, merchId, deviceId);
+            return SendCommand(operater, appId, merchId, deviceId, "reboot_sys");
         }
 
         public CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string deviceId)
         {
-            if (IsStopUse(merchId, deviceId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
-            }
-
-            return PushService.SendShutdownSys(operater, appId, merchId, deviceId);
+            return SendCommand(operater, appId, merchId, deviceId, "shutdown_sys");
         }
 
         public CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string deviceId, int status, string helpTip)
         {
-            if (IsStopUse(merchId, deviceId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
-            }
-
-            var content = new { status = status, helpTip = helpTip };
-            return PushService.SendSetSysStatus(operater, appId, merchId, deviceId, content);
+            var pms = new { status = status, helpTip = helpTip };
+            return SendCommand(operater, appId, merchId, deviceId, "set_sys_status", pms);
         }
 
         public CustomJsonResult SendOpenPickupDoor(string operater, string appId, string merchId, string deviceId)
+        {
+            return SendCommand(operater, appId, merchId, deviceId, "open_pickup_door");
+        }
+
+        public CustomJsonResult SendCommand(string operater, string appId, string merchId, string deviceId, string method, object pms = null)
         {
             if (IsStopUse(merchId, deviceId))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.SendOpenPickupDoor(operater, appId, merchId, deviceId);
+            return PushService.GetInstance().Send(operater, appId, merchId, deviceId, method, pms);
+
         }
 
         public CustomJsonResult QueryMsgPushResult(string operater, string appId, string merchId, string deviceId, string messageId)

@@ -69,7 +69,7 @@ namespace LocalS.BLL.Push
             LogUtil.Info(TAG, "接收到消息>>主题:" + topic + ",内容:" + payload);
         }
 
-        private CustomJsonResult Send(string operater, string appId, string merchId, string deviceId, string method, object prms)
+        public CustomJsonResult Send(string operater, string appId, string merchId, string deviceId, string method, object prms)
         {
             var d_DeviceMqttMessage = new DeviceMqttMessage();
             d_DeviceMqttMessage.Id = IdWorker.Build(IdType.NewGuid);
@@ -86,55 +86,6 @@ namespace LocalS.BLL.Push
 
             var result = GetInstance().Push.Send(deviceId, d_DeviceMqttMessage.Id, method, prms);
 
-            return result;
-        }
-
-        public static CustomJsonResult SendUpdateStock(string operater, string appId, string merchId, string deviceId, object prms)
-        {
-            var result = new CustomJsonResult();
-            result = GetInstance().Send(operater, appId, merchId, deviceId, "update_stock", prms);
-            return result;
-        }
-
-        public static CustomJsonResult SendUpdateAds(string operater, string appId, string merchId, string deviceId, object prms)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "update_ads", prms);
-            return result;
-        }
-
-        public static CustomJsonResult SendUpdateHomeLogo(string operater, string appId, string merchId, string deviceId, object prms)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "update_home_logo", prms);
-            return result;
-        }
-
-        public static CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string deviceId)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "reboot_sys", null);
-            return result;
-        }
-
-        public static CustomJsonResult SendShutdownSys(string operater, string appId, string merchId, string deviceId)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "shutdown_sys", null);
-            return result;
-        }
-
-        public static CustomJsonResult SendSetSysStatus(string operater, string appId, string merchId, string deviceId, object prms)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "set_sys_status", prms);
-            return result;
-        }
-
-        public static CustomJsonResult SendOpenPickupDoor(string operater, string appId, string merchId, string deviceId)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "open_pickup_door", null);
-            return result;
-        }
-
-        public static CustomJsonResult SendPaySuccess(string operater, string appId, string merchId, string deviceId, object prms)
-        {
-            var result = GetInstance().Send(operater, appId, merchId, deviceId, "pay_success", prms);
             return result;
         }
 

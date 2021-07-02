@@ -187,36 +187,36 @@ namespace LocalS.Service.Api.Merch
         {
             var ret = new RetDeviceInitManage();
 
-            var merchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CurUseStoreId).ToList();
+            var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CurUseStoreId).ToList();
 
-            merchDevices = merchDevices.OrderBy(m => m.IsStopUse).ToList();
+            d_MerchDevices = d_MerchDevices.OrderBy(m => m.IsStopUse).ToList();
 
-            foreach (var merchDevice in merchDevices)
+            foreach (var d_MerchDevice in d_MerchDevices)
             {
                 string name = "";
-                if (merchDevice.IsStopUse)
+                if (d_MerchDevice.IsStopUse)
                 {
-                    name = string.Format("{0} [{1}]", merchDevice.DeviceId, "已停止使用");
+                    name = string.Format("{0} [{1}]", d_MerchDevice.DeviceId, "已停止使用");
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(merchDevice.CurUseStoreId))
+                    if (string.IsNullOrEmpty(d_MerchDevice.CurUseStoreId))
                     {
-                        name = string.Format("{0} [未绑定店铺]", merchDevice.DeviceId);
+                        name = string.Format("{0} [未绑定店铺]", d_MerchDevice.DeviceId);
                     }
-                    else if (string.IsNullOrEmpty(merchDevice.CurUseShopId))
+                    else if (string.IsNullOrEmpty(d_MerchDevice.CurUseShopId))
                     {
-                        name = string.Format("{0} [未绑定门店]", merchDevice.DeviceId);
+                        name = string.Format("{0} [未绑定门店]", d_MerchDevice.DeviceId);
                     }
                     else
                     {
-                        var store = CurrentDb.Store.Where(m => m.Id == merchDevice.CurUseStoreId).FirstOrDefault();
+                        var store = CurrentDb.Store.Where(m => m.Id == d_MerchDevice.CurUseStoreId).FirstOrDefault();
 
-                        var shop = CurrentDb.Shop.Where(m => m.Id == merchDevice.CurUseShopId).FirstOrDefault();
+                        var shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
 
                         if (store != null && shop != null)
                         {
-                            name = string.Format("{0} [{1}/{2}]", GetCode(merchDevice.DeviceId, merchDevice.CumCode), store.Name, shop.Name);
+                            name = string.Format("{0} [{1}/{2}]", GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode), store.Name, shop.Name);
                         }
                         else
                         {
@@ -226,16 +226,16 @@ namespace LocalS.Service.Api.Merch
 
                 }
 
-                if (merchDevice.DeviceId == deviceId)
+                if (d_MerchDevice.DeviceId == deviceId)
                 {
                     ret.CurDevice = new DeviceModel();
-                    ret.CurDevice.Id = merchDevice.DeviceId;
+                    ret.CurDevice.Id = d_MerchDevice.DeviceId;
                     ret.CurDevice.Name = name;
                 }
 
 
 
-                ret.Devices.Add(new DeviceModel { Id = merchDevice.DeviceId, Name = name });
+                ret.Devices.Add(new DeviceModel { Id = d_MerchDevice.DeviceId, Name = name });
             }
 
 
@@ -301,15 +301,15 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetDeviceInitManageStock();
 
-            var deviceCabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == deviceId && m.IsUse).ToList();
+            var d_DeviceCabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == deviceId && m.IsUse).ToList();
 
 
-            foreach (var deviceCabinet in deviceCabinets)
+            foreach (var d_DeviceCabinet in d_DeviceCabinets)
             {
                 var optionNode = new OptionNode();
 
-                optionNode.Value = deviceCabinet.CabinetId;
-                optionNode.Label = deviceCabinet.CabinetName;
+                optionNode.Value = d_DeviceCabinet.CabinetId;
+                optionNode.Label = d_DeviceCabinet.CabinetName;
 
                 ret.OptionsCabinets.Add(optionNode);
 
@@ -326,7 +326,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var l_Device = BizFactory.Device.GetOne(deviceId);
+            var m_Device = BizFactory.Device.GetOne(deviceId);
 
             var d_DeviceCabinet = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == deviceId && m.CabinetId == cabinetId).FirstOrDefault();
 
@@ -342,7 +342,7 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == l_Device.StoreId && m.ShopId == l_Device.ShopId && m.DeviceId == deviceId && m.ShopMode == E_ShopMode.Device).ToList();
+            var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.CabinetId == cabinetId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.DeviceId == deviceId && m.ShopMode == E_ShopMode.Device).ToList();
 
             List<SlotRowModel> rows = new List<SlotRowModel>();
 
@@ -457,8 +457,6 @@ namespace LocalS.Service.Api.Merch
                     break;
             }
 
-
-
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", rows);
 
             return result;
@@ -466,15 +464,13 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult ManageStockEditStock(string operater, string merchId, RopDeviceEditStock rop)
         {
-            var result = new CustomJsonResult();
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            var device = BizFactory.Device.GetOne(rop.DeviceId);
-
-            result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Device, merchId, device.StoreId, device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
+            var result = BizFactory.ProductSku.AdjustStockQuantity(operater, E_ShopMode.Device, merchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceAdjustStockQuantity, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，调整库存", device.StoreName, device.ShopName, device.DeviceId, rop.CabinetId, rop.SlotId), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceAdjustStockQuantity, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，调整库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId), rop);
             }
 
             return result;
@@ -508,7 +504,7 @@ namespace LocalS.Service.Api.Merch
             if (result.Result == ResultType.Success)
             {
                 MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceEdit, string.Format("设备：{0}，信息修改，保存成功", d_MerchDevice.DeviceId), rop);
-                BizFactory.Device.SendHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
+                BizFactory.Device.SendUpdateHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
             }
 
             return result;
@@ -516,72 +512,62 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult RebootSys(string operater, string merchId, RopDeviceRebootSys rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
-
-            result = BizFactory.Device.SendRebootSys(operater, AppId.MERCH, merchId, rop.Id);
-
+            var result = BizFactory.Device.SendRebootSys(operater, AppId.MERCH, merchId, rop.Id);
             return result;
         }
 
         public CustomJsonResult ShutdownSys(string operater, string merchId, RopDeviceShutdownSys rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
-
-            result = BizFactory.Device.SendShutdownSys(operater, AppId.MERCH, merchId, rop.Id);
-
+            var result = BizFactory.Device.SendShutdownSys(operater, AppId.MERCH, merchId, rop.Id);
             return result;
         }
 
         public CustomJsonResult SetSysStatus(string operater, string merchId, RopDeviceSetSysStatus rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
+            var m_Device = CurrentDb.Device.Where(m => m.Id == rop.Id && m.CurUseMerchId == merchId).FirstOrDefault();
 
-            var l_Device = CurrentDb.Device.Where(m => m.Id == rop.Id && m.CurUseMerchId == merchId).FirstOrDefault();
-
-            if (l_Device == null)
+            if (m_Device == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该找不到记录");
             }
 
             if (rop.Status == 1)
             {
-                l_Device.ExIsHas = false;
-                l_Device.ExReason = "";
+                m_Device.ExIsHas = false;
+                m_Device.ExReason = "";
             }
             else if (rop.Status == 2)
             {
-                l_Device.ExIsHas = true;
-                l_Device.ExReason = "后台人员设置维护中";
+                m_Device.ExIsHas = true;
+                m_Device.ExReason = "后台人员设置维护中";
             }
 
             CurrentDb.SaveChanges();
 
-            result = BizFactory.Device.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
+            var result = BizFactory.Device.SendSetSysStatus(operater, AppId.MERCH, merchId, rop.Id, rop.Status, rop.HelpTip);
 
             return result;
         }
 
         public CustomJsonResult OpenPickupDoor(string operater, string merchId, RopDeviceOpenPickupDoor rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Device.SendOpenPickupDoor(operater, AppId.MERCH, merchId, rop.Id);
+            var result = BizFactory.Device.SendOpenPickupDoor(operater, AppId.MERCH, merchId, rop.Id);
 
             return result;
         }
 
         public CustomJsonResult QueryMsgPushResult(string operater, string merchId, RopDeviceQueryMsgPushResult rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.Device.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.DeviceId, rop.msg_id);
+            var result = BizFactory.Device.QueryMsgPushResult(operater, AppId.MERCH, merchId, rop.DeviceId, rop.msg_id);
 
             return result;
         }
 
         public CustomJsonResult UnBindShop(string operater, string merchId, RopDeviceUnBindShop rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
+            var result = new CustomJsonResult();
 
             var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
 
@@ -617,7 +603,7 @@ namespace LocalS.Service.Api.Merch
         }
         public CustomJsonResult BindShop(string operater, string merchId, RopDeviceUnBindShop rop)
         {
-            CustomJsonResult result = new CustomJsonResult();
+            var result = new CustomJsonResult();
 
             var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId).FirstOrDefault();
 
