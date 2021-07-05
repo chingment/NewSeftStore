@@ -90,12 +90,13 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Device.Mqtt = new MqttModel
             {
                 Type = "exmq",
-                Params = new 
+                Params = new
                 {
                     Host = "tcp://112.74.179.185:1883",
                     UserName = "admin",
                     Password = "public",
-                    ClientId = m_Device.DeviceId
+                    ClientId = m_Device.DeviceId,
+                    DeviceClass = "a1A2Mq6w5ln"
                 }
             };
 

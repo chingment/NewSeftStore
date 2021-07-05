@@ -49,7 +49,7 @@ namespace MyPushSdk
                     ClientId = Guid.NewGuid().ToString().Substring(0, 5),
                     UserName = "admin",
                     Password = "public",
-                    CleanSession = true
+                    CleanSession = true,
                 };
 
                 if (!mqttClient.IsConnected)
@@ -91,12 +91,14 @@ namespace MyPushSdk
             var obj_payload = new { Id = msgId, Method = method, Params = pms };
             var str_payload = JsonConvertUtil.SerializeObject(obj_payload);
 
-            var topic = "/topic_s_mch/" + deviceId;
+            var topic = "/a1A2Mq6w5ln/" + deviceId + "/user/get";
 
             LogUtil.Info(TAG, "topic:" + topic);
 
             var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.AtMostOnce, false);
             var publish = mqttClient.PublishAsync(appMsg);
+
+
 
             //if (!publish.IsCompleted)
             //{
@@ -119,13 +121,13 @@ namespace MyPushSdk
 
             if (msg == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未响应，命令发送失败");
             }
 
             if (msg != "1")
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "推送失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未响应，命令发送失败");
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "推送成功");
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "命令发送成功");
 
             return result;
         }

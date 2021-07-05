@@ -45,11 +45,11 @@ namespace LocalS.BLL.Task
         {
             LogUtil.Info(TAG, "服务器已连接");
 
-            LogUtil.Info(TAG, "订阅主题：/topic_p_mch/#");
+            LogUtil.Info(TAG, "订阅主题：/user/update/#");
 
             //发布和回应主题
             push.SubscribeAsync(new List<TopicFilter> {
-                    new TopicFilter("/topic_p_mch/#", MqttQualityOfServiceLevel.AtMostOnce),
+                    new TopicFilter("/+/+/user/update", MqttQualityOfServiceLevel.AtMostOnce),
                 });
         }
 
@@ -76,7 +76,7 @@ namespace LocalS.BLL.Task
                 LogUtil.Info(TAG, "接收到消息>>主题:" + topic + ",内容:" + payload);
 
                 //服务器推送的消息到设备，到达确认
-                if (topic.Contains("/topic_p_mch"))
+                if (topic.Contains("/user/update"))
                 {
                     Dictionary<string, object> obj_Payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(payload);
                     string id = obj_Payload["id"].ToString();
