@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.BLL.Mq.MqByRedis;
 using LocalS.Entity;
 using Lumos;
@@ -67,7 +68,6 @@ namespace LocalS.BLL.Task
 
         private void MessageReceivedEvent(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-
             try
             {
                 string topic = e.ApplicationMessage.Topic;
@@ -81,8 +81,8 @@ namespace LocalS.BLL.Task
                     Dictionary<string, object> obj_Payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(payload);
                     string id = obj_Payload["id"].ToString();
                     string method = obj_Payload["method"].ToString();
-
-                   
+                    string pms = obj_Payload["params"].ToJsonString();
+                    string deviceId = topic.Split('/')[1];
 
                     //BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", content);
 
@@ -97,6 +97,15 @@ namespace LocalS.BLL.Task
                         case "msg_exec_end":
                             msg_exec_end(id);
                             break;
+                        case "status":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", pms);
+                            break;
+                        case "pickup":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickup, "取货动作", pms);
+                            break;
+                        case "pickup_test":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickupTest, "[测试]取货动作", pms);
+                            break;
                     }
                 }
             }
@@ -104,32 +113,6 @@ namespace LocalS.BLL.Task
             {
                 LogUtil.Error(TAG, ex);
             }
-
-            ////设备推送的消息到服务，消息处理
-            //if (topic.Contains("topic_p_mch"))
-            //{
-            //    Dictionary<string, JToken> msg = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, JToken>>(payload);
-
-            //    if (msg.ContainsKey("type"))
-            //    {
-            //        string type = msg["type"].ToString();
-            //        string deviceId = topic.Split('/')[1];
-            //        string content = msg["content"].ToString(Newtonsoft.Json.Formatting.None);
-            //        switch (type)
-            //        {
-            //            case "status":
-            //                BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", content);
-            //                break;
-            //            case "pickup":
-            //                BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickup, "取货动作", content);
-            //                break;
-            //            case "pickup_test":
-            //                BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickupTest, "[测试]取货动作", content);
-            //                break;
-            //        }
-            //    }
-            //}
-
         }
 
         public void msg_arrive(string id)
