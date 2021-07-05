@@ -27,15 +27,15 @@ namespace LocalS.BLL.Biz
                     var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
                     HandleByLogout(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
-                case EventCode.DeviceStatus:
+                case EventCode.device_status:
                     var deviceStatusModel = model.EventContent.ToJsonObject<DeviceEventByDeviceStatusModel>();
                     HandleByDeviceStatus(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, deviceStatusModel);
                     break;
-                case EventCode.DevicePickup:
+                case EventCode.vending_pickup:
                     var devicePickupModel = model.EventContent.ToJsonObject<DeviceEventByPickupModel>();
                     HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupModel);
                     break;
-                case EventCode.DevicePickupTest:
+                case EventCode.vending_pickup_test:
                     var devicePickupTestModel = model.EventContent.ToJsonObject<DeviceEventByPickupTestModel>();
                     HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupTestModel);
                     break;
@@ -152,7 +152,7 @@ namespace LocalS.BLL.Biz
 
             if (isLog)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DeviceStatus, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, deviceId, eventRemark), model);
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.device_status, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, deviceId, eventRemark), model);
             }
         }
         private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupModel model)
@@ -374,7 +374,7 @@ namespace LocalS.BLL.Biz
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickup, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.vending_pickup, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
 
                 
             }
@@ -424,7 +424,7 @@ namespace LocalS.BLL.Biz
                 remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.DevicePickupTest, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), model);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.vending_pickup_test, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), model);
 
         }
     }

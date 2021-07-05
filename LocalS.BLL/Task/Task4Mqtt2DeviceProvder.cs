@@ -81,10 +81,16 @@ namespace LocalS.BLL.Task
                     Dictionary<string, object> obj_Payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(payload);
                     string id = obj_Payload["id"].ToString();
                     string method = obj_Payload["method"].ToString();
-                    string pms = obj_Payload["params"].ToJsonString();
-                    string deviceId = topic.Split('/')[1];
+                    string pms = null;
 
-                    //BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", content);
+                    if (obj_Payload.ContainsKey("params"))
+                    {
+                        pms = obj_Payload["params"].ToJsonString();
+                    }
+
+                    string deviceId = topic.Split('/')[2];
+
+                    LogUtil.Info(TAG, "接收到消息>>deviceId:" + deviceId);
 
                     switch (method)
                     {
@@ -97,14 +103,14 @@ namespace LocalS.BLL.Task
                         case "msg_exec_end":
                             msg_exec_end(id);
                             break;
-                        case "status":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DeviceStatus, "心跳包", pms);
+                        case "device_status":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.device_status, "心跳包", pms);
                             break;
-                        case "pickup":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickup, "取货动作", pms);
+                        case "vending_pickup":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup, "取货动作", pms);
                             break;
-                        case "pickup_test":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.DevicePickupTest, "[测试]取货动作", pms);
+                        case "vending_pickup_test":
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup_test, "[测试]取货动作", pms);
                             break;
                     }
                 }

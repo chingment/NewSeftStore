@@ -13,13 +13,13 @@ namespace LocalS.Entity
         [EventCodeRemark("A", "系统退出")]
         public const string Logout = "Logout";
         [EventCodeRemark("D", "设备心跳包")]
-        public const string DeviceStatus = "DeviceStatus";
+        public const string device_status = "device_status";
         [EventCodeRemark("A", "设备扫描货道")]
-        public const string DeviceScanSlot = "DeviceScanSlot";
+        public const string vending_scan_slots = "vending_scan_slots";
         [EventCodeRemark("D", "设备商品取货")]
-        public const string DevicePickup = "DevicePickup";
+        public const string vending_pickup = "vending_pickup";
         [EventCodeRemark("D", "设备商品测试取货")]
-        public const string DevicePickupTest = "DevicePickupTest";
+        public const string vending_pickup_test = "vending_pickup_test";
         [EventCodeRemark("A", "设备货道商品保存")]
         public const string DeviceCabinetSlotSave = "DeviceCabinetSlotSave";
         [EventCodeRemark("A", "设备货道商品移除")]
@@ -96,22 +96,6 @@ namespace LocalS.Entity
         public const string CouponAdd = "CouponAdd";
         [EventCodeRemark("A", "修改优惠券信息")]
         public const string CouponEdit = "CouponEdit";
-        [EventCodeRemark("B", "更新设备库存信息命令")]
-        public const string MCmdUpdateSkuStock = "MCmdUpdateSkuStock";
-        [EventCodeRemark("C", "更新设备广告")]
-        public const string MCmdUpdateAds = "MCmdUpdateAds";
-        [EventCodeRemark("C", "更新设备LOGO命令")]
-        public const string MCmdUpdateHomeLogo = "MCmdUpdateHomeLogo";
-        [EventCodeRemark("A", "重启系统命令")]
-        public const string MCmdSysReboot = "MCmdSysReboot";
-        [EventCodeRemark("A", "关闭系统命令")]
-        public const string MCmdSysShutdown = "MCmdSysShutdown";
-        [EventCodeRemark("A", "设置系统状态命令")]
-        public const string MCmdSysSetStatus = "MCmdSysSetStatus";
-        [EventCodeRemark("A", "打开DSX01设备取货门命令")]
-        public const string MCmdDsx01OpenPickupDoor = "MCmdDsx01OpenPickupDoor";
-        [EventCodeRemark("C", "支付成功命令")]
-        public const string MCmdPaySuccess = "MCmdPaySuccess";
         public static string GetEventName(string eventCode)
         {
 

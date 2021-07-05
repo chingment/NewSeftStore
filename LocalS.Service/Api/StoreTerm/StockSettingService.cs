@@ -260,7 +260,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 if (result.Result == ResultType.Success)
                 {
-                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceScanSlot, "设备扫描货道成功", new { Rop = rop, StockChangeRecords = m_StockChangeRecords });
+                    MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.vending_scan_slots, "设备扫描货道成功", new { Rop = rop, StockChangeRecords = m_StockChangeRecords });
                 }
             }
 
