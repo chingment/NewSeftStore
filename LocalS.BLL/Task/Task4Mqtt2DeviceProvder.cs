@@ -45,7 +45,7 @@ namespace LocalS.BLL.Task
         {
             LogUtil.Info(TAG, "服务器已连接");
 
-            LogUtil.Info(TAG, "订阅主题：/user/update/#");
+            LogUtil.Info(TAG, "订阅主题：/+/+/user/update");
 
             //发布和回应主题
             push.SubscribeAsync(new List<TopicFilter> {
