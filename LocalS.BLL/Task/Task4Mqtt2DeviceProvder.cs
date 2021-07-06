@@ -31,6 +31,7 @@ namespace LocalS.BLL.Task
             CustomJsonResult result = new CustomJsonResult();
 
             mqtt = new MqttService();
+
             mqtt.ConnectedEvent += ConnectedEvent;
             mqtt.DisconnectedEvent += DisconnectedEvent;
             mqtt.MessageReceivedEvent += MessageReceivedEvent;
