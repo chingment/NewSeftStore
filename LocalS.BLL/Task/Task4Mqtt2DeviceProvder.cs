@@ -1,6 +1,7 @@
 ﻿using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.BLL.Mq.MqByRedis;
+using LocalS.BLL.Push;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -9,7 +10,6 @@ using MQTTnet.Core;
 using MQTTnet.Core.Client;
 using MQTTnet.Core.Packets;
 using MQTTnet.Core.Protocol;
-using MyPushSdk;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,19 +24,17 @@ namespace LocalS.BLL.Task
     {
         private readonly string TAG = "Task4Mqtt2DeviceProvder";
 
-        private EmqxPushService push;
+        private MqttService mqtt;
 
         public CustomJsonResult Run()
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            push = new EmqxPushService();
-
-            push.ConnectedEvent += ConnectedEvent;
-            push.DisconnectedEvent += DisconnectedEvent;
-            push.MessageReceivedEvent += MessageReceivedEvent;
-
-            push.Connect();
+            mqtt = new MqttService();
+            mqtt.ConnectedEvent += ConnectedEvent;
+            mqtt.DisconnectedEvent += DisconnectedEvent;
+            mqtt.MessageReceivedEvent += MessageReceivedEvent;
+            mqtt.Connect();
 
             return result;
         }
@@ -45,10 +43,7 @@ namespace LocalS.BLL.Task
         {
             LogUtil.Info(TAG, "服务器已连接");
 
-            LogUtil.Info(TAG, "订阅主题：/+/+/user/update");
-
-            //发布和回应主题
-            push.SubscribeAsync(new List<TopicFilter> {
+            mqtt.SubscribeAsync(new List<TopicFilter> {
                     new TopicFilter("/+/+/user/update", MqttQualityOfServiceLevel.AtMostOnce),
                 });
         }
@@ -61,7 +56,7 @@ namespace LocalS.BLL.Task
 
             LogUtil.Info(TAG, "尝试重新连接服务器");
 
-            push.Connect();
+            mqtt.Connect();
         }
 
         public static readonly object _lock = new object();

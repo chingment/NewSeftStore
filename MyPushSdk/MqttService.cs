@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace MyPushSdk
 {
-    public class EmqxPushService : IPushService
+    public class MqttService : IPushService
     {
-        private readonly string TAG = "EmqxPushService";
+        private readonly string TAG = "MqttService";
 
         private static MqttClient mqttClient = null;
 
@@ -25,7 +25,7 @@ namespace MyPushSdk
         public event EventHandler ConnectedEvent;
         public event EventHandler DisconnectedEvent;
 
-        public EmqxPushService()
+        public MqttService()
         {
 
         }
@@ -97,7 +97,7 @@ namespace MyPushSdk
 
             var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.AtMostOnce, false);
             var publish = mqttClient.PublishAsync(appMsg);
-
+          
 
 
             //if (!publish.IsCompleted)
@@ -139,7 +139,5 @@ namespace MyPushSdk
 
             return mqttClient.SubscribeAsync(topicFilters);
         }
-
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using log4net;
-using MyPushSdk;
 using System;
 using System.IO;
 using System.Reflection;

@@ -236,10 +236,6 @@
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyPushSdk\MyPushSdk.csproj">
-      <Project>{ec691c59-681a-405e-93cb-4fe65d1a3db4}</Project>
-      <Name>MyPushSdk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TgPaySdk\TgPaySdk.csproj">
       <Project>{259e83da-5441-4911-b284-d524201329fc}</Project>
       <Name>TgPaySdk</Name>

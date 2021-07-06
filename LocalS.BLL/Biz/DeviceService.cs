@@ -3,7 +3,6 @@ using LocalS.BLL.Push;
 using LocalS.BLL.Task;
 using LocalS.Entity;
 using Lumos;
-using MyPushSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -218,7 +217,7 @@ namespace LocalS.BLL.Biz
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.GetInstance().Send(operater, appId, merchId, deviceId, method, pms);
+            return MqttService.GetInstance().Send(operater, appId, merchId, deviceId, method, pms);
 
         }
 
@@ -229,7 +228,7 @@ namespace LocalS.BLL.Biz
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            return PushService.QueryStatus(operater, appId, merchId, deviceId, messageId);
+            return MqttService.GetInstance().QueryStatus(operater, appId, merchId, deviceId, messageId);
         }
 
 

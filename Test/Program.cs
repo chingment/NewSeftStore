@@ -12,7 +12,6 @@ using log4net;
 using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
-using MyPushSdk;
 using MyWeiXinSdk;
 using Newtonsoft.Json.Linq;
 using NPinyin;

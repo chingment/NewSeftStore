@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmqxPushService\EmqxPushService.cs" />
+    <Compile Include="MqttService.cs" />
     <Compile Include="IPushService.cs" />
     <Compile Include="JgPushService\JgPushService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
