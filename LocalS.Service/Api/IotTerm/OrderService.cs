@@ -174,6 +174,7 @@ namespace LocalS.Service.Api.IotTerm
                 business_type = "ship",
                 detail = new
                 {
+                    is_trg = d_Order.PickupIsTrg,
                     sku_ships = sku_Ships
                 }
             };
