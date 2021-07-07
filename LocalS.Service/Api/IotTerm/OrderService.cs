@@ -171,7 +171,7 @@ namespace LocalS.Service.Api.IotTerm
             {
                 low_order_id = d_Order.CumId,
                 up_order_id = d_Order.Id,
-                business_type = "shipment",
+                business_type = "ship",
                 detail = new
                 {
                     sku_ships = sku_Ships
