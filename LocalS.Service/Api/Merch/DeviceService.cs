@@ -486,13 +486,19 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备已停止使用");
             }
 
-            var d_ExistCumCode = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId != rop.Id && m.CumCode == rop.CumCode).FirstOrDefault();
-            if (d_ExistCumCode != null)
+            string cumCode = null;
+            if (!string.IsNullOrEmpty(rop.CumCode))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备自定义编码已经存在");
+                cumCode = rop.CumCode.Trim();
+
+                var d_ExistCumCode = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId != rop.Id && m.CumCode == cumCode).FirstOrDefault();
+                if (d_ExistCumCode != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该设备自定义编码已经存在");
+                }
             }
 
-            d_MerchDevice.CumCode = rop.CumCode;
+            d_MerchDevice.CumCode = cumCode;
             d_MerchDevice.LogoImgUrl = rop.LogoImgUrl;
             d_MerchDevice.MendTime = DateTime.Now;
             d_MerchDevice.Mender = operater;
