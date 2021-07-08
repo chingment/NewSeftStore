@@ -126,34 +126,34 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetAdInitRelease();
 
-            var adSpace = CurrentDb.AdSpace.Where(m => m.Id == adSpaceId).FirstOrDefault();
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == adSpaceId).FirstOrDefault();
 
-            if (adSpace != null)
+            if (d_AdSpace != null)
             {
-                ret.AdSpaceId = adSpace.Id;
-                ret.AdSpaceName = adSpace.Name;
-                ret.AdSpaceDescription = adSpace.Description;
+                ret.AdSpaceId = d_AdSpace.Id;
+                ret.AdSpaceName = d_AdSpace.Name;
+                ret.AdSpaceDescription = d_AdSpace.Description;
 
-                if (adSpace.BelongType == E_AdSpaceBelongType.App)
+                if (d_AdSpace.BelongType == E_AdSpaceBelongType.App)
                 {
-                    var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                    var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
-                    foreach (var store in stores)
+                    foreach (var d_Store in d_Stores)
                     {
-                        ret.Belongs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
+                        ret.Belongs.Add(new { Id = d_Store.Id, Name = string.Format("[店铺]{0}", d_Store.Name) });
                     }
                 }
-                else if (adSpace.BelongType == E_AdSpaceBelongType.Device)
+                else if (d_AdSpace.BelongType == E_AdSpaceBelongType.Device)
                 {
                     var merchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId != null).OrderBy(m => m.CurUseStoreId).ToList();
 
                     foreach (var merchDevice in merchDevices)
                     {
                         string storeName = "未绑定店铺";
-                        var store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
-                        if (store != null)
+                        var m_Store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
+                        if (m_Store != null)
                         {
-                            storeName = store.Name;
+                            storeName = m_Store.Name;
                         }
 
                         string code = MerchServiceFactory.Device.GetCode(merchDevice.DeviceId, merchDevice.CumCode);
@@ -195,12 +195,12 @@ namespace LocalS.Service.Api.Merch
 
             if (d_AdContent.BelongType == E_AdSpaceBelongType.App)
             {
-                var stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
-                foreach (var store in stores)
+                var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+                foreach (var d_Store in d_Stores)
                 {
-                    if (!d_AdContentBelongIds.Contains(store.Id))
+                    if (!d_AdContentBelongIds.Contains(d_Store.Id))
                     {
-                        objs.Add(new { Id = store.Id, Name = string.Format("[店铺]{0}", store.Name) });
+                        objs.Add(new { Id = d_Store.Id, Name = string.Format("[店铺]{0}", d_Store.Name) });
                     }
                 }
             }
@@ -211,10 +211,10 @@ namespace LocalS.Service.Api.Merch
                 foreach (var merchDevice in merchDevices)
                 {
                     string storeName = "未绑定店铺";
-                    var store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
-                    if (store != null)
+                    var m_Store = BizFactory.Store.GetOne(merchDevice.CurUseStoreId);
+                    if (m_Store != null)
                     {
-                        storeName = store.Name;
+                        storeName = m_Store.Name;
                     }
 
                     if (!d_AdContentBelongIds.Contains(merchDevice.DeviceId))
@@ -302,7 +302,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdRelease, string.Format("发布广告（{0}）成功", rop.Title), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ad_release, string.Format("发布广告（{0}）成功", rop.Title), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发布成功");
             }
@@ -393,7 +393,7 @@ namespace LocalS.Service.Api.Merch
             CurrentDb.SaveChanges();
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdDeleteContent, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ad_delete_content, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
 
 
 

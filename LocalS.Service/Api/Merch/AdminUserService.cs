@@ -221,7 +221,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdminUserAdd, string.Format("新建管理账号（{0}）成功", merchUser.UserName),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.adminuser_add, string.Format("新建管理账号（{0}）成功", merchUser.UserName), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -324,7 +324,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.AdminUserEdit, string.Format("保存管理账号（{0}）信息成功", merchUser.UserName),rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.adminuser_edit, string.Format("保存管理账号（{0}）信息成功", merchUser.UserName), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

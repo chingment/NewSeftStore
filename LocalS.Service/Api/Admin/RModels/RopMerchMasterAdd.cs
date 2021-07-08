@@ -8,6 +8,7 @@ namespace LocalS.Service.Api.Admin
 {
     public class RopMerchMasterAdd
     {
+        public string MerchId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
 

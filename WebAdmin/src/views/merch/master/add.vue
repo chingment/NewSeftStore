@@ -1,6 +1,9 @@
 <template>
   <div id="useradd_container" class="app-container">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="商户号" prop="merchId">
+        <el-input v-model="form.merchId" />
+      </el-form-item>
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName" />
       </el-form-item>
@@ -34,6 +37,7 @@ export default {
     return {
       loading: false,
       form: {
+        merchId: '',
         userName: '',
         password: '',
         fullName: '',
@@ -43,6 +47,7 @@ export default {
         roleIds: []
       },
       rules: {
+        merchId: [{ required: true, message: '必填,且由3到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.userName }],
         userName: [{ required: true, message: '必填,且由3到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.userName }],
         password: [{ required: true, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
         fullName: [{ required: true, message: '必填', trigger: 'change' }],
@@ -66,6 +71,7 @@ export default {
     },
     resetForm() {
       this.form = {
+        merchId: '',
         userName: '',
         password: '',
         fullName: '',

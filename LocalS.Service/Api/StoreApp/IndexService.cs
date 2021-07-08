@@ -18,9 +18,9 @@ namespace LocalS.Service.Api.StoreApp
             var result = new CustomJsonResult<RetIndexPageData>();
 
 
-            var store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
-            if (store == null || store.IsDelete)
+            if (d_Store == null || d_Store.IsDelete)
             {
                 return new CustomJsonResult<RetIndexPageData>(ResultType.Failure, ResultCode.Failure2NoExsit, "无效店铺", null);
             }
@@ -30,17 +30,17 @@ namespace LocalS.Service.Api.StoreApp
             string storeId = rup.StoreId;
 
 
-            if (store.SctMode.Contains("K"))
+            if (d_Store.SctMode.Contains("K"))
             {
                 ret.IsSupMachineShop = true;
 
             }
 
 
-            ret.Store.Id = store.Id;
-            ret.Store.Name = store.Name;
+            ret.Store.Id = d_Store.Id;
+            ret.Store.Name = d_Store.Name;
 
-            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTopBanner && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == store.Id).Select(m => m.AdContentId).ToArray();
+            var adContentIds = CurrentDb.AdContentBelong.Where(m => m.MerchId == d_Store.MerchId && m.AdSpaceId == E_AdSpaceId.AppHomeTopBanner && m.BelongType == E_AdSpaceBelongType.App && m.BelongId == d_Store.Id).Select(m => m.AdContentId).ToArray();
 
             var adContents = CurrentDb.AdContent.Where(m => adContentIds.Contains(m.Id) && m.Status == E_AdContentStatus.Normal).ToList();
 

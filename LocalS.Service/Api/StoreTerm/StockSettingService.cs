@@ -86,7 +86,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetGetSlots, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.device_save_slot, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId), rop);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -120,16 +120,16 @@ namespace LocalS.Service.Api.StoreTerm
 
             if (string.IsNullOrEmpty(rop.SkuId))
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotRemove, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.device_remove_slot, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId);
             }
             else
             {
-                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.DeviceCabinetSlotSave, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
+                result = BizFactory.ProductSku.OperateSlot(operater, EventCode.device_save_slot, m_Device.MerchId, m_Device.StoreId, m_Device.ShopId, rop.DeviceId, rop.CabinetId, rop.SlotId, rop.SkuId, rop.Version, rop.SumQuantity, rop.MaxQuantity, rop.WarnQuantity, rop.HoldQuantity);
             }
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.DeviceCabinetSlotSave, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，{5}", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.device_save_slot, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，{5}", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId, result.Message), new { Rop = rop, StockChangeRecords = result.Data.ChangeRecords });
             }
 
             return result;
@@ -238,7 +238,7 @@ namespace LocalS.Service.Api.StoreTerm
                     var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
                     foreach (var removeSellChannelStock in removeSellChannelStocks)
                     {
-                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.DeviceCabinetSlotRemove, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.DeviceId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
+                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.device_remove_slot, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.DeviceId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
 
                         if (resultOperateSlot.Result != ResultType.Success)
                         {

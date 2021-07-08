@@ -22,15 +22,15 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportDeviceStockRealDataInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStores = new OptionNode();
 
-                optionsStores.Value = store.Id;
-                optionsStores.Label = store.Name;
+                optionsStores.Value = d_Store.Id;
+                optionsStores.Label = d_Store.Name;
 
 
 
@@ -120,15 +120,15 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportDeviceStockRealDataInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStore = new OptionNode();
 
-                optionsStore.Value = store.Id;
-                optionsStore.Label = store.Name;
+                optionsStore.Value = d_Store.Id;
+                optionsStore.Label = d_Store.Name;
 
 
                 ret.OptionsStores.Add(optionsStore);
@@ -224,15 +224,15 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStore = new OptionNode();
 
-                optionsStore.Value = store.Id;
-                optionsStore.Label = store.Name;
+                optionsStore.Value = d_Store.Id;
+                optionsStore.Label = d_Store.Name;
 
 
                 ret.OptionsStores.Add(optionsStore);
@@ -372,15 +372,15 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStore = new OptionNode();
 
-                optionsStore.Value = store.Id;
-                optionsStore.Label = store.Name;
+                optionsStore.Value = d_Store.Id;
+                optionsStore.Label = d_Store.Name;
 
 
                 ret.OptionsStores.Add(optionsStore);
@@ -470,17 +470,17 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetReportSkuSalesDateHisInit();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsSellChannel = new OptionNode();
 
-                optionsSellChannel.Value = store.Id;
-                optionsSellChannel.Label = store.Name;
+                optionsSellChannel.Value = d_Store.Id;
+                optionsSellChannel.Label = d_Store.Name;
 
-                var storeDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId == store.Id).ToList();
+                var storeDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CurUseStoreId == d_Store.Id).ToList();
                 if (storeDevices.Count > 0)
                 {
                     optionsSellChannel.Children = new List<OptionNode>();
@@ -570,7 +570,7 @@ namespace LocalS.Service.Api.Merch
 
             var result = new CustomJsonResult();
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ExportExcel, string.Format("导出报表：{0}", rop.FileName), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.export_excel, string.Format("导出报表：{0}", rop.FileName), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
 

@@ -9,25 +9,25 @@ namespace LocalS.Entity
     public static class EventCode
     {
         [EventCodeRemark("A", "系统登录")]
-        public const string Login = "Login";
+        public const string login = "login";
         [EventCodeRemark("A", "系统退出")]
-        public const string Logout = "Logout";
+        public const string logout = "logout";
         [EventCodeRemark("D", "设备心跳包")]
         public const string device_status = "device_status";
         [EventCodeRemark("A", "设备扫描货道")]
-        public const string vending_scan_slots = "vending_scan_slots";
+        public const string vending_scan_slots = "device_scan_slots";
         [EventCodeRemark("D", "设备商品取货")]
         public const string vending_pickup = "vending_pickup";
         [EventCodeRemark("D", "设备商品测试取货")]
         public const string vending_pickup_test = "vending_pickup_test";
         [EventCodeRemark("A", "设备货道商品保存")]
-        public const string DeviceCabinetSlotSave = "DeviceCabinetSlotSave";
+        public const string device_save_slot = "device_save_slot";
         [EventCodeRemark("A", "设备货道商品移除")]
-        public const string DeviceCabinetSlotRemove = "DeviceCabinetSlotRemove";
+        public const string device_remove_slot = "device_remove_slot";
         [EventCodeRemark("A", "设备商品库存查看")]
-        public const string DeviceCabinetGetSlots = "DeviceCabinetGetSlots";
+        public const string device_saw_stock = "device_saw_stock";
         [EventCodeRemark("A", "设备货道商品调整价格")]
-        public const string DeviceAdjustStockSalePrice = "DeviceAdjustStockSalePrice";
+        public const string device_vending_adjust_sale_price = "device_adjust_sale_price";
         [EventCodeRemark("A", "订单商品取货未完成人工标记未取状态")]
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         [EventCodeRemark("A", "订单商品取货已完成人工标记未取状态")]
@@ -37,65 +37,59 @@ namespace LocalS.Entity
         [EventCodeRemark("A", "订单商品取货未取货完成系统标记已取")]
         public const string OrderPickupOneManMadeSignTakeByNotComplete = "OrderPickupOneManMadeSignTakeByNotComplete";
         [EventCodeRemark("A", "订单取消")]
-        public const string OrderCancle = "OrderCancle";
+        public const string order_cancle = "order_cancle";
         [EventCodeRemark("A", "订单支付成功")]
-        public const string OrderPaySuccess = "OrderPaySuccess";
+        public const string order_pay_success = "order_pay_success";
         [EventCodeRemark("A", "订单预定成功")]
-        public const string OrderReserveSuccess = "OrderReserveSuccess";
+        public const string order_reserve_success = "order_reserve_success";
         [EventCodeRemark("A", "订单异常处理")]
-        public const string OrderHandleException = "OrderHandleException";
+        public const string order_handle_exception = "order_handle_exception";
         [EventCodeRemark("A", "新增管理账号信息")]
-        public const string AdminUserAdd = "AdminUserAdd";
+        public const string adminuser_add = "adminuser_add";
         [EventCodeRemark("A", "修改管理账号信息")]
-        public const string AdminUserEdit = "AdminUserEdit";
+        public const string adminuser_edit = "adminuser_edit";
         [EventCodeRemark("A", "修改客户账号信息")]
-        public const string ClientUserEdit = "ClientUserEdit";
+        public const string clientuser_edit = "clientuser_edit";
         [EventCodeRemark("A", "发布广告")]
-        public const string AdRelease = "AdRelease";
+        public const string ad_release = "ad_release";
         [EventCodeRemark("A", "删除广告")]
-        public const string AdDeleteContent = "AdDeleteContent";
+        public const string ad_delete_content = "ad_delete_content";
         [EventCodeRemark("A", "保存设备信息")]
-        public const string DeviceEdit = "DeviceEdit";
+        public const string device_edit = "device_edit";
         [EventCodeRemark("A", "导出Excel")]
-        public const string ExportExcel = "ExportExcel";
+        public const string export_excel = "export_excel";
         [EventCodeRemark("A", "解绑门店设备")]
-        public const string DeviceUnBindShop = "DeviceUnBindShop";
+        public const string device_unbind_shop = "device_unbind_shop";
         [EventCodeRemark("A", "绑定门店设备")]
-        public const string DeviceBindShop = "DeviceBindShop";
+        public const string device_bind_shop = "device_bind_shop";
         [EventCodeRemark("A", "保存设备货道库存")]
-        public const string DeviceAdjustStockQuantity = "DeviceAdjustStockQuantity";
-        [EventCodeRemark("A", "新增商品分类信息")]
-        public const string PrdKindAdd = "PrdKindAdd";
-        [EventCodeRemark("A", "修改商品分类信息")]
-        public const string PrdKindEdit = "PrdKindEdit";
-        [EventCodeRemark("A", "删除商品分类信息")]
-        public const string PrdKindDelete = "PrdKindDelete";
+        public const string device_adjust_stock_quantity = "device_adjust_stock_quantity";
         [EventCodeRemark("A", "新增商品信息")]
-        public const string PrdProductAdd = "PrdProductAdd";
+        public const string product_add = "product_add";
         [EventCodeRemark("A", "修改商品信息")]
-        public const string PrdProductEdit = "PrdProductEdit";
+        public const string product_edit = "product_edit";
         [EventCodeRemark("A", "新增店铺信息")]
-        public const string StoreAdd = "StoreAdd";
+        public const string store_add = "store_add";
         [EventCodeRemark("A", "修改店铺信息")]
-        public const string StoreEdit = "StoreEdit";
+        public const string store_edit = "store_edit";
         [EventCodeRemark("A", "店铺添加门店")]
-        public const string StoreAddShop = "StoreAddShop";
+        public const string store_add_shop = "store_add_shop";
         [EventCodeRemark("A", "店铺移除门店")]
-        public const string StoreRemoveShop = "StoreRemoveShop";
+        public const string store_remove_shop = "store_remove_shop";
         [EventCodeRemark("A", "保存店铺分类")]
-        public const string StoreSaveKind = "StoreSaveKind";
+        public const string store_save_kind = "store_save_kind";
         [EventCodeRemark("A", "移除店铺分类")]
-        public const string StoreRemoveKind = "StoreRemoveKind";
+        public const string store_remove_kind = "store_remove_kind";
         [EventCodeRemark("A", "保存门店信息")]
-        public const string ShopSave = "ShopSave";
+        public const string shop_save = "shop_save";
         [EventCodeRemark("A", "店铺绑定设备")]
-        public const string StoreAddDevice = "StoreAddDevice";
+        public const string store_bind_device = "store_bind_device";
         [EventCodeRemark("A", "店铺移除设备")]
-        public const string StoreRemoveDevice = "StoreRemoveDevice";
+        public const string store_remove_device = "store_remove_device";
         [EventCodeRemark("A", "新建优惠券")]
-        public const string CouponAdd = "CouponAdd";
+        public const string coupon_add = "coupon_add";
         [EventCodeRemark("A", "修改优惠券信息")]
-        public const string CouponEdit = "CouponEdit";
+        public const string coupon_edit = "coupon_edit";
         public static string GetEventName(string eventCode)
         {
 

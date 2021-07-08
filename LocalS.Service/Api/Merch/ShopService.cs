@@ -211,7 +211,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ShopSave, string.Format("保存门店信息（{0}）成功", rop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.shop_save, string.Format("保存门店信息（{0}）成功", rop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

@@ -309,13 +309,13 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new RetCouponInitAdd();
 
-            var d_stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            foreach (var d_store in d_stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStore = new OptionNode();
-                optionsStore.Value = d_store.Id;
-                optionsStore.Label = d_store.Name;
+                optionsStore.Value = d_Store.Id;
+                optionsStore.Label = d_Store.Name;
                 ret.OptionsStores.Add(optionsStore);
             }
 
@@ -449,7 +449,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.CouponAdd, string.Format("新建优惠券（{0}）成功", rop.Name), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.coupon_add, string.Format("新建优惠券（{0}）成功", rop.Name), rop);
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
@@ -500,14 +500,14 @@ namespace LocalS.Service.Api.Merch
                 ret.Coupon.IsSuperposition = d_coupon.IsSuperposition;
             }
 
-            var d_stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            foreach (var d_store in d_stores)
+            foreach (var d_Store in d_Stores)
             {
                 var optionsStore = new OptionNode();
 
-                optionsStore.Value = d_store.Id;
-                optionsStore.Label = d_store.Name;
+                optionsStore.Value = d_Store.Id;
+                optionsStore.Label = d_Store.Name;
                 ret.OptionsStores.Add(optionsStore);
             }
 
@@ -650,7 +650,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.CouponEdit, string.Format("保存优惠券（{0}）成功", rop.Name), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.coupon_edit, string.Format("保存优惠券（{0}）成功", rop.Name), rop);
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

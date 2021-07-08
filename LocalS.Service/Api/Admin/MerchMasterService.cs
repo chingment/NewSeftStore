@@ -138,15 +138,27 @@ namespace LocalS.Service.Api.Admin
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该用户名（{0}）已被使用", rop.UserName));
             }
 
+            if(!CommonUtil.IsInt(rop.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户号必须为8位数字");
+            }
+
+            if (rop.MerchId.Length != 8)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户号必须为8位数字");
+            }
+
+            var isExistMerchId = CurrentDb.Merch.Where(m => m.Id == rop.MerchId).FirstOrDefault();
+            if (isExistMerchId != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该商户号（{0}）已被使用", rop.MerchId));
+            }
+
             using (TransactionScope ts = new TransactionScope())
             {
-
-
-                string merchId = IdWorker.Build(IdType.NewGuid);
-
                 var user = new SysMerchUser();
                 user.Id = IdWorker.Build(IdType.NewGuid);
-                user.MerchId = merchId;
+                user.MerchId = rop.MerchId;
                 user.PId = IdWorker.Build(IdType.EmptyGuid);
                 user.UserName = rop.UserName;
                 user.FullName = rop.FullName;
@@ -157,16 +169,15 @@ namespace LocalS.Service.Api.Admin
                 user.IsDelete = false;
                 user.IsDisable = false;
                 user.IsMaster = true;
-                user.Creator = operater;
-                user.CreateTime = DateTime.Now;
                 user.RegisterTime = DateTime.Now;
                 user.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
-              
+                user.Creator = operater;
+                user.CreateTime = DateTime.Now;
 
                 CurrentDb.SysMerchUser.Add(user);
 
                 var merch = new LocalS.Entity.Merch();
-                merch.Id = merchId;
+                merch.Id = rop.MerchId;
                 merch.MerchUserId = user.Id;
                 merch.Name = rop.FullName;
                 merch.CreateTime = DateTime.Now;

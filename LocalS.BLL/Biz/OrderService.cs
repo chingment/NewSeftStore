@@ -876,7 +876,7 @@ namespace LocalS.BLL.Biz
                             //购物或租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderReserveSuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                                var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_reserve_success, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
 
                                 if (ret_OperateStock.Result != ResultType.Success)
                                 {
@@ -918,7 +918,7 @@ namespace LocalS.BLL.Biz
                     trgerId = s_Orders[0].StoreId;
                 }
 
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderReserveSuccess, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_reserve_success, string.Format("订单号：{0}，预定成功", string.Join("", s_Orders.Select(m => m.Id).ToArray())), new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
             }
 
             return result;
@@ -1267,7 +1267,7 @@ namespace LocalS.BLL.Biz
                             //购物和租赁进行库存操作
                             if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPaySuccess, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_pay_success, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -1397,7 +1397,7 @@ namespace LocalS.BLL.Biz
                         trgerId = d_Orders[0].StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, d_Orders[0].AppId, trgerId, EventCode.OrderPaySuccess, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
+                    MqFactory.Global.PushOperateLog(operater, d_Orders[0].AppId, trgerId, EventCode.order_pay_success, string.Format("订单号：{0}，支付成功", string.Join(",", d_Orders.Select(m => m.Id).ToArray())), new
                     {
                         Rop = new
                         {
@@ -1526,7 +1526,7 @@ namespace LocalS.BLL.Biz
                         //购物货租赁进行库存操作
                         if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                         {
-                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderCancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                            var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_cancle, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
                             if (result_OperateStock.Result != ResultType.Success)
                             {
                                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
@@ -1582,7 +1582,7 @@ namespace LocalS.BLL.Biz
                         trgerId = d_Order.StoreId;
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, d_Order.AppId, trgerId, EventCode.OrderCancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new
+                    MqFactory.Global.PushOperateLog(operater, d_Order.AppId, trgerId, EventCode.order_cancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new
                     {
                         Rop = new
                         {
@@ -2331,7 +2331,7 @@ namespace LocalS.BLL.Biz
                     trgerId = rop.MerchId;
                 }
 
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.OrderHandleException, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_handle_exception, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
             }
 

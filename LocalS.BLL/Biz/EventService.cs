@@ -19,11 +19,11 @@ namespace LocalS.BLL.Biz
         {
             switch (model.EventCode)
             {
-                case EventCode.Login:
+                case EventCode.login:
                     var loginLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
                     HandleByLogin(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, loginLogModel);
                     break;
-                case EventCode.Logout:
+                case EventCode.logout:
                     var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
                     HandleByLogout(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, logoutLogModel);
                     break;
@@ -63,7 +63,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Login, eventRemark, model);
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.login, eventRemark, model);
             }
         }
         private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
@@ -88,7 +88,7 @@ namespace LocalS.BLL.Biz
 
             if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
             {
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.Logout, eventRemark, model);
+                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.logout, eventRemark, model);
             }
 
         }

@@ -104,20 +104,20 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_store = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == storeId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.MerchId == merchId && m.Id == storeId).FirstOrDefault();
 
             var ret = new
             {
 
-                Id = d_store.Id,
-                Name = d_store.Name,
-                ContactName = d_store.ContactName,
-                ContactAddress = d_store.ContactAddress,
-                ContactPhone = d_store.ContactPhone,
-                BriefDes = d_store.BriefDes,
-                MainImgUrl = d_store.MainImgUrl,
-                IsTestMode = d_store.IsTestMode,
-                SctMode = d_store.SctMode
+                Id = d_Store.Id,
+                Name = d_Store.Name,
+                ContactName = d_Store.ContactName,
+                ContactAddress = d_Store.ContactAddress,
+                ContactPhone = d_Store.ContactPhone,
+                BriefDes = d_Store.BriefDes,
+                MainImgUrl = d_Store.MainImgUrl,
+                IsTestMode = d_Store.IsTestMode,
+                SctMode = d_Store.SctMode
             };
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -129,10 +129,10 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
 
-            var d_store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { SctMode = d_store.SctMode });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { SctMode = d_Store.SctMode });
             return result;
         }
 
@@ -270,7 +270,7 @@ namespace LocalS.Service.Api.Merch
                 ts.Complete();
 
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreSaveKind, string.Format("店铺：{0}，分类：{1}，保存成功", d_Store.Name, rop.Name), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.store_save_kind, string.Format("店铺：{0}，分类：{1}，保存成功", d_Store.Name, rop.Name), rop);
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
@@ -301,7 +301,7 @@ namespace LocalS.Service.Api.Merch
             CurrentDb.SaveChanges();
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveKind, string.Format("店铺：{0}，分类：{1}，移除成功", d_Store.Name, d_StoreKind.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.store_remove_kind, string.Format("店铺：{0}，分类：{1}，移除成功", d_Store.Name, d_StoreKind.Name), rop);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
@@ -611,7 +611,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreRemoveShop, string.Format("将门店（{1}）从店铺（{0}）移除成功", d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.store_remove_shop, string.Format("将门店（{1}）从店铺（{0}）移除成功", d_Store.Name, d_Shop.Name), rop);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
@@ -644,7 +644,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.StoreAddShop, string.Format("选择门店（{0}）到店铺（{1}）添加成功", d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.store_add_shop, string.Format("选择门店（{0}）到店铺（{1}）添加成功", d_Store.Name, d_Shop.Name), rop);
 
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");

@@ -107,6 +107,29 @@ namespace Lumos
             }
         }
 
+        public static bool IsInt(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return false;
+            }
+            else
+            {
+                Int32 dtDate;
+                bool bValid = true;
+                try
+                {
+                    dtDate = Int32.Parse(str);
+                }
+                catch (FormatException)
+                {
+                    // 如果解析方法失败则表示不是日期性数据
+                    bValid = false;
+                }
+                return bValid;
+            }
+        }
+
         public static bool IsEmpty(string strDate)
         {
             if (strDate == null)

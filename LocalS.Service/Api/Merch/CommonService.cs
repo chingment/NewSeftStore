@@ -20,11 +20,11 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new List<object>();
 
-            var stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            foreach (var store in stores)
+            foreach (var d_Store in d_Stores)
             {
-                ret.Add(new { Value = store.Id, Label = store.Name });
+                ret.Add(new { Value = d_Store.Id, Label = d_Store.Name });
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

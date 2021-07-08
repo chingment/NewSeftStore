@@ -195,7 +195,7 @@ namespace LocalS.Service.Api.IotTerm
             if (result.Code == ResultCode.Success)
             {
                 CacheServiceFactory.Product.GetSkuInfo(merchId, skuIds.ToArray());
-                MqFactory.Global.PushOperateLog(merchId, AppId.MERCH, merchId, EventCode.PrdProductAdd, string.Format("新建商品（{0}）成功", rop.name), rop);
+                MqFactory.Global.PushOperateLog(merchId, AppId.MERCH, merchId, EventCode.product_add, string.Format("新建商品（{0}）成功", rop.name), rop);
             }
 
             return result;
@@ -334,7 +334,7 @@ namespace LocalS.Service.Api.IotTerm
             {
                 CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.spu_id);
                 CacheServiceFactory.Product.GetSkuInfo(merchId, skuIds.ToArray());
-                MqFactory.Global.PushOperateLog(merchId, AppId.MERCH, merchId, EventCode.PrdProductEdit, string.Format("保存商品（{0}）信息成功", rop.name), rop);
+                MqFactory.Global.PushOperateLog(merchId, AppId.MERCH, merchId, EventCode.product_edit, string.Format("保存商品（{0}）信息成功", rop.name), rop);
 
             }
 

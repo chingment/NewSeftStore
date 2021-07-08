@@ -19,7 +19,7 @@ namespace LocalS.BLL.Biz
             var ret = new RetOperateSlot();
             using (TransactionScope ts = new TransactionScope())
             {
-                if (operateEvent == EventCode.DeviceCabinetSlotRemove)
+                if (operateEvent == EventCode.device_remove_slot)
                 {
                     #region DeviceCabinetSlotRemove
                     SellChannelStock d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -76,7 +76,7 @@ namespace LocalS.BLL.Biz
                     result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "删除成功", ret);
                     #endregion DeviceCabinetSlotRemove
                 }
-                else if (operateEvent == EventCode.DeviceCabinetSlotSave)
+                else if (operateEvent == EventCode.device_save_slot)
                 {
                     #region DeviceCabinetSlotSave
                     SellChannelStock d_SellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId).FirstOrDefault();
@@ -155,7 +155,7 @@ namespace LocalS.BLL.Biz
                                 WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
                                 WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
                                 SumQuantity = d_SellChannelStock.SumQuantity,
-                                EventCode = EventCode.DeviceCabinetSlotRemove,
+                                EventCode = EventCode.device_remove_slot,
                                 ChangeQuantity = sumQuantity.Value
                             };
 
@@ -190,7 +190,7 @@ namespace LocalS.BLL.Biz
                             WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
                             WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
                             SumQuantity = d_SellChannelStock.SumQuantity,
-                            EventCode = EventCode.DeviceCabinetSlotSave,
+                            EventCode = EventCode.device_save_slot,
                             ChangeQuantity = sumQuantity.Value
                         };
 
@@ -240,7 +240,7 @@ namespace LocalS.BLL.Biz
                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
                 switch (operateEvent)
                 {
-                    case EventCode.OrderReserveSuccess:
+                    case EventCode.order_reserve_success:
                         #region OrderReserve
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();
@@ -262,7 +262,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case EventCode.OrderCancle:
+                    case EventCode.order_cancle:
                         #region OrderCancle
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();
@@ -289,7 +289,7 @@ namespace LocalS.BLL.Biz
                         result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
                         #endregion
                         break;
-                    case EventCode.OrderPaySuccess:
+                    case EventCode.order_pay_success:
                         #region OrderPaySuccess
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();

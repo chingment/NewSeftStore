@@ -134,10 +134,10 @@ namespace LocalS.Service.Api.Merch
 
                 if (!string.IsNullOrEmpty(item.CurUseShopId))
                 {
-                    var store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
-                    var shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
+                    var d_Shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
 
-                    shopName = string.Format("{0}/{1}", store.Name, shop.Name);
+                    shopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
                 }
 
                 string opTips = "";
@@ -210,13 +210,13 @@ namespace LocalS.Service.Api.Merch
                     }
                     else
                     {
-                        var store = CurrentDb.Store.Where(m => m.Id == d_MerchDevice.CurUseStoreId).FirstOrDefault();
+                        var d_Store = CurrentDb.Store.Where(m => m.Id == d_MerchDevice.CurUseStoreId).FirstOrDefault();
 
-                        var shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
+                        var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
 
-                        if (store != null && shop != null)
+                        if (d_Store != null && d_Shop != null)
                         {
-                            name = string.Format("{0} [{1}/{2}]", GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode), store.Name, shop.Name);
+                            name = string.Format("{0} [{1}/{2}]", GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode), d_Store.Name, d_Shop.Name);
                         }
                         else
                         {
@@ -283,10 +283,10 @@ namespace LocalS.Service.Api.Merch
             }
             else
             {
-                var store = CurrentDb.Store.Where(m => m.Id == d_Device.CurUseStoreId).FirstOrDefault();
-                var shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
+                var d_Store = CurrentDb.Store.Where(m => m.Id == d_Device.CurUseStoreId).FirstOrDefault();
+                var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
 
-                ret.ShopName = string.Format("{0}/{1}", store.Name, shop.Name);
+                ret.ShopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -470,7 +470,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceAdjustStockQuantity, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，调整库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_adjust_stock_quantity, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，货道：{4}，调整库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId, rop.SlotId), rop);
             }
 
             return result;
@@ -503,7 +503,7 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceEdit, string.Format("设备：{0}，信息修改，保存成功", d_MerchDevice.DeviceId), rop);
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_edit, string.Format("设备：{0}，信息修改，保存成功", d_MerchDevice.DeviceId), rop);
                 BizFactory.Device.SendUpdateHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
             }
 
@@ -595,7 +595,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceUnBindShop, string.Format("将设备（{0}）从店铺（{1}）门店（{2}）移除成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_unbind_shop, string.Format("将设备（{0}）从店铺（{1}）门店（{2}）移除成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
 
@@ -651,7 +651,7 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
             }
 
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.DeviceBindShop, string.Format("选择设备（{0}）到店铺（{1}）门店（{2}）添加成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_bind_shop, string.Format("选择设备（{0}）到店铺（{1}）门店（{2}）添加成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 
