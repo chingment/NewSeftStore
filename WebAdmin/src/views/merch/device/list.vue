@@ -69,7 +69,7 @@
     <el-dialog title="绑定商户" :visible.sync="dialogBindOnMerchIsVisible" width="800px">
       <el-form ref="formByBindOnMerch" :model="formByBindOnMerch" :rules="rulesByBindOnMerch" label-position="left" label-width="80px">
         <el-form-item label="机器编号">
-          <span>{{ formByBindOnMerch.machineId }}</span>
+          <span>{{ formByBindOnMerch.deviceId }}</span>
         </el-form-item>
         <el-form-item label="商户名称" prop="merchId">
           <el-select v-model="formByBindOnMerch.merchId" class="filter-item" placeholder="选择" clearable style="width:500px">
@@ -362,7 +362,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit, edit } from '@/api/merchmachine'
+import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit, edit } from '@/api/merchdevice'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -384,7 +384,7 @@ export default {
       dialogEditLoading: false,
       formByBindOnMerch: {
         merchiId: '',
-        machineId: ''
+        deviceId: ''
       },
       rulesByBindOnMerch: {
         merchiId: [
@@ -469,10 +469,10 @@ export default {
     },
     _dialogBindOnMerchOpen(row) {
       this.dialogBindOnMerchIsVisible = true
-      this.formByBindOnMerch.machineId = row.id
+      this.formByBindOnMerch.deviceId = row.id
     },
     _bindOnMerch() {
-      MessageBox.confirm('确定要将机器(' + this.formByBindOnMerch.machineId + ')绑定商户？', '提示（慎重操作）', {
+      MessageBox.confirm('确定要将机器(' + this.formByBindOnMerch.deviceId + ')绑定商户？', '提示（慎重操作）', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -492,7 +492,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        bindOffMerch({ merchId: row.merchId, machineId: row.id }).then(res => {
+        bindOffMerch({ merchId: row.merchId, deviceId: row.id }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this._getList()

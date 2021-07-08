@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function initGetList(params) {
   return request({
-    url: '/merchmachine/initGetlist',
+    url: '/merchdevice/initGetlist',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function initGetList(params) {
 
 export function initEdit(params) {
   return request({
-    url: '/merchmachine/initEdit',
+    url: '/merchdevice/initEdit',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function initEdit(params) {
 
 export function edit(data) {
   return request({
-    url: '/merchmachine/edit',
+    url: '/merchdevice/edit',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function edit(data) {
 
 export function getList(params) {
   return request({
-    url: '/merchmachine/getlist',
+    url: '/merchdevice/getlist',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function getList(params) {
 
 export function bindOffMerch(data) {
   return request({
-    url: '/merchmachine/bindOffMerch',
+    url: '/merchdevice/bindOffMerch',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function bindOffMerch(data) {
 
 export function bindOnMerch(data) {
   return request({
-    url: '/merchmachine/bindOnMerch',
+    url: '/merchdevice/bindOnMerch',
     method: 'post',
     data
   })
