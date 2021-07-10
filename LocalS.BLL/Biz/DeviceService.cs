@@ -119,7 +119,7 @@ namespace LocalS.BLL.Biz
             if (string.IsNullOrEmpty(d_Device.CurUseMerchId))
                 return m_Ads;
 
-            var d_AdSpaces = CurrentDb.AdSpace.Where(m => m.Id == E_AdSpaceId.DeviceHomeBanner).ToList();
+            var d_AdSpaces = CurrentDb.AdSpace.Where(m => m.BelongType == E_AdSpaceBelongType.Device).ToList();
 
             foreach (var d_AdSpace in d_AdSpaces)
             {

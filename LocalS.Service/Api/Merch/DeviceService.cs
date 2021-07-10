@@ -499,7 +499,7 @@ namespace LocalS.Service.Api.Merch
             }
 
             d_MerchDevice.CumCode = cumCode;
-            d_MerchDevice.LogoImgUrl = rop.LogoImgUrl;
+            //d_MerchDevice.LogoImgUrl = rop.LogoImgUrl;
             d_MerchDevice.MendTime = DateTime.Now;
             d_MerchDevice.Mender = operater;
             CurrentDb.SaveChanges();
@@ -510,7 +510,7 @@ namespace LocalS.Service.Api.Merch
             if (result.Result == ResultType.Success)
             {
                 MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_edit, string.Format("设备：{0}，信息修改，保存成功", d_MerchDevice.DeviceId), rop);
-                BizFactory.Device.SendUpdateHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
+                //BizFactory.Device.SendUpdateHomeLogo(operater, AppId.MERCH, merchId, rop.Id, rop.LogoImgUrl);
             }
 
             return result;

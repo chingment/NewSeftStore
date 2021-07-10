@@ -293,7 +293,7 @@ namespace LocalS.Service.Api.Merch
                     d_AdContentBelong.CreateTime = DateTime.Now;
                     CurrentDb.AdContentBelong.Add(d_AdContentBelong);
 
-                    if (rop.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
+                    if (d_AdSpace.BelongType == E_AdSpaceBelongType.Device)
                     {
                         deviceIds.Add(belongId);
                     }
@@ -374,6 +374,7 @@ namespace LocalS.Service.Api.Merch
             List<string> deviceIds = new List<string>();
 
             var d_AdContent = CurrentDb.AdContent.Where(m => m.Id == rop.Id && m.MerchId == merchId).FirstOrDefault();
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == d_AdContent.AdSpaceId).FirstOrDefault();
 
             if (d_AdContent == null)
             {
@@ -385,9 +386,9 @@ namespace LocalS.Service.Api.Merch
             d_AdContent.Mender = operater;
             d_AdContent.MendTime = DateTime.Now;
 
-            if (d_AdContent.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
+            if (d_AdSpace.BelongType == E_AdSpaceBelongType.Device)
             {
-                deviceIds = CurrentDb.AdContentBelong.Where(m => m.AdSpaceId == E_AdSpaceId.DeviceHomeBanner && m.AdContentId == d_AdContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Device).Select(m => m.BelongId).Distinct().ToList();
+                deviceIds = CurrentDb.AdContentBelong.Where(m => m.AdContentId == d_AdContent.Id && m.MerchId == merchId && m.BelongType == E_AdSpaceBelongType.Device).Select(m => m.BelongId).Distinct().ToList();
             }
 
             CurrentDb.SaveChanges();
@@ -485,13 +486,13 @@ namespace LocalS.Service.Api.Merch
             List<string> deviceIds = new List<string>();
 
             var d_AdContentBelong = CurrentDb.AdContentBelong.Where(m => m.Id == rop.Id).FirstOrDefault();
-
+            var d_AdSpace = CurrentDb.AdSpace.Where(m => m.Id == d_AdContentBelong.AdSpaceId).FirstOrDefault();
             if (d_AdContentBelong == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设置失败");
             }
 
-            if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
+            if (d_AdSpace.BelongType == E_AdSpaceBelongType.Device)
             {
                 deviceIds.Add(d_AdContentBelong.BelongId);
             }
@@ -559,7 +560,7 @@ namespace LocalS.Service.Api.Merch
                         d_AdContentBelong.CreateTime = DateTime.Now;
                         CurrentDb.AdContentBelong.Add(d_AdContentBelong);
 
-                        if (d_AdContentBelong.AdSpaceId == E_AdSpaceId.DeviceHomeBanner)
+                        if (d_AdSpace.BelongType == E_AdSpaceBelongType.Device)
                         {
                             deviceIds.Add(belongId);
                         }

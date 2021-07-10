@@ -9,7 +9,7 @@
         <el-input v-show="isEdit" v-model="form.cumCode" clearable />
         <span v-show="!isEdit">{{ temp.cumCode }}</span>
       </el-form-item>
-      <el-form-item label="设备Logo">
+      <!-- <el-form-item label="设备Logo">
         <img v-show="!isEdit" :src="temp.logoImgUrl" class="singlepic-device-banner">
 
         <el-upload
@@ -24,7 +24,7 @@
           <i v-else class="el-icon-plus singlepic-uploader-icon singlepic-device-banner" />
         </el-upload>
 
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="所属门店">
         {{ temp.shopName }}
       </el-form-item>

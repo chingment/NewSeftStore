@@ -13,6 +13,6 @@ namespace LocalS.Service.Api.Merch
         public string Name { get; set; }
         public string CumCode { get; set; }
 
-        public string LogoImgUrl { get; set; }
+        //public string LogoImgUrl { get; set; }
     }
 }
