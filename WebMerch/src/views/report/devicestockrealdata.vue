@@ -4,27 +4,15 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
+          <el-select v-model="listQuery.deviceId" placeholder="选择设备" style="width: 100%">
             <el-option
-              v-for="item in optionsStores"
+              v-for="item in optionsByDevice"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
           </el-select>
         </el-col>
-
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.shopMode" clearable placeholder="销售模式" style="width: 100%">
-            <el-option
-              v-for="item in optionsShopModes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
@@ -34,29 +22,36 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="_ge(listQuery)" />
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
     </div>
     <el-table
       :key="listKey"
       v-loading="loading"
       :data="listData"
+      border
       fit
       highlight-current-row
       style="width: 100%;"
+      :default-sort="{prop: 'sellQuantity', order: 'descending'}"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="销售模式" align="left" min-width="10%">
+      <el-table-column label="门店" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.sellChannelRefName }}</span>
+          <span>{{ scope.row.shopName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="模式备注" align="left" min-width="10%">
+      <el-table-column label="设备" align="left" prop="deviceName" sortable min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.sellChannelRemark }}</span>
+          <span>{{ scope.row.deviceName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="货道" align="left" prop="slotId" sortable min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.slotId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="10%">
@@ -69,32 +64,32 @@
           <span>{{ scope.row.skuCumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
+      <el-table-column label="商品规格" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuSpecDes }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="可售数量" align="left" min-width="10%">
+      <el-table-column label="可售数量" align="left" prop="sellQuantity" sortable min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sellQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="锁定数量" align="left" min-width="10%">
+      <el-table-column label="锁定数量" align="left" prop="lockQuantity" sortable min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.lockQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际数量" align="left" min-width="10%">
+      <el-table-column label="实际数量" align="left" prop="sumQuantity" sortable min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sumQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最大数量" align="left" min-width="10%">
+      <el-table-column label="最大数量" align="left" prop="maxQuantity" sortable min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.maxQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="需补数量" align="left" min-width="10%">
+      <el-table-column label="需补数量" align="left" prop="rshQuantity" sortable min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.rshQuantity }}</span>
         </template>
@@ -110,7 +105,7 @@
 
 <script>
 
-import { storeStockRealDataInit, storeStockRealDataGet, checkRightExport } from '@/api/report'
+import { deviceStockRealDataInit, deviceStockRealDataGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportStoreStockRealData',
@@ -118,24 +113,16 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '店铺实时库存报表',
+      filename: '设备实时库存报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
       listData: null,
       listTotal: 0,
       listQuery: {
-        storeIds: [],
-        sellChannelRefType: undefined
+        deviceId: ''
       },
-      optionsStores: [],
-      optionsShopModes: [{
-        value: '1',
-        label: '线上商城'
-      }, {
-        value: '3',
-        label: '线下设备'
-      }],
+      optionsByDevice: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -147,10 +134,10 @@ export default {
   },
   methods: {
     _initData() {
-      storeStockRealDataInit().then(res => {
+      deviceStockRealDataInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsStores = d.optionsStores
+          this.optionsByDevice = d.optionsByDevice
         }
         this.loading = false
       })
@@ -158,7 +145,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      storeStockRealDataGet(this.listQuery).then(res => {
+      deviceStockRealDataGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.listData = res.data
 
@@ -175,8 +162,8 @@ export default {
       })
     },
     handleFilter() {
-      if (this.listQuery.storeIds.length === 0) {
-        this.$message('请选择店铺')
+      if (this.listQuery.deviceId === null || this.listQuery.deviceId.length === 0) {
+        this.$message('请选择设备')
         return
       }
       this._getData()
@@ -201,8 +188,8 @@ export default {
         if (res.result === 1) {
           this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '销售模式', '模式备注', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
-        const filterVal = ['storeName', 'sellChannelRefName', 'sellChannelRemark', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
+        const tHeader = ['店铺', '门店', '设备', '货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
+        const filterVal = ['storeName', 'shopName', 'deviceName', 'slotId', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

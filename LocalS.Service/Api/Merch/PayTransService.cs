@@ -29,17 +29,31 @@ namespace LocalS.Service.Api.Merch
                               (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                                           (rup.PayPartnerPayTransId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerPayTransId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName,o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
+                         select new { o.Id, o.StoreId, o.StoreName, o.Description, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.OrderIds, o.PayedTime, o.PayWay, o.PayCaller, o.PayPartner, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
 
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.StoreId == rup.StoreId);
             }
 
-            if(rup.PayStatus!= E_PayStatus.Unknow)
+            if (rup.PayStatus != E_PayStatus.Unknow)
             {
                 query = query.Where(m => m.PayStatus == rup.PayStatus);
             }
+
+            if (rup.TradeDateArea != null && rup.TradeDateArea.Length == 2)
+            {
+                if (CommonUtil.IsDateTime(rup.TradeDateArea[0]) && CommonUtil.IsDateTime(rup.TradeDateArea[1]))
+                {
+
+                    DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rup.TradeDateArea[0]);
+
+                    DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rup.TradeDateArea[1]);
+
+                    query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
+                }
+            }
+
 
             int total = query.Count();
 

@@ -11,9 +11,9 @@ namespace LocalS.Service.Api.Merch
     {
         public RetReportDeviceStockRealDataInit()
         {
-            this.OptionsStores = new List<OptionNode>();
+            this.OptionsByDevice = new List<OptionNode>();
         }
 
-        public List<OptionNode> OptionsStores { get; set; }
+        public List<OptionNode> OptionsByDevice { get; set; }
     }
 }

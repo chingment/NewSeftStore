@@ -54,12 +54,13 @@
           </el-button>
         </el-col>
         </el-col:xs="24"></el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
     </div>
     <el-table
       :key="listKey"
       v-loading="loading"
       show-summary
+      border
       :data="listData"
       fit
       highlight-current-row

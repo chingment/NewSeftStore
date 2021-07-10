@@ -3,13 +3,13 @@
 
     <div v-show="isSearch">
       <el-form ref="form" label-width="120px">
-        <el-form-item label="交易号">
+        <el-form-item label="商户单号">
           <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item label="订单号">
           <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
-        <el-form-item label="支付商交易号">
+        <el-form-item label="交易单号">
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleSearch" />
         </el-form-item>
         <el-form-item>
@@ -28,7 +28,7 @@
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易号" prop="payTransId" align="left" :width="isDesktop==true?220:80">
+        <el-table-column label="商户单号" prop="payTransId" align="left" :width="isDesktop==true?220:80">
           <template slot-scope="scope">
             <span>{{ scope.row.payTransId }}</span>
           </template>

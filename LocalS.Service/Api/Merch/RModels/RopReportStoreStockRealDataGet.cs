@@ -9,9 +9,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopReportStoreStockRealDataGet
     {
-        public List<string> StoreIds { get; set; }
-
-        public E_ShopMode ShopMode { get; set; }
+        public string DeviceId { get; set; }
 
     }
 }

@@ -16,93 +16,118 @@ namespace LocalS.Service.Api.Merch
 {
     public class ReportService : BaseService
     {
-        public CustomJsonResult StoreStockRealDataInit(string operater, string merchId)
+
+        private List<OptionNode> GetOptionsByDevice(string merchId)
+        {
+            var options = new List<OptionNode>();
+
+
+            var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).OrderByDescending(r => r.CurUseStoreId).OrderBy(m => m.IsStopUse).ToList();
+
+            foreach (var d_MerchDevice in d_MerchDevices)
+            {
+                string label = "";
+                if (d_MerchDevice.IsStopUse)
+                {
+                    label = string.Format("{0} [{1}]", d_MerchDevice.DeviceId, "已停止使用");
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(d_MerchDevice.CurUseStoreId))
+                    {
+                        label = string.Format("{0} [未绑定店铺]", d_MerchDevice.DeviceId);
+                    }
+                    else if (string.IsNullOrEmpty(d_MerchDevice.CurUseShopId))
+                    {
+                        label = string.Format("{0} [未绑定门店]", d_MerchDevice.DeviceId);
+                    }
+                    else
+                    {
+                        var d_Store = CurrentDb.Store.Where(m => m.Id == d_MerchDevice.CurUseStoreId).FirstOrDefault();
+
+                        var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
+
+                        if (d_Store != null && d_Shop != null)
+                        {
+                            label = string.Format("{0} [{1}/{2}]", MerchServiceFactory.Device.GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode), d_Store.Name, d_Shop.Name);
+                        }
+                        else
+                        {
+                            label = "未知";
+                        }
+                    }
+
+                }
+
+                var option = new OptionNode();
+                option.Value = d_MerchDevice.DeviceId; ;
+                option.Label = label;
+
+                options.Add(option);
+            }
+
+            return options;
+        }
+
+        public CustomJsonResult DeviceStockRealDataInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetReportDeviceStockRealDataInit();
-
-            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
-
-
-            foreach (var d_Store in d_Stores)
-            {
-                var optionsStores = new OptionNode();
-
-                optionsStores.Value = d_Store.Id;
-                optionsStores.Label = d_Store.Name;
-
-
-
-                ret.OptionsStores.Add(optionsStores);
-            }
-
+            ret.OptionsByDevice = GetOptionsByDevice(merchId);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreStockRealDataGet(string operater, string merchId, RopReportStoreStockRealDataGet rop)
+        public CustomJsonResult DeviceStockRealDataGet(string operater, string merchId, RopReportStoreStockRealDataGet rop)
         {
-
             var result = new CustomJsonResult();
 
-            if (rop.StoreIds == null || rop.StoreIds.Count == 0)
+            if (string.IsNullOrEmpty(rop.DeviceId))
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择店铺");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择设备");
             }
 
             List<object> olist = new List<object>();
 
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+            var d_Shops = CurrentDb.Shop.Where(m => m.MerchId == merchId).ToList();
+            var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).ToList();
 
             var query = (from m in CurrentDb.SellChannelStock
-                         join s in CurrentDb.Store on m.StoreId equals s.Id into temp
-                         from tt in temp.DefaultIfEmpty()
                          where
-                         m.MerchId == merchId
-                         && rop.StoreIds.Contains(m.StoreId)
-                         select new { m.StoreId, StoreName = tt.Name, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         m.MerchId == merchId &&
+                         m.DeviceId == rop.DeviceId &&
+                         m.ShopMode == E_ShopMode.Device
+                         select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
-            if (rop.ShopMode != Entity.E_ShopMode.Unknow)
+            var d_Stocks = query.OrderBy(m => m.DeviceId).ToList();
+
+            foreach (var d_Stock in d_Stocks)
             {
-                query = query.Where(m => m.ShopMode == rop.ShopMode);
-            }
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
 
-            var sellChannelStocks = query.OrderBy(m => m.SlotId).ToList();
-
-            foreach (var sellChannelStock in sellChannelStocks)
-            {
-                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(sellChannelStock.MerchId, sellChannelStock.SkuId);
-
-                string sellChannelRefName = "";
-                string sellChannelRemark = "";
-
-                if (sellChannelStock.ShopMode == Entity.E_ShopMode.Mall)
-                {
-                    sellChannelRefName = "线上商城";
-                }
-                else if (sellChannelStock.ShopMode == Entity.E_ShopMode.Device)
-                {
-                    sellChannelRefName = "线下设备";
-                    sellChannelRemark = string.Format("设备：{0}，货道：{1}", sellChannelStock.DeviceId, sellChannelStock.SlotId);
-                }
+                var l_Store = d_Stores.Where(m => m.Id == d_Stock.StoreId).FirstOrDefault();
+                var l_Shop = d_Shops.Where(m => m.Id == d_Stock.ShopId).FirstOrDefault();
+                var l_Device = d_MerchDevices.Where(m => m.DeviceId == d_Stock.DeviceId).FirstOrDefault();
 
                 olist.Add(new
                 {
-                    StoreName = sellChannelStock.StoreName,
-                    SellChannelRefName = sellChannelRefName,
-                    SellChannelRemark = sellChannelRemark,
+                    StoreName = l_Store.Name,
+                    ShopName = l_Shop.Name,
+                    DeviceName = MerchServiceFactory.Device.GetCode(l_Device.DeviceId, l_Device.CumCode),
+                    SlotId = d_Stock.SlotId,
                     SkuId = r_Sku.Id,
                     SkuName = r_Sku.Name,
                     SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
                     SkuCumCode = r_Sku.CumCode,
-                    SlotId = sellChannelStock.SlotId,
-                    SellQuantity = sellChannelStock.SellQuantity,
-                    WaitPayLockQuantity = sellChannelStock.WaitPayLockQuantity,
-                    WaitPickupLockQuantity = sellChannelStock.WaitPickupLockQuantity,
-                    LockQuantity = sellChannelStock.WaitPickupLockQuantity + sellChannelStock.WaitPayLockQuantity,
-                    SumQuantity = sellChannelStock.SumQuantity,
-                    MaxQuantity = sellChannelStock.MaxQuantity,
-                    RshQuantity = sellChannelStock.MaxQuantity - sellChannelStock.SumQuantity,
-                    IsOffSell = sellChannelStock.IsOffSell
+                    SellQuantity = d_Stock.SellQuantity,
+                    WaitPayLockQuantity = d_Stock.WaitPayLockQuantity,
+                    WaitPickupLockQuantity = d_Stock.WaitPickupLockQuantity,
+                    LockQuantity = d_Stock.WaitPickupLockQuantity + d_Stock.WaitPayLockQuantity,
+                    SumQuantity = d_Stock.SumQuantity,
+                    MaxQuantity = d_Stock.MaxQuantity,
+                    RshQuantity = d_Stock.MaxQuantity - d_Stock.SumQuantity,
+                    IsOffSell = d_Stock.IsOffSell
                 });
 
             }
@@ -114,30 +139,16 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult StoreStockDateHisInit(string operater, string merchId)
+        public CustomJsonResult DeviceStockDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
             var ret = new RetReportDeviceStockRealDataInit();
-
-            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
-
-
-            foreach (var d_Store in d_Stores)
-            {
-                var optionsStore = new OptionNode();
-
-                optionsStore.Value = d_Store.Id;
-                optionsStore.Label = d_Store.Name;
-
-
-                ret.OptionsStores.Add(optionsStore);
-            }
-
+            ret.OptionsByDevice = GetOptionsByDevice(merchId);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreStockDateHisGet(string operater, string merchId, RopReporStoreStockDateHisGet rop)
+        public CustomJsonResult DeviceStockDateHisGet(string operater, string merchId, RopReporStoreStockDateHisGet rop)
         {
 
             var result = new CustomJsonResult();

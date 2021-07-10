@@ -275,7 +275,7 @@ export default {
       this.getListDataBySelect()
     },
     handleUnBindShop: function(item) {
-      MessageBox.confirm('确定要解绑设备', '提示', {
+      MessageBox.confirm('确定要解绑该设备，解绑后库存将被清空，请谨慎操作！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

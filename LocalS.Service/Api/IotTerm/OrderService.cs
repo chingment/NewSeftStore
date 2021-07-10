@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.IotTerm
             bizRop.ShopMethod = E_ShopMethod.Buy;
             bizRop.IsTestMode = d_Device.IsTestMode;
             bizRop.CumOrderId = rop.low_order_id;
-
+            bizRop.IsPayed = true;
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
@@ -182,6 +182,81 @@ namespace LocalS.Service.Api.IotTerm
             result = new CustomJsonResult2(ResultCode.Success, "", ret);
 
             return result;
+        }
+
+        public IResult2 SaleRecords(string merchId, RopOrderSaleRecords rop)
+        {
+            var result = new CustomJsonResult2();
+
+            if (!CommonUtil.IsDateTime(rop.sale_date))
+                return new CustomJsonResult2(ResultCode.Failure, "日期格式不符合");
+
+
+            DateTime? startTime = CommonUtil.ConverToStartTime(rop.sale_date);
+            DateTime? endTime = CommonUtil.ConverToEndTime(rop.sale_date);
+
+            var query = (from o in CurrentDb.Order
+                         where
+                         o.PayStatus == E_PayStatus.PaySuccess &&
+                         o.MerchId == merchId &&
+                         o.PayedTime >= startTime &&
+                         o.PayedTime <= endTime
+                         select new { o.Id, o.CumId, o.PayedTime, o.PayWay, o.StoreId, o.IsTestMode, o.DeviceCumCode, o.DeviceId, o.StoreName, o.PickupIsTrg, o.ReceiverPhoneNumber, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
+
+
+            int total = query.Count();
+
+            int pageIndex = rop.page;
+            int pageSize = rop.limit;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+
+                var detail = new List<object>();
+
+                foreach (var orderSub in orderSubs)
+                {
+                    detail.Add(new
+                    {
+                        sku_id = orderSub.SkuId,
+                        sku_cum_code = orderSub.SkuCumCode,
+                        sku_name = orderSub.SkuName,
+                        quantity = orderSub.Quantity,
+                        sale_price = orderSub.SalePrice,
+                        trade_amount = orderSub.ChargeAmount
+                    });
+                }
+
+
+                olist.Add(new
+                {
+                    up_order_id = item.Id,
+                    low_order_id = item.CumId,
+                    device_id = item.DeviceId,
+                    device_cum_code = item.DeviceCumCode,
+                    trade_time = item.PayedTime.ToUnifiedFormatDateTime(),
+                    trade_amount = item.ChargeAmount,
+                    quantity = item.Quantity,
+                    pay_way = item.PayWay,
+                    client_name = item.ClientUserName,
+                    client_phonenumber = item.ReceiverPhoneNumber,
+                    detail = detail
+                });
+            }
+
+            var pageEntity = new { total = total, items = olist };
+
+            result = new CustomJsonResult2(ResultCode.Success, "", pageEntity);
+
+            return result;
+
         }
     }
 }

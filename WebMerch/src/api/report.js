@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export function storeStockRealDataInit(params) {
+export function deviceStockRealDataInit(params) {
   return request({
-    url: '/report/storeStockRealDataInit',
+    url: '/report/deviceStockRealDataInit',
     method: 'get',
     params
   })
 }
 
-export function storeStockRealDataGet(data) {
+export function deviceStockRealDataGet(data) {
   return request({
-    url: '/report/storeStockRealDataGet',
+    url: '/report/deviceStockRealDataGet',
     method: 'post',
     data
   })
@@ -89,8 +89,8 @@ export function checkRightExport(data) {
 }
 
 export default {
-  storeStockRealDataInit: storeStockRealDataInit,
-  storehStockRealDataGet: storeStockRealDataGet,
+  deviceStockRealDataInit: deviceStockRealDataInit,
+  devicehStockRealDataGet: deviceStockRealDataGet,
   skuSalesDateHisInit: skuSalesDateHisInit,
   skuSalesDateHisGet: skuSalesDateHisGet,
   orderSalesDateHisInit: orderSalesDateHisInit,

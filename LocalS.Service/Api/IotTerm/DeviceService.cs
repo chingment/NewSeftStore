@@ -80,7 +80,7 @@ namespace LocalS.Service.Api.IotTerm
             var query = (from m in CurrentDb.SellChannelStock
                          where
                          m.MerchId == merchId && m.StoreId == d_Device.CurUseStoreId && m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.device_id
-                         select new { m.CabinetId, m.SlotId, m.SkuId, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.SellQuantity, m.IsOffSell });
+                         select new { m.CabinetId, m.SlotId, m.WarnQuantity, m.MaxQuantity, m.HoldQuantity, m.SkuId, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.SellQuantity, m.IsOffSell });
 
             if (!string.IsNullOrEmpty(rop.cabinet_id))
             {
@@ -111,6 +111,9 @@ namespace LocalS.Service.Api.IotTerm
                     dics.Add("sum_quantity", r.SumQuantity);
                     dics.Add("lock_quantity", r.WaitPayLockQuantity + r.WaitPickupLockQuantity);
                     dics.Add("sell_quantity", r.SellQuantity);
+                    dics.Add("warn_quantity", r.WarnQuantity);
+                    dics.Add("hold_quantity", r.HoldQuantity);
+                    dics.Add("max_quantity", r.MaxQuantity);
                     dics.Add("is_off_sell", r.IsOffSell);
 
                     items.Add(dics);
@@ -139,10 +142,17 @@ namespace LocalS.Service.Api.IotTerm
                     int waitPayLockQuantity = sku_Stocks.Sum(m => m.WaitPayLockQuantity);
                     int waitPickupLockQuantity = sku_Stocks.Sum(m => m.WaitPickupLockQuantity);
                     int sellQuantity = sku_Stocks.Sum(m => m.SellQuantity);
+                    int warnQuantity = sku_Stocks.Sum(m => m.WarnQuantity);
+                    int holdQuantity = sku_Stocks.Sum(m => m.HoldQuantity);
+                    int maxQuantity = sku_Stocks.Sum(m => m.MaxQuantity);
 
                     dics.Add("sum_quantity", sumQuantity);
                     dics.Add("lock_quantity", waitPayLockQuantity + waitPickupLockQuantity);
                     dics.Add("sell_quantity", sellQuantity);
+                    dics.Add("warn_quantity", warnQuantity);
+                    dics.Add("hold_quantity", holdQuantity);
+                    dics.Add("max_quantity", maxQuantity);
+
                     dics.Add("is_off_sell", r.IsOffSell);
 
                     List<object> slots = new List<object>();
@@ -155,6 +165,9 @@ namespace LocalS.Service.Api.IotTerm
                         dic2s.Add("sum_quantity", sku_Stock.SumQuantity);
                         dic2s.Add("lock_quantity", sku_Stock.WaitPayLockQuantity + sku_Stock.WaitPickupLockQuantity);
                         dic2s.Add("sell_quantity", sku_Stock.SellQuantity);
+                        dic2s.Add("warn_quantity", sku_Stock.WarnQuantity);
+                        dic2s.Add("hold_quantity", sku_Stock.HoldQuantity);
+                        dic2s.Add("max_quantity", sku_Stock.MaxQuantity);
 
                         slots.Add(dic2s);
                     }

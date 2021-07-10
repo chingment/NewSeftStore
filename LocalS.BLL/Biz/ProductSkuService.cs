@@ -98,12 +98,37 @@ namespace LocalS.BLL.Biz
                         d_SellChannelStock.WaitPickupLockQuantity = 0;
                         d_SellChannelStock.SumQuantity = sumQuantity.Value;
                         d_SellChannelStock.SellQuantity = sumQuantity.Value;
-                        d_SellChannelStock.WarnQuantity = 0;
-                        d_SellChannelStock.HoldQuantity = 0;
+                        if (warnQuantity == null)
+                        {
+                            d_SellChannelStock.WarnQuantity = 0;
+                        }
+                        else
+                        {
+                            d_SellChannelStock.WarnQuantity = warnQuantity.Value;
+                        }
+
+                        if (holdQuantity == null)
+                        {
+                            d_SellChannelStock.HoldQuantity = 0;
+                        }
+                        else
+                        {
+                            d_SellChannelStock.HoldQuantity = holdQuantity.Value;
+                        }
+
+
+                        if (maxQuantity == null)
+                        {
+                            d_SellChannelStock.MaxQuantity = 0;
+                        }
+                        else
+                        {
+                            d_SellChannelStock.MaxQuantity = maxQuantity.Value;
+                        }
+
                         d_SellChannelStock.IsOffSell = false;
                         d_SellChannelStock.SalePrice = r_Sku.SalePrice;
                         d_SellChannelStock.Version = 0;
-                        d_SellChannelStock.MaxQuantity = maxQuantity.Value;
                         d_SellChannelStock.CreateTime = DateTime.Now;
                         d_SellChannelStock.Creator = operater;
                         CurrentDb.SellChannelStock.Add(d_SellChannelStock);

@@ -15,7 +15,7 @@ namespace LocalS.Entity
         [EventCodeRemark("D", "设备心跳包")]
         public const string device_status = "device_status";
         [EventCodeRemark("A", "设备扫描货道")]
-        public const string vending_scan_slots = "device_scan_slots";
+        public const string vending_scan_slots = "vending_scan_slots";
         [EventCodeRemark("D", "设备商品取货")]
         public const string vending_pickup = "vending_pickup";
         [EventCodeRemark("D", "设备商品测试取货")]
@@ -27,7 +27,7 @@ namespace LocalS.Entity
         [EventCodeRemark("A", "设备商品库存查看")]
         public const string device_saw_stock = "device_saw_stock";
         [EventCodeRemark("A", "设备货道商品调整价格")]
-        public const string device_vending_adjust_sale_price = "device_adjust_sale_price";
+        public const string device_adjust_sale_price = "device_adjust_sale_price";
         [EventCodeRemark("A", "订单商品取货未完成人工标记未取状态")]
         public const string OrderPickupOneManMadeSignNotTakeByNotComplete = "OrderPickupOneManMadeSignNotTakeByNotComplete";
         [EventCodeRemark("A", "订单商品取货已完成人工标记未取状态")]

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.IotTerm
 {
-    public class RopDeviceList
+    public class RopOrderSaleRecords
     {
         public int page { get; set; }
         public int limit { get; set; }
-        public string device_id { get; set; }
+        public string sale_date { get; set; }
     }
 }

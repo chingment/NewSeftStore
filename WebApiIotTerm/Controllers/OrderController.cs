@@ -33,5 +33,13 @@ namespace WebApiIotTerm.Controllers
 
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaleRecords(RopOrderSaleRecords rop)
+        {
+            var result = IotTermServiceFactory.Order.SaleRecords(this.CurrentMerchId, rop);
+
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

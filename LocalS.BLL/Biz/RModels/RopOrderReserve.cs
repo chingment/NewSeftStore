@@ -31,6 +31,7 @@ namespace LocalS.BLL.Biz
         public List<BlockModel> Blocks { get; set; }
         public bool IsTestMode { get; set; }
 
+        public bool IsPayed { get; set; }
         public class BlockModel
         {
             public BlockModel()

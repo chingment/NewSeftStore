@@ -575,36 +575,56 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
-
-            if (d_Device == null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已解绑门店");
-            }
+                var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId && m.CurUseStoreId == rop.StoreId && m.CurUseShopId == rop.ShopId).FirstOrDefault();
 
-            d_Device.CurUseStoreId = null;
-            d_Device.CurUseShopId = null;
-            d_Device.Mender = operater;
-            d_Device.MendTime = DateTime.Now;
-            CurrentDb.SaveChanges();
+                if (d_Device == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已解绑门店");
+                }
 
-            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
-            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == merchId).FirstOrDefault();
+                var d_LockCount = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopId == rop.ShopId && (m.WaitPayLockQuantity > 0 || m.WaitPickupLockQuantity > 0)).Count();
 
-            if (d_MerchDevice != null)
-            {
-                d_MerchDevice.CurUseShopId = null;
-                d_MerchDevice.CurUseStoreId = null;
-                d_MerchDevice.Mender = operater;
-                d_MerchDevice.MendTime = DateTime.Now;
+                if (d_LockCount > 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "存在已锁定的商品数量，不能解绑，请先确保数量未被锁定");
+                }
+
+                d_Device.CurUseStoreId = null;
+                d_Device.CurUseShopId = null;
+                d_Device.Mender = operater;
+                d_Device.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
+
+                var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+                var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
+                var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == merchId).FirstOrDefault();
+
+                if (d_MerchDevice != null)
+                {
+                    d_MerchDevice.CurUseShopId = null;
+                    d_MerchDevice.CurUseStoreId = null;
+                    d_MerchDevice.Mender = operater;
+                    d_MerchDevice.MendTime = DateTime.Now;
+                    CurrentDb.SaveChanges();
+                }
+
+                var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopId == rop.StoreId && m.DeviceId == rop.DeviceId).ToList();
+                foreach (var d_Stock in d_Stocks)
+                {
+                    CurrentDb.SellChannelStock.Remove(d_Stock);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_unbind_shop, string.Format("将设备（{0}）从店铺（{1}）门店（{2}）移除成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
+
             }
-
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_unbind_shop, string.Format("将设备（{0}）从店铺（{1}）门店（{2}）移除成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
-
             return result;
         }
         public CustomJsonResult BindShop(string operater, string merchId, RopDeviceUnBindShop rop)

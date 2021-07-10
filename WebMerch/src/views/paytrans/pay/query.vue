@@ -3,14 +3,25 @@
     <div class="filter-container">
 
       <el-form ref="form" label-width="120px">
-        <el-form-item label="交易号">
+        <el-form-item label="商户单号">
           <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="订单号">
           <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-form-item label="支付商交易号">
+        <el-form-item label="交易单号">
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="交易时间">
+          <el-date-picker
+            v-model="listQuery.tradeDateArea"
+            type="daterange"
+            range-separator="-"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            style="max-width: 300px;"
+          />
         </el-form-item>
         <el-form-item label="交易状态">
           <el-radio-group v-model="listQuery.payStatus">
@@ -31,7 +42,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="交易号" fixed align="left" width="220">
+      <el-table-column label="商户单号" fixed align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -51,7 +62,7 @@
           <span>{{ scope.row.payPartner.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付商交易号" align="left" width="150">
+      <el-table-column label="交易单号" align="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
@@ -124,6 +135,7 @@ export default {
         page: 1,
         limit: 10,
         payStatus: '0',
+        tradeDateArea: [],
         userName: undefined
       },
       payStatuss: [

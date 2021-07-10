@@ -12,31 +12,31 @@ namespace WebApiMerch.Controllers
     public class ReportController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse StoreStockRealDataInit()
+        public OwnApiHttpResponse DeviceStockRealDataInit()
         {
-            var result = MerchServiceFactory.Report.StoreStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.DeviceStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse StoreStockRealDataGet([FromBody]RopReportStoreStockRealDataGet rop)
+        public OwnApiHttpResponse DeviceStockRealDataGet([FromBody]RopReportStoreStockRealDataGet rop)
         {
-            var result = MerchServiceFactory.Report.StoreStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.DeviceStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
 
         [HttpGet]
-        public OwnApiHttpResponse StoreStockDateHisInit()
+        public OwnApiHttpResponse DeviceStockDateHisInit()
         {
-            var result = MerchServiceFactory.Report.StoreStockDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.DeviceStockDateHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse StoreStockDateHisGet([FromBody]RopReporStoreStockDateHisGet rop)
+        public OwnApiHttpResponse DeviceStockDateHisGet([FromBody]RopReporStoreStockDateHisGet rop)
         {
-            var result = MerchServiceFactory.Report.StoreStockDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.DeviceStockDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
