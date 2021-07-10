@@ -184,11 +184,6 @@ namespace LocalS.BLL.Biz
             });
         }
 
-        public CustomJsonResult SendUpdateHomeLogo(string operater, string appId, string merchId, string deviceId, string logoImgUrl)
-        {
-            return SendCommand(operater, appId, merchId, deviceId, "update_home_logo", new { logoImgUrl = logoImgUrl });
-        }
-
         public CustomJsonResult SendRebootSys(string operater, string appId, string merchId, string deviceId)
         {
             return SendCommand(operater, appId, merchId, deviceId, "reboot_sys");
