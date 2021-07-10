@@ -2189,7 +2189,7 @@ namespace LocalS.BLL.Biz
 
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignTakeByNotComplete, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_take, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，扣减库存失败");
@@ -2228,7 +2228,7 @@ namespace LocalS.BLL.Biz
                         {
                             if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                             {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
 
                                 if (result_OperateStock.Result != ResultType.Success)
                                 {

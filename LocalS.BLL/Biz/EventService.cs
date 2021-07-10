@@ -325,7 +325,7 @@ namespace LocalS.BLL.Biz
                                     {
                                         if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
                                         {
-                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.OrderPickupOneSysMadeSignTake, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
+                                            var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_sign_take, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                             if (resultOperateStock.Result != ResultType.Success)
                                             {
                                                 return;

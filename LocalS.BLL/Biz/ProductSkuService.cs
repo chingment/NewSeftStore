@@ -346,7 +346,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case EventCode.OrderPickupOneSysMadeSignTake:
+                    case EventCode.order_sign_take:
                         #region OrderPickupOneSysMadeSignTake
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();
@@ -369,7 +369,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case EventCode.OrderPickupOneManMadeSignTakeByNotComplete:
+                    case EventCode.order_nocomplete_sign_take:
                         #region OrderPickupOneManMadeSignTakeByNotComplete
 
 
@@ -392,7 +392,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case EventCode.OrderPickupOneManMadeSignNotTakeByComplete:
+                    case EventCode.order_complete_sign_notake:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
 
@@ -415,7 +415,7 @@ namespace LocalS.BLL.Biz
 
                         #endregion
                         break;
-                    case EventCode.OrderPickupOneManMadeSignNotTakeByNotComplete:
+                    case EventCode.order_nocomplete_sign_notake:
                         #region OrderPickupOneManMadeSignNotTakeByComplete
 
                         sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();
