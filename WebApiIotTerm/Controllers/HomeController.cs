@@ -20,7 +20,7 @@ namespace WebApiIotTerm.Controllers
 {
     public class HomeController : Controller
     {
-        private string merch_id = "d17df2252133478c99104180e8062230";
+        private string merch_id = "87596751";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private long timespan = 1620465964;
@@ -31,19 +31,20 @@ namespace WebApiIotTerm.Controllers
 
         public ActionResult Index()
         {
-            //model.Add("设备信息", DeviceList());
-            //model.Add("设备库存", DeviceStock());
+            model.Add("设备信息", DeviceList());
+            model.Add("设备库存", DeviceStock());
             //model.Add("订单下单", OrderReserve());
             //model.Add("订单查看", OrderQuery());
             //model.Add("订单取消", OrderCancle());
-            model.Add("商品添加", ProductAdd());
-            model.Add("商品修改", ProductEdit());
+            //model.Add("商品添加", ProductAdd());
+            //model.Add("商品修改", ProductEdit());
+            model.Add("订单销售记录", OrderSaleRecords());
             return View(model);
         }
 
         public string DeviceList()
         {
-            string data = "{\"page\":0,\"limit\":10}";
+            string data = "{\"page\":0,\"limit\":10,\"device_cum_code\":\"test\"}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
@@ -54,7 +55,7 @@ namespace WebApiIotTerm.Controllers
 
         public string DeviceStock()
         {
-            string data = "{\"device_id\":\"202004220011\",\"data_format\":\"sku\", \"cabinet_id\":\"\", \"is_need_detail\":false }";
+            string data = "{\"device_cum_code\":\"test1\",\"data_format\":\"sku\", \"cabinet_id\":\"\", \"is_need_detail\":false }";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
@@ -93,6 +94,17 @@ namespace WebApiIotTerm.Controllers
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/order/cancle", data, headers);
+            return result;
+        }
+
+        public string OrderSaleRecords()
+        {
+            string data = "{\"page\":0,\"limit\":10,\"sale_date\":\"2021-05-12\"}";
+            string sign = GetSign(data);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/order/salerecords", data, headers);
             return result;
         }
 

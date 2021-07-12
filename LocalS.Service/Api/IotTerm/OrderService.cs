@@ -200,7 +200,8 @@ namespace LocalS.Service.Api.IotTerm
                          o.PayStatus == E_PayStatus.PaySuccess &&
                          o.MerchId == merchId &&
                          o.PayedTime >= startTime &&
-                         o.PayedTime <= endTime
+                         o.PayedTime <= endTime &&
+                         o.IsTestMode == false
                          select new { o.Id, o.CumId, o.PayedTime, o.PayWay, o.StoreId, o.IsTestMode, o.DeviceCumCode, o.DeviceId, o.StoreName, o.PickupIsTrg, o.ReceiverPhoneNumber, o.ReceiveModeName, o.ReceiveMode, o.ExIsHappen, o.ClientUserId, o.ExIsHandle, o.ClientUserName, o.Source, o.SubmittedTime, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.CreateTime, o.Quantity, o.Status });
 
 

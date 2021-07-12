@@ -9,6 +9,7 @@ namespace LocalS.Service.Api.IotTerm
     public class RopDeviceStock
     {
         public string device_id { get; set; }
+        public string device_cum_code { get; set; }
         public string data_format { get; set; }
         public string cabinet_id { get; set; }
         public bool is_need_detail { get; set; }

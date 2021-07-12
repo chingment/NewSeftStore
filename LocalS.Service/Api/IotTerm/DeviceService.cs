@@ -23,6 +23,18 @@ namespace LocalS.Service.Api.IotTerm
                          select new { u.DeviceId, u.Name, u.CumCode, tt.Lat, tt.Lng, tt.RunStatus });
 
 
+            if (!string.IsNullOrEmpty(rop.device_id))
+            {
+                query = query.Where(m => m.DeviceId == rop.device_id);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(rop.device_cum_code))
+                {
+                    query = query.Where(m => m.CumCode.StartsWith(rop.device_cum_code));
+                }
+            }
+
             int total = query.Count();
 
             int pageIndex = rop.page;
@@ -64,7 +76,7 @@ namespace LocalS.Service.Api.IotTerm
         {
             var result = new CustomJsonResult2();
 
-            var d_Device = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId == rop.device_id).FirstOrDefault();
+            var d_Device = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && (m.DeviceId == rop.device_id || m.CumCode == rop.device_cum_code)).FirstOrDefault();
 
             if (d_Device == null)
                 return new CustomJsonResult2(ResultCode.Failure, "设备不存在");

@@ -11,5 +11,7 @@ namespace LocalS.Service.Api.IotTerm
         public int page { get; set; }
         public int limit { get; set; }
         public string device_id { get; set; }
+
+        public string device_cum_code { get; set; }
     }
 }
