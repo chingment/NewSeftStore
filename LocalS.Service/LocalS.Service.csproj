@@ -197,6 +197,7 @@
     <Compile Include="Api\IotTerm\RModels\RopOrderQuery.cs" />
     <Compile Include="Api\IotTerm\RModels\RopOrderReserve.cs" />
     <Compile Include="Api\IotTerm\RModels\RopOrderSaleRecords.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopOrderShip.cs" />
     <Compile Include="Api\IotTerm\RModels\RopProductAdd.cs" />
     <Compile Include="Api\IotTerm\RModels\RopProductEdit.cs" />
     <Compile Include="Api\Merch\AdService.cs" />

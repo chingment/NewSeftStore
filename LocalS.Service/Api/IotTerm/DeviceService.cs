@@ -111,11 +111,11 @@ namespace LocalS.Service.Api.IotTerm
                     dics.Add("cabinet_id", r.CabinetId);
                     dics.Add("slot_id", r.SlotId);
                     dics.Add("sku_id", r.SkuId);
-
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, r.SkuId);
+                    dics.Add("sku_cum_code", r_Sku.CumCode);
                     if (rop.is_need_detail)
                     {
-                        var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, r.SkuId);
-                        dics.Add("sku_cum_code", r_Sku.CumCode);
+
                         dics.Add("sku_name", r_Sku.Name);
                         dics.Add("sku_img_url", r_Sku.MainImgUrl);
                     }
@@ -139,11 +139,10 @@ namespace LocalS.Service.Api.IotTerm
                 {
                     Dictionary<string, object> dics = new Dictionary<string, object>();
                     dics.Add("sku_id", r.SkuId);
-
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, r.SkuId);
+                    dics.Add("sku_cum_code", r_Sku.CumCode);
                     if (rop.is_need_detail)
                     {
-                        var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, r.SkuId);
-                        dics.Add("sku_cum_code", r_Sku.CumCode);
                         dics.Add("sku_name", r_Sku.Name);
                         dics.Add("sku_img_url", r_Sku.MainImgUrl);
                     }

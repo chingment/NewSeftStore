@@ -18,42 +18,35 @@ namespace LocalS.Service.Api.IotTerm
         {
             var result = new CustomJsonResult2();
 
-            if (string.IsNullOrEmpty(rop.device_id))
+            if (string.IsNullOrEmpty(rop.device_id) && string.IsNullOrEmpty(rop.device_com_code))
             {
-                return new CustomJsonResult2(ResultCode.Failure, "设备Id不能为空");
+                return new CustomJsonResult2(ResultCode.Failure, "device_id,device_com_code不能同时为空");
             }
 
-            var d_Device = CurrentDb.Device.Where(m => m.Id == rop.device_id).FirstOrDefault();
+            MerchDevice d_MerchDevice = null;
+            if (!string.IsNullOrEmpty(rop.device_id))
+            {
+                d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId == rop.device_id).FirstOrDefault();
+            }
+            else
+            {
+                d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.CumCode == rop.device_com_code).FirstOrDefault();
+            }
 
-            if (d_Device == null)
+            if (d_MerchDevice == null)
             {
                 return new CustomJsonResult2(ResultCode.Failure, "设备未登记");
             }
 
-            if (string.IsNullOrEmpty(d_Device.CurUseMerchId))
-            {
-                return new CustomJsonResult2(ResultCode.Failure, "设备未绑定商户");
-            }
 
-            if (string.IsNullOrEmpty(d_Device.CurUseStoreId))
+            if (string.IsNullOrEmpty(d_MerchDevice.CurUseStoreId))
             {
                 return new CustomJsonResult2(ResultCode.Failure, "设备未绑定店铺");
             }
 
-            if (string.IsNullOrEmpty(d_Device.CurUseShopId))
+            if (string.IsNullOrEmpty(d_MerchDevice.CurUseShopId))
             {
                 return new CustomJsonResult2(ResultCode.Failure, "设备未绑定门店");
-            }
-
-            if (d_Device.RunStatus != E_DeviceRunStatus.Running)
-            {
-                return new CustomJsonResult2(ResultCode.Failure, "设备在维护状态");
-            }
-
-
-            if (string.IsNullOrEmpty(rop.low_order_id))
-            {
-                return new CustomJsonResult2(ResultCode.Failure, "商户订单编号不能为空");
             }
 
             if (string.IsNullOrEmpty(rop.low_order_id))
@@ -66,17 +59,19 @@ namespace LocalS.Service.Api.IotTerm
                 return new CustomJsonResult2(ResultCode.Failure, "通知URL不能为空");
             }
 
-            var shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
+            var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
 
-            if (shop == null)
+            if (d_Shop == null)
             {
                 return new CustomJsonResult2(ResultCode.Failure, "门店信息异常");
             }
 
+            var d_Device = CurrentDb.Device.Where(m => m.Id == d_MerchDevice.DeviceId).FirstOrDefault();
+
             LocalS.BLL.Biz.RopOrderReserve bizRop = new LocalS.BLL.Biz.RopOrderReserve();
             bizRop.AppId = AppId.STORETERM;
             bizRop.Source = E_OrderSource.Api;
-            bizRop.StoreId = d_Device.CurUseStoreId;
+            bizRop.StoreId = d_MerchDevice.CurUseStoreId;
             bizRop.ShopMethod = E_ShopMethod.Buy;
             bizRop.IsTestMode = d_Device.IsTestMode;
             bizRop.CumOrderId = rop.low_order_id;
@@ -84,11 +79,11 @@ namespace LocalS.Service.Api.IotTerm
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;
-            block.SelfTake.Mark.Id = d_Device.CurUseShopId;
-            block.SelfTake.Mark.Name = shop.Name;
-            block.SelfTake.Mark.Address = shop.Address;
-            block.SelfTake.Mark.AreaCode = shop.AreaCode;
-            block.SelfTake.Mark.AreaName = shop.AreaName;
+            block.SelfTake.Mark.Id = d_MerchDevice.CurUseShopId;
+            block.SelfTake.Mark.Name = d_Shop.Name;
+            block.SelfTake.Mark.Address = d_Shop.Address;
+            block.SelfTake.Mark.AreaCode = d_Shop.AreaCode;
+            block.SelfTake.Mark.AreaName = d_Shop.AreaName;
 
             foreach (var detail in rop.detail)
             {
@@ -180,6 +175,16 @@ namespace LocalS.Service.Api.IotTerm
             };
 
             result = new CustomJsonResult2(ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public IResult2 Ship(string merchId, RopOrderShip rop)
+        {
+            var result = new CustomJsonResult2();
+
+
+            result = new CustomJsonResult2(ResultCode.Success, "");
 
             return result;
         }

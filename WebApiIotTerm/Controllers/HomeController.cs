@@ -20,6 +20,8 @@ namespace WebApiIotTerm.Controllers
 {
     public class HomeController : Controller
     {
+        public const short MaxTimeDiff = 30;
+
         private string merch_id = "87596751";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
@@ -29,16 +31,34 @@ namespace WebApiIotTerm.Controllers
 
         Dictionary<string, string> model = new Dictionary<string, string>();
 
+        public bool IsRequestTimeout(long app_timestamp)
+        {
+            System.DateTime time = System.DateTime.MinValue;
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime app_requestTime = startTime.AddMilliseconds(app_timestamp);
+
+            var ts = DateTime.Now - app_requestTime;
+            if (System.Math.Abs(ts.TotalMinutes) > MaxTimeDiff)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public ActionResult Index()
         {
-            model.Add("设备信息", DeviceList());
-            model.Add("设备库存", DeviceStock());
+            string a = timespan.ToString();
+            IsRequestTimeout(1626142536385);
+
+            //model.Add("设备信息", DeviceList());
+            //model.Add("设备库存", DeviceStock());
             //model.Add("订单下单", OrderReserve());
             //model.Add("订单查看", OrderQuery());
             //model.Add("订单取消", OrderCancle());
             //model.Add("商品添加", ProductAdd());
             //model.Add("商品修改", ProductEdit());
-            model.Add("订单销售记录", OrderSaleRecords());
+            //model.Add("订单销售记录", OrderSaleRecords());
             return View(model);
         }
 
