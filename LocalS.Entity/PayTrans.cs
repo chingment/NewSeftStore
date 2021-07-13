@@ -11,6 +11,7 @@ namespace LocalS.Entity
         Wx = 1,//微信支付
         Zfb = 2, //支付宝支付
         MyAccount = 81,
+        ApiReservePay = 82
     }
 
     public enum E_PayPartner
@@ -19,6 +20,7 @@ namespace LocalS.Entity
         Wx = 1,//微信支付
         Zfb = 2, //支付宝支付
         MyAccount = 81,
+        ApiReservePay = 82,
         Tg = 91, //通莞金服
         Xrt = 92 //深银联金服
     }
@@ -41,6 +43,7 @@ namespace LocalS.Entity
         WxByMp = 12, //微信小程序发起支付,
         ZfbByNt = 20, //支付宝方式生成二维码
         UrlRedirect = 30,//路径跳转方式
+        ApiReservePay = 40,
         AggregatePayByNt = 90 //聚合方式生成二维码
     }
 

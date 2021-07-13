@@ -38,6 +38,10 @@ namespace LocalS.Service.Api.IotTerm
                 return new CustomJsonResult2(ResultCode.Failure, "设备未登记");
             }
 
+            if (d_MerchDevice.IsStopUse)
+            {
+                return new CustomJsonResult2(ResultCode.Failure, "设备已被停用");
+            }
 
             if (string.IsNullOrEmpty(d_MerchDevice.CurUseStoreId))
             {

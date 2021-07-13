@@ -19,13 +19,7 @@ namespace LocalS.BLL.Biz
         public E_PayCaller PayCaller { get; set; }
         public E_PayPartner PayPartner { get; set; }
         public string CreateIp { get; set; }
-
         public List<RopOrderReserve.BlockModel> Blocks { get; set; }
-
-        public class Order
-        {
-            public string Id { get; set; }
-        }
 
     }
 }

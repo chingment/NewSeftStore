@@ -15,6 +15,7 @@ namespace LocalS.BLL.Biz
             this.Blocks = new List<BlockModel>();
         }
 
+        public string CreateIp { get; set; }
         public string ReffSign { get; set; }
         public string POrderId { get; set; }
         public string CumOrderId { get; set; }
