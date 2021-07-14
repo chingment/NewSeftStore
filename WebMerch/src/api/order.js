@@ -56,11 +56,20 @@ export function handleExByDeviceSelfTake(data) {
   })
 }
 
+export function SendDeviceShip(data) {
+  return request({
+    url: '/order/sendDeviceShip',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   getListByDelivery: getListByDelivery,
   getListByDeviceSelfTake: getListByDeviceSelfTake,
   getListByStoreSelfTake: getListByStoreSelfTake,
   getDetailsByDeviceSelfTake: getDetailsByDeviceSelfTake,
-  handleExByDeviceSelfTake: handleExByDeviceSelfTake
+  handleExByDeviceSelfTake: handleExByDeviceSelfTake,
+  SendDeviceShip: SendDeviceShip
 }

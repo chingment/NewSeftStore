@@ -42,5 +42,13 @@ namespace WebApiMerch.Controllers
             var result = MerchServiceFactory.Order.HandleExByDeviceSelfTake(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse SendDeviceShip(RopOrderHandleExByDeviceSelfTake rop)
+        {
+            rop.AppId = AppId.MERCH;
+            var result = MerchServiceFactory.Order.SendDeviceShip(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

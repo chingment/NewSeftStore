@@ -17,8 +17,8 @@ namespace Lumos.Redis
        // public static readonly string IR_DEVICEID = "irdeviceid";//SN序列号增长因子
         public static readonly string IR_PICKCODE = "irpc";//取货码增长因子
 
-        public static readonly string STSLPRD = "stslprd:{1}";//店铺可售商品的集合
+        public static readonly string STSLPRD = "stslprd:{0}";//店铺可售商品的集合
 
-        public static readonly string DEVICE_SHIP = "device_ship:{1}";
+        public static readonly string DEVICE_SHIP = "device_ship:{0}";
     }
 }

@@ -374,6 +374,11 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
+
+        <el-button type="primary" @click="_sendDevice(details)">
+          发起出货
+        </el-button>
+
         <el-button v-if="details.canHandleEx" type="primary" @click="_handleEx(details)">
           确认处理
         </el-button>
@@ -388,7 +393,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetailsByDeviceSelfTake, handleExByDeviceSelfTake } from '@/api/order'
+import { getList, getDetailsByDeviceSelfTake, handleExByDeviceSelfTake, SendDeviceShip } from '@/api/order'
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -627,6 +632,28 @@ export default {
           }
 
           this.detailsLoading = false
+        })
+      })
+    },
+    _sendDevice(details) {
+      MessageBox.confirm('确定要发起出货', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        SendDeviceShip({ id: details.id }).then(res => {
+          if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
         })
       })
     },

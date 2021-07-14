@@ -373,5 +373,11 @@ namespace LocalS.Service.Api.Merch
             var result = BizFactory.Order.HandleExByDeviceSelfTake(operater, bizRop);
             return result;
         }
+
+        public CustomJsonResult SendDeviceShip(string operater, string merchId, RopOrderHandleExByDeviceSelfTake rop)
+        {
+            var result = BizFactory.Order.SendDeviceShip(operater, merchId, rop.Id);
+            return result;
+        }
     }
 }

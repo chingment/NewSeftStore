@@ -53,7 +53,9 @@ namespace WebApiIotTerm.Controllers
 
             //model.Add("设备信息", DeviceList());
             //model.Add("设备库存", DeviceStock());
-            model.Add("订单下单", OrderReserve());
+            /// model.Add("订单下单", OrderReserve());
+            /// 
+            model.Add("订单出货", OrderShip("6100137202001221450573331"));
             //model.Add("订单查看", OrderQuery());
             //model.Add("订单取消", OrderCancle());
             //model.Add("商品添加", ProductAdd());
@@ -114,6 +116,18 @@ namespace WebApiIotTerm.Controllers
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/order/cancle", data, headers);
+            return result;
+        }
+
+
+        public string OrderShip(string low_order_id)
+        {
+            string data = "{\"low_order_id\":\""+ low_order_id + "\"}";
+            string sign = GetSign(data);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/order/ship", data, headers);
             return result;
         }
 
