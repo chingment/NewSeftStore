@@ -886,13 +886,36 @@ namespace LocalS.BLL.Biz
 
                     if (rop.IsPayed)
                     {
-                        //var parm = new RopOrderBuildPayParams();
-                        //parm.OrderIds = s_Orders.Select(m => m.Id).ToList();
-                        //parm.AppId = rop.AppId;
-                        //parm.PayCaller = E_PayCaller.ApiReservePay;
-                        //parm.PayPartner = E_PayPartner.ApiReservePay;
-                        //parm.CreateIp = rop.CreateIp;
-                        //BuildPayParams(operater, parm);
+                        var payTrans = new PayTrans();
+                        payTrans.Id = IdWorker.Build(IdType.PayTransId);
+                        payTrans.MerchId = s_Orders[0].MerchId;
+                        payTrans.MerchName = s_Orders[0].MerchName;
+                        payTrans.StoreId = s_Orders[0].StoreId;
+                        payTrans.StoreName = s_Orders[0].StoreName;
+                        payTrans.ShopIds = string.Join(",", s_Orders.Select(m => m.ShopId));
+                        payTrans.ShopNames = string.Join(",", s_Orders.Select(m => m.ShopName));
+                        payTrans.OrderIds = string.Join(",", s_Orders.Select(m => m.Id));
+                        payTrans.OriginalAmount = s_Orders.Sum(m => m.OriginalAmount);
+                        payTrans.DiscountAmount = s_Orders.Sum(m => m.DiscountAmount);
+                        payTrans.ChargeAmount = s_Orders.Sum(m => m.ChargeAmount);
+                        payTrans.Quantity = s_Orders.Sum(m => m.Quantity);
+                        payTrans.IsTestMode = s_Orders[0].IsTestMode;
+                        payTrans.AppId = s_Orders[0].AppId;
+                        payTrans.ClientUserId = s_Orders[0].ClientUserId;
+                        payTrans.ClientUserName = s_Orders[0].ClientUserName;
+                        payTrans.SubmittedTime = DateTime.Now;
+                        payTrans.Source = s_Orders[0].Source;
+                        payTrans.PayPartner = E_PayPartner.ApiReservePay;
+                        payTrans.PayWay = E_PayWay.ApiReservePay;
+                        payTrans.PayStatus = E_PayStatus.Paying;
+                        payTrans.PayExpireTime = s_Orders[0].PayExpireTime;
+                        payTrans.PayCaller = E_PayCaller.ApiReservePay;
+                        payTrans.CreateTime = DateTime.Now;
+                        payTrans.Creator = operater;
+                        CurrentDb.PayTrans.Add(payTrans);
+                        CurrentDb.SaveChanges();
+
+                        PayTransSuccess(operater, payTrans.Id, E_PayPartner.ApiReservePay, "", E_PayWay.ApiReservePay, DateTime.Now);
                     }
 
 

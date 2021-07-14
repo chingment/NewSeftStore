@@ -86,7 +86,7 @@ namespace WebApiIotTerm.Controllers
 
         public string OrderReserve()
         {
-            string data = "{\"device_id\":\"202004220011\",\"low_order_id\":\"6100137202001221450573323\",\"is_im_ship\":false,\"notify_url\":\"http://www.xxxx.com/xxxxx/xxx\",\"detail\":[{\"sku_id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"sku_cum_code \":\"xxxxx\",\"quantity\":1}]}";
+            string data = "{\"device_id\":\"202004220011\",\"low_order_id\":\"6100137202001221450573324\",\"is_im_ship\":false,\"notify_url\":\"http://www.xxxx.com/xxxxx/xxx\",\"detail\":[{\"sku_id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"sku_cum_code \":\"xxxxx\",\"quantity\":1}]}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
