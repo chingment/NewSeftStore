@@ -475,16 +475,18 @@ namespace LocalS.BLL.Biz
                     });
 
                     string data = ret.ToJsonString();
+                    LogUtil.Info("sign.data:" + data);
                     long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
                     string sign = GetSign(d_Merch.Id, d_Merch.IotApiSecret, timespan, ret.ToJsonString());
-
 
                     HttpUtil http = new HttpUtil();
                     Dictionary<string, string> headers = new Dictionary<string, string>();
 
-                    headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", d_Merch.Id, timespan, sign));
+                    string authorization = string.Format("merch_id={0},timestamp={1},sign={2}", d_Merch.Id, timespan, sign);
+                    LogUtil.Info("authorization:" + authorization);
+                    headers.Add("Authorization", authorization);
 
-                    var result_http = http.HttpPostJson(notify_url, ret.ToJsonString(), headers);
+                    var result_http = http.HttpPostJson(notify_url, data, headers);
 
                     if (!string.IsNullOrEmpty(result_http))
                     {
