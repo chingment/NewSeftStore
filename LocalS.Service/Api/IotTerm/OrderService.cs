@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -119,6 +120,11 @@ namespace LocalS.Service.Api.IotTerm
             {
                 var order = bizResult.Data.Orders[0];
 
+                if (rop.is_im_ship)
+                {
+                    //MqFactory.Global.PushPayRefundResultNotify
+                }
+
                 result = new CustomJsonResult2(ResultCode.Success, "", new { low_order_id = order.CumId, up_order_id = order.Id });
             }
             else
@@ -150,6 +156,61 @@ namespace LocalS.Service.Api.IotTerm
 
             var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
 
+            string[] skuIds = d_OrderSubs.Select(m => m.SkuId).ToArray();
+
+            var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == d_Order.MerchId && m.StoreId == d_Order.StoreId && m.DeviceId == d_Order.DeviceId && skuIds.Contains(m.SkuId)).ToList();
+
+            List<object> sku_stocks = new List<object>();
+
+            var stock_Skus = (from u in d_Stocks select new { u.SkuId, u.IsOffSell }).Distinct();
+
+            foreach (var stock_Sku in stock_Skus)
+            {
+                Dictionary<string, object> dics = new Dictionary<string, object>();
+                dics.Add("sku_id", stock_Sku.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, stock_Sku.SkuId);
+                dics.Add("sku_cum_code", r_Sku.CumCode);
+
+                var sku_Stocks = d_Stocks.Where(m => m.SkuId == stock_Sku.SkuId);
+
+                int sumQuantity = sku_Stocks.Sum(m => m.SumQuantity);
+                int waitPayLockQuantity = sku_Stocks.Sum(m => m.WaitPayLockQuantity);
+                int waitPickupLockQuantity = sku_Stocks.Sum(m => m.WaitPickupLockQuantity);
+                int sellQuantity = sku_Stocks.Sum(m => m.SellQuantity);
+                int warnQuantity = sku_Stocks.Sum(m => m.WarnQuantity);
+                int holdQuantity = sku_Stocks.Sum(m => m.HoldQuantity);
+                int maxQuantity = sku_Stocks.Sum(m => m.MaxQuantity);
+
+                dics.Add("sum_quantity", sumQuantity);
+                dics.Add("lock_quantity", waitPayLockQuantity + waitPickupLockQuantity);
+                dics.Add("sell_quantity", sellQuantity);
+                dics.Add("warn_quantity", warnQuantity);
+                dics.Add("hold_quantity", holdQuantity);
+                dics.Add("max_quantity", maxQuantity);
+                dics.Add("is_off_sell", stock_Sku.IsOffSell);
+
+                List<object> slots = new List<object>();
+                foreach (var sku_Stock in sku_Stocks)
+                {
+                    Dictionary<string, object> dic2s = new Dictionary<string, object>();
+
+                    dic2s.Add("cabinet_id", sku_Stock.CabinetId);
+                    dic2s.Add("slot_id", sku_Stock.SlotId);
+                    dic2s.Add("sum_quantity", sku_Stock.SumQuantity);
+                    dic2s.Add("lock_quantity", sku_Stock.WaitPayLockQuantity + sku_Stock.WaitPickupLockQuantity);
+                    dic2s.Add("sell_quantity", sku_Stock.SellQuantity);
+                    dic2s.Add("warn_quantity", sku_Stock.WarnQuantity);
+                    dic2s.Add("hold_quantity", sku_Stock.HoldQuantity);
+                    dic2s.Add("max_quantity", sku_Stock.MaxQuantity);
+
+                    slots.Add(dic2s);
+                }
+
+                dics.Add("slots", slots);
+
+                sku_stocks.Add(dics);
+            }
+
             var sku_Ships = new List<object>();
 
             foreach (var item in d_OrderSubs)
@@ -174,7 +235,8 @@ namespace LocalS.Service.Api.IotTerm
                 detail = new
                 {
                     is_trg = d_Order.PickupIsTrg,
-                    sku_ships = sku_Ships
+                    sku_stocks = sku_stocks,
+                    sku_ships = sku_Ships,
                 }
             };
 

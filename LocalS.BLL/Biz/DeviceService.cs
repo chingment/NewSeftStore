@@ -160,16 +160,9 @@ namespace LocalS.BLL.Biz
             return d_MerchDevice.IsStopUse;
         }
 
-        public void SendUpdateStock(string operater, string appId, string merchId, string deviceId, List<DeviceSkuStockModel> pms)
+        public void SendUpdateStock(string operater, string appId, string merchId, string deviceId, object pms)
         {
             SendCommand(operater, appId, merchId, deviceId, "update_stock", pms);
-        }
-
-        public void SendSendUpdateStock(string operater, string appId, string merchId, string deviceId, DeviceSkuStockModel content)
-        {
-            List<DeviceSkuStockModel> contents = new List<DeviceSkuStockModel>();
-            contents.Add(content);
-            SendUpdateStock(operater, appId, merchId, deviceId, contents);
         }
 
         public void SendAds(string operater, string appId, string merchId, string[] deviceIds)
@@ -203,6 +196,12 @@ namespace LocalS.BLL.Biz
         public CustomJsonResult SendOpenPickupDoor(string operater, string appId, string merchId, string deviceId)
         {
             return SendCommand(operater, appId, merchId, deviceId, "open_pickup_door");
+        }
+
+
+        public CustomJsonResult SendOrderPickup(string operater, string appId, string merchId, string deviceId,object pms)
+        {
+            return SendCommand(operater, appId, merchId, deviceId, "order_pickup", pms);
         }
 
         public CustomJsonResult SendCommand(string operater, string appId, string merchId, string deviceId, string method, object pms = null)

@@ -2549,5 +2549,16 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
+
+        public CustomJsonResult NotifyDevicePickup(string operater, string orderId)
+        {
+            //var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            //var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+
+
+            //BizFactory.Device.SendOrderPickup(operater, AppId.MERCH, d_Order.Id, d_Order.DeviceId,);
+
+            return null;
+        }
     }
 }
