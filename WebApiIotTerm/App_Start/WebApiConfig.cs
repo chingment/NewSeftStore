@@ -96,7 +96,7 @@ namespace WebApiIotTerm
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.HttpPreRoute();
+            config.HttpPreRoute2();
 
             // 干掉XML序列化器
             config.Formatters.Remove(config.Formatters.XmlFormatter);

@@ -63,11 +63,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Http\HttpNotFoundControllerActionSelector.cs" />
+    <Compile Include="Http\HttpNotFoundControllerActionSelector2.cs" />
     <Compile Include="Http\HttpNotFoundControllerSelector.cs" />
+    <Compile Include="Http\HttpNotFoundControllerSelector2.cs" />
     <Compile Include="Http\HttpWebApiControllerActionInvoker.cs" />
+    <Compile Include="Http\HttpWebApiControllerActionInvoker2.cs" />
     <Compile Include="Http\MonitorLog.cs" />
     <Compile Include="Http\BaseController.cs" />
     <Compile Include="Http\BaseStatisticsTrackerAttribute.cs" />
+    <Compile Include="Http\PreRouteHandler2.cs" />
     <Compile Include="Mvc\BaseController.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Mvc\BaseStatisticsTrackerAttribute.cs" />

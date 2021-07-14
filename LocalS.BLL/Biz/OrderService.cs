@@ -886,13 +886,13 @@ namespace LocalS.BLL.Biz
 
                     if (rop.IsPayed)
                     {
-                        var parm = new RopOrderBuildPayParams();
-                        parm.OrderIds = s_Orders.Select(m => m.Id).ToList();
-                        parm.AppId = rop.AppId;
-                        parm.PayCaller = E_PayCaller.ApiReservePay;
-                        parm.PayPartner = E_PayPartner.ApiReservePay;
-                        parm.CreateIp = rop.CreateIp;
-                        BuildPayParams(operater, parm);
+                        //var parm = new RopOrderBuildPayParams();
+                        //parm.OrderIds = s_Orders.Select(m => m.Id).ToList();
+                        //parm.AppId = rop.AppId;
+                        //parm.PayCaller = E_PayCaller.ApiReservePay;
+                        //parm.PayPartner = E_PayPartner.ApiReservePay;
+                        //parm.CreateIp = rop.CreateIp;
+                        //BuildPayParams(operater, parm);
                     }
 
 
