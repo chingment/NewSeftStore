@@ -362,7 +362,7 @@ namespace LocalS.Service.Api.Merch
                             row.No = i;
 
                             int cols = dsCabinetRowColLayout.Rows[i];
-                            for (int j = 0; j < cols; j++)
+                            for (int j = cols - 1; j >= 0; j--)
                             {
                                 var slotId = string.Format("r{0}c{1}", i, j);
 
