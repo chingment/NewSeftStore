@@ -122,7 +122,9 @@ namespace LocalS.Service.Api.IotTerm
 
                 if (rop.is_im_ship)
                 {
-                    //MqFactory.Global.PushPayRefundResultNotify
+                    LogUtil.Info("is_im_ship");
+
+                    BizFactory.Order.SendDevicePickup("", order.Id);
                 }
 
                 result = new CustomJsonResult2(ResultCode.Success, "", new { low_order_id = order.CumId, up_order_id = order.Id });

@@ -48,8 +48,23 @@ namespace LocalS.BLL.Push
             {
                 mqttClient = new MqttClientFactory().CreateMqttClient() as MqttClient;
                 mqttClient.ApplicationMessageReceived += MessageReceivedEvent;
-                mqttClient.Connected += ConnectedEvent;
-                mqttClient.Disconnected += DisconnectedEvent;
+                if (ConnectedEvent == null)
+                {
+                    mqttClient.Connected += _ConnectedEvent;
+                }
+                else
+                {
+                    mqttClient.Connected += ConnectedEvent;
+                }
+
+                if (DisconnectedEvent == null)
+                {
+                    mqttClient.Disconnected += _DisconnectedEvent;
+                }
+                else
+                {
+                    mqttClient.Disconnected += DisconnectedEvent;
+                }
             }
 
             try
@@ -75,6 +90,22 @@ namespace LocalS.BLL.Push
             {
                 LogUtil.Error($"连接到MQTT服务器失败！" + Environment.NewLine + ex.Message + Environment.NewLine);
             }
+        }
+
+        private void _ConnectedEvent(object sender, EventArgs e)
+        {
+            LogUtil.Info(TAG, "服务器已连接");
+        }
+
+        private void _DisconnectedEvent(object sender, EventArgs e)
+        {
+            LogUtil.Info(TAG, "服务器已断开");
+
+            System.Threading.Thread.Sleep(3000);
+
+            LogUtil.Info(TAG, "尝试重新连接服务器");
+
+            Connect();
         }
 
         public CustomJsonResult Send(string operater, string appId, string merchId, string deviceId, string method, object pms)
@@ -121,11 +152,11 @@ namespace LocalS.BLL.Push
 
             LogUtil.Info(TAG, "topic:" + topic);
 
-            var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.AtMostOnce, false);
+            var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.ExactlyOnce, false);
             var publish = mqttClient.PublishAsync(appMsg);
 
 
-        
+
             //if (!publish.IsCompleted)
             //{
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");

@@ -113,6 +113,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ret.Data.PayStatus = ret_Biz.Data.PayStatus;
                 if (ret_Biz.Data.PayStatus == E_PayStatus.PaySuccess)
                 {
+                    ret.Data.OrderStatus = E_OrderStatus.Payed;
                     ret.Data.OrderId = ret_Biz.Data.OrderIds[0];
                     ret.Data.Skus = BizFactory.Order.GetOrderSkuByPickup(ret_Biz.Data.OrderIds[0], rup.DeviceId);
                 }
@@ -175,8 +176,8 @@ namespace LocalS.Service.Api.StoreTerm
             var ret = new RetOrderSearchByPickupCode();
 
             ret.OrderId = d_Order.Id;
-
-
+            ret.PayStatus = d_Order.PayStatus;
+            ret.Status = d_Order.Status;
             ret.Skus = BizFactory.Order.GetOrderSkuByPickup(d_Order.Id, rup.DeviceId);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

@@ -15,6 +15,7 @@ namespace LocalS.Service.Api.StoreTerm
         public E_PayStatus PayStatus { get; set; }
         public List<OrderSkuByPickupModel> Skus { get; set; }
         public string OrderId { get; set; }
+        public E_OrderStatus OrderStatus { get; set; }
 
     }
 }
