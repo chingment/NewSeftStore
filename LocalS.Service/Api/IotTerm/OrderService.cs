@@ -81,6 +81,7 @@ namespace LocalS.Service.Api.IotTerm
             bizRop.IsTestMode = d_Device.IsTestMode;
             bizRop.CumOrderId = rop.low_order_id;
             bizRop.IsPayed = true;
+            bizRop.NotifyUrl = rop.notify_url;
             LocalS.BLL.Biz.RopOrderReserve.BlockModel block = new LocalS.BLL.Biz.RopOrderReserve.BlockModel();
 
             block.ReceiveMode = E_ReceiveMode.SelfTakeByDevice;

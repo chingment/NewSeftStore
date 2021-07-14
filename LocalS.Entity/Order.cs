@@ -145,5 +145,7 @@ namespace LocalS.Entity
         public E_ShopMethod ShopMethod { get; set; }
         public string ReffSign { get; set; }
         public string ReffUserId { get; set; }
+
+        public string NotifyUrl { get; set; }
     }
 }

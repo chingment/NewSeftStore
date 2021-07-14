@@ -33,6 +33,8 @@ namespace LocalS.BLL.Biz
         public bool IsTestMode { get; set; }
 
         public bool IsPayed { get; set; }
+
+        public string NotifyUrl { get; set; }
         public class BlockModel
         {
             public BlockModel()

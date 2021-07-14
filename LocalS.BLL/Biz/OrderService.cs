@@ -673,7 +673,7 @@ namespace LocalS.BLL.Biz
                         d_Order.ShopMethod = rop.ShopMethod;
                         d_Order.ReffSign = rop.ReffSign;
                         d_Order.ReffUserId = reffUserId;
-
+                        d_Order.NotifyUrl = rop.NotifyUrl;
                         switch (buildOrder.ReceiveMode)
                         {
                             case E_ReceiveMode.Delivery:

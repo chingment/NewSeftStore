@@ -7,6 +7,7 @@ using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -161,6 +162,9 @@ namespace LocalS.BLL.Biz
                 return;
 
             List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
+            Order d_Order;
+            List<OrderSub> d_OrderSubs;
+            Merch d_Merch;
             using (TransactionScope ts = new TransactionScope())
             {
                 if (string.IsNullOrEmpty(model.SignId))
@@ -211,15 +215,15 @@ namespace LocalS.BLL.Biz
                     remark.Append(string.Format("当前动作：{0}，状态：{1}", model.ActionName, model.ActionStatusName));
                 }
 
-                var d_Order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
+                d_Order = CurrentDb.Order.Where(m => m.Id == model.OrderId).FirstOrDefault();
+                d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.ShopMode == E_ShopMode.Device && m.DeviceId == d_Device.Id).ToList();
+                d_Merch = CurrentDb.Merch.Where(m => m.Id == d_Order.MerchId).FirstOrDefault();
+
                 if (d_Order != null)
                 {
 
                     if (d_Order.Status != E_OrderStatus.Completed && !d_Order.ExIsHappen)
                     {
-                        var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == model.OrderId && m.ShopMode == E_ShopMode.Device && m.DeviceId == d_Device.Id).ToList();
-
-
                         //是否触发过取货
                         if (d_Order.PickupTrgTime == null)
                         {
@@ -369,6 +373,7 @@ namespace LocalS.BLL.Biz
                             }
                         }
                     }
+
                 }
 
                 CurrentDb.SaveChanges();
@@ -376,9 +381,150 @@ namespace LocalS.BLL.Biz
 
                 MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.vending_pickup, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), new { Rop = model, StockChangeRecords = s_StockChangeRecords });
 
-                
             }
+
+
+            if (!string.IsNullOrEmpty(d_Order.NotifyUrl))
+            {
+                try
+                {
+
+                    LogUtil.Info("NotifyUrl:" + d_Order.NotifyUrl);
+                    string[] skuIds = d_OrderSubs.Select(m => m.SkuId).ToArray();
+
+                    var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == d_Order.MerchId && m.StoreId == d_Order.StoreId && m.DeviceId == d_Order.DeviceId && skuIds.Contains(m.SkuId)).ToList();
+
+                    List<object> sku_stocks = new List<object>();
+
+                    var stock_Skus = (from u in d_Stocks select new { u.SkuId, u.IsOffSell }).Distinct();
+
+                    foreach (var stock_Sku in stock_Skus)
+                    {
+                        Dictionary<string, object> dics = new Dictionary<string, object>();
+                        dics.Add("sku_id", stock_Sku.SkuId);
+                        var r_Sku2 = CacheServiceFactory.Product.GetSkuInfo(d_Order.MerchId, stock_Sku.SkuId);
+                        dics.Add("sku_cum_code", r_Sku2.CumCode);
+
+                        var sku_Stocks = d_Stocks.Where(m => m.SkuId == stock_Sku.SkuId);
+
+                        int sumQuantity = sku_Stocks.Sum(m => m.SumQuantity);
+                        int waitPayLockQuantity = sku_Stocks.Sum(m => m.WaitPayLockQuantity);
+                        int waitPickupLockQuantity = sku_Stocks.Sum(m => m.WaitPickupLockQuantity);
+                        int sellQuantity = sku_Stocks.Sum(m => m.SellQuantity);
+                        int warnQuantity = sku_Stocks.Sum(m => m.WarnQuantity);
+                        int holdQuantity = sku_Stocks.Sum(m => m.HoldQuantity);
+                        int maxQuantity = sku_Stocks.Sum(m => m.MaxQuantity);
+
+                        dics.Add("sum_quantity", sumQuantity);
+                        dics.Add("lock_quantity", waitPayLockQuantity + waitPickupLockQuantity);
+                        dics.Add("sell_quantity", sellQuantity);
+                        dics.Add("warn_quantity", warnQuantity);
+                        dics.Add("hold_quantity", holdQuantity);
+                        dics.Add("max_quantity", maxQuantity);
+                        dics.Add("is_off_sell", stock_Sku.IsOffSell);
+
+                        List<object> slots = new List<object>();
+                        foreach (var sku_Stock in sku_Stocks)
+                        {
+                            Dictionary<string, object> dic2s = new Dictionary<string, object>();
+
+                            dic2s.Add("cabinet_id", sku_Stock.CabinetId);
+                            dic2s.Add("slot_id", sku_Stock.SlotId);
+                            dic2s.Add("sum_quantity", sku_Stock.SumQuantity);
+                            dic2s.Add("lock_quantity", sku_Stock.WaitPayLockQuantity + sku_Stock.WaitPickupLockQuantity);
+                            dic2s.Add("sell_quantity", sku_Stock.SellQuantity);
+                            dic2s.Add("warn_quantity", sku_Stock.WarnQuantity);
+                            dic2s.Add("hold_quantity", sku_Stock.HoldQuantity);
+                            dic2s.Add("max_quantity", sku_Stock.MaxQuantity);
+
+                            slots.Add(dic2s);
+                        }
+
+                        dics.Add("slots", slots);
+
+                        sku_stocks.Add(dics);
+                    }
+
+                    var sku_Ships = new List<object>();
+
+                    foreach (var item in d_OrderSubs)
+                    {
+                        sku_Ships.Add(new
+                        {
+                            unique_id = item.Id,
+                            cabinet_id = item.CabinetId,
+                            slot_id = item.SlotId,
+                            sku_id = item.SkuId,
+                            sku_cum_code = item.SkuCumCode,
+                            status = item.PickupStatus,
+                            tips = item.ExPickupReason,
+                        });
+                    }
+
+                    string notify_url = d_Order.NotifyUrl;
+
+                    Dictionary<string, Object> ret = new Dictionary<string, object>();
+                    ret.Add("low_order_id", d_Order.CumId);
+                    ret.Add("up_order_id", d_Order.Id);
+                    ret.Add("business_type", "ship");
+                    ret.Add("detail", new
+                    {
+                        is_trg = d_Order.PickupIsTrg,
+                        sku_stocks = sku_stocks,
+                        sku_ships = sku_Ships,
+                    });
+
+                    string data = ret.ToJsonString();
+                    long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+                    string sign = GetSign(d_Merch.Id, d_Merch.IotApiSecret, timespan, ret.ToJsonString());
+
+
+                    HttpUtil http = new HttpUtil();
+                    Dictionary<string, string> headers = new Dictionary<string, string>();
+
+                    headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", d_Merch.Id, timespan, sign));
+
+                    var result_http = http.HttpPostJson(notify_url, ret.ToJsonString(), headers);
+
+                    if (!string.IsNullOrEmpty(result_http))
+                    {
+                        LogUtil.Info("result_http=>" + result_http);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogUtil.Error("", ex);
+                }
+
+            }
+
         }
+
+        public string GetSign(string merchId, string secret, long timespan, string data)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(merchId);
+            sb.Append(secret);
+            sb.Append(timespan.ToString());
+            sb.Append(data);
+
+            var material = string.Concat(sb.ToString().OrderBy(c => c));
+
+            var input = Encoding.UTF8.GetBytes(material);
+
+            var hash = SHA256Managed.Create().ComputeHash(input);
+
+            StringBuilder sb2 = new StringBuilder();
+            foreach (byte b in hash)
+                sb2.Append(b.ToString("x2"));
+
+            string str = sb2.ToString();
+
+            return str;
+        }
+
+
         private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupTestModel model)
         {
             if (model == null)

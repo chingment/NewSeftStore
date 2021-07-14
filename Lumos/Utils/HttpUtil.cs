@@ -85,128 +85,56 @@ namespace Lumos
 
         public string HttpPostJson(string urlString, string body, Dictionary<string, string> headers = null)
         {
-
-
-
-            byte[] bytes = Encoding.UTF8.GetBytes(body);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlString);
-
-            //X509Certificate cer = new X509Certificate("D:\\ca\\intermediate2.cer");
-            //request.ClientCertificates.Add(cer);
-
-
-            if (headers != null)
+            string strResult = null;
+            try
             {
-                foreach (var m in headers)
+                byte[] bytes = Encoding.UTF8.GetBytes(body);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlString);
+
+                if (headers != null)
                 {
-                    request.Headers.Add(m.Key, m.Value);
+                    foreach (var m in headers)
+                    {
+                        request.Headers.Add(m.Key, m.Value);
+                    }
                 }
+
+                //写数据
+                request.Method = "POST";
+                request.ContentLength = bytes.Length;
+                request.ContentType = "application/json";
+                Stream reqstream = request.GetRequestStream();
+                reqstream.Write(bytes, 0, bytes.Length);
+
+                //读数据
+                request.Timeout = 300000;
+                request.Headers.Set("Pragma", "no-cache");
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream streamReceive = response.GetResponseStream();
+                StreamReader streamReader = new StreamReader(streamReceive, Encoding.UTF8);
+
+                strResult = streamReader.ReadToEnd();
+
+
+                LogUtil.Info("urlString:" + urlString);
+                LogUtil.Info("body:" + body);
+                LogUtil.Info("strResult:" + strResult);
+
+                //关闭流
+                reqstream.Close();
+                streamReader.Close();
+                streamReceive.Close();
+                request.Abort();
+                response.Close();
             }
-
-            //写数据
-            request.Method = "POST";
-            request.ContentLength = bytes.Length;
-            request.ContentType = "application/json";
-            Stream reqstream = request.GetRequestStream();
-            reqstream.Write(bytes, 0, bytes.Length);
-
-            //读数据
-            request.Timeout = 300000;
-            request.Headers.Set("Pragma", "no-cache");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream streamReceive = response.GetResponseStream();
-            StreamReader streamReader = new StreamReader(streamReceive, Encoding.UTF8);
-            string strResult = streamReader.ReadToEnd();
-
-            //关闭流
-            reqstream.Close();
-            streamReader.Close();
-            streamReceive.Close();
-            request.Abort();
-            response.Close();
+            catch(Exception ex)
+            {
+                LogUtil.Error("", ex);
+            }
 
 
             return strResult;
 
-
-
-
-
-
-
-
-
-
-
-
-
-            //string result = "";
-            //StringBuilder strLog = new StringBuilder();
-            //strLog.Append("\r\n");
-            //strLog.Append("[Function]:HttpPostJson\r\n");
-            //strLog.Append("[RequestURL]:" + urlString + "\r\n");
-            //strLog.Append("[Post]:\r\n");
-            //strLog.Append("" + body + "\r\n");
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
-            //HttpWebRequest webRequest = WebRequest.Create(urlString) as HttpWebRequest;
-
-            //// webRequest.ContentType = "application/json";
-            //webRequest.ContentType = "application/json";
-            //webRequest.Method = "POST";
-            //webRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
-            //webRequest.Accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-            //webRequest.Headers.Add("Accept-Encoding", "gzip,deflate,sdch");
-            //webRequest.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
-            //webRequest.Headers.Add("Accept-Charset", "utf-8,GBK;q=0.7,*;q=0.3");
-
-            //if (headers != null)
-            //{
-            //    foreach (var m in headers)
-            //    {
-            //        webRequest.Headers.Add(m.Key, m.Value);
-            //    }
-            //}
-
-            //byte[] bytes = Encoding.UTF8.GetBytes(body);
-            //Stream stream = null;
-            //try
-            //{ //读数据
-            //    webRequest.Timeout = 300000;
-            //    webRequest.ContentLength = bytes.Length;
-            //    stream = webRequest.GetRequestStream();
-            //    stream.Write(bytes, 0, bytes.Length);         //Send it
-            //    WebResponse webResponse = webRequest.GetResponse();
-
-
-            //    stream = webResponse.GetResponseStream();
-
-            //    var streamReader = new StreamReader(stream, Encoding.UTF8);
-            //    if (webResponse.Headers["Content-Encoding"] != null && webResponse.Headers["Content-Encoding"].Equals("gzip"))
-            //    {
-            //        var gzipStream = new GZipStream(stream, CompressionMode.Decompress);
-            //        streamReader = new StreamReader(gzipStream);
-            //    }
-            //    result = streamReader.ReadToEnd().Trim();
-            //}
-            //catch (Exception ex)
-            //{
-
-            //}
-            //finally
-            //{
-            //    if (stream != null)
-            //    {
-            //        stream.Close();
-            //    }
-            //    sw.Stop();
-            //    strLog.Append("[RequestTime]:" + sw.ElapsedMilliseconds + "ms\r\n");
-            //    strLog.Append("[Return]:" + result + "\r\n");
-            //    strLog.Append(" ----------------------------------------------------\r\n");
-
-
-            //}
-            //return result;
         }
         public string HttpGet(string urlString, Dictionary<string, string> headers = null)
         {
