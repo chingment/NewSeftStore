@@ -2550,15 +2550,57 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-        public void SendDevicePickup(string operater, string orderId)
+        public CustomJsonResult SendDeviceShip(string operater, string merchId, string orderId, string orderCumId = null)
         {
-            var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(orderId) && string.IsNullOrEmpty(orderCumId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单号和商户订单号不能同时为空");
+            }
+
+            Order d_Order = null;
+            if (!string.IsNullOrEmpty(orderId))
+            {
+                d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            }
+            else
+            {
+                d_Order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.CumId == orderCumId).FirstOrDefault();
+            }
+
+            if (d_Order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该订单，请重新输入");
+            }
+
+            if (d_Order.PayStatus != E_PayStatus.PaySuccess)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未支付");
+            }
+
+            if (d_Order.PickupIsTrg)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经取货");
+            }
+
+            string sign = RedisClient.Get<string>(string.Format(RedisKeyS.DEVICE_SHIP, d_Order.Id));
+            if (!string.IsNullOrEmpty(sign))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "命令已发送，请稍后再发");
+            }
 
             var pms = new { OrderId = d_Order.Id, Status = d_Order.Status, PayStatus = d_Order.PayStatus, Skus = GetOrderSkuByPickup(d_Order.Id, d_Order.DeviceId) };
 
-            LogUtil.Info(pms.ToJsonString());
+            var ret = BizFactory.Device.SendDeviceShip(operater, AppId.MERCH, d_Order.MerchId, d_Order.DeviceId, pms);
 
-            BizFactory.Device.SendOrderPickup(operater, AppId.MERCH, d_Order.MerchId, d_Order.DeviceId, pms);
+            if (ret.Result == ResultType.Success)
+            {
+                RedisClient.Set<string>(string.Format(RedisKeyS.DEVICE_SHIP, d_Order.Id), "0", new TimeSpan(0, 0, 10));
+            }
+
+
+            return ret;
         }
     }
 }

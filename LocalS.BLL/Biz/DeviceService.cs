@@ -198,10 +198,9 @@ namespace LocalS.BLL.Biz
             return SendCommand(operater, appId, merchId, deviceId, "open_pickup_door");
         }
 
-
-        public CustomJsonResult SendOrderPickup(string operater, string appId, string merchId, string deviceId,object pms)
+        public CustomJsonResult SendDeviceShip(string operater, string appId, string merchId, string deviceId,object pms)
         {
-            return SendCommand(operater, appId, merchId, deviceId, "order_pickup", pms);
+            return SendCommand(operater, appId, merchId, deviceId, "device_ship", pms);
         }
 
         public CustomJsonResult SendCommand(string operater, string appId, string merchId, string deviceId, string method, object pms = null)

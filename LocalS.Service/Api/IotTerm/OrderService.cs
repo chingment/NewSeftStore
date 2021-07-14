@@ -122,9 +122,7 @@ namespace LocalS.Service.Api.IotTerm
 
                 if (rop.is_im_ship)
                 {
-                    LogUtil.Info("is_im_ship");
-
-                    BizFactory.Order.SendDevicePickup("", order.Id);
+                    BizFactory.Order.SendDeviceShip(IdWorker.Build(IdType.EmptyGuid), merchId, order.Id);
                 }
 
                 result = new CustomJsonResult2(ResultCode.Success, "", new { low_order_id = order.CumId, up_order_id = order.Id });
@@ -251,8 +249,9 @@ namespace LocalS.Service.Api.IotTerm
         {
             var result = new CustomJsonResult2();
 
+            var result_Send = BizFactory.Order.SendDeviceShip(IdWorker.Build(IdType.EmptyGuid), merchId, "", rop.low_order_id);
 
-            result = new CustomJsonResult2(ResultCode.Success, "");
+            result = new CustomJsonResult2(result_Send.Code, result_Send.Message);
 
             return result;
         }
