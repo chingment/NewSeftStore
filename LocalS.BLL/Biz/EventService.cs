@@ -477,7 +477,7 @@ namespace LocalS.BLL.Biz
                     string data = ret.ToJsonString();
                     LogUtil.Info("sign.data:" + data);
                     long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-                    string sign = GetSign(d_Merch.Id, d_Merch.IotApiSecret, timespan, ret.ToJsonString());
+                    string sign = GetSign(d_Merch.Id, d_Merch.IotApiSecret, timespan, data);
 
                     HttpUtil http = new HttpUtil();
                     Dictionary<string, string> headers = new Dictionary<string, string>();

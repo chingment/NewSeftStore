@@ -24,8 +24,8 @@ namespace WebApiIotTerm.Controllers
 
         private string merch_id = "87596751";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
-        private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private long timespan = 1620465964;
+        //private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        private long timespan = 1626252736;
 
         private string host = "http://api.iot.17fanju.com";
 
@@ -51,9 +51,10 @@ namespace WebApiIotTerm.Controllers
             string a = timespan.ToString();
             IsRequestTimeout(1626142536385);
 
-            //model.Add("设备信息", DeviceList());
+       
+            model.Add("设备信息", DeviceList());
             //model.Add("设备库存", DeviceStock());
-            model.Add("订单下单", OrderReserve());
+           // model.Add("订单下单", OrderReserve());
             /// 
             //model.Add("订单出货", OrderShip("6100137202001221450573331"));
             //model.Add("订单查看", OrderQuery());
@@ -66,7 +67,7 @@ namespace WebApiIotTerm.Controllers
 
         public string DeviceList()
         {
-            string data = "{\"page\":0,\"limit\":10,\"device_cum_code\":\"test\"}";
+            string data = "{\"low_order_id\":\"testSO0000520210714019\",\"up_order_id\":\"610651120210714165129662\",\"business_type\":\"ship\",\"detail\":{\"is_trg\":true,\"sku_stocks\":[{\"sku_id\":\"3c3997de7a4745c1b5d11df836831310\",\"sku_cum_code\":\"KS0000520210617001\",\"sum_quantity\":12,\"lock_quantity\":1,\"sell_quantity\":11,\"warn_quantity\":4,\"hold_quantity\":0,\"max_quantity\":12,\"is_off_sell\":false,\"slots\":[{\"cabinet_id\":\"dsx01n01\",\"slot_id\":\"r4c1\",\"sum_quantity\":12,\"lock_quantity\":1,\"sell_quantity\":11,\"warn_quantity\":4,\"hold_quantity\":0,\"max_quantity\":12}]}],\"sku_ships\":[{\"unique_id\":\"6106511202107141651296620\",\"cabinet_id\":\"dsx01n01\",\"slot_id\":\"r4c1\",\"sku_id\":\"3c3997de7a4745c1b5d11df836831310\",\"sku_cum_code\":\"KS0000520210617001\",\"status\":6000,\"tips\":\"取货动作发生异常\"}]}}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
