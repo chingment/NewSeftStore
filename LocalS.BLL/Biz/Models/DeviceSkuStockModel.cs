@@ -8,7 +8,7 @@ namespace LocalS.BLL.Biz
 {
     public class DeviceSkuStockModel
     {
-        public string PSkuId { get; set; }
+        public string SkuId { get; set; }
         public decimal SalePrice { get; set; }
         public bool IsOffSell { get; set; }
         public int SumQuantity { get; set; }

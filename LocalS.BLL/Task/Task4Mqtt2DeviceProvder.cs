@@ -93,12 +93,6 @@ namespace LocalS.BLL.Task
                         case "msg_arrive":
                             msg_arrive(id);
                             break;
-                        case "msg_exec_start":
-                            msg_exec_start(id);
-                            break;
-                        case "msg_exec_end":
-                            msg_exec_end(id);
-                            break;
                         case "device_status":
                             BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.device_status, "心跳包", pms);
                             break;
@@ -129,34 +123,6 @@ namespace LocalS.BLL.Task
                 RedisManager.Db.StringSet("mqtt_msg:" + id, "1", new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
 
                 LogUtil.Info(TAG, "msg_arrive:" + id + ",SaveChanges");
-            }
-        }
-
-        public void msg_exec_start(string id)
-        {
-            LogUtil.Info(TAG, "msg_exec_start:" + id);
-
-            var m_DeviceMqttMessage = CurrentDb.DeviceMqttMessage.Where(m => m.Id == id).FirstOrDefault();
-            if (m_DeviceMqttMessage != null)
-            {
-                m_DeviceMqttMessage.IsExecStart = true;
-                CurrentDb.SaveChanges();
-
-                LogUtil.Info(TAG, "msg_exec_start:" + id + ",SaveChanges");
-            }
-        }
-
-        public void msg_exec_end(string id)
-        {
-            LogUtil.Info(TAG, "msg_exec_end:" + id);
-
-            var m_DeviceMqttMessage = CurrentDb.DeviceMqttMessage.Where(m => m.Id == id).FirstOrDefault();
-            if (m_DeviceMqttMessage != null)
-            {
-                m_DeviceMqttMessage.IsExecEnd = true;
-                CurrentDb.SaveChanges();
-
-                LogUtil.Info(TAG, "msg_exec_end:" + id + ",SaveChanges");
             }
         }
     }
