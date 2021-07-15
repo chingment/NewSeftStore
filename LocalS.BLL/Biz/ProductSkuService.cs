@@ -575,8 +575,6 @@ namespace LocalS.BLL.Biz
             return result;
         }
 
-
-
         public string GetSkuSpecCombineName(string productName, List<SpecDes> specDess)
         {
             string str_Spec = "";

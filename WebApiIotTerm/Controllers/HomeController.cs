@@ -24,8 +24,8 @@ namespace WebApiIotTerm.Controllers
 
         private string merch_id = "87596751";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
-        //private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private long timespan = 1626255947;
+        private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        //private long timespan = 1626255947;
 
         private string host = "http://api.iot.17fanju.com";
 
@@ -53,16 +53,16 @@ namespace WebApiIotTerm.Controllers
 
             //GetSign("87596751", "", "", "");
        
-            model.Add("设备信息", DeviceList());
+            //model.Add("设备信息", DeviceList());
             //model.Add("设备库存", DeviceStock());
-           // model.Add("订单下单", OrderReserve());
+            // model.Add("订单下单", OrderReserve());
             /// 
             //model.Add("订单出货", OrderShip("6100137202001221450573331"));
             //model.Add("订单查看", OrderQuery());
             //model.Add("订单取消", OrderCancle());
             //model.Add("商品添加", ProductAdd());
             //model.Add("商品修改", ProductEdit());
-            //model.Add("订单销售记录", OrderSaleRecords());
+            model.Add("订单销售记录", OrderSaleRecords());
             return View(model);
         }
 
@@ -90,7 +90,7 @@ namespace WebApiIotTerm.Controllers
 
         public string OrderReserve()
         {
-            string data = "{\"device_id\":\"202004220011\",\"low_order_id\":\"6100137202001221450573334\",\"is_im_ship\":true,\"notify_url\":\"http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx\",\"detail\":[{\"sku_id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"sku_cum_code \":\"xxxxx\",\"quantity\":1}]}";
+            string data = "{\"device_id\":\"202004220011\",\"low_order_id\":\"6100137202001221450573335\",\"is_im_ship\":true,\"notify_url\":\"http://api.m.17fanju.com/Api/Order/PayResultNotifyByWx\",\"detail\":[{\"sku_id\":\"0a8cc495b3714c6eb8fff32043801ed5\",\"sku_cum_code \":\"xxxxx\",\"quantity\":1}]}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
@@ -135,7 +135,7 @@ namespace WebApiIotTerm.Controllers
 
         public string OrderSaleRecords()
         {
-            string data = "{\"page\":0,\"limit\":10,\"sale_date\":\"2021-05-12\"}";
+            string data = "{\'page\":0,\"limit\":10,\"sale_date\":\"2021-05-12\"}";
             string sign = GetSign(data);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", string.Format("merch_id={0},timestamp={1},sign={2}", merch_id, timespan, sign));
