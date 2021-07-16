@@ -135,9 +135,9 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.clientuser_edit, string.Format("保存客户账号（{0}）信息成功", d_SysClientUser.UserName), rop);
-
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.clientuser_edit, string.Format("保存客户账号（{0}）信息成功", d_SysClientUser.UserName), rop);
 
             }
 
