@@ -10,7 +10,7 @@ namespace LocalS.Entity
         Running = 1,
         //Stoped = 2,
         Setting = 3,
-        Excepition = 4
+        Exception = 4
     }
 
     [Table("Device")]

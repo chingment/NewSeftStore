@@ -11,23 +11,10 @@ namespace LocalS.BLL.Biz
 
         public CabinetRowColLayoutByZSModel()
         {
-            this.Rows = new List<RowLayout>();
+            this.Rows = new List<List<string>>();
         }
 
-        public List<RowLayout> Rows { get; set; }
+        public List<List<string>> Rows { get; set; }
 
-        public class RowLayout
-        {
-            public int Index { get; set; }
-            public string Id { get; set; }
-            public List<ColLayout> Cols { get; set; }
-        }
-
-        public class ColLayout
-        {
-            public int Index { get; set; } 
-            public string Id { get; set; }
-            public bool CanUse { get; set; }
-        }
     }
 }

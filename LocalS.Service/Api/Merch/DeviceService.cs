@@ -409,17 +409,17 @@ namespace LocalS.Service.Api.Merch
 
                             for (int i = 0; i < rowsLength; i++)
                             {
-                                if (zsCabinetRowColLayout.Rows[i].Cols != null)
+                                if (zsCabinetRowColLayout.Rows[i] != null)
                                 {
                                     SlotRowModel row = new SlotRowModel();
                                     row.No = i;
 
-                                    int cols = zsCabinetRowColLayout.Rows[i].Cols.Count;
+                                    int cols = zsCabinetRowColLayout.Rows[i].Count;
                                     LogUtil.Info("cols.length：" + cols);
                                     for (int j = 0; j < cols; j++)
                                     {
 
-                                        var slotId = zsCabinetRowColLayout.Rows[i].Cols[j].Id;
+                                        var slotId = zsCabinetRowColLayout.Rows[i][j].ToString();
 
                                         var col = new SlotColModel();
                                         col.No = j;
