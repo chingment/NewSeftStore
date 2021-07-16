@@ -309,8 +309,11 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                Task.Factory.StartNew(() =>
+                {
+                    BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
 
+                });
             }
 
             return result;
@@ -403,7 +406,11 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                Task.Factory.StartNew(() =>
+                {
+                    BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+
+                });
             }
 
             return result;
@@ -507,7 +514,10 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                Task.Factory.StartNew(() =>
+                {
+                    BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                });
             }
 
             return result;
@@ -576,7 +586,12 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                Task.Factory.StartNew(() =>
+                {
+                    BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                });
+
+
             }
 
             return result;
@@ -625,7 +640,12 @@ namespace LocalS.Service.Api.Merch
 
             if (result.Result == ResultType.Success)
             {
-                BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                Task.Factory.StartNew(() =>
+                {
+                    BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());
+                });
+
+
             }
 
             return result;
