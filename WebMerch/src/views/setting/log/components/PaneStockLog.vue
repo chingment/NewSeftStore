@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.SkuName }}</span>
+          <span>{{ scope.row.skuName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="销售渠道" align="left" min-width="15%">

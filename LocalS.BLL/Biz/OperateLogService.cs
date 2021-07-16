@@ -95,6 +95,7 @@ namespace LocalS.BLL.Biz
                         {
                             var r_Sku = CacheServiceFactory.Product.GetSkuInfo(m_ChangeRecord.MerchId, m_ChangeRecord.SkuId);
                             string storeName = BizFactory.Merch.GetStoreName(m_ChangeRecord.MerchId, m_ChangeRecord.StoreId);
+                            string shopName = BizFactory.Merch.GetStoreName(m_ChangeRecord.MerchId, m_ChangeRecord.ShopId);
                             var d_SellChannelStockLog = new SellChannelStockLog();
                             d_SellChannelStockLog.Id = IdWorker.Build(IdType.NewGuid);
                             d_SellChannelStockLog.MerchId = m_ChangeRecord.MerchId;
@@ -102,6 +103,7 @@ namespace LocalS.BLL.Biz
                             d_SellChannelStockLog.StoreId = m_ChangeRecord.StoreId;
                             d_SellChannelStockLog.StoreName = storeName;
                             d_SellChannelStockLog.ShopId = m_ChangeRecord.ShopId;
+                            d_SellChannelStockLog.ShopName = shopName;
                             d_SellChannelStockLog.DeviceId = m_ChangeRecord.DeviceId;
                             d_SellChannelStockLog.ShopMode = m_ChangeRecord.ShopMode;
                             d_SellChannelStockLog.CabinetId = m_ChangeRecord.CabinetId;

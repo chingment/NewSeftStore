@@ -58,6 +58,8 @@
     <Compile Include="CouponRevPosSt.cs" />
     <Compile Include="CouponUseAreaObj.cs" />
     <Compile Include="Enumeration.cs" />
+    <Compile Include="ErpReplenishPlan.cs" />
+    <Compile Include="ErpReplenishPlanDetail.cs" />
     <Compile Include="EventCode.cs" />
     <Compile Include="Ins\InsCarCompanyRule.cs" />
     <Compile Include="Ins\InsCarModelInfo.cs" />
