@@ -204,6 +204,7 @@
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\CommonService.cs" />
     <Compile Include="Api\Merch\CouponService.cs" />
+    <Compile Include="Api\Merch\ErpReplenishPlanService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
     <Compile Include="Api\Merch\DeviceService.cs" />
     <Compile Include="Api\Merch\MemberRightService.cs" />
@@ -274,6 +275,8 @@
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
+    <Compile Include="Api\Merch\RModels\RopErpReplenishPlanNew.cs" />
+    <Compile Include="Api\Merch\RModels\RupErpReplenishPlanGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetDayReports.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetTags.cs" />

@@ -102,32 +102,42 @@ namespace LocalS.Service.Api.Merch
 
             var d_Stocks = query.OrderBy(m => m.DeviceId).ToList();
 
-            foreach (var d_Stock in d_Stocks)
+            var dt_Stocks = (from m in d_Stocks select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.IsOffSell }).Distinct();
+
+            foreach (var dt_Stock in dt_Stocks)
             {
-                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(dt_Stock.MerchId, dt_Stock.SkuId);
 
-                var l_Store = d_Stores.Where(m => m.Id == d_Stock.StoreId).FirstOrDefault();
-                var l_Shop = d_Shops.Where(m => m.Id == d_Stock.ShopId).FirstOrDefault();
-                var l_Device = d_MerchDevices.Where(m => m.DeviceId == d_Stock.DeviceId).FirstOrDefault();
+                var l_Store = d_Stores.Where(m => m.Id == dt_Stock.StoreId).FirstOrDefault();
+                var l_Shop = d_Shops.Where(m => m.Id == dt_Stock.ShopId).FirstOrDefault();
+                var l_Device = d_MerchDevices.Where(m => m.DeviceId == dt_Stock.DeviceId).FirstOrDefault();
 
+                var l_Stock = d_Stocks.Where(m => m.SkuId == dt_Stock.SkuId);
+
+                int sellQuantity = l_Stock.Sum(m => m.SellQuantity);
+                int waitPayLockQuantity = l_Stock.Sum(m => m.WaitPayLockQuantity);
+                int waitPickupLockQuantity = l_Stock.Sum(m => m.WaitPickupLockQuantity);
+                int sumQuantity = l_Stock.Sum(m => m.SumQuantity);
+                int maxQuantity = l_Stock.Sum(m => m.MaxQuantity);
+                string slotIds = String.Join(",", l_Stock.Select(m => m.SlotId).ToArray());
                 olist.Add(new
                 {
                     StoreName = l_Store.Name,
                     ShopName = l_Shop.Name,
                     DeviceName = MerchServiceFactory.Device.GetCode(l_Device.DeviceId, l_Device.CumCode),
-                    SlotId = d_Stock.SlotId,
                     SkuId = r_Sku.Id,
                     SkuName = r_Sku.Name,
                     SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
                     SkuCumCode = r_Sku.CumCode,
-                    SellQuantity = d_Stock.SellQuantity,
-                    WaitPayLockQuantity = d_Stock.WaitPayLockQuantity,
-                    WaitPickupLockQuantity = d_Stock.WaitPickupLockQuantity,
-                    LockQuantity = d_Stock.WaitPickupLockQuantity + d_Stock.WaitPayLockQuantity,
-                    SumQuantity = d_Stock.SumQuantity,
-                    MaxQuantity = d_Stock.MaxQuantity,
-                    RshQuantity = d_Stock.MaxQuantity - d_Stock.SumQuantity,
-                    IsOffSell = d_Stock.IsOffSell
+                    SellQuantity = sellQuantity,
+                    WaitPayLockQuantity = waitPayLockQuantity,
+                    WaitPickupLockQuantity = waitPickupLockQuantity,
+                    LockQuantity = waitPayLockQuantity + waitPickupLockQuantity,
+                    SumQuantity = sumQuantity,
+                    MaxQuantity = maxQuantity,
+                    RshQuantity = maxQuantity - sumQuantity,
+                    IsOffSell = dt_Stock.IsOffSell,
+                    SlotIds = slotIds
                 });
 
             }

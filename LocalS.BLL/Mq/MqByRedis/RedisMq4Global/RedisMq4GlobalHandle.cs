@@ -67,6 +67,11 @@ namespace LocalS.BLL.Mq.MqByRedis
                             var m_OperateLog = this.Content.ToJsonObject<OperateLogModel>();
                             BizFactory.OperateLog.Handle(m_OperateLog);
                             break;
+                        case MqMessageType.ErpReplenishPlanBuild:
+                            LogUtil.Info(TAG, "进入->ErpReplenishPlanBuild");
+                            var m_ReplenishPlanBuild = this.Content.ToJsonObject<ReplenishPlanBuildModel>();
+                            BizFactory.Erp.HandleReplenishPlanBuild(m_ReplenishPlanBuild);
+                            break;
                         default:
                             LogUtil.Info(TAG, string.Format("消息队列处理[{0}]，不能处理", this.Ticket));
                             break;

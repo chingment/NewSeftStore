@@ -45,7 +45,7 @@
           <span>{{ scope.row.sumCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="机器自提" align="left" prop="sumReceiveMode3">
+      <el-table-column label="设备自提" align="left" prop="sumReceiveMode3">
         <template slot-scope="scope">
           <span>{{ scope.row.sumReceiveMode3 }}</span>
         </template>
@@ -197,7 +197,7 @@ export default {
         if (res.result === 1) {
           this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '总订单数', '机器自提', '店铺自取', '配送商品', '已完成', '未完成', '异常', '商品数量', '支付金额', '退款金额', '合计金额']
+        const tHeader = ['店铺', '总订单数', '设备自提', '店铺自取', '配送商品', '已完成', '未完成', '异常', '商品数量', '支付金额', '退款金额', '合计金额']
         const filterVal = ['storeName', 'sumCount', 'sumReceiveMode3', 'sumReceiveMode2', 'sumReceiveMode1', 'sumNoComplete', 'sumNoComplete', 'sumEx', 'sumQuantity', 'sumChargeAmount', 'sumRefundAmount', 'sumAmount']
         const list = this.listData
         const data = this.formatJson(filterVal, list)

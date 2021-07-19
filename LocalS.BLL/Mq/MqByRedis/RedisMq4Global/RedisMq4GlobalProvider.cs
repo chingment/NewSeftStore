@@ -80,5 +80,18 @@ namespace LocalS.BLL.Mq.MqByRedis
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
+
+        public CustomJsonResult PushReplenishPlanBuild(string operater, string replenishPlanId)
+        {
+            var content = new ReplenishPlanBuildModel();
+            content.ReplenishPlanId = replenishPlanId;
+            var obj = new RedisMq4GlobalHandle();
+            obj.Type = MqMessageType.ErpReplenishPlanBuild;
+            obj.Ticket = IdWorker.Build(IdType.NewGuid);
+            obj.Content = content.ToJsonString();
+            this.Push(obj);
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        }
     }
 }

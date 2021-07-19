@@ -153,5 +153,13 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static ErpReplenishPlanService ErpReplenishPlan
+        {
+            get
+            {
+                return new ErpReplenishPlanService();
+            }
+        }
+
     }
 }

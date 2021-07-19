@@ -63,5 +63,5 @@ export default {
   edit: edit,
   initEdit: initEdit,
   getReceiveRecords: getReceiveRecords,
-  send:send
+  send: send
 }

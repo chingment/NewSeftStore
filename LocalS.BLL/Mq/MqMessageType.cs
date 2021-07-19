@@ -12,6 +12,7 @@ namespace LocalS.BLL.Mq
         PayTransResultNotify = 2,
         EventNotify = 3,
         PayRefundResultNotify = 4,
-        OperateLog = 5
+        OperateLog = 5,
+        ErpReplenishPlanBuild = 6
     }
 }

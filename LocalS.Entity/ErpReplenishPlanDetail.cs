@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
+    [Table("ErpReplenishPlanDetail")]
     public class ErpReplenishPlanDetail
     {
         [Key]
         public string Id { get; set; }
-        public string ErpReplenishPlanId { get; set; }
+        public string PlanId { get; set; }
+        public string PlanCumCode { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string StoreName { get; set; }
@@ -22,7 +24,7 @@ namespace LocalS.Entity
         public string DeviceCumCode { get; set; }
         public int PlanRshQuantity { get; set; }
         public int RealRshQuantity { get; set; }
-        public DateTime RealRshTime { get; set; }
+        public DateTime? RealRshTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

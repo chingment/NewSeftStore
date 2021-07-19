@@ -91,6 +91,10 @@ namespace LocalS.DAL
         
         public IDbSet<SenvivHealthTagExplain> SenvivHealthTagExplain { get; set; }
 
+        public IDbSet<ErpReplenishPlan> ErpReplenishPlan { get; set; }
+        public IDbSet<ErpReplenishPlanDetail> ErpReplenishPlanDetail { get; set; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -8,9 +8,10 @@ namespace LocalS.Entity
     {
 
         Unknow = 0,
-        Building = 1,
-        BuildSuccess = 2,
-        BuildFailure = 3
+        Submit = 1,
+        Building = 2,
+        BuildSuccess = 3,
+        BuildFailure = 4
     }
 
     [Table("ErpReplenishPlan")]
@@ -18,13 +19,17 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+        public string CumCode { get; set; }
         public string MerchId { get; set; }
-        public string DocMakerUserId { get; set; }
-        public string DocMakerFullName { get; set; }
+        public string MakerName { get; set; }
+        public string MakerId { get; set; }
+        public string MakeDate { get; set; }
         public DateTime MakeTime { get; set; }
-        public DateTime BuildTime { get; set; }
+        public DateTime? BuildTime { get; set; }
         public E_ErpReplenishPlan_Status Status { get; set; }
+
         public string FailReason { get; set; }
+        public string Remark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

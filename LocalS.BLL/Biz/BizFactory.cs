@@ -94,5 +94,13 @@ namespace LocalS.BLL.Biz
                 return new CouponService();
             }
         }
+
+        public static ErpService Erp
+        {
+            get
+            {
+                return new ErpService();
+            }
+        }
     }
 }
