@@ -24,7 +24,9 @@ namespace LocalS.Entity
         public string DeviceCumCode { get; set; }
         public int PlanRshQuantity { get; set; }
         public int RealRshQuantity { get; set; }
-        public DateTime? RealRshTime { get; set; }
+        public DateTime? RshTime { get; set; }
+        public string RsherId { get; set; }
+        public string RsherName { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

@@ -138,7 +138,7 @@
 
 import { MessageBox } from 'element-ui'
 import { getList, send } from '@/api/coupon'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
 import PaneReceiveRecord from './components/PaneReceiveRecord.vue'
 import ClientSelect from '@/views/client/components/select.vue'
 export default {
