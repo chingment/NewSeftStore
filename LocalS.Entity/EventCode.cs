@@ -52,8 +52,8 @@ namespace LocalS.Entity
         public const string clientuser_edit = "clientuser_edit";
         [EventCodeRemark("A", "发布广告")]
         public const string ad_release = "ad_release";
-        [EventCodeRemark("A", "删除广告")]
-        public const string ad_delete_content = "ad_delete_content";
+        [EventCodeRemark("A", "设置广告状态")]
+        public const string ad_set_status = "ad_set_status";
         [EventCodeRemark("A", "保存设备信息")]
         public const string device_edit = "device_edit";
         [EventCodeRemark("A", "导出Excel")]

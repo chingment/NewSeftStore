@@ -396,16 +396,13 @@ namespace LocalS.Service.Api.Merch
 
             CurrentDb.SaveChanges();
 
-
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ad_delete_content, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
-
-
-
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "设置成功");
 
 
             if (result.Result == ResultType.Success)
             {
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.ad_set_status, string.Format("设置广告状态（{0}）成功", d_AdContent.Title), rop);
+
                 Task.Factory.StartNew(() =>
                 {
                     BizFactory.Device.SendAds(operater, AppId.MERCH, merchId, deviceIds.ToArray());

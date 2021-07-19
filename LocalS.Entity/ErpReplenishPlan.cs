@@ -21,7 +21,7 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string DocMakerUserId { get; set; }
         public string DocMakerFullName { get; set; }
-        public DateTime ApplyTime { get; set; }
+        public DateTime MakeTime { get; set; }
         public DateTime BuildTime { get; set; }
         public E_ErpReplenishPlan_Status Status { get; set; }
         public string FailReason { get; set; }
