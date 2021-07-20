@@ -22,8 +22,11 @@ namespace LocalS.Entity
         public string SkuSpecDes { get; set; }
         public string DeviceId { get; set; }
         public string DeviceCumCode { get; set; }
-        public int PlanRshQuantity { get; set; }
-        public int RealRshQuantity { get; set; }
+        public int PlanQuantity { get; set; }
+        public int RshQuantity { get; set; }
+        public string MakerId { get; set; }
+        public string MakerName { get; set; }
+        public DateTime? BuildTime { get; set; }
         public DateTime? RshTime { get; set; }
         public string RsherId { get; set; }
         public string RsherName { get; set; }

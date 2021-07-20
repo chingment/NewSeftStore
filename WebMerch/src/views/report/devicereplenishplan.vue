@@ -1,24 +1,62 @@
 <template>
   <div id="report_list">
-
     <div class="filter-container">
-      <el-form ref="form" label-width="120px">
-        <el-form-item label="单据号">
-          <el-input v-model="listQuery.cumCode" clearable placeholder="单据号" va style="max-width: 300px;" class="filter-item" />
-        </el-form-item>
-        <el-form-item>
+
+      <el-row :gutter="12">
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-select v-model="listQuery.deviceId" placeholder="选择设备" style="width: 100%">
+            <el-option
+              v-for="item in optionsByDevice"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="dialogNewPlanOpen">
-            新建补货计划
+          <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="handleDownload">
+            导出
           </el-button>
-        </el-form-item>
-      </el-form>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
+        </el-col>
+      </el-row>
+      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
     </div>
 
-    <el-table
+    <!-- <table class="list-tb" cellspacing="0" cellpadding="0">
+      <tbody>
+        <tr><td colspan="4">单号：test01 </td><td colspan="4">制单时间：2021/7/20 18:43:32 </td>
+          <td colspan="4">制单人：东莞东华医院 </td></tr>
+        <tr><td>店铺</td><td>商品编码</td><td>商品名称</td><td>商品规格</td><td>计划补货数</td><td>门店</td><td>总量</td><td>设备</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+        <tr><td rowspan="18">泰安医药</td><td rowspan="1">922031702</td><td rowspan="1">犬(动物)抓伤皮肤抗菌喷剂 液体,30ml</td><td rowspan="1">液体,30ml</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+        <tr><td rowspan="1">22039679</td><td rowspan="1">安捷手消毒凝胶 500g</td><td rowspan="1">	 500g</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+        <tr><td rowspan="2">22035610</td><td rowspan="2">创口贴（组合装） 无</td><td rowspan="2">无</td><td rowspan="2">0</td><td rowspan="2">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-02</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+        <tr><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+        <tr>
+
+          <td rowspan="1">922031038</td><td rowspan="1">赛乐洁皮肤黏膜消毒剂 60ml/瓶</td><td rowspan="1">60ml/瓶</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td>
+        </tr>
+
+      </tbody></table> -->
+
+    <div v-html="report.html" />
+
+    <!-- tr(v-for="item in ccxx")
+    td(:rowspan="item.cclxspan" :style="{ display: item.cclxdis }") {{ item.cclx }}
+    td(:rowspan="item.lsspan" :style="{ display: item.lsdis }") {{ item.ls }}
+    td(:rowspan="item.ysspan" :style="{ display: item.ysdis }") {{ item.ys }}
+    td {{ item.lhjgd }}
+    td {{ item.lhjkd }}
+    td {{ item.lhjpf }}
+    td {{ item.ps }}
+    td {{ item.bz }}
+    td {{ item.blgd }}
+    td {{ item.blkd }}
+    td {{ item.blpf }} -->
+
+    <!-- <el-table
       :key="listKey"
       v-loading="loading"
       :data="listData"
@@ -26,25 +64,11 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :span-method="spanMethod"
     >
-      <el-table-column label="单据号" align="left" min-width="10%">
+      <el-table-column label="单据号" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
-          <span>{{ scope.row.cumCode }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="制单人" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.makerName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="制单日期" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.makeDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status.text }}</span>
+          <span>{{ scope.row.planCumCode }}</span>
         </template>
       </el-table-column>
       <el-table-column label="生成时间" align="left" min-width="10%">
@@ -52,90 +76,87 @@
           <span>{{ scope.row.buildTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="left" min-width="10%">
+      <el-table-column label="制单人" align="left" min-width="10%">
         <template slot-scope="scope">
-          <span>{{ scope.row.remark }}</span>
+          <span>{{ scope.row.makerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-
-          <el-button type="text" size="mini">
-            查看
-          </el-button>
-
+      <el-table-column label="店铺" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-    </el-table>
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
-
-    <el-dialog title="新建补货计划" :visible.sync="dialogNewPlanIsVisible" :width="isDesktop==true?'800px':'90%'">
-      <div>
-
-        <el-form
-          ref="formByNewPlan"
-          v-loading="dialogNewPlanLoading"
-          :model="formByNewPlan"
-          :rules="rulesByNewPlan"
-          label-width="80px"
-        >
-          <el-form-item label="单据号" prop="cumCode">
-            <el-input v-model="formByNewPlan.cumCode" clearable style="max-width:300px" />
-          </el-form-item>
-          <el-form-item label="制单人">
-            <span>{{ formByNewPlan.makerName }}</span>
-          </el-form-item>
-          <el-form-item label="制单日期">
-            <span>{{ formByNewPlan.makeDate }}</span>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="formByNewPlan.remark" clearable style="max-width:500px" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_handleNewPlan">
-          新建
-        </el-button>
-        <el-button @click="dialogNewPlanIsVisible = false">
-          关闭
-        </el-button>
-      </div>
-    </el-dialog>
-
+      <el-table-column label="商品编码" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuCumCode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品名称" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品规格" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuSpecDes }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="补货数" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.planQuantity }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="门店" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shopName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="设备" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.deviceCumCode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="补货人" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.rsherName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="补货时间" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.rshTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="补货数量" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.rshQuantity }}</span>
+        </template>
+      </el-table-column>
+    </el-table> -->
   </div>
 </template>
 
 <script>
-import { MessageBox } from 'element-ui'
-import Pagination from '@/components/Pagination'
-import { getList, initNewPlan, newPlan } from '@/api/erpreplenishplan'
+
+import { deviceReplenishPlanInit, deviceReplenishPlanGet, checkRightExport } from '@/api/report'
+import { parseTime } from '@/utils'
 export default {
-  name: 'Devicereplenishplan',
-  components: { Pagination },
+  name: 'ReportStoreStockRealData',
   data() {
     return {
       loading: false,
+      downloadLoading: false,
+      filename: '设备实时库存报表',
+      autoWidth: true,
+      bookType: 'xlsx',
       listKey: 0,
       listData: null,
       listTotal: 0,
       listQuery: {
-        page: 1,
-        limit: 10,
-        cumCode: ''
+        deviceId: ''
       },
-      rulesByNewPlan: {
-        cumCode: [{ required: true, min: 1, max: 30, message: '必填,且不能超过30个字符', trigger: 'change' }]
-      },
-      formByNewPlan: {
-        cumCode: '',
-        makerId: '',
-        makerName: '',
-        makeDate: '',
-        remark: ''
-      },
-      dialogNewPlanIsVisible: false,
-      dialogNewPlanLoading: false,
+      report: '',
+      optionsByDevice: [],
+      ccxx: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -143,66 +164,135 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-
-    this.getListData()
+    this._initData()
   },
   methods: {
-    getListData() {
-      this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+    _initData() {
+      deviceReplenishPlanInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.listData = d.items
-          this.listTotal = d.total
+          this.optionsByDevice = d.optionsByDevice
+        }
+        this.loading = false
+      })
+    },
+    _getData() {
+      this.loading = true
+      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+      deviceReplenishPlanGet(this.listQuery).then(res => {
+        if (res.result === 1) {
+          this.report = res.data
+          // this.combineCell(this.listData)
+          // this.ccxx = list
+          // if (this.listData === null || this.listData.length === 0) {
+          // this.$message('查询不到对应条件的数据')
+          // }
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
         }
         this.loading = false
       })
     },
     handleFilter() {
-      this.getListData()
+      this._getData()
     },
-    dialogNewPlanOpen() {
-      this.formByNewPlan.cumCode = ''
-      this.formByNewPlan.remark = ''
-      this.dialogNewPlanIsVisible = true
-      this.dialogNewPlanLoading = true
-      initNewPlan({}).then(res => {
-        this.dialogNewPlanLoading = false
-        if (res.result === 1) {
-          var d = res.data
-          this.formByNewPlan.makerId = d.makerId
-          this.formByNewPlan.makerName = d.makerName
-          this.formByNewPlan.makeDate = d.makeDate
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
         }
-      })
+      }))
     },
-    _handleNewPlan() {
-      this.$refs['formByNewPlan'].validate((valid) => {
-        if (valid) {
-          MessageBox.confirm('确定要新建计划？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            newPlan(this.formByNewPlan).then(res => {
-              if (res.result === 1) {
-                this.$message({
-                  message: res.message,
-                  type: 'success'
-                })
-                this.dialogNewPlanIsVisible = false
-                this.getListData(this.listQuery)
-              } else {
-                this.$message({
-                  message: res.message,
-                  type: 'error'
-                })
-              }
-            })
+    handleDownload() {
+      if (this.listData === null || this.listData.length === 0) {
+        this.$message('没有可导出的数据')
+        return
+      }
+      var filename = this.filename
+
+      checkRightExport({ fileName: filename }).then(res => {
+        if (res.result === 1) {
+          this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['店铺', '门店', '设备', '相关货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
+        const filterVal = ['storeName', 'shopName', 'deviceName', 'slotIds', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
+        const list = this.ccxx
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
           })
         }
       })
+    },
+    combineCell(list) {
+      for (var field in list[0]) { // 获取数据中的字段，也就是table中的column，只需要取其中一条记录的就可以了
+        // 定义数据list的index
+        var k = 0
+        while (k < list.length) {
+          // 增加字段-用于统计有多少重复值
+          list[k][field + 'span'] = 1
+          // 增加字段-用于控制显示与隐藏
+          list[k][field + 'dis'] = ''
+          for (var i = k + 1; i <= list.length - 1; i++) {
+            // 判断第k条数据的field字段，与下一条是否重复
+            if (list[k][field] === list[i][field] && list[k][field] !== '') {
+              // 如果重复，第k条数据的字段统计+1
+              list[k][field + 'span']++
+              // 设置为显示
+              list[k][field + 'dis'] = ''
+              // 重复的记录，则设置为1，表示不跨行
+              list[i][field + 'span'] = 1
+              // 并且该字段设置为隐藏
+              list[i][field + 'dis'] = 'none'
+            } else {
+              break
+            }
+          }
+          // 跳转到第i条数据的索引
+          k = i
+        }
+      }
+      this.ccxx = list
+      console.log(list)
+    },
+    spanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex <= 2) {
+        if (row[column.property] === '') {
+          return [1, 1]
+        }
+        if (this[column.property] !== row[column.property]) {
+          this[column.property] = row[column.property]
+          let num = 0
+          for (let i = rowIndex; i < this.list.length; i++) {
+            if (this.list[i][column.property] === row[column.property]) {
+              num++
+              if (i === this.list.length - 1) {
+                return [num, 1]
+              }
+            } else {
+              return [num, 1]
+            }
+          }
+        } else {
+          return [0, 0]
+        }
+      }
     }
   }
 }

@@ -22,7 +22,6 @@
       :key="listKey"
       v-loading="loading"
       :data="listData"
-      border
       fit
       highlight-current-row
       style="width: 100%;"
@@ -102,7 +101,6 @@
         </el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 

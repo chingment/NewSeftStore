@@ -40,14 +40,26 @@ namespace System
                 {
                     if (dr[p.Name] != DBNull.Value)//判断属性在不为空
                     {
+
                         object tempValue = dr[p.Name];
+                        Type type = tempValue.GetType();
+                        //if判断就是解决办法
+                        if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))//判断convertsionType是否为nullable泛型类  
+                        {
+                            //如果type为nullable类，声明一个NullableConverter类，该类提供从Nullable类到基础基元类型的转换  
+                            System.ComponentModel.NullableConverter nullableConverter = new System.ComponentModel.NullableConverter(type);
+                            //将type转换为nullable对的基础基元类型  
+                            type = nullableConverter.UnderlyingType;
+                        }
+
+          
                         if (dr[p.Name].GetType() == typeof(DateTime) && dateTimeToString == true)//判断是否为时间
                         {
                             tempValue = dr[p.Name].ToString();
                         }
                         try
                         {
-                            p.SetValue(model, tempValue, null);//设置
+                            p.SetValue(model, Convert.ChangeType(tempValue, type), null);//设置
                         }
                         catch { }
                     }

@@ -44,7 +44,7 @@ namespace LocalS.BLL.Biz
             var d_Shops = CurrentDb.Shop.Where(m => m.MerchId == merchId).ToList();
             var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).ToList();
 
-
+            DateTime buildTime = DateTime.Now;
             try
             {
                 using (TransactionScope ts = new TransactionScope())
@@ -92,8 +92,11 @@ namespace LocalS.BLL.Biz
                             d_ErpReplenishPlanDetail.SkuName = r_Sku.Name;
                             d_ErpReplenishPlanDetail.SkuCumCode = r_Sku.CumCode;
                             d_ErpReplenishPlanDetail.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
-                            d_ErpReplenishPlanDetail.PlanRshQuantity = maxQuantity - sumQuantity;
-                            d_ErpReplenishPlanDetail.RealRshQuantity = 0;
+                            d_ErpReplenishPlanDetail.PlanQuantity = maxQuantity - sumQuantity;
+                            d_ErpReplenishPlanDetail.RshQuantity = 0;
+                            d_ErpReplenishPlanDetail.BuildTime = buildTime;
+                            d_ErpReplenishPlanDetail.MakerId = d_ErpReplenishPlan.MakerId;
+                            d_ErpReplenishPlanDetail.MakerName = d_ErpReplenishPlan.MakerName;
                             d_ErpReplenishPlanDetail.Creator = d_ErpReplenishPlan.Creator;
                             d_ErpReplenishPlanDetail.CreateTime = DateTime.Now;
 
@@ -115,7 +118,7 @@ namespace LocalS.BLL.Biz
 
 
             var dd_ErpReplenishPlan = CurrentDb.ErpReplenishPlan.Where(m => m.Id == replenishPlanId).FirstOrDefault();
-            dd_ErpReplenishPlan.BuildTime = DateTime.Now;
+            dd_ErpReplenishPlan.BuildTime = buildTime;
             if (result.Result == ResultType.Success)
             {
                 dd_ErpReplenishPlan.Status = E_ErpReplenishPlan_Status.BuildSuccess;

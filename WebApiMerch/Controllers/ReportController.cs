@@ -25,6 +25,20 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse DeviceReplenishPlanInit()
+        {
+            var result = MerchServiceFactory.Report.DeviceStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse DeviceReplenishPlanGet([FromBody]RopReportDeviceReplenishPlanGet rop)
+        {
+            var result = MerchServiceFactory.Report.DeviceReplenishPlanGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
 
         [HttpGet]
         public OwnApiHttpResponse DeviceStockDateHisInit()

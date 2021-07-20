@@ -88,6 +88,22 @@ export function checkRightExport(data) {
   })
 }
 
+export function deviceReplenishPlanInit(params) {
+  return request({
+    url: '/report/deviceReplenishPlanInit',
+    method: 'get',
+    params
+  })
+}
+
+export function deviceReplenishPlanGet(data) {
+  return request({
+    url: '/report/deviceReplenishPlanGet',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   deviceStockRealDataInit: deviceStockRealDataInit,
   devicehStockRealDataGet: deviceStockRealDataGet,
