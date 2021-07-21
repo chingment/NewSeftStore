@@ -78,8 +78,8 @@ namespace LocalS.BLL.Biz
 
                             int sumQuantity = l_Stock.Sum(m => m.SumQuantity);
                             int maxQuantity = l_Stock.Sum(m => m.MaxQuantity);
-
-                            if (sumQuantity <= warnQuantity)
+                            //sumQuantity <= warnQuantity
+                            if (true)
                             {
                                 var d_ErpReplenishPlanDetail = new ErpReplenishPlanDetail();
                                 d_ErpReplenishPlanDetail.Id = IdWorker.Build(IdType.NewGuid);

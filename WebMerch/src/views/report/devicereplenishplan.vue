@@ -148,13 +148,19 @@
 
 import { deviceReplenishPlanInit, deviceReplenishPlanGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'ReportStoreStockRealData',
+  components: {
+    FileSaver,
+    XLSX
+  },
   data() {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '设备实时库存报表',
+      filename: '设备补货计划报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
@@ -191,11 +197,6 @@ export default {
       deviceReplenishPlanGet(this.listQuery).then(res => {
         if (res.result === 1) {
           this.report = res.data
-          // this.combineCell(this.listData)
-          // this.ccxx = list
-          // if (this.listData === null || this.listData.length === 0) {
-          // this.$message('查询不到对应条件的数据')
-          // }
         } else {
           this.$message({
             message: res.message,
@@ -231,10 +232,19 @@ export default {
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        excel.export_table_to_excel('abc')
-        this.downloadLoading = false
-      })
+
+          // 从表生成工作簿对象
+          var wb = XLSX.utils.table_to_book(document.getElementById('abc'))
+          // 得到二进制字符串作为输出
+          var wbout = XLSX.write(wb, {
+            bookType: 'xlsx',
+            type: 'binary'
+          })
+          FileSaver.saveAs(new Blob([this.s2ab(wbout)], {
+            type: 'application/octet-stream'
+          }), filename + '.xlsx')
+
+          this.downloadLoading = false
         } else {
           this.$message({
             message: res.message,
@@ -243,58 +253,22 @@ export default {
         }
       })
     },
-    combineCell(list) {
-      for (var field in list[0]) { // 获取数据中的字段，也就是table中的column，只需要取其中一条记录的就可以了
-        // 定义数据list的index
-        var k = 0
-        while (k < list.length) {
-          // 增加字段-用于统计有多少重复值
-          list[k][field + 'span'] = 1
-          // 增加字段-用于控制显示与隐藏
-          list[k][field + 'dis'] = ''
-          for (var i = k + 1; i <= list.length - 1; i++) {
-            // 判断第k条数据的field字段，与下一条是否重复
-            if (list[k][field] === list[i][field] && list[k][field] !== '') {
-              // 如果重复，第k条数据的字段统计+1
-              list[k][field + 'span']++
-              // 设置为显示
-              list[k][field + 'dis'] = ''
-              // 重复的记录，则设置为1，表示不跨行
-              list[i][field + 'span'] = 1
-              // 并且该字段设置为隐藏
-              list[i][field + 'dis'] = 'none'
-            } else {
-              break
-            }
-          }
-          // 跳转到第i条数据的索引
-          k = i
+    s2ab: function(s) {
+      var cuf
+      var i
+      if (typeof ArrayBuffer !== 'undefined') {
+        cuf = new ArrayBuffer(s.length)
+        var view = new Uint8Array(cuf)
+        for (i = 0; i !== s.length; i++) {
+          view[i] = s.charCodeAt(i) & 0xFF
         }
-      }
-      this.ccxx = list
-      console.log(list)
-    },
-    spanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex <= 2) {
-        if (row[column.property] === '') {
-          return [1, 1]
+        return cuf
+      } else {
+        cuf = new Array(s.length)
+        for (i = 0; i !== s.length; ++i) {
+          cuf[i] = s.charCodeAt(i) & 0xFF
         }
-        if (this[column.property] !== row[column.property]) {
-          this[column.property] = row[column.property]
-          let num = 0
-          for (let i = rowIndex; i < this.list.length; i++) {
-            if (this.list[i][column.property] === row[column.property]) {
-              num++
-              if (i === this.list.length - 1) {
-                return [num, 1]
-              }
-            } else {
-              return [num, 1]
-            }
-          }
-        } else {
-          return [0, 0]
-        }
+        return cuf
       }
     }
   }
