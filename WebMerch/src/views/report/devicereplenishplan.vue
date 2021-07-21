@@ -329,10 +329,7 @@ export default {
         table.rows[1].cells[j].onmouseup = function() {
           // 结束宽度调整
 
-          if (tTD === undefined) tTD = this
-
           tTD.mouseDown = false
-
           tTD.style.cursor = 'default'
         }
 
@@ -345,6 +342,7 @@ export default {
 
           if (tTD === undefined) tTD = this
 
+          if (!tTD.mouseDown) return
           // 调整宽度
 
           if (tTD.mouseDown != null && tTD.mouseDown === true) {
