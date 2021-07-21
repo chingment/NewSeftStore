@@ -307,6 +307,85 @@ table.list-tb > tbody > tr > td {
 }
 
 
+table.list-tb2 {
+  /*border-style: none;
+border-color: inherit;
+border-width: 0;
+border-collapse: collapse;
+font-size: 9.2pt;
+background-color: White;
+text-align: left;
+margin-right: 0px;*/
+  table-layout: fixed;
+  width: 100%;
+  border-left: 1px solid #e1e6eb;
+  border-top: 1px solid #e1e6eb;
+  color: #606266;
+}
+
+table.list-tb2 > thead {
+  font-weight: bold;
+  /*padding-left: 3px;*/
+  /*padding-top: 3px;*/
+  padding: 3px;
+}
+
+table.list-tb2 > thead > tr > th {
+  border: 0px;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 42px;
+  height: 42px;
+  padding: 0px;
+  padding-left: 3px;
+  font-weight: 300;
+  border-bottom: 1px solid #e1e6eb;
+  text-align: left;
+}
+
+table.list-tb2 > tbody > tr {
+  height: 20px;
+  padding: 2px;
+}
+
+table.list-tb2  td {
+  border: 0px;
+  padding-left: 3px;
+  cursor: default;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 32px;
+  line-height: 21px;
+  background-color: #fff;
+  border-bottom: 1px solid #e1e6eb;
+  border-right: 1px solid #e1e6eb;
+  word-break: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+table.list-tb2 .row1 > td {
+  font-size: 14px;
+  color: #909399;
+  font-weight: bold;
+  padding: 12px 10px;
+}
+
+
+table.list-tb2 .row2 > td {
+  font-size: 14px;
+  color: #909399;
+  font-weight: bold;
+  padding: 12px 10px;
+}
+
+table.list-tb2 .row3 > td {
+  font-size: 14px;
+}
+
+
 .refundedAmount{
   font-size: 24px;
 }

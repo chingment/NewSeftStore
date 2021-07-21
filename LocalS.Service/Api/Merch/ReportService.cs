@@ -667,7 +667,7 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
             StringBuilder sbTable = new StringBuilder();
-            sbTable.Append("<table id=\"abc\" class=\"el-table__body\" cellspacing='0' cellpadding='0' style=\"width:100%\" >");
+            sbTable.Append("<table id=\"abc\" class='list-tb2' cellspacing='0' cellpadding='0'>");
             sbTable.Append("{content}");
             sbTable.Append("</table>");
 
@@ -712,24 +712,24 @@ namespace LocalS.Service.Api.Merch
 
             for (int r = 0; r < dt1.Count; r++)
             {
-                sbTableContent.Append("<tr class=\"el-table__row\">");
-                sbTableContent.Append("<td colspan=\"4\"><div class=\"cell\"><span>单号：" + dt1[r].PlanCumCode + "</span></div></td>");
-                sbTableContent.Append("<td colspan=\"4\"><div class=\"cell\"><span>制单时间：" + dt1[r].BuildTime.ToUnifiedFormatDateTime() + "</span></div></td>");
-                sbTableContent.Append("<td colspan=\"4\"><div class=\"cell\"><span>制单人：" + dt1[r].MakerName + "</span></div></td>");
+                sbTableContent.Append("<tr class=\"row1\">");
+                sbTableContent.Append("<td colspan=\"4\">单号：" + dt1[r].PlanCumCode + " </td>");
+                sbTableContent.Append("<td colspan=\"4\">制单时间：" + dt1[r].BuildTime.ToUnifiedFormatDateTime() + " </td>");
+                sbTableContent.Append("<td colspan=\"4\">制单人：" + dt1[r].MakerName + " </td>");
                 sbTableContent.Append("</tr>");
-                sbTableContent.Append("<tr class=\"el-table__row\">");
-                sbTableContent.Append("<td><div class=\"cell\"><span>店铺</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>商品编码</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>商品名称</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>商品规格</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>补货数</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>门店</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>总量</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>设备</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>数量</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>补货人</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>补数时间</span></div></td>");
-                sbTableContent.Append("<td><div class=\"cell\"><span>补货量</span></div></td>");
+                sbTableContent.Append("<tr class=\"row2\">");
+                sbTableContent.Append("<td>店铺</td>");
+                sbTableContent.Append("<td>商品编码</td>");
+                sbTableContent.Append("<td>商品名称</td>");
+                sbTableContent.Append("<td>商品规格</td>");
+                sbTableContent.Append("<td>补货数</td>");
+                sbTableContent.Append("<td>门店</td>");
+                sbTableContent.Append("<td>总量</td>");
+                sbTableContent.Append("<td>设备</td>");
+                sbTableContent.Append("<td>数量</td>");
+                sbTableContent.Append("<td>补货人</td>");
+                sbTableContent.Append("<td>补数时间</td>");
+                sbTableContent.Append("<td>补货量</td>");
                 sbTableContent.Append("</tr>");
 
                 string planCumCode = dt1[r].PlanCumCode;
@@ -811,49 +811,49 @@ namespace LocalS.Service.Api.Merch
                                 string device_CumCode = dt5[o].Key.DeviceCumCode;
 
                                 StringBuilder sbTableContent2 = new StringBuilder();
-                                sbTableContent2.Append("<tr class=\"el-table__row\">");
+                                sbTableContent2.Append("<tr class=\"row3\">");
 
                                 if (x == 0 && o == 0)
                                 {
-                                    sbTableContent2.Append("<td rowspan=\"" + storeCount + "\"><div class=\"cell\"><span>" + storeName + "</span></div></td>");
+                                    sbTableContent2.Append("<td rowspan=\"" + storeCount + "\">" + storeName + "</td>");
                                 }
 
                                 if (sku_Count <= 1)
                                 {
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + sku_CumCode + "</span></div></td>");
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + sku_Name + "</span></div></td>");
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + sku_SpecDes + "</span></div></td>");
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + sku_Quantity + "</span></div></td>");
+                                    sbTableContent2.Append("<td >" + sku_CumCode + "</td>");
+                                    sbTableContent2.Append("<td >" + sku_Name + "</td>");
+                                    sbTableContent2.Append("<td >" + sku_SpecDes + "</td>");
+                                    sbTableContent2.Append("<td >" + sku_Quantity + "</td>");
                                 }
                                 else
                                 {
                                     if (y == 0 && o == 0)
                                     {
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\"><div class=\"cell\"><span>" + sku_CumCode + "</span></div></td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\"><div class=\"cell\"><span>" + sku_Name + "</span></div></td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\"><div class=\"cell\"><span>" + sku_SpecDes + "</span></div></td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\"><div class=\"cell\"><span>" + sku_Quantity + "</span></div></td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_CumCode + "</td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_Name + "</td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_SpecDes + "</td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_Quantity + "</td>");
                                     }
 
                                 }
 
                                 if (shop_Count <= 1)
                                 {
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + shop_Name + "</span></div></td>");
-                                    sbTableContent2.Append("<td ><div class=\"cell\"><span>" + shop_Quantity + "</span></div></td>");
+                                    sbTableContent2.Append("<td >" + shop_Name + "</td>");
+                                    sbTableContent2.Append("<td >" + shop_Quantity + "</td>");
                                 }
                                 else
                                 {
                                     if (o == 0)
                                     {
-                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\"><div class=\"cell\"><span>" + shop_Name + "</span></div></td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\"><div class=\"cell\"><span>" + shop_Quantity + "</span></div></td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\">" + shop_Name + "</td>");
+                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\">" + shop_Quantity + "</td>");
                                     }
                                 }
 
 
-                                sbTableContent2.Append("<td><div class=\"cell\"><span>" + dt5[o].Key.DeviceCumCode + "</span></div></td>");
-                                sbTableContent2.Append("<td><div class=\"cell\"><span>" + dt5[o].Key.PlanQuantity + "</span></div></td>");
+                                sbTableContent2.Append("<td>" + dt5[o].Key.DeviceCumCode + "</td>");
+                                sbTableContent2.Append("<td>" + dt5[o].Key.PlanQuantity + "</td>");
 
                                 var dt6 = (from m in dtData
                                            where m.PlanCumCode == planCumCode
@@ -868,12 +868,11 @@ namespace LocalS.Service.Api.Merch
                                 string rshQuantity = "";
                                 if (dt6 != null)
                                 {
-
+                              
                                     rshTime = dt6.RshTime.ToUnifiedFormatDateTime();
-
                                     if (dt6.RshTime == null)
                                     {
-                                        rsherName = "";
+                                        rsherName="";
                                         rshQuantity = "";
                                     }
                                     else
@@ -883,9 +882,9 @@ namespace LocalS.Service.Api.Merch
                                     }
                                 }
 
-                                sbTableContent2.Append("<td><div class=\"cell\"><span>" + rsherName + "</span></div></td>");
-                                sbTableContent2.Append("<td><div class=\"cell\"><span>" + rshTime + "</span></div></td>");
-                                sbTableContent2.Append("<td><div class=\"cell\"><span>" + rshQuantity + "</span></div></td>");
+                                sbTableContent2.Append("<td>" + rsherName + "</td>");
+                                sbTableContent2.Append("<td>" + rshTime + "</td>");
+                                sbTableContent2.Append("<td>" + rshQuantity + "</td>");
 
 
 

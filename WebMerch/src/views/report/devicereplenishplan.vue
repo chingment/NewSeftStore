@@ -50,7 +50,7 @@
 
     </table> -->
 
-    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover" v-html="report.html" />
+    <div v-html="report.html" />
 
     <!-- tr(v-for="item in ccxx")
     td(:rowspan="item.cclxspan" :style="{ display: item.cclxdis }") {{ item.cclx }}
