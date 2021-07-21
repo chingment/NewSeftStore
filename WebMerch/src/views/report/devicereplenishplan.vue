@@ -4,14 +4,23 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.deviceId" placeholder="选择设备" style="width: 100%">
+          <el-select v-model="listQuery.planId" placeholder="计划单号" clearable style="width: 100%">
             <el-option
-              v-for="item in optionsByDevice"
+              v-for="item in optionsByPlan"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
           </el-select>
+        </el-col>
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-input v-model="listQuery.shopName" clearable placeholder="门店" />
+        </el-col>
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-input v-model="listQuery.skuCumCode" clearable placeholder="商品编码" />
+        </el-col>
+        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+          <el-input v-model="listQuery.makerName" clearable placeholder="制单人" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -23,25 +32,25 @@
         </el-col>
       </el-row>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
+
     </div>
 
-    <!-- <table class="list-tb" cellspacing="0" cellpadding="0">
-      <tbody>
-        <tr><td colspan="4">单号：test01 </td><td colspan="4">制单时间：2021/7/20 18:43:32 </td>
-          <td colspan="4">制单人：东莞东华医院 </td></tr>
-        <tr><td>店铺</td><td>商品编码</td><td>商品名称</td><td>商品规格</td><td>计划补货数</td><td>门店</td><td>总量</td><td>设备</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
-        <tr><td rowspan="18">泰安医药</td><td rowspan="1">922031702</td><td rowspan="1">犬(动物)抓伤皮肤抗菌喷剂 液体,30ml</td><td rowspan="1">液体,30ml</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
-        <tr><td rowspan="1">22039679</td><td rowspan="1">安捷手消毒凝胶 500g</td><td rowspan="1">	 500g</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
-        <tr><td rowspan="2">22035610</td><td rowspan="2">创口贴（组合装） 无</td><td rowspan="2">无</td><td rowspan="2">0</td><td rowspan="2">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-02</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
-        <tr><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
-        <tr>
+    <!-- <table id="abc" class="list-tb" cellspacing="0" cellpadding="0">
+      <tr><td colspan="4">单号：test01 </td><td colspan="4">制单时间：2021/7/20 18:43:32 </td>
+        <td colspan="4">制单人：东莞东华医院 </td></tr>
+      <tr><td>店铺</td><td>商品编码</td><td>商品名称</td><td>商品规格</td><td>计划补货数</td><td>门店</td><td>总量</td><td>设备</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+      <tr><td rowspan="18">泰安医药</td><td rowspan="1">922031702</td><td rowspan="1">犬(动物)抓伤皮肤抗菌喷剂 液体,30ml</td><td rowspan="1">液体,30ml</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+      <tr><td rowspan="1">22039679</td><td rowspan="1">安捷手消毒凝胶 500g</td><td rowspan="1">	 500g</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+      <tr><td rowspan="2">22035610</td><td rowspan="2">创口贴（组合装） 无</td><td rowspan="2">无</td><td rowspan="2">0</td><td rowspan="2">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-02</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+      <tr><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td></tr>
+      <tr>
 
-          <td rowspan="1">922031038</td><td rowspan="1">赛乐洁皮肤黏膜消毒剂 60ml/瓶</td><td rowspan="1">60ml/瓶</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td>
-        </tr>
+        <td rowspan="1">922031038</td><td rowspan="1">赛乐洁皮肤黏膜消毒剂 60ml/瓶</td><td rowspan="1">60ml/瓶</td><td rowspan="1">0</td><td rowspan="1">东华医院总院一楼急诊室外</td><td>总量</td><td>D-DH-JZ-01-01</td><td>数量</td><td>补货人</td><td>补数时间</td><td>补货量</td>
+      </tr>
 
-      </tbody></table> -->
+    </table> -->
 
-    <div v-html="report.html" />
+    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover" v-html="report.html" />
 
     <!-- tr(v-for="item in ccxx")
     td(:rowspan="item.cclxspan" :style="{ display: item.cclxdis }") {{ item.cclx }}
@@ -152,18 +161,18 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
-        deviceId: ''
+        planId: '',
+        shopName: '',
+        makerName: '',
+        skuCumCode: ''
       },
       report: '',
-      optionsByDevice: [],
+      optionsByPlan: [],
       ccxx: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
-    }
     this._initData()
   },
   methods: {
@@ -171,7 +180,7 @@ export default {
       deviceReplenishPlanInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsByDevice = d.optionsByDevice
+          this.optionsByPlan = d.optionsByPlan
         }
         this.loading = false
       })
@@ -197,6 +206,10 @@ export default {
       })
     },
     handleFilter() {
+      if (this.listQuery.planId === null || this.listQuery.planId.length === 0) {
+        this.$message('请选择计划单号')
+        return
+      }
       this._getData()
     },
     formatJson(filterVal, jsonData) {
@@ -209,27 +222,17 @@ export default {
       }))
     },
     handleDownload() {
-      if (this.listData === null || this.listData.length === 0) {
-        this.$message('没有可导出的数据')
-        return
-      }
+      // if (this.listData === null || this.listData.length === 0) {
+      //   this.$message('没有可导出的数据')
+      //   return
+      // }
       var filename = this.filename
 
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '门店', '设备', '相关货道', '商品名称', '商品编码', '商品规格', '可售数量', '锁定数量', '实际数量', '最大数量', '需补数量']
-        const filterVal = ['storeName', 'shopName', 'deviceName', 'slotIds', 'skuName', 'skuCumCode', 'skuSpecDes', 'sellQuantity', 'lockQuantity', 'sumQuantity', 'maxQuantity', 'rshQuantity']
-        const list = this.ccxx
-        const data = this.formatJson(filterVal, list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: filename,
-          autoWidth: this.autoWidth,
-          bookType: this.bookType
-        })
+        excel.export_table_to_excel('abc')
         this.downloadLoading = false
       })
         } else {

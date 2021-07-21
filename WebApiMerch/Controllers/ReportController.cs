@@ -28,7 +28,7 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse DeviceReplenishPlanInit()
         {
-            var result = MerchServiceFactory.Report.DeviceStockRealDataInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.DeviceReplenishPlanInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
