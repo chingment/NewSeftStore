@@ -694,10 +694,9 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            if (!string.IsNullOrEmpty(rop.PlanId))
-            {
-                sql.Append(" and PlanId = '" + rop.PlanId + "' ");
-            }
+
+            sql.Append(" and PlanId = '" + rop.PlanId.NullToEmpty() + "' ");
+
 
             sql.Append(" order by PlanCumCode desc ");
 
@@ -868,11 +867,11 @@ namespace LocalS.Service.Api.Merch
                                 string rshQuantity = "";
                                 if (dt6 != null)
                                 {
-                              
+
                                     rshTime = dt6.RshTime.ToUnifiedFormatDateTime();
                                     if (dt6.RshTime == null)
                                     {
-                                        rsherName="";
+                                        rsherName = "";
                                         rshQuantity = "";
                                     }
                                     else
@@ -922,6 +921,29 @@ namespace LocalS.Service.Api.Merch
 
             //    sbTableContent.Append("</tr>");
             //}
+
+            if (sbTableContent.Length == 0)
+            {
+                sbTableContent.Append("<tr class=\"row1\">");
+                sbTableContent.Append("<td colspan=\"4\">单号： </td>");
+                sbTableContent.Append("<td colspan=\"4\">制单时间： </td>");
+                sbTableContent.Append("<td colspan=\"4\">制单人： </td>");
+                sbTableContent.Append("</tr>");
+                sbTableContent.Append("<tr class=\"row2\">");
+                sbTableContent.Append("<td>店铺</td>");
+                sbTableContent.Append("<td>商品编码</td>");
+                sbTableContent.Append("<td>商品名称</td>");
+                sbTableContent.Append("<td>商品规格</td>");
+                sbTableContent.Append("<td>补货数</td>");
+                sbTableContent.Append("<td>门店</td>");
+                sbTableContent.Append("<td>总量</td>");
+                sbTableContent.Append("<td>设备</td>");
+                sbTableContent.Append("<td>数量</td>");
+                sbTableContent.Append("<td>补货人</td>");
+                sbTableContent.Append("<td>补数时间</td>");
+                sbTableContent.Append("<td>补货量</td>");
+                sbTableContent.Append("</tr>");
+            }
 
             sbTable.Replace("{content}", sbTableContent.ToString());
 
