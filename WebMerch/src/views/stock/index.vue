@@ -5,7 +5,7 @@
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
             <template slot="title">库存</template>
-            <el-menu-item index="/stock/replenishplan">设备补货计划</el-menu-item>
+            <el-menu-item index="/stock/replenishplan">设备补货计划单</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>

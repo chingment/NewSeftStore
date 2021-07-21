@@ -11,7 +11,7 @@
             查询
           </el-button>
           <el-button style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="dialogNewPlanOpen">
-            新建补货计划
+            新建补货计划单
           </el-button>
         </el-form-item>
       </el-form>
@@ -26,7 +26,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="单据号" align="left" min-width="10%">
+      <el-table-column label="单号" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.cumCode }}</span>
         </template>
@@ -59,7 +59,7 @@
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
 
-          <el-button type="text" size="mini">
+          <el-button v-if="row.status.value===3" type="text" size="mini" @click="_handleSawDetail(row)">
             查看
           </el-button>
 
@@ -78,7 +78,7 @@
           :rules="rulesByNewPlan"
           label-width="80px"
         >
-          <el-form-item label="单据号" prop="cumCode">
+          <el-form-item label="单号" prop="cumCode">
             <el-input v-model="formByNewPlan.cumCode" clearable style="max-width:300px" />
           </el-form-item>
           <el-form-item label="制单人">
@@ -199,6 +199,15 @@ export default {
               }
             })
           })
+        }
+      })
+    },
+    _handleSawDetail(row) {
+      this.$router.push({
+        name: 'MerchReplenishPlanDetail',
+        path: '/stock/replenishplan/detail',
+        params: {
+          id: row.id
         }
       })
     }
