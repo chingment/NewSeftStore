@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupPrdProductGetList : RupBaseGetList
+    public class RupPrdProductGetListBySale : RupBaseGetList
     {
         public string Key { get; set; }
-
-        public bool IsDelete { get; set; }
     }
 }

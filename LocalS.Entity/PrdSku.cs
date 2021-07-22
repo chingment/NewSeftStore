@@ -20,6 +20,7 @@ namespace LocalS.Entity
         public string SpecDes { get; set; }
         public string SpecIdx { get; set; }
         public string Creator { get; set; }
+        public bool IsDelete { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? MendTime { get; set; }
         public string Mender { get; set; }

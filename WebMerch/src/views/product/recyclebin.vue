@@ -21,9 +21,6 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-            新建
-          </el-button>
         </el-col>
       </el-row>
       <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
@@ -78,9 +75,6 @@
           <el-button type="text" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button type="text" size="mini" @click="handleDelete(row)">
-            加入回收站
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,7 +100,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        isDelete: false,
+        isDelete: true,
         key: ''
       },
       isDesktop: this.$store.getters.isDesktop
@@ -135,11 +129,6 @@ export default {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleCreate() {
-      this.$router.push({
-        path: '/product/add'
-      })
-    },
     handleUpdate(row) {
       this.$router.push({
         path: '/product/edit?id=' + row.id
@@ -167,29 +156,6 @@ export default {
           this.listTotal = d.total
         }
         this.loading = false
-      })
-    },
-    handleDelete(row) {
-      MessageBox.confirm('确定要删除', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        del({ id: row.id }).then(res => {
-          if (res.result === 1) {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
-            this.getListData()
-          } else {
-            this.$message({
-              message: res.message,
-              type: 'error'
-            })
-          }
-        })
-      }).catch(() => {
       })
     }
   }

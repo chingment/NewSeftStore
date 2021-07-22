@@ -46,17 +46,25 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse GetOnSaleStores([FromUri]string id)
+        [HttpPost]
+        public OwnApiHttpResponse Delete([FromBody]RopProductDelete rop)
         {
-            var result = MerchServiceFactory.PrdProduct.GetOnSaleStores(this.CurrentUserId, this.CurrentMerchId, id);
+            var result = MerchServiceFactory.PrdProduct.Delete(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
+        [HttpGet]
+        public OwnApiHttpResponse GetListBySale([FromUri]RupPrdProductGetListBySale rup)
+        {
+            var result = MerchServiceFactory.PrdProduct.GetListBySale(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse EditSalePriceOnStore([FromBody]RopProductEditSalePriceOnStore rop)
+        public OwnApiHttpResponse EditSale([FromBody]RopProductEditSale rop)
         {
-            var result = MerchServiceFactory.PrdProduct.EditSalePriceOnStore(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.PrdProduct.EditSale(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

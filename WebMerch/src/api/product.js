@@ -40,17 +40,17 @@ export function edit(data) {
   })
 }
 
-export function getOnSaleStores(params) {
+export function getListBySale(params) {
   return request({
-    url: '/product/getOnSaleStores',
+    url: '/product/getListBySale',
     method: 'get',
     params
   })
 }
 
-export function editSalePriceOnStore(data) {
+export function editSale(data) {
   return request({
-    url: '/product/editSalePriceOnStore',
+    url: '/product/editSale',
     method: 'post',
     data
   })
@@ -80,15 +80,24 @@ export function getSpecs(params) {
   })
 }
 
+export function del(data) {
+  return request({
+    url: '/product/delete',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   initAdd: initAdd,
   add: add,
   initEdit: initEdit,
   edit: edit,
-  getOnSaleStores: getOnSaleStores,
-  editSalePriceOnStore: editSalePriceOnStore,
+  getListBySale: getListBySale,
+  editSale: editSale,
   searchSpu: searchSpu,
   searchSku: searchSku,
-  getSpecs: getSpecs
+  getSpecs: getSpecs,
+  del: del
 }

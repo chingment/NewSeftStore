@@ -45,5 +45,7 @@ namespace LocalS.Entity
         public string Mender { get; set; }
         public string SupplierId { get; set; }
         public bool IsMavkBuy{ get; set; }
+
+        public  bool IsDelete { get; set; }
     }
 }

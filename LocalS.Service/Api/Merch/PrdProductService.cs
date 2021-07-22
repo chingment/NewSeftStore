@@ -91,6 +91,8 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.PrdSpu
                          where
                          u.MerchId == merchId
+                         &&
+                         u.IsDelete == rup.IsDelete
                          select new { u.Id, u.Name, u.SpuCode, u.BriefDes, u.KindIds, u.KindId1, u.KindId2, u.KindId3, u.CreateTime, u.DisplayImgUrls });
 
             if (spuIds != null)
@@ -161,7 +163,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult Add(string operater, string merchId, RopProductAdd rop)
         {
@@ -473,19 +474,107 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetOnSaleStores(string operater, string merchId, string spuId)
+        public CustomJsonResult Delete(string operater, string merchId, RopProductDelete rop)
         {
+            CustomJsonResult result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.Id))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商品Id不能为空");
+            }
+
+            //先删除缓存
+
+            CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+
+
+            List<string> skuIds = new List<string>();
+
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var d_Spu = CurrentDb.PrdSpu.Where(m => m.Id == rop.Id).FirstOrDefault();
+
+                d_Spu.IsDelete = true;
+                d_Spu.Mender = operater;
+                d_Spu.MendTime = DateTime.Now;
+
+                var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == d_Spu.Id).ToList();
+
+                foreach (var d_Sku in d_Skus)
+                {
+                    d_Sku.IsDelete = true;
+                    d_Sku.Mender = operater;
+                    d_Sku.MendTime = DateTime.Now;
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
+            }
+
+            if (result.Result == ResultType.Success)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+                });
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult GetListBySale(string operater, string merchId, RupPrdProductGetListBySale rup)
+        {
+            string[] spuIds = null;
+
+            if (!string.IsNullOrEmpty(rup.Key))
+            {
+                List<string> l_SpuIds = new List<string>();
+                var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
+                if (search1 != null)
+                {
+                    var l_SpuId = search1.Select(m => m.SpuId).Distinct().ToArray();
+
+                    l_SpuIds.AddRange(l_SpuId);
+                }
+
+                if (search2 != null)
+                {
+                    var l_SpuId = search2.Select(m => m.SpuId).Distinct().ToArray();
+
+                    l_SpuIds.AddRange(l_SpuId);
+                }
+
+                spuIds = l_SpuIds.Distinct().ToArray();
+            }
 
             var query = (from u in CurrentDb.SellChannelStock
-                         where u.SpuId == spuId
-                         && u.MerchId == merchId
-                         select new { u.StoreId, u.SpuId, u.SkuId, u.IsOffSell, u.SalePrice }).Distinct();
+                         where u.MerchId == merchId
+                         group u by new
+                         {
+                             u.StoreId,
+                             u.SpuId,
+                             u.SkuId,
+                             u.IsOffSell,
+                             u.SalePrice
+                         }
+             into g
+                         select new { g.Key });
 
+            if (spuIds != null)
+            {
+                query = query.Where(m => spuIds.Contains(m.Key.SpuId));
+            }
 
             int total = query.Count();
 
-            int pageIndex = 0;
-            int pageSize = int.MaxValue;
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.Key.StoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -493,19 +582,19 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.SkuId);
-                var store = BizFactory.Store.GetOne(item.StoreId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, item.Key.SkuId);
+                var store = BizFactory.Store.GetOne(item.Key.StoreId);
                 olist.Add(new
                 {
-                    StoreId = item.StoreId,
+                    StoreId = item.Key.StoreId,
                     StoreName = store.Name,
-                    SpuId = item.SpuId,
-                    SkuId = item.SkuId,
-                    SkuCumCode = r_Sku.CumCode,
-                    SkuName = r_Sku.Name,
-                    SkuMainImgUrl = r_Sku.MainImgUrl,
-                    SkuIsOffSell = item.IsOffSell,
-                    SkuSalePrice = item.SalePrice
+                    SpuId = item.Key.SpuId,
+                    SkuId = item.Key.SkuId,
+                    CumCode = r_Sku.CumCode,
+                    Name = r_Sku.Name,
+                    MainImgUrl = r_Sku.MainImgUrl,
+                    IsOffSell = item.Key.IsOffSell,
+                    SalePrice = item.Key.SalePrice
                 });
             }
 
@@ -515,9 +604,9 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
         }
 
-        public CustomJsonResult EditSalePriceOnStore(string operater, string merchId, RopProductEditSalePriceOnStore rop)
+        public CustomJsonResult EditSale(string operater, string merchId, RopProductEditSale rop)
         {
-            return BizFactory.ProductSku.AdjustStockSalePrice(operater, merchId, rop.StoreId, rop.SkuId, rop.SkuSalePrice, rop.SkuIsOffSell);
+            return BizFactory.ProductSku.AdjustStockSalePrice(operater, merchId, rop.StoreId, rop.SkuId, rop.SalePrice, rop.IsOffSell);
         }
 
         public CustomJsonResult SearchSpu(string operater, string merchId, string key)
