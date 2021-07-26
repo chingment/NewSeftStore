@@ -3,13 +3,16 @@ import store from '@/store'
 export default {
   inserted(el, binding, vnode) {
     const { value } = binding
-    const roles = store.getters && store.getters.roles
+    console.log('value:' + value)
+    // console.log(JSON.stringify(store.getters.userInfo.menus))
+    const menus = store.getters.userInfo.menus
 
-    if (value && value instanceof Array && value.length > 0) {
+    if (menus && menus instanceof Array && menus.length > 0) {
       const permissionRoles = value
 
-      const hasPermission = roles.some(role => {
-        return permissionRoles.includes(role)
+      const hasPermission = menus.some(menu => {
+        console.log('menus:' + menu.name)
+        return false
       })
 
       if (!hasPermission) {

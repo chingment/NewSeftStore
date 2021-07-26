@@ -9,36 +9,31 @@ function _generateRoutes(routers, menus) {
     if (item.path.indexOf('?') > -1) {
       path = item.path.split('?')[0]
     }
-    const component = resolve => require([`@/views${item.component}`], resolve)
-    const menu = {
-      path: path,
-      component: component,
-      children: undefined,
-      redirect: undefined,
-      hidden: !item.isSidebar,
-      isSidebar: item.isSidebar,
-      name: item.name,
-      meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
-    }
-    if (item.children) {
-      if (menu.children === undefined) {
-        menu.children = []
+    if (item.component != null && item.component !== '') {
+      const component = resolve => require([`@/views${item.component}`], resolve)
+      const menu = {
+        path: path,
+        component: component,
+        children: undefined,
+        redirect: undefined,
+        hidden: !item.isSidebar,
+        isSidebar: item.isSidebar,
+        name: item.name,
+        meta: { title: item.title, icon: item.icon, id: item.id, pId: item.pId }
       }
-      const redirect = item.redirect == null ? undefined : item.redirect
 
-      menu.redirect = redirect
-      _generateRoutes(menu.children, item.children)
+      if (item.children) {
+        if (menu.children === undefined) {
+          menu.children = []
+        }
+        const redirect = item.redirect == null ? undefined : item.redirect
+
+        menu.redirect = redirect
+        _generateRoutes(menu.children, item.children)
+      }
+
+      routers.push(menu)
     }
-
-    routers.push(menu)
-
-    // if (isCheckSidebar) {
-    //   if (item.isSidebar) {
-    //     routers.push(menu)
-    //   }
-    // } else {
-    //   routers.push(menu)
-    // }
   })
 }
 

@@ -1,234 +1,236 @@
 <template>
   <div id="home_container" class="app-container">
 
-    <el-row :gutter="40" class="panel-group">
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleStoreCount('newVisitis')">
-          <div class="card-panel-icon-wrapper icon-select">
-            <svg-icon icon-class="t_store" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              店铺
+    <div>
+      <el-row :gutter="40" class="panel-group">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleStoreCount('newVisitis')">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_store" class-name="card-panel-icon" />
             </div>
-            <count-to :start-val="0" :end-val="storeCount" :duration="2600" class="card-panel-num" />
-          </div>
-        </div>
-      </el-col>
-      <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleDeviceCount('messages')">
-          <div class="card-panel-icon-wrapper icon-select">
-            <svg-icon icon-class="t_machine" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              设备
-            </div>
-            <div style="display:flex">
-              <div style="margin-right:10px;display:flex; align-items: center;">
-                台数：
-                <count-to :start-val="0" :end-val="deviceCount" :duration="3000" class="card-panel-num" />
-              </div>
-              <div style="display:flex; align-items: center;">
-                异常：
-                <count-to :start-val="0" :end-val="deviceExCount" :duration="3000" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSumTradeAmount('purchases')">
-          <div class="card-panel-icon-wrapper icon-select">
-            <svg-icon icon-class="t_money" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-
-            <div>
+            <div class="card-panel-description">
               <div class="card-panel-text">
-                总收入
+                店铺
               </div>
-              <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="storeCount" :duration="2600" class="card-panel-num" />
             </div>
           </div>
-        </div>
-      </el-col>
-      <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleReplenishCount('shoppings')">
-          <div class="card-panel-icon-wrapper icon-select">
-            <svg-icon icon-class="t_buhuo" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              补货
+        </el-col>
+        <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleDeviceCount('messages')">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_machine" class-name="card-panel-icon" />
             </div>
-            <count-to :start-val="0" :end-val="replenishCount" :duration="3600" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                设备
+              </div>
+              <div style="display:flex">
+                <div style="margin-right:10px;display:flex; align-items: center;">
+                  台数：
+                  <count-to :start-val="0" :end-val="deviceCount" :duration="3000" class="card-panel-num" />
+                </div>
+                <div style="display:flex; align-items: center;">
+                  异常：
+                  <count-to :start-val="0" :end-val="deviceExCount" :duration="3000" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
+                </div>
+              </div>
 
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>今日总览</span>
-          </div>
-          <div class="today-sum" style="height:300px;">
-            <div class="it">
-              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单量</span></div>
-            </div>
-            <div class="it">
-              <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumQuantity }}</span><br> <span class="d1">今日商品量</span></div>
-            </div>
-            <div class="it">
-              <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
-            </div>
-            <div v-if="mctMode.indexOf('M')>-1" class="it">
-              <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">设备异常订单</span></div>
             </div>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>今日店铺销售额</span>
-
-            <el-button style="float: right; padding: 0px 0;display:none" type="text">更多</el-button>
-          </div>
-          <div style="height:300px;">
-
-            <div v-if="todayStoreGmvRl.length>0">
-
-              <ul class="rl">
-                <li v-for="(val,index) in todayStoreGmvRl" :key="val.name" class="it">
-                  <div class="name">
-                    <span :class="'rli-'+index">  {{ val.name }}</span>
-                  </div>
-                  <div class="sumQuantity">
-                    {{ val.sumQuantity }}
-                  </div>
-                  <div class="sumTradeAmount">
-                    {{ val.sumTradeAmount }}
-                  </div>
-                </li>
-              </ul>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSumTradeAmount('purchases')">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_money" class-name="card-panel-icon" />
             </div>
+            <div class="card-panel-description">
 
-          </div>
-        </el-card>
-
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>最近10天销售额</span>
-          </div>
-          <div style="height:300px;">
-
-            <div v-if="get7DayGmv.length>0">
-
-              <ul class="rl">
-                <li v-for="(val,index) in get7DayGmv" :key="val.datef" class="it">
-                  <div class="name">
-                    <span :class="'rli2-'+index">  {{ val.datef }}</span>
-
-                  </div>
-                  <div class="sumQuantity">
-                    {{ val.sumCount }}
-                  </div>
-                  <div class="sumTradeAmount">
-                    {{ val.sumTradeAmount }}
-                  </div>
-                </li>
-              </ul>
+              <div>
+                <div class="card-panel-text">
+                  总收入
+                </div>
+                <count-to :start-val="0" :decimals="2" :end-val="sumTradeAmount" :duration="3000" class="card-panel-num" />
+              </div>
             </div>
-
           </div>
-        </el-card>
-
-      </el-col>
-    </el-row>
-
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px; margin-bottom:30px;">
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>店铺销售排行榜</span>
-          </div>
-          <div style="min-height:300px;">
-
-            <div v-if="storeGmvRl.length>0">
-
-              <ul class="rl">
-                <li v-for="(val,index) in storeGmvRl" :key="val.name" class="it">
-                  <div class="name">
-                    <span :class="'rli-'+index">  {{ val.name }}</span>
-                  </div>
-                  <div class="sumQuantity">
-                    {{ val.sumQuantity }}
-                  </div>
-                  <div class="sumTradeAmount">
-                    {{ val.sumTradeAmount }}
-                  </div>
-                </li>
-              </ul>
+        </el-col>
+        <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleReplenishCount('shoppings')">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_buhuo" class-name="card-panel-icon" />
             </div>
-            <div v-else>
-              <el-button type="text" @click="goNewStore(item)">暂无店铺，马上新建，GO GO GO</el-button>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                补货
+              </div>
+              <count-to :start-val="0" :end-val="replenishCount" :duration="3600" class="card-panel-num" style="color:#ff4949;font-size:30px;" />
             </div>
-
           </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="margin-bottom:30px; ">
+        </el-col>
+      </el-row>
 
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>热销商品排行榜</span>
-            <el-button style="float: right; padding: 0px 0;display:none" type="text">更多</el-button>
-          </div>
-          <div style="min-height:300px;">
+      <el-row :gutter="8">
+        <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
 
-            <div v-if="skuSaleRl.length>0">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>今日总览</span>
+            </div>
+            <div class="today-sum" style="height:300px;">
+              <div class="it">
+                <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumCount }}</span><br> <span class="d1">今日订单量</span></div>
+              </div>
+              <div class="it">
+                <div class="t1" @click="todayGmvClick"><span class="m1"> {{ todayGmv.sumQuantity }}</span><br> <span class="d1">今日商品量</span></div>
+              </div>
+              <div class="it">
+                <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
+              </div>
+              <div v-if="mctMode.indexOf('M')>-1" class="it">
+                <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">设备异常订单</span></div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
 
-              <ul class="rl">
-                <li v-for="(val,index) in skuSaleRl" :key="val.name" class="it">
-                  <div class="name">
-                    <span :class="'rli-'+index">  {{ val.name }}</span>
-                  </div>
-                  <div class="sumQuantity">
-                    {{ val.sumQuantity }}
-                  </div>
-                  <div class="sumTradeAmount">
-                    {{ val.sumTradeAmount }}
-                  </div>
-                </li>
-              </ul>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>今日店铺销售额</span>
+
+              <el-button style="float: right; padding: 0px 0;display:none" type="text">更多</el-button>
+            </div>
+            <div style="height:300px;">
+
+              <div v-if="todayStoreGmvRl.length>0">
+
+                <ul class="rl">
+                  <li v-for="(val,index) in todayStoreGmvRl" :key="val.name" class="it">
+                    <div class="name">
+                      <span :class="'rli-'+index">  {{ val.name }}</span>
+                    </div>
+                    <div class="sumQuantity">
+                      {{ val.sumQuantity }}
+                    </div>
+                    <div class="sumTradeAmount">
+                      {{ val.sumTradeAmount }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
 
             </div>
-            <div v-else>
-              <span>暂无销售数据</span>
+          </el-card>
+
+        </el-col>
+        <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>最近10天销售额</span>
             </div>
+            <div style="height:300px;">
 
-          </div>
-        </el-card>
+              <div v-if="get7DayGmv.length>0">
 
-      </el-col>
+                <ul class="rl">
+                  <li v-for="(val,index) in get7DayGmv" :key="val.datef" class="it">
+                    <div class="name">
+                      <span :class="'rli2-'+index">  {{ val.datef }}</span>
 
-    </el-row>
+                    </div>
+                    <div class="sumQuantity">
+                      {{ val.sumCount }}
+                    </div>
+                    <div class="sumTradeAmount">
+                      {{ val.sumTradeAmount }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
 
+            </div>
+          </el-card>
+
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="8">
+        <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px; margin-bottom:30px;">
+
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>店铺销售排行榜</span>
+            </div>
+            <div style="min-height:300px;">
+
+              <div v-if="storeGmvRl.length>0">
+
+                <ul class="rl">
+                  <li v-for="(val,index) in storeGmvRl" :key="val.name" class="it">
+                    <div class="name">
+                      <span :class="'rli-'+index">  {{ val.name }}</span>
+                    </div>
+                    <div class="sumQuantity">
+                      {{ val.sumQuantity }}
+                    </div>
+                    <div class="sumTradeAmount">
+                      {{ val.sumTradeAmount }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div v-else>
+                <el-button type="text" @click="goNewStore(item)">暂无店铺，马上新建，GO GO GO</el-button>
+              </div>
+
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="margin-bottom:30px; ">
+
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>热销商品排行榜</span>
+              <el-button style="float: right; padding: 0px 0;display:none" type="text">更多</el-button>
+            </div>
+            <div style="min-height:300px;">
+
+              <div v-if="skuSaleRl.length>0">
+
+                <ul class="rl">
+                  <li v-for="(val,index) in skuSaleRl" :key="val.name" class="it">
+                    <div class="name">
+                      <span :class="'rli-'+index">  {{ val.name }}</span>
+                    </div>
+                    <div class="sumQuantity">
+                      {{ val.sumQuantity }}
+                    </div>
+                    <div class="sumTradeAmount">
+                      {{ val.sumTradeAmount }}
+                    </div>
+                  </li>
+                </ul>
+
+              </div>
+              <div v-else>
+                <span>暂无销售数据</span>
+              </div>
+
+            </div>
+          </el-card>
+
+        </el-col>
+
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
 import CountTo from 'vue-count-to'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
 
 export default {
@@ -236,6 +238,7 @@ export default {
   components: {
     CountTo
   },
+  directives: { permission },
   data() {
     return {
       storeCount: 0,
