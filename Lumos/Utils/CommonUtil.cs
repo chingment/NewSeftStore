@@ -402,7 +402,11 @@ namespace Lumos
             }
             else
             {
-                if (dspNow < dspWorkingDayPM)
+                if (dspNow > dspWorkingDayPM&& dspNow> dspWorkingDayAM)
+                {
+                    return true;
+                }
+                else if (dspNow < dspWorkingDayPM)
                 {
                     return true;
                 }

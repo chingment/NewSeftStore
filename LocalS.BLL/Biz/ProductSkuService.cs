@@ -54,25 +54,28 @@ namespace LocalS.BLL.Biz
                     ret.Version = 0;
                     ret.IsCanAlterMaxQuantity = true;
 
-                    var record = new StockChangeRecordModel
+                    if (d_SellChannelStock != null)
                     {
-                        MerchId = d_SellChannelStock.MerchId,
-                        StoreId = d_SellChannelStock.StoreId,
-                        ShopId = d_SellChannelStock.ShopId,
-                        DeviceId = d_SellChannelStock.DeviceId,
-                        CabinetId = d_SellChannelStock.CabinetId,
-                        ShopMode = d_SellChannelStock.ShopMode,
-                        SlotId = d_SellChannelStock.SlotId,
-                        SkuId = d_SellChannelStock.SkuId,
-                        SellQuantity = d_SellChannelStock.SellQuantity,
-                        WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
-                        WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
-                        SumQuantity = d_SellChannelStock.SumQuantity,
-                        EventCode = operateEvent,
-                        ChangeQuantity = d_SellChannelStock.SumQuantity
-                    };
+                        var record = new StockChangeRecordModel
+                        {
+                            MerchId = d_SellChannelStock.MerchId,
+                            StoreId = d_SellChannelStock.StoreId,
+                            ShopId = d_SellChannelStock.ShopId,
+                            DeviceId = d_SellChannelStock.DeviceId,
+                            CabinetId = d_SellChannelStock.CabinetId,
+                            ShopMode = d_SellChannelStock.ShopMode,
+                            SlotId = d_SellChannelStock.SlotId,
+                            SkuId = d_SellChannelStock.SkuId,
+                            SellQuantity = d_SellChannelStock.SellQuantity,
+                            WaitPayLockQuantity = d_SellChannelStock.WaitPayLockQuantity,
+                            WaitPickupLockQuantity = d_SellChannelStock.WaitPickupLockQuantity,
+                            SumQuantity = d_SellChannelStock.SumQuantity,
+                            EventCode = operateEvent,
+                            ChangeQuantity = d_SellChannelStock.SumQuantity
+                        };
+                        ret.ChangeRecords.Add(record);
+                    }
 
-                    ret.ChangeRecords.Add(record);
                     result = new CustomJsonResult<RetOperateSlot>(ResultType.Success, ResultCode.Success, "删除成功", ret);
                     #endregion DeviceCabinetSlotRemove
                 }

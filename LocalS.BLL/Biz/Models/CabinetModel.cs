@@ -11,11 +11,8 @@ namespace LocalS.BLL.Biz
         public string CabinetId { get; set; }
         public string Name { get; set; }
         public string RowColLayout { get; set; }
-
         public int Priority { get; set; }
-
         public string ComId { get; set; }
-
         public int ComBaud { get; set; }
     }
 }
