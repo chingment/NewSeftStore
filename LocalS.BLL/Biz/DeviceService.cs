@@ -54,8 +54,9 @@ namespace LocalS.BLL.Biz
                 m_Cabinet.CabinetId = d_Cabinet.CabinetId;
                 m_Cabinet.Name = d_Cabinet.CabinetName;
                 m_Cabinet.RowColLayout = d_Cabinet.RowColLayout;
-                m_Cabinet.Priority = d_Cabinet.Priority;
                 m_Cabinet.ComId = d_Cabinet.ComId;
+                m_Cabinet.ComBaud = d_Cabinet.ComBaud;
+                m_Cabinet.Priority = d_Cabinet.Priority;
                 m_Device.Cabinets.Add(m_Cabinet.CabinetId, m_Cabinet);
             }
 

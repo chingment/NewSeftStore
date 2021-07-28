@@ -26,5 +26,6 @@ namespace LocalS.Entity
         public DateTime? MendTime { get; set; }
         public int Priority { get; set; }
         public string ComId { get; set; }
+        public int ComBaud { get; set; }
     }
 }

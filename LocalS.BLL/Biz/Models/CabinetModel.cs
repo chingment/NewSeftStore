@@ -15,5 +15,7 @@ namespace LocalS.BLL.Biz
         public int Priority { get; set; }
 
         public string ComId { get; set; }
+
+        public int ComBaud { get; set; }
     }
 }
