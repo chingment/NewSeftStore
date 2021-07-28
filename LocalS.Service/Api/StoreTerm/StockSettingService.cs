@@ -86,7 +86,7 @@ namespace LocalS.Service.Api.StoreTerm
             }
 
 
-            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.device_save_slot, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId), rop);
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.device_saw_stock, string.Format("店铺：{0}，门店：{1}，设备：{2}，机柜：{3}，查看库存", m_Device.StoreName, m_Device.ShopName, m_Device.DeviceId, rop.CabinetId), rop);
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
