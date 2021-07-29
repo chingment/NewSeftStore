@@ -8,11 +8,11 @@ export function getInfo(token, website) {
   })
 }
 
-export function checkPermission(website, tpye, content) {
+export function checkPermission(webSite, type, content) {
   return request({
     url: '/own/checkPermission',
     method: 'get',
-    params: { website, tpye, content }
+    params: { webSite, type, content }
   })
 }
 

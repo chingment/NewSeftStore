@@ -5,6 +5,7 @@ const getters = {
   isDesktop: state => state.app.isDesktop,
   token: state => state.own.token,
   userInfo: state => state.own.userInfo,
+  permission: state => state.own.permission,
   listPageQuery: state => state.app.listPageQuery
 }
 export default getters

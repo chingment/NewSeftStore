@@ -28,7 +28,9 @@ router.beforeEach(async(to, from, next) => {
         })
       }
 
-      await store.dispatch('own/checkPermission', '1', to.path).then((res) => {
+      // var l_path = to.path
+      // console.log('to:' + JSON.stringify(to))
+      await store.dispatch('own/checkPermission', { type: '1', content: to.name }).then((res) => {
         if (res.code === 2401) {
           next('/401')
         } else {

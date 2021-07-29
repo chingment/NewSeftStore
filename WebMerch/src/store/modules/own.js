@@ -6,6 +6,7 @@ import { generateRoutes } from '@/utils/ownResource'
 const state = {
   token: getToken(),
   userInfo: null,
+  permission: null,
   navBar: []
 }
 
@@ -18,6 +19,9 @@ const mutations = {
   },
   SET_NAVBAR: (state, navBar) => {
     state.navBar = navBar
+  },
+  SET_PERMISSION: (state, permission) => {
+    state.permission = permission
   }
 }
 
@@ -31,7 +35,6 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token, 'merch').then(res => {
-        // console.log(JSON.stringify(res))
         if (res.result === 1) {
           const d = res.data
           commit('SET_USERINFO', d)
@@ -63,10 +66,14 @@ const actions = {
     })
   },
   // checkperminssion
-  checkPermission({ commit }, type, content) {
+  checkPermission({ commit }, state) {
     return new Promise((resolve, reject) => {
-      checkPermission('merch', type, content).then(response => {
-        resolve(response)
+      checkPermission('merch', state.type, state.content).then(res => {
+        if (res.result === 1) {
+          const d = res.data
+          commit('SET_PERMISSION', d.permission)
+        }
+        resolve(res)
       }).catch(error => {
         reject(error)
       })

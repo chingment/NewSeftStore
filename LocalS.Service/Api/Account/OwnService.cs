@@ -118,6 +118,7 @@ namespace LocalS.Service.Api.Account
                 menuNode.IsSidebar = sysMenu.IsSidebar;
                 menuNode.IsNavbar = sysMenu.IsNavbar;
                 menuNode.IsRouter = sysMenu.IsRouter;
+                menuNode.Redirect = sysMenu.Redirect;
                 menuNodes.Add(menuNode);
             }
 
@@ -760,25 +761,45 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.Postpone(token);
 
+            List<string> permission = new List<string>();
+
             switch (rup.Type)
             {
                 case "1":
-                    string path = rup.Content;
-                    if (rup.Content == "/")
+                    string content = rup.Content;
+                    LogUtil.Info("content1:" + content);
+                    if (string.IsNullOrEmpty(content))
                     {
-                        path = "/home";
+                        content = "MerchHome";
                     }
-
-                    var menus = GetMenus(webSite, userId);
-                    var hasMenu = menus.Where(m => m.Path == path).FirstOrDefault();
-                    if (hasMenu == null)
+                    LogUtil.Info("content2:" + content);
+                    var menus = GetMenus2(webSite, userId);
+                    var hasMenu = menus.Where(m => m.Name == content).Count();
+                    if (hasMenu == 0)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "没有权限访问页面");
                     }
 
+                    permission = menus.Select(m => m.Name).ToList();
+
+                    //string content = rup.Content;
+                    //if (rup.Content == "/")
+                    //{
+                    //    path = "/home";
+                    //}
+
+                    //var menus = GetMenus2(webSite, userId);
+                    //var hasMenu = menus.Where(m => m.Name == path || m.Redirect == path).Count();
+                    //if (hasMenu == 0)
+                    //{
+                    //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2NoRight, "没有权限访问页面");
+                    //}
+                    //permission = menus.Select(m => m.Name).ToList();
+
                     break;
             }
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "检查成功");
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "检查成功", new { permission = permission });
 
             return result;
         }

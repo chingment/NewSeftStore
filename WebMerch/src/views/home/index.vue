@@ -1,7 +1,7 @@
 <template>
   <div id="home_container" class="app-container">
 
-    <div>
+    <div v-permission="['Merch_Home_Shop']">
       <el-row :gutter="40" class="panel-group">
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleStoreCount('newVisitis')">
@@ -225,6 +225,52 @@
 
       </el-row>
     </div>
+
+    <div v-permission="['Merch_Home_Senviv']">
+      <el-row :gutter="40" class="panel-group">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSenvivUsers">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_users" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                客户信息
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSenvivDayReport">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_dayreport" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                健康日报
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSenvivMonthReport">
+            <div class="card-panel-icon-wrapper icon-select">
+              <svg-icon icon-class="t_monthreport" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                健康月报
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+
+    </div>
+
   </div>
 </template>
 
@@ -357,7 +403,23 @@ export default {
     },
     handleReplenishCount() {
 
+    },
+    handleSenvivUsers() {
+      this.$router.push({
+        path: '/senviv/users'
+      })
+    },
+    handleSenvivDayReport() {
+      this.$router.push({
+        path: '/senviv/dayreport'
+      })
+    },
+    handleSenvivMonthReport() {
+      this.$router.push({
+        path: '/senviv/monthreport'
+      })
     }
+
   }
 }
 

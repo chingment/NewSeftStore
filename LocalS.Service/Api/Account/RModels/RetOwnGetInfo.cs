@@ -21,9 +21,8 @@ namespace LocalS.Service.Api.Account
         public string PhoneNumber { get; set; }
         public int FingerVeinCount { get; set; }
         public List<MenuNode> Menus { get; set; }
-
+        public List<string> Rights { get; set; }
         public List<RoleModel> Roles { get; set; }
-
         public string MctMode { get; set; }
     }
 }
