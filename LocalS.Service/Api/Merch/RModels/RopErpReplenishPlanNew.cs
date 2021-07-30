@@ -8,7 +8,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopErpReplenishPlanNew
     {
-        public string CumCode { get; set; }
         public string MakeDate { get; set; }
         public string Remark { get; set; }
     }

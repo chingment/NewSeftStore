@@ -35,11 +35,11 @@ namespace LocalS.BLL.Biz
                          m.MerchId == merchId &&
                          m.ShopMode == E_ShopMode.Device
 
-                         select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                         select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.CabinetId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
 
             var d_Stocks = query.OrderBy(m => m.DeviceId).ToList();
 
-            var dt_Stocks = (from m in d_Stocks select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.IsOffSell }).Distinct();
+            //  var dt_Stocks = (from m in d_Stocks select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.IsOffSell }).Distinct();
 
             var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
             var d_Shops = CurrentDb.Shop.Where(m => m.MerchId == merchId).ToList();
@@ -61,37 +61,41 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        foreach (var dt_Stock in dt_Stocks)
+                        foreach (var d_Stock in d_Stocks)
                         {
-                            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(dt_Stock.MerchId, dt_Stock.SkuId);
+                            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
 
-                            var l_Store = d_Stores.Where(m => m.Id == dt_Stock.StoreId).FirstOrDefault();
-                            var l_Shop = d_Shops.Where(m => m.Id == dt_Stock.ShopId).FirstOrDefault();
-                            var l_Device = d_MerchDevices.Where(m => m.DeviceId == dt_Stock.DeviceId).FirstOrDefault();
+                            var l_Store = d_Stores.Where(m => m.Id == d_Stock.StoreId).FirstOrDefault();
+                            var l_Shop = d_Shops.Where(m => m.Id == d_Stock.ShopId).FirstOrDefault();
+                            var l_Device = d_MerchDevices.Where(m => m.DeviceId == d_Stock.DeviceId).FirstOrDefault();
 
-                            var l_Stock = d_Stocks.Where(m => m.SkuId == dt_Stock.SkuId);
+                            //var l_Stock = d_Stocks.Where(m => m.SkuId == dt_Stock.SkuId);
 
-                            int warnQuantity = l_Stock.Sum(m => m.WarnQuantity);
-                            int sellQuantity = l_Stock.Sum(m => m.SellQuantity);
-                            int waitPayLockQuantity = l_Stock.Sum(m => m.WaitPayLockQuantity);
-                            int waitPickupLockQuantity = l_Stock.Sum(m => m.WaitPickupLockQuantity);
+                            //int warnQuantity = l_Stock.Sum(m => m.WarnQuantity);
+                            //int sellQuantity = l_Stock.Sum(m => m.SellQuantity);
+                            //int waitPayLockQuantity = l_Stock.Sum(m => m.WaitPayLockQuantity);
+                            //int waitPickupLockQuantity = l_Stock.Sum(m => m.WaitPickupLockQuantity);
 
-                            int sumQuantity = l_Stock.Sum(m => m.SumQuantity);
-                            int maxQuantity = l_Stock.Sum(m => m.MaxQuantity);
-                            //sumQuantity <= warnQuantity
+                            int sumQuantity = d_Stock.SumQuantity;
+                            int maxQuantity = d_Stock.MaxQuantity;
+                            ////sumQuantity <= warnQuantity
                             if (true)
                             {
                                 var d_ErpReplenishPlanDetail = new ErpReplenishPlanDetail();
                                 d_ErpReplenishPlanDetail.Id = IdWorker.Build(IdType.NewGuid);
                                 d_ErpReplenishPlanDetail.PlanId = d_ErpReplenishPlan.Id;
                                 d_ErpReplenishPlanDetail.PlanCumCode = d_ErpReplenishPlan.CumCode;
-                                d_ErpReplenishPlanDetail.MerchId = dt_Stock.MerchId;
+                                d_ErpReplenishPlanDetail.MerchId = d_Stock.MerchId;
                                 d_ErpReplenishPlanDetail.StoreId = l_Store.Id;
                                 d_ErpReplenishPlanDetail.StoreName = l_Store.Name;
                                 d_ErpReplenishPlanDetail.ShopId = l_Shop.Id;
                                 d_ErpReplenishPlanDetail.ShopName = l_Shop.Name;
                                 d_ErpReplenishPlanDetail.DeviceId = l_Device.DeviceId;
                                 d_ErpReplenishPlanDetail.DeviceCumCode = l_Device.CumCode;
+                                d_ErpReplenishPlanDetail.CabinetId = d_Stock.CabinetId;
+                                d_ErpReplenishPlanDetail.CabinetName = d_Stock.CabinetId;
+                                d_ErpReplenishPlanDetail.SlotId = d_Stock.SlotId;
+                                d_ErpReplenishPlanDetail.SlotName = d_Stock.SlotId;
                                 d_ErpReplenishPlanDetail.SpuId = r_Sku.SpuId;
                                 d_ErpReplenishPlanDetail.SkuId = r_Sku.Id;
                                 d_ErpReplenishPlanDetail.SkuName = r_Sku.Name;

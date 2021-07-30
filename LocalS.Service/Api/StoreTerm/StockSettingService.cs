@@ -267,5 +267,99 @@ namespace LocalS.Service.Api.StoreTerm
             return result;
         }
 
+        public IResult GetCabinetRshPlans(string operater, RopStockSettingGetCabinetRshPlans rop)
+        {
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
+
+            if (m_Device == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.StoreId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.ShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
+            }
+
+            var d_Details = CurrentDb.ErpReplenishPlanDetail.Where(m => m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.DeviceId == rop.DeviceId).ToList();
+
+            Dictionary<string, object> slots = new Dictionary<string, object>();
+
+            foreach (var d_Detail in d_Details)
+            {
+                slots.Add(d_Detail.SlotId, new
+                {
+                    SlotId = d_Detail.SlotId,
+                    SkuId = d_Detail.SkuId,
+                    SkuName = d_Detail.SkuName,
+                    PlanQuantity = d_Detail.PlanQuantity
+                });
+            }
+
+            var ret = new { Slots = slots };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public IResult GetCabinetRshPlanDetail(string operater, RopStockSettingGetReplenishPlanDetail rop)
+        {
+            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
+
+            if (m_Device == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未登记");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.MerchId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定商户");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.StoreId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定店铺");
+            }
+
+            if (string.IsNullOrEmpty(m_Device.ShopId))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备未绑定门店");
+            }
+
+            var d_Details = CurrentDb.ErpReplenishPlanDetail.Where(m => m.PlanCumCode == rop.PlanCumCode && m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.CabinetId == rop.CabinetId && m.DeviceId == rop.DeviceId).ToList();
+
+            Dictionary<string, object> slots = new Dictionary<string, object>();
+
+            foreach (var d_Detail in d_Details)
+            {
+                slots.Add(d_Detail.SlotId, new
+                {
+                    SlotId = d_Detail.SlotId,
+                    SkuId = d_Detail.SkuId,
+                    SkuName = d_Detail.SkuName,
+                    PlanQuantity = d_Detail.PlanQuantity
+                });
+            }
+
+            var ret = new { Slots = slots };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public IResult ConfirmRshPlanQuantity(string operater, RopStockSettingConfirmRshPlanQuantity rop)
+        {
+
+
+            return null;
+        }
     }
 }

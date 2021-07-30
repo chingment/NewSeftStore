@@ -22,6 +22,10 @@ namespace LocalS.Entity
         public string SkuSpecDes { get; set; }
         public string DeviceId { get; set; }
         public string DeviceCumCode { get; set; }
+        public string CabinetId { get; set; }
+        public string CabinetName { get; set; }
+        public string SlotId { get; set; }
+        public string SlotName { get; set; }
         public int PlanQuantity { get; set; }
         public int RshQuantity { get; set; }
         public string MakerId { get; set; }

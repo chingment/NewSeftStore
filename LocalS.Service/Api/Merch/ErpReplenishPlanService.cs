@@ -103,13 +103,14 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (string.IsNullOrEmpty(rop.CumCode))
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "单号不能为空");
+                //if (string.IsNullOrEmpty(rop.CumCode))
+                //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "单号不能为空");
 
                 if (string.IsNullOrEmpty(rop.MakeDate))
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "制单日期不能为空");
 
-                var d_ErpReplenishPlan = CurrentDb.ErpReplenishPlan.Where(m => m.MerchId == merchId && m.CumCode == rop.CumCode).FirstOrDefault();
+                string cumCode = DateTime.Now.ToString("yyyyMMddHHmmss");
+                var d_ErpReplenishPlan = CurrentDb.ErpReplenishPlan.Where(m => m.MerchId == merchId && m.CumCode == cumCode).FirstOrDefault();
                 if (d_ErpReplenishPlan != null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该单号已经存在");
@@ -118,9 +119,9 @@ namespace LocalS.Service.Api.Merch
                 var maker = CurrentDb.SysUser.Where(m => m.Id == operater).FirstOrDefault();
 
                 d_ErpReplenishPlan = new ErpReplenishPlan();
-                d_ErpReplenishPlan.Id = IdWorker.Build(IdType.ErpReplenishPlanId);
+                d_ErpReplenishPlan.Id = IdWorker.Build(IdType.NewGuid);
                 d_ErpReplenishPlan.MerchId = merchId;
-                d_ErpReplenishPlan.CumCode = rop.CumCode;
+                d_ErpReplenishPlan.CumCode = cumCode;
                 d_ErpReplenishPlan.MakerId = maker.Id;
                 d_ErpReplenishPlan.MakerName = maker.FullName;
                 d_ErpReplenishPlan.MakeTime = DateTime.Now;

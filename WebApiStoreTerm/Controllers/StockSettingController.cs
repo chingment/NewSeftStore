@@ -32,5 +32,11 @@ namespace WebApiStoreTerm.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse GetCabinetRshPlanDetail([FromBody]RopStockSettingGetReplenishPlanDetail rup)
+        {
+            var result = StoreTermServiceFactory.StockSetting.GetCabinetRshPlanDetail(this.CurrentUserId, rup);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

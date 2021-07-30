@@ -75,11 +75,9 @@ namespace Lumos.Redis
                     id = prefix + part2 + part1 + part0;
                     break;
                 case IdType.ErpReplenishPlanId:
-                    prefix = "52";
-                    part0 = ran.Next(100, 999).ToString();
                     part1 = DateTime.Now.ToString("yyyyMMddHHmmss");
                     part2 = GetIncrNum().ToString().PadLeft(5, '0');
-                    id = prefix + part2 + part1 + part0;
+                    id = part1 + part2;
                     break;
                 //case IdType.DeviceId:
                 //    var incr = RedisManager.Db.StringIncrement(RedisKeyS.IR_DEVICEID, 1);

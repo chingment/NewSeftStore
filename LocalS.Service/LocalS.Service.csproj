@@ -461,6 +461,7 @@
     <Compile Include="Api\StoreTerm\RModels\RopOwnLoginByAccount.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOwnLoginByFingerVein.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOwnLogout..cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopStockSettingGetReplenishPlanDetail.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />

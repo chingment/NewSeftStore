@@ -78,9 +78,6 @@
           :rules="rulesByNewPlan"
           label-width="80px"
         >
-          <el-form-item label="单号" prop="cumCode">
-            <el-input v-model="formByNewPlan.cumCode" clearable style="max-width:300px" />
-          </el-form-item>
           <el-form-item label="制单人">
             <span>{{ formByNewPlan.makerName }}</span>
           </el-form-item>
@@ -123,7 +120,7 @@ export default {
         cumCode: ''
       },
       rulesByNewPlan: {
-        cumCode: [{ required: true, min: 1, max: 30, message: '必填,且不能超过30个字符', trigger: 'change' }]
+
       },
       formByNewPlan: {
         cumCode: '',
