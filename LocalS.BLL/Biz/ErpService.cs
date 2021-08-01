@@ -39,8 +39,6 @@ namespace LocalS.BLL.Biz
 
             var d_Stocks = query.OrderBy(m => m.DeviceId).ToList();
 
-            //  var dt_Stocks = (from m in d_Stocks select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.ShopId, m.ShopMode, m.IsOffSell }).Distinct();
-
             var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
             var d_Shops = CurrentDb.Shop.Where(m => m.MerchId == merchId).ToList();
             var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).ToList();
@@ -51,7 +49,7 @@ namespace LocalS.BLL.Biz
                 using (TransactionScope ts = new TransactionScope())
                 {
 
-                    var count = CurrentDb.ErpReplenishPlanDetail.Where(m => m.PlanId == replenishPlanId).Count();
+                    var count = CurrentDb.ErpReplenishPlanDeviceDetail.Where(m => m.PlanId == replenishPlanId).Count();
 
                     if (count > 0)
                     {
@@ -61,56 +59,85 @@ namespace LocalS.BLL.Biz
                     else
                     {
 
-                        foreach (var d_Stock in d_Stocks)
+                        var d_Device_Plans = (from m in d_Stocks
+                                              select new { m.MerchId, m.StoreId, m.ShopId, m.DeviceId }).Distinct().ToList();
+
+                        foreach (var d_Device_Plan in d_Device_Plans)
                         {
-                            var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
+                            var l_Store = d_Stores.Where(m => m.Id == d_Device_Plan.StoreId).FirstOrDefault();
+                            var l_Shop = d_Shops.Where(m => m.Id == d_Device_Plan.ShopId).FirstOrDefault();
+                            var l_Device = d_MerchDevices.Where(m => m.DeviceId == d_Device_Plan.DeviceId).FirstOrDefault();
 
-                            var l_Store = d_Stores.Where(m => m.Id == d_Stock.StoreId).FirstOrDefault();
-                            var l_Shop = d_Shops.Where(m => m.Id == d_Stock.ShopId).FirstOrDefault();
-                            var l_Device = d_MerchDevices.Where(m => m.DeviceId == d_Stock.DeviceId).FirstOrDefault();
+                            var d_PlanDevice = new ErpReplenishPlanDevice();
+                            d_PlanDevice.Id = IdWorker.Build(IdType.NewGuid);
+                            d_PlanDevice.PlanId = d_ErpReplenishPlan.Id;
+                            d_PlanDevice.PlanCumCode = d_ErpReplenishPlan.CumCode;
+                            d_PlanDevice.MerchId = d_Device_Plan.MerchId;
+                            d_PlanDevice.StoreId = l_Store.Id;
+                            d_PlanDevice.StoreName = l_Store.Name;
+                            d_PlanDevice.ShopId = l_Shop.Id;
+                            d_PlanDevice.ShopName = l_Shop.Name;
+                            d_PlanDevice.DeviceId = l_Device.DeviceId;
+                            d_PlanDevice.DeviceCumCode = l_Device.CumCode;
+                            d_PlanDevice.MakeDate = d_ErpReplenishPlan.MakeDate;
+                            d_PlanDevice.MakerId = d_ErpReplenishPlan.MakerId;
+                            d_PlanDevice.MakerName = d_ErpReplenishPlan.MakerName;
+                            d_PlanDevice.MakeTime = d_ErpReplenishPlan.MakeTime;
+                            d_PlanDevice.Creator = d_ErpReplenishPlan.Creator;
+                            d_PlanDevice.CreateTime = DateTime.Now;
 
-                            //var l_Stock = d_Stocks.Where(m => m.SkuId == dt_Stock.SkuId);
-
-                            //int warnQuantity = l_Stock.Sum(m => m.WarnQuantity);
-                            //int sellQuantity = l_Stock.Sum(m => m.SellQuantity);
-                            //int waitPayLockQuantity = l_Stock.Sum(m => m.WaitPayLockQuantity);
-                            //int waitPickupLockQuantity = l_Stock.Sum(m => m.WaitPickupLockQuantity);
-
-                            int sumQuantity = d_Stock.SumQuantity;
-                            int maxQuantity = d_Stock.MaxQuantity;
-                            ////sumQuantity <= warnQuantity
-                            if (true)
+                            var d_Device_Stocks = (from m in d_Stocks
+                                                   where m.MerchId == d_Device_Plan.MerchId &&
+                                                   m.StoreId == d_Device_Plan.StoreId &&
+                                                   m.ShopId == d_Device_Plan.ShopId &&
+                                                   m.DeviceId == d_Device_Plan.DeviceId
+                                                   select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.CabinetId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                            foreach (var d_Stock in d_Stocks)
                             {
-                                var d_ErpReplenishPlanDetail = new ErpReplenishPlanDetail();
-                                d_ErpReplenishPlanDetail.Id = IdWorker.Build(IdType.NewGuid);
-                                d_ErpReplenishPlanDetail.PlanId = d_ErpReplenishPlan.Id;
-                                d_ErpReplenishPlanDetail.PlanCumCode = d_ErpReplenishPlan.CumCode;
-                                d_ErpReplenishPlanDetail.MerchId = d_Stock.MerchId;
-                                d_ErpReplenishPlanDetail.StoreId = l_Store.Id;
-                                d_ErpReplenishPlanDetail.StoreName = l_Store.Name;
-                                d_ErpReplenishPlanDetail.ShopId = l_Shop.Id;
-                                d_ErpReplenishPlanDetail.ShopName = l_Shop.Name;
-                                d_ErpReplenishPlanDetail.DeviceId = l_Device.DeviceId;
-                                d_ErpReplenishPlanDetail.DeviceCumCode = l_Device.CumCode;
-                                d_ErpReplenishPlanDetail.CabinetId = d_Stock.CabinetId;
-                                d_ErpReplenishPlanDetail.CabinetName = d_Stock.CabinetId;
-                                d_ErpReplenishPlanDetail.SlotId = d_Stock.SlotId;
-                                d_ErpReplenishPlanDetail.SlotName = d_Stock.SlotId;
-                                d_ErpReplenishPlanDetail.SpuId = r_Sku.SpuId;
-                                d_ErpReplenishPlanDetail.SkuId = r_Sku.Id;
-                                d_ErpReplenishPlanDetail.SkuName = r_Sku.Name;
-                                d_ErpReplenishPlanDetail.SkuCumCode = r_Sku.CumCode;
-                                d_ErpReplenishPlanDetail.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
-                                d_ErpReplenishPlanDetail.PlanQuantity = maxQuantity - sumQuantity;
-                                d_ErpReplenishPlanDetail.RshQuantity = 0;
-                                d_ErpReplenishPlanDetail.BuildTime = buildTime;
-                                d_ErpReplenishPlanDetail.MakerId = d_ErpReplenishPlan.MakerId;
-                                d_ErpReplenishPlanDetail.MakerName = d_ErpReplenishPlan.MakerName;
-                                d_ErpReplenishPlanDetail.Creator = d_ErpReplenishPlan.Creator;
-                                d_ErpReplenishPlanDetail.CreateTime = DateTime.Now;
+                                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
 
-                                CurrentDb.ErpReplenishPlanDetail.Add(d_ErpReplenishPlanDetail);
+
+                                int sumQuantity = d_Stock.SumQuantity;
+                                int maxQuantity = d_Stock.MaxQuantity;
+
+                                if (true)
+                                {
+                                    var d_PlanDeviceDetail = new ErpReplenishPlanDeviceDetail();
+                                    d_PlanDeviceDetail.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_PlanDeviceDetail.PlanId = d_ErpReplenishPlan.Id;
+                                    d_PlanDeviceDetail.PlanDeviceId = d_PlanDevice.Id;
+                                    d_PlanDeviceDetail.PlanCumCode = d_ErpReplenishPlan.CumCode;
+                                    d_PlanDeviceDetail.MerchId = d_Stock.MerchId;
+                                    d_PlanDeviceDetail.StoreId = l_Store.Id;
+                                    d_PlanDeviceDetail.StoreName = l_Store.Name;
+                                    d_PlanDeviceDetail.ShopId = l_Shop.Id;
+                                    d_PlanDeviceDetail.ShopName = l_Shop.Name;
+                                    d_PlanDeviceDetail.DeviceId = l_Device.DeviceId;
+                                    d_PlanDeviceDetail.DeviceCumCode = l_Device.CumCode;
+                                    d_PlanDeviceDetail.CabinetId = d_Stock.CabinetId;
+                                    d_PlanDeviceDetail.CabinetName = d_Stock.CabinetId;
+                                    d_PlanDeviceDetail.SlotId = d_Stock.SlotId;
+                                    d_PlanDeviceDetail.SlotName = d_Stock.SlotId;
+                                    d_PlanDeviceDetail.SpuId = r_Sku.SpuId;
+                                    d_PlanDeviceDetail.SkuId = r_Sku.Id;
+                                    d_PlanDeviceDetail.SkuName = r_Sku.Name;
+                                    d_PlanDeviceDetail.SkuCumCode = r_Sku.CumCode;
+                                    d_PlanDeviceDetail.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
+                                    d_PlanDeviceDetail.PlanQuantity = maxQuantity - sumQuantity;
+                                    d_PlanDeviceDetail.RshQuantity = 0;
+                                    d_PlanDeviceDetail.BuildTime = buildTime;
+                                    d_PlanDeviceDetail.MakerId = d_ErpReplenishPlan.MakerId;
+                                    d_PlanDeviceDetail.MakerName = d_ErpReplenishPlan.MakerName;
+                                    d_PlanDeviceDetail.Creator = d_ErpReplenishPlan.Creator;
+                                    d_PlanDeviceDetail.CreateTime = DateTime.Now;
+
+                                    CurrentDb.ErpReplenishPlanDeviceDetail.Add(d_PlanDeviceDetail);
+                                    CurrentDb.SaveChanges();
+                                }
                             }
+
+                            CurrentDb.ErpReplenishPlanDevice.Add(d_PlanDevice);
+                            CurrentDb.SaveChanges();
                         }
 
                         CurrentDb.SaveChanges();

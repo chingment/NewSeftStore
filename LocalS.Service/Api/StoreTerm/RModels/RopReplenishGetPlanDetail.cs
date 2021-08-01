@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.StoreTerm
 {
-    public class RopStockSettingGetReplenishPlanDetail
+    public class RopReplenishGetPlanDetail
     {
-        public string PlanCumCode { get; set; }
+        public string PlanId { get; set; }
+        public string PlanDeviceId { get; set; }
         public string DeviceId { get; set; }
         public string CabinetId { get; set; }
     }

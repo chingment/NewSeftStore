@@ -443,6 +443,7 @@
     <Compile Include="Api\StoreTerm\Models\SlotModel.cs" />
     <Compile Include="Api\StoreTerm\OrderService.cs" />
     <Compile Include="Api\StoreTerm\ProductService.cs" />
+    <Compile Include="Api\StoreTerm\ReplenishService.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetImServiceSeats.cs" />
     <Compile Include="Api\StoreTerm\RModels\RetDeviceGetRunExHandleItems.cs" />
     <Compile Include="Api\StoreApp\RModels\RetMemberPayLevelSt.cs" />
@@ -461,7 +462,9 @@
     <Compile Include="Api\StoreTerm\RModels\RopOwnLoginByAccount.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOwnLoginByFingerVein.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOwnLogout..cs" />
-    <Compile Include="Api\StoreTerm\RModels\RopStockSettingGetReplenishPlanDetail.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopReplenishConfirmReplenish.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopReplenishGetPlanDetail.cs" />
+    <Compile Include="Api\StoreTerm\RModels\RopReplenishGetPlans.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetRowColLayout.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopStockSettingSaveCabinetSlot.cs" />
     <Compile Include="Api\StoreTerm\RModels\RopOrderBuildPayParams.cs" />

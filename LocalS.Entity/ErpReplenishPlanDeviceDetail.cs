@@ -1,14 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace LocalS.Entity
 {
-    [Table("ErpReplenishPlanDetail")]
-    public class ErpReplenishPlanDetail
+    [Table("ErpReplenishPlanDeviceDetail")]
+    public class ErpReplenishPlanDeviceDetail
     {
         [Key]
         public string Id { get; set; }
         public string PlanId { get; set; }
+        public string PlanDeviceId { get; set; }
         public string PlanCumCode { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }

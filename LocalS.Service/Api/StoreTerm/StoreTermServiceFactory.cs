@@ -48,5 +48,13 @@ namespace LocalS.Service.Api.StoreTerm
             }
         }
 
+        public static ReplenishService Replenish
+        {
+            get
+            {
+                return new ReplenishService();
+            }
+        }
+
     }
 }
