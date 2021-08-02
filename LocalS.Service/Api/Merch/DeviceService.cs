@@ -615,6 +615,19 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SellChannelStock.Remove(d_Stock);
                 }
 
+                var d_DeviceBindLog = new DeviceBindLog();
+                d_DeviceBindLog.Id = IdWorker.Build(IdType.NewGuid);
+                d_DeviceBindLog.DeviceId = rop.DeviceId;
+                d_DeviceBindLog.MerchId = merchId;
+                d_DeviceBindLog.StoreId = rop.StoreId;
+                d_DeviceBindLog.ShopId = rop.ShopId;
+                d_DeviceBindLog.BindType = E_DeviceBindType.BindOnShop;
+                d_DeviceBindLog.CreateTime = DateTime.Now;
+                d_DeviceBindLog.Creator = operater;
+                d_DeviceBindLog.RemarkByDev = "解绑门店";
+                CurrentDb.DeviceBindLog.Add(d_DeviceBindLog);
+                CurrentDb.SaveChanges();
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -630,55 +643,75 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId).FirstOrDefault();
-
-            if (d_Device == null)
+            using (TransactionScope ts = new TransactionScope())
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到设备");
-            }
+                var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == merchId && m.Id == rop.DeviceId).FirstOrDefault();
 
-            if (!string.IsNullOrEmpty(d_Device.CurUseStoreId) || !string.IsNullOrEmpty(d_Device.CurUseShopId))
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被绑定，请先解除绑定");
-            }
+                if (d_Device == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到设备");
+                }
 
-            d_Device.CurUseStoreId = rop.StoreId;
-            d_Device.CurUseShopId = rop.ShopId;
-            d_Device.Mender = operater;
-            d_Device.MendTime = DateTime.Now;
-            CurrentDb.SaveChanges();
+                if (!string.IsNullOrEmpty(d_Device.CurUseStoreId) || !string.IsNullOrEmpty(d_Device.CurUseShopId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已被绑定，请先解除绑定");
+                }
 
-            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
-            var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
-            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == merchId).FirstOrDefault();
-
-            if (d_MerchDevice == null)
-            {
-                d_MerchDevice = new MerchDevice();
-                d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
-                d_MerchDevice.MerchId = merchId;
-                d_MerchDevice.DeviceId = rop.DeviceId;
-                d_MerchDevice.CurUseStoreId = rop.StoreId;
-                d_MerchDevice.CurUseShopId = rop.ShopId;
-                d_MerchDevice.Name = d_Device.Name;
-                d_MerchDevice.LogoImgUrl = d_Device.LogoImgUrl;
-                d_MerchDevice.Creator = operater;
-                d_MerchDevice.CreateTime = DateTime.Now;
-                CurrentDb.MerchDevice.Add(d_MerchDevice);
+                d_Device.CurUseStoreId = rop.StoreId;
+                d_Device.CurUseShopId = rop.ShopId;
+                d_Device.Mender = operater;
+                d_Device.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
-            }
-            else
-            {
-                d_MerchDevice.CurUseStoreId = rop.StoreId;
-                d_MerchDevice.CurUseShopId = rop.ShopId;
-                d_MerchDevice.Mender = operater;
-                d_MerchDevice.MendTime = DateTime.Now;
+
+                var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId).FirstOrDefault();
+                var d_Shop = CurrentDb.Shop.Where(m => m.Id == rop.ShopId).FirstOrDefault();
+                var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == merchId).FirstOrDefault();
+
+                if (d_MerchDevice == null)
+                {
+                    d_MerchDevice = new MerchDevice();
+                    d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
+                    d_MerchDevice.MerchId = merchId;
+                    d_MerchDevice.DeviceId = rop.DeviceId;
+                    d_MerchDevice.CurUseStoreId = rop.StoreId;
+                    d_MerchDevice.CurUseShopId = rop.ShopId;
+                    d_MerchDevice.Name = d_Device.Name;
+                    d_MerchDevice.LogoImgUrl = d_Device.LogoImgUrl;
+                    d_MerchDevice.Creator = operater;
+                    d_MerchDevice.CreateTime = DateTime.Now;
+                    CurrentDb.MerchDevice.Add(d_MerchDevice);
+                    CurrentDb.SaveChanges();
+                }
+                else
+                {
+                    d_MerchDevice.CurUseStoreId = rop.StoreId;
+                    d_MerchDevice.CurUseShopId = rop.ShopId;
+                    d_MerchDevice.Mender = operater;
+                    d_MerchDevice.MendTime = DateTime.Now;
+                    CurrentDb.SaveChanges();
+                }
+
+                var d_DeviceBindLog = new DeviceBindLog();
+                d_DeviceBindLog.Id = IdWorker.Build(IdType.NewGuid);
+                d_DeviceBindLog.DeviceId = rop.DeviceId;
+                d_DeviceBindLog.MerchId = merchId;
+                d_DeviceBindLog.StoreId = rop.StoreId;
+                d_DeviceBindLog.ShopId = rop.ShopId;
+                d_DeviceBindLog.BindType = E_DeviceBindType.BindOnShop;
+                d_DeviceBindLog.CreateTime = DateTime.Now;
+                d_DeviceBindLog.Creator = operater;
+                d_DeviceBindLog.RemarkByDev = "绑定门店";
+                CurrentDb.DeviceBindLog.Add(d_DeviceBindLog);
                 CurrentDb.SaveChanges();
+
+                ts.Complete();
+
+
+                MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_bind_shop, string.Format("选择设备（{0}）到店铺（{1}）门店（{2}）添加成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
+
             }
-
-            MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_bind_shop, string.Format("选择设备（{0}）到店铺（{1}）门店（{2}）添加成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 
             return result;
         }

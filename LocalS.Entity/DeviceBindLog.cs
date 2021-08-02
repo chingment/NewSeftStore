@@ -10,7 +10,9 @@ namespace LocalS.Entity
         BindOnMerch = 1,
         BindOffMerch = 2,
         BindOnStore = 3,
-        BindOffStore = 4
+        BindOffStore = 4,
+        BindOnShop = 5,
+        BindOffShop = 6
     }
 
     [Table("DeviceBindLog")]
@@ -21,6 +23,7 @@ namespace LocalS.Entity
         public string DeviceId { get; set; }
         public string MerchId { get; set; }
         public string StoreId { get; set; }
+        public string ShopId { get; set; }
         public E_DeviceBindType BindType { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

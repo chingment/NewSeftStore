@@ -253,6 +253,7 @@ namespace LocalS.Service.Api.Admin
                 deviceBindLog.DeviceId = rop.DeviceId;
                 deviceBindLog.MerchId = rop.MerchId;
                 deviceBindLog.StoreId = null;
+                deviceBindLog.ShopId = null;
                 deviceBindLog.BindType = E_DeviceBindType.BindOnMerch;
                 deviceBindLog.CreateTime = DateTime.Now;
                 deviceBindLog.Creator = operater;
@@ -291,6 +292,7 @@ namespace LocalS.Service.Api.Admin
                 deviceBindLog.DeviceId = rop.DeviceId;
                 deviceBindLog.MerchId = device.CurUseMerchId;
                 deviceBindLog.StoreId = device.CurUseStoreId;
+                deviceBindLog.ShopId = device.CurUseShopId;
                 deviceBindLog.BindType = E_DeviceBindType.BindOnMerch;
                 deviceBindLog.CreateTime = DateTime.Now;
                 deviceBindLog.Creator = operater;
@@ -299,6 +301,7 @@ namespace LocalS.Service.Api.Admin
 
                 device.CurUseMerchId = null;
                 device.CurUseStoreId = null;
+                device.CurUseShopId = null;
                 device.Mender = operater;
                 device.MendTime = DateTime.Now;
 
