@@ -24,24 +24,21 @@ namespace LocalS.BLL.Biz
             string replenishPlanId = rop.ReplenishPlanId;
 
             var d_ErpReplenishPlan = CurrentDb.ErpReplenishPlan.Where(m => m.Id == replenishPlanId).FirstOrDefault();
-
             d_ErpReplenishPlan.Status = E_ErpReplenishPlan_Status.Building;
             CurrentDb.SaveChanges();
 
             var merchId = d_ErpReplenishPlan.MerchId;
 
-            var query = (from m in CurrentDb.SellChannelStock
-                         where
-                         m.MerchId == merchId &&
-                         m.ShopMode == E_ShopMode.Device
+            var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.IsStopUse == false && m.CurUseStoreId != null && m.CurUseShopId != null).ToList();
 
-                         select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.CabinetId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+            var deviceIds = d_MerchDevices.Select(m => m.DeviceId).ToArray();
 
-            var d_Stocks = query.OrderBy(m => m.DeviceId).ToList();
-
+            var d_Stocks = (from m in CurrentDb.SellChannelStock
+                            where m.MerchId == merchId && m.ShopMode == E_ShopMode.Device && deviceIds.Contains(m.DeviceId)
+                            select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.CabinetId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell }).OrderBy(m => m.DeviceId).ToList();
             var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
             var d_Shops = CurrentDb.Shop.Where(m => m.MerchId == merchId).ToList();
-            var d_MerchDevices = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId).ToList();
+          
 
             DateTime buildTime = DateTime.Now;
             try
@@ -58,6 +55,8 @@ namespace LocalS.BLL.Biz
                     }
                     else
                     {
+
+                        bool is_Plan_Has = false;
 
                         var d_Device_Plans = (from m in d_Stocks
                                               select new { m.MerchId, m.StoreId, m.ShopId, m.DeviceId }).Distinct().ToList();
@@ -92,6 +91,7 @@ namespace LocalS.BLL.Biz
                                                    m.ShopId == d_Device_Plan.ShopId &&
                                                    m.DeviceId == d_Device_Plan.DeviceId
                                                    select new { m.StoreId, m.MerchId, m.SkuId, m.DeviceId, m.CabinetId, m.WarnQuantity, m.ShopId, m.ShopMode, m.SlotId, m.SellQuantity, m.WaitPayLockQuantity, m.WaitPickupLockQuantity, m.SumQuantity, m.MaxQuantity, m.IsOffSell });
+                            bool is_Device_Has = false;
                             foreach (var d_Stock in d_Stocks)
                             {
                                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
@@ -103,6 +103,9 @@ namespace LocalS.BLL.Biz
                                 int rshQuantity = maxQuantity - sumQuantity;
                                 if ((sumQuantity < warnQuantity) && rshQuantity > 0)
                                 {
+                                    is_Device_Has = true;
+                                    is_Plan_Has = true;
+
                                     var d_PlanDeviceDetail = new ErpReplenishPlanDeviceDetail();
                                     d_PlanDeviceDetail.Id = IdWorker.Build(IdType.NewGuid);
                                     d_PlanDeviceDetail.PlanId = d_ErpReplenishPlan.Id;
@@ -131,18 +134,34 @@ namespace LocalS.BLL.Biz
                                     d_PlanDeviceDetail.MakerName = d_ErpReplenishPlan.MakerName;
                                     d_PlanDeviceDetail.Creator = d_ErpReplenishPlan.Creator;
                                     d_PlanDeviceDetail.CreateTime = DateTime.Now;
-
                                     CurrentDb.ErpReplenishPlanDeviceDetail.Add(d_PlanDeviceDetail);
                                     CurrentDb.SaveChanges();
                                 }
                             }
-                            CurrentDb.ErpReplenishPlanDevice.Add(d_PlanDevice);
-                            CurrentDb.SaveChanges();
+
+                            if (is_Device_Has)
+                            {
+                                CurrentDb.ErpReplenishPlanDevice.Add(d_PlanDevice);
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+
+                        if (is_Plan_Has)
+                        {
+                            d_ErpReplenishPlan.BuildTime = DateTime.Now;
                         }
 
                         CurrentDb.SaveChanges();
                         ts.Complete();
-                        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "生成成功");
+
+                        if (is_Plan_Has)
+                        {
+                            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "生成成功");
+                        }
+                        else
+                        {
+                            result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成失败，没有需补货的商品");
+                        }
                     }
                 }
 
@@ -150,7 +169,7 @@ namespace LocalS.BLL.Biz
             catch (Exception ex)
             {
                 LogUtil.Error("", ex);
-                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "生成异常");
+                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "生成异常，处理过程失败");
             }
 
 
