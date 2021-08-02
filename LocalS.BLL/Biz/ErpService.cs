@@ -96,11 +96,12 @@ namespace LocalS.BLL.Biz
                             {
                                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(d_Stock.MerchId, d_Stock.SkuId);
 
-
+                                int warnQuantity = d_Stock.WarnQuantity;
                                 int sumQuantity = d_Stock.SumQuantity;
-                                int maxQuantity = d_Stock.MaxQuantity;
 
-                                if (true)
+                                int maxQuantity = d_Stock.MaxQuantity;
+                                int rshQuantity = maxQuantity - sumQuantity;
+                                if ((sumQuantity < warnQuantity) && rshQuantity > 0)
                                 {
                                     var d_PlanDeviceDetail = new ErpReplenishPlanDeviceDetail();
                                     d_PlanDeviceDetail.Id = IdWorker.Build(IdType.NewGuid);
@@ -123,8 +124,8 @@ namespace LocalS.BLL.Biz
                                     d_PlanDeviceDetail.SkuName = r_Sku.Name;
                                     d_PlanDeviceDetail.SkuCumCode = r_Sku.CumCode;
                                     d_PlanDeviceDetail.SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes);
-                                    d_PlanDeviceDetail.PlanQuantity = maxQuantity - sumQuantity;
-                                    d_PlanDeviceDetail.RshQuantity = 0;
+                                    d_PlanDeviceDetail.PlanRshQuantity = rshQuantity;
+                                    d_PlanDeviceDetail.RealRshQuantity = 0;
                                     d_PlanDeviceDetail.BuildTime = buildTime;
                                     d_PlanDeviceDetail.MakerId = d_ErpReplenishPlan.MakerId;
                                     d_PlanDeviceDetail.MakerName = d_ErpReplenishPlan.MakerName;
@@ -135,7 +136,6 @@ namespace LocalS.BLL.Biz
                                     CurrentDb.SaveChanges();
                                 }
                             }
-
                             CurrentDb.ErpReplenishPlanDevice.Add(d_PlanDevice);
                             CurrentDb.SaveChanges();
                         }

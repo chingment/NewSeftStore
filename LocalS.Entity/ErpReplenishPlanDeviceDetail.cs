@@ -28,8 +28,8 @@ namespace LocalS.Entity
         public string CabinetName { get; set; }
         public string SlotId { get; set; }
         public string SlotName { get; set; }
-        public int PlanQuantity { get; set; }
-        public int RshQuantity { get; set; }
+        public int PlanRshQuantity { get; set; }
+        public int RealRshQuantity { get; set; }
         public string MakerId { get; set; }
         public string MakerName { get; set; }
         public DateTime? BuildTime { get; set; }

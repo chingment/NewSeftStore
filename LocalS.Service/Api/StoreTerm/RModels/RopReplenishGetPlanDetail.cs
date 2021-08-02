@@ -11,6 +11,5 @@ namespace LocalS.Service.Api.StoreTerm
         public string PlanId { get; set; }
         public string PlanDeviceId { get; set; }
         public string DeviceId { get; set; }
-        public string CabinetId { get; set; }
     }
 }
