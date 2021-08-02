@@ -621,7 +621,7 @@ namespace LocalS.Service.Api.Merch
                 d_DeviceBindLog.MerchId = merchId;
                 d_DeviceBindLog.StoreId = rop.StoreId;
                 d_DeviceBindLog.ShopId = rop.ShopId;
-                d_DeviceBindLog.BindType = E_DeviceBindType.BindOnShop;
+                d_DeviceBindLog.BindType = E_DeviceBindType.BindOffShop;
                 d_DeviceBindLog.CreateTime = DateTime.Now;
                 d_DeviceBindLog.Creator = operater;
                 d_DeviceBindLog.RemarkByDev = "解绑门店";
@@ -705,7 +705,6 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
-
 
                 MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.device_bind_shop, string.Format("选择设备（{0}）到店铺（{1}）门店（{2}）添加成功", rop.DeviceId, d_Store.Name, d_Shop.Name), rop);
 

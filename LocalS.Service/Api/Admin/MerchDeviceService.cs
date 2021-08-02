@@ -308,7 +308,7 @@ namespace LocalS.Service.Api.Admin
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
             }
             return result;
         }

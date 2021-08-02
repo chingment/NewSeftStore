@@ -82,6 +82,7 @@ namespace LocalS.Service.Api.StoreTerm
         public IResult GetPlanDetail(string operater, RopReplenishGetPlanDetail rop)
         {
             var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
+
             var d_DeviceCabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.IsUse == true).ToList();
             var d_DeviceStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.DeviceId == rop.DeviceId).ToList();
             var d_DeviceReplenishs = (from u in CurrentDb.ErpReplenishPlanDeviceDetail where u.PlanDeviceId == rop.PlanDeviceId select new { u.Id, u.PlanId, u.PlanCumCode, u.RsherName, u.CabinetId, u.CabinetName, u.SlotId, u.SlotName, u.SkuId, u.SkuCumCode, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RshTime }).ToList();
