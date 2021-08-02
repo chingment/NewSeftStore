@@ -51,7 +51,7 @@ namespace LocalS.Service.Api.StoreTerm
                 }
                 else
                 {
-                    m_Status = new StatusModel(1, "已完成");
+                    m_Status = new StatusModel(2, "已完成");
                 }
 
                 olist.Add(new
@@ -154,11 +154,16 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var result = new CustomJsonResult();
 
+            List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
+
             using (TransactionScope ts = new TransactionScope())
             {
                 var d_SysUser = CurrentDb.SysMerchUser.Where(m => m.Id == operater).FirstOrDefault();
 
                 var d_PlanDevice = CurrentDb.ErpReplenishPlanDevice.Where(m => m.Id == rop.PlanDeviceId).FirstOrDefault();
+
+                if (d_PlanDevice.RshTime != null)
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "补货计划单已处理");
 
                 d_PlanDevice.RsherId = operater;
                 d_PlanDevice.RsherName = d_SysUser.FullName;
@@ -179,15 +184,30 @@ namespace LocalS.Service.Api.StoreTerm
                         d_PlanDeviceDetail.RealRshQuantity = slot.RealRshQuantity;
                         d_PlanDeviceDetail.Mender = d_PlanDevice.Mender;
                         d_PlanDeviceDetail.MendTime = d_PlanDevice.MendTime;
-                        CurrentDb.SaveChanges();
 
+                        if (slot.RealRshQuantity > 0)
+                        {
+                            var ret_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.device_slot_rsh, E_ShopMode.Device, d_PlanDeviceDetail.MerchId, d_PlanDeviceDetail.StoreId, d_PlanDeviceDetail.ShopId, d_PlanDeviceDetail.DeviceId, d_PlanDeviceDetail.CabinetId, d_PlanDeviceDetail.SlotId, d_PlanDeviceDetail.SkuId, slot.RealRshQuantity);
+                            if (ret_OperateStock.Result != ResultType.Success)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, ret_OperateStock.Message);
+                            }
+                            s_StockChangeRecords.AddRange(ret_OperateStock.Data.ChangeRecords);
+                        }
                     }
                 }
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "异常处理成功");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "处理成功");
+
+
+                MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, rop.DeviceId, EventCode.device_slot_rsh, "补货处理成功", new
+                {
+                    Rop = rop,
+                    StockChangeRecords = s_StockChangeRecords
+                });
             }
             return result;
         }

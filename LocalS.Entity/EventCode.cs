@@ -22,6 +22,8 @@ namespace LocalS.Entity
         public const string vending_pickup_test = "vending_pickup_test";
         [EventCodeRemark("A", "设备货道商品保存")]
         public const string device_save_slot = "device_save_slot";
+        [EventCodeRemark("A", "设备货道商品补货")]
+        public const string device_slot_rsh = "device_slot_rsh";
         [EventCodeRemark("A", "设备货道商品移除")]
         public const string device_remove_slot = "device_remove_slot";
         [EventCodeRemark("A", "设备商品库存查看")]

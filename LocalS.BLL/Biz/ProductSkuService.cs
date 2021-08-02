@@ -279,6 +279,28 @@ namespace LocalS.BLL.Biz
                 var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, skuId);
                 switch (operateEvent)
                 {
+                    case EventCode.device_slot_rsh:
+                        #region device_slot_rsh
+
+                        sellChannelStock = CurrentDb.SellChannelStock.Where(m => m.ShopMode == shopMode && m.MerchId == merchId && m.StoreId == storeId && m.ShopId == shopId && m.DeviceId == deviceId && m.CabinetId == cabinetId && m.SlotId == slotId && m.SkuId == skuId).FirstOrDefault();
+                        if (sellChannelStock == null)
+                        {
+                            ts.Complete();
+                            return new CustomJsonResult<RetOperateStock>(ResultType.Failure, ResultCode.Failure, string.Format("库存信息找不到:{0}", skuId), null);
+                        }
+
+                        sellChannelStock.SumQuantity += quantity;
+                        sellChannelStock.SellQuantity += quantity;
+                        sellChannelStock.Version += 1;
+                        sellChannelStock.Mender = operater;
+                        sellChannelStock.MendTime = DateTime.Now;
+                        CurrentDb.SaveChanges();
+                        ts.Complete();
+
+                        result = new CustomJsonResult<RetOperateStock>(ResultType.Success, ResultCode.Success, "操作成功", ret);
+
+                        #endregion
+                        break;
                     case EventCode.order_reserve_success:
                         #region OrderReserve
 
