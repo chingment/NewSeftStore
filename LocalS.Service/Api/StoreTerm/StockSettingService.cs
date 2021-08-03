@@ -192,60 +192,66 @@ namespace LocalS.Service.Api.StoreTerm
                     }
 
                     newRowColLayout.PendantRows = oldRowColLayout.PendantRows;
-
                 }
 
-
-                //旧布局代表有数据需要检测
-                if (oldRowColLayout.Rows != null)
+                if (oldRowColLayout != null)
                 {
-                    List<string> slotIds = new List<string>();
-                    for (int i = 0; i < newRowColLayout.Rows.Count; i++)
+                    //旧布局代表有数据需要检测
+                    if (oldRowColLayout.Rows != null)
                     {
-                        int colLength = newRowColLayout.Rows[i];
-                        for (var j = 0; j < colLength; j++)
+                        int num = 1;
+                        List<string> slotIds = new List<string>();
+                        for (int i = 0; i < newRowColLayout.Rows.Count; i++)
                         {
-                            string slotId = string.Format("r{0}c{1}", i, j);
-                            slotIds.Add(slotId);
-                        }
-                    }
-
-                    var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == d_Device.CurUseMerchId && m.StoreId == d_Device.CurUseStoreId & m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId).ToList();
-
-                    for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
-                    {
-                        int colLength = oldRowColLayout.Rows[i];
-
-                        for (var j = 0; j < colLength; j++)
-                        {
-                            string slotId = string.Format("r{0}c{1}", i, j);
-
-                            var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
-                            if (sellChannelStock != null)
+                            int colLength = newRowColLayout.Rows[i];
+                            for (var j = colLength - 1; j > 0; j--)
                             {
-                                int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
-
-                                if (lockQuantity > 0)
-                                {
-                                    if (!slotIds.Contains(slotId))
-                                    {
-                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，货道存在锁定数量");
-                                    }
-                                }
+                                string slotId = string.Format("{0}-{1}-{2}", i, j, num);
+                                slotIds.Add(slotId);
+                                num++;
                             }
                         }
-                    }
-                    var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
-                    foreach (var removeSellChannelStock in removeSellChannelStocks)
-                    {
-                        var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.device_remove_slot, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.DeviceId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
 
-                        if (resultOperateSlot.Result != ResultType.Success)
+                        var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == d_Device.CurUseMerchId && m.StoreId == d_Device.CurUseStoreId & m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId).ToList();
+
+                        num = 1;
+                        for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
                         {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道库存扣减失败");
-                        }
+                            int colLength = oldRowColLayout.Rows[i];
 
-                        m_StockChangeRecords.AddRange(resultOperateSlot.Data.ChangeRecords);
+                            for (var j = colLength - 1; j > 0; j--)
+                            {
+                                string slotId = string.Format("{0}-{1}-{2}", i, j, num);
+
+                                var sellChannelStock = sellChannelStocks.Where(m => m.SlotId == slotId).FirstOrDefault();
+                                if (sellChannelStock != null)
+                                {
+                                    int lockQuantity = sellChannelStock.WaitPayLockQuantity + sellChannelStock.WaitPickupLockQuantity;
+
+                                    if (lockQuantity > 0)
+                                    {
+                                        if (!slotIds.Contains(slotId))
+                                        {
+                                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扫描结果上传失败，货道存在锁定数量");
+                                        }
+                                    }
+                                }
+
+                                num++;
+                            }
+                        }
+                        var removeSellChannelStocks = sellChannelStocks.Where(m => !slotIds.Contains(m.SlotId)).ToList();
+                        foreach (var removeSellChannelStock in removeSellChannelStocks)
+                        {
+                            var resultOperateSlot = BizFactory.ProductSku.OperateSlot(IdWorker.Build(IdType.NewGuid), EventCode.device_remove_slot, removeSellChannelStock.MerchId, removeSellChannelStock.StoreId, removeSellChannelStock.ShopId, rop.DeviceId, removeSellChannelStock.CabinetId, removeSellChannelStock.SlotId, removeSellChannelStock.SkuId);
+
+                            if (resultOperateSlot.Result != ResultType.Success)
+                            {
+                                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "货道库存扣减失败");
+                            }
+
+                            m_StockChangeRecords.AddRange(resultOperateSlot.Data.ChangeRecords);
+                        }
                     }
                 }
 
