@@ -32,6 +32,7 @@ namespace LocalS.Entity
         public int RealRshQuantity { get; set; }
         public string MakerId { get; set; }
         public string MakerName { get; set; }
+        public DateTime? MakeTime { get; set; }
         public DateTime? BuildTime { get; set; }
         public DateTime? RshTime { get; set; }
         public string RsherId { get; set; }

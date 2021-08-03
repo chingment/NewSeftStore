@@ -49,8 +49,10 @@ namespace LocalS.Service.Api.Merch
         public string SkuSpecDes { get; set; }
         public string DeviceId { get; set; }
         public string DeviceCumCode { get; set; }
-        public int PlanQuantity { get; set; }
-        public int RshQuantity { get; set; }
+        public string CabinetId { get; set; }
+        public string SlotId { get; set; }
+        public int PlanRshQuantity { get; set; }
+        public int RealRshQuantity { get; set; }
         public string MakerName { get; set; }
         public DateTime? BuildTime { get; set; }
         public DateTime? RshTime { get; set; }
@@ -662,362 +664,79 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
+
+        public string GetCabinetName(string cabinetId)
+        {
+            return cabinetId;
+        }
+
+        public string GetSlotName(string cabinetId, string slotId)
+        {
+            if (cabinetId.IndexOf("ds") > -1)
+                return slotId.Split('-')[2];
+            else if (cabinetId.IndexOf("zs") > -1)
+                return slotId.Split('-')[2];
+
+            return "";
+        }
+
+
         public CustomJsonResult DeviceReplenishPlanGet(string operater, string merchId, RopReportDeviceReplenishPlanGet rop)
         {
             var result = new CustomJsonResult();
 
-            StringBuilder sbTable = new StringBuilder();
-            sbTable.Append("<table id=\"abc\" class='list-tb2' cellspacing='0' cellpadding='0'>");
-            sbTable.Append("{content}");
-            sbTable.Append("</table>");
+            var query = (from u in CurrentDb.ErpReplenishPlanDeviceDetail
+                         where u.MerchId == merchId
+                         select new { u.PlanCumCode, u.PlanId, u.MakeTime, u.MakerName, u.StoreName, u.ShopName, u.DeviceId, u.DeviceCumCode, u.CabinetId, u.SlotId, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RsherName, u.RshTime });
 
-
-            #region POST
-            StringBuilder sql = new StringBuilder(" select StoreId, PlanCumCode,StoreName,ShopName,DeviceId,DeviceCumCode,SkuId,SkuName,SkuCumCode,SkuSpecDes,PlanQuantity,RshQuantity,BuildTime,RshTime,RsherName,MakerName  from  ");
-            sql.Append(" ErpReplenishPlanDetail  ");
-
-            sql.Append(" where merchId='" + merchId + "' and SkuCumCode is not null ");
-
-            if (!string.IsNullOrEmpty(rop.ShopName))
+            if (!string.IsNullOrEmpty(rop.PlanId))
             {
-                sql.Append(" and ShopName like '%" + rop.ShopName + "%' ");
-            }
-
-            if (!string.IsNullOrEmpty(rop.MakerName))
-            {
-                sql.Append(" and MakerName like '%" + rop.MakerName + "%' ");
+                query = query.Where(m => m.PlanId == rop.PlanId);
             }
 
             if (!string.IsNullOrEmpty(rop.SkuCumCode))
             {
-                sql.Append(" and SkuCumCode like '%" + rop.SkuCumCode + "%' ");
+                query = query.Where(m => rop.SkuCumCode.Contains(m.SkuCumCode));
             }
 
-
-
-            sql.Append(" and PlanId = '" + rop.PlanId.NullToEmpty() + "' ");
-
-
-            sql.Append(" order by PlanCumCode desc ");
-
-
-            List<ReplenishPlanDetailModel> dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToList<ReplenishPlanDetailModel>(true);
-
-            StringBuilder sbTableContent = new StringBuilder();
-
-            var dt1 = (from m in dtData
-                       select new { m.PlanCumCode, m.BuildTime, m.MakerName }).Distinct().ToList();
-
-
-            for (int r = 0; r < dt1.Count; r++)
+            if (!string.IsNullOrEmpty(rop.ShopName))
             {
-                sbTableContent.Append("<tr class=\"row1\">");
-                sbTableContent.Append("<td colspan=\"4\">单号：" + dt1[r].PlanCumCode + " </td>");
-                sbTableContent.Append("<td colspan=\"4\">制单时间：" + dt1[r].BuildTime.ToUnifiedFormatDateTime() + " </td>");
-                sbTableContent.Append("<td colspan=\"4\">制单人：" + dt1[r].MakerName + " </td>");
-                sbTableContent.Append("</tr>");
-                sbTableContent.Append("<tr class=\"row2\">");
-                sbTableContent.Append("<td>店铺</td>");
-                sbTableContent.Append("<td>商品编码</td>");
-                sbTableContent.Append("<td>商品名称</td>");
-                sbTableContent.Append("<td>商品规格</td>");
-                sbTableContent.Append("<td>补货数</td>");
-                sbTableContent.Append("<td>门店</td>");
-                sbTableContent.Append("<td>总量</td>");
-                sbTableContent.Append("<td>设备</td>");
-                sbTableContent.Append("<td>数量</td>");
-                sbTableContent.Append("<td>补货人</td>");
-                sbTableContent.Append("<td>补数时间</td>");
-                sbTableContent.Append("<td>补货量</td>");
-                sbTableContent.Append("</tr>");
+                query = query.Where(m => rop.ShopName.Contains(m.ShopName));
+            }
 
-                string planCumCode = dt1[r].PlanCumCode;
-                var dt2 = (from m in dtData
-                           where m.PlanCumCode == planCumCode
-                           group m by new
-                           {
-                               m.StoreName
-                           }
-                           into g
-                           select new { g.Key, MyCount = g.Count() }).Distinct().ToList();
+            if (!string.IsNullOrEmpty(rop.MakerName))
+            {
+                query = query.Where(m => rop.MakerName.Contains(m.MakerName));
+            }
 
+            List<object> olist = new List<object>();
 
-                for (int j = 0; j < dt2.Count; j++)
+            var list = query.OrderByDescending(m => m.ShopName).ToList();
+
+            foreach (var item in list)
+            {
+                olist.Add(new
                 {
-                    string storeName = dt2[j].Key.StoreName;
-                    string storeCount = dt2[j].MyCount.ToString();
-
-                    var dt3 = (from m in dtData
-                               where m.PlanCumCode == planCumCode
-                               && m.StoreName == storeName
-                               group m by new
-                               {
-                                   m.SkuName,
-                                   m.SkuCumCode,
-                                   m.SkuSpecDes
-                               } into g
-                               select new { g.Key, MyCount = g.Count() }).Distinct().ToList();
-
-                    LogUtil.Info("Store.SkuCumCode.Count:" + dt3.Count);
-
-                    for (int x = 0; x < dt3.Count; x++)
-                    {
-                        string sku_Name = dt3[x].Key.SkuName;
-                        string sku_CumCode = dt3[x].Key.SkuCumCode;
-                        string sku_SpecDes = dt3[x].Key.SkuSpecDes;
-                        int sku_Count = dt3[x].MyCount;
-                        int sku_Quantity = (from m in dtData
-                                            where m.PlanCumCode == planCumCode
-                                            && m.StoreName == storeName
-                                            && m.SkuCumCode == sku_CumCode
-                                            select new { m.PlanQuantity }).Sum(m => m.PlanQuantity);
-
-                        var dt4 = (from m in dtData
-                                   where m.PlanCumCode == planCumCode
-                                   && m.StoreName == storeName
-                                   && m.SkuCumCode == sku_CumCode
-                                   group m by new
-                                   {
-                                       m.ShopName
-                                   } into g
-                                   select new { g.Key, MyCount = g.Count() }).Distinct().ToList();
-
-
-                        for (int y = 0; y < dt4.Count; y++)
-                        {
-                            string shop_Name = dt4[y].Key.ShopName;
-                            int shop_Count = dt4[y].MyCount;
-                            int shop_Quantity = (from m in dtData
-                                                 where m.PlanCumCode == planCumCode
-                                                 && m.StoreName == storeName
-                                                 && m.SkuCumCode == sku_CumCode
-                                                 && m.ShopName == shop_Name
-                                                 select new { m.PlanQuantity }).Sum(m => m.PlanQuantity);
-
-                            var dt5 = (from m in dtData
-                                       where m.PlanCumCode == planCumCode
-                                       && m.StoreName == storeName
-                                       && m.SkuCumCode == sku_CumCode
-                                       && m.ShopName == shop_Name
-                                       group m by new
-                                       {
-                                           m.PlanQuantity,
-                                           m.DeviceCumCode
-                                       } into g
-                                       select new { g.Key }).Distinct().ToList();
-                            for (int o = 0; o < dt5.Count; o++)
-                            {
-                                string device_CumCode = dt5[o].Key.DeviceCumCode;
-
-                                StringBuilder sbTableContent2 = new StringBuilder();
-                                sbTableContent2.Append("<tr class=\"row3\">");
-
-                                if (x == 0 && o == 0)
-                                {
-                                    sbTableContent2.Append("<td rowspan=\"" + storeCount + "\">" + storeName + "</td>");
-                                }
-
-                                if (sku_Count <= 1)
-                                {
-                                    sbTableContent2.Append("<td >" + sku_CumCode + "</td>");
-                                    sbTableContent2.Append("<td >" + sku_Name + "</td>");
-                                    sbTableContent2.Append("<td >" + sku_SpecDes + "</td>");
-                                    sbTableContent2.Append("<td >" + sku_Quantity + "</td>");
-                                }
-                                else
-                                {
-                                    if (y == 0 && o == 0)
-                                    {
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_CumCode + "</td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_Name + "</td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_SpecDes + "</td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + sku_Count + "\">" + sku_Quantity + "</td>");
-                                    }
-
-                                }
-
-                                if (shop_Count <= 1)
-                                {
-                                    sbTableContent2.Append("<td >" + shop_Name + "</td>");
-                                    sbTableContent2.Append("<td >" + shop_Quantity + "</td>");
-                                }
-                                else
-                                {
-                                    if (o == 0)
-                                    {
-                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\">" + shop_Name + "</td>");
-                                        sbTableContent2.Append("<td rowspan=\"" + shop_Count + "\">" + shop_Quantity + "</td>");
-                                    }
-                                }
-
-
-                                sbTableContent2.Append("<td>" + dt5[o].Key.DeviceCumCode + "</td>");
-                                sbTableContent2.Append("<td>" + dt5[o].Key.PlanQuantity + "</td>");
-
-                                var dt6 = (from m in dtData
-                                           where m.PlanCumCode == planCumCode
-                                           && m.StoreName == storeName
-                                           && m.SkuCumCode == sku_CumCode
-                                           && m.ShopName == shop_Name
-                                           && m.DeviceCumCode == device_CumCode
-                                           select m).FirstOrDefault();
-
-                                string rsherName = "";
-                                string rshTime = "";
-                                string rshQuantity = "";
-                                if (dt6 != null)
-                                {
-
-                                    rshTime = dt6.RshTime.ToUnifiedFormatDateTime();
-                                    if (dt6.RshTime == null)
-                                    {
-                                        rsherName = "";
-                                        rshQuantity = "";
-                                    }
-                                    else
-                                    {
-                                        rsherName = dt6.RsherName.NullToEmpty();
-                                        rshQuantity = dt6.RshQuantity.ToString();
-                                    }
-                                }
-
-                                sbTableContent2.Append("<td>" + rsherName + "</td>");
-                                sbTableContent2.Append("<td>" + rshTime + "</td>");
-                                sbTableContent2.Append("<td>" + rshQuantity + "</td>");
-
-
-
-                                sbTableContent2.Append("</tr>");
-                                sbTableContent.Append(sbTableContent2);
-
-                            }
-                        }
-                    }
-                }
+                    PlanCumCode = item.PlanCumCode,
+                    MakeTime = item.MakeTime.ToUnifiedFormatDateTime(),
+                    MakerName = item.MakerName,
+                    StoreName = item.StoreName,
+                    ShopName = item.ShopName,
+                    DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
+                    CabinetName = GetCabinetName(item.CabinetId),
+                    SlotName = GetSlotName(item.CabinetId, item.SlotId),
+                    SkuCumCode = item.SkuCumCode,
+                    SkuName = item.SkuName,
+                    SkuSpecDes = item.SkuSpecDes,
+                    PlanRshQuantity = item.PlanRshQuantity,
+                    RealRshQuantity = item.RealRshQuantity,
+                    RsherName = item.RsherName,
+                    RshTime = item.RshTime.ToUnifiedFormatDateTime()
+                });
 
             }
 
-            //for (int r = 0; r < dtData.Rows.Count; r++)
-            //{
-            //    sbTableContent.Append("<tr>");
-
-
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["PlanCumCode"].ToString().Trim() + " </td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["BuildTime"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["MakerName"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["StoreName"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["SkuCumCode"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["SkuName"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["SkuSpecDes"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["PlanQuantity"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["ShopName"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["PlanQuantity"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["DeviceCumCode"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["PlanQuantity"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["RsherName"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["RshTime"].ToString().Trim() + "</td>");
-            //    sbTableContent.Append("<td>" + dtData.Rows[r]["RshQuantity"].ToString().Trim() + "</td>");
-
-
-            //    sbTableContent.Append("</tr>");
-            //}
-
-            if (sbTableContent.Length == 0)
-            {
-                sbTableContent.Append("<tr class=\"row1\">");
-                sbTableContent.Append("<td colspan=\"4\">单号： </td>");
-                sbTableContent.Append("<td colspan=\"4\">制单时间： </td>");
-                sbTableContent.Append("<td colspan=\"4\">制单人： </td>");
-                sbTableContent.Append("</tr>");
-                sbTableContent.Append("<tr class=\"row2\">");
-                sbTableContent.Append("<td>店铺</td>");
-                sbTableContent.Append("<td>商品编码</td>");
-                sbTableContent.Append("<td>商品名称</td>");
-                sbTableContent.Append("<td>商品规格</td>");
-                sbTableContent.Append("<td>补货数</td>");
-                sbTableContent.Append("<td>门店</td>");
-                sbTableContent.Append("<td>总量</td>");
-                sbTableContent.Append("<td>设备</td>");
-                sbTableContent.Append("<td>数量</td>");
-                sbTableContent.Append("<td>补货人</td>");
-                sbTableContent.Append("<td>补数时间</td>");
-                sbTableContent.Append("<td>补货量</td>");
-                sbTableContent.Append("</tr>");
-            }
-
-            sbTable.Replace("{content}", sbTableContent.ToString());
-
-            ReportTable reportTable = new ReportTable(sbTable.ToString());
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", reportTable);
-
-            //if (model.Operate == Enumeration.OperateType.Serach)
-            //{
-            //    return Json(ResultType.Success, reportTable, "");
-            //}
-            //else
-            //{
-            //    NPOIExcelHelper.HtmlTable2Excel(reportTable.Html, "业务员对应POS机报表");
-
-            //    return Json(ResultType.Success, "");
-            //}
-            #endregion
-
-
-
-
-
-            //var query = (from m in CurrentDb.ErpReplenishPlanDetail
-            //             where
-            //             m.MerchId == merchId
-            //             select new
-            //             {
-            //                 m.PlanCumCode,
-            //                 m.StoreName,
-            //                 m.ShopName,
-            //                 m.DeviceId,
-            //                 m.DeviceCumCode,
-            //                 m.SkuId,
-            //                 m.SkuName,
-            //                 m.SkuCumCode,
-            //                 m.SkuSpecDes,
-            //                 m.PlanQuantity,
-            //                 m.RshQuantity,
-            //                 m.BuildTime,
-            //                 m.RshTime,
-            //                 m.RsherName,
-            //                 m.MakerName
-            //             });
-
-            //var d_Details = query.OrderBy(m => m.DeviceId).ToList();
-
-            //List<object> olist = new List<object>();
-
-            //foreach (var d_Detail in d_Details)
-            //{
-            //    olist.Add(new
-            //    {
-            //        PlanCumCode = d_Detail.PlanCumCode,
-            //        StoreName = d_Detail.StoreName,
-            //        ShopName = d_Detail.ShopName,
-            //        DeviceId = d_Detail.DeviceId,
-            //        DeviceCumCode = d_Detail.DeviceCumCode,
-            //        SkuId = d_Detail.SkuId,
-            //        SkuName = d_Detail.SkuName,
-            //        BuildTime=d_Detail.BuildTime,
-            //        SkuCumCode = d_Detail.SkuCumCode,
-            //        SkuSpecDes = d_Detail.SkuSpecDes,
-            //        PlanQuantity = d_Detail.PlanQuantity,
-            //        RshQuantity = d_Detail.RshQuantity,
-            //        RshTime = d_Detail.RshTime,
-            //        RsherName = d_Detail.RsherName,
-            //        MakerName=d_Detail.MakerName
-            //    });
-
-            //}
-
-
-            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
 
             return result;
 

@@ -18,6 +18,7 @@ namespace LocalS.Entity
         public string ShopName { get; set; }
         public string DeviceId { get; set; }
         public string DeviceCumCode { get; set; }
+        public string Cabinets { get; set; }
         public string MakerName { get; set; }
         public string MakerId { get; set; }
         public string MakeDate { get; set; }

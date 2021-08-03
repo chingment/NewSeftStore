@@ -12,9 +12,9 @@ namespace LocalS.Service.Api.StoreTerm
         public string PlanId { get; set; }
         public string PlanDeviceId { get; set; }
         public string DeviceId { get; set; }
-        public List<SlotModel> Slots { get; set; }
+        public List<RshSlotModel> RshSlots { get; set; }
 
-        public class SlotModel
+        public class RshSlotModel
         {
             public string SlotId { get; set; }
             public string CabinetId { get; set; }

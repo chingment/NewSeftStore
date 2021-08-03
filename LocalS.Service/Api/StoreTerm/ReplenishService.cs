@@ -83,22 +83,24 @@ namespace LocalS.Service.Api.StoreTerm
         {
             var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
 
-            var d_DeviceCabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == rop.DeviceId && m.IsUse == true).ToList();
-            var d_DeviceStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.DeviceId == rop.DeviceId).ToList();
-            var d_DeviceReplenishs = (from u in CurrentDb.ErpReplenishPlanDeviceDetail where u.PlanDeviceId == rop.PlanDeviceId select new { u.Id, u.PlanId, u.PlanCumCode, u.RsherName, u.CabinetId, u.CabinetName, u.SlotId, u.SlotName, u.SkuId, u.SkuCumCode, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RshTime }).ToList();
+            var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == m_Device.MerchId && m.StoreId == m_Device.StoreId && m.ShopId == m_Device.ShopId && m.DeviceId == rop.DeviceId).ToList();
+            var d_PlanDevice = CurrentDb.ErpReplenishPlanDevice.Where(m => m.Id == rop.PlanDeviceId).FirstOrDefault();
+            var d_PlanDeviceDetails = (from u in CurrentDb.ErpReplenishPlanDeviceDetail where u.PlanDeviceId == rop.PlanDeviceId select new { u.Id, u.PlanId, u.PlanCumCode, u.RsherName, u.CabinetId, u.CabinetName, u.SlotId, u.SlotName, u.SkuId, u.SkuCumCode, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RshTime }).ToList();
 
             Dictionary<string, object> cabinets = new Dictionary<string, object>();
 
-            foreach (var d_DeviceCabinet in d_DeviceCabinets)
+            var l_Cabinets = d_PlanDevice.Cabinets.ToJsonObject<List<CabinetModel>>();
+
+            foreach (var l_Cabinet in l_Cabinets)
             {
                 Dictionary<string, object> slots = new Dictionary<string, object>();
 
-                var l_DeviceStocks = d_DeviceStocks.Where(m => m.CabinetId == d_DeviceCabinet.CabinetId).ToList();
+                var l_Stocks = d_Stocks.Where(m => m.CabinetId == l_Cabinet.CabinetId).ToList();
 
-                foreach (var l_DeviceStock in l_DeviceStocks)
+                foreach (var l_Stock in l_Stocks)
                 {
-                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(l_DeviceStock.MerchId, l_DeviceStock.SkuId);
-                    var l_Rsh = d_DeviceReplenishs.Where(m => m.CabinetId == l_DeviceStock.CabinetId && m.SlotId == l_DeviceStock.SlotId).FirstOrDefault();
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(l_Stock.MerchId, l_Stock.SkuId);
+                    var l_Rsh = d_PlanDeviceDetails.Where(m => m.CabinetId == l_Stock.CabinetId && m.SlotId == l_Stock.SlotId).FirstOrDefault();
 
                     int planRshQuantity = 0;
                     int realRshQuantity = 0;
@@ -122,28 +124,28 @@ namespace LocalS.Service.Api.StoreTerm
                     {
                         var m_Slot = new
                         {
-                            SlotId = l_DeviceStock.SlotId,
-                            StockId = l_DeviceStock.Id,
-                            CabinetId = l_DeviceStock.CabinetId,
+                            SlotId = l_Stock.SlotId,
+                            StockId = l_Stock.Id,
+                            CabinetId = l_Stock.CabinetId,
                             SkuId = r_Sku.Id,
                             SkuCumCode = r_Sku.CumCode,
                             SkuName = r_Sku.Name,
                             SkuMainImgUrl = ImgSet.Convert_S(r_Sku.MainImgUrl),
                             SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
-                            SumQuantity = l_DeviceStock.SumQuantity + planRshQuantity,
-                            LockQuantity = l_DeviceStock.WaitPayLockQuantity + l_DeviceStock.WaitPickupLockQuantity,
-                            SellQuantity = l_DeviceStock.SellQuantity + planRshQuantity,
+                            SumQuantity = l_Stock.SumQuantity + planRshQuantity,
+                            LockQuantity = l_Stock.WaitPayLockQuantity + l_Stock.WaitPickupLockQuantity,
+                            SellQuantity = l_Stock.SellQuantity + planRshQuantity,
                             PlanRshQuantity = planRshQuantity,
                             RealRshQuantity = realRshQuantity,
                             IsPlanRsh = isPlanRsh,
-                            Version = l_DeviceStock.Version
+                            Version = l_Stock.Version
                         };
 
-                        slots.Add(l_DeviceStock.SlotId, m_Slot);
+                        slots.Add(l_Stock.SlotId, m_Slot);
                     }
                 }
 
-                cabinets.Add(d_DeviceCabinet.CabinetId, new { RowColLayout = d_DeviceCabinet.RowColLayout, Slots = slots });
+                cabinets.Add(l_Cabinet.CabinetId, new { CabinetId = l_Cabinet.CabinetId, Name = l_Cabinet.Name, Priority = l_Cabinet.Priority, RowColLayout = l_Cabinet.RowColLayout, RshSlots = slots });
             }
 
             var ret = new { Cabinets = cabinets };
@@ -176,7 +178,7 @@ namespace LocalS.Service.Api.StoreTerm
 
                 foreach (var d_PlanDeviceDetail in d_PlanDeviceDetails)
                 {
-                    var slot = rop.Slots.Where(m => m.CabinetId == d_PlanDeviceDetail.CabinetId && m.SlotId == d_PlanDeviceDetail.SlotId).FirstOrDefault();
+                    var slot = rop.RshSlots.Where(m => m.CabinetId == d_PlanDeviceDetail.CabinetId && m.SlotId == d_PlanDeviceDetail.SlotId).FirstOrDefault();
                     if (slot != null)
                     {
                         d_PlanDeviceDetail.RsherId = d_PlanDevice.RsherId;

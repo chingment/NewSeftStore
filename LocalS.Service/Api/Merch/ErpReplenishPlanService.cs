@@ -49,7 +49,7 @@ namespace LocalS.Service.Api.Merch
                          where
                           (rup.CumCode == null || u.CumCode.Contains(rup.CumCode)) &&
                          u.MerchId == merchId
-                         select new { u.Id, u.CumCode, u.MakerName, u.MakeDate, u.Status, u.BuildTime, u.Remark, u.CreateTime });
+                         select new { u.Id, u.CumCode, u.MakerName, u.MakeDate, u.Status, u.FailReason, u.BuildTime, u.Remark, u.CreateTime });
 
             int total = query.Count();
 
@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.Merch
                     MakeDate = item.MakeDate,
                     Status = GetStatus(item.Status),
                     BuildTime = item.BuildTime.ToUnifiedFormatDateTime(),
-                    Remark = item.Remark,
+                    Remark = item.FailReason,
                 });
             }
 
