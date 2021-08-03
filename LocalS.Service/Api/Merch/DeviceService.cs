@@ -356,6 +356,7 @@ namespace LocalS.Service.Api.Merch
                     {
                         int rowsLength = dsCabinetRowColLayout.Rows.Count;
 
+                        int num = 1;
                         for (int i = rowsLength - 1; i >= 0; i--)
                         {
                             SlotRowModel row = new SlotRowModel();
@@ -364,7 +365,7 @@ namespace LocalS.Service.Api.Merch
                             int cols = dsCabinetRowColLayout.Rows[i];
                             for (int j = cols - 1; j >= 0; j--)
                             {
-                                var slotId = string.Format("r{0}c{1}", i, j);
+                                var slotId = string.Format("{0}-{1}-{2}", i, j, num);
 
                                 var col = new SlotColModel();
                                 col.No = j;
@@ -389,6 +390,8 @@ namespace LocalS.Service.Api.Merch
                                 }
 
                                 row.Cols.Add(col);
+
+                                num++;
                             }
 
                             rows.Add(row);
