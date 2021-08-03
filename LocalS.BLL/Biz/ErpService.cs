@@ -15,6 +15,16 @@ namespace LocalS.BLL.Biz
 {
     public class ErpService : BaseService
     {
+        public string GetSlotName(string cabinetId, string slotId)
+        {
+            if (cabinetId.IndexOf("ds") > -1)
+                return slotId.Split('-')[2];
+            else if (cabinetId.IndexOf("zs") > -1)
+                return slotId.Split('-')[2];
+
+            return "";
+        }
+
         public CustomJsonResult HandleReplenishPlanBuild(ReplenishPlanBuildModel rop)
         {
             LogUtil.Info("已进入 HandleReplenishPlanBuild");
@@ -135,7 +145,7 @@ namespace LocalS.BLL.Biz
                                 d_PlanDeviceDetail.CabinetId = l_Stock.CabinetId;
                                 d_PlanDeviceDetail.CabinetName = l_Stock.CabinetId;
                                 d_PlanDeviceDetail.SlotId = l_Stock.SlotId;
-                                d_PlanDeviceDetail.SlotName = l_Stock.SlotId;
+                                d_PlanDeviceDetail.SlotName = GetSlotName(l_Stock.CabinetId, l_Stock.SlotId);
                                 d_PlanDeviceDetail.SpuId = r_Sku.SpuId;
                                 d_PlanDeviceDetail.SkuId = r_Sku.Id;
                                 d_PlanDeviceDetail.SkuName = r_Sku.Name;

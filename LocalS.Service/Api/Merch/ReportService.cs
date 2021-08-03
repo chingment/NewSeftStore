@@ -670,16 +670,6 @@ namespace LocalS.Service.Api.Merch
             return cabinetId;
         }
 
-        public string GetSlotName(string cabinetId, string slotId)
-        {
-            if (cabinetId.IndexOf("ds") > -1)
-                return slotId.Split('-')[2];
-            else if (cabinetId.IndexOf("zs") > -1)
-                return slotId.Split('-')[2];
-
-            return "";
-        }
-
 
         public CustomJsonResult DeviceReplenishPlanGet(string operater, string merchId, RopReportDeviceReplenishPlanGet rop)
         {
@@ -687,7 +677,7 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.ErpReplenishPlanDeviceDetail
                          where u.MerchId == merchId
-                         select new { u.PlanCumCode, u.PlanId, u.MakeTime, u.MakerName, u.StoreName, u.ShopName, u.DeviceId, u.DeviceCumCode, u.CabinetId, u.SlotId, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RsherName, u.RshTime });
+                         select new { u.PlanCumCode, u.PlanId, u.MakeTime, u.MakerName, u.StoreName, u.ShopName, u.DeviceId, u.DeviceCumCode, u.CabinetId, u.SlotId, u.SlotName, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.PlanRshQuantity, u.RealRshQuantity, u.RsherName, u.RshTime });
 
             if (!string.IsNullOrEmpty(rop.PlanId))
             {
@@ -711,7 +701,7 @@ namespace LocalS.Service.Api.Merch
 
             List<object> olist = new List<object>();
 
-            var list = query.OrderByDescending(m => m.ShopName).ToList();
+            var list = query.OrderBy(m => m.DeviceId).ThenBy(m => m.CabinetId).ThenBy(x => x.SlotName.Length).ThenBy(m => m.SlotName).ToList();
 
             foreach (var item in list)
             {
@@ -724,7 +714,7 @@ namespace LocalS.Service.Api.Merch
                     ShopName = item.ShopName,
                     DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
                     CabinetName = GetCabinetName(item.CabinetId),
-                    SlotName = GetSlotName(item.CabinetId, item.SlotId),
+                    SlotName = item.SlotName,
                     SkuCumCode = item.SkuCumCode,
                     SkuName = item.SkuName,
                     SkuSpecDes = item.SkuSpecDes,
