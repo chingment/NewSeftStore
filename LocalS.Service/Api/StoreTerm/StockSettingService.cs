@@ -200,11 +200,12 @@ namespace LocalS.Service.Api.StoreTerm
                     if (oldRowColLayout.Rows != null)
                     {
                         int num = 1;
+                        int newRowLenth = newRowColLayout.Rows.Count;
                         List<string> slotIds = new List<string>();
-                        for (int i = 0; i < newRowColLayout.Rows.Count; i++)
+                        for (int i = newRowLenth - 1; i >= 0; i--)
                         {
                             int colLength = newRowColLayout.Rows[i];
-                            for (var j = colLength - 1; j > 0; j--)
+                            for (var j = colLength - 1; j >= 0; j--)
                             {
                                 string slotId = string.Format("{0}-{1}-{2}", i, j, num);
                                 slotIds.Add(slotId);
@@ -215,11 +216,12 @@ namespace LocalS.Service.Api.StoreTerm
                         var sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.ShopMode == E_ShopMode.Device && m.MerchId == d_Device.CurUseMerchId && m.StoreId == d_Device.CurUseStoreId & m.ShopId == d_Device.CurUseShopId && m.DeviceId == rop.DeviceId && m.CabinetId == rop.CabinetId).ToList();
 
                         num = 1;
-                        for (int i = 0; i < oldRowColLayout.Rows.Count; i++)
+                        int oldRowLenth = oldRowColLayout.Rows.Count;
+                        for (int i = oldRowLenth - 1; i >= 0; i--)
                         {
                             int colLength = oldRowColLayout.Rows[i];
 
-                            for (var j = colLength - 1; j > 0; j--)
+                            for (var j = colLength - 1; j >= 0; j--)
                             {
                                 string slotId = string.Format("{0}-{1}-{2}", i, j, num);
 
