@@ -262,7 +262,7 @@ namespace LocalS.Service.Api.StoreTerm
                 ts.Complete();
 
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功", new { RowColLayout = d_DeviceCabinet.RowColLayout });
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "扫描结果上传成功");
 
                 if (result.Result == ResultType.Success)
                 {

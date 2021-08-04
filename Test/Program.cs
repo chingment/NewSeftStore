@@ -162,8 +162,17 @@ namespace Test
 
         }
 
+
+
         static void Main(string[] args)
         {
+
+            int[] s = new int[3] { 1, 2, 3 };
+
+            var b = s.Reverse().ToArray();
+
+            // int[] b = s;
+
             List<DateTime> dates = new List<DateTime>();
 
 
