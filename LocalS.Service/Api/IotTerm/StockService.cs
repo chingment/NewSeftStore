@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.IotTerm
                          u.MakeTime >= startTime &&
                          u.MakeTime <= endTime &&
                          u.Status == Entity.E_ErpReplenishPlan_Status.BuildSuccess
-                         select new { u.CumCode, u.BuildTime });
+                         select new { u.CumCode, u.MakeTime });
 
             int total = query.Count();
 
@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.IotTerm
 
             int pageSize = rop.limit;
 
-            query = query.OrderByDescending(r => r.BuildTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.MakeTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -45,7 +45,7 @@ namespace LocalS.Service.Api.IotTerm
                 items.Add(new
                 {
                     plan_cum_code = r.CumCode,
-                    build_time = r.BuildTime.ToUnifiedFormatDateTime()
+                    make_time = r.MakeTime.ToUnifiedFormatDateTime()
                 });
 
             }
@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.IotTerm
                          u.MerchId == merchId
                          &&
                          u.PlanCumCode == rop.plan_cum_code
-                         select new { u.DeviceId, u.DeviceCumCode, u.CabinetId, u.SlotId, u.SkuId, u.SkuCumCode, u.PlanRshQuantity, u.RealRshQuantity, u.RshTime });
+                         select new { u.DeviceId, u.PlanCumCode, u.MakeTime, u.DeviceCumCode, u.CabinetId, u.SlotId, u.SkuId, u.SkuCumCode, u.PlanRshQuantity, u.RealRshQuantity, u.RshTime });
 
             int total = query.Count();
 
@@ -88,6 +88,8 @@ namespace LocalS.Service.Api.IotTerm
             {
                 items.Add(new
                 {
+                    plan_cum_code = r.PlanCumCode,
+                    make_time = r.MakeTime,
                     device_id = r.DeviceId,
                     device_cum_code = r.DeviceCumCode,
                     cabinet_id = r.CabinetId,
