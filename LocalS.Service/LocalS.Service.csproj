@@ -200,6 +200,9 @@
     <Compile Include="Api\IotTerm\RModels\RopOrderShip.cs" />
     <Compile Include="Api\IotTerm\RModels\RopProductAdd.cs" />
     <Compile Include="Api\IotTerm\RModels\RopProductEdit.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlanDetails.cs" />
+    <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlans.cs" />
+    <Compile Include="Api\IotTerm\StockService.cs" />
     <Compile Include="Api\Merch\AdService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\CommonService.cs" />

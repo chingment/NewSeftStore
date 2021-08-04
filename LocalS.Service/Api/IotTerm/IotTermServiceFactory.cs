@@ -32,5 +32,13 @@ namespace LocalS.Service.Api.IotTerm
             }
         }
 
+        public static StockService Stock
+        {
+            get
+            {
+                return new StockService();
+            }
+        }
+
     }
 }
