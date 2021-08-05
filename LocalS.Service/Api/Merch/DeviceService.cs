@@ -612,10 +612,11 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SaveChanges();
                 }
 
-                var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopId == rop.StoreId && m.DeviceId == rop.DeviceId).ToList();
+                var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == merchId && m.StoreId == rop.StoreId && m.ShopId == rop.ShopId && m.DeviceId == rop.DeviceId).ToList();
                 foreach (var d_Stock in d_Stocks)
                 {
                     CurrentDb.SellChannelStock.Remove(d_Stock);
+                    CurrentDb.SaveChanges();
                 }
 
                 var d_DeviceBindLog = new DeviceBindLog();
