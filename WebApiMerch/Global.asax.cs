@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using LocalS.BLL.Push;
+using log4net;
 using Lumos;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace WebApiMerch
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            MqttService.GetInstance().Connect();
         }
 
         protected void Application_Error(object sender, EventArgs e)

@@ -69,21 +69,22 @@ namespace LocalS.BLL.Push
 
             try
             {
+                string str_con = System.Configuration.ConfigurationManager.AppSettings["custom:MqttConnection"];
+                var config_Options = MqttUtil.GetMqttTcpOptions(str_con);
+
                 var options = new MqttClientTcpOptions
                 {
-                    Server = "112.74.179.185",
-                    Port = 1883,
-                    ClientId = Guid.NewGuid().ToString().Substring(0, 5),
-                    UserName = "admin",
-                    Password = "public",
+                    Server = config_Options.Server,
+                    Port = config_Options.Port,
+                    ClientId = config_Options.ClientId,
+                    UserName = config_Options.UserName,
+                    Password = config_Options.Password,
                     CleanSession = true,
                 };
 
                 if (!mqttClient.IsConnected)
                 {
                     var connect = mqttClient.ConnectAsync(options);
-
-
                 }
             }
             catch (Exception ex)

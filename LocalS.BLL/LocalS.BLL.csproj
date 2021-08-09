@@ -136,7 +136,10 @@
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalHandle.cs" />
     <Compile Include="Mq\MqByRedis\RedisMq4Global\RedisMq4GlobalProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Push\MqttConnectConfig.cs" />
     <Compile Include="Push\MqttService.cs" />
+    <Compile Include="Push\MqttTcpOptions.cs" />
+    <Compile Include="Push\MqttUtil.cs" />
     <Compile Include="Sdk\EasemobSdkProvider.cs" />
     <Compile Include="Sdk\PayRefundResult.cs" />
     <Compile Include="Sdk\SenvivProvider.cs" />

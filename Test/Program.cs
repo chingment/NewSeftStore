@@ -2,6 +2,7 @@
 using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq.MqByRedis;
+using LocalS.BLL.Push;
 using LocalS.BLL.Task;
 using LocalS.Entity;
 using LocalS.Service;
@@ -166,6 +167,9 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            var cofig = MqttUtil.GetMqttTcpOptions("type=exmq;server=112.74.179.185;port=1883;username=admin;password=public;clientid=WebApiMerch;productkey=7;devicename=8;devicesecret=9;");
+
 
             int[] s = new int[3] { 1, 2, 3 };
 
