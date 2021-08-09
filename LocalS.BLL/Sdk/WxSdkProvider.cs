@@ -506,6 +506,8 @@ namespace LocalS.BLL
             result.Message = orderPayRefund.Message;
             return result;
         }
+
+
         public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)
         {
             return null;

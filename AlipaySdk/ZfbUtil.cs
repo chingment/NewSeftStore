@@ -96,7 +96,31 @@ namespace MyAlipaySdk
             AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
             request.BizContent = "{\"out_trade_no\":\"" + out_trade_no + "\"}";
             AlipayTradeQueryResponse response = _client.Execute(request);
+
+            LogUtil.Info("OrderQuery->response:" + response.ToJsonString());
+
             return response.Body;
         }
+
+        public AlipayTradeRefundResponse PayRefund(string out_trade_no, decimal refund_amount, string refund_reason)
+        {
+            AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+
+            var bizContent = new
+            {
+                out_trade_no = out_trade_no,
+                refund_amount = refund_amount,
+                refund_reason = refund_reason
+            };
+
+            request.BizContent = bizContent.ToJsonString();
+
+            AlipayTradeRefundResponse response = _client.Execute(request);
+
+            LogUtil.Info("PayRefund->response:" + response.ToJsonString());
+
+            return response;
+        }
+
     }
 }

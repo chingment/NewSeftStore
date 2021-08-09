@@ -506,6 +506,10 @@
     <Folder Include="Api\StoreSvcChat\Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlipaySdk\MyAlipaySdk.csproj">
+      <Project>{28d06c14-41ed-4d4c-a221-d7b3a785640e}</Project>
+      <Name>MyAlipaySdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasemobSdk\EasemobSdk.csproj">
       <Project>{86fca40d-88cd-4ca0-8218-107704ca76fd}</Project>
       <Name>EasemobSdk</Name>

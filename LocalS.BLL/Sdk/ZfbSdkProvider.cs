@@ -131,8 +131,25 @@ namespace LocalS.BLL
 
         public PayRefundResult PayRefund(ZfbAppInfoConfig config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc)
         {
-            return null;
+            var result = new PayRefundResult();
+
+            ZfbUtil zfbUtil = new ZfbUtil(config);
+
+            var respone = zfbUtil.PayRefund(payTranId, refund_fee, refund_desc);
+
+            if(respone.Code== "10000")
+            {
+                result.Status = "SUCCESS";
+            }
+            else
+            {
+                result.Status = "FAIL";
+            }
+
+
+            return result;
         }
+
         public string PayRefundQuery(ZfbAppInfoConfig config, string payTranId, string payRefundId)
         {
             return null;
