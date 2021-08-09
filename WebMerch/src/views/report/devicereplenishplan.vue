@@ -3,14 +3,7 @@
     <div class="filter-container">
       <el-row :gutter="12">
         <el-col v-show="planIdIsHidden" :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.planId" placeholder="计划单号" clearable style="width: 100%">
-            <el-option
-              v-for="item in optionsByPlan"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <el-input v-model="listQuery.planId" clearable placeholder="计划单号" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-input v-model="listQuery.shopName" clearable placeholder="门店" />
@@ -164,10 +157,10 @@ export default {
     console.log('this.planId2:' + this.planId)
     if (this.planId !== undefined) {
       this.planIdIsHidden = false
+      this.listQuery.planId = this.planId
+      this._initData()
+      this._getData()
     }
-    this.listQuery.planId = this.planId
-    this._initData()
-    this._getData()
   },
   methods: {
     _initData() {
@@ -208,10 +201,6 @@ export default {
       })
     },
     handleFilter() {
-      if (this.listQuery.planId === null || this.listQuery.planId.length === 0) {
-        this.$message('请选择计划单号')
-        return
-      }
       this._getData()
     },
     handleDownload() {

@@ -686,17 +686,17 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rop.SkuCumCode))
             {
-                query = query.Where(m => rop.SkuCumCode.Contains(m.SkuCumCode));
+                query = query.Where(m => m.SkuCumCode.Contains(rop.SkuCumCode));
             }
 
             if (!string.IsNullOrEmpty(rop.ShopName))
             {
-                query = query.Where(m => rop.ShopName.Contains(m.ShopName));
+                query = query.Where(m => m.ShopName.Contains(rop.ShopName));
             }
 
             if (!string.IsNullOrEmpty(rop.MakerName))
             {
-                query = query.Where(m => rop.MakerName.Contains(m.MakerName));
+                query = query.Where(m => m.MakerName.Contains(rop.MakerName));
             }
 
             List<object> olist = new List<object>();

@@ -355,7 +355,7 @@ export default {
                 })
                 var d = res.data
                 this.$router.push({
-                  path: '/payRefund/query?payRefundId=' + d.payRefundId
+                  path: '/paytrans/refund/query?payRefundId=' + d.payRefundId
                 })
               } else {
                 this.$message({
