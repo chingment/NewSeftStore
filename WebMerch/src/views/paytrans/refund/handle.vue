@@ -6,16 +6,16 @@
 
         <el-form ref="form" label-width="120px">
           <el-form-item label="退款单号">
-            <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+            <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" @clear="handleFilter" />
           </el-form-item>
           <el-form-item label="商户单号">
-            <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+            <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" />
           </el-form-item>
           <el-form-item label="订单号">
-            <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+            <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" />
           </el-form-item>
           <el-form-item label="交易单号">
-            <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+            <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>

@@ -150,9 +150,29 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.ReceiveMode == rup.ReceiveMode);
             }
 
-            if (!string.IsNullOrEmpty(rup.SellChannelRefId))
+            if (!string.IsNullOrEmpty(rup.DeviceId))
             {
-                query = query.Where(m => m.DeviceId == rup.SellChannelRefId);
+                query = query.Where(m => m.DeviceId == rup.DeviceId);
+            }
+
+            if (!string.IsNullOrEmpty(rup.DeviceCumCode))
+            {
+                query = query.Where(m => m.DeviceCumCode.Contains(rup.DeviceCumCode));
+            }
+
+            if (rup.SubmittedTimeArea != null)
+            {
+                if (rup.SubmittedTimeArea.Length == 2)
+                {
+                    DateTime? submittedStartTime = DateTime.Parse(rup.SubmittedTimeArea[0]);
+                    DateTime? submittedEndTime = DateTime.Parse(rup.SubmittedTimeArea[1]);
+
+                    if (submittedStartTime != null && submittedEndTime != null)
+                    {
+                        query = query.Where(m => m.SubmittedTime >= submittedStartTime && m.SubmittedTime <= submittedEndTime);
+
+                    }
+                }
             }
 
             int total = query.Count();

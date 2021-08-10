@@ -14,10 +14,11 @@ namespace LocalS.Service.Api.Merch
         public string OrderId { get; set; }
         public E_OrderStatus OrderStatus { get; set; }
         public string DeviceId { get; set; }
+        public string DeviceCumCode { get; set; }
         public string ClientUserId { get; set; }
         public bool IsHasEx { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public int PickupTrgStatus { get; set; }
-        public string SellChannelRefId { get; set; }
+        public string[] SubmittedTimeArea { get; set; }
     }
 }

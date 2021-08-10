@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="优惠券名称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="优惠券名称" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px;display:flex">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

@@ -8,13 +8,13 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="isShowClientUserNameInput" label="下单用户">
-          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="max-width: 300px;" class="filter-item" />
+          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" style="max-width: 300px;" class="filter-item" />
         </el-form-item>
         <el-form-item label="异常">
           <el-checkbox v-model="listQuery.isHasEx">异常未处理</el-checkbox>
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="max-width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" style="max-width: 300px;" class="filter-item" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="handleFilter">查 询</el-button>

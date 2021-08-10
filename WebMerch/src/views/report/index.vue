@@ -10,8 +10,8 @@
             <!-- <el-menu-item index="/report/storestockdatehis">店铺历史库存报表</el-menu-item> -->
             <el-menu-item index="/report/devicereplenishplan">设备补货计划报表</el-menu-item>
             <el-menu-item index="/report/skusalesdatehis">商品销售报表</el-menu-item>
+            <el-menu-item index="/report/devicesaleshis">设备销售报表</el-menu-item>
             <el-menu-item index="/report/ordersalesdatehis">订单销售报表</el-menu-item>
-
           </el-menu-item-group>
         </el-menu>
       </el-aside>

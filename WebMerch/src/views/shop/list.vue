@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
-          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="门店名称" va class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="门店名称" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

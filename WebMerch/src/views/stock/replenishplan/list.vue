@@ -4,7 +4,7 @@
     <div class="filter-container">
       <el-form ref="form" label-width="120px">
         <el-form-item label="单据号">
-          <el-input v-model="listQuery.cumCode" clearable placeholder="单据号" va style="max-width: 300px;" class="filter-item" />
+          <el-input v-model="listQuery.cumCode" clearable placeholder="单据号" style="max-width: 300px;" class="filter-item" />
         </el-form-item>
         <el-form-item>
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

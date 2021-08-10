@@ -4,13 +4,13 @@
 
       <el-form ref="form" label-width="120px">
         <el-form-item label="商户单号">
-          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" />
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.orderId" clearable style="max-width: 300px;" />
         </el-form-item>
         <el-form-item label="交易单号">
-          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" />
         </el-form-item>
         <el-form-item label="交易时间">
           <el-date-picker

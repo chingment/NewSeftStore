@@ -4,7 +4,7 @@
 
       <el-row :gutter="16">
         <el-col :span="8" :xs="24" style="margin-bottom:20px">
-          <el-input v-model="listQuery.nickName" clearable style="width: 100%" placeholder="昵称" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.nickName" clearable style="width: 100%" placeholder="昵称" class="filter-item" />
         </el-col>
         <el-col :span="8" :xs="24" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

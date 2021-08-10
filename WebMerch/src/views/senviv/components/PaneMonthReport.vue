@@ -18,7 +18,7 @@
 
         </el-form-item>
         <el-form-item v-if="userId===''" label="搜索">
-          <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>

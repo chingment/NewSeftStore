@@ -631,6 +631,51 @@ namespace LocalS.Service.Api.Merch
 
         }
 
+
+
+        public CustomJsonResult DeviceSalesHisInit(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { });
+        }
+
+        public CustomJsonResult DeviceSalesHisGet(string operater, string merchId, RopReportDeviceSalesHisGet rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            if (rop.TradeDateTimeArea == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择交易时间");
+            }
+
+            if (rop.TradeDateTimeArea.Length != 2)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择交易时间");
+            }
+
+            string tradeStartTime = DateTime.Parse(CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+
+            string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+
+
+            StringBuilder sql = new StringBuilder(" StoreName,ShopName, DeviceCumCode,SUM(ChargeAmount) as SumChargeAmount,COUNT(*) as SumCount ");
+            sql.Append(" from dbo.[Order] where PayStatus=3 and IsTestMode=0 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "' ");
+            sql.Append(" group by  StoreName,ShopName, DeviceCumCode ");
+
+           
+            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", dtData);
+
+            return result;
+
+        }
+
+
+
         public CustomJsonResult CheckRightExport(string operater, string merchId, RopReportCheckRightExport rop)
         {
 

@@ -229,6 +229,7 @@ namespace LocalS.Service.Api.Admin
                     merchDevice.Name = device.Name;
                     merchDevice.MerchId = rop.MerchId;
                     merchDevice.DeviceId = rop.DeviceId;
+                    merchDevice.CumCode = rop.DeviceId;
                     merchDevice.LogoImgUrl = null;
                     merchDevice.IsStopUse = false;
                     merchDevice.CreateTime = DateTime.Now;

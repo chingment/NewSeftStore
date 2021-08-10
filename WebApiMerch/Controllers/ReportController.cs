@@ -104,5 +104,20 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
+        [HttpGet]
+        public OwnApiHttpResponse DeviceSalesHisInit()
+        {
+            var result = MerchServiceFactory.Report.DeviceSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse DeviceSalesHisGet([FromBody]RopReportDeviceSalesHisGet rop)
+        {
+            var result = MerchServiceFactory.Report.DeviceSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

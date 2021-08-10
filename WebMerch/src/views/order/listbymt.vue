@@ -8,19 +8,33 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="isShowClientUserNameInput" label="下单用户">
-          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" va style="max-width: 300px;" class="filter-item" />
+          <el-input v-model="listQuery.clientUserName" clearable placeholder="下单用户" style="max-width: 300px;" class="filter-item" />
         </el-form-item>
         <el-form-item label="异常">
           <el-checkbox v-model="listQuery.isHasEx">异常未处理</el-checkbox>
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" va style="max-width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" @clear="handleFilter" />
+          <el-input v-model="listQuery.orderId" clearable placeholder="订单号" style="max-width: 300px;" class="filter-item" />
+        </el-form-item>
+        <el-form-item label="设备">
+          <el-input v-model="listQuery.deviceCumCode" clearable placeholder="设备编码" style="max-width: 300px;" class="filter-item" />
+        </el-form-item>
+        <el-form-item label="下单时间">
+          <el-date-picker
+            v-model="listQuery.submittedTimeArea"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            align="right"
+            style="max-width: 400px;"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="handleFilter">查 询</el-button>
         </el-form-item>
       </el-form>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
     </div>
     <el-table
       :key="listKey"
@@ -93,42 +107,32 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="设备" prop="deviceCode" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="设备" prop="deviceCode" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.clientUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单方式" prop="sourceName" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sourceName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="取货方式" prop="sourceName" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.receiveModeName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.pickupTrgStatus.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="10%">
+      <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="金额" prop="chargeAmount" align="left" min-width="10%">
+      <el-table-column label="金额" prop="chargeAmount" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" align="left" min-width="10%">
+      <el-table-column label="状态" prop="status" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
         </template>
@@ -430,6 +434,8 @@ export default {
       listTotal: 0,
       listQuery: {
         receiveMode: 4,
+        deviceCumCode: '',
+        submittedTimeArea: undefined,
         page: 1,
         limit: 10,
         clientName: undefined,
@@ -500,6 +506,33 @@ export default {
       },
       rulesByHandle: {
         remark: [{ required: true, min: 1, max: 200, message: '原因不能为空', trigger: 'change' }]
+      },
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
       },
       isDesktop: this.$store.getters.isDesktop,
       isShowClientUserNameInput: true
