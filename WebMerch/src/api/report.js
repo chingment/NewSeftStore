@@ -32,49 +32,49 @@ export function storeStockDateHisGet(data) {
   })
 }
 
-export function skuSalesDateHisInit(params) {
+export function skuSalesHisInit(params) {
   return request({
-    url: '/report/skuSalesDateHisInit',
+    url: '/report/skuSalesHisInit',
     method: 'get',
     params
   })
 }
 
-export function skuSalesDateHisGet(data) {
+export function skuSalesHisGet(data) {
   return request({
-    url: '/report/skuSalesDateHisGet',
+    url: '/report/skuSalesHisGet',
     method: 'post',
     data
   })
 }
 
-export function orderSalesDateHisInit(params) {
+export function orderSalesHisInit(params) {
   return request({
-    url: '/report/orderSalesDateHisInit',
+    url: '/report/orderSalesHisInit',
     method: 'get',
     params
   })
 }
 
-export function orderSalesDateHisGet(data) {
+export function orderSalesHisGet(data) {
   return request({
-    url: '/report/orderSalesDateHisGet',
+    url: '/report/orderSalesHisGet',
     method: 'post',
     data
   })
 }
 
-export function storeSalesDateHisInit(params) {
+export function storeSalesHisInit(params) {
   return request({
-    url: '/report/storeSalesDateHisInit',
+    url: '/report/storeSalesHisInit',
     method: 'get',
     params
   })
 }
 
-export function storeSalesDateHisGet(data) {
+export function storeSalesHisGet(data) {
   return request({
-    url: '/report/storeSalesDateHisGet',
+    url: '/report/storeSalesHisGet',
     method: 'post',
     data
   })
@@ -107,13 +107,13 @@ export function deviceReplenishPlanGet(data) {
 export default {
   deviceStockRealDataInit: deviceStockRealDataInit,
   devicehStockRealDataGet: deviceStockRealDataGet,
-  skuSalesDateHisInit: skuSalesDateHisInit,
-  skuSalesDateHisGet: skuSalesDateHisGet,
-  orderSalesDateHisInit: orderSalesDateHisInit,
-  orderSalesDateHisGet: orderSalesDateHisGet,
+  skuSalesHisInit: skuSalesHisInit,
+  skuSalesHisGet: skuSalesHisGet,
+  orderSalesHisInit: orderSalesHisInit,
+  orderSalesHisGet: orderSalesHisGet,
   storeStockDateHisInit: storeStockDateHisInit,
   storeStockDateHisGet: storeStockDateHisGet,
-  storeSalesDateHisInit: storeSalesDateHisInit,
-  storeSalesDateHisGet: storeSalesDateHisGet,
+  storeSalesHisInit: storeSalesHisInit,
+  storeSalesHisGet: storeSalesHisGet,
   checkRightExport: checkRightExport
 }

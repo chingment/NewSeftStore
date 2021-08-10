@@ -4,17 +4,6 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-
-          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
-            <el-option
-              v-for="item in optionsStores"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -26,26 +15,6 @@
           />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.pickupStatus" style="width:100%" clearable placeholder="全部取货状态">
-            <el-option
-              v-for="item in optionsPickupStatus"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" style="width:100%" clearable placeholder="全部提货方式">
-            <el-option
-              v-for="item in optionsReceiveModes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -53,138 +22,108 @@
             导出
           </el-button>
         </el-col>
-        </el-col:xs="24"></el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
+      </el-row>
     </div>
     <el-table
       :key="listKey"
       v-loading="loading"
-      show-summary
-      border
       :data="listData"
+      border
+      show-summary
       fit
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?110:80">
+      <el-table-column label="店铺" align="left">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="提货方式" align="left" min-width="10%">
+      <el-table-column label="总订单数" align="left" prop="sumCount">
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveModeName }}</span>
+          <span>{{ scope.row.sumCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="方式备注" align="left" min-width="10%">
+      <el-table-column label="设备自提" align="left" prop="sumReceiveMode3">
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveRemark }}</span>
+          <span>{{ scope.row.sumReceiveMode3 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单号" align="left" min-width="10%">
+      <el-table-column label="店铺自取" align="left" prop="sumReceiveMode2">
         <template slot-scope="scope">
-          <span>{{ scope.row.orderId }}</span>
+          <span>{{ scope.row.sumReceiveMode2 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易时间" align="left" min-width="10%">
+      <el-table-column label="配送商品" align="left" prop="sumReceiveMode1">
         <template slot-scope="scope">
-          <span>{{ scope.row.tradeTime }}</span>
+          <span>{{ scope.row.sumReceiveMode1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品名称" align="left" min-width="10%">
+      <el-table-column label="已完成" align="left" prop="sumComplete">
         <template slot-scope="scope">
-          <span>{{ scope.row.skuName }}</span>
+          <span>{{ scope.row.sumComplete }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品编码" align="left" min-width="10%">
+      <el-table-column label="未完成" align="left" prop="sumNoComplete">
         <template slot-scope="scope">
-          <span>{{ scope.row.skuCumCode }}</span>
+          <span>{{ scope.row.sumNoComplete }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
+      <el-table-column label="异常" align="left" prop="sumEx">
         <template slot-scope="scope">
-          <span>{{ scope.row.skuSpecDes }}</span>
+          <span>{{ scope.row.sumEx }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="单价" align="left" min-width="10%">
+      <el-table-column label="商品数量" align="left" prop="sumQuantity">
         <template slot-scope="scope">
-          <span>{{ scope.row.salePrice }}</span>
+          <span>{{ scope.row.sumQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="left" prop="quantity" min-width="10%">
+      <el-table-column label="支付金额" align="left" prop="sumChargeAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.quantity }}</span>
+          <span>{{ scope.row.sumChargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总金额" align="left" prop="tradeAmount" min-width="10%">
+      <el-table-column label="退款金额" align="left" prop="sumRefundedAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.tradeAmount }}</span>
+          <span>{{ scope.row.sumRefundedAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付方式" align="left" min-width="10%">
+      <el-table-column label="合计金额" align="left" prop="sumAmount">
         <template slot-scope="scope">
-          <span>{{ scope.row.payWay }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="取货状态" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.pickupStatus }}</span>
+          <span>{{ scope.row.sumAmount }}</span>
         </template>
       </el-table-column>
     </el-table>
     <el-alert
-      title="提示：以商品单位维度来统计销售报表， 不统计测试模式"
+      title="提示：以店铺单位维度来统计销售报表， 不统计测试模式"
       type="remark-gray"
       :closable="false"
     />
-
   </div>
 </template>
 
 <script>
 
-import { skuSalesDateHisInit, skuSalesDateHisGet, checkRightExport } from '@/api/report'
+import { storeSalesHisInit, storeSalesHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'ReportSkuSalesDateHis',
+  name: 'ReportStoreSalesDateHis',
   props: {
   },
   data() {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '商品销售报表',
+      filename: '店铺销售概况报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
-      listData: null,
+      listData: [],
       listTotal: 0,
       listQuery: {
-        storeIds: [],
-        tradeDateTimeArea: [],
-        receiveMode: undefined
+        tradeDateTimeArea: []
       },
-      optionsPickupStatus: [{
-        value: '1',
-        label: '待取货'
-      }, {
-        value: '2',
-        label: '未取货'
-      }, {
-        value: '3',
-        label: '已取货'
-      }],
-      optionsReceiveModes: [{
-        value: '4',
-        label: '设备自提'
-      }, {
-        value: '2',
-        label: '店铺自取'
-      }, {
-        value: '1',
-        label: '配送商品'
-      }],
-      optionsStores: [],
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -196,33 +135,25 @@ export default {
   },
   methods: {
     _initData() {
-      skuSalesDateHisInit().then(res => {
+      storeSalesHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.optionsStores = d.optionsStores
         }
         this.loading = false
       })
     },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      skuSalesDateHisGet(this.listQuery).then(res => {
-        this.listData = res.data == null ? [] : res.data
+      storeSalesHisGet(this.listQuery).then(res => {
+        this.listData = res.data
+
         if (res.result === 1) {
-          // this.listData = res.data
           if (this.listData === null || this.listData.length === 0) {
             this.$message('查询不到对应条件的数据')
           }
+
+          // this.listData = res.data
         } else {
           this.$message({
             message: res.message,
@@ -238,6 +169,15 @@ export default {
         return
       }
       this._getData()
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     },
     handleDownload() {
       if (this.listData === null || this.listData.length === 0) {
@@ -256,8 +196,8 @@ export default {
         if (res.result === 1) {
           this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '提货方式', '方式备注', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '单价', '数量', '总金额', '支付方式', '取货状态']
-        const filterVal = ['storeName', 'receiveModeName', 'receiveRemark', 'orderId', 'tradeTime', 'skuName', 'skuCumCode', 'skuSpecDes', 'salePrice', 'quantity', 'tradeAmount', 'payWay', 'pickupStatus']
+        const tHeader = ['店铺', '总订单数', '设备自提', '店铺自取', '配送商品', '已完成', '未完成', '异常', '商品数量', '支付金额', '退款金额', '合计金额']
+        const filterVal = ['storeName', 'sumCount', 'sumReceiveMode3', 'sumReceiveMode2', 'sumReceiveMode1', 'sumNoComplete', 'sumNoComplete', 'sumEx', 'sumQuantity', 'sumChargeAmount', 'sumRefundAmount', 'sumAmount']
         const list = this.listData
         const data = this.formatJson(filterVal, list)
 

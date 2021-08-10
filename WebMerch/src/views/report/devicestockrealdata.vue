@@ -22,7 +22,6 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
     </div>
     <el-table
       :key="listKey"

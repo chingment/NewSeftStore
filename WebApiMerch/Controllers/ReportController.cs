@@ -56,44 +56,44 @@ namespace WebApiMerch.Controllers
 
 
         [HttpGet]
-        public OwnApiHttpResponse SkuSalesDateHisInit()
+        public OwnApiHttpResponse SkuSalesHisInit()
         {
             var result = MerchServiceFactory.Report.SkuSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SkuSalesDateHisGet([FromBody]RopReportSkuSalesDateHisGet rop)
+        public OwnApiHttpResponse SkuSalesHisGet([FromBody]RopReportSkuSalesHisGet rop)
         {
             var result = MerchServiceFactory.Report.SkuSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse OrderSalesDateHisInit()
+        public OwnApiHttpResponse OrderSalesHisInit()
         {
-            var result = MerchServiceFactory.Report.OrderSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.OrderSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse OrderSalesDateHisGet([FromBody]RopReporOrderSalesDateHisGet rop)
+        public OwnApiHttpResponse OrderSalesHisGet([FromBody]RopReporOrderSalesHisGet rop)
         {
-            var result = MerchServiceFactory.Report.OrderSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.OrderSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse StoreSalesDateHisInit()
+        public OwnApiHttpResponse StoreSalesHisInit()
         {
-            var result = MerchServiceFactory.Report.StoreSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.StoreSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse StoreSalesDateHisGet([FromBody]RopReporOrderSalesDateHisGet rop)
+        public OwnApiHttpResponse StoreSalesHisGet([FromBody]RopReporStoreSalesHisGet rop)
         {
-            var result = MerchServiceFactory.Report.StoreSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.StoreSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

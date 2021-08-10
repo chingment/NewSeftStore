@@ -236,6 +236,7 @@
     <Compile Include="Api\Merch\RModels\RopMemberRightSetFeeSt.cs" />
     <Compile Include="Api\Merch\RModels\RopMemberRightSetLevelSt.cs" />
     <Compile Include="Api\Merch\RModels\RopProductDelete.cs" />
+    <Compile Include="Api\Merch\RModels\RopReporStoreSalesHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportDeviceReplenishPlanGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportDeviceSalesHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RupAdGetContentBelongs.cs" />
@@ -276,7 +277,7 @@
     <Compile Include="Api\Merch\RModels\RopProductAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopProductEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopProductEditSale.cs" />
-    <Compile Include="Api\Merch\RModels\RopReporOrderSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReporOrderSalesHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReporStoreStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
@@ -317,7 +318,7 @@
     <Compile Include="Api\Merch\RModels\RupPayTransGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetList.cs" />
     <Compile Include="Api\Merch\RModels\RopReportStoreStockRealDataGet.cs" />
-    <Compile Include="Api\Merch\RModels\RopReportSkuSalesDateHisGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportSkuSalesHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpu.cs" />
     <Compile Include="Api\Merch\RModels\RupStoreGetKindSpus.cs" />

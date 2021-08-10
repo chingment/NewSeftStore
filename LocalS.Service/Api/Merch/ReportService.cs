@@ -309,7 +309,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SkuSalesDateHisGet(string operater, string merchId, RopReportSkuSalesDateHisGet rop)
+        public CustomJsonResult SkuSalesDateHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -432,7 +432,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult OrderSalesDateHisInit(string operater, string merchId)
+        public CustomJsonResult OrderSalesHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -457,7 +457,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult OrderSalesDateHisGet(string operater, string merchId, RopReporOrderSalesDateHisGet rop)
+        public CustomJsonResult OrderSalesHisGet(string operater, string merchId, RopReporOrderSalesHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -530,7 +530,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult StoreSalesDateHisInit(string operater, string merchId)
+        public CustomJsonResult StoreSalesHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -565,7 +565,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreSalesDateHisGet(string operater, string merchId, RopReporOrderSalesDateHisGet rop)
+        public CustomJsonResult StoreSalesHisGet(string operater, string merchId, RopReporStoreSalesHisGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -631,8 +631,6 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-
-
         public CustomJsonResult DeviceSalesHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
@@ -673,8 +671,6 @@ namespace LocalS.Service.Api.Merch
             return result;
 
         }
-
-
 
         public CustomJsonResult CheckRightExport(string operater, string merchId, RopReportCheckRightExport rop)
         {

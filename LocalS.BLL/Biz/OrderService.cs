@@ -2385,7 +2385,7 @@ namespace LocalS.BLL.Biz
             switch (payPartner)
             {
                 case E_PayPartner.Xrt:
-
+               
                     var dic = XmlUtil.ToDictionary(content);
 
                     string status = "";
@@ -2549,7 +2549,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult SendDeviceShip(string operater, string merchId, string orderId, string orderCumId = null)
         {
             var result = new CustomJsonResult();

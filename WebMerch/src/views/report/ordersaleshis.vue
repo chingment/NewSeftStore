@@ -43,7 +43,6 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
     </div>
     <el-table
       :key="listKey"
@@ -106,7 +105,7 @@
 
 <script>
 
-import { orderSalesDateHisInit, orderSalesDateHisGet, checkRightExport } from '@/api/report'
+import { orderSalesHisInit, orderSalesHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
   name: 'ReportOrderSalesDateHis',
@@ -149,7 +148,7 @@ export default {
   },
   methods: {
     _initData() {
-      orderSalesDateHisInit().then(res => {
+      orderSalesHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.optionsStores = d.optionsStores
@@ -160,7 +159,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      orderSalesDateHisGet(this.listQuery).then(res => {
+      orderSalesHisGet(this.listQuery).then(res => {
         this.listData = res.data == null ? [] : res.data
         if (res.result === 1) {
           if (this.listData === null || this.listData.length === 0) {

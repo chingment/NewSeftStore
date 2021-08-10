@@ -15,7 +15,7 @@
           </el-button>
         </el-form-item>
       </el-form>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="getListData(listQuery)" />
+
     </div>
 
     <el-table

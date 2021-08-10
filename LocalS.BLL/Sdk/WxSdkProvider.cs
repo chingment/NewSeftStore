@@ -510,29 +510,11 @@ namespace LocalS.BLL
 
         public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)
         {
-            return null;
+
+            CustomJsonResult result = new CustomJsonResult();
+            TenpayUtil tenpayUtil = new TenpayUtil(config);
+            string xml = tenpayUtil.OrderRefundQuery(payRefundId);
+            return xml;
         }
-
-        //public string OrderPayReFund(string comCode, string orderId, string orderReFundSn, decimal totalFee, decimal refundFee, string refundDesc)
-        //{
-        //    wxConfig = GetWxConfig(comCode);
-        //    CustomJsonResult result = new CustomJsonResult();
-        //    TenpayUtil tenpayUtil = new TenpayUtil(wxConfig);
-        //    string out_trade_no = orderId;
-        //    string out_refund_no = orderReFundSn;
-        //    string total_fee = Convert.ToInt32(totalFee * 100).ToString();
-        //    string refund_fee = Convert.ToInt32(refundFee * 100).ToString();
-        //    string xml = tenpayUtil.OrderPayReFund(out_trade_no, out_refund_no, total_fee, refund_fee, refundDesc);
-        //    return xml;
-        //}
-
-        //public string OrderRefundQuery(string comCode, string out_refund_no)
-        //{
-        //    wxConfig = GetWxConfig(comCode);
-        //    CustomJsonResult result = new CustomJsonResult();
-        //    TenpayUtil tenpayUtil = new TenpayUtil(wxConfig);
-        //    string xml = tenpayUtil.OrderRefundQuery(out_refund_no);
-        //    return xml;
-        //}
     }
 }
