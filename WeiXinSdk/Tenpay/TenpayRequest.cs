@@ -43,8 +43,6 @@ namespace MyWeiXinSdk.Tenpay
 
             _returnCoennt = webUtils.DoPost(config, realServerUrl, request.PostData, isUserCert);
 
- 
-
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(_returnCoennt);

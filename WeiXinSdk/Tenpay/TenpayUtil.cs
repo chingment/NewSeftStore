@@ -78,7 +78,7 @@ namespace MyWeiXinSdk.Tenpay
         public string OrderRefundQuery(string out_refund_no)
         {
             TenpayOrderRefundQueryApi api = new TenpayOrderRefundQueryApi(_config, out_refund_no);
-            var result = _request.DoPost(_config, api, true);
+            var result = _request.DoPost(_config, api, false);
 
             return _request.ReturnContent;
         }

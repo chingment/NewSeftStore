@@ -2373,94 +2373,84 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-        public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string payTransId, string payRefundId, string content)
+        public CustomJsonResult PayRefundResultNotify(string operater, E_PayPartner payPartner, E_PayTransLogNotifyFrom from, string content)
         {
-            LogUtil.Info("PayRefundResultNotify2");
+            Dictionary<string, Dictionary<string, object>> refunds = new Dictionary<string, Dictionary<string, object>>();
 
-
-            string refundStatus = "";
-            string payPartnerPayTransId = "";
-            string refundRemark = "";
-            decimal refundAmount = 0m;
             switch (payPartner)
             {
-                case E_PayPartner.Xrt:
-               
-                    var dic = XmlUtil.ToDictionary(content);
-
-                    string status = "";
-
-                    if (dic.ContainsKey("status"))
+                case E_PayPartner.Wx:
+                    switch (from)
                     {
-                        status = dic["status"].ToString();
-                    }
+                        case E_PayTransLogNotifyFrom.Query:
+                            var dic = XmlUtil.ToDictionary(content);
 
-                    string result_code = "";
-                    if (dic.ContainsKey("result_code"))
-                    {
-                        result_code = dic["result_code"].ToString();
-                    }
-
-                    if (status == "0" && result_code == "0")
-                    {
-                        if (dic.ContainsKey("out_trade_no"))
-                        {
-                            payTransId = dic["out_trade_no"].ToString();
-                        }
-
-                        if (dic.ContainsKey("refund_count"))
-                        {
-                            int refund_count = Convert.ToInt32(dic["refund_count"].ToString());
-
-                            for (var i = 0; i < refund_count; i++)
+                            if (dic["result_code"].ToString() == "SUCCESS")
                             {
-                                if (dic.ContainsKey("out_refund_no_" + i))
+                                if (dic.ContainsKey("refund_count"))
                                 {
-                                    string out_refund_no = dic["out_refund_no_" + i].ToString();
+                                    int refund_count = Convert.ToInt32(dic["refund_count"].ToString());
 
-                                    if (out_refund_no == payRefundId)
+                                    for (var i = 0; i < refund_count; i++)
                                     {
-                                        refundStatus = dic["refund_status_" + i].ToString();
-                                        refundAmount = decimal.Parse(dic["refund_fee_" + i].ToString()) * 0.01m;
-                                        break;
+                                        Dictionary<string, object> refund_parms = new Dictionary<string, object>();
+
+                                        string refund_status = dic["refund_status_" + i].ToString();
+                                        string payRefundId = dic["out_refund_no_" + i].ToString();
+                                        if (refund_status == "SUCCESS")
+                                        {
+                                            refund_parms.Add("refundAmount", decimal.Parse(dic["refund_fee_" + i].ToString()) * 0.01m);
+                                            refund_parms.Add("refundStatus", "SUCCESS");
+                                            refund_parms.Add("refundRemark", "系统自动退款成功");
+                                            refunds.Add(payRefundId, refund_parms);
+                                        }
                                     }
                                 }
                             }
 
-                        }
+
+                            break;
                     }
+
+
                     break;
             }
 
+            PayRefundHandle(IdWorker.Build(IdType.EmptyGuid), refunds);
 
-            if (refundStatus == "SUCCESS")
-            {
-                refundRemark = "系统自动退款成功";
-            }
-            else if (refundStatus == "FAIL")
-            {
-                refundRemark = "系统自动退款失败";
-            }
-
-            PayRefundHandle(IdWorker.Build(IdType.EmptyGuid), payRefundId, refundStatus, refundAmount, refundRemark);
-
-            var payNotifyLog = new PayNotifyLog();
-            payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
-            payNotifyLog.PayTransId = payTransId;
-            payNotifyLog.PayPartner = payPartner;
-            payNotifyLog.PayPartnerPayTransId = payPartnerPayTransId;
-            payNotifyLog.PayRefundId = payRefundId;
-            payNotifyLog.NotifyContent = content;
-            payNotifyLog.NotifyFrom = from;
-            payNotifyLog.NotifyType = E_PayTransLogNotifyType.PayRefund;
-            payNotifyLog.CreateTime = DateTime.Now;
-            payNotifyLog.Creator = operater;
-            CurrentDb.PayNotifyLog.Add(payNotifyLog);
-            CurrentDb.SaveChanges();
-
+            //var payNotifyLog = new PayNotifyLog();
+            //payNotifyLog.Id = IdWorker.Build(IdType.NewGuid);
+            //payNotifyLog.PayTransId = payTransId;
+            //payNotifyLog.PayPartner = payPartner;
+            //payNotifyLog.PayPartnerPayTransId = payPartnerPayTransId;
+            //payNotifyLog.PayRefundId = payRefundId;
+            //payNotifyLog.NotifyContent = content;
+            //payNotifyLog.NotifyFrom = from;
+            //payNotifyLog.NotifyType = E_PayTransLogNotifyType.PayRefund;
+            //payNotifyLog.CreateTime = DateTime.Now;
+            //payNotifyLog.Creator = operater;
+            //CurrentDb.PayNotifyLog.Add(payNotifyLog);
+            //CurrentDb.SaveChanges();
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
+
+        public CustomJsonResult PayRefundHandle(string operater, Dictionary<string, Dictionary<string, object>> refunds)
+        {
+            var result = new CustomJsonResult();
+
+            foreach (var refund in refunds)
+            {
+                string refundId = refund.Key;
+                string refundStatus = refund.Value["refundStatus"].ToString();
+                decimal refundAmount = decimal.Parse(refund.Value["refundAmount"].ToString());
+                string refundRemark = refund.Value["refundRemark"].ToString();
+                PayRefundHandle(operater, refundId, refundStatus, refundAmount, refundRemark);
+            }
+
+            return result;
+        }
+
         public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, string refundRemark)
         {
 

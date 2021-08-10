@@ -210,7 +210,7 @@ namespace LocalS.BLL.Task
                                     }
 
                                     LogUtil.Info(TAG, string.Format("退款单号：{0},查询结果文件:{1}", payRefund.Id, content));
-                                    MqFactory.Global.PushPayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefund.PayPartner, E_PayTransLogNotifyFrom.Query, payRefund.PayTransId, payRefund.Id, content);
+                                    MqFactory.Global.PushPayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), payRefund.PayPartner, E_PayTransLogNotifyFrom.Query, content);
                                 }
                                 else
                                 {

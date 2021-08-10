@@ -16,6 +16,7 @@ namespace MyWeiXinSdk
         public string PayMchId { get; set; }
         public string PayKey { get; set; }
         public string PayResultNotifyUrl { get; set; }
+        public string RefundResultNotifyUrl { get; set; }
         public string NotifyEventUrlToken { get; set; }
         public string Oauth2RedirectUrl { get; set; }
         public string SslCert_Path

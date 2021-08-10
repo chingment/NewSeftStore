@@ -510,7 +510,7 @@ namespace LocalS.BLL
 
         public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)
         {
-
+            LogUtil.Info("微信PayRefundQuery->payTranId" + payTranId + ",payRefundId:" + payRefundId);
             CustomJsonResult result = new CustomJsonResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);
             string xml = tenpayUtil.OrderRefundQuery(payRefundId);

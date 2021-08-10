@@ -55,7 +55,7 @@ namespace LocalS.BLL.Mq.MqByRedis
                         case MqMessageType.PayRefundResultNotify:
                             LogUtil.Info(TAG, "进入->PayRefundResultNotify");
                             var m_PayRefundResultNotify = this.Content.ToJsonObject<PayRefundResultNotifyModel>();
-                            BizFactory.Order.PayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), m_PayRefundResultNotify.PayPartner, m_PayRefundResultNotify.From, m_PayRefundResultNotify.PayTransId, m_PayRefundResultNotify.PayRefundId, m_PayRefundResultNotify.Content);
+                            BizFactory.Order.PayRefundResultNotify(IdWorker.Build(IdType.EmptyGuid), m_PayRefundResultNotify.PayPartner, m_PayRefundResultNotify.From, m_PayRefundResultNotify.Content);
                             break;
                         case MqMessageType.EventNotify:
                             LogUtil.Info(TAG, "进入->EventNotify");

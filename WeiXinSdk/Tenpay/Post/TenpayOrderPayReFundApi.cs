@@ -35,7 +35,7 @@ namespace MyWeiXinSdk.Tenpay
         /// </summary>
         /// <param name="config"></param>
         /// <param name="out_trade_no">商户内部的订单号</param>
-        public TenpayOrderPayReFundApi(WxAppInfoConfig config, string out_trade_no, string out_refund_no, string total_fee, string refund_fee,string refund_desc)
+        public TenpayOrderPayReFundApi(WxAppInfoConfig config, string out_trade_no, string out_refund_no, string total_fee, string refund_fee, string refund_desc)
         {
             SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();
 
@@ -43,7 +43,10 @@ namespace MyWeiXinSdk.Tenpay
             sParams.Add("mch_id", config.PayMchId);//商户号
             sParams.Add("nonce_str", CommonUtil.GetNonceStr());//随机字符串
             sParams.Add("out_trade_no", out_trade_no);//微信订单号
-
+            if (!string.IsNullOrEmpty(config.RefundResultNotifyUrl))
+            {
+                sParams.Add("notify_url", out_trade_no);
+            }
             sParams.Add("total_fee", int.Parse(total_fee));//订单总金额
             sParams.Add("refund_fee", int.Parse(refund_fee));//退款金额
             sParams.Add("out_refund_no", out_refund_no);//随机生成商户退款单号
