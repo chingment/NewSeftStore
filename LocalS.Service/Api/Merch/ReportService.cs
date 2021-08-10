@@ -59,6 +59,18 @@ namespace LocalS.Service.Api.Merch
         public string RsherName { get; set; }
     }
 
+    public class DeviceSalesModel
+    {
+        public string StoreName { get; set; }
+        public string ShopName { get; set; }
+        public string DeviceCumCode { get; set; }
+        public string SumChargeAmount { get; set; }
+        public string SumCount { get; set; }
+        public string PerCumPrice { get; set; }
+
+        public string SalesDate { get; set; }
+    }
+
     public class ReportService : BaseService
     {
 
@@ -676,9 +688,29 @@ namespace LocalS.Service.Api.Merch
 
             var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
 
-            var d_MerchDevice = (from u in CurrentDb.MerchDevice where u.MerchId == merchId && u.CurUseStoreId != null && u.CurUseShopId != null select new { u.DeviceId, u.CumCode, u.CurUseStoreId, u.CurUseShopId }).ToList();
+            var d_MerchDevices = (from u in CurrentDb.MerchDevice where u.MerchId == merchId && u.CurUseStoreId != null && u.CurUseShopId != null select new { u.DeviceId, u.CumCode, u.CurUseStoreId, u.CurUseShopId }).ToList();
 
-            List<object> lists = new List<object>();
+
+            List<DeviceSalesModel> sales1 = new List<DeviceSalesModel>();
+
+            foreach (var d_MerchDevice in d_MerchDevices)
+            {
+                var d_Store = CurrentDb.Store.Where(m => m.Id == d_MerchDevice.CurUseStoreId).FirstOrDefault();
+                var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_MerchDevice.CurUseShopId).FirstOrDefault();
+                sales1.Add(new DeviceSalesModel
+                {
+                    StoreName = d_Store.Name,
+                    ShopName = d_Shop.Name,
+                    DeviceCumCode = MerchServiceFactory.Device.GetCode(d_MerchDevice.DeviceId, d_MerchDevice.CumCode),
+                    SumChargeAmount = "0",
+                    SumCount = "0",
+                    PerCumPrice = "0",
+                    SalesDate = salesDate
+                });
+            }
+
+
+            List<DeviceSalesModel> sales2 = new List<DeviceSalesModel>();
 
             for (var i = 0; i < dtData.Rows.Count; i++)
             {
@@ -689,7 +721,7 @@ namespace LocalS.Service.Api.Merch
                 string SumCount = dtData.Rows[i]["SumCount"].ToString();
                 string PerCumPrice = dtData.Rows[i]["PerCumPrice"].ToString();
 
-                lists.Add(new
+                sales2.Add(new DeviceSalesModel
                 {
                     StoreName = StoreName,
                     ShopName = ShopName,
@@ -699,12 +731,52 @@ namespace LocalS.Service.Api.Merch
                     PerCumPrice = PerCumPrice,
                     SalesDate = salesDate
                 });
+
+            }
+
+
+            List<DeviceSalesModel> sales3 = new List<DeviceSalesModel>();
+            sales3.AddRange(sales1);
+            sales3.AddRange(sales2);
+
+
+            var sales4 = (from u in sales3 select new { u.ShopName, u.StoreName, u.DeviceCumCode }).Distinct().ToList();
+
+            var sale5 = new List<object>();
+
+            for (int i = 0; i < sales4.Count; i++)
+            {
+                string storeName = sales4[i].StoreName;
+                string shopName = sales4[i].ShopName;
+                string deviceCumCode = sales4[i].DeviceCumCode;
+                string sumChargeAmount = "0";
+                string sumCount = "0";
+                string perCumPrice = "0";
+
+                var sale = sales2.Where(m => m.StoreName == storeName && m.ShopName == shopName && m.DeviceCumCode == deviceCumCode).FirstOrDefault();
+                if (sale != null)
+                {
+                    sumChargeAmount = sale.SumChargeAmount;
+                    sumCount = sale.SumCount;
+                    perCumPrice = sale.PerCumPrice;
+                }
+
+                sale5.Add(new
+                {
+                    storeName = storeName,
+                    shopName = shopName,
+                    deviceCumCode = deviceCumCode,
+                    sumChargeAmount = sumChargeAmount,
+                    sumCount = sumCount,
+                    perCumPrice = perCumPrice,
+                    salesDate = salesDate
+                });
             }
 
 
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", lists);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", sale5);
 
             return result;
 
