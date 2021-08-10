@@ -17,6 +17,8 @@ namespace LocalS.Entity
         public string WxPayMchId { get; set; }
         public string WxPayKey { get; set; }
         public string WxPayResultNotifyUrl { get; set; }
+        public string WxPayCertPath { get; set; }
+        public string WxPayCertPassword { get; set; }
         public string WxPaNotifyEventUrlToken { get; set; }
         public string WxPaOauth2RedirectUrl { get; set; }
         public string WxPaAppId { get; set; }

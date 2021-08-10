@@ -8,8 +8,8 @@ namespace MyWeiXinSdk
 {
     public class WxAppInfoConfig
     {
-        private string _sslCert_Path = "E:\\Web\\cereson\\WebMobileByFuLi\\cert\\apiclient_cert.p12";
-        private string _sslCert_Password = "1486589902";
+        private string _sslCert_Path = "";
+        private string _sslCert_Password = "";
 
         public string AppId { get; set; }
         public string AppSecret { get; set; }

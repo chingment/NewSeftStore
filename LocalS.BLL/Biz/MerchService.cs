@@ -27,7 +27,8 @@ namespace LocalS.BLL.Biz
             m_Config.PayMchId = d_Merch.WxPayMchId;
             m_Config.PayKey = d_Merch.WxPayKey;
             m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
-
+            m_Config.SslCert_Path = d_Merch.WxPayCertPath;
+            m_Config.SslCert_Password = d_Merch.WxPayCertPassword;
             return m_Config;
         }
 
@@ -46,6 +47,8 @@ namespace LocalS.BLL.Biz
             m_Config.PayMchId = d_Merch.WxPayMchId;
             m_Config.PayKey = d_Merch.WxPayKey;
             m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
+            m_Config.SslCert_Path = d_Merch.WxPayCertPath;
+            m_Config.SslCert_Password = d_Merch.WxPayCertPassword;
             m_Config.MyMerchId = d_Merch.Id;
             m_Config.MyStoreId = d_Merch.MctStoreId;
 
