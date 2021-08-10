@@ -684,6 +684,11 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.PlanId == rop.PlanId);
             }
 
+            if (!string.IsNullOrEmpty(rop.PlanCumCode))
+            {
+                query = query.Where(m => m.PlanCumCode == rop.PlanCumCode);
+            }
+
             if (!string.IsNullOrEmpty(rop.SkuCumCode))
             {
                 query = query.Where(m => m.SkuCumCode.Contains(rop.SkuCumCode));
@@ -698,6 +703,23 @@ namespace LocalS.Service.Api.Merch
             {
                 query = query.Where(m => m.MakerName.Contains(rop.MakerName));
             }
+
+            if (rop.MakeDateArea != null)
+            {
+                if (rop.MakeDateArea.Length == 2)
+                {
+                    DateTime? makeStartTime = CommonUtil.ConverToStartTime(rop.MakeDateArea[0]);
+                    DateTime? makeEndTime = CommonUtil.ConverToEndTime(rop.MakeDateArea[1]);
+
+                    if (makeStartTime != null && makeEndTime != null)
+                    {
+                        query = query.Where(m => m.MakeTime >= makeStartTime && m.MakeTime <= makeEndTime);
+
+                    }
+                }
+            }
+
+
 
             List<object> olist = new List<object>();
 

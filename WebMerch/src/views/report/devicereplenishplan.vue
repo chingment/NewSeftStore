@@ -1,31 +1,39 @@
 <template>
   <div id="report_list">
     <div class="filter-container">
-      <el-row :gutter="12">
-        <el-col v-show="planIdIsHidden" :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.planId" clearable placeholder="计划单号" />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.shopName" clearable placeholder="门店" />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.skuCumCode" clearable placeholder="商品编码" />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.makerName" clearable placeholder="制单人" />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
+      <el-form ref="form" label-width="120px">
+        <el-form-item v-show="planIdIsHidden" label="计划单号">
+          <el-input v-model="listQuery.planCumCode" clearable style="max-width: 300px;" />
+        </el-form-item>
+        <el-form-item label="门店">
+          <el-input v-model="listQuery.shopName" clearable style="max-width: 300px;" />
+        </el-form-item>
+        <el-form-item label="商品编码">
+          <el-input v-model="listQuery.skuCumCode" clearable style="max-width: 300px;" />
+        </el-form-item>
+        <el-form-item label="制单人">
+          <el-input v-model="listQuery.makerName" clearable style="max-width: 300px;" />
+        </el-form-item>
+        <el-form-item label="制单日期">
+          <el-date-picker
+            v-model="listQuery.makeDateArea"
+            type="daterange"
+            range-separator="-"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            style="max-width: 300px;"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
           <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="handleDownload">
             导出
           </el-button>
-        </el-col>
-      </el-row>
-      <el-button style="position: absolute;right: 10px;top: 20px;" icon="el-icon-refresh" circle @click="handleFilter" />
-
+        </el-form-item>
+      </el-form>
     </div>
+
     <el-table
       :key="listKey"
       v-loading="loading"
@@ -118,6 +126,7 @@
 
 import { deviceReplenishPlanInit, deviceReplenishPlanGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
+
 export default {
   name: 'ReportSkuSalesDateHis',
   props: {
@@ -138,9 +147,11 @@ export default {
       listTotal: 0,
       listQuery: {
         planId: '',
+        planCumCode: '',
         shopName: '',
         makerName: '',
-        skuCumCode: ''
+        skuCumCode: '',
+        makeDateArea: ['', '']
       },
       planIdIsHidden: true,
       optionsByPlan: [],
@@ -201,6 +212,13 @@ export default {
       })
     },
     handleFilter() {
+      // if (this.planId === undefined) {
+      //   if (this.listQuery.planCumCode === '') {
+      //     this.$message('至少输入计划单号')
+      //     return
+      //   }
+      // }
+
       this._getData()
     },
     handleDownload() {
@@ -247,4 +265,10 @@ export default {
     border: 0px  !important;
   }
 }
+
+ .transition-box {
+
+    height: 300px;
+
+  }
 </style>
