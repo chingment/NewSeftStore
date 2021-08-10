@@ -104,6 +104,22 @@ export function deviceReplenishPlanGet(data) {
   })
 }
 
+export function deviceSalesHisInit(params) {
+  return request({
+    url: '/report/deviceSalesHisInit',
+    method: 'get',
+    params
+  })
+}
+
+export function deviceSalesHisGet(data) {
+  return request({
+    url: '/report/deviceSalesHisGet',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   deviceStockRealDataInit: deviceStockRealDataInit,
   devicehStockRealDataGet: deviceStockRealDataGet,
@@ -115,5 +131,7 @@ export default {
   storeStockDateHisGet: storeStockDateHisGet,
   storeSalesHisInit: storeSalesHisInit,
   storeSalesHisGet: storeSalesHisGet,
+  deviceSalesHisInit: deviceSalesHisInit,
+  deviceSalesHisGet: deviceSalesHisGet,
   checkRightExport: checkRightExport
 }

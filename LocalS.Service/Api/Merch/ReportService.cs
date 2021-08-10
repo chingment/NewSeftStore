@@ -653,20 +653,58 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择交易时间");
             }
 
+            string salesDate = "";
+
+            if (rop.TradeDateTimeArea[0] == rop.TradeDateTimeArea[1])
+            {
+                salesDate = DateTime.Parse(rop.TradeDateTimeArea[0]).ToUnifiedFormatDate();
+            }
+            else
+            {
+                salesDate = DateTime.Parse(rop.TradeDateTimeArea[0]).ToUnifiedFormatDate() + "~" + DateTime.Parse(rop.TradeDateTimeArea[1]).ToUnifiedFormatDate();
+            }
+
             string tradeStartTime = DateTime.Parse(CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
 
             string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
 
-
-            StringBuilder sql = new StringBuilder(" StoreName,ShopName, DeviceCumCode,SUM(ChargeAmount) as SumChargeAmount,COUNT(*) as SumCount ");
-            sql.Append(" from dbo.[Order] where PayStatus=3 and IsTestMode=0 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "' ");
-            sql.Append(" group by  StoreName,ShopName, DeviceCumCode ");
-
-           
-            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToJsonObject<List<object>>();
+            StringBuilder sql = new StringBuilder(" select StoreName,ShopName, DeviceCumCode,SumChargeAmount,SumCount, Convert(decimal(18,2),SumChargeAmount/SumCount) as PerCumPrice  from ( ");
+            sql.Append(" select StoreName,ShopName, DeviceCumCode,SUM(ChargeAmount) as SumChargeAmount,COUNT(*) as SumCount from dbo.[Order] where PayStatus=3 ");
+            sql.Append(" and IsTestMode=0 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "' ");
+            sql.Append(" group by  StoreName,ShopName,DeviceCumCode) tb ");
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", dtData);
+            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
+
+            var d_MerchDevice = (from u in CurrentDb.MerchDevice where u.MerchId == merchId && u.CurUseStoreId != null && u.CurUseShopId != null select new { u.DeviceId, u.CumCode, u.CurUseStoreId, u.CurUseShopId }).ToList();
+
+            List<object> lists = new List<object>();
+
+            for (var i = 0; i < dtData.Rows.Count; i++)
+            {
+                string StoreName = dtData.Rows[i]["StoreName"].ToString();
+                string ShopName = dtData.Rows[i]["ShopName"].ToString();
+                string DeviceCumCode = dtData.Rows[i]["DeviceCumCode"].ToString();
+                string SumChargeAmount = dtData.Rows[i]["SumChargeAmount"].ToString();
+                string SumCount = dtData.Rows[i]["SumCount"].ToString();
+                string PerCumPrice = dtData.Rows[i]["PerCumPrice"].ToString();
+
+                lists.Add(new
+                {
+                    StoreName = StoreName,
+                    ShopName = ShopName,
+                    DeviceCumCode = DeviceCumCode,
+                    SumChargeAmount = SumChargeAmount,
+                    SumCount = SumCount,
+                    PerCumPrice = PerCumPrice,
+                    SalesDate = salesDate
+                });
+            }
+
+
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", lists);
 
             return result;
 
