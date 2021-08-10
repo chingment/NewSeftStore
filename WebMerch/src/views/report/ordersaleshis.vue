@@ -1,10 +1,10 @@
 <template>
   <div id="report_list">
-    <div class="filter-container">
 
-      <el-row :gutter="12">
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.storeIds" multiple placeholder="选择店铺" style="width: 100%">
+    <div class="filter-container">
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="店铺" style="max-width: 600px;">
+          <el-select v-model="listQuery.storeIds" multiple placeholder="选择" style="width: 100%">
             <el-option
               v-for="item in optionsStores"
               :key="item.value"
@@ -12,8 +12,8 @@
               :value="item.value"
             />
           </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
+        </el-form-item>
+        <el-form-item label="交易日期" style="max-width: 400px;">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"
             type="daterange"
@@ -23,26 +23,19 @@
             end-placeholder="结束日期"
             style="width: 100%"
           />
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-select v-model="listQuery.receiveMode" style="width:100%" clearable placeholder="全部提货方式">
-            <el-option
-              v-for="item in optionsReceiveModes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-col>
-        <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
+        </el-form-item>
+        <el-form-item label="提货方式">
+          <el-radio-group v-model="listQuery.receiveMode">
+            <el-radio-button v-for="item in options_ReceiveModes" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
           <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="handleDownload">
             导出
           </el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+      </el-form>
     </div>
     <el-table
       :key="listKey"
@@ -124,10 +117,13 @@ export default {
       listQuery: {
         storeIds: [],
         tradeDateTimeArea: [],
-        receiveMode: undefined
+        receiveMode: '0'
       },
       optionsStores: [],
-      optionsReceiveModes: [{
+      options_ReceiveModes: [{
+        value: '0',
+        label: '全部'
+      }, {
         value: '4',
         label: '设备自提'
       }, {

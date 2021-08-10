@@ -58,14 +58,14 @@ namespace WebApiMerch.Controllers
         [HttpGet]
         public OwnApiHttpResponse SkuSalesHisInit()
         {
-            var result = MerchServiceFactory.Report.SkuSalesDateHisInit(this.CurrentUserId, this.CurrentMerchId);
+            var result = MerchServiceFactory.Report.SkuSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
         public OwnApiHttpResponse SkuSalesHisGet([FromBody]RopReportSkuSalesHisGet rop)
         {
-            var result = MerchServiceFactory.Report.SkuSalesDateHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.SkuSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 

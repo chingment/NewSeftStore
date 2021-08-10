@@ -284,7 +284,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult SkuSalesDateHisInit(string operater, string merchId)
+        public CustomJsonResult SkuSalesHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -309,7 +309,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SkuSalesDateHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
+        public CustomJsonResult SkuSalesHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
         {
 
             var result = new CustomJsonResult();

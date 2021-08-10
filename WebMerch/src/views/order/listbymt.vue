@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form ref="form" label-width="120px">
         <el-form-item label="状态">
-          <el-radio-group v-model="listQuery.orderStatus" @change="handleFilter">
+          <el-radio-group v-model="listQuery.orderStatus">
             <el-radio-button v-for="item in options_status" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
