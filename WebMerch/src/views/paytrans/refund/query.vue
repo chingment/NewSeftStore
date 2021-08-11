@@ -2,7 +2,7 @@
   <div id="refund_list">
     <div class="filter-container">
 
-      <el-form ref="form" label-width="120px">
+      <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="退款单号">
           <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" />
         </el-form-item>

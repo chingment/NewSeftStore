@@ -2,7 +2,7 @@
   <div id="report_list">
 
     <div class="filter-container">
-      <el-form ref="form" label-width="120px">
+      <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="店铺" style="max-width: 600px;">
           <el-select v-model="listQuery.storeIds" multiple placeholder="选择" style="width: 100%">
             <el-option

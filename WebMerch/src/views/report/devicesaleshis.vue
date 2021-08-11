@@ -2,7 +2,7 @@
   <div id="report_list">
 
     <div class="filter-container">
-      <el-form ref="form" label-width="120px">
+      <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="交易日期" style="max-width: 400px;">
           <el-date-picker
             v-model="listQuery.tradeDateTimeArea"

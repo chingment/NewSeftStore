@@ -2,7 +2,7 @@
   <div id="report_list">
 
     <div class="filter-container">
-      <el-form ref="form" label-width="120px">
+      <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="单据号">
           <el-input v-model="listQuery.cumCode" clearable placeholder="单据号" style="max-width: 300px;" class="filter-item" />
         </el-form-item>

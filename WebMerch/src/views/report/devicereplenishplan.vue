@@ -1,7 +1,7 @@
 <template>
   <div id="report_list">
     <div class="filter-container">
-      <el-form ref="form" label-width="120px">
+      <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item v-show="planIdIsHidden" label="计划单号">
           <el-input v-model="listQuery.planCumCode" clearable style="max-width: 300px;" />
         </el-form-item>
