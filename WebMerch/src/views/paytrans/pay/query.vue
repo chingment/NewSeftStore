@@ -52,7 +52,7 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="相关订单号" align="left" width="150">
+      <el-table-column label="相关订单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.orderIds }}</span>
         </template>
@@ -62,7 +62,7 @@
           <span>{{ scope.row.payPartner.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易单号" align="left" width="150">
+      <el-table-column label="交易单号" align="left" width="260">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column label="交易状态" align="left" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.payStatus.text }}</span>
+          <el-tag :type="getPayStatusColor(scope.row.payStatus.value)">{{ scope.row.payStatus.text }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="left" width="150">
@@ -92,7 +92,7 @@
           <span>{{ scope.row.appId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易时间" align="left" width="150">
+      <el-table-column label="交易时间" align="left" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.submittedTime }}</span>
         </template>
@@ -180,6 +180,20 @@ export default {
           path: '/paytrans/refund/apply?payTransId=' + arr[1]
         })
       }
+    },
+    getPayStatusColor(status) {
+      switch (status) {
+        case 1:
+          return ''
+        case 2:
+          return ''
+        case 3:
+          return 'success'
+        case 4:
+        case 5:
+          return ''
+      }
+      return ''
     }
   }
 }

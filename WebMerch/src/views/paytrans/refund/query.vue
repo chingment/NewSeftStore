@@ -29,59 +29,54 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.$index+1 }} </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="退款单号" align="left" min-width="10%">
+      <el-table-column label="退款单号" fixed align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="店铺" align="left" min-width="10%">
+      <el-table-column label="店铺" align="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单号" align="left" min-width="10%">
+      <el-table-column label="订单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.orderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商户单号" align="left" min-width="10%">
+      <el-table-column label="商户单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.payTransId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易单号" align="left" min-width="10%">
+      <el-table-column label="交易单号" align="left" width="260">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" align="left" min-width="10%">
+      <el-table-column label="退款金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.applyAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款方式" align="left" min-width="10%">
+      <el-table-column label="退款方式" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.applyMethod.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="申请时间" align="left" min-width="10%">
+      <el-table-column label="申请时间" align="left" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.applyTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="left" min-width="5%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status.text }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="原因" align="left" min-width="10%">
+      <el-table-column label="原因" align="left" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.applyRemark }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="left" fixed="right" width="80">
+        <template slot-scope="scope">
+          <el-tag :type="getStatusColor(scope.row.status.value)">{{ scope.row.status.text }}</el-tag>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
@@ -148,6 +143,20 @@ export default {
       this.$router.push({
         path: '/clientuser/details?id=' + row.id
       })
+    },
+    getStatusColor(status) {
+      switch (status) {
+        case 1:
+          return ''
+        case 2:
+          return ''
+        case 3:
+          return 'success'
+        case 4:
+        case 5:
+          return 'danger'
+      }
+      return ''
     }
   }
 }
