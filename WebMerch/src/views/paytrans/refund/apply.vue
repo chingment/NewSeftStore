@@ -221,7 +221,7 @@
           </el-form-item>
           <el-form-item label="" prop="">
             <el-button type="primary" @click="_apply()">
-              确认
+              提交
             </el-button>
             <el-button @click="isSearch = true">
               返回

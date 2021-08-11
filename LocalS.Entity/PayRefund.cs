@@ -36,8 +36,6 @@ namespace LocalS.Entity
         public string OrderId { get; set; }
         public string PayTransId { get; set; }
         public string PayPartnerPayTransId { get; set; }
-
-
         public E_PayRefundStatus Status { get; set; }
         public E_PayRefundMethod ApplyMethod { get; set; }
         public decimal ApplyAmount { get; set; }
@@ -49,6 +47,7 @@ namespace LocalS.Entity
         public string Handler { get; set; }
         public DateTime? RefundedTime { get; set; }
         public decimal RefundedAmount { get; set; }
+        public string RefundedRemark { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

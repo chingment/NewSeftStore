@@ -1,7 +1,7 @@
 <template>
   <div id="refund_handle">
 
-    <div v-show="!isHandle">
+    <div v-show="isShowList">
       <div class="filter-container">
 
         <el-form ref="form" label-width="120px" class="query-box">
@@ -93,7 +93,7 @@
 
     </div>
 
-    <div v-show="isHandle">
+    <div v-show="isShowHandle">
       <div v-loading="loadingByRefundHandle">
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
@@ -254,13 +254,20 @@
       </div>
       <div slot="footer" class="dialog-footer" style="padding-left:110px;">
         <el-button type="primary" @click="_handle()">
-          确认
+          提交
         </el-button>
-        <el-button @click="isHandle = false">
+        <el-button @click="isShowHandle = false">
           返回
         </el-button>
       </div>
     </div>
+
+    <el-result v-show="result.isShow" :icon="result.icon" :title="result.title" :sub-title="result.subTitle">
+      <template slot="extra">
+        <el-button type="primary" size="medium" @click="handleGoList">返回处理列表</el-button>
+        <el-button type="success" size="medium" @click="handelSawResult">查看处理结果</el-button>
+      </template>
+    </el-result>
 
   </div>
 </template>
@@ -319,8 +326,15 @@ export default {
           refundableAmount: ''
         }
       },
+      result: {
+        isShow: false,
+        icon: 'success',
+        title: '提交成功',
+        subTitle: '请根据提示进行操作'
+      },
       loadingByRefundHandle: false,
-      isHandle: false,
+      isShowList: true,
+      isShowHandle: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -365,7 +379,8 @@ export default {
           this.details = res.data
         }
         this.loadingByRefundHandle = false
-        this.isHandle = true
+        this.isShowList = false
+        this.isShowHandle = true
       })
     },
     _handle() {
@@ -380,12 +395,8 @@ export default {
           }).then(() => {
             handle(_this.formByHandle).then(res => {
               if (res.result === 1) {
-                this.$message({
-                  message: res.message,
-                  type: 'success'
-                })
-                this.isHandle = false
-                this.getListData()
+                this.isShowHandle = false
+                this.result.isShow = true
               } else {
                 this.$message({
                   message: res.message,
@@ -396,6 +407,17 @@ export default {
           }).catch(() => {
           })
         }
+      })
+    },
+    handleGoList() {
+      this.isShowList = true
+      this.isShowHandle = false
+      this.result.isShow = false
+      this.getListData()
+    },
+    handelSawResult() {
+      this.$router.push({
+        path: '/paytrans/refund/query'
       })
     }
   }

@@ -137,9 +137,14 @@ namespace LocalS.BLL
 
             var respone = zfbUtil.PayRefund(payTranId, refund_fee, refund_desc);
 
-            if(respone.Code== "10000")
+            if (respone.Code == "10000")
             {
-                result.Status = "SUCCESS";
+                if (respone.FundChange == "Y")
+                {
+                    result.Status = "SUCCESS";
+                    result.RefundTime = DateTime.Parse(respone.GmtRefundPay);
+                    result.RefundFee = decimal.Parse(respone.RefundFee);
+                }
             }
             else
             {

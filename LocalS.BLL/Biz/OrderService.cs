@@ -2445,13 +2445,13 @@ namespace LocalS.BLL.Biz
                 string refundStatus = refund.Value["refundStatus"].ToString();
                 decimal refundAmount = decimal.Parse(refund.Value["refundAmount"].ToString());
                 string refundRemark = refund.Value["refundRemark"].ToString();
-                PayRefundHandle(operater, refundId, refundStatus, refundAmount, refundRemark);
+                PayRefundHandle(operater, refundId, refundStatus, refundAmount, DateTime.Now, refundRemark, "");
             }
 
             return result;
         }
 
-        public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, string refundRemark)
+        public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, DateTime? refundTime, string refundRemark, string handleRemark)
         {
 
             var result = new CustomJsonResult();
@@ -2474,11 +2474,17 @@ namespace LocalS.BLL.Biz
                 if (refundStatus == "SUCCESS")
                 {
                     payRefund.Status = E_PayRefundStatus.Success;
-                    payRefund.RefundedTime = DateTime.Now;
+                    payRefund.RefundedTime = refundTime;
                     payRefund.RefundedAmount = refundAmount;
-                    payRefund.Handler = operater;
-                    payRefund.HandleRemark = refundRemark;
-                    payRefund.HandleTime = DateTime.Now;
+                    payRefund.RefundedRemark = refundRemark;
+
+                    if (payRefund.HandleTime == null)
+                    {
+                        payRefund.Handler = operater;
+                        payRefund.HandleRemark = handleRemark;
+                        payRefund.HandleTime = DateTime.Now;
+                    }
+
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
 
@@ -2495,23 +2501,39 @@ namespace LocalS.BLL.Biz
                 else if (refundStatus == "FAIL")
                 {
                     payRefund.Status = E_PayRefundStatus.Failure;
-                    payRefund.Handler = operater;
-                    payRefund.HandleRemark = refundRemark;
+                    payRefund.RefundedRemark = refundRemark;
+                    payRefund.RefundedTime = refundTime;
+                    if (payRefund.HandleTime == null)
+                    {
+                        payRefund.Handler = operater;
+                        payRefund.HandleRemark = handleRemark;
+                        payRefund.HandleTime = DateTime.Now;
+                    }
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
-                    payRefund.HandleTime = DateTime.Now;
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
+                }
+                else if (refundStatus == "HANDLING")
+                {
+                    payRefund.Status = E_PayRefundStatus.Handling;
+                    payRefund.Handler = operater;
+                    payRefund.HandleRemark = handleRemark;
+                    payRefund.HandleTime = DateTime.Now;
+                    payRefund.Mender = operater;
+                    payRefund.MendTime = DateTime.Now;
                 }
                 else if (refundStatus == "INVAILD")
                 {
                     payRefund.Status = E_PayRefundStatus.InVaild;
+                    payRefund.RefundedRemark = refundRemark;
                     payRefund.Handler = operater;
-                    payRefund.HandleRemark = refundRemark;
+                    payRefund.HandleRemark = handleRemark;
+                    payRefund.HandleTime = DateTime.Now;
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
-                    payRefund.HandleTime = DateTime.Now;
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
