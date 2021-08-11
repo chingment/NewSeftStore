@@ -29,7 +29,7 @@ namespace LocalS.BLL.Biz
             {
                 if (isHandleComplete)
                 {
-                    m_Status.Value = 0;
+                    m_Status.Value = 1;
                     m_Status.Text = "异常，已处理";
                 }
                 else

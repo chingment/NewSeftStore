@@ -153,7 +153,7 @@
       </el-table-column>
       <el-table-column label="异常？" prop="status" align="left" width="120">
         <template slot-scope="scope">
-          <span :class="'enable-status enable-status-'+scope.row.exStatus.value">{{ scope.row.exStatus.text }}</span>
+          <el-tag :type="getExStatusColor(scope.row.exStatus.value)">{{ scope.row.exStatus.text }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="isDesktop" label="下单时间" prop="submittedTime" align="left" min-width="15%">
@@ -677,6 +677,22 @@ export default {
     },
     selectNav(e) {
 
+    },
+    getExStatusColor(status) {
+      switch (status) {
+        case 0:
+          return 'info'
+        case 1:
+          return ''
+        case 2:
+          return 'danger'
+        case 3:
+          return ''
+        case 4:
+        case 5:
+          return ''
+      }
+      return ''
     }
   }
 }

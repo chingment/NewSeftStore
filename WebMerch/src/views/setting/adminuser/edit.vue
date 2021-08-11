@@ -95,7 +95,8 @@ export default {
         avatar: '',
         orgIds: [],
         roleIds: [],
-        imIsUse: false
+        imIsUse: false,
+        isDisable: false
       },
       rules: {
         password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
@@ -134,6 +135,7 @@ export default {
           this.form.roleIds = d.roleIds
           this.form.imIsUse = d.imIsUse
           this.form.avatar = d.avatar
+          this.form.isDisable = d.isDisable
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
 

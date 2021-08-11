@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column label="状态" prop="status" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span :class="'enable-status enable-status-'+scope.row.status.value">{{ scope.row.status.text }}</span>
+          <el-tag :type="getStatusColor(scope.row.status.value)">{{ scope.row.status.text }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
@@ -304,6 +304,20 @@ export default {
           })
         }
       })
+    },
+    getStatusColor(status) {
+      switch (status) {
+        case 1:
+          return 'success'
+        case 2:
+          return 'danger'
+        case 3:
+          return ''
+        case 4:
+        case 5:
+          return ''
+      }
+      return ''
     }
   }
 }

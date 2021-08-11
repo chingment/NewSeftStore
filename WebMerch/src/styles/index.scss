@@ -76,39 +76,6 @@ div:focus {
  padding: 0px !important;
 }
 
-.enable-status{
-  background-color: rgba(24,144,255,.1);
-  display: inline-block;
-  padding: 0 10px;
-  height: 32px;
-  line-height: 30px;
-  font-size: 12px;
-  color: #1890ff;
-  border-radius: 4px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  border: 1px solid rgba(24,144,255,.2);
-  white-space: nowrap;
-}
-
-.enable-status-0{
-  background-color: rgba(144,147,153,.1);
-  border-color: rgba(144,147,153,.2);
-  color: #909399;
-}
-
-.enable-status-1{
-  background-color: rgba(19,206,102,.1);
-  border-color: rgba(19,206,102,.2);
-  color: #13ce66;
-}
-
-.enable-status-2{
-  background-color: rgba(255,73,73,.1);
-  border-color: rgba(255,73,73,.2);
-  color: #ff4949;
-}
-
 .el-cascader-node__postfix{
   top: 10px;
 }
