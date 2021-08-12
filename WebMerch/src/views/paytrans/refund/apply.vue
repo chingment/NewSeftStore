@@ -1,7 +1,7 @@
 <template>
   <div id="refund_apply">
 
-    <div v-show="isSearch">
+    <div v-show="isShowList">
       <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="商户单号">
           <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" />
@@ -83,7 +83,7 @@
       </el-table>
     </div>
 
-    <div v-show="!isSearch">
+    <div v-show="isShowHandle">
       <div v-loading="loadingByRefundApply">
 
         <div class="row-title clearfix">
@@ -223,7 +223,7 @@
             <el-button type="primary" @click="_apply()">
               提交
             </el-button>
-            <el-button @click="isSearch = true">
+            <el-button @click="handleGoBack">
               返回
             </el-button>
           </el-form-item>
@@ -232,6 +232,13 @@
       </div>
 
     </div>
+
+    <el-result v-show="result.isShow" :icon="result.icon" :title="result.title" :sub-title="result.subTitle">
+      <template slot="extra">
+        <el-button type="primary" size="medium" @click="handleGoList">返回处理列表</el-button>
+        <el-button type="success" size="medium" @click="handelSawResult">查看处理结果</el-button>
+      </template>
+    </el-result>
   </div>
 </template>
 
@@ -278,7 +285,14 @@ export default {
         method: [{ required: true, max: 200, message: '请选择退款方式', trigger: 'change' }],
         remark: [{ required: true, min: 1, max: 200, message: '原因不能为空', trigger: 'change' }]
       },
-      isSearch: true,
+      result: {
+        isShow: false,
+        icon: 'success',
+        title: '提交成功',
+        subTitle: '请根据提示进行操作'
+      },
+      isShowList: true,
+      isShowHandle: false,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -334,7 +348,8 @@ export default {
           this.details = res.data
         }
         this.loadingByRefundApply = false
-        this.isSearch = false
+        this.isShowList = false
+        this.isShowHandle = true
       })
     },
     _apply() {
@@ -349,14 +364,12 @@ export default {
           }).then(() => {
             apply(_this.formByApply).then(res => {
               if (res.result === 1) {
-                this.$message({
-                  message: res.message,
-                  type: 'success'
-                })
-                var d = res.data
-                this.$router.push({
-                  path: '/paytrans/refund/query?payRefundId=' + d.payRefundId
-                })
+                this.isShowHandle = false
+                this.result.isShow = true
+                // var d = res.data
+                // this.$router.push({
+                //   path: '/paytrans/refund/query?payRefundId=' + d.payRefundId
+                // })
               } else {
                 this.$message({
                   message: res.message,
@@ -368,6 +381,22 @@ export default {
           })
         }
       })
+    },
+    handleGoList() {
+      this.isShowList = true
+      this.isShowHandle = false
+      this.result.isShow = false
+      this.getListData()
+    },
+    handelSawResult() {
+      this.$router.push({
+        path: '/paytrans/refund/query'
+      })
+    },
+    handleGoBack() {
+      this.isShowList = true
+      this.isShowHandle = false
+      this.result.isShow = false
     }
 
   }

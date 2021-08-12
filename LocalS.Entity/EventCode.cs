@@ -92,6 +92,11 @@ namespace LocalS.Entity
         public const string coupon_add = "coupon_add";
         [EventCodeRemark("A", "修改优惠券信息")]
         public const string coupon_edit = "coupon_edit";
+        [EventCodeRemark("A", "退款申请")]
+        public const string pay_refund_apply = "pay_refund_apply";
+        [EventCodeRemark("A", "退款处理")]
+        public const string pay_refund_handle = "pay_refund_handle";
+
         public static string GetEventName(string eventCode)
         {
 
