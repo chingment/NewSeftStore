@@ -557,6 +557,45 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult GetSysParams(string operater, string merchId, string deviceId)
+        {
+            var m_Device = CurrentDb.Device.Where(m => m.Id == deviceId && m.CurUseMerchId == merchId).FirstOrDefault();
+
+            if (m_Device == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该找不到记录");
+            }
+
+            var ret = new
+            {
+                Id = m_Device.Id,
+                CbLight = m_Device.CbLight.ToJsonObject<List<object>>()
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该找不到记录", ret);
+        }
+
+        public CustomJsonResult SetSysParams(string operater, string merchId, RopDeviceSetSysParams rop)
+        {
+            var m_Device = CurrentDb.Device.Where(m => m.Id == rop.Id && m.CurUseMerchId == merchId).FirstOrDefault();
+
+            if (m_Device == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该找不到记录");
+            }
+
+            m_Device.CbLight = rop.CbLight.ToJsonString();
+
+            CurrentDb.SaveChanges();
+
+            Dictionary<string, string> lights = new Dictionary<string, string>();
+            lights.Add("cb", m_Device.CbLight);
+
+            var result = BizFactory.Device.SendSetSysParams(operater, AppId.MERCH, merchId, rop.Id, new { Lights = lights });
+
+            return result;
+        }
+
         public CustomJsonResult OpenPickupDoor(string operater, string merchId, RopDeviceOpenPickupDoor rop)
         {
 

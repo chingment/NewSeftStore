@@ -61,5 +61,6 @@ namespace LocalS.Entity
         public string ImPartner { get; set; }
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }
+        public string CbLight { get; set; }
     }
 }

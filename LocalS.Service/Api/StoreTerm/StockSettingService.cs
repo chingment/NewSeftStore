@@ -140,9 +140,6 @@ namespace LocalS.Service.Api.StoreTerm
         public CustomJsonResult SaveCabinetRowColLayout(string operater, RopStockSettingSaveCabinetRowColLayout rop)
         {
             var result = new CustomJsonResult();
-
-            var m_Device = BizFactory.Device.GetOne(rop.DeviceId);
-
             switch (rop.CabinetId)
             {
                 case "dsx01n01":

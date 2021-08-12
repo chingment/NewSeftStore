@@ -86,6 +86,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Device.Im.Partner = m_Device.ImPartner;
             ret.Device.Im.UserName = m_Device.ImUserName;
             ret.Device.Im.Password = m_Device.ImPassword;
+            ret.Device.Lights = m_Device.Lights;
 
             ret.Device.Mqtt = new MqttModel
             {

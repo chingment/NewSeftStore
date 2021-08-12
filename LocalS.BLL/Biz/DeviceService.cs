@@ -68,7 +68,7 @@ namespace LocalS.BLL.Biz
             m_Device.Scanner.IsUse = d_Device.SannerIsUse;
             m_Device.Scanner.ComId = d_Device.SannerComId;
 
-
+            m_Device.Lights.Add("cb", d_Device.CbLight);
 
             var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_Device.CurUseMerchId).FirstOrDefault();
 
@@ -107,6 +107,43 @@ namespace LocalS.BLL.Biz
 
             return m_Device;
         }
+
+        //public DeviceBelongModel GetBelong(string id)
+        //{
+        //    var m_Device = new DeviceBelongModel();
+
+        //    var d_Device = CurrentDb.Device.Where(m => m.Id == id).FirstOrDefault();
+
+        //    if (d_Device == null)
+        //        return null;
+
+        //    m_Device.DeviceId = d_Device.Id;
+
+        //    var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_Device.CurUseMerchId).FirstOrDefault();
+
+        //    if (d_Merch != null)
+        //    {
+        //        m_Device.MerchId = d_Merch.Id;
+        //        m_Device.MerchName = d_Merch.Name;
+
+        //        var d_Store = CurrentDb.Store.Where(m => m.Id == d_Device.CurUseStoreId).FirstOrDefault();
+        //        if (d_Store != null)
+        //        {
+        //            m_Device.StoreId = d_Store.Id;
+        //            m_Device.StoreName = d_Store.Name;
+        //        }
+
+        //        var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
+        //        if (d_Shop != null)
+        //        {
+        //            m_Device.ShopId = d_Shop.Id;
+        //            m_Device.ShopName = d_Shop.Name;
+        //        }
+        //    }
+
+        //    return m_Device;
+        //}
+
 
         public Dictionary<string, AdModel> GetAds(string id)
         {
@@ -194,12 +231,17 @@ namespace LocalS.BLL.Biz
             return SendCommand(operater, appId, merchId, deviceId, "set_sys_status", pms);
         }
 
+        public CustomJsonResult SendSetSysParams(string operater, string appId, string merchId, string deviceId, object pms)
+        {
+            return SendCommand(operater, appId, merchId, deviceId, "set_sys_params", pms);
+        }
+
         public CustomJsonResult SendOpenPickupDoor(string operater, string appId, string merchId, string deviceId)
         {
             return SendCommand(operater, appId, merchId, deviceId, "open_pickup_door");
         }
 
-        public CustomJsonResult SendDeviceShip(string operater, string appId, string merchId, string deviceId,object pms)
+        public CustomJsonResult SendDeviceShip(string operater, string appId, string merchId, string deviceId, object pms)
         {
             return SendCommand(operater, appId, merchId, deviceId, "device_ship", pms);
         }

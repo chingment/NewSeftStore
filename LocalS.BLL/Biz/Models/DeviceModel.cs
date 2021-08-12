@@ -14,6 +14,7 @@ namespace LocalS.BLL.Biz
             this.Cabinets = new Dictionary<string, CabinetModel>();
             this.Scanner = new ScannerModel();
             this.FingerVeinner = new FingerVeinnerModel();
+            this.Lights = new Dictionary<string, string>();
         }
 
         public string DeviceId { get; set; }
@@ -45,7 +46,7 @@ namespace LocalS.BLL.Biz
         public bool CameraByRlIsUse { get; set; }
         public bool ExIsHas { get; set; }
         public Dictionary<string, CabinetModel> Cabinets { get; set; }
-        public string MstVern{ get; set; }
+        public string MstVern { get; set; }
         public string OstVern { get; set; }
         public ScannerModel Scanner { get; set; }
         public FingerVeinnerModel FingerVeinner { get; set; }
@@ -54,5 +55,6 @@ namespace LocalS.BLL.Biz
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }
         public int PicInSampleSize { get; set; }
+        public Dictionary<string, string> Lights { get; set; }
     }
 }

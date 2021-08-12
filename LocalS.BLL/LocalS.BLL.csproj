@@ -89,6 +89,7 @@
     <Compile Include="Biz\Models\CabinetRowColLayoutByDSModel.cs" />
     <Compile Include="Biz\Models\CabinetRowColLayoutByZSModel.cs" />
     <Compile Include="Biz\Models\ConsultModel.cs" />
+    <Compile Include="Biz\Models\DeviceBelongModel.cs" />
     <Compile Include="Biz\Models\StockChangeRecordModel.cs" />
     <Compile Include="Biz\Models\FingerVeinnerModel.cs" />
     <Compile Include="Biz\Models\DeviceEventBaseModel.cs" />

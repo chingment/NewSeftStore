@@ -90,6 +90,21 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetSysParams([FromUri]string id)
+        {
+            var result = MerchServiceFactory.Device.GetSysParams(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SetSysParams([FromBody]RopDeviceSetSysParams rop)
+        {
+            var result = MerchServiceFactory.Device.SetSysParams(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        
 
         [HttpPost]
         public OwnApiHttpResponse OpenPickupDoor([FromBody]RopDeviceOpenPickupDoor rop)

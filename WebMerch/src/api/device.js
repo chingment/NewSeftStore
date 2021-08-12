@@ -87,6 +87,22 @@ export function setSysStatus(data) {
   })
 }
 
+export function getSysParams(params) {
+  return request({
+    url: '/device/getSysParams',
+    method: 'get',
+    params
+  })
+}
+
+export function setSysParams(data) {
+  return request({
+    url: '/device/setSysParams',
+    method: 'post',
+    data
+  })
+}
+
 export function queryMsgPushResult(data) {
   return request({
     url: '/device/queryMsgPushResult',
@@ -131,6 +147,8 @@ export default {
   rebootSys: rebootSys,
   shutdownSys: shutdownSys,
   setSysStatus: setSysStatus,
+  setSysParams: setSysParams,
+  getSysParams: getSysParams,
   queryMsgPushResult: queryMsgPushResult,
   openPickupDoor: openPickupDoor,
   bindShop: bindShop,
