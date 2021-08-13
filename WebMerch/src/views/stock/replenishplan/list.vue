@@ -7,10 +7,10 @@
           <el-input v-model="listQuery.cumCode" clearable placeholder="单据号" style="max-width: 300px;" class="filter-item" />
         </el-form-item>
         <el-form-item>
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
-          <el-button style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="dialogNewPlanOpen">
+          <el-button style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="onDialogNewPlanOpen">
             新建补货计划单
           </el-button>
         </el-form-item>
@@ -59,14 +59,14 @@
       <el-table-column label="操作" fixed="right" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
 
-          <el-button v-if="row.status.value===3" type="text" size="mini" @click="_handleSawDetail(row)">
+          <el-button v-if="row.status.value===3" type="text" size="mini" @click="onSawDetail(row)">
             查看
           </el-button>
 
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
     <el-dialog title="新建补货计划" :visible.sync="dialogNewPlanIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div>
@@ -90,7 +90,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_handleNewPlan">
+        <el-button type="primary" @click="onNewPlan">
           新建
         </el-button>
         <el-button @click="dialogNewPlanIsVisible = false">
@@ -139,10 +139,10 @@ export default {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
 
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -154,10 +154,10 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
-      this.getListData()
+    onFilter() {
+      this.onGetList()
     },
-    dialogNewPlanOpen() {
+    onDialogNewPlanOpen() {
       this.formByNewPlan.cumCode = ''
       this.formByNewPlan.remark = ''
       this.dialogNewPlanIsVisible = true
@@ -172,7 +172,7 @@ export default {
         }
       })
     },
-    _handleNewPlan() {
+    onNewPlan() {
       this.$refs['formByNewPlan'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要新建计划？', '提示', {
@@ -199,7 +199,7 @@ export default {
         }
       })
     },
-    _handleSawDetail(row) {
+    onSawDetail(row) {
       this.$router.push({
         name: 'MerchReplenishPlanDetail',
         path: '/stock/replenishplan/detail',

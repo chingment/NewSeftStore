@@ -7,7 +7,7 @@
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="门店" class="filter-item" />
         </el-col>
         <el-col :span="8" :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
         </el-col>
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.isCanSelect" type="text" size="mini" @click="handleSelect(row)">
+          <el-button v-if="row.isCanSelect" type="text" size="mini" @click="onSelect(row)">
             选择
           </el-button>
           <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
@@ -47,14 +47,13 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
 <script>
 
-import { MessageBox } from 'element-ui'
-import { getList, save, getDetails } from '@/api/shop'
+import { getList } from '@/api/shop'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -100,10 +99,10 @@ export default {
     }
     this.listQuery.opCode = this.opCode
     this.listQuery.storeId = this.storeId
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -115,11 +114,11 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleSelect(item) {
+    onSelect(item) {
       if (this.selectMethod) {
         this.selectMethod(item)
       }

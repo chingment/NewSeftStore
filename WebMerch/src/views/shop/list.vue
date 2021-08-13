@@ -6,7 +6,7 @@
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="门店名称" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
         </el-col>
@@ -23,7 +23,7 @@
 
             </div>
             <div class="right">
-              <el-button type="text" @click="handleEdit(item)">编辑</el-button>
+              <el-button type="text" @click="onEdit(item)">编辑</el-button>
             </div>
           </div>
           <div class="it-component">
@@ -37,10 +37,10 @@
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left" />
-            <el-button type="text" @click="handleAdd">新建</el-button>
+            <el-button type="text" @click="onAdd">新建</el-button>
           </div>
           <div class="it-component">
-            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="handleAdd"><i data-v-62e19c49="" class="el-icon-plus" /></div>
+            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="onAdd"><i data-v-62e19c49="" class="el-icon-plus" /></div>
           </div>
         </el-card>
       </el-col>
@@ -70,10 +70,10 @@ export default {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
     this.mctMode = this.$store.getters.userInfo.mctMode
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -84,18 +84,18 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleAdd() {
+    onAdd() {
       this.$router.push({
         path: '/shop/add'
       })
     },
-    handleEdit(row) {
+    onEdit(item) {
       this.$router.push({
-        path: '/shop/edit?id=' + row.id
+        path: '/shop/edit?id=' + item.id
       })
     }
   }

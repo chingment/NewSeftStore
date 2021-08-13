@@ -77,10 +77,10 @@ export default {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
     this.mctMode = this.$store.getters.userInfo.mctMode
-    this.onGetListData()
+    this.onGetList()
   },
   methods: {
-    onGetListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -93,7 +93,7 @@ export default {
     },
     onFilter() {
       this.listQuery.page = 1
-      this.onGetListData()
+      this.onGetList()
     },
     onManage(item) {
       this.$router.push({

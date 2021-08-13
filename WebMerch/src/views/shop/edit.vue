@@ -1,7 +1,7 @@
 <template>
   <div id="shop_add">
     <page-header />
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="门店名称" prop="name">
         <el-input v-model="form.name" clearable style="max-width:500px" />
       </el-form-item>
@@ -43,12 +43,12 @@
         <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleSave">保存</el-button>
+        <el-button type="primary" @click="onSave">保存</el-button>
       </el-form-item>
     </el-form>
 
     <el-dialog v-if="dialogIsShowBySelectAddressPoint" title="选择位置" :visible.sync="dialogIsShowBySelectAddressPoint" width="800px" append-to-body>
-      <select-address-point :select-method="handleSelectAddressPoint" :cur-adddress="form.addressDetails" />
+      <select-address-point :select-method="onSelectAddressPoint" :cur-adddress="form.addressDetails" />
     </el-dialog>
 
   </div>
@@ -62,7 +62,7 @@ import { getUrlParam } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
 import SelectAddressPoint from '@/components/SelectAddressPoint/index.vue'
 export default {
-  name: 'ShopAdd',
+  name: 'ShopEdit',
   components: { PageHeader, SelectAddressPoint },
   data() {
     return {
@@ -112,7 +112,7 @@ export default {
     })
   },
   methods: {
-    handleSave() {
+    onSave() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -120,7 +120,9 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.loading = true
             save(this.form).then(res => {
+              this.loading = false
               if (res.result === 1) {
                 this.$message({
                   message: res.message,
@@ -136,6 +138,11 @@ export default {
           })
         }
       })
+    },
+    onSelectAddressPoint(rs) {
+      this.form.addressDetails = rs
+      this.form.address = rs.address
+      this.dialogIsShowBySelectAddressPoint = false
     },
     getUploadImglist(displayImgUrls) {
       var _uploadImglist = []
@@ -202,11 +209,6 @@ export default {
     uploadPreviewHandle(file) {
       this.uploadImgPreImgDialogUrl = file.url
       this.uploadImgPreImgDialogVisible = true
-    },
-    handleSelectAddressPoint(rs) {
-      this.form.addressDetails = rs
-      this.form.address = rs.address
-      this.dialogIsShowBySelectAddressPoint = false
     }
   }
 }
