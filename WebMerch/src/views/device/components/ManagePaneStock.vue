@@ -9,13 +9,13 @@
 
     <div class="filter-container" style="margin-bottom:20px">
 
-      <el-radio-group v-model="listQuery.cabinetId" @change="handleFilter">
+      <el-radio-group v-model="listQuery.cabinetId" @change="onChangeCabinet">
         <el-radio-button v-for="item in options_cabinets" :key="item.value" :label="item.value">{{ item.label }}库存</el-radio-button>
       </el-radio-group>
 
     </div>
 
-    <div class="rows">
+    <div v-loading="loading" class="rows">
 
       <div v-for="(row,rindex) in listData" :key="rindex" :class="'row '+(isDesktop==true?'row-flex':'row-block')">
         <template v-for="(col,cindex) in row.cols">
@@ -49,7 +49,7 @@
                   </div>
                   <div class="below-right">
 
-                    <el-button type="text" @click="dialogEditOpen(col)">编辑</el-button>
+                    <el-button type="text" @click="onDialogEditOpen(col)">编辑</el-button>
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@
 
     <el-dialog title="商品库存编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'500px':'90%'">
 
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" v-loading="dialogEditIsLoading" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="货槽编号">
           <span>{{ form.slotId }}</span>
         </el-form-item>
@@ -120,7 +120,7 @@
         <el-button size="small" @click="dialogEditIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" size="small" @click="handleEdit">
+        <el-button type="primary" size="small" @click="onSave">
           保存
         </el-button>
       </div>
@@ -132,14 +132,10 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/device'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import { isEmpty } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
-import vueSeamlessScroll from 'vue-seamless-scroll'
 export default {
   name: 'ManagePaneStock',
-  components: {
-    vueSeamlessScroll
-  },
   props: {
     deviceId: {
       type: String,
@@ -158,6 +154,7 @@ export default {
         cabinetId: undefined
       },
       listData: [],
+      dialogEditIsLoading: false,
       dialogEditIsVisible: false,
       rules: {
         id: [{ required: true, min: 1, max: 200, message: '', trigger: 'change' }],
@@ -204,15 +201,15 @@ export default {
             var d = res.data
             this.options_cabinets = d.optionsCabinets
             this.listQuery.cabinetId = this.options_cabinets[0].value
-            this.handleFilter()
+            this.onChangeCabinet()
           }
           this.loading = false
         })
 
-        this.getListData(this.listQuery)
+        this.onGetList(this.listQuery)
       }
     },
-    getListData(listQuery) {
+    onGetList(listQuery) {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
       manageStockGetStocks(this.listQuery).then(res => {
@@ -231,12 +228,11 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
-      this.getListData(this.listQuery)
+    onChangeCabinet() {
+      this.onGetList(this.listQuery)
     },
-    dialogEditOpen(sku) {
+    onDialogEditOpen(sku) {
       this.dialogEditIsVisible = true
-
       this.form.skuId = sku.skuId
       this.form.name = sku.name
       this.form.sellQuantity = sku.sellQuantity
@@ -253,7 +249,7 @@ export default {
       this.form.version = sku.version
       this.form.deviceId = this.listQuery.deviceId
     },
-    handleEdit() {
+    onSave() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           MessageBox.confirm('确定要保存', '提示', {
@@ -261,14 +257,16 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.dialogEditIsLoading = true
             manageStockEditStock(this.form).then(res => {
               if (res.result === 1) {
                 this.$message({
                   message: res.message,
                   type: 'success'
                 })
+                this.dialogEditIsLoading = false
                 this.dialogEditIsVisible = false
-                this.getListData(this.listQuery)
+                this.onGetList(this.listQuery)
               } else {
                 this.$message({
                   message: res.message,

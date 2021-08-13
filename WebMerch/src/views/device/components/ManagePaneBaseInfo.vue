@@ -41,8 +41,8 @@
         {{ temp.lastRequestTime }}
       </el-form-item>
       <el-form-item>
-        <el-button v-show="!isEdit&&!temp.isStopUse" type="primary" @click="openEdit">编辑</el-button>
-        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
+        <el-button v-show="!isEdit&&!temp.isStopUse" type="primary" @click="onOpenEdit">编辑</el-button>
+        <el-button v-show="isEdit" type="info" @click="onCancleEdit">取消</el-button>
         <el-button v-show="isEdit" type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
@@ -52,8 +52,7 @@
 
 import { MessageBox } from 'element-ui'
 import { edit, initManageBaseInfo } from '@/api/device'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-import { all } from 'q'
+import { isEmpty } from '@/utils/commonUtil'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -154,11 +153,11 @@ export default {
         }
       })
     },
-    openEdit() {
+    onOpenEdit() {
       this.form.cumCode = this.temp.cumCode
       this.isEdit = true
     },
-    cancleEdit() {
+    onCancleEdit() {
       this.isEdit = false
     },
     uploadBeforeHandle(file) {

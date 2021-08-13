@@ -13,10 +13,10 @@
           <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编号" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px;display:flex;">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
-          <el-button v-if="opCode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="dialogByOpenSelect(false,null)">
+          <el-button v-if="opCode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="onDialogByOpenSelect(false,null)">
             添加
           </el-button>
         </el-col>
@@ -33,8 +33,8 @@
 
             </div>
             <div class="right">
-              <el-button v-if="opCode==='list'" type="text" @click="handleManage(item)">管理</el-button>
-              <el-button v-if="opCode==='bindshop'" type="text" @click="handleUnBindShop(item)">解绑</el-button>
+              <el-button v-if="opCode==='list'" type="text" @click="onManage(item)">管理</el-button>
+              <el-button v-if="opCode==='bindshop'" type="text" @click="onUnBindShop(item)">解绑</el-button>
             </div>
           </div>
           <div class="storeName" style="font-size:12px;white-space: nowrap">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
@@ -44,8 +44,8 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul v-if="opCode==='list'">
-                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageStock(item)">库存查看</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageControlCenter(item)">控制中心</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="onStock(item)">库存查看</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="onControlCenter(item)">控制中心</el-button></li>
               </ul>
             </div>
           </div>
@@ -79,7 +79,7 @@
               <el-input v-model="listQueryBySelect.id" clearable style="width: 100%" placeholder="编号" class="filter-item" />
             </el-col>
             <el-col :span="8" :xs="24" style="margin-bottom:20px">
-              <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilterBySelect">
+              <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilterBySelect">
                 查询
               </el-button>
             </el-col>
@@ -112,7 +112,7 @@
           <el-table-column label="操作" align="right" width="100" class-name="small-padding fixed-width">
             <template slot-scope="{row}">
               <template v-if="opCode==='bindshop'">
-                <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="handleSelect(row)">
+                <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="onSelect(row)">
                   选择
                 </el-button>
                 <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
@@ -202,13 +202,13 @@ export default {
           this.deviceCount = d.deviceCount
 
           if (d.deviceCount > 0) {
-            this.getListData()
+            this.onGetList()
           }
         }
         this.loading = false
       })
     },
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -219,41 +219,41 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleManage(row) {
+    onManage(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
         path: '/device/manage',
         params: {
-          id: row.id,
+          id: item.id,
           tab: 'tabBaseInfo'
         }
       })
     },
-    handleManageStock(row) {
+    onStock(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
         path: '/device/manage',
         params: {
-          id: row.id,
+          id: item.id,
           tab: 'tabStock'
         }
       })
     },
-    handleManageControlCenter(row) {
+    onControlCenter(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
         path: '/device/manage',
         params: {
-          id: row.id,
+          id: item.id,
           tab: 'tabControlCenter'
         }
       })
     },
-    getListDataBySelect() {
+    onGetListBySelect() {
       this.listQueryBySelect.storeId = this.storeId
       this.listQueryBySelect.shopId = this.shopId
       this.listQueryBySelect.opCode = 'listbyunbindshop'
@@ -266,15 +266,15 @@ export default {
         this.loadingBySelect = false
       })
     },
-    handleFilterBySelect() {
+    onFilterBySelect() {
       this.listQueryBySelect.page = 1
-      this.getListDataBySelect()
+      this.onGetListBySelect()
     },
-    dialogByOpenSelect() {
+    onDialogByOpenSelect() {
       this.dialogByOpenSelectIsVisible = true
-      this.getListDataBySelect()
+      this.onGetListBySelect()
     },
-    handleUnBindShop: function(item) {
+    onUnBindShop: function(item) {
       MessageBox.confirm('确定要解绑该设备，解绑后库存将被清空，请谨慎操作！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -286,7 +286,7 @@ export default {
               message: res.message,
               type: 'success'
             })
-            this.getListData()
+            this.onGetList()
           } else {
             this.$message({
               message: res.message,
@@ -296,7 +296,7 @@ export default {
         })
       })
     },
-    handleSelect: function(item) {
+    onSelect: function(item) {
       if (this.opCode === 'bindshop') {
         MessageBox.confirm('确定绑定设备', '提示', {
           confirmButtonText: '确定',
@@ -309,7 +309,7 @@ export default {
                 message: res.message,
                 type: 'success'
               })
-              this.getListData()
+              this.onGetList()
               this.dialogByOpenSelectIsVisible = false
             } else {
               this.$message({

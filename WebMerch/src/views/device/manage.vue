@@ -5,7 +5,7 @@
       <div class="it-name">
         <span class="title">当前设备:</span><span class="name">{{ activeDropdown.name }}</span>
       </div>
-      <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
+      <el-dropdown class="it-switch" trigger="click" @command="onChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
@@ -23,7 +23,6 @@
 </template>
 <script>
 import { initManage } from '@/api/device'
-import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneStock from './components/ManagePaneStock'
 import managePaneControlCenter from './components/ManagePaneControlCenter'
@@ -63,7 +62,7 @@ export default {
         this.loading = false
       })
     },
-    handleChangeDropdown(id) {
+    onChangeDropdown(id) {
       this.activeDropdown.id = id
       this.init()
     }
