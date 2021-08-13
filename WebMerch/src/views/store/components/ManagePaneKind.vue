@@ -32,12 +32,6 @@
             :disabled="kindEditBtnDisabled"
             @click="dialogKindOpen(true)"
           >{{ currentKindName }}</el-button>
-
-          <!-- <el-link @click="dialogKindOpen(true)">{{ currentKindName }}<i class="el-icon-edit" /> </el-link> -->
-          <!-- <span style="font-size: 21px;display: block; float: left;margin-right: 20px;width: 130px;">{{ currentKindName }} </span> -->
-
-          <!-- <el-button type="primary" icon="el-icon-edit" size="small" :disabled="kindEditBtnDisabled" @click="dialogKindOpen(true)">编辑分类</el-button> -->
-
           <el-button
             type="primary"
             style="margin-left:0px;"
@@ -337,8 +331,8 @@ import {
   getKindSpu
 } from '@/api/store'
 import { searchSpu, getSpecs } from '@/api/product'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { isEmpty } from '@/utils/commonUtil'
+import Pagination from '@/components/Pagination'
 export default {
   name: 'ManagePaneKind',
   components: { Pagination },

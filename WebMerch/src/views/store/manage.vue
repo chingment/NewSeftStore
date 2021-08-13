@@ -5,7 +5,7 @@
       <div class="it-name">
         <span class="title">当前店铺:</span><span class="name">{{ activeDropdown.name }}</span>
       </div>
-      <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
+      <el-dropdown class="it-switch" trigger="click" @command="onChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
@@ -14,16 +14,15 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-tabs v-model="activeTab" type="card">
+    <el-tabs v-model="activeTab" v-loading="loading" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="activeDropdown.id" /></el-tab-pane>
       <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :store-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="关联门店" name="tabFront"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="关联门店" name="tabShop"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import { initManage } from '@/api/store'
-import { getUrlParam } from '@/utils/commonUtil'
 import managePaneBaseInfo from './components/ManagePaneBaseInfo'
 import managePaneShop from './components/ManagePaneShop'
 import managePaneKind from './components/ManagePaneKind'
@@ -70,7 +69,7 @@ export default {
         this.loading = false
       })
     },
-    handleChangeDropdown(id) {
+    onChangeDropdown(id) {
       this.activeDropdown.id = id
       this.init()
     }

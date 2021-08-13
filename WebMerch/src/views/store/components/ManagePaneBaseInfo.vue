@@ -1,6 +1,5 @@
 <template>
-  <div id="store_baseinfo" v-loading="loading">
-
+  <div id="store_baseinfo">
     <el-form ref="form" v-loading="loading" label-width="80px">
       <el-form-item label="名称" prop="name">
         <span>{{ store.name }}</span>
@@ -18,7 +17,6 @@
         <span>{{ store.briefDes }}</span>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 <script>

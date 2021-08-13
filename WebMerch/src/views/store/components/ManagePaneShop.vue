@@ -13,7 +13,7 @@
             </div>
             <div class="right">
 
-              <el-button type="text" @click="handleRemoveShop(item)">移除</el-button>
+              <el-button type="text" @click="onRemoveShop(item)">移除</el-button>
 
             </div>
           </div>
@@ -21,8 +21,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="dialogOpenByDevice(item)">({{ item.deviceCount }}台)设备</el-button></li>
-                <!-- <li><el-button type="text" style="color:#67c23a" @click="handleViewStock(item)">订单信息</el-button></li> -->
+                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="onDialogOpenByDevice(item)">({{ item.deviceCount }}台)设备</el-button></li>
               </ul>
             </div>
           </div>
@@ -34,14 +33,14 @@
             <div class="left" />
 
           </div>
-          <div class="it-component" @click="dialogOpenByShop">
+          <div class="it-component" @click="onDialogOpenByShop">
             <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
           </div>
         </el-card>
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="getListData(listQuery)">
+    <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="onGetListData(listQuery)">
       <div style="width:100%;height:600px">
         <manage-pane-device op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
       </div>
@@ -49,7 +48,7 @@
 
     <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" width="800px" :visible.sync="dialogByShopIsVisible">
       <div style="width:100%;height:600px">
-        <manage-pane-shop op-code="select" :store-id="storeId" :select-method="handleAddShop" />
+        <manage-pane-shop op-code="select" :store-id="storeId" :select-method="onAddShop" />
       </div>
     </el-dialog>
 
@@ -59,8 +58,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-import { all } from 'q'
+import { isEmpty } from '@/utils/commonUtil'
 import managePaneShop from '@/views/shop/select'
 import managePaneDevice from '@/views/device/list'
 export default {
@@ -109,12 +107,11 @@ export default {
           }
           this.loading = false
         })
-        this.getListData(this.listQuery)
+        this.onGetListData(this.listQuery)
       }
     },
-    getListData(listQuery) {
+    onGetListData(listQuery) {
       this.loading = true
-      // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: listQuery })
       getShops(listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -123,14 +120,14 @@ export default {
         this.loading = false
       })
     },
-    dialogOpenByShop() {
+    onDialogOpenByShop() {
       this.dialogByShopIsVisible = true
     },
-    dialogOpenByDevice(item) {
+    onDialogOpenByDevice(item) {
       this.shopId = item.id
       this.dialogByDeviceIsVisible = true
     },
-    handleAddShop(item) {
+    onAddShop(item) {
       MessageBox.confirm('确定要选择该门店？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -143,7 +140,7 @@ export default {
               type: 'success'
             })
             this.dialogByShopIsVisible = false
-            this.getListData(this.listQuery)
+            this.onGetListData(this.listQuery)
           } else {
             this.$message({
               message: res.message,
@@ -153,7 +150,7 @@ export default {
         })
       })
     },
-    handleRemoveShop(item) {
+    onRemoveShop(item) {
       MessageBox.confirm('确定要移除该门店？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -166,7 +163,7 @@ export default {
               type: 'success'
             })
             this.dialogByShopIsVisible = false
-            this.getListData(this.listQuery)
+            this.onGetListData(this.listQuery)
           } else {
             this.$message({
               message: res.message,

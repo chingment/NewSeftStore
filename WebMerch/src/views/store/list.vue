@@ -6,7 +6,7 @@
           <el-input v-model="listQuery.name" clearable style="width: 100%" placeholder="店铺名称" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="6" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
         </el-col>
@@ -23,17 +23,15 @@
 
             </div>
             <div class="right">
-              <el-button type="text" @click="handleManage(item)">管理</el-button>
+              <el-button type="text" @click="onManage(item)">管理</el-button>
             </div>
           </div>
           <div class="it-component">
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <!-- <li v-if="item.sctMode.indexOf('K')>-1"><el-button type="text" style="padding:0px" @click="handleManageDevice(item)">设备管理</el-button></li> -->
-                <!-- <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageOrder(item)">订单信息</el-button></li> -->
-                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="handleManageKind(item)">商品分类</el-button></li>
-                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="handleManageFront(item)">门店信息</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#67c23a" @click="onKind(item)">商品分类</el-button></li>
+                <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="onShop(item)">门店信息</el-button></li>
               </ul>
             </div>
           </div>
@@ -79,10 +77,10 @@ export default {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
     this.mctMode = this.$store.getters.userInfo.mctMode
-    this.getListData()
+    this.onGetListData()
   },
   methods: {
-    getListData() {
+    onGetListData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -93,62 +91,37 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetListData()
     },
-    handleCreate() {
-      this.$router.push({
-        path: '/store/add'
-      })
-    },
-    handleManage(row) {
+    onManage(item) {
       this.$router.push({
         name: 'MerchStoreEdit',
         path: '/store/manage',
         params: {
-          id: row.id,
+          id: item.id,
           tab: 'tabBaseInfo'
         }
       })
     },
-    handleManageDevice(row) {
+    onKind(item) {
       this.$router.push({
         name: 'MerchStoreEdit',
         path: '/store/manage',
         params: {
-          id: row.id,
-          tab: 'tabDevice'
-        }
-      })
-    },
-    handleManageOrder(row) {
-      this.$router.push({
-        name: 'MerchStoreEdit',
-        path: '/store/manage',
-        params: {
-          id: row.id,
-          tab: 'tabOrder'
-        }
-      })
-    },
-    handleManageKind(row) {
-      this.$router.push({
-        name: 'MerchStoreEdit',
-        path: '/store/manage',
-        params: {
-          id: row.id,
+          id: item.id,
           tab: 'tabKind'
         }
       })
     },
-    handleManageFront(row) {
+    onShop(item) {
       this.$router.push({
         name: 'MerchStoreEdit',
         path: '/store/manage',
         params: {
-          id: row.id,
-          tab: 'tabFront'
+          id: item.id,
+          tab: 'tabShop'
         }
       })
     }
