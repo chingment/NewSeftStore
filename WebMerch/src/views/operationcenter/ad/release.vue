@@ -41,9 +41,9 @@
         />
       </el-form-item>
       <el-form-item label="对象" prop="belongIds">
-        <el-checkbox v-model="belongsCheckAll" :indeterminate="belongsIsIndeterminate" @change="handleBelongsCheckAllChange">全选</el-checkbox>
+        <el-checkbox v-model="belongsCheckAll" :indeterminate="belongsIsIndeterminate" @change="onBelongsCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;" />
-        <el-checkbox-group v-model="form.belongIds" @change="handleBelongsCheckedChange">
+        <el-checkbox-group v-model="form.belongIds" @change="onBelongsCheckedChange">
           <el-checkbox v-for="(belong,index) in temp.belongs" :key="index" :label="belong.id">{{ belong.name }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
@@ -57,8 +57,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { release, initRelease } from '@/api/ad'
-import fromReg from '@/utils/formReg'
-import { goBack, getUrlParam } from '@/utils/commonUtil'
+import { getUrlParam } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterAdspaceRelease',
@@ -141,7 +140,7 @@ export default {
         }
       })
     },
-    handleBelongsCheckAllChange(val) {
+    onBelongsCheckAllChange(val) {
       var belongsChecked = []
       for (var i = 0; i < this.temp.belongs.length; i++) {
         belongsChecked.push(this.temp.belongs[i].id)
@@ -149,7 +148,7 @@ export default {
       this.form.belongIds = val ? belongsChecked : []
       this.belongsIsIndeterminate = false
     },
-    handleBelongsCheckedChange(value) {
+    onBelongsCheckedChange(value) {
       const checkedCount = value.length
       this.belongsCheckAll = checkedCount === this.temp.belongs.length
       this.belongsIsIndeterminate = checkedCount > 0 && checkedCount < this.temp.belongs.length

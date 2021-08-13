@@ -25,10 +25,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleRelease(row)">
+          <el-button type="text" size="mini" @click="onRelease(row)">
             发布
           </el-button>
-          <el-button type="text" size="mini" @click="handleSawContents(row)">
+          <el-button type="text" size="mini" @click="onSawContents(row)">
             发布记录
           </el-button>
         </template>
@@ -59,10 +59,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetSpaces()
   },
   methods: {
-    getListData() {
+    onGetSpaces() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getSpaces(this.listQuery).then(res => {
@@ -74,18 +74,14 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getListData()
-    },
-    handleRelease(row) {
+    onRelease(item) {
       this.$router.push({
-        path: '/operationcenter/ad/release?id=' + row.id
+        path: '/operationcenter/ad/release?id=' + item.id
       })
     },
-    handleSawContents(row) {
+    onSawContents(item) {
       this.$router.push({
-        path: '/operationcenter/ad/contents?id=' + row.id
+        path: '/operationcenter/ad/contents?id=' + item.id
       })
     }
   }

@@ -5,7 +5,7 @@
         <div :key="index" class="it">
           <div class="it-avatar">
             <img class="img bd-cycle" :src="item.avatar" style="width: 38px; height: 38px;">
-            <i class="el-icon-error btn-del-avatar" style="position:absolute;right:0;top:0;" @click="handleDelete(item)" />
+            <i class="el-icon-error btn-del-avatar" style="position:absolute;right:0;top:0;" @click="onDelete(item)" />
           </div>
           <div class="it-nickname">
             <span class="txt">{{ item.nickName }}</span>
@@ -13,7 +13,7 @@
         </div>
       </template>
       <div class="it">
-        <div class="it-avatar" @click="handleOpenDialogByClients">
+        <div class="it-avatar" @click="onOpenDialogByClients">
           <div
             class="bd-cycle btn-add-avatar"
           >
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="it-nickname">
-          <div @click="handleOpenDialogByClients" />
+          <div @click="onOpenDialogByClients" />
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
         fit
         highlight-current-row
         style="width: 100%;"
-        @selection-change="handleSelectionChange"
+        @selection-change="onSelectionChange"
       >
         <el-table-column
           v-if="multiple"
@@ -61,12 +61,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+      <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogIsShowByClients = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleSelect">
+        <el-button type="primary" @click="onSelect">
           确定
         </el-button>
       </div>
@@ -114,11 +114,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
-    this._getAvatars()
+    this.onGetList()
+    this.onGetAvatars()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -130,10 +130,10 @@ export default {
         this.loading = false
       })
     },
-    handleOpenDialogByClients() {
+    onOpenDialogByClients() {
       this.dialogIsShowByClients = true
     },
-    _getAvatars() {
+    onGetAvatars() {
       getAvatars({ clientUserIds: this.selectIds }).then(res => {
         if (res.result === 1) {
           this.avatars = res.data
@@ -142,10 +142,10 @@ export default {
         this.loading = false
       })
     },
-    handleSelectionChange(val) {
+    onSelectionChange(val) {
       this.selectIdsByMultiple = val
     },
-    handleSelect() {
+    onSelect() {
       if (this.multiple) {
         if (this.selectIdsByMultiple == null || this.selectIdsByMultiple.length == 0) {
           this.$message('至少选择一个')
@@ -167,9 +167,9 @@ export default {
 
       this.$emit('GetSelectIds', this.selectIds)
 
-      this._getAvatars()
+      this.onGetAvatars()
     },
-    handleDelete(item) {
+    onDelete(item) {
       MessageBox.confirm('确定移除' + item.nickName, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

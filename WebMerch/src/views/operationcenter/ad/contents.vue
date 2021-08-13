@@ -2,7 +2,7 @@
   <div id="adspace_release_list">
     <page-header />
     <div>
-      <el-button type="primary" size="mini" @click="handleRelease">
+      <el-button type="primary" size="mini" @click="onRelease">
         发布
       </el-button>
     </div>
@@ -65,19 +65,19 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.status.value==1" type="text" size="mini" @click="handleSetContentStatus(row)">
+          <el-button v-if="row.status.value==1" type="text" size="mini" @click="onSetContentStatus(row)">
             停止
           </el-button>
-          <el-button v-if="row.status.value==2" type="text" size="mini" @click="handleSetContentStatus(row)">
+          <el-button v-if="row.status.value==2" type="text" size="mini" @click="onSetContentStatus(row)">
             恢复
           </el-button>
-          <el-button type="text" size="mini" @click="handleBelong(row)">
+          <el-button type="text" size="mini" @click="onBelong(row)">
             编辑
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
@@ -122,10 +122,10 @@ export default {
         this.adSpace.name = d.adSpaceName
       }
     })
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       getContents(this.listQuery).then(res => {
         if (res.result === 1) {
@@ -136,16 +136,12 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getListData()
-    },
-    handleRelease() {
+    onRelease() {
       this.$router.push({
         path: '/operationcenter/ad/release?id=' + this.listQuery.adSpaceId
       })
     },
-    handleSetContentStatus(item) {
+    onSetContentStatus(item) {
       var status = 0
       var tip = ''
       if (item.status.value === 1) {
@@ -178,7 +174,7 @@ export default {
       }).catch(() => {
       })
     },
-    handleBelong(item) {
+    onBelong(item) {
       this.$router.push({
         path: '/operationcenter/ad/content/belongs?id=' + item.id
       })

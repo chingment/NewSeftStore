@@ -40,7 +40,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="onGetListData(listQuery)">
+    <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="onGetList(listQuery)">
       <div style="width:100%;height:600px">
         <manage-pane-device op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
       </div>
@@ -107,10 +107,10 @@ export default {
           }
           this.loading = false
         })
-        this.onGetListData(this.listQuery)
+        this.onGetList(this.listQuery)
       }
     },
-    onGetListData(listQuery) {
+    onGetList(listQuery) {
       this.loading = true
       getShops(listQuery).then(res => {
         if (res.result === 1) {
@@ -140,7 +140,7 @@ export default {
               type: 'success'
             })
             this.dialogByShopIsVisible = false
-            this.onGetListData(this.listQuery)
+            this.onGetList(this.listQuery)
           } else {
             this.$message({
               message: res.message,
@@ -163,7 +163,7 @@ export default {
               type: 'success'
             })
             this.dialogByShopIsVisible = false
-            this.onGetListData(this.listQuery)
+            this.onGetList(this.listQuery)
           } else {
             this.$message({
               message: res.message,

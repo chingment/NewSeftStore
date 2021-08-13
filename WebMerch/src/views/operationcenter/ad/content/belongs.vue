@@ -21,7 +21,7 @@
       <div class="pull-left"> <h5>相关对象</h5>
       </div>
       <div class="pull-right">
-        <el-button v-if="adContent.status.value==1" type="primary" size="mini" style="margin-top:-20px;margin-right:10px" @click="handleOpenDialogByEdit(false,null)">
+        <el-button v-if="adContent.status.value==1" type="primary" size="mini" style="margin-top:-20px;margin-right:10px" @click="onOpenDialogByEdit(false,null)">
           添加
         </el-button>
       </div>
@@ -56,14 +56,14 @@
       </el-table-column>
       <el-table-column label="操作" align="right" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-if="row.status.value==1" type="text" size="mini" @click="handleSetBelongStatus(row)">
+          <el-button v-if="row.status.value==1" type="text" size="mini" @click="onSetBelongStatus(row)">
             停止
           </el-button>
-          <el-button v-if="row.status.value==2" type="text" size="mini" @click="handleSetBelongStatus(row)">
+          <el-button v-if="row.status.value==2" type="text" size="mini" @click="onSetBelongStatus(row)">
             恢复
           </el-button>
 
-          <el-button v-if="row.status.value==1||row.status.value==2" type="text" size="mini" @click="handleOpenDialogByEdit(true,row)">
+          <el-button v-if="row.status.value==1||row.status.value==2" type="text" size="mini" @click="onOpenDialogByEdit(true,row)">
             编辑
           </el-button>
 
@@ -74,7 +74,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
     <el-dialog v-if="dialogByEditIsVisible" :title="'编辑'" width="600px" :visible.sync="dialogByEditIsVisible" append-to-body>
       <div style="width:100%;height:400px">
@@ -96,9 +96,9 @@
             </div>
 
             <div v-show="!formIsEdit">
-              <el-checkbox v-model="temp.belongsCheckAll" :indeterminate="temp.belongsIsIndeterminate" @change="handleBelongsCheckAllChange">全选</el-checkbox>
+              <el-checkbox v-model="temp.belongsCheckAll" :indeterminate="temp.belongsIsIndeterminate" @change="onBelongsCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;" />
-              <el-checkbox-group v-model="formByEdit.belongIds" @change="handleBelongsCheckedChange">
+              <el-checkbox-group v-model="formByEdit.belongIds" @change="onBelongsCheckedChange">
                 <el-checkbox v-for="(belong,index) in temp.belongs" :key="index" :label="belong.id">{{ belong.name }}</el-checkbox>
               </el-checkbox-group>
             </div>
@@ -107,7 +107,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleBelongEdit">
+        <el-button type="primary" @click="onBelongEdit">
           确定
         </el-button>
         <el-button @click="dialogByEditIsVisible = false">
@@ -182,10 +182,10 @@ export default {
         this.adContent.status = d.status
       }
     })
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       getContentBelongs(this.listQuery).then(res => {
         if (res.result === 1) {
@@ -196,11 +196,11 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleSetBelongStatus(item) {
+    onSetBelongStatus(item) {
       var status = 0
       var tip = ''
       if (item.status.value === 1) {
@@ -232,7 +232,7 @@ export default {
       }).catch(() => {
       })
     },
-    handleOpenDialogByEdit(isEdit, item) {
+    onOpenDialogByEdit(isEdit, item) {
       this.dialogByEditIsVisible = true
       this.formIsEdit = isEdit
       if (isEdit) {
@@ -251,7 +251,7 @@ export default {
         this.formByEdit.validDate = [this.listData[0].validStartTime, this.listData[0].validEndTime]
       }
     },
-    handleBelongsCheckAllChange(val) {
+    onBelongsCheckAllChange(val) {
       var belongsChecked = []
       for (var i = 0; i < this.temp.belongs.length; i++) {
         belongsChecked.push(this.temp.belongs[i].id)
@@ -259,12 +259,12 @@ export default {
       this.formByEdit.belongIds = val ? belongsChecked : []
       this.temp.belongsIsIndeterminate = false
     },
-    handleBelongsCheckedChange(value) {
+    onBelongsCheckedChange(value) {
       const checkedCount = value.length
       this.temp.belongsCheckAll = checkedCount === this.temp.belongs.length
       this.temp.belongsIsIndeterminate = checkedCount > 0 && checkedCount < this.temp.belongs.length
     },
-    handleBelongEdit() {
+    onBelongEdit() {
       MessageBox.confirm('确定保存', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -278,7 +278,7 @@ export default {
                 type: 'success'
               })
               this.dialogByEditIsVisible = false
-              this.getListData(this.listQuery)
+              this.onGetList(this.listQuery)
             } else {
               this.$message({
                 message: res.message,
@@ -294,7 +294,7 @@ export default {
                 type: 'success'
               })
               this.dialogByEditIsVisible = false
-              this.getListData(this.listQuery)
+              this.onGetList(this.listQuery)
             } else {
               this.$message({
                 message: res.message,
