@@ -7,7 +7,7 @@
           <el-input v-model="listQuery.userName" clearable style="width: 100%" placeholder="用户名" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
         </el-col>
@@ -54,21 +54,20 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleDetails(row)">
+          <el-button type="text" size="mini" @click="onDetails(row)">
             查看
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/clientuser'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import Pagination from '@/components/Pagination'
 export default {
   name: 'ClientUserList',
   components: { Pagination },
@@ -90,10 +89,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -105,13 +104,13 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleDetails(row) {
+    onDetails(item) {
       this.$router.push({
-        path: '/client/shop/details?id=' + row.id
+        path: '/client/shop/details?id=' + item.id
       })
     }
   }

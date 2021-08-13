@@ -1,6 +1,5 @@
 <template>
-  <div id="clientuser_baseinfo" v-loading="loading">
-
+  <div id="clientuser_baseinfo">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="编码">
         {{ temp.id }}
@@ -24,8 +23,8 @@
         <el-checkbox v-show="isEdit" v-model="form.isStaff">公司职员</el-checkbox>
       </el-form-item>
       <el-form-item>
-        <el-button v-show="!isEdit" type="primary" @click="openEdit">编辑</el-button>
-        <el-button v-show="isEdit" type="info" @click="cancleEdit">取消</el-button>
+        <el-button v-show="!isEdit" type="primary" @click="onOpenEdit">编辑</el-button>
+        <el-button v-show="isEdit" type="info" @click="onCancleEdit">取消</el-button>
         <el-button v-show="isEdit" type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
@@ -78,7 +77,6 @@ export default {
       initDetailsBaseInfo({ id: id }).then(res => {
         if (res.result === 1) {
           var d = res.data
-
           this.temp.id = d.id
           this.temp.userName = d.userName
           this.temp.fullName = d.fullName
@@ -99,6 +97,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.loading = true
             edit(this.form).then(res => {
               if (res.result === 1) {
                 this.$message({
@@ -113,18 +112,19 @@ export default {
                   type: 'error'
                 })
               }
+
+              this.loading = false
             })
           }).catch(() => {
           })
         }
       })
     },
-    openEdit() {
+    onOpenEdit() {
       this.isEdit = true
     },
-    cancleEdit() {
+    onCancleEdit() {
       this.isEdit = false
-      // this.$refs['form'].resetFields()
     }
   }
 }

@@ -1,26 +1,29 @@
 <template>
   <div id="profile_userinfo">
-    <el-form ref="form" v-loading="loading" :model="form" label-width="80px">
+    <div class="row-title clearfix">
+      <div class="pull-left"> <h5>基本信息</h5>
+      </div>
+      <div class="pull-right" />
+    </div>
+    <el-form v-loading="loading" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <span>{{ userInfo.userName }}</span>
       </el-form-item>
       <el-form-item label="密码">
         <div v-if="!isOpenEditPassword">
           <span>********</span>
-          <span @click="openEditPassword()">修改</span>
+          <span class="i-btn-save" @click="onOpenEditPassword()">修改</span>
         </div>
-        <div v-else style="display:flex">
+        <div v-else style="display:flex;max-width:300px">
           <div style="flex:1">
             <el-input v-model="form_change_pwd.password" type="password" />
           </div>
           <div style="width:90px;text-align: center;">
-            <span class="i-btn-save" @click="savePassword()"> 保存</span>
-            <span class="i-btn-cancle" @click="openEditPassword()">取消</span>
+            <span class="i-btn-save" @click="onSavePassword()"> 保存</span>
+            <span class="i-btn-cancle" @click="onOpenEditPassword()">取消</span>
           </div>
         </div>
-
       </el-form-item>
-
       <el-form-item label="姓名" prop="fullName">
         <span>{{ userInfo.fullName }}</span>
       </el-form-item>
@@ -42,7 +45,6 @@ import store from '@/store'
 import { MessageBox } from 'element-ui'
 import { changePassword } from '@/api/own'
 import fromReg from '@/utils/formReg'
-import { getUrlParam, goBack } from '@/utils/commonUtil'
 export default {
   name: 'ProfileUserInfo',
   data() {
@@ -85,7 +87,7 @@ export default {
 
       this.userInfo.roleNames = roleNames
     },
-    savePassword() {
+    onSavePassword() {
       if (this.form_change_pwd.password == null || this.form_change_pwd.password == undefined || this.form_change_pwd.password == '') {
         this.$message('密码不能为空')
 
@@ -102,6 +104,7 @@ export default {
         type: 'warning'
       }).then(() => {
         var data = { password: this.form_change_pwd.password }
+        this.loading = true
         changePassword(data).then(res => {
           if (res.result === 1) {
             this.$message({
@@ -115,20 +118,19 @@ export default {
               type: 'error'
             })
           }
+
+          this.loading = false
         })
       }).catch(() => {
       })
     },
-    openEditPassword() {
+    onOpenEditPassword() {
       if (this.isOpenEditPassword) {
         this.isOpenEditPassword = false
         this.form_change_pwd.password = ''
       } else {
         this.isOpenEditPassword = true
       }
-    },
-    cascader_org_change() {
-
     }
   }
 }
@@ -138,8 +140,7 @@ export default {
 
 #profile_userinfo
 {
-   max-width: 600px;
-
+ padding: 10px;
 .line {
   text-align: center;
 }
