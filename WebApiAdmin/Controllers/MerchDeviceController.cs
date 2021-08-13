@@ -52,5 +52,12 @@ namespace WebApiAdmin.Controllers
             var result = AdminServiceFactory.MerchDevice.BindOnMerch(this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpPost]
+        public OwnApiHttpResponse CopyBuild([FromBody]RopMerchDeviceCopyBuild rop)
+        {
+            var result = AdminServiceFactory.MerchDevice.CopyBuild(this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

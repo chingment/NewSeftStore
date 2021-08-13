@@ -34,7 +34,7 @@
           <span>{{ scope.row.appVersion }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="机器控制版本" prop="ctrlSdkVersion" align="left" min-width="20%">
+      <el-table-column label="设备控制版本" prop="ctrlSdkVersion" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.ctrlSdkVersion }}</span>
         </template>
@@ -49,13 +49,16 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="220" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button v-if="row.merchId==null" type="success" size="mini" width="100" @click="_dialogBindOnMerchOpen(row)">
             绑定
           </el-button>
           <el-button v-if="row.merchId!=null" type="warning" size="mini" width="100" @click="_bindOffMerch(row)">
             解绑
+          </el-button>
+          <el-button type="primary" size="mini" width="100" @click="_dialogCopyBuildOpen(row)">
+            复制
           </el-button>
           <el-button type="primary" size="mini" width="100" @click="_dialogEditOpen(row)">
             设置
@@ -68,7 +71,7 @@
 
     <el-dialog title="绑定商户" :visible.sync="dialogBindOnMerchIsVisible" width="800px">
       <el-form ref="formByBindOnMerch" :model="formByBindOnMerch" :rules="rulesByBindOnMerch" label-position="left" label-width="80px">
-        <el-form-item label="机器编号">
+        <el-form-item label="设备编号">
           <span>{{ formByBindOnMerch.deviceId }}</span>
         </el-form-item>
         <el-form-item label="商户名称" prop="merchId">
@@ -87,21 +90,19 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="机器信息" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'800px':'90%'">
+    <el-dialog title="设备信息" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'800px':'90%'">
       <div v-loading="dialogEditLoading">
-
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
         </div>
-
         <el-form class="form-container" style="display:flex">
           <el-col :span="24">
 
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label-width="80px" label="机器编码:" class="postInfo-container-item">
+                  <el-form-item label-width="80px" label="设备编码:" class="postInfo-container-item">
                     {{ details.id }}
                   </el-form-item>
                 </el-col>
@@ -326,9 +327,7 @@
                     label-width="80px"
                     label="端口:"
                     class="postInfo-container-item"
-                    style="display: block; float:left;
-    float: left;
-    width: 200px;"
+                    style="display: block; float:left;float: left;width: 200px;"
                   >
                     <el-input v-model="details.sannerComId" placeholder="" size="mini" />
                   </el-form-item>
@@ -357,12 +356,31 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="复制设备" :visible.sync="dialogCoypBuildIsVisible" width="800px">
+      <el-form ref="formByCopyBuild" :model="formByBindOnMerch" :rules="rulesByBindOnMerch" label-position="left" label-width="120px">
+        <el-form-item label="设备编码">
+          <span>{{ formByCopyBuild.copyDeviceId }}</span>
+        </el-form-item>
+        <el-form-item label="新设备编码" prop="merchId">
+          <el-input v-model="formByCopyBuild.buildDeviceId" clearable style="max-width:500px" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogCoypBuildIsVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="onCopyBuild">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initGetList, getList, bindOffMerch, bindOnMerch, initEdit, edit } from '@/api/merchdevice'
+import { initGetList, getList, bindOffMerch, bindOnMerch, copyBuild, initEdit, edit } from '@/api/merchdevice'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -382,13 +400,18 @@ export default {
       dialogBindOnMerchIsVisible: false,
       dialogEditIsVisible: false,
       dialogEditLoading: false,
+      dialogCoypBuildIsVisible: false,
       formByBindOnMerch: {
         merchiId: '',
         deviceId: ''
       },
+      formByCopyBuild: {
+        copyDeviceId: '',
+        buildDeviceId: ''
+      },
       rulesByBindOnMerch: {
         merchiId: [
-          { required: true, message: '请选择机器', trigger: 'change' }
+          { required: true, message: '请选择设备', trigger: 'change' }
         ]
       },
       formSelectMerchs: [
@@ -472,7 +495,7 @@ export default {
       this.formByBindOnMerch.deviceId = row.id
     },
     _bindOnMerch() {
-      MessageBox.confirm('确定要将机器(' + this.formByBindOnMerch.deviceId + ')绑定商户？', '提示（慎重操作）', {
+      MessageBox.confirm('确定要将设备(' + this.formByBindOnMerch.deviceId + ')绑定商户？', '提示（慎重操作）', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -487,7 +510,7 @@ export default {
       })
     },
     _bindOffMerch(row) {
-      MessageBox.confirm('确定要从商户(' + row.merchName + ')解绑机器(' + row.id + ')？', '提示（慎重操作）', {
+      MessageBox.confirm('确定要从商户(' + row.merchName + ')解绑设备(' + row.id + ')？', '提示（慎重操作）', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -512,6 +535,11 @@ export default {
         this.dialogEditIsVisible = true
       })
     },
+    _dialogCopyBuildOpen(row) {
+      this.dialogCoypBuildIsVisible = true
+      this.formByCopyBuild.copyDeviceId = row.id
+      this.formByCopyBuild.buildDeviceId = ''
+    },
     _edit() {
       MessageBox.confirm('确定要保存', '提示', {
         confirmButtonText: '确定',
@@ -524,6 +552,35 @@ export default {
 
           }
         })
+      })
+    },
+    onCopyBuild() {
+      this.$refs['formByCopyBuild'].validate((valid) => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            copyBuild(this.formByCopyBuild).then(res => {
+              if (res.result === 1) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
+
+                this.dialogCoypBuildIsVisible = false
+
+                this._getList()
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
+              }
+            })
+          })
+        }
       })
     }
   }

@@ -107,6 +107,7 @@
     <Compile Include="Api\Admin\RModels\RopBackgroundJobEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopMerchDeviceBindOffMerch.cs" />
     <Compile Include="Api\Admin\RModels\RopMerchDeviceBindOnMerch.cs" />
+    <Compile Include="Api\Admin\RModels\RopMerchDeviceCopyBuild.cs" />
     <Compile Include="Api\Admin\RModels\RopMerchDeviceEdit.cs" />
     <Compile Include="Api\Admin\RModels\RopPrdKindAdd.cs" />
     <Compile Include="Api\Admin\RModels\RopPrdKindEdit.cs" />

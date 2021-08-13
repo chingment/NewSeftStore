@@ -313,5 +313,85 @@ namespace LocalS.Service.Api.Admin
             }
             return result;
         }
+
+        public CustomJsonResult CopyBuild(string operater, RopMerchDeviceCopyBuild rop)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+            using (TransactionScope ts = new TransactionScope())
+            {
+                if (string.IsNullOrEmpty(rop.CopyDeviceId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "复制设备编码不能为空");
+                }
+
+                if (string.IsNullOrEmpty(rop.BuildDeviceId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "新设备编码不能为空");
+                }
+
+                var d_Device = CurrentDb.Device.Where(m => m.Id == rop.CopyDeviceId).FirstOrDefault();
+                if (d_Device == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "复制设备的不存在");
+                }
+
+                var n_Device = CurrentDb.Device.Where(m => m.Id == rop.BuildDeviceId).FirstOrDefault();
+
+                if (n_Device != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "新建的设备已存在");
+                }
+
+                var d_Cabinets = CurrentDb.DeviceCabinet.Where(m => m.DeviceId == d_Device.Id).ToList();
+
+                n_Device = new Device();
+                n_Device.Id = rop.BuildDeviceId;
+                n_Device.Name = d_Device.Name;
+                n_Device.Type = d_Device.Type;
+                n_Device.CharTags = d_Device.CharTags;
+                n_Device.MainImgUrl = d_Device.MainImgUrl;
+                n_Device.LogoImgUrl = d_Device.LogoImgUrl;
+                n_Device.IsTestMode = d_Device.IsTestMode;
+                n_Device.KindIsHidden = d_Device.KindIsHidden;
+                n_Device.KindRowCellSize = d_Device.KindRowCellSize;
+                n_Device.CameraByChkIsUse = d_Device.CameraByChkIsUse;
+                n_Device.CameraByJgIsUse = d_Device.CameraByJgIsUse;
+                n_Device.CameraByRlIsUse = d_Device.CameraByRlIsUse;
+                n_Device.SannerIsUse = d_Device.SannerIsUse;
+                n_Device.SannerComId = d_Device.SannerComId;
+                n_Device.FingerVeinnerIsUse = d_Device.FingerVeinnerIsUse;
+                n_Device.MstVern = d_Device.MstVern;
+                n_Device.OstVern = d_Device.OstVern;
+                n_Device.ImIsUse = d_Device.ImIsUse;
+                n_Device.ImPartner = d_Device.ImPartner;
+                n_Device.CbLight = d_Device.CbLight;
+                n_Device.Creator = d_Device.Creator;
+                n_Device.CreateTime = d_Device.CreateTime;
+
+                CurrentDb.Device.Add(n_Device);
+
+                foreach (var d_Cabinet in d_Cabinets)
+                {
+                    var n_Cabinet = new DeviceCabinet();
+                    n_Cabinet.Id = IdWorker.Build(IdType.NewGuid);
+                    n_Cabinet.DeviceId = n_Device.Id;
+                    n_Cabinet.CabinetId = d_Cabinet.CabinetId;
+                    n_Cabinet.CabinetName = d_Cabinet.CabinetName;
+                    n_Cabinet.IsUse = d_Cabinet.IsUse;
+                    n_Cabinet.Priority = d_Cabinet.Priority;
+                    n_Cabinet.ComId = d_Cabinet.ComId;
+                    n_Cabinet.ComBaud = d_Cabinet.ComBaud;
+                    n_Cabinet.Creator = d_Cabinet.Creator;
+                    n_Cabinet.CreateTime = d_Cabinet.CreateTime;
+                    CurrentDb.DeviceCabinet.Add(n_Cabinet);
+                }
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "复制成功");
+            }
+            return result;
+        }
     }
 }

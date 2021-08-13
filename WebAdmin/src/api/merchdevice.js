@@ -47,3 +47,11 @@ export function bindOnMerch(data) {
     data
   })
 }
+
+export function copyBuild(data) {
+  return request({
+    url: '/merchdevice/copyBuild',
+    method: 'post',
+    data
+  })
+}
