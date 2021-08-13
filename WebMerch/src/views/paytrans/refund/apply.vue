@@ -13,7 +13,7 @@
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
         </el-form-item>
       </el-form>
       <el-table
@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" align="center" width="180" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button type="text" size="mini" @click="dialogOpenByRefundApply(row)">
+            <el-button type="text" size="mini" @click="onDialogOpenByRefundApply(row)">
               退款
             </el-button>
           </template>
@@ -89,9 +89,7 @@
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
-          <div class="pull-right">
-            <el-button icon="el-icon-refresh" circle @click="refreshDetails(details.id)" />
-          </div>
+          <div class="pull-right" />
         </div>
         <el-form class="form-container" style="display:flex;max-width:800px;">
           <el-col :span="24">
@@ -220,10 +218,10 @@
             <el-input v-model="formByApply.remark" clearable />
           </el-form-item>
           <el-form-item label="" prop="">
-            <el-button type="primary" @click="_apply()">
+            <el-button type="primary" @click="onApply()">
               提交
             </el-button>
-            <el-button @click="handleGoBack">
+            <el-button @click="onGoBack">
               返回
             </el-button>
           </el-form-item>
@@ -235,8 +233,8 @@
 
     <el-result v-show="result.isShow" :icon="result.icon" :title="result.title" :sub-title="result.subTitle">
       <template slot="extra">
-        <el-button type="primary" size="medium" @click="handleGoList">返回处理列表</el-button>
-        <el-button type="success" size="medium" @click="handelSawResult">查看处理结果</el-button>
+        <el-button type="primary" size="medium" @click="onGoList">返回处理列表</el-button>
+        <el-button type="success" size="medium" @click="onSawResult">查看处理结果</el-button>
       </template>
     </el-result>
   </div>
@@ -304,10 +302,10 @@ export default {
       var payTransId = getUrlParam('payTransId')
       if (payTransId != null) {
         this.listQuery.payTransId = payTransId
-        this.handleSearch()
+        this.onSearch()
       }
     },
-    handleSearch() {
+    onSearch() {
       if (isEmpty(this.listQuery.payTransId) && isEmpty(this.listQuery.orderId) && isEmpty(this.listQuery.payPartnerPayTransId)) {
         this.$message('找少输入一个搜索条件')
         return
@@ -328,7 +326,7 @@ export default {
         this.loading = false
       })
     },
-    dialogOpenByRefundApply(row) {
+    onDialogOpenByRefundApply(row) {
       if (row.exStatus.value === 2) {
         this.$message({
           message: '该订单存在异常未有处理，请到订单中处理',
@@ -352,7 +350,7 @@ export default {
         this.isShowHandle = true
       })
     },
-    _apply() {
+    onApply() {
       var _this = this
 
       this.$refs['formByApply'].validate((valid) => {
@@ -382,18 +380,17 @@ export default {
         }
       })
     },
-    handleGoList() {
+    onGoList() {
       this.isShowList = true
       this.isShowHandle = false
       this.result.isShow = false
-      this.getListData()
     },
-    handelSawResult() {
+    onSawResult() {
       this.$router.push({
         path: '/paytrans/refund/query'
       })
     },
-    handleGoBack() {
+    onGoBack() {
       this.isShowList = true
       this.isShowHandle = false
       this.result.isShow = false

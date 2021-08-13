@@ -16,7 +16,7 @@
           <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
         </el-form-item>
       </el-form>
 
@@ -88,7 +88,7 @@
       </el-table-column> -->
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
@@ -120,10 +120,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -135,14 +135,9 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
-    },
-    handleDetails(row) {
-      this.$router.push({
-        path: '/clientuser/details?id=' + row.id
-      })
+      this.onGetList()
     },
     getStatusColor(status) {
       switch (status) {

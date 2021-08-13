@@ -29,7 +29,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
         </el-form-item>
       </el-form>
 
@@ -99,7 +99,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-dropdown @command="handleOperate">
+          <el-dropdown @command="onOperate">
             <el-button type="text" size="small">
               操作<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
@@ -114,7 +114,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
@@ -153,10 +153,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getList(this.listQuery).then(res => {
@@ -168,11 +168,11 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    handleOperate(command) {
+    onOperate(command) {
       // this.$message('click on item ' + command)
       var arr = command.split('-')
       if (arr[0] === 'payRefund') {

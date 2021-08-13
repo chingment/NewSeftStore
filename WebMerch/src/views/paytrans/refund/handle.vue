@@ -6,7 +6,7 @@
 
         <el-form ref="form" label-width="120px" class="query-box">
           <el-form-item label="退款单号">
-            <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" @clear="handleFilter" />
+            <el-input v-model="listQuery.payrefundId" clearable style="max-width: 300px;" />
           </el-form-item>
           <el-form-item label="商户单号">
             <el-input v-model="listQuery.payTransId" clearable style="max-width: 300px;" />
@@ -18,7 +18,7 @@
             <el-input v-model="listQuery.payPartnerPayTransId" clearable style="max-width: 300px;" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
           </el-form-item>
         </el-form>
 
@@ -78,13 +78,13 @@
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right" width="100" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button v-if="row.status.value==1" type="text" size="mini" @click="dialogOpenByRefundHandle(row)">
+            <el-button v-if="row.status.value==1" type="text" size="mini" @click="onDialogOpenByRefundHandle(row)">
               处理
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+      <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
     </div>
 
@@ -93,9 +93,7 @@
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
-          <div class="pull-right">
-            <el-button icon="el-icon-refresh" circle @click="refreshDetails(details.id)" />
-          </div>
+          <div class="pull-right" />
         </div>
         <el-form class="form-container" style="display:flex;max-width:800px;">
           <el-col :span="24">
@@ -248,10 +246,10 @@
 
       </div>
       <div slot="footer" class="dialog-footer" style="padding-left:110px;">
-        <el-button type="primary" @click="_handle()">
+        <el-button type="primary" @click="onHandle()">
           提交
         </el-button>
-        <el-button @click="handleGoBack">
+        <el-button @click="onGoBack">
           返回
         </el-button>
       </div>
@@ -259,8 +257,8 @@
 
     <el-result v-show="result.isShow" :icon="result.icon" :title="result.title" :sub-title="result.subTitle">
       <template slot="extra">
-        <el-button type="primary" size="medium" @click="handleGoList">返回处理列表</el-button>
-        <el-button type="success" size="medium" @click="handelSawResult">查看处理结果</el-button>
+        <el-button type="primary" size="medium" @click="onGoList">返回处理列表</el-button>
+        <el-button type="success" size="medium" @click="onSawResult">查看处理结果</el-button>
       </template>
     </el-result>
 
@@ -337,10 +335,10 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getListByHandle(this.listQuery).then(res => {
@@ -352,11 +350,11 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
-    dialogOpenByRefundHandle(row) {
+    onDialogOpenByRefundHandle(row) {
       this.loadingByRefundHandle = true
       this.formByHandle.payRefundId = row.id
       this.formByHandle.amount = row.applyAmount
@@ -378,7 +376,7 @@ export default {
         this.isShowHandle = true
       })
     },
-    _handle() {
+    onHandle() {
       var _this = this
 
       this.$refs['formByHandle'].validate((valid) => {
@@ -404,18 +402,18 @@ export default {
         }
       })
     },
-    handleGoList() {
+    onGoList() {
       this.isShowList = true
       this.isShowHandle = false
       this.result.isShow = false
-      this.getListData()
+      this.onGetList()
     },
-    handelSawResult() {
+    onSawResult() {
       this.$router.push({
         path: '/paytrans/refund/query'
       })
     },
-    handleGoBack() {
+    onGoBack() {
       this.isShowList = true
       this.isShowHandle = false
       this.result.isShow = false
