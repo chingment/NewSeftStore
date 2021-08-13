@@ -22,7 +22,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -37,7 +37,7 @@
           <span>{{ scope.row.sellChannelName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column label="时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>
@@ -52,7 +52,7 @@
           <span>{{ scope.row.changeQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="备注" align="left" min-width="35%">
+      <el-table-column label="备注" align="left" min-width="35%">
         <template slot-scope="scope">
           <span>{{ scope.row.remark }}</span>
         </template>
@@ -81,17 +81,17 @@
           highlight-current-row
           style="width: 100%;"
         >
-          <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+          <el-table-column label="序号" prop="id" align="left" width="80">
             <template slot-scope="scope">
               <span>{{ scope.$index+1 }} </span>
             </template>
           </el-table-column>
-          <el-table-column v-if="isDesktop" label="时间" prop="createTime" align="left" min-width="15%">
+          <el-table-column label="时间" prop="createTime" align="left" min-width="15%">
             <template slot-scope="scope">
               <span>{{ scope.row.createTime }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-if="isDesktop" label="备注" align="left" min-width="35%">
+          <el-table-column label="备注" align="left" min-width="35%">
             <template slot-scope="scope">
               <span>{{ scope.row.remark }}</span>
             </template>

@@ -31,7 +31,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -51,17 +51,17 @@
           <span>{{ scope.row.spuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="条形码" align="left" min-width="10%">
+      <el-table-column label="条形码" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skus[0].barCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="分类" align="left" min-width="20%">
+      <el-table-column label="分类" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.kindNames }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="默认销售价" align="left" min-width="10%">
+      <el-table-column label="默认销售价" align="left" min-width="10%">
         <template slot-scope="{row}">
           {{ row.skus[0].salePrice }}
 

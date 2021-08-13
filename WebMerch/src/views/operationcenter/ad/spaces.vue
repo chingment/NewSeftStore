@@ -8,7 +8,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" align="left" width="80">
+      <el-table-column label="序号" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -18,7 +18,7 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="描述" align="left" min-width="70%">
+      <el-table-column label="描述" align="left" min-width="70%">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>

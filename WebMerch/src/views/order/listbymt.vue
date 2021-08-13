@@ -102,27 +102,27 @@
           <span :class="'c-mode-'+(scope.row.isTestMode==false?'1':'2')">{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
+      <el-table-column label="店铺" prop="storeName" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="设备" prop="deviceCode" align="left" min-width="15%">
+      <el-table-column label="设备" prop="deviceCode" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="15%">
+      <el-table-column label="下单用户" prop="clientUserName" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.clientUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="8%">
+      <el-table-column label="触发状态" prop="sourceName" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.pickupTrgStatus.text }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="数量" prop="quantity" align="left" min-width="8%">
+      <el-table-column label="数量" prop="quantity" align="left" min-width="8%">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
@@ -142,7 +142,7 @@
           <el-tag :type="getExStatusColor(scope.row.exStatus.value)">{{ scope.row.exStatus.text }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下单时间" prop="submittedTime" align="left" min-width="15%">
+      <el-table-column label="下单时间" prop="submittedTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.submittedTime }}</span>
         </template>
@@ -314,7 +314,7 @@
             highlight-current-row
             style="width: 100%;"
           >
-            <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+            <el-table-column label="序号" prop="id" align="left" width="80">
               <template slot-scope="scope">
                 <span>{{ scope.$index+1 }} </span>
               </template>

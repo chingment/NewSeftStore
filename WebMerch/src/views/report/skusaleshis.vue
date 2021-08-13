@@ -53,17 +53,17 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?110:80">
+      <el-table-column label="店铺" align="left" :width="isDesktop==true?110:80">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="提货方式" align="left" min-width="10%">
+      <el-table-column label="提货方式" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.receiveModeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="方式备注" align="left" min-width="10%">
+      <el-table-column label="方式备注" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.receiveRemark }}</span>
         </template>
@@ -88,7 +88,7 @@
           <span>{{ scope.row.skuCumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
+      <el-table-column label="商品规格" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuSpecDes }}</span>
         </template>

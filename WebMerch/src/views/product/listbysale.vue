@@ -58,12 +58,12 @@
           <span>{{ scope.row.cumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下架？" align="left" min-width="20%">
+      <el-table-column label="下架？" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.isOffSell==true?"是":"否" }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="销售价" align="left" min-width="20%">
+      <el-table-column label="销售价" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.salePrice }}</span>
         </template>

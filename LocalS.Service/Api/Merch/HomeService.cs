@@ -36,7 +36,7 @@ namespace LocalS.Service.Api.Merch
             decimal sumTradeAmount = decimal.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql3.ToString()).ToString());
 
             StringBuilder sql4 = new StringBuilder();
-            sql4.Append("  select count(*) from SellChannelStock where (SellQuantity=0 or (SumQuantity < MaxQuantity)) and merchId='" + merchId + "' ");
+            sql4.Append("  select COUNT( distinct skuId) from SellChannelStock where (SellQuantity=0 or (SumQuantity < MaxQuantity)) and merchId='" + merchId + "' ");
 
             int replenishCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql4.ToString()).ToString());
 

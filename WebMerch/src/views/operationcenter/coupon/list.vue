@@ -33,7 +33,7 @@
         type="selection"
         width="55"
       />
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -58,27 +58,27 @@
           <span>{{ scope.row.useAreaType }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="使用门槛" prop="atLeastAmount" align="left" min-width="10%">
+      <el-table-column label="使用门槛" prop="atLeastAmount" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.atLeastAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="券种" prop="faceType" align="left" min-width="10%">
+      <el-table-column label="券种" prop="faceType" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceType }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="券值" prop="faceValue" align="left" min-width="10%">
+      <el-table-column label="券值" prop="faceValue" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.faceValue }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="有效期" prop="validDate" align="left" min-width="15%">
+      <el-table-column label="有效期" prop="validDate" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.validDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="状态" prop="validDate" align="left" min-width="10%">
+      <el-table-column label="状态" prop="validDate" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.status.text }}</span>
         </template>

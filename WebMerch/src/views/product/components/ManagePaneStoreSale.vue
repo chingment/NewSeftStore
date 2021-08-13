@@ -13,17 +13,17 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品" align="left" min-width="20%">
+      <el-table-column label="商品" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="下架？" align="left" min-width="20%">
+      <el-table-column label="下架？" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuIsOffSell==true?"是":"否" }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="销售价" align="left" min-width="20%">
+      <el-table-column label="销售价" align="left" min-width="20%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuSalePrice }}</span>
         </template>

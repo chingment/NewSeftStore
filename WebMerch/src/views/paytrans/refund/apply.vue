@@ -33,27 +33,27 @@
             <span>{{ scope.row.payTransId }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="店铺" prop="storeName" align="left" min-width="10%">
+        <el-table-column label="店铺" prop="storeName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.storeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单用户" prop="clientUserName" align="left" min-width="10%">
+        <el-table-column label="下单用户" prop="clientUserName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.clientUserName }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="下单方式" prop="sourceName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.sourceName }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="取货方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="取货方式" prop="sourceName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.receiveModeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="触发状态" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="触发状态" prop="sourceName" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.pickupTrgStatus.text }}</span>
           </template>
@@ -68,7 +68,7 @@
             <span>{{ scope.row.status.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="isDesktop" label="下单时间" prop="submittedTime" align="left" min-width="10%">
+        <el-table-column label="下单时间" prop="submittedTime" align="left" min-width="10%">
           <template slot-scope="scope">
             <span>{{ scope.row.submittedTime }}</span>
           </template>

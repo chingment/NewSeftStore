@@ -55,7 +55,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="店铺" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
@@ -65,7 +65,7 @@
           <span>{{ scope.row.sellChannelRefName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="模式备注" align="left" min-width="10%">
+      <el-table-column label="模式备注" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.sellChannelRemark }}</span>
         </template>
@@ -80,7 +80,7 @@
           <span>{{ scope.row.skuCumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="商品规格" align="left" min-width="10%">
+      <el-table-column label="商品规格" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuSpecDes }}</span>
         </template>

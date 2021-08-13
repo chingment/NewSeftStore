@@ -22,7 +22,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -42,12 +42,12 @@
           <span>{{ scope.row.nickName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="手机号码" prop="phoneNumber" align="left" min-width="10%">
+      <el-table-column label="手机号码" prop="phoneNumber" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.phoneNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="创建时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column label="创建时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>

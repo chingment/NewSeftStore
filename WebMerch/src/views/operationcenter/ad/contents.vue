@@ -38,7 +38,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
@@ -48,7 +48,7 @@
           <img :src="scope.row.url" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="标题" prop="title" align="left" min-width="40%">
+      <el-table-column label="标题" prop="title" align="left" min-width="40%">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
@@ -58,7 +58,7 @@
           <el-tag :type="getStatusColor(scope.row.status.value)">{{ scope.row.status.text }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="发布时间" prop="createTime" align="left" min-width="15%">
+      <el-table-column label="发布时间" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>
         </template>

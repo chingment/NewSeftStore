@@ -34,17 +34,17 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column v-if="isDesktop" label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="对象" prop="title" align="left" min-width="40%">
+      <el-table-column label="对象" prop="title" align="left" min-width="40%">
         <template slot-scope="scope">
           <span>{{ scope.row.belongName }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isDesktop" label="有效期" prop="title" align="left" min-width="45%">
+      <el-table-column label="有效期" prop="title" align="left" min-width="45%">
         <template slot-scope="scope">
           <span>{{ scope.row.validStartTime }}</span>~<span>{{ scope.row.validEndTime }}</span>
         </template>
