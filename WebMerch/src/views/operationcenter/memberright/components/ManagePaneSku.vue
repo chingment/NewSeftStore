@@ -123,8 +123,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handelAddSku">保存</el-button>
-        <el-button @click="dialogByAddSkuIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="handelAddSku">保存</el-button>
+        <el-button size="small" @click="dialogByAddSkuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 
@@ -170,8 +170,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleEditSku">保存</el-button>
-        <el-button @click="dialogByEditSkuIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="handleEditSku">保存</el-button>
+        <el-button size="small" @click="dialogByEditSkuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 

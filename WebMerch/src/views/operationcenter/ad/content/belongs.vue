@@ -107,10 +107,10 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onBelongEdit">
+        <el-button size="small" type="primary" @click="onBelongEdit">
           确定
         </el-button>
-        <el-button @click="dialogByEditIsVisible = false">
+        <el-button size="small" @click="dialogByEditIsVisible = false">
           关闭
         </el-button>
       </div>

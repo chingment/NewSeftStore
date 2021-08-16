@@ -84,8 +84,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleSaveTagExplain">保存</el-button>
-        <el-button @click="dialogTagExplainIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="handleSaveTagExplain">保存</el-button>
+        <el-button size="small" @click="dialogTagExplainIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 

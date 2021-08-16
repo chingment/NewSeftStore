@@ -246,10 +246,10 @@
 
       </div>
       <div slot="footer" class="dialog-footer" style="padding-left:110px;">
-        <el-button type="primary" @click="onHandle()">
+        <el-button size="small" type="primary" @click="onHandle()">
           提交
         </el-button>
-        <el-button @click="onGoBack">
+        <el-button size="small" @click="onGoBack">
           返回
         </el-button>
       </div>

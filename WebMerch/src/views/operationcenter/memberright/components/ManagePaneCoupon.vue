@@ -85,8 +85,8 @@
 
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handelAddCoupon">保存</el-button>
-        <el-button @click="dialogByAddCouponIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="handelAddCoupon">保存</el-button>
+        <el-button size="small" @click="dialogByAddCouponIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 

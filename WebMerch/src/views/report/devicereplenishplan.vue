@@ -11,10 +11,10 @@
         <el-form-item label="商品编码">
           <el-input v-model="listQuery.skuCumCode" clearable style="max-width: 300px;" />
         </el-form-item>
-        <el-form-item label="制单人">
+        <el-form-item v-show="planIdIsHidden" label="制单人">
           <el-input v-model="listQuery.makerName" clearable style="max-width: 300px;" />
         </el-form-item>
-        <el-form-item label="制单日期">
+        <el-form-item v-show="planIdIsHidden" label="制单日期">
           <el-date-picker
             v-model="listQuery.makeDateArea"
             type="daterange"

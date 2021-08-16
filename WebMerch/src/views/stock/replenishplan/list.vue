@@ -90,10 +90,10 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onNewPlan">
+        <el-button size="small" type="primary" @click="onNewPlan">
           新建
         </el-button>
-        <el-button @click="dialogNewPlanIsVisible = false">
+        <el-button size="small" @click="dialogNewPlanIsVisible = false">
           关闭
         </el-button>
       </div>

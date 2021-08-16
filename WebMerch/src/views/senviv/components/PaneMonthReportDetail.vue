@@ -284,7 +284,7 @@
       </tbody>
     </table>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleOpenByDrawerBySug">评 价</el-button>
+      <el-button size="small" type="primary" @click="handleOpenByDrawerBySug">评 价</el-button>
     </span>
 
     <el-drawer

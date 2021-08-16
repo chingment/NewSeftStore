@@ -63,10 +63,10 @@
       </el-table>
       <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogIsShowByClients = false">
+        <el-button size="small" @click="dialogIsShowByClients = false">
           取消
         </el-button>
-        <el-button type="primary" @click="onSelect">
+        <el-button size="small" type="primary" @click="onSelect">
           确定
         </el-button>
       </div>

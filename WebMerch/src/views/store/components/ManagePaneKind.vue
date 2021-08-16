@@ -128,9 +128,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_saveKind">保存</el-button>
-        <el-button v-show="kindRemoveBtnShow" type="warning" @click="_removeKind">删除</el-button>
-        <el-button @click="dialogKindIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="_saveKind">保存</el-button>
+        <el-button v-show="kindRemoveBtnShow" size="small" type="warning" @click="_removeKind">删除</el-button>
+        <el-button size="small" @click="dialogKindIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
 
@@ -229,9 +229,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="_saveKindSpu">保存</el-button>
-        <el-button v-show="kindSpuRemoveBtnShow" type="warning" @click="_removeKindSpu">删除</el-button>
-        <el-button @click="dialogKindSpuIsVisible=false">关闭</el-button>
+        <el-button size="small" type="primary" @click="_saveKindSpu">保存</el-button>
+        <el-button v-show="kindSpuRemoveBtnShow" size="small" type="warning" @click="_removeKindSpu">删除</el-button>
+        <el-button size="small" @click="dialogKindSpuIsVisible=false">关闭</el-button>
       </span>
     </el-dialog>
   </div>

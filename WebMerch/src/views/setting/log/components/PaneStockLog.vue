@@ -102,7 +102,7 @@
 
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogRelStockIsVisible = false">
+        <el-button size="small" @click="dialogRelStockIsVisible = false">
           关闭
         </el-button>
       </div>

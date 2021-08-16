@@ -48,11 +48,6 @@
           <span>{{ scope.row.deviceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="相关货道" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.slotIds }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="商品名称" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.skuName }}</span>

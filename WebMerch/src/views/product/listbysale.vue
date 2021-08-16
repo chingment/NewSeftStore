@@ -104,10 +104,10 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogEditIsVisible = false">
+        <el-button size="small" @click="dialogEditIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleEdit">
+        <el-button size="small" type="primary" @click="handleEdit">
           确定
         </el-button>
       </div>

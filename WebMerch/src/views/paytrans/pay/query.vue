@@ -52,12 +52,17 @@
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="交易时间" align="left" width="160">
+        <template slot-scope="scope">
+          <span>{{ scope.row.submittedTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="相关订单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.orderIds }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付商" align="left" width="150">
+      <el-table-column label="支付商" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.payPartner.text }}</span>
         </template>
@@ -67,19 +72,14 @@
           <span>{{ scope.row.payPartnerPayTransId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left" width="150">
+      <el-table-column label="支付金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付方式" align="left" width="150">
+      <el-table-column label="支付方式" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.payWay.text }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易状态" align="left" width="150">
-        <template slot-scope="scope">
-          <el-tag :type="getPayStatusColor(scope.row.payStatus.value)">{{ scope.row.payStatus.text }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="left" width="150">
@@ -87,17 +87,12 @@
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="应用程序" align="left" width="150">
+      <el-table-column label="交易状态" align="left" fixed="right" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.appId }}</span>
+          <el-tag :type="getPayStatusColor(scope.row.payStatus.value)">{{ scope.row.payStatus.text }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="交易时间" align="left" width="160">
-        <template slot-scope="scope">
-          <span>{{ scope.row.submittedTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="100" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-dropdown @command="onOperate">
             <el-button type="text" size="small">

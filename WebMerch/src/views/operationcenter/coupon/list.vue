@@ -121,10 +121,10 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogIsShowBySendCoupon = false">
+        <el-button size="small" @click="dialogIsShowBySendCoupon = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleSendCoupon">
+        <el-button size="small" type="primary" @click="handleSendCoupon">
           确定
         </el-button>
       </div>

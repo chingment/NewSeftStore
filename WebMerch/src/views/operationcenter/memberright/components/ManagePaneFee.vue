@@ -44,10 +44,10 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogBySettingIsVisible = false">
+        <el-button size="small" @click="dialogBySettingIsVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleSetting">
+        <el-button size="small" type="primary" @click="handleSetting">
           确定
         </el-button>
       </div>

@@ -379,14 +379,14 @@
       </div>
       <div slot="footer" class="dialog-footer">
 
-        <el-button type="primary" @click="_sendDevice(details)">
+        <el-button size="small" type="primary" @click="_sendDevice(details)">
           发起出货
         </el-button>
 
-        <el-button v-if="details.canHandleEx" type="primary" @click="_handleEx(details)">
+        <el-button v-if="details.canHandleEx" size="small" type="primary" @click="_handleEx(details)">
           确认处理
         </el-button>
-        <el-button @click="dialogDetailsIsVisible = false">
+        <el-button size="small" @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
       </div>

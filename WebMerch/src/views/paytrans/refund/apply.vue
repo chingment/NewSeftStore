@@ -23,52 +23,52 @@
         highlight-current-row
         style="width: 100%;"
       >
-        <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
+        <el-table-column label="订单号" prop="id" align="left" width="220">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="商户单号" prop="payTransId" align="left" :width="isDesktop==true?220:80">
+        <el-table-column label="商户单号" prop="payTransId" align="left" width="220">
           <template slot-scope="scope">
             <span>{{ scope.row.payTransId }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="店铺" prop="storeName" align="left" min-width="10%">
+        <el-table-column label="店铺" prop="storeName" align="left" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.storeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下单用户" prop="clientUserName" align="left" min-width="10%">
+        <el-table-column label="下单用户" prop="clientUserName" align="left" width="120">
           <template slot-scope="scope">
             <span>{{ scope.row.clientUserName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下单方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="下单方式" prop="sourceName" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.sourceName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="取货方式" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="取货方式" prop="sourceName" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.receiveModeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="触发状态" prop="sourceName" align="left" min-width="10%">
+        <el-table-column label="触发状态" prop="sourceName" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.pickupTrgStatus.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" prop="chargeAmount" align="left" min-width="10%">
+        <el-table-column label="金额" prop="chargeAmount" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.chargeAmount }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" prop="status" align="left" min-width="10%">
+        <el-table-column label="状态" prop="status" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.status.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下单时间" prop="submittedTime" align="left" min-width="10%">
+        <el-table-column label="下单时间" prop="submittedTime" align="left" width="160">
           <template slot-scope="scope">
             <span>{{ scope.row.submittedTime }}</span>
           </template>
