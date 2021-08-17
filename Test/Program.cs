@@ -164,9 +164,43 @@ namespace Test
         }
 
 
+        public static string GetSign(string app_id, string app_key, string secret, long timespan, string data)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(app_id);
+            sb.Append(app_key);
+            sb.Append(secret);
+            sb.Append(timespan.ToString());
+            sb.Append(data);
+
+            var material = string.Concat(sb.ToString().OrderBy(c => c));
+
+            var input = Encoding.UTF8.GetBytes(material);
+
+            var hash = SHA256Managed.Create().ComputeHash(input);
+
+            StringBuilder sb2 = new StringBuilder();
+            foreach (byte b in hash)
+                sb2.Append(b.ToString("x2"));
+
+            string str = sb2.ToString();
+
+            return str;
+        }
+
 
         static void Main(string[] args)
         {
+            //7481c293bbf2bc62aa2de2cf2ae2127cf946b3586cc73b1b02fe6f9c6bf0de08
+            string cccc = GetSign("com.uplink.selfstore", "fanju", "7460e6512f1940f68c00fe1fdb2b7eb1", 1629083489, "{\"deviceId\":\"202108020005\",\"eventRemark\":\"商品取货\",\"appId\":\"com.uplink.selfstore\",\"content\":{\"signId\":1427105705646755840,\"orderId\":\"610696120210816110624974\",\"uniqueId\":\"6106961202108161106249747\",\"skuId\":\"c9c36d03379249f9b5beedaf917fd986\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"1-8-35\",\"pickupStatus\":3011,\"actionId\":-1,\"actionName\":\"未知动作\",\"actionStatusCode\":0,\"actionStatusName\":\"\",\"pickupUseTime\":0,\"imgId\":\"\",\"imgId2\":\"\",\"remark\":\"发起取货\"},\"lat\":0,\"lng\":0,\"eventCode\":\"vending_pickup\"}");
+
+            bool isFlag = false;
+            if (cccc == "7481c293bbf2bc62aa2de2cf2ae2127cf946b3586cc73b1b02fe6f9c6bf0de08")
+            {
+                isFlag = true;
+            }
+
 
             var cofig = MqttUtil.GetMqttTcpOptions("type=exmq;server=112.74.179.185;port=1883;username=admin;password=public;clientid=WebApiMerch;productkey=7;devicename=8;devicesecret=9;");
 

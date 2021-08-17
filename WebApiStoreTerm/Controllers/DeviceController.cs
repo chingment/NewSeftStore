@@ -61,7 +61,7 @@ namespace WebApiStoreTerm.Controllers
 
         public OwnApiHttpResponse Upload()
         {
-            LogUtil.Info("调用Upload.Post");
+            //LogUtil.Info("调用Upload.Post");
 
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];//获取传统context
             HttpRequestBase request = context.Request;//定义传统request对象 
@@ -73,16 +73,16 @@ namespace WebApiStoreTerm.Controllers
                 string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
                 string rootPath = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
-                LogUtil.Info("文件Count:" + request.Files.Count);
+                //LogUtil.Info("文件Count:" + request.Files.Count);
                 for (var i = 0; i < request.Files.Count; i++)
                 {
-                    LogUtil.Info("文件名称:" + request.Files[i].FileName);
+                    //LogUtil.Info("文件名称:" + request.Files[i].FileName);
                 }
 
-                LogUtil.Info("表单Count:" + request.Form.Count);
+                //LogUtil.Info("表单Count:" + request.Form.Count);
                 for (var i = 0; i < request.Form.Count; i++)
                 {
-                    LogUtil.Info("文件名称:" + request.Form[i]);
+                    //LogUtil.Info("文件名称:" + request.Form[i]);
                 }
 
 
@@ -98,7 +98,7 @@ namespace WebApiStoreTerm.Controllers
                     }
                 }
 
-                LogUtil.Info("folder:" + folder);
+                //LogUtil.Info("folder:" + folder);
 
                 if (request.Form["fileName"] != null)
                 {
@@ -110,11 +110,11 @@ namespace WebApiStoreTerm.Controllers
                 }
 
 
-                LogUtil.Info("fileName:" + fileName);
+                //LogUtil.Info("fileName:" + fileName);
 
                 string savePath = "/Upload/" + folder;
 
-                LogUtil.Info("savePath:" + savePath);
+                //LogUtil.Info("savePath:" + savePath);
 
                 DirectoryInfo dir = new DirectoryInfo(rootPath + "/" + savePath);
                 if (!dir.Exists)
@@ -131,14 +131,14 @@ namespace WebApiStoreTerm.Controllers
                 {
                     string extension = Path.GetExtension(request.Files[0].FileName);
 
-                    LogUtil.Info("extension:" + extension);
+                    //LogUtil.Info("extension:" + extension);
 
 
                     string serverSavePath = rootPath + "/" + savePath + "/" + fileName + extension;
                     string domainPathUrl = domain + "/" + savePath + "/" + fileName + extension;
 
-                    LogUtil.Info("serverSavePath:" + serverSavePath);
-                    LogUtil.Info("domainPathUrl:" + domainPathUrl);
+                    //LogUtil.Info("serverSavePath:" + serverSavePath);
+                    //LogUtil.Info("domainPathUrl:" + domainPathUrl);
 
                     FileStream fs = new FileStream(serverSavePath, FileMode.Create, FileAccess.Write);
                     fs.Write(fileData, 0, fileData.Length);

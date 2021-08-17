@@ -12,6 +12,8 @@ using System.Web.Http;
 using System.Linq;
 using LocalS.Service.Api.StoreTerm;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace WebApiStoreTerm
 {
@@ -40,9 +42,20 @@ namespace WebApiStoreTerm
                 var httpMethod = request.HttpMethod.ToLower();
                 var contentType = request.ContentType.ToLower();
                 var rawUrl = request.RawUrl.ToLower();
+                string requstBody = null;
+
+                if (contentType.Contains("application/json"))
+                {
+                    Stream stream = request.InputStream;
+                    stream.Seek(0, SeekOrigin.Begin);
+                    requstBody = new StreamReader(stream).ReadToEnd();
+                }
+
                 var passUrls = new List<string>();
 
                 passUrls.Add("/api/device/upload");
+
+                Log(request, requstBody);
 
                 if (passUrls.Contains(rawUrl))
                 {
@@ -76,35 +89,8 @@ namespace WebApiStoreTerm
                     string app_version = request.Headers["version"];
                     string app_timestamp_s = request.Headers["timestamp"];
 
-                    string app_data = null;
 
-                    Stream stream = request.InputStream;
-                    stream.Seek(0, SeekOrigin.Begin);
-                    app_data = new StreamReader(stream).ReadToEnd();
-
-                    #region 过滤图片
-                    if (app_data.LastIndexOf(",\"ImgData\":{") > -1)
-                    {
-                        //Log.Info("去掉图片之前的数据：" + app_data);
-                        int x = app_data.LastIndexOf(",\"ImgData\":{");
-                        app_data = app_data.Substring(0, x);
-                        app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
-
-                    }
-                    else if (app_data.LastIndexOf(",\"imgData\":{") > -1)
-                    {
-                        // Log.Info("去掉图片之前的数据：" + app_data);
-                        int x = app_data.LastIndexOf(",\"imgData\":{");
-                        app_data = app_data.Substring(0, x);
-                        app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
-                    }
-
-                    #endregion
-
-
-                    LogUtil.Info("Sign_data:" + app_data);
+                    //LogUtil.Info("Sign_data2:" + requstBody);
 
                     //检查必要的参数
                     if (app_key == null || app_sign == null || app_timestamp_s == null)
@@ -126,7 +112,7 @@ namespace WebApiStoreTerm
 
                     long app_timestamp = long.Parse(app_timestamp_s);
 
-                    string signStr = GetSign(app_id, app_key, app_secret, app_timestamp, app_data);
+                    string signStr = GetSign(app_id, app_key, app_secret, app_timestamp, requstBody);
 
                     if (IsRequestTimeout(app_timestamp))
                     {
@@ -153,6 +139,20 @@ namespace WebApiStoreTerm
                 actionContext.Response = new OwnApiHttpResponse(result);
                 return;
             }
+
+        }
+
+        public override void OnActionExecuted(HttpActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+
+            Task.Factory.StartNew(async () =>
+            {
+                var sb = new StringBuilder();
+                string content = await filterContext.Response.Content.ReadAsStringAsync();
+                sb.Append("Response: " + content + Environment.NewLine);
+                LogUtil.Info(sb.ToString());
+            });
 
         }
 
@@ -194,6 +194,35 @@ namespace WebApiStoreTerm
             string str = sb2.ToString();
 
             return str;
+        }
+
+        private static Task Log(HttpRequestBase request, string requestBody)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                var sb = new StringBuilder();
+                sb.Append("Url: " + request.RawUrl + Environment.NewLine);
+                sb.Append("IP: " + CommonUtil.GetIpAddress(request) + Environment.NewLine);
+                sb.Append("Method: " + request.HttpMethod + Environment.NewLine);
+                sb.Append("ContentType: " + request.ContentType + Environment.NewLine);
+                NameValueCollection headers = request.Headers;
+
+                if (headers["appKey"] != null)
+                {
+                    sb.Append("Header.appId: " + headers["appId"] + Environment.NewLine);
+                    sb.Append("Header.appKey: " + headers["appKey"] + Environment.NewLine);
+                    sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
+                    sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
+                    sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
+                }
+
+                if (request.ContentType.Contains("application/json"))
+                {
+                    sb.Append("PostData: " + requestBody + Environment.NewLine);
+                }
+
+                LogUtil.Info(sb.ToString());
+            });
         }
     }
 }
