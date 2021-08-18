@@ -30,12 +30,12 @@ namespace LocalS.BLL.Biz
                 if (isHandleComplete)
                 {
                     m_Status.Value = 1;
-                    m_Status.Text = "异常，已处理";
+                    m_Status.Text = "已处理";
                 }
                 else
                 {
                     m_Status.Value = 2;
-                    m_Status.Text = "异常，未处理";
+                    m_Status.Text = "未处理";
                 }
             }
             else
