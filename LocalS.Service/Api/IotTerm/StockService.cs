@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.IotTerm
                          u.MakeTime >= startTime &&
                          u.MakeTime <= endTime &&
                          u.Status == Entity.E_ErpReplenishPlan_Status.BuildSuccess
-                         select new { u.CumCode, u.MakeTime });
+                         select new { u.CumCode, u.MakeTime, u.MakerName });
 
             int total = query.Count();
 
@@ -45,6 +45,7 @@ namespace LocalS.Service.Api.IotTerm
                 items.Add(new
                 {
                     plan_cum_code = r.CumCode,
+                    maker_name = r.MakerName,
                     make_time = r.MakeTime.ToUnifiedFormatDateTime()
                 });
 

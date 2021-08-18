@@ -48,59 +48,6 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column type="expand">
-        <template slot-scope="scope">
-          <div v-for="(item,index) in scope.row.receiveDetails" :key="index">
-            <div> <i class="el-icon-place" /><span> {{ item.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
-            <table class="table-skus" style="width:100%;table-layout:fixed;max-width: 800px;">
-              <tr v-for="(pickupSku,sub_index) in item.detailItems" :key="sub_index">
-                <td style="20%">
-                  <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
-                </td>
-                <td style="20%">
-                  {{ pickupSku.name }}
-                </td>
-                <td style="30%">
-                  x {{ pickupSku.quantity }}
-                </td>
-                <td v-show="scope.row.receiveMode===4" style="15%">
-                  {{ pickupSku.status.text }}
-                </td>
-                <td v-show="scope.row.receiveMode===4" style="width:15%;text-align:center;">
-                  <el-popover
-                    v-if="pickupSku.pickupLogs.length>0"
-                    placement="right"
-                    width="400"
-                    trigger="click"
-                  >
-                    <el-timeline>
-                      <el-timeline-item
-                        v-for="(activity, index) in pickupSku.pickupLogs"
-                        :key="index"
-                        :timestamp="activity.timestamp"
-                      >
-                        {{ activity.content }}
-                        <br>
-                        <el-image
-                          v-for="(url, k) in activity.imgUrls"
-                          :key="k"
-                          style="width: 80px; height: 80px;margin-right:5px;"
-                          :src="url"
-                          :preview-src-list="activity.imgUrls"
-                        />
-
-                      </el-timeline-item>
-                    </el-timeline>
-                    <el-link slot="reference" type="primary" style="margin-right:15px;">出货流程</el-link>
-                  </el-popover>
-
-                </td>
-              </tr>
-            </table>
-          </div>
-        </template>
-      </el-table-column>
-      <!-- <span>{{ scope.row.id }}</span> <span style="color:#e1b11e">{{ scope.row.isTestMode==false?"":"[测]" }}</span> -->
       <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
         <template slot-scope="scope">
           <span :class="'c-mode-'+(scope.row.isTestMode==false?'1':'2')">{{ scope.row.id }}</span>

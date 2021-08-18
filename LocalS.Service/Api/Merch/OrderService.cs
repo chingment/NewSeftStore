@@ -187,56 +187,6 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                List<object> receiveDetails = new List<object>();
-                List<object> pickupSkus = new List<object>();
-
-                var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-
-                foreach (var orderSub in orderSubs)
-                {
-                    var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.CreateTime).ToList();
-
-                    List<object> pickupLogs = new List<object>();
-
-                    foreach (var orderPickupLog in orderPickupLogs)
-                    {
-                        string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                        string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                        List<string> imgUrls = new List<string>();
-                        if (!string.IsNullOrEmpty(imgUrl))
-                        {
-                            imgUrls.Add(imgUrl);
-                        }
-
-                        if (!string.IsNullOrEmpty(imgUrl2))
-                        {
-                            imgUrls.Add(imgUrl2);
-                        }
-
-                        pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
-                    }
-
-                    pickupSkus.Add(new
-                    {
-                        Id = orderSub.SkuId,
-                        MainImgUrl = orderSub.SkuMainImgUrl,
-                        UniqueId = orderSub.Id,
-                        ExPickupIsHandle = orderSub.ExPickupIsHandle,
-                        Name = orderSub.SkuName,
-                        Quantity = orderSub.Quantity,
-                        Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                        PickupLogs = pickupLogs
-                    });
-                }
-
-                receiveDetails.Add(new
-                {
-                    Name = item.ReceiveModeName,
-                    Mode = item.ReceiveMode,
-                    DetailType = 1,
-                    DetailItems = pickupSkus
-                });
-
                 olist.Add(new
                 {
                     Id = item.Id,
@@ -254,7 +204,6 @@ namespace LocalS.Service.Api.Merch
                     SourceName = BizFactory.Order.GetSourceName(item.Source),
                     ExStatus = BizFactory.Order.GetExStatus(item.ExIsHappen, item.ExIsHandle),
                     CanHandleEx = BizFactory.Order.GetCanHandleEx(item.ExIsHappen, item.ExIsHandle),
-                    ReceiveDetails = receiveDetails,
                     ReceiveMode = item.ReceiveMode,
                     ReceiveModeName = item.ReceiveModeName,
                     PickupTrgStatus = BizFactory.Order.GetPickupTrgStatus(item.ReceiveMode, item.PickupIsTrg),
