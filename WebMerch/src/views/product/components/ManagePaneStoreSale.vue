@@ -37,7 +37,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="店铺商品编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'500px':'90%'">
+    <el-dialog title="店铺商品编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'600px':'90%'">
 
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="店铺">

@@ -67,7 +67,7 @@
       <span>暂无数据</span>
     </div>
 
-    <el-dialog title="商品库存编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'500px':'90%'">
+    <el-dialog title="商品库存编辑" :visible.sync="dialogEditIsVisible" :width="isDesktop==true?'600px':'90%'">
 
       <el-form ref="form" v-loading="dialogEditIsLoading" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="货槽编号">
