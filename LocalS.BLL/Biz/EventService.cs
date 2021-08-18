@@ -221,6 +221,33 @@ namespace LocalS.BLL.Biz
 
                 if (d_Order != null)
                 {
+                    d_OrderPickupLog = new OrderPickupLog();
+                    d_OrderPickupLog.Id = model.SignId;
+                    d_OrderPickupLog.OrderId = model.OrderId;
+                    d_OrderPickupLog.MerchId = d_Order.MerchId;
+                    d_OrderPickupLog.ShopMode = E_ShopMode.Device;
+                    d_OrderPickupLog.StoreId = d_Order.StoreId;
+                    d_OrderPickupLog.ShopId = d_Order.ShopId;
+                    d_OrderPickupLog.DeviceId = d_Order.DeviceId;
+                    d_OrderPickupLog.UniqueId = model.UniqueId;
+                    d_OrderPickupLog.UniqueType = E_UniqueType.OrderSub;
+                    d_OrderPickupLog.SkuId = model.SkuId;
+                    d_OrderPickupLog.CabinetId = model.CabinetId;
+                    d_OrderPickupLog.SlotId = model.SlotId;
+                    d_OrderPickupLog.Status = model.PickupStatus;
+                    d_OrderPickupLog.ActionId = model.ActionId;
+                    d_OrderPickupLog.ActionName = model.ActionName;
+                    d_OrderPickupLog.ActionStatusCode = model.ActionStatusCode;
+                    d_OrderPickupLog.ActionStatusName = model.ActionStatusName;
+                    d_OrderPickupLog.ImgId = model.ImgId;
+                    d_OrderPickupLog.ImgId2 = model.ImgId2;
+                    d_OrderPickupLog.ImgId3 = model.ImgId3;
+                    d_OrderPickupLog.PickupUseTime = model.PickupUseTime;
+                    d_OrderPickupLog.ActionRemark = remark.ToString();
+                    d_OrderPickupLog.Remark = model.Remark;
+                    d_OrderPickupLog.CreateTime = DateTime.Now;
+                    d_OrderPickupLog.Creator = operater;
+                    CurrentDb.OrderPickupLog.Add(d_OrderPickupLog);
 
                     if (d_Order.Status != E_OrderStatus.Completed && !d_Order.ExIsHappen)
                     {
@@ -236,34 +263,6 @@ namespace LocalS.BLL.Biz
 
                             Task4Factory.Tim2Global.Enter(Task4TimType.Order2CheckPickupTimeout, d_Order.Id, DateTime.Now.AddMinutes(timoutM), new Order2CheckPickupTimeoutModel { OrderId = d_Order.Id, DeviceId = d_Order.DeviceId });
                         }
-
-                        d_OrderPickupLog = new OrderPickupLog();
-                        d_OrderPickupLog.Id = model.SignId;
-                        d_OrderPickupLog.OrderId = model.OrderId;
-                        d_OrderPickupLog.MerchId = d_Order.MerchId;
-                        d_OrderPickupLog.ShopMode = E_ShopMode.Device;
-                        d_OrderPickupLog.StoreId = d_Order.StoreId;
-                        d_OrderPickupLog.ShopId = d_Order.ShopId;
-                        d_OrderPickupLog.DeviceId = d_Order.DeviceId;
-                        d_OrderPickupLog.UniqueId = model.UniqueId;
-                        d_OrderPickupLog.UniqueType = E_UniqueType.OrderSub;
-                        d_OrderPickupLog.SkuId = model.SkuId;
-                        d_OrderPickupLog.CabinetId = model.CabinetId;
-                        d_OrderPickupLog.SlotId = model.SlotId;
-                        d_OrderPickupLog.Status = model.PickupStatus;
-                        d_OrderPickupLog.ActionId = model.ActionId;
-                        d_OrderPickupLog.ActionName = model.ActionName;
-                        d_OrderPickupLog.ActionStatusCode = model.ActionStatusCode;
-                        d_OrderPickupLog.ActionStatusName = model.ActionStatusName;
-                        d_OrderPickupLog.ImgId = model.ImgId;
-                        d_OrderPickupLog.ImgId2 = model.ImgId2;
-                        d_OrderPickupLog.ImgId3 = model.ImgId3;
-                        d_OrderPickupLog.PickupUseTime = model.PickupUseTime;
-                        d_OrderPickupLog.ActionRemark = remark.ToString();
-                        d_OrderPickupLog.Remark = model.Remark;
-                        d_OrderPickupLog.CreateTime = DateTime.Now;
-                        d_OrderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(d_OrderPickupLog);
 
                         if (model.PickupStatus == E_OrderPickupStatus.Exception)
                         {
