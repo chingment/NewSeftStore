@@ -212,7 +212,7 @@ namespace LocalS.Service.Api.StoreTerm
         {
             BizFactory.Device.EventNotify(operater, AppId.STORETERM, rop.DeviceId, rop.EventCode, rop.EventRemark, rop.Content);
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { MsgId = rop.MsgId });
         }
 
         public IResult GetRunExHandleItems(string operater, RopDeviceGetRunExHandleItems rop)

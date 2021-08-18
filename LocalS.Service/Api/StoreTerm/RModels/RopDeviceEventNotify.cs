@@ -16,5 +16,6 @@ namespace LocalS.Service.Api.StoreTerm
         public object Content { get; set; }
         public string EventCode { get; set; }
         public string EventRemark { get; set; }
+        public int MsgId { get; set; }
     }
 }

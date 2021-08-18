@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.DeviceCumCode))
             {
-                query = query.Where(m => m.DeviceCumCode.Contains(rup.DeviceCumCode));
+                query = query.Where(m => m.DeviceCumCode == rup.DeviceCumCode || m.DeviceId == rup.DeviceCumCode);
             }
 
             if (rup.SubmittedTimeArea != null)
