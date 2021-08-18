@@ -17,5 +17,6 @@ namespace LocalS.Service.Api.StoreTerm
         public string EventCode { get; set; }
         public string EventRemark { get; set; }
         public int MsgId { get; set; }
+        public string MsgMode { get; set; }
     }
 }

@@ -33,37 +33,37 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="序号" prop="id" align="left" width="80">
+      <el-table-column label="序号" prop="id" fixed="left" align="left" width="80">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }} </span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" prop="mainImgUrl" align="center" width="110">
+      <el-table-column label="图片" prop="mainImgUrl" fixed="left" align="center" width="110">
         <template slot-scope="scope">
           <img :src="scope.row.mainImgUrl" style="width:80px;height:80px;">
         </template>
       </el-table-column>
-      <el-table-column label="店铺" prop="sn" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" prop="sn" align="left" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="left" min-width="30%">
+      <el-table-column label="名称" align="left" min-width="100%">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="编码" min-width="10%">
+      <el-table-column label="编码" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.cumCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下架？" align="left" min-width="20%">
+      <el-table-column label="下架？" align="left" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.isOffSell==true?"是":"否" }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="销售价" align="left" min-width="20%">
+      <el-table-column label="销售价" align="left" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.salePrice }}</span>
         </template>

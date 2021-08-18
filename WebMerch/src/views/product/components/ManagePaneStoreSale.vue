@@ -8,7 +8,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="店铺" prop="sn" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" prop="sn" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>

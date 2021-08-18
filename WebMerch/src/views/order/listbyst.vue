@@ -29,7 +29,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="订单号" prop="id" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="订单号" prop="id" align="left" width="220">
         <template slot-scope="scope">
           <span :class="'c-mode-'+(scope.row.isTestMode==false?'1':'2')">{{ scope.row.id }}</span>
         </template>

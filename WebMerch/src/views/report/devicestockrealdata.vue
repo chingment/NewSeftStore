@@ -33,7 +33,7 @@
       style="width: 100%;"
       :default-sort="{prop: 'sellQuantity', order: 'descending'}"
     >
-      <el-table-column label="店铺" align="left" :width="isDesktop==true?220:80">
+      <el-table-column label="店铺" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
