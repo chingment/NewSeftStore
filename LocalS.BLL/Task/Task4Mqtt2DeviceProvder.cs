@@ -94,13 +94,13 @@ namespace LocalS.BLL.Task
                             msg_arrive(id);
                             break;
                         case "device_status":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.device_status, "心跳包", pms);
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.device_status, "心跳包", 0, "mqtt", pms);
                             break;
                         case "vending_pickup":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup, "取货动作", pms);
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup, "取货动作", 0, "mqtt", pms);
                             break;
                         case "vending_pickup_test":
-                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup_test, "[测试]取货动作", pms);
+                            BizFactory.Device.EventNotify(IdWorker.Build(IdType.EmptyGuid), AppId.STORETERM, deviceId, EventCode.vending_pickup_test, "[测试]取货动作", 0, "mqtt", pms);
                             break;
                     }
                 }

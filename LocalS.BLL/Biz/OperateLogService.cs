@@ -129,6 +129,62 @@ namespace LocalS.BLL.Biz
                     }
                 }
             }
+
+
         }
+
+
+
+        //private void HandleByLogin(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
+        //{
+        //    var userLoginHis = new SysUserLoginHis();
+        //    userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
+        //    userLoginHis.UserId = operater;
+        //    userLoginHis.AppId = appId;
+        //    userLoginHis.LoginAccount = model.LoginAccount;
+        //    userLoginHis.LoginFun = model.LoginFun;
+        //    userLoginHis.LoginWay = model.LoginWay;
+        //    userLoginHis.Ip = model.LoginIp;
+        //    userLoginHis.LoginTime = DateTime.Now;
+        //    userLoginHis.Result = model.LoginResult;
+        //    userLoginHis.Description = eventRemark;
+        //    userLoginHis.Remark = model.Remark;
+        //    userLoginHis.CreateTime = DateTime.Now;
+        //    userLoginHis.Creator = operater;
+        //    CurrentDb.SysUserLoginHis.Add(userLoginHis);
+        //    CurrentDb.SaveChanges();
+
+        //    if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
+        //    {
+        //        MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.login, eventRemark, model);
+        //    }
+        //}
+        //private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
+        //{
+        //    var userLoginHis = new SysUserLoginHis();
+        //    userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
+        //    userLoginHis.UserId = operater;
+        //    userLoginHis.AppId = appId;
+        //    userLoginHis.LoginAccount = model.LoginAccount;
+        //    userLoginHis.LoginFun = model.LoginFun;
+        //    userLoginHis.LoginWay = model.LoginWay;
+        //    userLoginHis.Ip = model.LoginIp;
+        //    userLoginHis.LoginTime = DateTime.Now;
+        //    userLoginHis.Result = model.LoginResult;
+        //    userLoginHis.Description = eventRemark;
+        //    userLoginHis.Remark = model.Remark;
+        //    userLoginHis.CreateTime = DateTime.Now;
+        //    userLoginHis.Creator = operater;
+        //    CurrentDb.SysUserLoginHis.Add(userLoginHis);
+        //    CurrentDb.SaveChanges();
+
+
+        //    if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
+        //    {
+        //        MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.logout, eventRemark, model);
+        //    }
+
+        //}
+
     }
 }

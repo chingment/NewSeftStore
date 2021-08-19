@@ -210,7 +210,7 @@ namespace LocalS.Service.Api.StoreTerm
 
         public IResult EventNotify(string operater, RopDeviceEventNotify rop)
         {
-            BizFactory.Device.EventNotify(operater, AppId.STORETERM, rop.DeviceId, rop.EventCode, rop.EventRemark, rop.Content);
+            BizFactory.Device.EventNotify(operater, AppId.STORETERM, rop.DeviceId, rop.EventCode, rop.EventRemark, rop.MsgId, rop.MsgMode, rop.Content);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { MsgId = rop.MsgId });
         }

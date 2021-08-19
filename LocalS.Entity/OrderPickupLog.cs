@@ -34,5 +34,9 @@ namespace LocalS.Entity
         public string ImgId { get; set; }
         public string ImgId2 { get; set; }
         public string ImgId3 { get; set; }
+        public int MsgId { get; set; }
+
+        public string MsgMode { get; set; }
+
     }
 }

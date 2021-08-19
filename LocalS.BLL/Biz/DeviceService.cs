@@ -275,9 +275,9 @@ namespace LocalS.BLL.Biz
         //    return PushService.SendPaySuccess(operater, appId, merchId, deviceId, content);
         //}
 
-        public CustomJsonResult EventNotify(string operater, string appId, string deviceId, string eventCode, string eventRemark, object content)
+        public CustomJsonResult EventNotify(string operater, string appId, string deviceId, string eventCode, string eventRemark,int eventMsgId, string eventMsgMode, object content)
         {
-            MqFactory.Global.PushEventNotify(operater, appId, deviceId, eventCode, eventRemark, content);
+            MqFactory.Global.PushEventNotify(operater, appId, deviceId, eventCode, eventRemark, eventMsgId, eventMsgMode, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
     }

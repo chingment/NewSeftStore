@@ -34,7 +34,7 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public void PushPayRefundResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from,string content)
+        public void PushPayRefundResultNotify(string ticket, E_PayPartner payParner, E_PayTransLogNotifyFrom from, string content)
         {
             var obj = new RedisMq4GlobalHandle();
             obj.Type = MqMessageType.PayRefundResultNotify;
@@ -43,12 +43,14 @@ namespace LocalS.BLL.Mq.MqByRedis
             this.Push(obj);
         }
 
-        public CustomJsonResult PushEventNotify(string operater, string appId, string trgerId, string eventCode, string eventRemark, object eventContent = null)
+        public CustomJsonResult PushEventNotify(string operater, string appId, string trgerId, string eventCode, string eventRemark, int eventMsgId, string eventMsgMode, object eventContent = null)
         {
             var content = new EventNotifyModel();
             content.AppId = appId;
             content.Operater = operater;
             content.TrgerId = trgerId;
+            content.EventMsgId = eventMsgId;
+            content.EventMsgMode = eventMsgMode;
             content.EventCode = eventCode;
             content.EventRemark = eventRemark;
             content.EventContent = eventContent;

@@ -20,21 +20,13 @@ namespace LocalS.BLL.Biz
         {
             switch (model.EventCode)
             {
-                case EventCode.login:
-                    var loginLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
-                    HandleByLogin(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, loginLogModel);
-                    break;
-                case EventCode.logout:
-                    var logoutLogModel = model.EventContent.ToJsonObject<LoginLogModel>();
-                    HandleByLogout(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, logoutLogModel);
-                    break;
                 case EventCode.device_status:
                     var deviceStatusModel = model.EventContent.ToJsonObject<DeviceEventByDeviceStatusModel>();
                     HandleByDeviceStatus(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, deviceStatusModel);
                     break;
                 case EventCode.vending_pickup:
                     var devicePickupModel = model.EventContent.ToJsonObject<DeviceEventByPickupModel>();
-                    HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupModel);
+                    HandleByPickup(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, model.EventMsgId, model.EventMsgMode, devicePickupModel);
                     break;
                 case EventCode.vending_pickup_test:
                     var devicePickupTestModel = model.EventContent.ToJsonObject<DeviceEventByPickupTestModel>();
@@ -43,56 +35,6 @@ namespace LocalS.BLL.Biz
             }
         }
 
-        private void HandleByLogin(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
-        {
-            var userLoginHis = new SysUserLoginHis();
-            userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
-            userLoginHis.UserId = operater;
-            userLoginHis.AppId = appId;
-            userLoginHis.LoginAccount = model.LoginAccount;
-            userLoginHis.LoginFun = model.LoginFun;
-            userLoginHis.LoginWay = model.LoginWay;
-            userLoginHis.Ip = model.LoginIp;
-            userLoginHis.LoginTime = DateTime.Now;
-            userLoginHis.Result = model.LoginResult;
-            userLoginHis.Description = eventRemark;
-            userLoginHis.Remark = model.Remark;
-            userLoginHis.CreateTime = DateTime.Now;
-            userLoginHis.Creator = operater;
-            CurrentDb.SysUserLoginHis.Add(userLoginHis);
-            CurrentDb.SaveChanges();
-
-            if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
-            {
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.login, eventRemark, model);
-            }
-        }
-        private void HandleByLogout(string operater, string appId, string trgerId, string eventCode, string eventRemark, LoginLogModel model)
-        {
-            var userLoginHis = new SysUserLoginHis();
-            userLoginHis.Id = IdWorker.Build(IdType.NewGuid);
-            userLoginHis.UserId = operater;
-            userLoginHis.AppId = appId;
-            userLoginHis.LoginAccount = model.LoginAccount;
-            userLoginHis.LoginFun = model.LoginFun;
-            userLoginHis.LoginWay = model.LoginWay;
-            userLoginHis.Ip = model.LoginIp;
-            userLoginHis.LoginTime = DateTime.Now;
-            userLoginHis.Result = model.LoginResult;
-            userLoginHis.Description = eventRemark;
-            userLoginHis.Remark = model.Remark;
-            userLoginHis.CreateTime = DateTime.Now;
-            userLoginHis.Creator = operater;
-            CurrentDb.SysUserLoginHis.Add(userLoginHis);
-            CurrentDb.SaveChanges();
-
-
-            if (appId == AppId.MERCH || appId == AppId.STORETERM || appId == AppId.WXMINPRAGROM)
-            {
-                MqFactory.Global.PushOperateLog(operater, appId, trgerId, EventCode.logout, eventRemark, model);
-            }
-
-        }
         private void HandleByDeviceStatus(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByDeviceStatusModel model)
         {
             LogUtil.Info(">>>>>HandleByDeviceStatus");
@@ -156,7 +98,7 @@ namespace LocalS.BLL.Biz
                 MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.device_status, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, deviceId, eventRemark), model);
             }
         }
-        private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupModel model)
+        private void HandleByPickup(string operater, string appId, string trgerId, string eventCode, string eventRemark, int eventMsgId, string eventMsgMode, DeviceEventByPickupModel model)
         {
             if (model == null)
                 return;
@@ -245,6 +187,8 @@ namespace LocalS.BLL.Biz
                     d_OrderPickupLog.PickupUseTime = model.PickupUseTime;
                     d_OrderPickupLog.ActionRemark = remark.ToString();
                     d_OrderPickupLog.Remark = model.Remark;
+                    d_OrderPickupLog.MsgId = eventMsgId;
+                    d_OrderPickupLog.MsgMode=eventMsgMode;
                     d_OrderPickupLog.CreateTime = DateTime.Now;
                     d_OrderPickupLog.Creator = operater;
                     CurrentDb.OrderPickupLog.Add(d_OrderPickupLog);
@@ -502,7 +446,6 @@ namespace LocalS.BLL.Biz
             }
 
         }
-
         public string GetSign(string merchId, string secret, long timespan, string data)
         {
             var sb = new StringBuilder();
@@ -526,7 +469,6 @@ namespace LocalS.BLL.Biz
 
             return str;
         }
-
         private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupTestModel model)
         {
             if (model == null)

@@ -14,5 +14,9 @@ namespace LocalS.BLL.Mq
         public string EventCode { get; set; }
         public string EventRemark { get; set; }
         public object EventContent { get; set; }
+
+        public int EventMsgId { get; set; }
+
+        public string EventMsgMode{ get; set; }
     }
 }
