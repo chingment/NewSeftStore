@@ -285,7 +285,7 @@ namespace LocalS.Service.Api.Merch
             var pickupSkus = new List<RetOrderDetailsByDeviceSelfTake.PickupSku>();
             foreach (var orderSub in orderSubs)
             {
-                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.CreateTime).ToList();
+                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.MsgId).ToList();
 
                 List<RetOrderDetailsByDeviceSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByDeviceSelfTake.PickupLog>();
 

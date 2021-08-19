@@ -2254,6 +2254,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.CabinetId = d_OrderSub.CabinetId;
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
+                            orderPickupLog.MsgId = int.MaxValue;
                             orderPickupLog.ActionRemark = "人为标识已取货";
                             orderPickupLog.Remark = "";
                             orderPickupLog.CreateTime = DateTime.Now;
@@ -2293,6 +2294,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
                             orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
                             orderPickupLog.ActionRemark = "人为标识未取货";
+                            orderPickupLog.MsgId = int.MaxValue;
                             orderPickupLog.Remark = "";
                             orderPickupLog.CreateTime = DateTime.Now;
                             orderPickupLog.Creator = operater;
