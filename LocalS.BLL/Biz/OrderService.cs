@@ -17,6 +17,7 @@ using System.Configuration;
 using System.Security.Cryptography;
 using System.IO;
 
+
 namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseService
@@ -2359,17 +2360,29 @@ namespace LocalS.BLL.Biz
 
             if (result.Result == ResultType.Success)
             {
-                string trgerId = "";
-                if (rop.AppId == AppId.STORETERM)
-                {
-                    trgerId = rop.DeviceId;
-                }
-                else if (rop.AppId == AppId.MERCH)
-                {
-                    trgerId = rop.MerchId;
-                }
 
-                MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_handle_exception, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    string trgerId = "";
+                    if (rop.AppId == AppId.STORETERM)
+                    {
+                        trgerId = rop.DeviceId;
+                    }
+                    else if (rop.AppId == AppId.MERCH)
+                    {
+                        trgerId = rop.MerchId;
+                    }
+                    foreach (var s_Order in s_Orders)
+                    {
+                        if (!string.IsNullOrEmpty(s_Order.NotifyUrl))
+                        {
+                            BizFactory.Order.NotifyMerchShip(operater, s_Order.MerchId, s_Order.Id);
+                        }
+                    }
+
+                    MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_handle_exception, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+
+                });
 
             }
 
@@ -2615,5 +2628,165 @@ namespace LocalS.BLL.Biz
 
             return ret;
         }
+
+        public string GetSign(string merchId, string secret, long timespan, string data)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(merchId);
+            sb.Append(secret);
+            sb.Append(timespan.ToString());
+            sb.Append(data);
+
+            var material = string.Concat(sb.ToString().OrderBy(c => c));
+            LogUtil.Info("sign.material:" + material);
+            var input = Encoding.UTF8.GetBytes(material);
+
+            var hash = SHA256Managed.Create().ComputeHash(input);
+
+            StringBuilder sb2 = new StringBuilder();
+            foreach (byte b in hash)
+                sb2.Append(b.ToString("x2"));
+
+            string str = sb2.ToString();
+
+            return str;
+        }
+
+        public CustomJsonResult NotifyMerchShip(string operater, string merchId, string orderId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+
+            if (d_Order == null)
+                return result;
+
+            if (string.IsNullOrEmpty(d_Order.NotifyUrl))
+                return result;
+
+
+            LogUtil.Info("NotifyUrl:" + d_Order.NotifyUrl);
+
+            if (d_Order.Status == E_OrderStatus.Completed || d_Order.ExIsHappen == true)
+            {
+                try
+                {
+                    var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+                    var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == orderId).ToList();
+                    string[] skuIds = d_OrderSubs.Select(m => m.SkuId).ToArray();
+
+                    var d_Stocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == d_Order.MerchId && m.StoreId == d_Order.StoreId && m.DeviceId == d_Order.DeviceId && skuIds.Contains(m.SkuId)).ToList();
+
+                    List<object> sku_stocks = new List<object>();
+
+                    var stock_Skus = (from u in d_Stocks select new { u.SkuId, u.IsOffSell }).Distinct();
+
+                    foreach (var stock_Sku in stock_Skus)
+                    {
+                        Dictionary<string, object> dics = new Dictionary<string, object>();
+                        dics.Add("sku_id", stock_Sku.SkuId);
+                        var r_Sku2 = CacheServiceFactory.Product.GetSkuInfo(d_Order.MerchId, stock_Sku.SkuId);
+                        dics.Add("sku_cum_code", r_Sku2.CumCode);
+
+                        var sku_Stocks = d_Stocks.Where(m => m.SkuId == stock_Sku.SkuId);
+
+                        int sumQuantity = sku_Stocks.Sum(m => m.SumQuantity);
+                        int waitPayLockQuantity = sku_Stocks.Sum(m => m.WaitPayLockQuantity);
+                        int waitPickupLockQuantity = sku_Stocks.Sum(m => m.WaitPickupLockQuantity);
+                        int sellQuantity = sku_Stocks.Sum(m => m.SellQuantity);
+                        int warnQuantity = sku_Stocks.Sum(m => m.WarnQuantity);
+                        int holdQuantity = sku_Stocks.Sum(m => m.HoldQuantity);
+                        int maxQuantity = sku_Stocks.Sum(m => m.MaxQuantity);
+
+                        dics.Add("sum_quantity", sumQuantity);
+                        dics.Add("lock_quantity", waitPayLockQuantity + waitPickupLockQuantity);
+                        dics.Add("sell_quantity", sellQuantity);
+                        dics.Add("warn_quantity", warnQuantity);
+                        dics.Add("hold_quantity", holdQuantity);
+                        dics.Add("max_quantity", maxQuantity);
+                        dics.Add("is_off_sell", stock_Sku.IsOffSell);
+
+                        List<object> slots = new List<object>();
+                        foreach (var sku_Stock in sku_Stocks)
+                        {
+                            Dictionary<string, object> dic2s = new Dictionary<string, object>();
+
+                            dic2s.Add("cabinet_id", sku_Stock.CabinetId);
+                            dic2s.Add("slot_id", sku_Stock.SlotId);
+                            dic2s.Add("sum_quantity", sku_Stock.SumQuantity);
+                            dic2s.Add("lock_quantity", sku_Stock.WaitPayLockQuantity + sku_Stock.WaitPickupLockQuantity);
+                            dic2s.Add("sell_quantity", sku_Stock.SellQuantity);
+                            dic2s.Add("warn_quantity", sku_Stock.WarnQuantity);
+                            dic2s.Add("hold_quantity", sku_Stock.HoldQuantity);
+                            dic2s.Add("max_quantity", sku_Stock.MaxQuantity);
+
+                            slots.Add(dic2s);
+                        }
+
+                        dics.Add("slots", slots);
+
+                        sku_stocks.Add(dics);
+                    }
+
+                    var sku_Ships = new List<object>();
+
+                    foreach (var item in d_OrderSubs)
+                    {
+                        sku_Ships.Add(new
+                        {
+                            unique_id = item.Id,
+                            cabinet_id = item.CabinetId,
+                            slot_id = item.SlotId,
+                            sku_id = item.SkuId,
+                            sku_cum_code = item.SkuCumCode,
+                            status = item.PickupStatus,
+                            tips = item.ExPickupReason,
+                        });
+                    }
+
+                    string notify_url = d_Order.NotifyUrl;
+
+                    Dictionary<string, Object> ret = new Dictionary<string, object>();
+                    ret.Add("low_order_id", d_Order.CumId);
+                    ret.Add("up_order_id", d_Order.Id);
+                    ret.Add("business_type", "ship");
+                    ret.Add("detail", new
+                    {
+                        is_trg = d_Order.PickupIsTrg,
+                        sku_stocks = sku_stocks,
+                        sku_ships = sku_Ships,
+                    });
+
+                    string data = ret.ToJsonString();
+                    LogUtil.Info("sign.data:" + data);
+
+                    long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+                    string sign = GetSign(d_Merch.Id, d_Merch.IotApiSecret, timespan, data);
+
+                    HttpUtil http = new HttpUtil();
+                    Dictionary<string, string> headers = new Dictionary<string, string>();
+
+                    string authorization = string.Format("merch_id={0},timestamp={1},sign={2}", d_Merch.Id, timespan, sign);
+                    LogUtil.Info("sign.authorization:" + authorization);
+                    headers.Add("Authorization", authorization);
+
+                    var result_http = http.HttpPostJson(notify_url, data, headers);
+
+                    if (!string.IsNullOrEmpty(result_http))
+                    {
+                        LogUtil.Info("result_http=>" + result_http);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogUtil.Error("", ex);
+                }
+            }
+
+
+            return result;
+        }
+
     }
 }
