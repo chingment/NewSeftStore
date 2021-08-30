@@ -1856,7 +1856,7 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayWay = E_PayWay.Zfb;
                                 payTrans.PayStatus = E_PayStatus.Paying;
                                 var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
-                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, 0.01m, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount,"", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
