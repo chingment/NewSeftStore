@@ -102,13 +102,14 @@ namespace MyAlipaySdk
             return response.Body;
         }
 
-        public AlipayTradeRefundResponse PayRefund(string out_trade_no, decimal refund_amount, string refund_reason)
+        public AlipayTradeRefundResponse PayRefund(string out_trade_no, string out_request_no, decimal refund_amount, string refund_reason)
         {
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 
             var bizContent = new
             {
                 out_trade_no = out_trade_no,
+                out_request_no = out_request_no,
                 refund_amount = refund_amount,
                 refund_reason = refund_reason
             };

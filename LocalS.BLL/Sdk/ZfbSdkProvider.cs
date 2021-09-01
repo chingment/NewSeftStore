@@ -135,7 +135,7 @@ namespace LocalS.BLL
 
             ZfbUtil zfbUtil = new ZfbUtil(config);
 
-            var respone = zfbUtil.PayRefund(payTranId, refund_fee, refund_desc);
+            var respone = zfbUtil.PayRefund(payTranId, payRefundId, refund_fee, refund_desc);
 
             if (respone.Code == "10000")
             {
