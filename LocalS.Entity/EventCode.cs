@@ -30,19 +30,19 @@ namespace LocalS.Entity
         public const string device_saw_stock = "device_saw_stock";
         [EventCodeRemark("A", "设备货道商品调整价格")]
         public const string device_adjust_sale_price = "device_adjust_sale_price";
-        [EventCodeRemark("A", "订单商品取货未完成人工标记未取状态")]
+        [EventCodeRemark("D", "订单商品取货未完成人工标记未取状态")]
         public const string order_nocomplete_sign_notake = "order_nocomplete_sign_notake";
-        [EventCodeRemark("A", "订单商品取货已完成人工标记未取状态")]
+        [EventCodeRemark("D", "订单商品取货已完成人工标记未取状态")]
         public const string order_complete_sign_notake = "order_complete_sign_notake";
-        [EventCodeRemark("A", "订单商品取货系统标记已取")]
+        [EventCodeRemark("D", "订单商品取货系统标记已取")]
         public const string order_sign_take = "order_sign_take";
-        [EventCodeRemark("A", "订单商品取货未取货完成系统标记已取")]
+        [EventCodeRemark("D", "订单商品取货未取货完成系统标记已取")]
         public const string order_nocomplete_sign_take = "order_nocomplete_sign_take";
-        [EventCodeRemark("A", "订单取消")]
+        [EventCodeRemark("D", "订单取消")]
         public const string order_cancle = "order_cancle";
         [EventCodeRemark("A", "订单支付成功")]
         public const string order_pay_success = "order_pay_success";
-        [EventCodeRemark("A", "订单预定成功")]
+        [EventCodeRemark("D", "订单预定成功")]
         public const string order_reserve_success = "order_reserve_success";
         [EventCodeRemark("A", "订单异常处理")]
         public const string order_handle_exception = "order_handle_exception";
