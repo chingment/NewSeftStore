@@ -336,7 +336,6 @@ namespace LocalS.BLL.Biz
             }
 
         }
-       
         private void HandleByPickupTest(string operater, string appId, string trgerId, string eventCode, string eventRemark, DeviceEventByPickupTestModel model)
         {
             if (model == null)

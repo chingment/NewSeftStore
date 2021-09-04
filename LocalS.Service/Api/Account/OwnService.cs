@@ -271,7 +271,7 @@ namespace LocalS.Service.Api.Account
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
                 tokenInfo.MctMode = merch.MctMode;
 
-                MqFactory.Global.PushEventNotify(sysUser.Id, AppId.MERCH, merchUser.MerchId, EventCode.login, "登录成功",0,"normal", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
+                MqFactory.Global.PushOperateLog(sysUser.Id, AppId.MERCH, merchUser.MerchId, EventCode.login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
                 SSOUtil.SetTokenInfo(token, tokenInfo, new TimeSpan(1, 0, 0));
 
