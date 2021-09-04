@@ -647,12 +647,10 @@ namespace LocalS.BLL.Biz
                                     buildOrderChild.SalePrice = buildSku.SalePrice;
                                     buildOrderChild.SaleAmount = buildOrderChild.Quantity * buildSku.SalePrice;
                                     buildOrderChild.OriginalPrice = buildSku.OriginalPrice;
-                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * buildSku.OriginalPrice;
-                                    buildOrderChild.CouponAmountByDeposit = buildSku.CouponAmountByDeposit;
-                                    buildOrderChild.CouponAmountByShop = buildSku.CouponAmountByShop;
-                                    buildOrderChild.CouponAmountByRent = buildSku.CouponAmountByRent;
+                                    buildOrderChild.OriginalAmount = buildOrderChild.Quantity * buildOrderChild.OriginalPrice;
+                                    buildOrderChild.CouponAmountByShop = 0;
                                     buildOrderChild.DiscountAmount = buildOrderChild.OriginalAmount - buildOrderChild.SaleAmount;
-                                    buildOrderChild.ChargeAmount = buildSku.SaleAmount - buildSku.CouponAmountByDeposit - buildSku.CouponAmountByShop - buildSku.CouponAmountByRent;
+                                    buildOrderChild.ChargeAmount = buildOrderChild.SaleAmount - buildOrderChild.CouponAmountByShop;
                                     buildOrderChilds.Add(buildOrderChild);
                                 }
                                 else
