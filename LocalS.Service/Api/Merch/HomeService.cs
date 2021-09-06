@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.Merch
             int deviceCount = int.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql2.ToString()).ToString());
 
             StringBuilder sql3 = new StringBuilder();
-            sql3.Append(" select ISNULL(sum(ChargeAmount),0) from [Order] where  payStatus='3' and IsTestMode=0 and merchId='" + merchId + "' ");
+            sql3.Append(" select ISNULL(sum(ChargeAmount),0)-ISNULL(sum(RefundedAmount),0) from [Order] where  payStatus='3' and IsTestMode=0 and merchId='" + merchId + "' ");
 
             decimal sumTradeAmount = decimal.Parse(DatabaseFactory.GetIDBOptionBySql().ExecuteScalar(sql3.ToString()).ToString());
 
@@ -69,7 +69,7 @@ namespace LocalS.Service.Api.Merch
             string date = DateTime.Now.ToString("yyyy-MM") + "-01";
 
             StringBuilder sql2 = new StringBuilder();
-            sql2.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 0 and merchId='" + merchId + "' ");
+            sql2.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0)-ISNULL(SUM(RefundedAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 0 and merchId='" + merchId + "' ");
             DataTable dtData2 = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql2.ToString()).Tables[0];
 
 
@@ -81,7 +81,7 @@ namespace LocalS.Service.Api.Merch
             }
 
             StringBuilder sql3 = new StringBuilder();
-            sql3.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 1 and merchId='" + merchId + "' ");
+            sql3.Append(" select COUNT(*) as sumCount,ISNULL(SUM(Quantity),0) as sumQuantity , ISNULL(SUM(ChargeAmount),0)-ISNULL(SUM(RefundedAmount),0) as sumTradeAmount  from dbo.[Order] where  PayStatus=3 and  DATEDIFF(MONTH, PayedTime, '" + date + "') = 1 and merchId='" + merchId + "' ");
             DataTable dtData3 = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql2.ToString()).Tables[0];
 
 
@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.Merch
             sql.Remove(sql.Length - 5, 5);
 
             sql.Append(" ) a1 left join ");
-            sql.Append(" (    select datef, sum(sumCount) as sumCount , sum(sumQuantity) as sumQuantity,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 10  group by PayedTime ) tb  group by datef ) b1 ");
+            sql.Append(" (    select datef, sum(sumCount) as sumCount , sum(sumQuantity) as sumQuantity,sum(sumTradeAmount) as sumTradeAmount from ( select CONVERT(varchar(100),PayedTime, 23) datef,count(*) as sumCount ,sum(Quantity) as sumQuantity,sum(ChargeAmount)-sum(RefundedAmount) as sumTradeAmount from [Order] WITH(NOLOCK)  where  merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and DateDiff(dd, PayedTime, getdate()) <= 10  group by PayedTime ) tb  group by datef ) b1 ");
             sql.Append(" on  a1.datef=b1.datef  ");
             sql.Append(" order by a1.datef desc  ");
 
@@ -156,7 +156,7 @@ namespace LocalS.Service.Api.Merch
             string endTime = CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).ToUnifiedFormatDateTime();
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumCount,0) as sumCount ,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
-            sql.Append("  select StoreId ,count(*) as sumCount, sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
+            sql.Append("  select StoreId ,count(*) as sumCount, sum(Quantity) as sumQuantity,sum(ChargeAmount)-sum(RefundedAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and PayStatus='3' and IsTestMode=0 and PayedTime>='" + startTime + "'  and PayedTime<='" + endTime + "'  group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
@@ -187,7 +187,7 @@ namespace LocalS.Service.Api.Merch
             var retRptStoreGmvRl = new RetRptStoreGmvRl();
 
             StringBuilder sql = new StringBuilder("  select top 10 name,isnull(sumQuantity,0) as sumQuantity,isnull(sumTradeAmount,0) as sumTradeAmount from Store a left join ( ");
-            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(chargeAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by StoreId  )  b on a.id=b.storeId ");
+            sql.Append("  select StoreId ,sum(Quantity) as sumQuantity,sum(chargeAmount)-sum(RefundedAmount) as sumTradeAmount  from [Order] WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by StoreId  )  b on a.id=b.storeId ");
             sql.Append("  where merchId='" + merchId + "' and a.IsDelete=0 order by sumTradeAmount desc ");
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
