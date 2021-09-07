@@ -12,7 +12,8 @@ namespace LocalS.Service.Api.Merch
     {
         public RetOrderDetails()
         {
-            this.ReceiveDetails = new List<ReceiveDetail>();
+            this.ReceiveModes = new List<ReceiveMode>();
+            this.RefundRecords = new List<object>();
         }
 
         public string Id { get; set; }
@@ -33,18 +34,28 @@ namespace LocalS.Service.Api.Merch
         public string ExHandleRemark { get; set; }
 
         public bool ExIsHappen { get; set; }
-        public List<ReceiveDetail> ReceiveDetails { get; set; }
-        public class ReceiveDetail
+
+        public string ReceiveModeName { get; set; }
+
+        public bool IsTestMode { get; set; }
+        public string RefundedAmount { get; set; }
+        public string RefundingAmount { get; set; }
+        public string RefundableAmount { get; set; }
+        public List<object> DetailItems { get; set; }
+
+        public List<object> RefundRecords { get; set; }
+        public List<ReceiveMode> ReceiveModes { get; set; }
+        public class ReceiveMode
         {
-            public ReceiveDetail()
+            public ReceiveMode()
             {
-                this.DetailItems = new List<object>();
+                this.Items = new List<object>();
             }
 
             public string Name { get; set; }
             public E_ReceiveMode Mode { get; set; }
-            public int DetailType { get; set; }
-            public List<object> DetailItems { get; set; }
+            public int Type { get; set; }
+            public List<object> Items { get; set; }
         }
 
         public class PickupSku
@@ -54,7 +65,7 @@ namespace LocalS.Service.Api.Merch
                 this.PickupLogs = new List<PickupLog>();
             }
             public string UniqueId { get; set; }
-            public string Id { get; set; }
+            public string ProdcutSkuId { get; set; }
             public string MainImgUrl { get; set; }
             public string Name { get; set; }
             public int Quantity { get; set; }
