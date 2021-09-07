@@ -508,6 +508,7 @@ export default {
       })
     },
     dialogDetailsOpen(row) {
+      this.dialogDetailsIsVisible = true
       this.detailsLoading = true
       this.formByHandle.remark = ''
       getDetails({ id: row.id }).then(res => {
@@ -515,7 +516,6 @@ export default {
           this.details = res.data
         }
         this.detailsLoading = false
-        this.dialogDetailsIsVisible = true
       })
     },
     _handleEx(details) {
