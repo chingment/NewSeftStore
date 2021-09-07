@@ -577,7 +577,6 @@ namespace LocalS.Service.Api.Merch
                         Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, PayTransId = order.PayTransId, PayPartner = order.PayPartner });
                     }
 
-
                     MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.pay_refund_handle, string.Format("订单号:{0}，处理退款金额：{1}，提交成功，退款单号：{2}", payRefund.OrderId, payRefund.ApplyAmount.ToF2Price(), payRefund.Id), rop);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功，结果稍后在退款查询查看");

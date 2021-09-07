@@ -31,7 +31,7 @@ namespace LocalS.Entity
         public string SkuSpecDes { get; set; }
         public string SkuProducer { get; set; }
         public string SkuMainImgUrl { get; set; }
-        public string SkuDeviceSn{ get; set; }
+        public string SkuDeviceSn { get; set; }
         public int KindId1 { get; set; }
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }
@@ -75,5 +75,8 @@ namespace LocalS.Entity
         public decimal CouponAmountByDeposit { get; set; }
         public string ReffSign { get; set; }
         public string ReffUserId { get; set; }
+        //public bool IsRefunded { get; set; }
+        //public decimal RefundedAmount { get; set; }
+        //public int RefundedQuantity { get; set; }
     }
 }

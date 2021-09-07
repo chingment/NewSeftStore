@@ -354,7 +354,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetailsByDeviceSelfTake, handleExByDeviceSelfTake, SendDeviceShip } from '@/api/order'
+import { getList, getDetails, handleExByDeviceSelfTake, SendDeviceShip } from '@/api/order'
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -555,7 +555,7 @@ export default {
     },
     refreshDetails(id) {
       this.detailsLoading = true
-      getDetailsByDeviceSelfTake({ id: id }).then(res => {
+      getDetails({ id: id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }
@@ -565,7 +565,7 @@ export default {
     dialogDetailsOpen(row) {
       this.detailsLoading = true
       this.formByHandle.remark = ''
-      getDetailsByDeviceSelfTake({ id: row.id }).then(res => {
+      getDetails({ id: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }

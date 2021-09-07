@@ -20,18 +20,10 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [HttpGet]
         public OwnApiHttpResponse GetDetails(string id)
         {
             var result = MerchServiceFactory.Order.GetDetails(this.CurrentUserId, this.CurrentMerchId, id);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse GetDetailsByDeviceSelfTake(string id)
-        {
-            var result = MerchServiceFactory.Order.GetDetailsByDeviceSelfTake(this.CurrentUserId, this.CurrentMerchId, id);
             return new OwnApiHttpResponse(result);
         }
 

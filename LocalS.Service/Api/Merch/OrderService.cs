@@ -20,82 +20,105 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetOrderDetails();
+            var ret = new RetOrderDetailsByDeviceSelfTake();
 
-            //var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
-            //if (order == null)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
-            //}
+            var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+            }
 
-            //ret.Id = order.Id;
-            //ret.ClientUserName = order.ClientUserName;
-            //ret.ClientUserId = order.ClientUserId;
-            //ret.StoreName = order.StoreName;
-            //ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
-            //ret.ChargeAmount = order.ChargeAmount.ToF2Price();
-            //ret.DiscountAmount = order.DiscountAmount.ToF2Price();
-            //ret.OriginalAmount = order.OriginalAmount.ToF2Price();
-            //ret.Quantity = order.Quantity;
-            //ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
-            ////ret.Status = BizFactory.Order.GetStatus(order.Status);
-            //ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
-            ////ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-            ////ret.ExHandleRemark = order.ExHandleRemark;
-            ////ret.ExIsHappen = order.ExIsHappen;
-            //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).ToList();
+            ret.Id = order.Id;
+            ret.ClientUserName = order.ClientUserName;
+            ret.ClientUserId = order.ClientUserId;
+            ret.StoreName = order.StoreName;
+            ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.ChargeAmount = order.ChargeAmount.ToF2Price();
+            ret.DiscountAmount = order.DiscountAmount.ToF2Price();
+            ret.OriginalAmount = order.OriginalAmount.ToF2Price();
+            ret.Quantity = order.Quantity;
+            ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
+            ret.Status = BizFactory.Order.GetStatus(order.Status);
+            ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            ret.ExHandleRemark = order.ExHandleRemark;
+            ret.ExIsHappen = order.ExIsHappen;
+            ret.IsTestMode = order.IsTestMode;
 
-            //List<RetOrderDetails.ReceiveDetail> receiveDetails = new List<RetOrderDetails.ReceiveDetail>();
-            //foreach (var orderSub in orderSubs)
-            //{
-            //    var receiveDetail = new RetOrderDetails.ReceiveDetail();
+            var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
 
-            //    receiveDetail.Mode = orderSub.ReceiveMode;
-            //    receiveDetail.Name = orderSub.ReceiveModeName;
-            //    receiveDetail.DetailType = 1;
+            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
+            ret.RefundedAmount = refundedAmount.ToF2Price();
+            ret.RefundingAmount = refundingAmount.ToF2Price();
+            ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
 
-            //    var orderSubChilds = CurrentDb.OrderSubChild.Where(m => m.OrderSubId == orderSub.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-            //    var pickupSkus = new List<RetOrderDetails.PickupSku>();
-            //    foreach (var orderSubChild in orderSubChilds)
-            //    {
-            //        var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSubChild.Id).OrderByDescending(m => m.CreateTime).ToList();
+            foreach (var payRefund in payRefunds)
+            {
+                decimal amount = payRefund.ApplyAmount;
+                string dateTime = payRefund.ApplyTime.ToUnifiedFormatDateTime();
 
-            //        List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
+                if (payRefund.Status == E_PayRefundStatus.Success)
+                {
+                    amount = payRefund.RefundedAmount;
+                    dateTime = payRefund.RefundedTime.ToUnifiedFormatDateTime();
+                }
+                else if (payRefund.Status == E_PayRefundStatus.Failure)
+                {
+                    dateTime = payRefund.HandleTime.ToUnifiedFormatDateTime();
+                }
 
-            //        foreach (var orderPickupLog in orderPickupLogs)
-            //        {
-            //            string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-            //            string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-            //            List<string> imgUrls = new List<string>();
-            //            if (!string.IsNullOrEmpty(imgUrl))
-            //            {
-            //                imgUrls.Add(imgUrl);
-            //            }
-            //            if (!string.IsNullOrEmpty(imgUrl2))
-            //            {
-            //                imgUrls.Add(imgUrl2);
-            //            }
-            //            pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
-            //        }
+                ret.RefundRecords.Add(new { Id = payRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(payRefund.Status), DateTime = dateTime });
+            }
 
-            //        receiveDetail.DetailItems.Add(new RetOrderDetails.PickupSku
-            //        {
-            //            Id = orderSubChild.SkuId,
-            //            ExPickupIsHandle = orderSubChild.ExPickupIsHandle,
-            //            UniqueId = orderSubChild.Id,
-            //            MainImgUrl = orderSubChild.SkuMainImgUrl,
-            //            Name = orderSubChild.SkuName,
-            //            Quantity = orderSubChild.Quantity,
-            //            Status = BizFactory.Order.GetPickupStatus(orderSubChild.PickupStatus),
-            //            PickupLogs = pickupLogs,
-            //            SignStatus = 0
-            //        });
-            //    }
+            var receiveMode = new RetOrderDetailsByDeviceSelfTake.ReceiveMode();
+            receiveMode.Mode = order.ReceiveMode;
+            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode));
+            receiveMode.Type = 1;
 
-            //    ret.ReceiveDetails.Add(receiveDetail);
+            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+            var pickupSkus = new List<RetOrderDetailsByDeviceSelfTake.PickupSku>();
+            foreach (var orderSub in orderSubs)
+            {
+                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.MsgId).ToList();
 
-            //}
+                List<RetOrderDetailsByDeviceSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByDeviceSelfTake.PickupLog>();
 
+                foreach (var orderPickupLog in orderPickupLogs)
+                {
+                    string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
+                    string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
+                    string imgUrl3 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId3);
+                    List<string> imgUrls = new List<string>();
+                    if (!string.IsNullOrEmpty(imgUrl))
+                    {
+                        imgUrls.Add(imgUrl);
+                    }
+                    if (!string.IsNullOrEmpty(imgUrl2))
+                    {
+                        imgUrls.Add(imgUrl2);
+                    }
+                    if (!string.IsNullOrEmpty(imgUrl3))
+                    {
+                        imgUrls.Add(imgUrl3);
+                    }
+                    pickupLogs.Add(new RetOrderDetailsByDeviceSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                }
+
+                receiveMode.Items.Add(new RetOrderDetailsByDeviceSelfTake.PickupSku
+                {
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
+                    UniqueId = orderSub.Id,
+                    MainImgUrl = orderSub.SkuMainImgUrl,
+                    Name = orderSub.SkuName,
+                    Quantity = orderSub.Quantity,
+                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    PickupLogs = pickupLogs,
+                    SignStatus = 0
+                });
+            }
+
+            ret.ReceiveModes.Add(receiveMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -216,118 +239,6 @@ namespace LocalS.Service.Api.Merch
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
 
             return result;
-        }
-
-        public CustomJsonResult GetDetailsByDeviceSelfTake(string operater, string merchId, string orderId)
-        {
-            var result = new CustomJsonResult();
-
-            var ret = new RetOrderDetailsByDeviceSelfTake();
-
-            var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
-            if (order == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
-            }
-
-            ret.Id = order.Id;
-            ret.ClientUserName = order.ClientUserName;
-            ret.ClientUserId = order.ClientUserId;
-            ret.StoreName = order.StoreName;
-            ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
-            ret.ChargeAmount = order.ChargeAmount.ToF2Price();
-            ret.DiscountAmount = order.DiscountAmount.ToF2Price();
-            ret.OriginalAmount = order.OriginalAmount.ToF2Price();
-            ret.Quantity = order.Quantity;
-            ret.CreateTime = order.CreateTime.ToUnifiedFormatDateTime();
-            ret.Status = BizFactory.Order.GetStatus(order.Status);
-            ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
-            ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-            ret.ExHandleRemark = order.ExHandleRemark;
-            ret.ExIsHappen = order.ExIsHappen;
-            ret.IsTestMode = order.IsTestMode;
-
-
-            var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
-
-            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
-            ret.RefundedAmount = refundedAmount.ToF2Price();
-            ret.RefundingAmount = refundingAmount.ToF2Price();
-            ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
-
-
-            foreach (var payRefund in payRefunds)
-            {
-                decimal amount = payRefund.ApplyAmount;
-                string dateTime = payRefund.ApplyTime.ToUnifiedFormatDateTime();
-
-                if (payRefund.Status == E_PayRefundStatus.Success)
-                {
-                    amount = payRefund.RefundedAmount;
-                    dateTime = payRefund.RefundedTime.ToUnifiedFormatDateTime();
-                }
-                else if (payRefund.Status == E_PayRefundStatus.Failure)
-                {
-                    dateTime = payRefund.HandleTime.ToUnifiedFormatDateTime();
-                }
-
-                ret.RefundRecords.Add(new { Id = payRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(payRefund.Status), DateTime = dateTime });
-            }
-
-
-            var receiveMode = new RetOrderDetailsByDeviceSelfTake.ReceiveMode();
-            receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode));
-            receiveMode.Type = 1;
-
-            var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-            var pickupSkus = new List<RetOrderDetailsByDeviceSelfTake.PickupSku>();
-            foreach (var orderSub in orderSubs)
-            {
-                var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.MsgId).ToList();
-
-                List<RetOrderDetailsByDeviceSelfTake.PickupLog> pickupLogs = new List<RetOrderDetailsByDeviceSelfTake.PickupLog>();
-
-                foreach (var orderPickupLog in orderPickupLogs)
-                {
-                    string imgUrl = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId);
-                    string imgUrl2 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId2);
-                    string imgUrl3 = BizFactory.Order.GetPickImgUrl(orderPickupLog.ImgId3);
-                    List<string> imgUrls = new List<string>();
-                    if (!string.IsNullOrEmpty(imgUrl))
-                    {
-                        imgUrls.Add(imgUrl);
-                    }
-                    if (!string.IsNullOrEmpty(imgUrl2))
-                    {
-                        imgUrls.Add(imgUrl2);
-                    }
-                    if (!string.IsNullOrEmpty(imgUrl3))
-                    {
-                        imgUrls.Add(imgUrl3);
-                    }
-                    pickupLogs.Add(new RetOrderDetailsByDeviceSelfTake.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
-                }
-
-                receiveMode.Items.Add(new RetOrderDetailsByDeviceSelfTake.PickupSku
-                {
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
-                    UniqueId = orderSub.Id,
-                    MainImgUrl = orderSub.SkuMainImgUrl,
-                    Name = orderSub.SkuName,
-                    Quantity = orderSub.Quantity,
-                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                    PickupLogs = pickupLogs,
-                    SignStatus = 0
-                });
-            }
-
-            ret.ReceiveModes.Add(receiveMode);
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-            return result;
-
         }
 
         public CustomJsonResult HandleExByDeviceSelfTake(string operater, string merchId, RopOrderHandleExByDeviceSelfTake rop)

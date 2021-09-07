@@ -32,9 +32,9 @@ export function getListByDeviceSelfTake(params) {
   })
 }
 
-export function getDetailsByDeviceSelfTake(params) {
+export function getDetails(params) {
   return request({
-    url: '/order/getDetailsByDeviceSelfTake',
+    url: '/order/getDetails',
     method: 'get',
     params
   })
@@ -69,7 +69,7 @@ export default {
   getListByDelivery: getListByDelivery,
   getListByDeviceSelfTake: getListByDeviceSelfTake,
   getListByStoreSelfTake: getListByStoreSelfTake,
-  getDetailsByDeviceSelfTake: getDetailsByDeviceSelfTake,
+  getDetails: getDetails,
   handleExByDeviceSelfTake: handleExByDeviceSelfTake,
   SendDeviceShip: SendDeviceShip
 }
