@@ -523,7 +523,7 @@ export default {
       var _this = this
       var _formByHandle = _this.formByHandle
       if (isEmpty(_this.formByHandle.remark)) {
-        this.$message('请输入备注')
+        this.$message({ message: '请输入备注', type: 'warning' })
         return
       }
 
@@ -533,7 +533,7 @@ export default {
           var l_sku = details.skus[i]
           if (l_sku.status.value === 6000) {
             if (l_sku.signStatus === 0) {
-              this.$message('处理前，请选择【' + l_sku.name + '】的取货状态 已取或未取')
+              this.$message({ message: '处理前，请选择【' + l_sku.name + '】的取货状态 已取或未取', type: 'warning' })
               return
             } else {
               uniques.push({ uniqueId: l_sku.uniqueId, signStatus: l_sku.signStatus })
