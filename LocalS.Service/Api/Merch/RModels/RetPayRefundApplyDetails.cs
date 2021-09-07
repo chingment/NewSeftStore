@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RetPayRefundOrderDetails
+    public class RetPayRefundApplyDetails
     {
-        public RetPayRefundOrderDetails()
+        public RetPayRefundApplyDetails()
         {
             this.Order = new _Order();
         }

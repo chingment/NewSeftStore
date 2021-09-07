@@ -179,7 +179,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var ret = new RetPayRefundOrderDetails();
+            var ret = new RetPayRefundApplyDetails();
 
             var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == orderId).FirstOrDefault();
             if (order == null)

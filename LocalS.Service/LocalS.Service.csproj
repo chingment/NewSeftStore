@@ -246,7 +246,7 @@
     <Compile Include="Api\Merch\RModels\RetCouponInitEdit.cs" />
     <Compile Include="Api\Merch\RModels\RetOrderDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetPayRefundHandleDetails.cs" />
-    <Compile Include="Api\Merch\RModels\RetPayRefundOrderDetails.cs" />
+    <Compile Include="Api\Merch\RModels\RetPayRefundApplyDetails.cs" />
     <Compile Include="Api\Merch\RModels\RetReportDeviceStockRealDataInit.cs" />
     <Compile Include="Api\Merch\RModels\RetReportProductSkuSalesDateHisInit.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
