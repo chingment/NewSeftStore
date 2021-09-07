@@ -56,15 +56,15 @@ export default {
     }
   },
   created() {
-    if (this.$store.getters.listPageQuery.has(this.$route.path)) {
-      this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
-    }
+    // if (this.$store.getters.listPageQuery.has(this.$route.path)) {
+    //   this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
+    // }
     this.onGetSpaces()
   },
   methods: {
     onGetSpaces() {
       this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
+      // this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       getSpaces(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
