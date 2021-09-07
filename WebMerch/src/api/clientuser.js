@@ -24,22 +24,6 @@ export function initDetailsBaseInfo(params) {
   })
 }
 
-export function initDetailsOrders(params) {
-  return request({
-    url: '/clientuser/initDetailsOrders',
-    method: 'get',
-    params
-  })
-}
-
-export function detailsOrdersGetOrderList(params) {
-  return request({
-    url: '/clientuser/detailsOrdersGetOrderList',
-    method: 'get',
-    params
-  })
-}
-
 export function edit(data) {
   return request({
     url: '/clientuser/edit',
@@ -61,7 +45,5 @@ export default {
   edit: edit,
   initDetails: initDetails,
   initDetailsBaseInfo: initDetailsBaseInfo,
-  initDetailsOrders: initDetailsOrders,
-  detailsOrdersGetOrderList: detailsOrdersGetOrderList,
-  getAvatars:getAvatars
+  getAvatars: getAvatars
 }

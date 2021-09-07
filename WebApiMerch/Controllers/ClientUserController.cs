@@ -39,21 +39,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse InitDetailsOrders([FromUri]string id)
-        {
-            var result = MerchServiceFactory.ClientUser.InitDetailsOrders(this.CurrentUserId, this.CurrentMerchId, id);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse DetailsOrdersGetOrderList([FromUri]RupClientDetailsOrdersGetOrderList rup)
-        {
-            var result = MerchServiceFactory.ClientUser.DetailsOrdersGetOrderList(this.CurrentUserId, this.CurrentMerchId,rup);
-            return new OwnApiHttpResponse(result);
-        }
-
-
         [HttpPost]
         public OwnApiHttpResponse Edit([FromBody]RopClientUserEdit rop)
         {

@@ -105,19 +105,6 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult InitDetailsOrders(string operater, string merchId, string clientUserId)
-        {
-            var ret = new RetClientUserInitDetailsOrders();
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-        }
-
-        public CustomJsonResult DetailsOrdersGetOrderList(string operater, string merchId, RupClientDetailsOrdersGetOrderList rup)
-        {
-            var result = new CustomJsonResult();
-            return MerchServiceFactory.Order.GetList(operater, merchId, new RupOrderGetList { ClientUserId = rup.ClientUserId, OrderId = rup.OrderId });
-        }
-
         public CustomJsonResult Edit(string operater, string merchId, RopClientUserEdit rop)
         {
 
@@ -146,7 +133,6 @@ namespace LocalS.Service.Api.Merch
 
 
         }
-
 
         public CustomJsonResult GetAvatars(string operater, string merchId, RupClientGetAvatars rup)
         {
