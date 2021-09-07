@@ -75,8 +75,8 @@ namespace LocalS.Entity
         public decimal CouponAmountByDeposit { get; set; }
         public string ReffSign { get; set; }
         public string ReffUserId { get; set; }
-        //public bool IsRefunded { get; set; }
-        //public decimal RefundedAmount { get; set; }
-        //public int RefundedQuantity { get; set; }
+        public bool IsRefunded { get; set; }
+        public decimal RefundedAmount { get; set; }
+        public int RefundedQuantity { get; set; }
     }
 }

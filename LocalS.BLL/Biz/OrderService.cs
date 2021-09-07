@@ -1856,7 +1856,7 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayWay = E_PayWay.Zfb;
                                 payTrans.PayStatus = E_PayStatus.Paying;
                                 var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
-                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount,"", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
+                                var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
                                 {
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付二维码生成失败");
@@ -2509,6 +2509,21 @@ namespace LocalS.BLL.Biz
                         order.RefundedAmount += refundAmount;
                         order.Mender = operater;
                         order.MendTime = DateTime.Now;
+                    }
+
+                    var d_PayRefundSkus = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefund.Id).ToList();
+                    foreach (var d_PayRefundSku in d_PayRefundSkus)
+                    {
+                        var d_OrderSub = CurrentDb.OrderSub.Where(m => m.Id == d_PayRefundSku.UniqueId).FirstOrDefault();
+                        if (d_OrderSub != null)
+                        {
+                            if (!d_OrderSub.IsRefunded && d_PayRefundSku.SignRefunded)
+                            {
+                                d_OrderSub.IsRefunded = true;
+                                d_OrderSub.RefundedAmount = d_PayRefundSku.RefundedAmount;
+                                d_OrderSub.Quantity = d_PayRefundSku.RefundedQuantity;
+                            }
+                        }
                     }
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);

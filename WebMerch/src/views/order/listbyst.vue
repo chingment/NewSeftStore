@@ -288,26 +288,6 @@
           </div>
 
           <el-form v-if="details.canHandleEx" ref="formByApply" :model="formByHandle" :rules="rulesByHandle" label-width="80px" style="max-width:800px;">
-            <el-form-item label="申请退款:" prop="isRefund">
-              <el-radio-group v-model="formByHandle.isRefund">
-                <el-radio :label="false">否</el-radio>
-                <el-radio :label="true">是</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item v-show="formByHandle.isRefund" label="退款提示:">
-              <span>已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
-            </el-form-item>
-            <el-form-item v-show="formByHandle.isRefund" label="退款方式:" prop="refundMethod">
-              <el-radio-group v-model="formByHandle.refundMethod">
-                <el-radio label="1">原路退回（系统自动处理，退款到用户支付账号）</el-radio>
-                <el-radio label="2">线下退回（人工审核处理，线下人工退回）</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item v-show="formByHandle.isRefund" label="退款金额:" prop="refundAmount">
-              <el-input v-model="formByHandle.refundAmount" style="width:160px">
-                <template slot="prepend">￥</template>
-              </el-input>
-            </el-form-item>
             <el-form-item label="备注:" prop="remark">
               <el-input v-model="formByHandle.remark" />
             </el-form-item>

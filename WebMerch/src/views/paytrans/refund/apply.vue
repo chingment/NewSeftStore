@@ -174,7 +174,7 @@
               <td style="width:20%">
                 <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:30%">
+              <td style="width:20%">
                 {{ sku.name }}
               </td>
               <td style="width:10%">
@@ -186,6 +186,10 @@
               <td style="width:30%;">
                 {{ sku.status.text }}
               </td>
+              <td style="width:10%;">
+                <el-checkbox v-model="sku.signRefunded">标记退款</el-checkbox>
+              </td>
+
             </tr>
           </table>
         </div>
@@ -280,7 +284,8 @@ export default {
         orderId: '',
         method: '',
         remark: '',
-        amount: 0
+        amount: 0,
+        refundSkus: []
       },
       rulesByApply: {
         method: [{ required: true, max: 200, message: '请选择退款方式', trigger: 'change' }],
@@ -355,6 +360,18 @@ export default {
     },
     onApply() {
       var _this = this
+
+      var refundSkus = []
+
+      var skus = this.details.order.skus
+      for (var i = 0; i < skus.length; i++) {
+        var l_sku = skus[i]
+        if (l_sku.signRefunded) {
+          refundSkus.push({ uniqueId: l_sku.uniqueId, signStatus: l_sku.signStatus })
+        }
+      }
+
+      _this.formByApply.refundSkus = refundSkus
 
       this.$refs['formByApply'].validate((valid) => {
         if (valid) {

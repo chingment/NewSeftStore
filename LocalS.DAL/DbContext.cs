@@ -43,6 +43,8 @@ namespace LocalS.DAL
         public IDbSet<PayTrans> PayTrans { get; set; }
         public IDbSet<PayTransSub> PayTransSub { get; set; }
         public IDbSet<PayRefund> PayRefund { get; set; }
+        public IDbSet<PayRefundSku> PayRefundSku { get; set; }
+        
         public IDbSet<PayNotifyLog> PayNotifyLog { get; set; }
         public IDbSet<AppSoftware> AppSoftware { get; set; }
         public IDbSet<Device> Device { get; set; }

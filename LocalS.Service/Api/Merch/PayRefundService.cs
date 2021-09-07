@@ -225,7 +225,8 @@ namespace LocalS.Service.Api.Merch
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
-                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus)
+                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    SignRefunded = false
                 });
             }
 
@@ -306,8 +307,27 @@ namespace LocalS.Service.Api.Merch
                 payRefund.Status = E_PayRefundStatus.WaitHandle;
                 payRefund.CreateTime = DateTime.Now;
                 payRefund.Creator = operater;
-
                 CurrentDb.PayRefund.Add(payRefund);
+
+
+                if (rop.RefundSkus != null)
+                {
+                    foreach (var refundSku in rop.RefundSkus)
+                    {
+                        var d_PayRefundSku = new PayRefundSku();
+                        d_PayRefundSku.Id = IdWorker.Build(IdType.NewGuid);
+                        d_PayRefundSku.PayRefundId = payRefundId;
+                        d_PayRefundSku.SignRefunded = refundSku.SignRefunded;
+                        d_PayRefundSku.RefundedAmount = refundSku.RefundedAmount;
+                        d_PayRefundSku.RefundedQuantity = refundSku.RefundedQuantity;
+                        d_PayRefundSku.CreateTime = DateTime.Now;
+                        d_PayRefundSku.Creator = operater;
+
+                        CurrentDb.PayRefundSku.Add(d_PayRefundSku);
+                    }
+                }
+
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -415,6 +435,18 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var orderSub in orderSubs)
             {
+                bool l_SignRefunded = false;
+                decimal l_RefundedAmount = 0m;
+                int l_RefundedQuantity = 0;
+
+                var d_PayRefundSku = CurrentDb.PayRefundSku.Where(m => m.UniqueId == orderSub.Id).FirstOrDefault();
+                if (d_PayRefundSku != null)
+                {
+                    l_SignRefunded = d_PayRefundSku.SignRefunded;
+                    l_RefundedAmount = d_PayRefundSku.RefundedAmount;
+                    l_RefundedQuantity = d_PayRefundSku.RefundedQuantity;
+                }
+
                 ret.Order.Skus.Add(new
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
@@ -424,7 +456,10 @@ namespace LocalS.Service.Api.Merch
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
-                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus)
+                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    SignRefunded = l_SignRefunded,
+                    RefundedAmount = l_RefundedAmount,
+                    RefundedQuantity = l_RefundedQuantity
                 });
             }
 

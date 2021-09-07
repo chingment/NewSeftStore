@@ -178,7 +178,7 @@
               <td style="width:20%">
                 <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:30%">
+              <td style="width:20%">
                 {{ sku.name }}
               </td>
               <td style="width:10%">
@@ -189,6 +189,9 @@
               </td>
               <td style="width:30%;">
                 {{ sku.status.text }}
+              </td>
+              <td style="width:10%;">
+                <span v-if="sku.signRefunded">标记退款</span>
               </td>
             </tr>
           </table>

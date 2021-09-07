@@ -79,6 +79,7 @@
     <Compile Include="DeviceBindLog.cs" />
     <Compile Include="DeviceMqttMessage.cs" />
     <Compile Include="PayRefund.cs" />
+    <Compile Include="PayRefundSku.cs" />
     <Compile Include="PayTrans.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderSub.cs" />
