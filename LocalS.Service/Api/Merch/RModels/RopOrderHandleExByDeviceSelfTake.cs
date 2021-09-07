@@ -23,7 +23,6 @@ namespace LocalS.Service.Api.Merch
         public bool IsRefund { get; set; }
         public decimal RefundAmount { get; set; }
         public E_PayRefundMethod RefundMethod { get; set; }
-
         public string DeviceId { get; set; }
     }
 }
