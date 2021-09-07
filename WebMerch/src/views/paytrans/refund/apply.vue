@@ -98,27 +98,27 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="110px" label="订单编号:" class="postInfo-container-item">
-                    {{ details.id }}
+                    {{ details.order.id }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
                   <el-form-item label-width="110px" label="店铺名称:" class="postInfo-container-item">
-                    {{ details.storeName }}
+                    {{ details.order.storeName }}
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="下单用户:" class="postInfo-container-item">
-                    {{ details.clientUserName }}
+                    {{ details.order.clientUserName }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="下单方式:" class="postInfo-container-item">
-                    {{ details.sourceName }}
+                    {{ details.order.sourceName }}
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -126,13 +126,13 @@
 
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="下单时间:" class="postInfo-container-item">
-                    {{ details.submittedTime }}
+                    {{ details.order.submittedTime }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="原金额:" class="postInfo-container-item">
-                    {{ details.originalAmount }}
+                    {{ details.order.originalAmount }}
                   </el-form-item>
                 </el-col>
 
@@ -141,13 +141,13 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="优惠金额:" class="postInfo-container-item">
-                    {{ details.discountAmount }}
+                    {{ details.order.discountAmount }}
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="支付金额:" class="postInfo-container-item">
-                    {{ details.chargeAmount }}
+                    {{ details.order.chargeAmount }}
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -155,7 +155,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="状态:" class="postInfo-container-item">
-                    {{ details.status.text }}
+                    {{ details.order.status.text }}
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" />
@@ -167,24 +167,24 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(receiveMode,index) in details.receiveModes" :key="index" style="font-size:14px">
-          <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+
+        <div style="font-size:14px">
           <table class="table-skus" style="max-width:800px;table-layout:fixed;">
-            <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
-              <td style="width:10%">
-                <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
-              </td>
+            <tr v-for="(sku,sub_index) in details.order.skus" :key="sub_index">
               <td style="width:20%">
-                {{ pickupSku.name }}
+                <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:20%">
-                x {{ pickupSku.quantity }}
+              <td style="width:30%">
+                {{ sku.name }}
               </td>
               <td style="width:10%">
-                {{ pickupSku.chargeAmount }}
+                x {{ sku.quantity }}
+              </td>
+              <td style="width:10%">
+                {{ sku.chargeAmount }}
               </td>
               <td style="width:30%;">
-                {{ pickupSku.status.text }}
+                {{ sku.status.text }}
               </td>
             </tr>
           </table>
@@ -198,7 +198,7 @@
         <el-form ref="formByApply" :model="formByApply" :rules="rulesByApply" label-width="110px" style="max-width:800px;">
           <el-form-item label="退款提示:">
 
-            <span style="line-height:30px">已退款金额：<span class="refundedAmount">{{ details.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.refundableAmount }}</span></span>
+            <span style="line-height:30px">已退款金额：<span class="refundedAmount">{{ details.order.refundedAmount }}</span>，正在申请退款金额：<span class="refundingAmount">{{ details.order.refundingAmount }}</span>，可申请退款金额：<span class="refundableAmount">{{ details.order.refundableAmount }}</span></span>
 
           </el-form-item>
           <el-form-item label="退款方式:" prop="method">
@@ -241,7 +241,7 @@
 </template>
 
 <script>
-import { searchOrder, getOrderDetails, apply } from '@/api/payrefund'
+import { searchOrder, getApplyDetails, apply } from '@/api/payrefund'
 import { MessageBox } from 'element-ui'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
 export default {
@@ -259,19 +259,22 @@ export default {
       },
       loadingByRefundApply: false,
       details: {
-        sn: '',
-        storeName: '',
-        clientUserName: '',
-        sourceName: '',
-        quantity: '',
-        originalAmount: '',
-        discountAmount: '',
-        chargeAmount: '',
-        submittedTime: '',
-        status: { text: '' },
-        exHandleRemark: '',
-        details: undefined,
-        isRunning: false
+        order: {
+          id: '',
+          sn: '',
+          storeName: '',
+          clientUserName: '',
+          sourceName: '',
+          quantity: '',
+          originalAmount: '',
+          discountAmount: '',
+          chargeAmount: '',
+          submittedTime: '',
+          status: { text: '' },
+          exHandleRemark: '',
+          isRunning: false,
+          skus: []
+        }
       },
       formByApply: {
         orderId: '',
@@ -341,7 +344,7 @@ export default {
       this.formByApply.method = ''
       this.formByApply.amount = 0
 
-      getOrderDetails({ orderId: row.id }).then(res => {
+      getApplyDetails({ orderId: row.id }).then(res => {
         if (res.result === 1) {
           this.details = res.data
         }

@@ -201,7 +201,11 @@
                     {{ details.status.text }}
                   </el-form-item>
                 </el-col>
-                <el-col :span="12" />
+                <el-col :span="12">
+                  <el-form-item label-width="80px" label="设备编码:" class="postInfo-container-item">
+                    {{ details.deviceCumCode }}
+                  </el-form-item>
+                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -210,32 +214,31 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(receiveMode,index) in details.receiveModes" :key="index">
-          <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+        <div>
           <table class="table-skus" style="width:100%;table-layout:fixed;">
-            <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
+            <tr v-for="(sku,sub_index) in details.skus" :key="sub_index">
               <td style="width:60px">
-                <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
+                <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
               </td>
               <td style="width:100%">
-                {{ pickupSku.name }}
+                {{ sku.name }}
               </td>
               <td style="width:50px">
-                x {{ pickupSku.quantity }}
+                x {{ sku.quantity }}
               </td>
-              <td v-show="receiveMode.mode===4" style="width:200px;text-align:center;">
-                {{ pickupSku.status.text }}
+              <td v-show="details.receiveMode===4" style="width:200px;text-align:center;">
+                {{ sku.status.text }}
               </td>
-              <td v-show="receiveMode.mode===4" style="width:100px;text-align:center;">
+              <td v-show="details.receiveMode===4" style="width:100px;text-align:center;">
                 <el-popover
-                  v-if="pickupSku.pickupLogs.length>0"
+                  v-if="sku.pickupLogs.length>0"
                   placement="right"
                   width="400"
                   trigger="click"
                 >
                   <el-timeline>
                     <el-timeline-item
-                      v-for="(activity, index) in pickupSku.pickupLogs"
+                      v-for="(activity, index) in sku.pickupLogs"
                       :key="index"
                       :timestamp="activity.timestamp"
                     >
@@ -255,9 +258,9 @@
                 </el-popover>
               </td>
               <td style="width:200px">
-                <div v-if="pickupSku.status.value==6000">
-                  <el-radio v-model="pickupSku.signStatus" label="1" style="margin-right:5px;">已取</el-radio>
-                  <el-radio v-model="pickupSku.signStatus" label="2">未取</el-radio>
+                <div v-if="sku.status.value==6000">
+                  <el-radio v-model="sku.signStatus" label="1" style="margin-right:5px;">已取</el-radio>
+                  <el-radio v-model="sku.signStatus" label="2">未取</el-radio>
                 </div>
               </td>
             </tr>
@@ -580,18 +583,15 @@ export default {
       }
 
       var uniques = []
-
-      for (var i = 0; i < details.receiveModes.length; i++) {
-        if (details.receiveModes[i].mode === 4) {
-          var l_items = details.receiveModes[i].items
-          for (var j = 0; j < l_items.length; j++) {
-            if (l_items[j].status.value === 6000) {
-              if (l_items[j].signStatus === 0) {
-                this.$message('处理前，请选择【' + l_items[j].name + '】的取货状态 已取或未取')
-                return
-              } else {
-                uniques.push({ uniqueId: l_items[j].uniqueId, signStatus: l_items[j].signStatus })
-              }
+      if (details.receiveMode === 4) {
+        for (var i = 0; i < details.skus.length; i++) {
+          var l_sku = details.skus[i]
+          if (l_sku.status.value === 6000) {
+            if (l_sku.signStatus === 0) {
+              this.$message('处理前，请选择【' + l_sku.name + '】的取货状态 已取或未取')
+              return
+            } else {
+              uniques.push({ uniqueId: l_sku.uniqueId, signStatus: l_sku.signStatus })
             }
           }
         }

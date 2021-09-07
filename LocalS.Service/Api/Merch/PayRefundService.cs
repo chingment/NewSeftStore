@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetOrderDetails(string operater, string merchId, string orderId)
+        public CustomJsonResult GetApplyDetails(string operater, string merchId, string orderId)
         {
             var result = new CustomJsonResult();
 
@@ -187,40 +187,36 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
             }
 
-            ret.Id = order.Id;
-            ret.ClientUserName = order.ClientUserName;
-            ret.ClientUserId = order.ClientUserId;
-            ret.StoreName = order.StoreName;
-            ret.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
-            ret.ChargeAmount = order.ChargeAmount.ToF2Price();
-            ret.DiscountAmount = order.DiscountAmount.ToF2Price();
-            ret.OriginalAmount = order.OriginalAmount.ToF2Price();
-            ret.Quantity = order.Quantity;
-            ret.Status = BizFactory.Order.GetStatus(order.Status);
-            ret.SourceName = BizFactory.Order.GetSourceName(order.Source);
-            ret.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-            ret.ExHandleRemark = order.ExHandleRemark;
-            ret.ExIsHappen = order.ExIsHappen;
+            ret.Order.Id = order.Id;
+            ret.Order.ClientUserName = order.ClientUserName;
+            ret.Order.ClientUserId = order.ClientUserId;
+            ret.Order.StoreName = order.StoreName;
+            ret.Order.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.Order.ChargeAmount = order.ChargeAmount.ToF2Price();
+            ret.Order.DiscountAmount = order.DiscountAmount.ToF2Price();
+            ret.Order.OriginalAmount = order.OriginalAmount.ToF2Price();
+            ret.Order.Quantity = order.Quantity;
+            ret.Order.Status = BizFactory.Order.GetStatus(order.Status);
+            ret.Order.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            ret.Order.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            ret.Order.ExHandleRemark = order.ExHandleRemark;
+            ret.Order.ExIsHappen = order.ExIsHappen;
 
 
             var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
 
             decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
             decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
-            ret.RefundedAmount = refundedAmount.ToF2Price();
-            ret.RefundingAmount = refundingAmount.ToF2Price();
-            ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
+            ret.Order.RefundedAmount = refundedAmount.ToF2Price();
+            ret.Order.RefundingAmount = refundingAmount.ToF2Price();
+            ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
 
-            var receiveMode = new RetPayRefundOrderDetails.ReceiveMode();
-            receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = order.ReceiveModeName;
-            receiveMode.Type = 1;
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
             foreach (var orderSub in orderSubs)
             {
-                receiveMode.Items.Add(new
+                ret.Order.Skus.Add(new
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
@@ -232,8 +228,6 @@ namespace LocalS.Service.Api.Merch
                     Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus)
                 });
             }
-
-            ret.ReceiveModes.Add(receiveMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
@@ -416,16 +410,12 @@ namespace LocalS.Service.Api.Merch
             ret.Order.RefundingAmount = refundingAmount.ToF2Price();
             ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
 
-            var receiveMode = new RetPayRefundHandleDetails.ReceiveMode();
-            receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = order.ReceiveModeName;
-            receiveMode.Type = 1;
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
             foreach (var orderSub in orderSubs)
             {
-                receiveMode.Items.Add(new
+                ret.Order.Skus.Add(new
                 {
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
@@ -438,7 +428,6 @@ namespace LocalS.Service.Api.Merch
                 });
             }
 
-            ret.Order.ReceiveModes.Add(receiveMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 

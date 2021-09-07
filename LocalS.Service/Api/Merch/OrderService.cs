@@ -44,6 +44,8 @@ namespace LocalS.Service.Api.Merch
             ret.ExHandleRemark = order.ExHandleRemark;
             ret.ExIsHappen = order.ExIsHappen;
             ret.IsTestMode = order.IsTestMode;
+            ret.ReceiveMode = order.ReceiveMode;
+            ret.DeviceCumCode = order.DeviceCumCode;
 
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
 
@@ -71,18 +73,13 @@ namespace LocalS.Service.Api.Merch
                 ret.RefundRecords.Add(new { Id = payRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(payRefund.Status), DateTime = dateTime });
             }
 
-            var receiveMode = new RetOrderDetails.ReceiveMode();
-            receiveMode.Mode = order.ReceiveMode;
-            receiveMode.Name = string.Format("{0}[{1}]", order.ReceiveModeName, MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode));
-            receiveMode.Type = 1;
-
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
-            var pickupSkus = new List<RetOrderDetails.PickupSku>();
+
             foreach (var orderSub in orderSubs)
             {
                 var orderPickupLogs = CurrentDb.OrderPickupLog.Where(m => m.UniqueId == orderSub.Id).OrderByDescending(m => m.MsgId).ToList();
 
-                List<RetOrderDetails.PickupLog> pickupLogs = new List<RetOrderDetails.PickupLog>();
+                List<object> pickupLogs = new List<object>();
 
                 foreach (var orderPickupLog in orderPickupLogs)
                 {
@@ -102,13 +99,13 @@ namespace LocalS.Service.Api.Merch
                     {
                         imgUrls.Add(imgUrl3);
                     }
-                    pickupLogs.Add(new RetOrderDetails.PickupLog { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
+                    pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                 }
 
-                receiveMode.Items.Add(new RetOrderDetails.PickupSku
+                ret.Skus.Add(new 
                 {
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     MainImgUrl = orderSub.SkuMainImgUrl,
                     Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
@@ -118,7 +115,6 @@ namespace LocalS.Service.Api.Merch
                 });
             }
 
-            ret.ReceiveModes.Add(receiveMode);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;

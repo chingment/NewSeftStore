@@ -251,7 +251,6 @@
     <Compile Include="Api\Merch\RModels\RetReportProductSkuSalesDateHisInit.cs" />
     <Compile Include="Api\Merch\RModels\RetRpt7DayGmvRl.cs" />
     <Compile Include="Api\Merch\RModels\RetAdInitRelease.cs" />
-    <Compile Include="Api\Merch\RModels\RetClientUserInitDetailsOrders.cs" />
     <Compile Include="Api\Merch\RModels\RetClientUserInitManageBaseInfo.cs" />
     <Compile Include="Api\Merch\RModels\RetDeviceInitManage.cs" />
     <Compile Include="Api\Merch\RModels\RetDeviceInitManageBaseInfo.cs" />

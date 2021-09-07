@@ -171,24 +171,24 @@
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
         </div>
-        <div v-for="(receiveMode,index) in details.order.receiveModes" :key="index" style="font-size:14px">
-          <div> <i class="el-icon-place" /><span> {{ receiveMode.name }} </span> <i class="el-icon-d-arrow-right" /> </div>
+
+        <div style="font-size:14px">
           <table class="table-skus" style="max-width:800px;table-layout:fixed;">
-            <tr v-for="(pickupSku,sub_index) in receiveMode.items" :key="sub_index">
-              <td style="width:10%">
-                <img :src="pickupSku.mainImgUrl" style="width:50px;height:50px;">
-              </td>
+            <tr v-for="(sku,sub_index) in details.order.skus" :key="sub_index">
               <td style="width:20%">
-                {{ pickupSku.name }}
+                <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
               </td>
-              <td style="width:20%">
-                x {{ pickupSku.quantity }}
+              <td style="width:30%">
+                {{ sku.name }}
               </td>
               <td style="width:10%">
-                {{ pickupSku.chargeAmount }}
+                x {{ sku.quantity }}
+              </td>
+              <td style="width:10%">
+                {{ sku.chargeAmount }}
               </td>
               <td style="width:30%;">
-                {{ pickupSku.status.text }}
+                {{ sku.status.text }}
               </td>
             </tr>
           </table>

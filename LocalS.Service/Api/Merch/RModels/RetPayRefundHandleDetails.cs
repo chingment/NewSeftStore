@@ -12,24 +12,19 @@ namespace LocalS.Service.Api.Merch
     {
         public RetPayRefundHandleDetails()
         {
-
             this.Order = new _Order();
         }
-
         public string PayRefundId { get; set; }
         public StatusModel ApplyMethod { get; set; }
         public string ApplyAmount { get; set; }
         public string ApplyTime { get; set; }
         public string ApplyRemark { get; set; }
-
         public _Order Order { get; set; }
-
         public class _Order
         {
             public _Order()
             {
-
-                this.ReceiveModes = new List<ReceiveMode>();
+                this.Skus = new List<object>();
             }
             public string Id { get; set; }
             public string ClientUserName { get; set; }
@@ -42,24 +37,16 @@ namespace LocalS.Service.Api.Merch
             public int Quantity { get; set; }
             public StatusModel Status { get; set; }
             public string SourceName { get; set; }
-            public List<ReceiveMode> ReceiveModes { get; set; }
+            public List<object> Skus { get; set; }
             public string RefundedAmount { get; set; }
             public string RefundingAmount { get; set; }
             public string RefundableAmount { get; set; }
+
+            public bool CanHandleEx { get; set; }
+
+            public string ExHandleRemark { get; set; }
+
+            public bool ExIsHappen { get; set; }
         }
-
-        public class ReceiveMode
-        {
-            public ReceiveMode()
-            {
-                this.Items = new List<object>();
-            }
-
-            public string Name { get; set; }
-            public E_ReceiveMode Mode { get; set; }
-            public int Type { get; set; }
-            public List<object> Items { get; set; }
-        }
-
     }
 }

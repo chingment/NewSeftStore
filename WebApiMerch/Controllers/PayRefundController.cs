@@ -29,9 +29,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetOrderDetails(string orderId)
+        public OwnApiHttpResponse GetApplyDetails(string orderId)
         {
-            var result = MerchServiceFactory.PayRefund.GetOrderDetails(this.CurrentUserId, this.CurrentMerchId, orderId);
+            var result = MerchServiceFactory.PayRefund.GetApplyDetails(this.CurrentUserId, this.CurrentMerchId, orderId);
             return new OwnApiHttpResponse(result);
         }
 

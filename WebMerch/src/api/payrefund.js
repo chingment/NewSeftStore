@@ -24,9 +24,9 @@ export function searchOrder(params) {
   })
 }
 
-export function getOrderDetails(params) {
+export function getApplyDetails(params) {
   return request({
-    url: '/payrefund/GetOrderDetails',
+    url: '/payrefund/GetApplyDetails',
     method: 'get',
     params
   })
@@ -60,7 +60,7 @@ export default {
   getList: getList,
   getListByHandle: getListByHandle,
   searchOrder: searchOrder,
-  getOrderDetails: getOrderDetails,
+  getApplyDetails: getApplyDetails,
   getHandleDetails: getHandleDetails,
   apply: apply,
   handle: handle
