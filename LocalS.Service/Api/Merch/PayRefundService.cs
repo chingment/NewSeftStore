@@ -266,11 +266,18 @@ namespace LocalS.Service.Api.Merch
 
             if (order.ExIsHappen && !order.ExIsHandle)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单发生异常没有处理，请到订单处理，再进行退款操作");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单发生异常没有处理，请到订单处理，再进行申请退款操作");
             }
 
 
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == rop.OrderId).ToList();
+
+            var hasNoHandleCount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Count();
+
+            if (hasNoHandleCount > 0)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单存在一笔未处理，请到退款处理，再进行申请退款操作");
+            }
 
             decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
             decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
