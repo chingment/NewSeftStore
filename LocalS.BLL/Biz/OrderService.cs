@@ -2138,8 +2138,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in rop.Items)
                 {
-                    LogUtil.Info("Item:" + item.ItemId);
-
+ 
                     var d_Order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
                     if (d_Order == null)
                     {
@@ -2157,59 +2156,56 @@ namespace LocalS.BLL.Biz
                     }
 
 
-                    if (item.IsRefund)
-                    {
+                    //if (item.IsRefund)
+                    //{
 
-                        var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == item.ItemId).ToList();
+                    //    var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == item.ItemId).ToList();
 
-                        decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-                        decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
+                    //    decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+                    //    decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
 
-                        if (item.RefundAmount > (d_Order.ChargeAmount - (refundedAmount + refundingAmount)))
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
-                        }
+                    //    if (item.RefundAmount > (d_Order.ChargeAmount - (refundedAmount + refundingAmount)))
+                    //    {
+                    //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
+                    //    }
 
-                        var payTran = CurrentDb.PayTrans.Where(m => m.Id == d_Order.PayTransId).FirstOrDefault();
+                    //    var payTran = CurrentDb.PayTrans.Where(m => m.Id == d_Order.PayTransId).FirstOrDefault();
 
-                        if (item.RefundAmount > payTran.ChargeAmount)
-                        {
-                            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
-                        }
+                    //    if (item.RefundAmount > payTran.ChargeAmount)
+                    //    {
+                    //        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "异常处理失败，退款的金额不能大于可退金额");
+                    //    }
 
-                        string payRefundId = IdWorker.Build(IdType.PayRefundId);
+                    //    string payRefundId = IdWorker.Build(IdType.PayRefundId);
 
-                        var payRefund = new PayRefund();
-                        payRefund.Id = payRefundId;
-                        payRefund.MerchId = d_Order.MerchId;
-                        payRefund.MerchName = d_Order.MerchName;
-                        payRefund.StoreId = d_Order.StoreId;
-                        payRefund.StoreName = d_Order.StoreName;
-                        payRefund.ClientUserId = d_Order.ClientUserId;
-                        payRefund.ClientUserName = d_Order.ClientUserName;
-                        payRefund.OrderId = d_Order.Id;
-                        payRefund.PayPartnerPayTransId = d_Order.PayPartnerPayTransId;
-                        payRefund.PayTransId = d_Order.PayTransId;
-                        payRefund.ApplyTime = DateTime.Now;
-                        payRefund.ApplyMethod = item.RefundMethod;
-                        payRefund.ApplyRemark = rop.Remark;
-                        payRefund.ApplyAmount = item.RefundAmount;
-                        payRefund.Applyer = operater;
-                        payRefund.Status = E_PayRefundStatus.WaitHandle;
-                        payRefund.CreateTime = DateTime.Now;
-                        payRefund.Creator = operater;
-                        CurrentDb.PayRefund.Add(payRefund);
-                    }
-
-                    LogUtil.Info("orderSubs");
+                    //    var payRefund = new PayRefund();
+                    //    payRefund.Id = payRefundId;
+                    //    payRefund.MerchId = d_Order.MerchId;
+                    //    payRefund.MerchName = d_Order.MerchName;
+                    //    payRefund.StoreId = d_Order.StoreId;
+                    //    payRefund.StoreName = d_Order.StoreName;
+                    //    payRefund.ClientUserId = d_Order.ClientUserId;
+                    //    payRefund.ClientUserName = d_Order.ClientUserName;
+                    //    payRefund.OrderId = d_Order.Id;
+                    //    payRefund.PayPartnerPayTransId = d_Order.PayPartnerPayTransId;
+                    //    payRefund.PayTransId = d_Order.PayTransId;
+                    //    payRefund.ApplyTime = DateTime.Now;
+                    //    payRefund.ApplyMethod = item.RefundMethod;
+                    //    payRefund.ApplyRemark = rop.Remark;
+                    //    payRefund.ApplyAmount = item.RefundAmount;
+                    //    payRefund.Applyer = operater;
+                    //    payRefund.Status = E_PayRefundStatus.WaitHandle;
+                    //    payRefund.CreateTime = DateTime.Now;
+                    //    payRefund.Creator = operater;
+                    //    CurrentDb.PayRefund.Add(payRefund);
+                    //}
 
                     var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == item.ItemId && m.ExPickupIsHappen == true && m.ExPickupIsHandle == false && m.PickupStatus == E_OrderPickupStatus.Exception).ToList();
 
 
                     foreach (var d_OrderSub in d_OrderSubs)
                     {
-                        LogUtil.Info("orderSubs");
-
+                       
                         var detailItem = item.Uniques.Where(m => m.UniqueId == d_OrderSub.Id).FirstOrDefault();
                         if (detailItem == null)
                         {
@@ -2310,12 +2306,7 @@ namespace LocalS.BLL.Biz
                     d_Order.CompletedTime = DateTime.Now;
 
                     s_Orders.Add(d_Order);
-
-
-                    LogUtil.Info("orders");
                 }
-
-                LogUtil.Info("IsRunning");
 
                 if (rop.IsRunning)
                 {
@@ -2449,7 +2440,6 @@ namespace LocalS.BLL.Biz
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
-
         public CustomJsonResult PayRefundHandle(string operater, Dictionary<string, Dictionary<string, object>> refunds)
         {
             var result = new CustomJsonResult();
@@ -2465,7 +2455,6 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
-
         public CustomJsonResult PayRefundHandle(string operater, string refundId, string refundStatus, decimal refundAmount, DateTime? refundTime, string refundRemark, string handleRemark)
         {
 
@@ -2646,7 +2635,6 @@ namespace LocalS.BLL.Biz
 
             return ret;
         }
-
         public string GetSign(string merchId, string secret, long timespan, string data)
         {
             var sb = new StringBuilder();
@@ -2670,7 +2658,6 @@ namespace LocalS.BLL.Biz
 
             return str;
         }
-
         public CustomJsonResult NotifyMerchShip(string operater, string merchId, string orderId)
         {
             var result = new CustomJsonResult();

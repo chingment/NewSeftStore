@@ -17,9 +17,9 @@ namespace LocalS.BLL.Biz
     {
         public string ItemId { get; set; }
         public List<ExUnique> Uniques { get; set; }
-        public bool IsRefund { get; set; }
-        public decimal RefundAmount { get; set; }
-        public E_PayRefundMethod RefundMethod { get; set; }
+        //public bool IsRefund { get; set; }
+        //public decimal RefundAmount { get; set; }
+        //public E_PayRefundMethod RefundMethod { get; set; }
     }
 
     public class ExReason
@@ -40,7 +40,6 @@ namespace LocalS.BLL.Biz
         public string Remark { get; set; }
         public bool IsRunning { get; set; }
         public string DeviceId { get; set; }
-
         public string MerchId { get; set; }
     }
 }

@@ -169,29 +169,58 @@
         </div>
 
         <div style="font-size:14px">
-          <table class="table-skus" style="max-width:800px;table-layout:fixed;">
-            <tr v-for="(sku,sub_index) in details.order.skus" :key="sub_index">
-              <td style="width:20%">
-                <img :src="sku.mainImgUrl" style="width:50px;height:50px;">
-              </td>
-              <td style="width:20%">
-                {{ sku.name }}
-              </td>
-              <td style="width:10%">
-                x {{ sku.quantity }}
-              </td>
-              <td style="width:10%">
-                {{ sku.chargeAmount }}
-              </td>
-              <td style="width:30%;">
-                {{ sku.status.text }}
-              </td>
-              <td style="width:10%;">
-                <el-checkbox v-model="sku.signRefunded">标记退款</el-checkbox>
-              </td>
 
-            </tr>
-          </table>
+          <el-table
+            :key="listKey"
+            :data="details.order.skus"
+            fit
+            highlight-current-row
+            style="width: 800px"
+          >
+            <el-table-column label="" fixed align="left" width="100">
+              <template slot-scope="scope">
+                <img :src="scope.row.mainImgUrl" style="width:50px;height:50px;">
+              </template>
+            </el-table-column>
+            <el-table-column label="商品名称" fixed align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="交易数量" align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.quantity }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="交易金额" align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.chargeAmount }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="取货状态" align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.pickupStatus.text }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="已退数量" align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.refundedQuantity }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="已退金额" align="left" width="100">
+              <template slot-scope="scope">
+                <span>{{ scope.row.refundedAmount }}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="操作" align="center" width="100" fixed="right" class-name="small-padding fixed-width">
+              <template slot-scope="scope">
+                <el-checkbox v-model="scope.row.applySignRefunded">标记退款</el-checkbox>
+              </template>
+
+            </el-table-column>
+          </el-table>
+
         </div>
 
         <div class="row-title clearfix">
@@ -366,8 +395,8 @@ export default {
       var skus = this.details.order.skus
       for (var i = 0; i < skus.length; i++) {
         var l_sku = skus[i]
-        if (l_sku.signRefunded) {
-          refundSkus.push({ uniqueId: l_sku.uniqueId, signStatus: l_sku.signStatus })
+        if (l_sku.applySignRefunded) {
+          refundSkus.push({ uniqueId: l_sku.uniqueId, signRefunded: l_sku.applySignRefunded, refundedAmount: l_sku.applyRefundedAmount, refundedQuantity: l_sku.applyRefundedQuantity })
         }
       }
 

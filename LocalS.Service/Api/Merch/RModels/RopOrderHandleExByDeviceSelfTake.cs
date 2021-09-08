@@ -20,9 +20,9 @@ namespace LocalS.Service.Api.Merch
         public List<ExUnique> Uniques { get; set; }
         public string Remark { get; set; }
         public bool IsRunning { get; set; }
-        public bool IsRefund { get; set; }
-        public decimal RefundAmount { get; set; }
-        public E_PayRefundMethod RefundMethod { get; set; }
+        //public bool IsRefund { get; set; }
+        //public decimal RefundAmount { get; set; }
+        //public E_PayRefundMethod RefundMethod { get; set; }
         public string DeviceId { get; set; }
     }
 }

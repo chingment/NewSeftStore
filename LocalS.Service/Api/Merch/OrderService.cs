@@ -102,7 +102,7 @@ namespace LocalS.Service.Api.Merch
                     pickupLogs.Add(new { Timestamp = orderPickupLog.CreateTime.ToUnifiedFormatDateTime(), Content = orderPickupLog.ActionRemark, ImgUrl = imgUrl, ImgUrls = imgUrls });
                 }
 
-                ret.Skus.Add(new 
+                ret.Skus.Add(new
                 {
                     UniqueId = orderSub.Id,
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
@@ -245,7 +245,7 @@ namespace LocalS.Service.Api.Merch
             bizRop.DeviceId = rop.DeviceId;
             bizRop.IsRunning = rop.IsRunning;
             bizRop.Remark = rop.Remark;
-            bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques, IsRefund = rop.IsRefund, RefundAmount = rop.RefundAmount, RefundMethod = rop.RefundMethod });
+            bizRop.Items.Add(new ExItem { ItemId = rop.Id, Uniques = rop.Uniques });
             var result = BizFactory.Order.HandleExByDeviceSelfTake(operater, bizRop);
             return result;
         }

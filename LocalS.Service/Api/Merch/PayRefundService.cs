@@ -225,10 +225,12 @@ namespace LocalS.Service.Api.Merch
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
                     ExPickupIsHandle = orderSub.ExPickupIsHandle,
-                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
                     IsRefunded = orderSub.IsRefunded,
                     RefundedAmount = orderSub.RefundedAmount,
                     RefundedQuantity = orderSub.RefundedQuantity,
+                    ApplyRefundedQuantity = orderSub.Quantity,
+                    ApplyRefundedAmount = orderSub.ChargeAmount,
                     ApplySignRefunded = false
                 });
             }
@@ -320,6 +322,7 @@ namespace LocalS.Service.Api.Merch
                         var d_PayRefundSku = new PayRefundSku();
                         d_PayRefundSku.Id = IdWorker.Build(IdType.NewGuid);
                         d_PayRefundSku.PayRefundId = payRefundId;
+                        d_PayRefundSku.UniqueId = refundSku.UniqueId;
                         d_PayRefundSku.ApplySignRefunded = refundSku.SignRefunded;
                         d_PayRefundSku.ApplyRefundedAmount = refundSku.RefundedAmount;
                         d_PayRefundSku.ApplyRefundedQuantity = refundSku.RefundedQuantity;
@@ -458,7 +461,7 @@ namespace LocalS.Service.Api.Merch
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
-                    Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+                    PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
                     IsRefunded = orderSub.IsRefunded,
                     RefundedAmount = orderSub.RefundedAmount,
                     RefundedQuantity = orderSub.RefundedQuantity,
