@@ -13,6 +13,7 @@ namespace LocalS.Entity
         Completed = 4000,
         Canceled = 5000
     }
+
     public enum E_OrderSource
     {
         Unknow = 0,
@@ -68,7 +69,6 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string PId { get; set; }
         public string UnId { get; set; }
-
         public string CumId { get; set; }
         public string ClientUserId { get; set; }
         public string MerchId { get; set; }
@@ -131,6 +131,8 @@ namespace LocalS.Entity
         public string CancelOperator { get; set; }
         public string CancelReason { get; set; }
         public decimal RefundedAmount { get; set; }
+
+        public int RefundedQuantity { get; set; }
         public string PayTransId { get; set; }
         public string PayPartnerPayTransId { get; set; }
         public E_PayPartner PayPartner { get; set; }

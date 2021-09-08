@@ -218,15 +218,18 @@ namespace LocalS.Service.Api.Merch
             {
                 ret.Order.Skus.Add(new
                 {
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
                     MainImgUrl = orderSub.SkuMainImgUrl,
                     Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                    SignRefunded = false
+                    IsRefunded = orderSub.IsRefunded,
+                    RefundedAmount = orderSub.RefundedAmount,
+                    RefundedQuantity = orderSub.RefundedQuantity,
+                    ApplySignRefunded = false
                 });
             }
 
@@ -317,12 +320,11 @@ namespace LocalS.Service.Api.Merch
                         var d_PayRefundSku = new PayRefundSku();
                         d_PayRefundSku.Id = IdWorker.Build(IdType.NewGuid);
                         d_PayRefundSku.PayRefundId = payRefundId;
-                        d_PayRefundSku.SignRefunded = refundSku.SignRefunded;
-                        d_PayRefundSku.RefundedAmount = refundSku.RefundedAmount;
-                        d_PayRefundSku.RefundedQuantity = refundSku.RefundedQuantity;
+                        d_PayRefundSku.ApplySignRefunded = refundSku.SignRefunded;
+                        d_PayRefundSku.ApplyRefundedAmount = refundSku.RefundedAmount;
+                        d_PayRefundSku.ApplyRefundedQuantity = refundSku.RefundedQuantity;
                         d_PayRefundSku.CreateTime = DateTime.Now;
                         d_PayRefundSku.Creator = operater;
-
                         CurrentDb.PayRefundSku.Add(d_PayRefundSku);
                     }
                 }
@@ -435,16 +437,16 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var orderSub in orderSubs)
             {
-                bool l_SignRefunded = false;
-                decimal l_RefundedAmount = 0m;
-                int l_RefundedQuantity = 0;
+                bool l_ApplySignRefunded = false;
+                decimal l_ApplyRefundedAmount = 0m;
+                int l_ApplyRefundedQuantity = 0;
 
-                var d_PayRefundSku = CurrentDb.PayRefundSku.Where(m => m.UniqueId == orderSub.Id).FirstOrDefault();
+                var d_PayRefundSku = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefund.Id && m.UniqueId == orderSub.Id).FirstOrDefault();
                 if (d_PayRefundSku != null)
                 {
-                    l_SignRefunded = d_PayRefundSku.SignRefunded;
-                    l_RefundedAmount = d_PayRefundSku.RefundedAmount;
-                    l_RefundedQuantity = d_PayRefundSku.RefundedQuantity;
+                    l_ApplySignRefunded = d_PayRefundSku.ApplySignRefunded;
+                    l_ApplyRefundedAmount = d_PayRefundSku.ApplyRefundedAmount;
+                    l_ApplyRefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity;
                 }
 
                 ret.Order.Skus.Add(new
@@ -457,9 +459,12 @@ namespace LocalS.Service.Api.Merch
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
                     Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                    SignRefunded = l_SignRefunded,
-                    RefundedAmount = l_RefundedAmount,
-                    RefundedQuantity = l_RefundedQuantity
+                    IsRefunded = orderSub.IsRefunded,
+                    RefundedAmount = orderSub.RefundedAmount,
+                    RefundedQuantity = orderSub.RefundedQuantity,
+                    ApplySignRefunded = l_ApplySignRefunded,
+                    ApplyRefundedAmount = l_ApplyRefundedAmount,
+                    ApplyRefundedQuantity = l_ApplyRefundedQuantity
                 });
             }
 

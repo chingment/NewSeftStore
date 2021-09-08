@@ -48,7 +48,6 @@ namespace LocalS.Entity
         public DateTime? RefundedTime { get; set; }
         public decimal RefundedAmount { get; set; }
         public string RefundedRemark { get; set; }
-        //public string RefundedSkus { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

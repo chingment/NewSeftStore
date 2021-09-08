@@ -2511,20 +2511,23 @@ namespace LocalS.BLL.Biz
                         order.MendTime = DateTime.Now;
                     }
 
+                    int refundedQuantity = 0;
                     var d_PayRefundSkus = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefund.Id).ToList();
                     foreach (var d_PayRefundSku in d_PayRefundSkus)
                     {
                         var d_OrderSub = CurrentDb.OrderSub.Where(m => m.Id == d_PayRefundSku.UniqueId).FirstOrDefault();
                         if (d_OrderSub != null)
                         {
-                            if (!d_OrderSub.IsRefunded && d_PayRefundSku.SignRefunded)
+                            if (!d_OrderSub.IsRefunded && d_PayRefundSku.ApplySignRefunded)
                             {
                                 d_OrderSub.IsRefunded = true;
-                                d_OrderSub.RefundedAmount = d_PayRefundSku.RefundedAmount;
-                                d_OrderSub.Quantity = d_PayRefundSku.RefundedQuantity;
+                                d_OrderSub.RefundedAmount += d_PayRefundSku.ApplyRefundedAmount;
+                                d_OrderSub.RefundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                             }
                         }
                     }
+
+                    order.RefundedQuantity += refundedQuantity;
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
