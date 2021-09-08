@@ -2492,13 +2492,6 @@ namespace LocalS.BLL.Biz
                     payRefund.Mender = operater;
                     payRefund.MendTime = DateTime.Now;
 
-                    var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
-                    if (order != null)
-                    {
-                        order.RefundedAmount += refundAmount;
-                        order.Mender = operater;
-                        order.MendTime = DateTime.Now;
-                    }
 
                     int refundedQuantity = 0;
                     var d_PayRefundSkus = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefund.Id).ToList();
@@ -2507,23 +2500,25 @@ namespace LocalS.BLL.Biz
                         var d_OrderSub = CurrentDb.OrderSub.Where(m => m.Id == d_PayRefundSku.UniqueId).FirstOrDefault();
                         if (d_OrderSub != null)
                         {
-
-                            d_OrderSub.IsRefunded = true;
-
-                            d_OrderSub.RefundedAmount += d_PayRefundSku.ApplyRefundedAmount;
-                            d_OrderSub.RefundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
-
-                            if (d_OrderSub.RefundedQuantity > d_OrderSub.Quantity)
+                            if (!d_OrderSub.IsRefunded)
                             {
-                                d_OrderSub.RefundedQuantity = d_OrderSub.Quantity;
-                                d_OrderSub.RefundedAmount = d_OrderSub.ChargeAmount;
+                                d_OrderSub.IsRefunded = true;
+                                d_OrderSub.RefundedAmount = d_PayRefundSku.ApplyRefundedAmount;
+                                d_OrderSub.RefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity;
+                                refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                             }
-
-                            refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                         }
                     }
 
-                    order.RefundedQuantity += refundedQuantity;
+                    var order = CurrentDb.Order.Where(m => m.Id == payRefund.OrderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.RefundedQuantity += refundedQuantity;
+                        order.RefundedAmount += refundAmount;
+                        order.Mender = operater;
+                        order.MendTime = DateTime.Now;
+                    }
+
 
                     Task4Factory.Tim2Global.Exit(Task4TimType.PayRefundCheckStatus, refundId);
                 }
