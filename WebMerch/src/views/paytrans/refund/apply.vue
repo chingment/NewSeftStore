@@ -215,7 +215,7 @@
 
             <el-table-column label="操作" align="center" width="100" fixed="right" class-name="small-padding fixed-width">
               <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.applySignRefunded">标记退款</el-checkbox>
+                <el-checkbox v-if="scope.row.applyCanSignRefunded" v-model="scope.row.applySignRefunded">标记退款</el-checkbox>
               </template>
 
             </el-table-column>

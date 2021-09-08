@@ -2138,7 +2138,7 @@ namespace LocalS.BLL.Biz
 
                 foreach (var item in rop.Items)
                 {
- 
+
                     var d_Order = CurrentDb.Order.Where(m => m.Id == item.ItemId).FirstOrDefault();
                     if (d_Order == null)
                     {
@@ -2205,7 +2205,7 @@ namespace LocalS.BLL.Biz
 
                     foreach (var d_OrderSub in d_OrderSubs)
                     {
-                       
+
                         var detailItem = item.Uniques.Where(m => m.UniqueId == d_OrderSub.Id).FirstOrDefault();
                         if (detailItem == null)
                         {
@@ -2512,6 +2512,8 @@ namespace LocalS.BLL.Biz
                                 d_OrderSub.IsRefunded = true;
                                 d_OrderSub.RefundedAmount += d_PayRefundSku.ApplyRefundedAmount;
                                 d_OrderSub.RefundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
+
+                                refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                             }
                         }
                     }
