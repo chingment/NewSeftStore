@@ -230,7 +230,7 @@ namespace LocalS.Service.Api.Merch
                     ApplyRefundedQuantity = orderSub.Quantity,
                     ApplyRefundedAmount = orderSub.ChargeAmount,
                     ApplySignRefunded = false,
-                    ApplyCanSignRefunded = orderSub.RefundedQuantity == orderSub.Quantity ? false : true
+                    ApplyCanSignRefunded = orderSub.IsRefunded == true ? false : true,
                 });
             }
 
