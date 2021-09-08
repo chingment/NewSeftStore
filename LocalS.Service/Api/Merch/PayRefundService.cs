@@ -261,12 +261,12 @@ namespace LocalS.Service.Api.Merch
             var order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == rop.OrderId).FirstOrDefault();
             if (order == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单信息查找不到");
             }
 
             if (order.ExIsHappen && !order.ExIsHandle)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单发生异常没有处理，请到订单处理，再进行申请退款操作");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单存在异常未处理，请到订单处理后，再进行申请退款操作");
             }
 
 
@@ -276,7 +276,7 @@ namespace LocalS.Service.Api.Merch
 
             if (hasNoHandleCount > 0)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单存在一笔未处理，请到退款处理，再进行申请退款操作");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单存在一笔退款未处理，请到退款处理后，再进行申请退款操作");
             }
 
             decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
