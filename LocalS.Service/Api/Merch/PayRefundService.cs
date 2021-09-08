@@ -322,6 +322,7 @@ namespace LocalS.Service.Api.Merch
                         d_PayRefundSku.Id = IdWorker.Build(IdType.NewGuid);
                         d_PayRefundSku.PayRefundId = payRefundId;
                         d_PayRefundSku.UniqueId = refundSku.UniqueId;
+                        d_PayRefundSku.ApplySignRefunded = true;
                         d_PayRefundSku.ApplyRefundedAmount = refundSku.RefundedAmount;
                         d_PayRefundSku.ApplyRefundedQuantity = refundSku.RefundedQuantity;
                         d_PayRefundSku.CreateTime = DateTime.Now;
