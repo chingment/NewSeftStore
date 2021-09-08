@@ -17,7 +17,6 @@ namespace LocalS.Service.Api.Merch
         public class RefundSku
         {
             public string UniqueId { get; set; }
-            public bool SignRefunded { get; set; }
             public decimal RefundedAmount { get; set; }
             public int RefundedQuantity { get; set; }
         }

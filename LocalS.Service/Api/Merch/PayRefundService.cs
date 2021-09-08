@@ -224,9 +224,7 @@ namespace LocalS.Service.Api.Merch
                     Quantity = orderSub.Quantity,
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                    IsRefunded = orderSub.IsRefunded,
                     RefundedAmount = orderSub.RefundedAmount,
                     RefundedQuantity = orderSub.RefundedQuantity,
                     ApplyRefundedQuantity = orderSub.Quantity,
@@ -324,7 +322,6 @@ namespace LocalS.Service.Api.Merch
                         d_PayRefundSku.Id = IdWorker.Build(IdType.NewGuid);
                         d_PayRefundSku.PayRefundId = payRefundId;
                         d_PayRefundSku.UniqueId = refundSku.UniqueId;
-                        d_PayRefundSku.ApplySignRefunded = refundSku.SignRefunded;
                         d_PayRefundSku.ApplyRefundedAmount = refundSku.RefundedAmount;
                         d_PayRefundSku.ApplyRefundedQuantity = refundSku.RefundedQuantity;
                         d_PayRefundSku.CreateTime = DateTime.Now;
@@ -448,14 +445,13 @@ namespace LocalS.Service.Api.Merch
                 var d_PayRefundSku = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefund.Id && m.UniqueId == orderSub.Id).FirstOrDefault();
                 if (d_PayRefundSku != null)
                 {
-                    l_ApplySignRefunded = d_PayRefundSku.ApplySignRefunded;
+                    l_ApplySignRefunded = true;
                     l_ApplyRefundedAmount = d_PayRefundSku.ApplyRefundedAmount;
                     l_ApplyRefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity;
                 }
 
                 ret.Order.Skus.Add(new
                 {
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     UniqueId = orderSub.Id,
                     MainImgUrl = orderSub.SkuMainImgUrl,
                     Name = orderSub.SkuName,
@@ -463,7 +459,6 @@ namespace LocalS.Service.Api.Merch
                     SalePrice = orderSub.SalePrice,
                     ChargeAmount = orderSub.ChargeAmount,
                     PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-                    IsRefunded = orderSub.IsRefunded,
                     RefundedAmount = orderSub.RefundedAmount,
                     RefundedQuantity = orderSub.RefundedQuantity,
                     ApplySignRefunded = l_ApplySignRefunded,

@@ -177,12 +177,12 @@
             highlight-current-row
             style="width: 800px"
           >
-            <el-table-column label="" fixed align="left" width="100">
+            <el-table-column label="" align="left" width="100">
               <template slot-scope="scope">
                 <img :src="scope.row.mainImgUrl" style="width:50px;height:50px;">
               </template>
             </el-table-column>
-            <el-table-column label="商品名称" fixed align="left" width="100">
+            <el-table-column label="商品名称" align="left" width="100">
               <template slot-scope="scope">
                 <span>{{ scope.row.name }}</span>
               </template>
@@ -212,8 +212,7 @@
                 <span>{{ scope.row.refundedAmount }}</span>
               </template>
             </el-table-column>
-
-            <el-table-column label="操作" align="center" width="100" fixed="right" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
               <template slot-scope="scope">
                 <el-checkbox v-if="scope.row.applyCanSignRefunded" v-model="scope.row.applySignRefunded">标记退款</el-checkbox>
               </template>

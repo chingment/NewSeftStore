@@ -2507,14 +2507,19 @@ namespace LocalS.BLL.Biz
                         var d_OrderSub = CurrentDb.OrderSub.Where(m => m.Id == d_PayRefundSku.UniqueId).FirstOrDefault();
                         if (d_OrderSub != null)
                         {
-                            if (!d_OrderSub.IsRefunded && d_PayRefundSku.ApplySignRefunded)
-                            {
-                                d_OrderSub.IsRefunded = true;
-                                d_OrderSub.RefundedAmount += d_PayRefundSku.ApplyRefundedAmount;
-                                d_OrderSub.RefundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
 
-                                refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
+                            d_OrderSub.IsRefunded = true;
+
+                            d_OrderSub.RefundedAmount += d_PayRefundSku.ApplyRefundedAmount;
+                            d_OrderSub.RefundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
+
+                            if (d_OrderSub.RefundedQuantity > d_OrderSub.Quantity)
+                            {
+                                d_OrderSub.RefundedQuantity = d_OrderSub.Quantity;
+                                d_OrderSub.RefundedAmount = d_OrderSub.ChargeAmount;
                             }
+
+                            refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                         }
                     }
 
