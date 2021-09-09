@@ -46,5 +46,7 @@ namespace LocalS.BLL
         public int KindId2 { get; set; }
         public int KindId3 { get; set; }
         public bool IsMavkBuy { get; set; }
+
+        public bool IsDelete { get; set; }
     }
 }

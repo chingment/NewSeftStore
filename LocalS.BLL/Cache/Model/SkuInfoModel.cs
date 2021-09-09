@@ -44,5 +44,6 @@ namespace LocalS.BLL
         public bool IsUseRent { get; set; }
         public decimal RentMhPrice { get; set; }
         public decimal DepositPrice { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

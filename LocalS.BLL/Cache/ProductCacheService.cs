@@ -68,6 +68,7 @@ namespace LocalS.BLL
                     r_Spu.KindId1 = d_Spu.KindId1;
                     r_Spu.KindId2 = d_Spu.KindId2;
                     r_Spu.KindId3 = d_Spu.KindId3;
+                    r_Spu.IsDelete = d_Spu.IsDelete;
 
                     var d_Skus = CurrentDb.PrdSku.Where(m => m.SpuId == spuId).ToList();
 
@@ -210,6 +211,8 @@ namespace LocalS.BLL
                     r_Sku.KindId1 = r_Spu.KindId1;
                     r_Sku.KindId2 = r_Spu.KindId2;
                     r_Sku.KindId3 = r_Spu.KindId3;
+                    r_Sku.IsDelete = d_Sku.IsDelete;
+
                     if (!string.IsNullOrEmpty(r_Sku.BarCode))
                     {
                         RedisManager.Db.HashSetAsync(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("BC:{0}:{1}", r_Sku.BarCode.ToLower(), skuId.ToLower()), skuId.ToLower(), StackExchange.Redis.When.Always);

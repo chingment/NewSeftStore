@@ -519,6 +519,7 @@ namespace LocalS.Service.Api.Merch
                 Task.Factory.StartNew(() =>
                 {
                     CacheServiceFactory.Product.RemoveSpuInfo(merchId, rop.Id);
+                    CacheServiceFactory.Product.GetSkuInfo(merchId, skuIds.ToArray());
                 });
             }
 
