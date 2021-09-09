@@ -240,7 +240,7 @@ namespace LocalS.BLL
             return r_Sku;
         }
 
-        public List<SkuInfoBySearchModel> SearchSku(string merchId, string type, string key)
+        public List<SkuInfoBySearchModel> SearchSku(string merchId, string type, string key,bool isGetDelete)
         {
             List<SkuInfoBySearchModel> m_searchs = new List<SkuInfoBySearchModel>();
 
@@ -272,6 +272,7 @@ namespace LocalS.BLL
                     try
                     {
                         var l_sku = Newtonsoft.Json.JsonConvert.DeserializeObject<SkuInfoModel>(r_sku);
+                        
                         var m_search = new SkuInfoBySearchModel();
                         m_search.SkuId = l_sku.Id;
                         m_search.SpuId = l_sku.SpuId;
@@ -281,7 +282,20 @@ namespace LocalS.BLL
                         m_search.BarCode = l_sku.BarCode;
                         m_search.SpecDes = SpecDes.GetDescribe(l_sku.SpecDes);
                         m_search.MainImgUrl = ImgSet.Convert_S(l_sku.MainImgUrl);
-                        m_searchs.Add(m_search);
+
+                        if (isGetDelete)
+                        {
+                            m_searchs.Add(m_search);
+                        }
+                        else
+                        {
+                            if(!l_sku.IsDelete)
+                            {
+                                m_searchs.Add(m_search);
+                            }
+                        }
+
+
                     }
                     catch (Exception ex)
                     {

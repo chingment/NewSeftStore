@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.Merch
             {
                 List<string> l_SpuIds = new List<string>();
                 var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
-                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key,true);
                 if (search1 != null)
                 {
                     var l_SpuId = search1.Select(m => m.SpuId).Distinct().ToArray();
@@ -534,7 +534,7 @@ namespace LocalS.Service.Api.Merch
             {
                 List<string> l_SpuIds = new List<string>();
                 var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
-                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key,true);
                 if (search1 != null)
                 {
                     var l_SpuId = search1.Select(m => m.SpuId).Distinct().ToArray();
@@ -619,7 +619,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult SearchSku(string operater, string merchId, string key)
         {
-            var r_Skus = CacheServiceFactory.Product.SearchSku(merchId, "All", key);
+            var r_Skus = CacheServiceFactory.Product.SearchSku(merchId, "All", key,true);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", r_Skus);
         }
