@@ -171,7 +171,7 @@ export default {
         value: 5,
         label: '关'
       }],
-
+      handleLoading: null,
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -193,9 +193,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.showLoading()
         rebootSys({ id: this.deviceId }).then(res => {
+          this.hideLoading()
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msgId)
+            // this.onQueryMsgStatus(res.data.msgId)
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
           } else {
             this.$message({
               message: res.message,
@@ -212,9 +218,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.showLoading()
         shutdownSys({ id: this.deviceId }).then(res => {
+          this.hideLoading()
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msgId)
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            // this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -252,10 +264,16 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.showLoading()
             setSysStatus({ id: this.deviceId, status: this.formBySetSysStatus.status, helpTip: this.formBySetSysStatus.helpTip }).then(res => {
+              this.hideLoading()
               if (res.result === 1) {
                 this.dialogSetSysStatusIsVisible = false
-                this.onQueryMsgStatus(res.data.msgId)
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
+                // this.onQueryMsgStatus(res.data.msgId)
               } else {
                 this.$message({
                   message: res.message,
@@ -276,10 +294,16 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.showLoading()
             setSysParams({ id: this.deviceId, cbLight: this.formBySetSysParams.cbLight }).then(res => {
+              this.hideLoading()
               if (res.result === 1) {
                 this.dialogSetSysParamsIsVisible = false
-                this.onQueryMsgStatus(res.data.msgId)
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
+                // this.onQueryMsgStatus(res.data.msgId)
               } else {
                 this.$message({
                   message: res.message,
@@ -298,9 +322,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.showLoading()
         openPickupDoor({ id: this.deviceId }).then(res => {
+          this.hideLoading()
           if (res.result === 1) {
-            this.onQueryMsgStatus(res.data.msgId)
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            // this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -346,6 +376,19 @@ export default {
           _this.$message(res.message)
         })
       }, 10000)
+    },
+    showLoading() {
+      this.handleLoading = this.$loading({
+        lock: true,
+        text: '正常处理中，请耐心等候，大概需要10秒',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+    },
+    hideLoading() {
+      if (this.handleLoading != null) {
+        this.handleLoading.close()
+      }
     }
   }
 }

@@ -209,7 +209,7 @@
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label-width="110px" label="支付方式:" class="postInfo-container-item">
+                  <el-form-item label-width="80px" label="支付方式:" class="postInfo-container-item">
                     {{ details.payWay.text }}
                   </el-form-item>
                 </el-col>

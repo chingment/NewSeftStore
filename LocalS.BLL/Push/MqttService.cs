@@ -156,17 +156,32 @@ namespace LocalS.BLL.Push
             var appMsg = new MqttApplicationMessage(topic, Encoding.UTF8.GetBytes(str_payload), MqttQualityOfServiceLevel.ExactlyOnce, false);
             var publish = mqttClient.PublishAsync(appMsg);
 
-
-
-            //if (!publish.IsCompleted)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
-            //}
-
-
             RedisManager.Db.StringSet("mqtt_msg:" + msgId, "0", new TimeSpan(0, 0, 60), StackExchange.Redis.When.Always);
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已发送，待确认", new { msgId = msgId });
+            DateTime dt1 = DateTime.Now;
+            bool isSendSuccess = false;
+            while ((DateTime.Now - dt1).TotalMilliseconds < 3000)
+            {
+                string msg = RedisManager.Db.StringGet("mqtt_msg:" + msgId);
+                if (msg != null)
+                {
+                    if (msg == "1")
+                    {
+                        isSendSuccess = true;
+                        break;
+                    }
+                }
+                continue;
+            };
+
+            if (isSendSuccess)
+            {
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功", new { msgId = msgId });
+            }
+            else
+            {
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送失败", new { msgId = msgId });
+            }
 
             return result;
         }

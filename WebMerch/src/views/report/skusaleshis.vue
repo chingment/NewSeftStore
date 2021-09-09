@@ -113,6 +113,11 @@
           <span>{{ scope.row.payWay }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="支付状态" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.payStatus }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="取货状态" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.pickupStatus }}</span>
