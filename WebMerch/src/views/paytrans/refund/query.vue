@@ -74,6 +74,11 @@
           <span>{{ scope.row.applyRemark }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="备注" align="left" width="160">
+        <template slot-scope="scope">
+          <span>{{ scope.row.refundedRemark }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="left" fixed="right" width="80">
         <template slot-scope="scope">
           <el-tag :type="getStatusColor(scope.row.status.value)">{{ scope.row.status.text }}</el-tag>

@@ -77,7 +77,7 @@ namespace LocalS.Service.Api.Merch
                             (rup.PayTransId == null || o.Id.Contains(rup.PayTransId)) &&
                             (rup.PayPartnerOrderId == null || o.PayPartnerPayTransId.Contains(rup.PayPartnerOrderId)) &&
                          o.MerchId == merchId
-                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerPayTransId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime });
+                         select new { o.Id, o.StoreId, o.StoreName, o.ApplyMethod, o.OrderId, o.Status, o.ApplyAmount, o.PayPartnerPayTransId, o.ApplyRemark, o.PayTransId, o.ApplyTime, o.CreateTime, o.RefundedRemark, });
 
             int total = query.Count();
 
@@ -104,6 +104,7 @@ namespace LocalS.Service.Api.Merch
                     ApplyRemark = item.ApplyRemark,
                     PayTransId = item.PayTransId,
                     ApplyTime = item.ApplyTime.ToUnifiedFormatDateTime(),
+                    RefundedRemark = item.RefundedRemark
                 });
             }
 
@@ -201,9 +202,10 @@ namespace LocalS.Service.Api.Merch
             ret.Order.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
             ret.Order.ExHandleRemark = order.ExHandleRemark;
             ret.Order.ExIsHappen = order.ExIsHappen;
+            ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
+            ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
 
-
-            var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
+           var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
 
             decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
             decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
@@ -432,6 +434,8 @@ namespace LocalS.Service.Api.Merch
             ret.Order.Quantity = order.Quantity;
             ret.Order.Status = BizFactory.Order.GetStatus(order.Status);
             ret.Order.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
+            ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
 
             var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
 
@@ -440,7 +444,6 @@ namespace LocalS.Service.Api.Merch
             ret.Order.RefundedAmount = refundedAmount.ToF2Price();
             ret.Order.RefundingAmount = refundingAmount.ToF2Price();
             ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
-
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
@@ -559,7 +562,7 @@ namespace LocalS.Service.Api.Merch
                                 else
                                 {
                                     refundStatus = "FAIL";
-                                    refundRemark = "退款失败";
+                                    refundRemark = "退款失败，" + api_Result.Message;
                                 }
                                 #endregion
                                 break;

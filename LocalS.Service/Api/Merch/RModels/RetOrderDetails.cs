@@ -34,11 +34,12 @@ namespace LocalS.Service.Api.Merch
         public string ReceiveModeName { get; set; }
         public E_ReceiveMode ReceiveMode { get; set; }
         public bool IsTestMode { get; set; }
-        public string RefundedAmount { get; set; }
-        public string RefundingAmount { get; set; }
-        public string RefundableAmount { get; set; }
+        public decimal RefundedAmount { get; set; }
+        public int RefundedQuantity { get; set; }
         public string DeviceCumCode { get; set; }
         public List<object> Skus { get; set; }
         public List<object> RefundRecords { get; set; }
+
+        public StatusModel PayWay { get; set; }
     }
 }

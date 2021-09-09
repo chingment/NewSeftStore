@@ -58,9 +58,14 @@
             <span>{{ scope.row.pickupTrgStatus.text }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" prop="chargeAmount" align="left" width="100">
+        <el-table-column label="支付金额" align="left" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.chargeAmount }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付方式" align="left" width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.payWay.text }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" prop="status" align="left" width="100">
@@ -156,6 +161,18 @@
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="状态:" class="postInfo-container-item">
                     {{ details.order.status.text }}
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label-width="110px" label="设备编码:" class="postInfo-container-item">
+                    {{ details.order.deviceCumCode }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="110px" label="支付方式:" class="postInfo-container-item">
+                    {{ details.order.payWay.text }}
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" />
@@ -305,7 +322,8 @@ export default {
           status: { text: '' },
           exHandleRemark: '',
           isRunning: false,
-          skus: []
+          skus: [],
+          payWay: { text: '' }
         }
       },
       formByApply: {

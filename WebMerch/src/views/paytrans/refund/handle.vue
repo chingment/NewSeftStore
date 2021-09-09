@@ -155,11 +155,22 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-
               <el-row>
                 <el-col :span="12">
                   <el-form-item label-width="110px" label="状态:" class="postInfo-container-item">
                     {{ details.order.status.text }}
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label-width="110px" label="设备编码:" class="postInfo-container-item">
+                    {{ details.order.deviceCumCode }}
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="110px" label="支付方式:" class="postInfo-container-item">
+                    {{ details.order.payWay.text }}
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" />
@@ -347,7 +358,8 @@ export default {
           status: { text: '' },
           refundedAmount: '',
           refundingAmount: '',
-          refundableAmount: ''
+          refundableAmount: '',
+          payWay: { text: '' }
         }
       },
       result: {

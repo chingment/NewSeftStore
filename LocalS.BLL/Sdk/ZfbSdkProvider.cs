@@ -149,6 +149,7 @@ namespace LocalS.BLL
             else
             {
                 result.Status = "FAIL";
+                result.Message = respone.SubMsg;
             }
 
 

@@ -45,32 +45,29 @@ namespace LocalS.Service.Api.Merch
             ret.ExIsHappen = order.ExIsHappen;
             ret.IsTestMode = order.IsTestMode;
             ret.ReceiveMode = order.ReceiveMode;
-            ret.DeviceCumCode = order.DeviceCumCode;
+            ret.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
+            ret.RefundedAmount = order.RefundedAmount;
+            ret.RefundedQuantity = order.RefundedQuantity;
+            ret.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
 
-            var payRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
+            var d_PayRefunds = CurrentDb.PayRefund.Where(m => m.OrderId == order.Id).ToList();
 
-            decimal refundedAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-            decimal refundingAmount = payRefunds.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
-            ret.RefundedAmount = refundedAmount.ToF2Price();
-            ret.RefundingAmount = refundingAmount.ToF2Price();
-            ret.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
-
-            foreach (var payRefund in payRefunds)
+            foreach (var d_PayRefund in d_PayRefunds)
             {
-                decimal amount = payRefund.ApplyAmount;
-                string dateTime = payRefund.ApplyTime.ToUnifiedFormatDateTime();
+                decimal amount = d_PayRefund.ApplyAmount;
+                string dateTime = d_PayRefund.ApplyTime.ToUnifiedFormatDateTime();
 
-                if (payRefund.Status == E_PayRefundStatus.Success)
+                if (d_PayRefund.Status == E_PayRefundStatus.Success)
                 {
-                    amount = payRefund.RefundedAmount;
-                    dateTime = payRefund.RefundedTime.ToUnifiedFormatDateTime();
+                    amount = d_PayRefund.RefundedAmount;
+                    dateTime = d_PayRefund.RefundedTime.ToUnifiedFormatDateTime();
                 }
-                else if (payRefund.Status == E_PayRefundStatus.Failure)
+                else if (d_PayRefund.Status == E_PayRefundStatus.Failure)
                 {
-                    dateTime = payRefund.HandleTime.ToUnifiedFormatDateTime();
+                    dateTime = d_PayRefund.HandleTime.ToUnifiedFormatDateTime();
                 }
 
-                ret.RefundRecords.Add(new { Id = payRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(payRefund.Status), DateTime = dateTime });
+                ret.RefundRecords.Add(new { Id = d_PayRefund.Id, Amount = amount, Status = MerchServiceFactory.PayRefund.GetStatus(d_PayRefund.Status), DateTime = dateTime });
             }
 
             var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
@@ -105,10 +102,10 @@ namespace LocalS.Service.Api.Merch
                 ret.Skus.Add(new
                 {
                     UniqueId = orderSub.Id,
-                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     MainImgUrl = orderSub.SkuMainImgUrl,
                     Name = orderSub.SkuName,
                     Quantity = orderSub.Quantity,
+                    ExPickupIsHandle = orderSub.ExPickupIsHandle,
                     Status = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
                     PickupLogs = pickupLogs,
                     SignStatus = 0

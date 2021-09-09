@@ -47,6 +47,10 @@ namespace LocalS.Service.Api.Merch
             public string ExHandleRemark { get; set; }
 
             public bool ExIsHappen { get; set; }
+
+            public string DeviceCumCode { get; set; }
+
+            public StatusModel PayWay { get; set; }
         }
     }
 }

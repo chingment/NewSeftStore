@@ -203,6 +203,14 @@
                   </el-form-item>
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label-width="110px" label="支付方式:" class="postInfo-container-item">
+                    {{ details.payWay.text }}
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" />
+              </el-row>
             </div>
           </el-col>
         </el-form>
@@ -394,7 +402,8 @@ export default {
         exHandleRemark: '',
         details: undefined,
         isRunning: false,
-        refundRecords: null
+        refundRecords: null,
+        payWay: { text: '' }
       },
       options_status: [{
         value: '0',
