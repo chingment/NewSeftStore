@@ -246,7 +246,7 @@ namespace LocalS.Service.Api.StoreTerm
                     l_exUnique.MainImgUrl = d_orderSub.SkuMainImgUrl;
                     l_exUnique.Status = BizFactory.Order.GetPickupStatus(d_orderSub.PickupStatus);
                     l_exUnique.SignStatus = 0;
-                    if (d_orderSub.PickupStatus == E_OrderPickupStatus.Taked || d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignUnTaked && d_orderSub.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked)
+                    if (d_orderSub.PickupStatus == E_OrderPickupStatus.Taked || d_orderSub.PickupStatus == E_OrderPickupStatus.UnTaked)
                     {
                         l_exUnique.CanHandle = false;
                     }

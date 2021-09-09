@@ -240,8 +240,7 @@ namespace LocalS.BLL.Biz
                                 {
                                     if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked
                                         && d_OrderSub.PickupStatus != E_OrderPickupStatus.Exception
-                                        && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                                        && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                        && d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                                     {
                                         d_OrderSub.PickupStatus = E_OrderPickupStatus.Exception;
                                         d_OrderSub.ExPickupReason = "取货动作发生异常";
@@ -270,7 +269,7 @@ namespace LocalS.BLL.Biz
 
                                     if (model.PickupStatus == E_OrderPickupStatus.Taked)
                                     {
-                                        if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                        if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                                         {
                                             var resultOperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_sign_take, d_OrderSub.ShopMode, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                             if (resultOperateStock.Result != ResultType.Success)
@@ -294,7 +293,7 @@ namespace LocalS.BLL.Biz
                                         d_OrderSub.PickupStartTime = DateTime.Now;
                                     }
 
-                                    if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                                    if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                                     {
                                         d_OrderSub.PickupStatus = model.PickupStatus;
                                     }

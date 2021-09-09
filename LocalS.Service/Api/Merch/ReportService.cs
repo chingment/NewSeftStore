@@ -372,11 +372,11 @@ namespace LocalS.Service.Api.Merch
             }
             else if (rop.PickupStatus == "2")
             {
-                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked);
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.UnTaked);
             }
             else if (rop.PickupStatus == "3")
             {
-                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Taked || m.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignTaked);
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Taked);
             }
 
             if (rop.ReceiveMode != Entity.E_ReceiveMode.Unknow)
@@ -392,11 +392,11 @@ namespace LocalS.Service.Api.Merch
             foreach (var item in list)
             {
                 string pickupStatus = "";
-                if (item.PickupStatus == Entity.E_OrderPickupStatus.Taked || item.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignTaked)
+                if (item.PickupStatus == Entity.E_OrderPickupStatus.Taked)
                 {
                     pickupStatus = "已取货";
                 }
-                else if (item.PickupStatus == Entity.E_OrderPickupStatus.ExPickupSignUnTaked)
+                else if (item.PickupStatus == Entity.E_OrderPickupStatus.UnTaked)
                 {
                     pickupStatus = "未取货";
                 }

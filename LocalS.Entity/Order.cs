@@ -41,8 +41,9 @@ namespace LocalS.Entity
         Taked = 4000,
         Canceled = 5000,
         Exception = 6000,
-        ExPickupSignTaked = 6010,
-        ExPickupSignUnTaked = 6011
+        UnTaked = 7000,
+        //ExPickupSignTaked = 6010,
+        //ExPickupSignUnTaked = 6011
     }
 
     public enum E_OrderExPickupHandleSign

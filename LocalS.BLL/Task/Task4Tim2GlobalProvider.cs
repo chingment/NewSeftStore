@@ -276,8 +276,7 @@ namespace LocalS.BLL.Task
                     {
                         if (orderSub.PickupStatus != E_OrderPickupStatus.Taked
                             && orderSub.PickupStatus != E_OrderPickupStatus.Exception
-                            && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked
-                            && orderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            && orderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                         {
                             orderSub.PickupStatus = E_OrderPickupStatus.Exception;
                             orderSub.ExPickupIsHappen = true;

@@ -118,7 +118,7 @@ namespace LocalS.BLL.Biz
                     break;
                 case E_OrderPickupStatus.Taked:
                     m_Status.Value = 4000;
-                    m_Status.Text = "已完成";
+                    m_Status.Text = "已取货";
                     break;
                 case E_OrderPickupStatus.Canceled:
                     m_Status.Value = 5000;
@@ -126,15 +126,11 @@ namespace LocalS.BLL.Biz
                     break;
                 case E_OrderPickupStatus.Exception:
                     m_Status.Value = 6000;
-                    m_Status.Text = "异常未处理";
+                    m_Status.Text = "异常";
                     break;
-                case E_OrderPickupStatus.ExPickupSignTaked:
-                    m_Status.Value = 6010;
-                    m_Status.Text = "异常已处理，标记为已取货";
-                    break;
-                case E_OrderPickupStatus.ExPickupSignUnTaked:
-                    m_Status.Value = 6011;
-                    m_Status.Text = "异常已处理，标记为未取货";
+                case E_OrderPickupStatus.UnTaked:
+                    m_Status.Value = 7000;
+                    m_Status.Text = "未取货";
                     break;
             }
             return m_Status;
@@ -2090,7 +2086,7 @@ namespace LocalS.BLL.Biz
                 model.Name = orderSubs_Sku[0].SkuName;
                 model.MainImgUrl = orderSubs_Sku[0].SkuMainImgUrl;
                 model.Quantity = orderSubs_Sku.Sum(m => m.Quantity);
-                model.QuantityBySuccess = orderSubs_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked || m.PickupStatus == E_OrderPickupStatus.ExPickupSignTaked).Count();
+                model.QuantityBySuccess = orderSubs_Sku.Where(m => m.PickupStatus == E_OrderPickupStatus.Taked).Count();
 
                 foreach (var orderSubs_SkuSlot in orderSubs_Sku)
                 {
@@ -2220,7 +2216,7 @@ namespace LocalS.BLL.Biz
                         if (detailItem.SignStatus == 1)
                         {
 
-                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                             {
                                 var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_take, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
                                 if (result_OperateStock.Result != ResultType.Success)
@@ -2234,7 +2230,7 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.ExPickupIsHandle = true;
                             d_OrderSub.ExPickupHandleTime = DateTime.Now;
                             d_OrderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.Taked;
-                            d_OrderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignTaked;
+                            d_OrderSub.PickupStatus = E_OrderPickupStatus.Taked;
 
 
                             var orderPickupLog = new OrderPickupLog();
@@ -2250,7 +2246,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.SkuId = d_OrderSub.SkuId;
                             orderPickupLog.CabinetId = d_OrderSub.CabinetId;
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignTaked;
+                            orderPickupLog.Status = E_OrderPickupStatus.Taked;
                             orderPickupLog.MsgId = int.MaxValue;
                             orderPickupLog.ActionRemark = "人为标识已取货";
                             orderPickupLog.Remark = "";
@@ -2260,7 +2256,7 @@ namespace LocalS.BLL.Biz
                         }
                         else if (detailItem.SignStatus == 2)
                         {
-                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignTaked && d_OrderSub.PickupStatus != E_OrderPickupStatus.ExPickupSignUnTaked)
+                            if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked && d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                             {
                                 var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, 1);
 
@@ -2275,7 +2271,7 @@ namespace LocalS.BLL.Biz
                             d_OrderSub.ExPickupIsHandle = true;
                             d_OrderSub.ExPickupHandleTime = DateTime.Now;
                             d_OrderSub.ExPickupHandleSign = E_OrderExPickupHandleSign.UnTaked;
-                            d_OrderSub.PickupStatus = E_OrderPickupStatus.ExPickupSignUnTaked;
+                            d_OrderSub.PickupStatus = E_OrderPickupStatus.UnTaked;
 
                             var orderPickupLog = new OrderPickupLog();
                             orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
@@ -2289,7 +2285,7 @@ namespace LocalS.BLL.Biz
                             orderPickupLog.SkuId = d_OrderSub.SkuId;
                             orderPickupLog.CabinetId = d_OrderSub.CabinetId;
                             orderPickupLog.SlotId = d_OrderSub.SlotId;
-                            orderPickupLog.Status = E_OrderPickupStatus.ExPickupSignUnTaked;
+                            orderPickupLog.Status = E_OrderPickupStatus.UnTaked;
                             orderPickupLog.ActionRemark = "人为标识未取货";
                             orderPickupLog.MsgId = int.MaxValue;
                             orderPickupLog.Remark = "";
