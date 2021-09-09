@@ -10,6 +10,6 @@ namespace LocalS.Service.Api.Merch
     public class RopReportStoreStockRealDataGet
     {
         public string DeviceId { get; set; }
-
+        public string[] TradeDateArea { get; set; }
     }
 }

@@ -206,6 +206,44 @@ namespace LocalS.Service.Api.Merch
 
         }
 
+        public CustomJsonResult DeviceStockSumGet(string operater, string merchId, RopReportStoreStockRealDataGet rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            string tradeStartTime = DateTime.Parse(CommonUtil.ConverToStartTime(rop.TradeDateArea[0]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+
+            string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+
+
+            StringBuilder sql = new StringBuilder(" select MerchId,StoreId,SkuId, ");
+            sql.Append(" SUM(SumQuantity) as SumQuantity ,");
+            sql.Append(" Sum(SellQuantity) as SellQuantity , ");
+            sql.Append(" Sum(WaitPayLockQuantity+WaitPickupLockQuantity) as LockQuantity , ");
+            sql.Append(" Sum(MaxQuantity) as MaxQuantity,  ");
+            sql.Append(" Sum(MaxQuantity-SumQuantity) as RshQuantity,");
+            sql.Append(" (select SUM(Quantity) from OrderSub where SkuId=a.SkuId and MerchId=a.merchId  and   ");
+            sql.Append("  PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  ) as SaleQuantity ");
+            sql.Append(" from SellChannelStock a where MerchId='" + merchId + "' group by MerchId,StoreId,SkuId ");
+
+            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
+
+            List<object> oList = new List<object>();
+
+            for (var i = 0; i < dtData.Rows.Count; i++)
+            {
+            
+
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", oList);
+
+            return result;
+
+
+
+        }
+
         public CustomJsonResult DeviceStockDateHisInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
