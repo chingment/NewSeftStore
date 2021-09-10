@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Text;
 using System.IO;
 using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace WebApiMerch
 {
@@ -105,16 +107,41 @@ namespace WebApiMerch
             Task.Factory.StartNew(async () =>
             {
                 var request = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Request;
+                var response = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Response;
                 var requestMethod = request.HttpMethod;
                 var contentType = request.ContentType.ToLower();
                 var rawUrl = request.RawUrl.ToLower();
+
+                var headers = response.Headers;
+
+
+                //string[] contentDisposition = null;
+                //if (headers.["content-Disposition"] != null)
+                //{
+                //    contentDisposition = headers.GetValues("content-Disposition");
+                //}
+
+                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
+                for (var i = 0; i < headers.Count; i++)
+                {
+                    _headers.Add(headers.Keys[i], headers.GetValues(i));
+                }
+
+
+                string content = null;
                 if (!rawUrl.Contains("report"))
                 {
-                    var sb = new StringBuilder();
-                    string content = await filterContext.Response.Content.ReadAsStringAsync();
-                    sb.Append("Response: " + content + Environment.NewLine);
-                    LogUtil.Info(sb.ToString());
+                    content = await filterContext.Response.Content.ReadAsStringAsync();
                 }
+
+                var ret = new
+                {
+                    headers = _headers,
+                    response = content,
+                };
+
+                LogUtil.Info(ret.ToJsonString());
+
             });
 
         }
@@ -124,28 +151,41 @@ namespace WebApiMerch
         {
             return Task.Factory.StartNew(() =>
             {
-                var sb = new StringBuilder();
-                sb.Append("Url: " + request.RawUrl + Environment.NewLine);
-                sb.Append("IP: " + CommonUtil.GetIpAddress(request) + Environment.NewLine);
-                sb.Append("Method: " + request.HttpMethod + Environment.NewLine);
-                sb.Append("ContentType: " + request.ContentType + Environment.NewLine);
-                NameValueCollection headers = request.Headers;
 
-                if (headers["appKey"] != null)
-                {
-                    sb.Append("Header.appId: " + headers["appId"] + Environment.NewLine);
-                    sb.Append("Header.appKey: " + headers["appKey"] + Environment.NewLine);
-                    sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
-                    sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
-                    sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
-                }
+                string url = request.RawUrl;
+                string ip = CommonUtil.GetIpAddress(request);
+                string method = request.HttpMethod;
+                string contentType = request.ContentType;
+                string body = null;
 
                 if (request.ContentType.Contains("application/json"))
                 {
-                    sb.Append("PostData: " + requestBody + Environment.NewLine);
+                    body = requestBody;
                 }
 
-                LogUtil.Info(sb.ToString());
+                NameValueCollection headers = request.Headers;
+
+                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
+                for (var i = 0; i < headers.Count; i++)
+                {
+                    _headers.Add(headers.Keys[i], headers.GetValues(i));
+                }
+
+                var ret = new
+                {
+                    request = new
+                    {
+                        url,
+                        ip,
+                        method,
+                        contentType,
+                        headers = _headers,
+                        body
+                    }
+                };
+
+                LogUtil.Info(ret.ToJsonString());
+
             });
         }
     }
