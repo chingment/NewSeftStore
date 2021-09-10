@@ -71,6 +71,31 @@ namespace LocalS.Service.Api.Merch
         public string SalesDate { get; set; }
     }
 
+
+    public class SkuSaleModel
+    {
+        public string StoreName { get; set; }
+        public string ShopName { get; set; }
+        public string DeviceCode { get; set; }
+        public string ReceiveMode { get; set; }
+        public string OrderId { get; set; }
+        public string PayedTime { get; set; }
+        public string SkuName { get; set; }
+        public string SkuBarCode { get; set; }
+        public string SkuCumCode { get; set; }
+        public string SkuSpecDes { get; set; }
+        public string SkuProducer { get; set; }
+        public int Quantity { get; set; }
+        public decimal SalePrice { get; set; }
+        public decimal ChargeAmount { get; set; }
+        public decimal RefundedAmount { get; set; }
+        public int RefundedQuantity { get; set; }
+        public int TradeQuantity { get; set; }
+        public decimal TradeAmount { get; set; }
+        public string PayWay { get; set; }
+        public string PayStatus { get; set; }
+        public string PickupStatus { get; set; }
+    }
     public class ReportService : BaseService
     {
 
@@ -232,7 +257,7 @@ namespace LocalS.Service.Api.Merch
 
             for (var i = 0; i < dtData.Rows.Count; i++)
             {
-            
+
 
             }
 
@@ -359,24 +384,26 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult SkuSalesHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
+        public CustomJsonResult<List<SkuSaleModel>> SkuSalesHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
         {
 
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<List<SkuSaleModel>>();
 
             if (rop.TradeDateTimeArea == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择日期");
+                return new CustomJsonResult<List<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
             }
 
             if (rop.TradeDateTimeArea.Length != 2)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择日期");
+                return new CustomJsonResult<List<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
             }
 
-
-            LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
-            LogUtil.Info("rup.TradeDateTimeArea[1]" + rop.TradeDateTimeArea[1]);
+            LogUtil.Info("merchId:" + merchId);
+            LogUtil.Info("rup.TradeDateTimeArea[0]:" + rop.TradeDateTimeArea[0]);
+            LogUtil.Info("rup.TradeDateTimeArea[1]:" + rop.TradeDateTimeArea[1]);
+            LogUtil.Info("rup.PickupStatus:" + rop.PickupStatus);
+            LogUtil.Info("rup.ReceiveMode:" + rop.ReceiveMode);
 
             DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
 
@@ -393,7 +420,7 @@ namespace LocalS.Service.Api.Merch
                          where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
                         && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
                         u.IsTestMode == false
-                         select new { u.StoreName, u.StoreId, u.PayStatus, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.DeviceId, u.DeviceCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+                         select new { u.StoreName, u.StoreId, u.DeviceId, u.RefundedQuantity, u.RefundedAmount, u.PayStatus, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.DeviceCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
 
             if (rop.StoreIds != null && rop.StoreIds.Count > 0)
             {
@@ -423,7 +450,7 @@ namespace LocalS.Service.Api.Merch
             }
 
 
-            List<object> olist = new List<object>();
+            List<SkuSaleModel> olist = new List<SkuSaleModel>();
 
             var list = query.OrderByDescending(m => m.PayedTime).ToList();
 
@@ -455,13 +482,14 @@ namespace LocalS.Service.Api.Merch
                 }
 
 
-                olist.Add(new
+                olist.Add(new SkuSaleModel
                 {
                     StoreName = item.StoreName,
-                    ReceiveModeName = item.ReceiveModeName,
-                    ReceiveRemark = receiveRemark,
+                    ShopName = item.ShopName,
+                    DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
+                    ReceiveMode = item.ReceiveModeName,
                     OrderId = item.OrderId,
-                    TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
+                    PayedTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     SkuName = item.SkuName,
                     SkuBarCode = item.SkuBarCode,
                     SkuCumCode = item.SkuCumCode,
@@ -469,7 +497,11 @@ namespace LocalS.Service.Api.Merch
                     SkuProducer = item.SkuProducer,
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
-                    TradeAmount = item.ChargeAmount,
+                    ChargeAmount = item.ChargeAmount,
+                    RefundedAmount = item.RefundedAmount,
+                    RefundedQuantity = item.RefundedQuantity,
+                    TradeQuantity = item.Quantity - item.RefundedQuantity,
+                    TradeAmount = item.ChargeAmount - item.RefundedAmount,
                     PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text,
                     PayStatus = BizFactory.Order.GetPayStatus(item.PayStatus).Text,
                     PickupStatus = pickupStatus
@@ -477,7 +509,7 @@ namespace LocalS.Service.Api.Merch
 
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+            result = new CustomJsonResult<List<SkuSaleModel>>(ResultType.Success, ResultCode.Success, "", olist);
 
             return result;
 

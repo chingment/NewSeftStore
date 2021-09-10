@@ -1,10 +1,14 @@
 ﻿using LocalS.Service.Api.Merch;
 using Lumos;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace WebApiMerch.Controllers
@@ -70,10 +74,112 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SkuSalesHisGet([FromBody]RopReportSkuSalesHisGet rop)
+        public OwnApiHttpResponse<List<SkuSaleModel>> SkuSalesHisGet([FromBody]RopReportSkuSalesHisGet rop)
         {
             var result = MerchServiceFactory.Report.SkuSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
+            return new OwnApiHttpResponse<List<SkuSaleModel>>(result);
+        }
+
+        private static void saveTofle(MemoryStream file, string filePath)// string fileName
+        {
+            //if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                byte[] buffer = file.ToArray();//转化为byte格式存储
+                fs.Write(buffer, 0, buffer.Length);
+                fs.Flush();
+                buffer = null;
+            }
+        }
+
+        [HttpPost]
+        //[AllowAnonymous]
+        public HttpResponseMessage SkuSalesHisGettt([FromBody]RopReportSkuSalesHisGet rop)
+        {
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            ISheet sheet = workbook.CreateSheet("sheet1");
+            IRow titleRow = sheet.CreateRow(0);
+            string[] titleNames = new string[] {
+                "店铺",
+                "门店",
+                "设备编码",
+                "提货方式",
+                "订单号",
+                "交易时间",
+                "商品名称",
+                "商品编码",
+                "商品规格",
+                "支付方式",
+                "支付状态",
+                "取货状态",
+                "单价",
+                "数量",
+                "支付金额",
+                "退款数量",
+                "退款金额",
+                "结算数量",
+                "结算金额",
+            };
+
+            for (int i = 0; i < titleNames.Length; i++)
+            {
+                titleRow.CreateCell(i).SetCellValue(titleNames[i]);
+            }
+
+            var result_His = MerchServiceFactory.Report.SkuSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            if (result_His.Result == ResultType.Success)
+            {
+                var data = result_His.Data;
+
+                LogUtil.Info(" result_His.Data.Count:" + data.Count);
+
+                for (int i = 0; i < data.Count; i++)
+                {
+                    IRow cellRow = sheet.CreateRow(i + 1);
+
+                    cellRow.CreateCell(0, CellType.String).SetCellValue(data[i].StoreName);
+                    cellRow.CreateCell(1, CellType.String).SetCellValue(data[i].ShopName);
+                    cellRow.CreateCell(2, CellType.String).SetCellValue(data[i].DeviceCode);
+                    cellRow.CreateCell(3, CellType.String).SetCellValue(data[i].ReceiveMode);
+                    cellRow.CreateCell(4, CellType.String).SetCellValue(data[i].OrderId);
+                    cellRow.CreateCell(5, CellType.String).SetCellValue(data[i].PayedTime);
+                    cellRow.CreateCell(6, CellType.String).SetCellValue(data[i].SkuName);
+                    cellRow.CreateCell(7, CellType.String).SetCellValue(data[i].SkuCumCode);
+                    cellRow.CreateCell(8, CellType.String).SetCellValue(data[i].SkuSpecDes);
+                    cellRow.CreateCell(9, CellType.String).SetCellValue(data[i].PayWay);
+                    cellRow.CreateCell(10, CellType.String).SetCellValue(data[i].PayStatus);
+                    cellRow.CreateCell(11, CellType.String).SetCellValue(data[i].PickupStatus);
+                    cellRow.CreateCell(12, CellType.String).SetCellValue(data[i].SalePrice.ToF2Price());
+                    cellRow.CreateCell(13, CellType.String).SetCellValue(data[i].Quantity);
+                    cellRow.CreateCell(14, CellType.String).SetCellValue(data[i].ChargeAmount.ToF2Price());
+                    cellRow.CreateCell(15, CellType.String).SetCellValue(data[i].RefundedQuantity);
+                    cellRow.CreateCell(16, CellType.String).SetCellValue(data[i].RefundedAmount.ToF2Price());
+                    cellRow.CreateCell(17, CellType.String).SetCellValue(data[i].TradeQuantity);
+                    cellRow.CreateCell(18, CellType.String).SetCellValue(data[i].TradeAmount.ToF2Price());
+
+                }
+            }
+
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff") + ".xls";
+            //将Excel表格转化为流，输出
+            //创建文件流
+            MemoryStream bookStream = new MemoryStream();
+            //文件写入流（向流中写入字节序列）
+            workbook.Write(bookStream);
+            //输出之前调用Seek（偏移量，游标位置) 把0位置指定为开始位置
+            bookStream.Seek(0, SeekOrigin.Begin);
+
+            //saveTofle(bookStream, "E:\\Web\\NewSeftStore\\WebApiMerch\\AAAA.xls");
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StreamContent(bookStream);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+            response.Content.Headers.ContentLength = bookStream.Length;
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = fileName;
+            return response;
         }
 
         [HttpGet]

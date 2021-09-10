@@ -117,7 +117,7 @@ namespace WebApiMerch
             // config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver()
 
             config.Filters.Add(new OwnApiExceptionAttribute());
-            config.Filters.Add(new OwnStatisticsTrackerAttribute());
+            //config.Filters.Add(new OwnStatisticsTrackerAttribute());
         }
     }
 }
