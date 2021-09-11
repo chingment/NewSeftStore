@@ -96,6 +96,25 @@ namespace LocalS.Service.Api.Merch
         public string PayStatus { get; set; }
         public string PickupStatus { get; set; }
     }
+
+
+    public class OrderSaleModel
+    {
+        public string StoreName { get; set; }
+        public string ShopName { get; set; }
+        public string ReceiveMode { get; set; }
+        public string DeviceCode { get; set; }
+        public string OrderId { get; set; }
+        public string PayedTime { get; set; }
+        public int Quantity { get; set; }
+        public decimal ChargeAmount { get; set; }
+        public string PayWay { get; set; }
+        public string PayStatus { get; set; }
+        public decimal RefundedAmount { get; set; }
+        public int RefundedQuantity { get; set; }
+        public int TradeQuantity { get; set; }
+        public decimal TradeAmount { get; set; }
+    }
     public class ReportService : BaseService
     {
 
@@ -384,19 +403,19 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult<List<SkuSaleModel>> SkuSalesHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
+        public CustomJsonResult<PageEntity<SkuSaleModel>> SkuSalesHisGet(string operater, string merchId, RopReportSkuSalesHisGet rop)
         {
 
-            var result = new CustomJsonResult<List<SkuSaleModel>>();
+            var result = new CustomJsonResult<PageEntity<SkuSaleModel>>();
 
             if (rop.TradeDateTimeArea == null)
             {
-                return new CustomJsonResult<List<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+                return new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
             }
 
             if (rop.TradeDateTimeArea.Length != 2)
             {
-                return new CustomJsonResult<List<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+                return new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
             }
 
             DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
@@ -443,10 +462,16 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
+            int total = query.Count();
+
+            int pageIndex = rop.Page - 1;
+            int pageSize = rop.Limit;
+
+            query = query.OrderByDescending(r => r.PayedTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
 
             List<SkuSaleModel> olist = new List<SkuSaleModel>();
-
-            var list = query.OrderByDescending(m => m.PayedTime).ToList();
 
             foreach (var item in list)
             {
@@ -475,7 +500,6 @@ namespace LocalS.Service.Api.Merch
                     receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode));
                 }
 
-
                 olist.Add(new SkuSaleModel
                 {
                     StoreName = item.StoreName,
@@ -500,13 +524,14 @@ namespace LocalS.Service.Api.Merch
                     PayStatus = BizFactory.Order.GetPayStatus(item.PayStatus).Text,
                     PickupStatus = pickupStatus
                 });
-
             }
 
-            result = new CustomJsonResult<List<SkuSaleModel>>(ResultType.Success, ResultCode.Success, "", olist);
+
+            PageEntity<SkuSaleModel> pageEntity = new PageEntity<SkuSaleModel> { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Success, ResultCode.Success, "", pageEntity);
 
             return result;
-
         }
 
         public CustomJsonResult OrderSalesHisInit(string operater, string merchId)
@@ -534,19 +559,19 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult OrderSalesHisGet(string operater, string merchId, RopReporOrderSalesHisGet rop)
+        public CustomJsonResult<PageEntity<OrderSaleModel>> OrderSalesHisGet(string operater, string merchId, RopReporOrderSalesHisGet rop)
         {
 
-            var result = new CustomJsonResult();
+            var result = new CustomJsonResult<PageEntity<OrderSaleModel>>();
 
             if (rop.TradeDateTimeArea == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间");
+                return new CustomJsonResult<PageEntity<OrderSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择时间", null);
             }
 
             if (rop.TradeDateTimeArea.Length != 2)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请选择时间范围");
+                return new CustomJsonResult<PageEntity<OrderSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择时间范围", null);
             }
 
             LogUtil.Info("rup.TradeDateTimeArea[0]" + rop.TradeDateTimeArea[0]);
@@ -561,7 +586,7 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.Order
                          where u.MerchId == merchId && u.PayStatus == Entity.E_PayStatus.PaySuccess &&
                          u.IsTestMode == false
-                         select new { u.Id, u.StoreName, u.ShopName, u.StoreId, u.DeviceId, u.DeviceCumCode, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
+                         select new { u.Id, u.StoreName, u.ShopName, u.RefundedAmount, u.RefundedQuantity, u.StoreId, u.DeviceId, u.DeviceCumCode, u.ReceiveMode, u.ReceiveModeName, u.PayedTime, u.Quantity, u.ChargeAmount, u.PayWay, u.PayStatus });
 
             query = query.Where(m => m.PayedTime >= tradeStartTime && m.PayedTime <= tradeEndTime);
 
@@ -575,33 +600,43 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
-            List<object> olist = new List<object>();
+            int total = query.Count();
 
-            var list = query.OrderByDescending(m => m.PayedTime).ToList();
+            int pageIndex = rop.Page - 1;
+            int pageSize = rop.Limit;
+
+            query = query.OrderByDescending(r => r.PayedTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<OrderSaleModel> olist = new List<OrderSaleModel>();
+
 
             foreach (var item in list)
             {
-                var receiveRemark = "";
-
-                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByDevice)
-                {
-                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode));
-                }
-
-                olist.Add(new
+                olist.Add(new OrderSaleModel
                 {
                     StoreName = item.StoreName,
-                    ReceiveModeName = item.ReceiveModeName,
-                    ReceiveRemark = receiveRemark,
+                    ShopName = item.ShopName,
+                    ReceiveMode = item.ReceiveModeName,
+                    DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
                     OrderId = item.Id,
-                    TradeTime = item.PayedTime.ToUnifiedFormatDateTime(),
+                    PayedTime = item.PayedTime.ToUnifiedFormatDateTime(),
                     Quantity = item.Quantity,
-                    TradeAmount = item.ChargeAmount,
-                    PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text
+                    ChargeAmount = item.ChargeAmount,
+                    PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text,
+                    PayStatus = BizFactory.Order.GetPayStatus(item.PayStatus).Text,
+                    RefundedAmount = item.RefundedAmount,
+                    RefundedQuantity = item.RefundedQuantity,
+                    TradeQuantity = item.Quantity - item.RefundedQuantity,
+                    TradeAmount = item.ChargeAmount - item.RefundedAmount,
+
                 });
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", olist);
+            PageEntity<OrderSaleModel> pageEntity = new PageEntity<OrderSaleModel> { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult<PageEntity<OrderSaleModel>>(ResultType.Success, ResultCode.Success, "", pageEntity);
 
             return result;
 

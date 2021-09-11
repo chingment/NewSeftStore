@@ -30,8 +30,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-          <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="handleDownload">
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
+          <el-button :loading="downloadLoading" style="margin-left: 10px;" type="primary" icon="el-icon-document" @click="onDownload">
             导出
           </el-button>
         </el-form-item>
@@ -42,52 +42,83 @@
       v-loading="loading"
       :data="listData"
       border
-      show-summary
       fit
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="店铺" align="left" width="220">
+      <el-table-column label="店铺" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.storeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="提货方式" align="left" min-width="10%">
+      <el-table-column label="门店" align="left" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveModeName }}</span>
+          <span>{{ scope.row.shopName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="方式备注" align="left" min-width="10%">
+      <el-table-column label="设备编码" align="left" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveRemark }}</span>
+          <span>{{ scope.row.deviceCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单号" align="left" min-width="10%">
+      <el-table-column label="提货方式" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.receiveMode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.orderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易时间" align="left" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.tradeTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="数量" align="left" prop="quantity" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.quantity }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="总金额" align="left" prop="tradeAmount" min-width="10%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.tradeAmount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="支付方式" align="left" min-width="10%">
+      <el-table-column label="支付方式" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.payWay }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="支付状态" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.payStatus }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付时间" align="left" width="160">
+        <template slot-scope="scope">
+          <span>{{ scope.row.payedTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="数量" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.quantity }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付金额" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.chargeAmount }}</span>
+        </template>
+      </el-table-column>
+        <el-table-column label="退款数量" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.refundedQuantity }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="退款金额" align="left"  width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.refundedAmount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结算数量" align="left" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.tradeQuantity }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结算金额" align="left"  width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.tradeAmount }}</span>
+        </template>
+      </el-table-column>
     </el-table>
+        <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
+
     <el-alert
       title="提示：以订单单位维度来统计销售报表， 不统计测试模式"
       type="remark-gray"
@@ -97,11 +128,15 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+import fileDownload from 'js-file-download'
 import { orderSalesHisInit, orderSalesHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
+import { getToken } from '@/utils/auth'
+import Pagination from '@/components/Pagination'
 export default {
   name: 'ReportOrderSalesDateHis',
+  components: { Pagination },
   props: {
   },
   data() {
@@ -115,6 +150,8 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
+        page: 1,
+        limit: 10,
         storeIds: [],
         tradeDateTimeArea: [],
         receiveMode: '0'
@@ -152,15 +189,14 @@ export default {
         this.loading = false
       })
     },
-    _getData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       orderSalesHisGet(this.listQuery).then(res => {
-        this.listData = res.data == null ? [] : res.data
-        if (res.result === 1) {
-          if (this.listData === null || this.listData.length === 0) {
-            this.$message('查询不到对应条件的数据')
-          }
+         if (res.result === 1) {
+          var d = res.data
+          this.listData = d.items
+          this.listTotal = d.total
         } else {
           this.$message({
             message: res.message,
@@ -170,59 +206,53 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       if (this.listQuery.tradeDateTimeArea.length === 0) {
         this.$message('请选择日期范围')
         return
       }
-      this._getData()
+      this.onGetList()
     },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    handleDownload() {
-      if (this.listData === null || this.listData.length === 0) {
-        this.$message('没有可导出的数据')
+    onDownload() {
+
+     if (this.listQuery.tradeDateTimeArea.length === 0) {
+        this.$message('请选择日期范围')
         return
       }
+
       var filename = this.filename
+
       if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
         filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
       } else {
         filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
       }
 
+     this.downloadLoading = true
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
-          this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['店铺', '提货方式', '方式备注', '订单号', '交易时间', '数量', '总金额', '支付方式']
-        const filterVal = ['storeName', 'receiveModeName', 'receiveRemark', 'orderId', 'tradeTime', 'quantity', 'tradeAmount', 'payWay']
-        const list = this.listData
-        const data = this.formatJson(filterVal, list)
-
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: filename,
-          autoWidth: this.autoWidth,
-          bookType: this.bookType
-        })
-        this.downloadLoading = false
-      })
+          const data = this.listQuery
+          axios({
+            url: `http://api.merch.17fanju.com/api/report/OrderSalesHisExport`,
+            method: 'post',
+            data,
+            'responseType': 'arraybuffer',
+            headers: {
+              'X-Token': getToken()
+            }
+          }).then(res => {
+            fileDownload(res.data, filename + '.xls')
+                        this.downloadLoading = false
+          })
         } else {
+          this.downloadLoading = false
           this.$message({
             message: res.message,
             type: 'error'
           })
         }
       })
+
     }
   }
 }

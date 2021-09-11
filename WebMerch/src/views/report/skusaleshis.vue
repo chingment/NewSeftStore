@@ -37,23 +37,20 @@
         </el-form-item>
 
         <el-form-item>
-          <!-- <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button> -->
-          <el-button :loading="downloadLoading" type="primary" icon="el-icon-document" @click="handleDownload">
-            打包下载
+         <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button> 
+          <el-button :loading="downloadLoading" type="primary" style="margin-left:10px" icon="el-icon-document" @click="onDownload">
+            导出
           </el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table
-
       :key="listKey"
       v-loading="loading"
-      show-summary
       border
       :data="listData"
       fit
       highlight-current-row
-      style="width: 100%;display:none"
     >
       <el-table-column label="店铺" align="left" width="100">
         <template slot-scope="scope">
@@ -78,11 +75,6 @@
       <el-table-column label="订单号" align="left" width="220">
         <template slot-scope="scope">
           <span>{{ scope.row.orderId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易时间" align="left" width="160">
-        <template slot-scope="scope">
-          <span>{{ scope.row.payedTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品名称" align="left" width="200">
@@ -110,6 +102,11 @@
           <span>{{ scope.row.payStatus }}</span>
         </template>
       </el-table-column>
+       <el-table-column label="支付时间" align="left" width="160">
+        <template slot-scope="scope">
+          <span>{{ scope.row.payedTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="取货状态" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.pickupStatus }}</span>
@@ -120,37 +117,39 @@
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="left" prop="quantity" width="100">
+      <el-table-column label="数量" align="left"  width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left" prop="chargeAmount" width="100">
+      <el-table-column label="支付金额" align="left"  width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款数量" align="left" prop="refundedQuantity" width="100">
+      <el-table-column label="退款数量" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.refundedQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" align="left" prop="refundedAmount" width="100">
+      <el-table-column label="退款金额" align="left"  width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.refundedAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结算数量" align="left" prop="tradeQuantity" width="100">
+      <el-table-column label="结算数量" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结算金额" align="left" prop="tradeAmount" width="100">
+      <el-table-column label="结算金额" align="left"  width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
+
     <el-alert
       title="提示：以商品单位维度来统计销售报表， 不统计测试模式"
       type="remark-gray"
@@ -166,8 +165,10 @@ import fileDownload from 'js-file-download'
 import { skuSalesHisInit, skuSalesHisGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 import { getToken } from '@/utils/auth'
+import Pagination from '@/components/Pagination'
 export default {
   name: 'ReportSkuSalesDateHis',
+  components: { Pagination },
   props: {
   },
   data() {
@@ -181,6 +182,8 @@ export default {
       listData: null,
       listTotal: 0,
       listQuery: {
+        page: 1,
+        limit: 10,
         storeIds: [],
         tradeDateTimeArea: [],
         pickupStatus: '',
@@ -232,25 +235,15 @@ export default {
         this.loading = false
       })
     },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    _getData() {
+    onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       skuSalesHisGet(this.listQuery).then(res => {
-        this.listData = res.data == null ? [] : res.data
+ 
         if (res.result === 1) {
-          // this.listData = res.data
-          if (this.listData === null || this.listData.length === 0) {
-            this.$message('查询不到对应条件的数据')
-          }
+          var d = res.data
+          this.listData = d.items
+          this.listTotal = d.total
         } else {
           this.$message({
             message: res.message,
@@ -260,14 +253,14 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       if (this.listQuery.tradeDateTimeArea.length === 0) {
         this.$message('请选择日期范围')
         return
       }
-      this._getData()
+      this.onGetList()
     },
-    handleDownload() {
+    onDownload() {
       if (this.listQuery.tradeDateTimeArea.length === 0) {
         this.$message('请选择日期范围')
         return
@@ -281,12 +274,12 @@ export default {
         filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
       }
 
+     this.downloadLoading = true
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
-          this.downloadLoading = true
           const data = this.listQuery
           axios({
-            url: `http://api.merch.17fanju.com/api/report/SkuSalesHisGettt`,
+            url: `http://api.merch.17fanju.com/api/report/SkuSalesHisExport`,
             method: 'post',
             data,
             'responseType': 'arraybuffer',
@@ -294,60 +287,17 @@ export default {
               'X-Token': getToken()
             }
           }).then(res => {
-            this.downloadLoading = false
             fileDownload(res.data, filename + '.xls')
+                        this.downloadLoading = false
           })
         } else {
+          this.downloadLoading = false
           this.$message({
             message: res.message,
             type: 'error'
           })
         }
       })
-
-      // axios.get(`http://api.merch.17fanju.com/api/report/SkuSalesHisGettt`, {
-      //   responseType: 'blob' // 返回的数据类型
-      // })
-      //   .then(res => {
-      //     fileDownload(res.data, 'xxxx.xls')
-      //   })
-      // if (this.listData === null || this.listData.length === 0) {
-      //   this.$message('没有可导出的数据')
-      //   return
-      // }
-      // var filename = this.filename
-
-      // if (this.listQuery.tradeDateTimeArea[0] === this.listQuery.tradeDateTimeArea[1]) {
-      //   filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + ')'
-      // } else {
-      //   filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
-      // }
-
-      // checkRightExport({ fileName: filename }).then(res => {
-      //   if (res.result === 1) {
-      //     this.downloadLoading = true
-      // import('@/vendor/Export2Excel').then(excel => {
-      //   const tHeader = ['店铺', '门店', '设备编码', '提货方式', '订单号', '交易时间', '商品名称', '商品编码', '商品规格', '支付方式', '支付状态', '取货状态', '单价', '数量', '支付金额', '退款数量', '退款金额', '结算数量', '结算金额']
-      //   const filterVal = ['storeName', 'shopName', 'deviceCode', 'receiveMode', 'orderId', 'payedTime', 'skuName', 'skuCumCode', 'skuSpecDes', 'payWay', 'payStatus', 'pickupStatus', 'salePrice', 'quantity', 'chargeAmount', 'refundedQuantity', 'refundedAmount', 'tradeQuantity', 'tradeAmount']
-      //   const list = this.listData
-      //   const data = this.formatJson(filterVal, list)
-
-      //   excel.export_json_to_excel({
-      //     header: tHeader,
-      //     data,
-      //     filename: filename,
-      //     autoWidth: this.autoWidth,
-      //     bookType: this.bookType
-      //   })
-      //   this.downloadLoading = false
-      // })
-      //   } else {
-      //     this.$message({
-      //       message: res.message,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
     }
   }
 }

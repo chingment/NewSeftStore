@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RopReportSkuSalesHisGet
+    public class RopReportSkuSalesHisGet : RupBaseGetList
     {
         public List<string> StoreIds { get; set; }
 
