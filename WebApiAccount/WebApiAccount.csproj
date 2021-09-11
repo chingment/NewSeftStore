@@ -139,7 +139,6 @@
     <Compile Include="App_Start\OwnApi\OwnApiBaseController.cs" />
     <Compile Include="App_Start\OwnApi\OwnApiAuthorizeAttribute.cs" />
     <Compile Include="App_Start\OwnApi\OwnApiRequest.cs" />
-    <Compile Include="App_Start\OwnApi\OwnStatisticsTrackerAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />

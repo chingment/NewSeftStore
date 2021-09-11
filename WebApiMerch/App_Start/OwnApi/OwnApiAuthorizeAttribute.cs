@@ -38,7 +38,7 @@ namespace WebApiMerch
                     requstBody = new StreamReader(stream).ReadToEnd();
                 }
 
-                Log(request, requstBody);
+                MonitorLog.Log(request, requstBody);
 
 
                 bool skipAuthorization = actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
@@ -99,94 +99,11 @@ namespace WebApiMerch
             }
         }
 
-
         public override void OnActionExecuted(HttpActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
-
-            Task.Factory.StartNew(async () =>
-            {
-                var request = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Request;
-                var response = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Response;
-                var requestMethod = request.HttpMethod;
-                var contentType = request.ContentType.ToLower();
-                var rawUrl = request.RawUrl.ToLower();
-
-                var headers = response.Headers;
-
-
-                //string[] contentDisposition = null;
-                //if (headers.["content-Disposition"] != null)
-                //{
-                //    contentDisposition = headers.GetValues("content-Disposition");
-                //}
-
-                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
-                for (var i = 0; i < headers.Count; i++)
-                {
-                    _headers.Add(headers.Keys[i], headers.GetValues(i));
-                }
-
-
-                string content = null;
-                if (!rawUrl.Contains("report"))
-                {
-                    content = await filterContext.Response.Content.ReadAsStringAsync();
-                }
-
-                var ret = new
-                {
-                    headers = _headers,
-                    response = content,
-                };
-
-                LogUtil.Info(ret.ToJsonString());
-
-            });
-
+            MonitorLog.Log(filterContext);
         }
 
-
-        private static Task Log(HttpRequestBase request, string requestBody)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-
-                string url = request.RawUrl;
-                string ip = CommonUtil.GetIpAddress(request);
-                string method = request.HttpMethod;
-                string contentType = request.ContentType;
-                string body = null;
-
-                if (request.ContentType.Contains("application/json"))
-                {
-                    body = requestBody;
-                }
-
-                NameValueCollection headers = request.Headers;
-
-                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
-                for (var i = 0; i < headers.Count; i++)
-                {
-                    _headers.Add(headers.Keys[i], headers.GetValues(i));
-                }
-
-                var ret = new
-                {
-                    request = new
-                    {
-                        url,
-                        ip,
-                        method,
-                        contentType,
-                        headers = _headers,
-                        body
-                    }
-                };
-
-                LogUtil.Info(ret.ToJsonString());
-
-            });
-        }
     }
 }

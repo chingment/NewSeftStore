@@ -133,8 +133,6 @@ namespace WebApiMerch.Controllers
             {
                 var data = result_His.Data;
 
-                LogUtil.Info(" result_His.Data.Count:" + data.Count);
-
                 for (int i = 0; i < data.Count; i++)
                 {
                     IRow cellRow = sheet.CreateRow(i + 1);

@@ -110,7 +110,7 @@ namespace WebApiStoreSvcChat
             // config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver()
 
             config.Filters.Add(new OwnApiExceptionAttribute());
-            config.Filters.Add(new OwnStatisticsTrackerAttribute());
+
         }
     }
 }

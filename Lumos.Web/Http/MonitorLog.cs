@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net.Http;
@@ -12,93 +13,84 @@ namespace Lumos.Web.Http
 {
     public static class MonitorLog
     {
-
-        public static string GetPostData(Stream inputStream)
+        public static Task Log(HttpRequestBase request, string requestBody)
         {
-            string s = "";
-
-            if (inputStream == null)
-                return s;
-
-            try
+            return Task.Factory.StartNew(() =>
             {
-                Stream stream = inputStream;
-                stream.Seek(0, SeekOrigin.Begin);
-                s = new StreamReader(stream).ReadToEnd();
-            }
-            catch
-            {
-                s = "";
-            }
+                string url = request.RawUrl;
+                string ip = CommonUtil.GetIpAddress(request);
+                string method = request.HttpMethod;
+                string contentType = request.ContentType;
+                string body = null;
 
-            return s;
+                if (request.ContentType.Contains("application/json"))
+                {
+                    body = requestBody;
+                }
+
+                NameValueCollection headers = request.Headers;
+
+                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
+                for (var i = 0; i < headers.Count; i++)
+                {
+                    _headers.Add(headers.Keys[i], headers.GetValues(i));
+                }
+
+                var ret = new
+                {
+                    request = new
+                    {
+                        url,
+                        ip,
+                        method,
+                        contentType,
+                        headers = _headers,
+                        body
+                    }
+                };
+
+                LogUtil.Info(ret.ToJsonString());
+
+            });
         }
-        private static Task LogAsync(HttpRequestMessage request, HttpResponseMessage response = null)
+
+        public static Task Log(HttpActionExecutedContext filterContext)
         {
             return Task.Factory.StartNew(async () =>
-             {
-                 var sb = new StringBuilder();
-                 var myRequest = ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request;
+            {
 
-                 sb.Append("Url: " + myRequest.RawUrl + Environment.NewLine);
-                 sb.Append("IP: " + CommonUtil.GetIpAddress(myRequest) + Environment.NewLine);
-                 sb.Append("Method: " + myRequest.HttpMethod + Environment.NewLine);
-                 sb.Append("ContentType: " + myRequest.ContentType + Environment.NewLine);
+                var request = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Request;
+                var response = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Response;
 
-                 NameValueCollection headers = myRequest.Headers;
+                //var requestMethod = request.HttpMethod;
+                //var contentType = request.ContentType.ToLower();
+                var rawUrl = request.RawUrl.ToLower();
 
-                 string currentUserId = "";
-                 string requestGuid = "";
-
-                 if (request.Headers.GetValues("CurrentUserId") != null)
-                 {
-                     currentUserId = (request.Headers.GetValues("CurrentUserId") as string[])[0];
-                 }
-
-                 if (request.Headers.GetValues("RequestGuid") != null)
-                 {
-                     requestGuid = (request.Headers.GetValues("RequestGuid") as string[])[0];
-                 }
+                //var headers = response.Headers;
 
 
-                 sb.Append("Header.CurrentUserId: " + currentUserId + Environment.NewLine);
-                 sb.Append("Header.RequestGuid: " + requestGuid + Environment.NewLine);
 
-                 if (headers["appKey"] != null)
-                 {
-                     sb.Append("Header.appId: " + headers["appId"] + Environment.NewLine);
-                     sb.Append("Header.appKey: " + headers["appKey"] + Environment.NewLine);
-                     sb.Append("Header.sign: " + headers["sign"] + Environment.NewLine);
-                     sb.Append("Header.version: " + headers["version"] + Environment.NewLine);
-                     sb.Append("Header.timestamp: " + headers["timestamp"] + Environment.NewLine);
-                 }
+                //Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
+                //for (var i = 0; i < headers.Count; i++)
+                //{
+                //    _headers.Add(headers.Keys[i], headers.GetValues(i));
+                //}
 
-                 if (headers["Authorization"] != null)
-                 {
-                     sb.Append("Header.Authorization: " + headers["Authorization"] + Environment.NewLine);
-                 }
 
-                 if (myRequest.ContentType.IndexOf("application/json") > -1)
-                 {
-                     sb.Append("PostData: " + GetPostData(myRequest.InputStream) + Environment.NewLine);
-                 }
-                 if (response != null)
-                 {
-                     string content = await response.Content.ReadAsStringAsync();
-                     sb.Append("Response: " + content + Environment.NewLine);
-                 }
+                string content = null;
+                if (!rawUrl.Contains("report"))
+                {
+                    content = await filterContext.Response.Content.ReadAsStringAsync();
+                }
 
-                 LogUtil.Info(sb.ToString());
-             });
-        }
+                var ret = new
+                {
+                    response = content,
+                };
 
-        public static void OnActionExecuting(HttpActionContext filterContext)
-        {
-            LogAsync(filterContext.Request);
-        }
-        public static void OnActionExecuted(HttpActionExecutedContext actionContext)
-        {
-            LogAsync(actionContext.Request, actionContext.Response);
+                LogUtil.Info(ret.ToJsonString());
+
+            });
         }
     }
 }

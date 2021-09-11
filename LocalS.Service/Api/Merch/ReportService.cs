@@ -399,12 +399,6 @@ namespace LocalS.Service.Api.Merch
                 return new CustomJsonResult<List<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
             }
 
-            LogUtil.Info("merchId:" + merchId);
-            LogUtil.Info("rup.TradeDateTimeArea[0]:" + rop.TradeDateTimeArea[0]);
-            LogUtil.Info("rup.TradeDateTimeArea[1]:" + rop.TradeDateTimeArea[1]);
-            LogUtil.Info("rup.PickupStatus:" + rop.PickupStatus);
-            LogUtil.Info("rup.ReceiveMode:" + rop.ReceiveMode);
-
             DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
 
             DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
