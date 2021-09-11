@@ -13,40 +13,38 @@ namespace Lumos.Web.Http
 {
     public static class MonitorLog
     {
-        public static Task Log(HttpRequestBase request, string requestBody)
+        public static Task Log(HttpRequestBase request, string requestPayload)
         {
             return Task.Factory.StartNew(() =>
             {
-                string url = request.RawUrl;
-                string ip = CommonUtil.GetIpAddress(request);
-                string method = request.HttpMethod;
-                string contentType = request.ContentType;
-                string body = null;
+                string _requestUrl = request.RawUrl;
+                string _remoteAddress = CommonUtil.GetIpAddress(request);
+                string _requestMethod = request.HttpMethod;
+                string _requestPayload = null;
 
                 if (request.ContentType.Contains("application/json"))
                 {
-                    body = requestBody;
+                    _requestPayload = requestPayload;
                 }
 
                 NameValueCollection headers = request.Headers;
 
-                Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
+                Dictionary<string, string> _requestHeaders = new Dictionary<string, string>();
                 for (var i = 0; i < headers.Count; i++)
                 {
-                    _headers.Add(headers.Keys[i], headers.GetValues(i));
+                    _requestHeaders.Add(headers.Keys[i], string.Join(",", headers.GetValues(i)));
                 }
 
                 var ret = new
                 {
-                    request = new
+                    general = new
                     {
-                        url,
-                        ip,
-                        method,
-                        contentType,
-                        headers = _headers,
-                        body
-                    }
+                        requestUrl = _requestUrl,
+                        requestMethod = _requestMethod,
+                        remoteAddress = _remoteAddress,
+                    },
+                    requestHeaders = _requestHeaders,
+                    requestPayload = _requestPayload
                 };
 
                 LogUtil.Info(ret.ToJsonString());
@@ -58,34 +56,46 @@ namespace Lumos.Web.Http
         {
             return Task.Factory.StartNew(async () =>
             {
-
                 var request = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Request;
+
+
                 var response = ((HttpContextWrapper)filterContext.Request.Properties["MS_HttpContext"]).Response;
 
-                //var requestMethod = request.HttpMethod;
-                //var contentType = request.ContentType.ToLower();
                 var rawUrl = request.RawUrl.ToLower();
 
-                //var headers = response.Headers;
+                var responseHeaders = response.Headers;
 
 
 
-                //Dictionary<string, string[]> _headers = new Dictionary<string, string[]>();
-                //for (var i = 0; i < headers.Count; i++)
-                //{
-                //    _headers.Add(headers.Keys[i], headers.GetValues(i));
-                //}
-
-
-                string content = null;
-                if (!rawUrl.Contains("report"))
+                Dictionary<string, string> _responseHeaders = new Dictionary<string, string>();
+                for (var i = 0; i < responseHeaders.Count; i++)
                 {
-                    content = await filterContext.Response.Content.ReadAsStringAsync();
+                    _responseHeaders.Add(responseHeaders.Keys[i], string.Join(",", responseHeaders.GetValues(i)));
+                }
+
+                bool isFile = false;
+                if (_responseHeaders.ContainsKey("Content-Disposition"))
+                {
+                    var v = _responseHeaders["Content-Disposition"];
+                    if (v != null)
+                    {
+                        if (v.Contains("attachment"))
+                        {
+                            isFile = true;
+                        }
+                    }
+                }
+
+                string _responseData = null;
+                if (!isFile)
+                {
+                    _responseData = await filterContext.Response.Content.ReadAsStringAsync();
                 }
 
                 var ret = new
                 {
-                    response = content,
+                    responseHeaders = _responseHeaders,
+                    responseData = _responseData,
                 };
 
                 LogUtil.Info(ret.ToJsonString());
