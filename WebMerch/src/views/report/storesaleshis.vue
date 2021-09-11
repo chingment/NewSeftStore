@@ -84,14 +84,24 @@
           <span>{{ scope.row.sumChargeAmount }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="退款数量" align="left" prop="sumRefundedQuantity">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sumRefundedQuantity }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="退款金额" align="left" prop="sumRefundedAmount">
         <template slot-scope="scope">
           <span>{{ scope.row.sumRefundedAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合计金额" align="left" prop="sumAmount">
+      <el-table-column label="结算数量" align="left" prop="sumTradeQuantity">
         <template slot-scope="scope">
-          <span>{{ scope.row.sumAmount }}</span>
+          <span>{{ scope.row.sumTradeQuantity }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结算金额" align="left" prop="sumTradeAmount">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sumTradeAmount }}</span>
         </template>
       </el-table-column>
     </el-table>

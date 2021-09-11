@@ -712,7 +712,9 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" IsNull(SumQuantity,0) as SumQuantity, ");
             sql.Append(" IsNull(SumChargeAmount,0) as SumChargeAmount, ");
             sql.Append(" IsNull(SumRefundedAmount,0) as SumRefundedAmount, ");
-            sql.Append(" IsNull((SumChargeAmount-SumRefundedAmount),0) as SumAmount, ");
+            sql.Append(" IsNull(SumRefundedQuantity,0) as SumRefundedQuantity, ");
+            sql.Append(" IsNull((SumQuantity-SumRefundedQuantity),0) as sumTradeQuantity, ");
+            sql.Append(" IsNull((SumChargeAmount-SumRefundedAmount),0) as sumTradeAmount, ");
             sql.Append(" IsNull(PayWayByWx,0) as PayWayByWx, ");
             sql.Append(" IsNull(PayWayByZfb,0) as PayWayByZfb ");
             sql.Append(" from Store tb1 left join (  ");
@@ -722,10 +724,11 @@ namespace LocalS.Service.Api.Merch
             sql.Append(" SUM( CASE ExIsHandle WHEN 1 THEN 1 ELSE 0 END) as SumExHandle,  ");
             sql.Append(" SUM( CASE ReceiveMode WHEN 1 THEN 1 ELSE 0 END) as SumReceiveMode1,  ");
             sql.Append(" SUM( CASE ReceiveMode WHEN 2 THEN 1 ELSE 0 END) as SumReceiveMode2,  ");
-            sql.Append(" SUM( CASE ReceiveMode WHEN 3 THEN 1 ELSE 0 END) as SumReceiveMode3,  ");
+            sql.Append(" SUM( CASE ReceiveMode WHEN 4 THEN 1 ELSE 0 END) as SumReceiveMode3,  ");
 
             sql.Append(" SUM(Quantity) as SumQuantity,  ");
             sql.Append(" SUM(ChargeAmount)as SumChargeAmount,  ");
+            sql.Append(" SUM(RefundedQuantity) as SumRefundedQuantity ,  ");
             sql.Append(" SUM(RefundedAmount) as SumRefundedAmount ,  ");
             sql.Append(" SUM( CASE PayWay WHEN 1 THEN 1 ELSE 0 END) as PayWayByWx,  ");
             sql.Append(" SUM( CASE PayWay WHEN 2 THEN 1 ELSE 0 END) as PayWayByZfb,  ");
