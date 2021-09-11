@@ -125,7 +125,7 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '店铺销售概况报表',
+      filename: '店铺概况报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,

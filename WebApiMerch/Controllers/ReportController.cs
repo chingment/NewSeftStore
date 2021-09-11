@@ -118,7 +118,17 @@ namespace WebApiMerch.Controllers
             HSSFWorkbook workbook = new HSSFWorkbook();
 
             ISheet sheet = workbook.CreateSheet("sheet1");
+    
+            ICellStyle style = workbook.CreateCellStyle();
+
+            IFont font = workbook.CreateFont();
+            font.FontHeightInPoints = 12; 
+            font.FontName = "宋体";
+            style.SetFont(font);
+
+
             IRow titleRow = sheet.CreateRow(0);
+            
             string[] titleNames = new string[] {
                 "店铺",
                 "门店",
@@ -143,6 +153,7 @@ namespace WebApiMerch.Controllers
 
             for (int i = 0; i < titleNames.Length; i++)
             {
+                sheet.SetDefaultColumnStyle(i, style);
                 titleRow.CreateCell(i).SetCellValue(titleNames[i]);
             }
 
@@ -159,6 +170,7 @@ namespace WebApiMerch.Controllers
                     IRow cellRow = sheet.CreateRow(i + 1);
 
                     cellRow.CreateCell(0, CellType.String).SetCellValue(items[i].StoreName);
+
                     cellRow.CreateCell(1, CellType.String).SetCellValue(items[i].ShopName);
                     cellRow.CreateCell(2, CellType.String).SetCellValue(items[i].DeviceCode);
                     cellRow.CreateCell(3, CellType.String).SetCellValue(items[i].ReceiveMode);
@@ -179,7 +191,34 @@ namespace WebApiMerch.Controllers
                     cellRow.CreateCell(18, CellType.String).SetCellValue(items[i].TradeAmount.ToF2Price());
 
                 }
+
+                IRow endRowTitle = sheet.CreateRow(items.Count + 3);
+                endRowTitle.CreateCell(0, CellType.String).SetCellValue("总笔数");
+                endRowTitle.CreateCell(1, CellType.String).SetCellValue("交易数量");
+                endRowTitle.CreateCell(2, CellType.String).SetCellValue("交易总额");
+                endRowTitle.CreateCell(3, CellType.String).SetCellValue("退款数量");
+                endRowTitle.CreateCell(4, CellType.String).SetCellValue("退款总额");
+                endRowTitle.CreateCell(5, CellType.String).SetCellValue("结算数量");
+                endRowTitle.CreateCell(6, CellType.String).SetCellValue("结算总额");
+
+
+                int quantity = items.Sum(m => m.Quantity);
+                decimal chargeAmount = items.Sum(m => m.ChargeAmount);
+                int refundedQuantity = items.Sum(m => m.RefundedQuantity);
+                decimal refundedAmount = items.Sum(m => m.RefundedAmount);
+                int tradeQuantity = quantity - refundedQuantity;
+                decimal tradeAmount = chargeAmount - refundedAmount;
+                IRow endRowValue = sheet.CreateRow(items.Count + 4);
+                endRowValue.CreateCell(0, CellType.String).SetCellValue(items.Count);
+                endRowValue.CreateCell(1, CellType.String).SetCellValue(quantity);
+                endRowValue.CreateCell(2, CellType.String).SetCellValue(chargeAmount.ToF2Price());
+                endRowValue.CreateCell(3, CellType.String).SetCellValue(refundedQuantity);
+                endRowValue.CreateCell(4, CellType.String).SetCellValue(refundedAmount.ToF2Price());
+                endRowValue.CreateCell(5, CellType.String).SetCellValue(tradeQuantity);
+                endRowValue.CreateCell(6, CellType.String).SetCellValue(tradeAmount.ToF2Price());
             }
+
+
 
             var fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff") + ".xls";
             //将Excel表格转化为流，输出
@@ -221,6 +260,15 @@ namespace WebApiMerch.Controllers
             HSSFWorkbook workbook = new HSSFWorkbook();
 
             ISheet sheet = workbook.CreateSheet("sheet1");
+
+            ICellStyle style = workbook.CreateCellStyle();
+
+            IFont font = workbook.CreateFont();
+            font.FontHeightInPoints = 12;
+            font.FontName = "宋体";
+            style.SetFont(font);
+
+
             IRow titleRow = sheet.CreateRow(0);
             string[] titleNames = new string[] {
                 "店铺",
@@ -234,12 +282,14 @@ namespace WebApiMerch.Controllers
                 "数量",
                 "支付金额",
                 "退款数量",
+                "退款总额",
                 "结算数量",
                 "结算金额",
             };
 
             for (int i = 0; i < titleNames.Length; i++)
             {
+                sheet.SetDefaultColumnStyle(i, style);
                 titleRow.CreateCell(i).SetCellValue(titleNames[i]);
             }
 
@@ -260,9 +310,9 @@ namespace WebApiMerch.Controllers
                     cellRow.CreateCell(2, CellType.String).SetCellValue(items[i].DeviceCode);
                     cellRow.CreateCell(3, CellType.String).SetCellValue(items[i].ReceiveMode);
                     cellRow.CreateCell(4, CellType.String).SetCellValue(items[i].OrderId);
-                    cellRow.CreateCell(5, CellType.String).SetCellValue(items[i].PayedTime);
-                    cellRow.CreateCell(6, CellType.String).SetCellValue(items[i].PayWay);
-                    cellRow.CreateCell(7, CellType.String).SetCellValue(items[i].PayStatus);
+                    cellRow.CreateCell(5, CellType.String).SetCellValue(items[i].PayWay);
+                    cellRow.CreateCell(6, CellType.String).SetCellValue(items[i].PayStatus);
+                    cellRow.CreateCell(7, CellType.String).SetCellValue(items[i].PayedTime);
                     cellRow.CreateCell(8, CellType.String).SetCellValue(items[i].Quantity);
                     cellRow.CreateCell(9, CellType.String).SetCellValue(items[i].ChargeAmount.ToF2Price());
                     cellRow.CreateCell(10, CellType.String).SetCellValue(items[i].RefundedQuantity);
@@ -271,6 +321,31 @@ namespace WebApiMerch.Controllers
                     cellRow.CreateCell(13, CellType.String).SetCellValue(items[i].TradeAmount.ToF2Price());
 
                 }
+
+                IRow endRowTitle = sheet.CreateRow(items.Count + 3);
+                endRowTitle.CreateCell(0, CellType.String).SetCellValue("总笔数");
+                endRowTitle.CreateCell(1, CellType.String).SetCellValue("交易数量");
+                endRowTitle.CreateCell(2, CellType.String).SetCellValue("交易总额");
+                endRowTitle.CreateCell(3, CellType.String).SetCellValue("退款数量");
+                endRowTitle.CreateCell(4, CellType.String).SetCellValue("退款总额");
+                endRowTitle.CreateCell(5, CellType.String).SetCellValue("结算数量");
+                endRowTitle.CreateCell(6, CellType.String).SetCellValue("结算总额");
+
+
+                int quantity = items.Sum(m => m.Quantity);
+                decimal chargeAmount = items.Sum(m => m.ChargeAmount);
+                int refundedQuantity = items.Sum(m => m.RefundedQuantity);
+                decimal refundedAmount = items.Sum(m => m.RefundedAmount);
+                int tradeQuantity = quantity - refundedQuantity;
+                decimal tradeAmount = chargeAmount - refundedAmount;
+                IRow endRowValue = sheet.CreateRow(items.Count + 4);
+                endRowValue.CreateCell(0, CellType.String).SetCellValue(items.Count);
+                endRowValue.CreateCell(1, CellType.String).SetCellValue(quantity);
+                endRowValue.CreateCell(2, CellType.String).SetCellValue(chargeAmount.ToF2Price());
+                endRowValue.CreateCell(3, CellType.String).SetCellValue(refundedQuantity);
+                endRowValue.CreateCell(4, CellType.String).SetCellValue(refundedAmount.ToF2Price());
+                endRowValue.CreateCell(5, CellType.String).SetCellValue(tradeQuantity);
+                endRowValue.CreateCell(6, CellType.String).SetCellValue(tradeAmount.ToF2Price());
             }
 
             var fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff") + ".xls";

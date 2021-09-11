@@ -90,7 +90,7 @@ export default {
     return {
       loading: false,
       downloadLoading: false,
-      filename: '设备销售报表',
+      filename: '设备概况报表',
       autoWidth: true,
       bookType: 'xlsx',
       listKey: 0,
