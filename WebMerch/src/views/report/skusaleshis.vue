@@ -223,10 +223,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this._initData()
+    this.init()
   },
   methods: {
-    _initData() {
+    init() {
+      this.loading=true
       skuSalesHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -239,7 +240,6 @@ export default {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       skuSalesHisGet(this.listQuery).then(res => {
- 
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

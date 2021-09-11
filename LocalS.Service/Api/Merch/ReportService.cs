@@ -642,7 +642,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult StoreSalesHisInit(string operater, string merchId)
+        public CustomJsonResult StoreSummaryInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
@@ -677,7 +677,7 @@ namespace LocalS.Service.Api.Merch
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult StoreSalesHisGet(string operater, string merchId, RopReporStoreSalesHisGet rop)
+        public CustomJsonResult StoreSummaryGet(string operater, string merchId, RopReporStoreSummaryGet rop)
         {
 
             var result = new CustomJsonResult();
@@ -746,14 +746,14 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult DeviceSalesHisInit(string operater, string merchId)
+        public CustomJsonResult DeviceSummaryInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { });
         }
 
-        public CustomJsonResult DeviceSalesHisGet(string operater, string merchId, RopReportDeviceSalesHisGet rop)
+        public CustomJsonResult DeviceSummaryGet(string operater, string merchId, RopReportDeviceSummaryGet rop)
         {
 
             var result = new CustomJsonResult();

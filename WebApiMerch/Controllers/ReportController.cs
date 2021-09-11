@@ -15,6 +15,37 @@ namespace WebApiMerch.Controllers
 {
     public class ReportController : OwnApiBaseController
     {
+
+        [HttpGet]
+        public OwnApiHttpResponse StoreSummaryInit()
+        {
+            var result = MerchServiceFactory.Report.StoreSummaryInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse StoreSummaryGet([FromBody]RopReporStoreSummaryGet rop)
+        {
+            var result = MerchServiceFactory.Report.StoreSummaryGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
+        [HttpGet]
+        public OwnApiHttpResponse DeviceSummaryInit()
+        {
+            var result = MerchServiceFactory.Report.DeviceSummaryInit(this.CurrentUserId, this.CurrentMerchId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse DeviceSummaryGet([FromBody]RopReportDeviceSummaryGet rop)
+        {
+            var result = MerchServiceFactory.Report.DeviceSummaryGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
         [HttpGet]
         public OwnApiHttpResponse DeviceStockRealDataInit()
         {
@@ -262,20 +293,6 @@ namespace WebApiMerch.Controllers
             return response;
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse StoreSalesHisInit()
-        {
-            var result = MerchServiceFactory.Report.StoreSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse StoreSalesHisGet([FromBody]RopReporStoreSalesHisGet rop)
-        {
-            var result = MerchServiceFactory.Report.StoreSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
         [HttpPost]
         public OwnApiHttpResponse CheckRightExport([FromBody]RopReportCheckRightExport rop)
         {
@@ -283,20 +300,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
-        [HttpGet]
-        public OwnApiHttpResponse DeviceSalesHisInit()
-        {
-            var result = MerchServiceFactory.Report.DeviceSalesHisInit(this.CurrentUserId, this.CurrentMerchId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse DeviceSalesHisGet([FromBody]RopReportDeviceSalesHisGet rop)
-        {
-            var result = MerchServiceFactory.Report.DeviceSalesHisGet(this.CurrentUserId, this.CurrentMerchId, rop);
-            return new OwnApiHttpResponse(result);
-        }
 
     }
 }

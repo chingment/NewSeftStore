@@ -115,10 +115,10 @@
 
 <script>
 
-import { storeSalesHisInit, storeSalesHisGet, checkRightExport } from '@/api/report'
+import { storeSummaryInit, storeSummaryGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'ReportStoreSalesDateHis',
+  name: 'ReportStoreSummary',
   props: {
   },
   data() {
@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     _initData() {
-      storeSalesHisInit().then(res => {
+      storeSummaryInit().then(res => {
         if (res.result === 1) {
           var d = res.data
         }
@@ -155,7 +155,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      storeSalesHisGet(this.listQuery).then(res => {
+      storeSummaryGet(this.listQuery).then(res => {
         this.listData = res.data
 
         if (res.result === 1) {

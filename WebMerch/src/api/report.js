@@ -64,17 +64,17 @@ export function orderSalesHisGet(data) {
   })
 }
 
-export function storeSalesHisInit(params) {
+export function storeSummaryInit(params) {
   return request({
-    url: '/report/storeSalesHisInit',
+    url: '/report/storeSummaryInit',
     method: 'get',
     params
   })
 }
 
-export function storeSalesHisGet(data) {
+export function storeSummaryGet(data) {
   return request({
-    url: '/report/storeSalesHisGet',
+    url: '/report/storeSummaryGet',
     method: 'post',
     data
   })
@@ -104,17 +104,17 @@ export function deviceReplenishPlanGet(data) {
   })
 }
 
-export function deviceSalesHisInit(params) {
+export function deviceSummaryInit(params) {
   return request({
-    url: '/report/deviceSalesHisInit',
+    url: '/report/deviceSummaryInit',
     method: 'get',
     params
   })
 }
 
-export function deviceSalesHisGet(data) {
+export function deviceSummaryGet(data) {
   return request({
-    url: '/report/deviceSalesHisGet',
+    url: '/report/deviceSummaryGet',
     method: 'post',
     data
   })
@@ -129,9 +129,9 @@ export default {
   orderSalesHisGet: orderSalesHisGet,
   storeStockDateHisInit: storeStockDateHisInit,
   storeStockDateHisGet: storeStockDateHisGet,
-  storeSalesHisInit: storeSalesHisInit,
-  storeSalesHisGet: storeSalesHisGet,
-  deviceSalesHisInit: deviceSalesHisInit,
-  deviceSalesHisGet: deviceSalesHisGet,
+  storeSummaryInit: storeSummaryInit,
+  storeSummaryGet: storeSummaryGet,
+  deviceSummaryInit: deviceSummaryInit,
+  deviceSummaryGet: deviceSummaryGet,
   checkRightExport: checkRightExport
 }

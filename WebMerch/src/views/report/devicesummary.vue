@@ -80,10 +80,10 @@
 
 <script>
 
-import { deviceSalesHisInit, deviceSalesHisGet, checkRightExport } from '@/api/report'
+import { deviceSummaryInit, deviceSummaryGet, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 export default {
-  name: 'ReportSkuSalesDateHis',
+  name: 'ReportDeviceSummary',
   props: {
   },
   data() {
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     _initData() {
-      deviceSalesHisInit().then(res => {
+      deviceSummaryInit().then(res => {
         if (res.result === 1) {
           var d = res.data
         }
@@ -129,7 +129,7 @@ export default {
     _getData() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      deviceSalesHisGet(this.listQuery).then(res => {
+      deviceSummaryGet(this.listQuery).then(res => {
         this.listData = res.data == null ? [] : res.data
         if (res.result === 1) {
           // this.listData = res.data
