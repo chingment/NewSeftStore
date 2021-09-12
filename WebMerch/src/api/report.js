@@ -120,6 +120,23 @@ export function deviceSummaryGet(data) {
   })
 }
 
+export function deviceStockSummaryInit(params) {
+  return request({
+    url: '/report/deviceStockSummaryInit',
+    method: 'get',
+    params
+  })
+}
+
+export function deviceStockSummaryGet(data) {
+  return request({
+    url: '/report/deviceStockSummaryGet',
+    method: 'post',
+    data
+  })
+}
+
+
 export default {
   deviceStockRealDataInit: deviceStockRealDataInit,
   devicehStockRealDataGet: deviceStockRealDataGet,
@@ -133,5 +150,7 @@ export default {
   storeSummaryGet: storeSummaryGet,
   deviceSummaryInit: deviceSummaryInit,
   deviceSummaryGet: deviceSummaryGet,
-  checkRightExport: checkRightExport
+  checkRightExport: checkRightExport,
+  deviceStockSummaryInit:deviceStockSummaryInit,
+  deviceStockSummaryGet:deviceStockSummaryGet
 }

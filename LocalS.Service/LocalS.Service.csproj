@@ -240,6 +240,7 @@
     <Compile Include="Api\Merch\RModels\RopProductDelete.cs" />
     <Compile Include="Api\Merch\RModels\RopReporStoreSummaryGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReportDeviceReplenishPlanGet.cs" />
+    <Compile Include="Api\Merch\RModels\RopReportDeviceSkuSummaryGet..cs" />
     <Compile Include="Api\Merch\RModels\RopReportDeviceSummaryGet.cs" />
     <Compile Include="Api\Merch\RModels\RupAdGetContentBelongs.cs" />
     <Compile Include="Api\Merch\RModels\RetCouponInitAdd.cs" />

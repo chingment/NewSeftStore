@@ -46,6 +46,7 @@ namespace WebApiMerch.Controllers
         }
 
 
+
         [HttpGet]
         public OwnApiHttpResponse DeviceStockRealDataInit()
         {
@@ -60,11 +61,100 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse DeviceStockSumGet([FromBody]RopReportStoreStockRealDataGet rop)
+        [HttpGet]
+        public OwnApiHttpResponse DeviceStockSummaryInit()
         {
-            var result = MerchServiceFactory.Report.DeviceStockRealDataGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Report.DeviceStockSummaryInit(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse<PageEntity<DeviceSkuSummaryModel>> DeviceStockSummaryGet([FromBody]RopReportDeviceSkuSummaryGet rop)
+        {
+            var result = MerchServiceFactory.Report.DeviceStockSummaryGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse<PageEntity<DeviceSkuSummaryModel>>(result);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage DeviceStockSummaryExport([FromBody]RopReportDeviceSkuSummaryGet rop)
+        {
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            ISheet sheet = workbook.CreateSheet("sheet1");
+
+            ICellStyle style = workbook.CreateCellStyle();
+
+            IFont font = workbook.CreateFont();
+            font.FontHeightInPoints = 12;
+            font.FontName = "宋体";
+            style.SetFont(font);
+
+
+            IRow titleRow = sheet.CreateRow(0);
+
+            string[] titleNames = new string[] {
+                "店铺",
+                "商品名称",
+                "商品编码",
+                "商品规格",
+                "可售数量",
+                "锁定数量",
+                "实际数量",
+                "最大数量",
+                "需补数量"
+            };
+
+            for (int i = 0; i < titleNames.Length; i++)
+            {
+                sheet.SetDefaultColumnStyle(i, style);
+                titleRow.CreateCell(i).SetCellValue(titleNames[i]);
+            }
+
+            rop.Page = 1;
+            rop.Limit = int.MaxValue;
+
+            var result_His = MerchServiceFactory.Report.DeviceStockSummaryGet(this.CurrentUserId, this.CurrentMerchId, rop);
+            if (result_His.Result == ResultType.Success)
+            {
+                var data = result_His.Data;
+                var items = data.Items;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    IRow cellRow = sheet.CreateRow(i + 1);
+
+                    cellRow.CreateCell(0, CellType.String).SetCellValue(items[i].StoreName);
+
+                    cellRow.CreateCell(1, CellType.String).SetCellValue(items[i].SkuName);
+                    cellRow.CreateCell(2, CellType.String).SetCellValue(items[i].SkuCumCode);
+                    cellRow.CreateCell(3, CellType.String).SetCellValue(items[i].SkuSpecDes);
+                    cellRow.CreateCell(4, CellType.String).SetCellValue(items[i].SellQuantity);
+                    cellRow.CreateCell(5, CellType.String).SetCellValue(items[i].LockQuantity);
+                    cellRow.CreateCell(6, CellType.String).SetCellValue(items[i].SumQuantity);
+                    cellRow.CreateCell(7, CellType.String).SetCellValue(items[i].MaxQuantity);
+                    cellRow.CreateCell(8, CellType.String).SetCellValue(items[i].RshQuantity);
+
+                }
+            }
+
+
+
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff") + ".xls";
+            //将Excel表格转化为流，输出
+            //创建文件流
+            MemoryStream bookStream = new MemoryStream();
+            //文件写入流（向流中写入字节序列）
+            workbook.Write(bookStream);
+            //输出之前调用Seek（偏移量，游标位置) 把0位置指定为开始位置
+            bookStream.Seek(0, SeekOrigin.Begin);
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StreamContent(bookStream);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+            response.Content.Headers.ContentLength = bookStream.Length;
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = fileName;
+            return response;
         }
 
         [HttpGet]

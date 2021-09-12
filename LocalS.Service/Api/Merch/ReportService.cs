@@ -58,7 +58,6 @@ namespace LocalS.Service.Api.Merch
         public DateTime? RshTime { get; set; }
         public string RsherName { get; set; }
     }
-
     public class DeviceSalesModel
     {
         public string StoreName { get; set; }
@@ -70,8 +69,6 @@ namespace LocalS.Service.Api.Merch
 
         public string SalesDate { get; set; }
     }
-
-
     public class SkuSaleModel
     {
         public string StoreName { get; set; }
@@ -96,8 +93,6 @@ namespace LocalS.Service.Api.Merch
         public string PayStatus { get; set; }
         public string PickupStatus { get; set; }
     }
-
-
     public class OrderSaleModel
     {
         public string StoreName { get; set; }
@@ -114,6 +109,19 @@ namespace LocalS.Service.Api.Merch
         public int RefundedQuantity { get; set; }
         public int TradeQuantity { get; set; }
         public decimal TradeAmount { get; set; }
+    }
+
+    public class DeviceSkuSummaryModel
+    {
+        public string StoreName { get; set; }
+        public string SkuName { get; set; }
+        public string SkuCumCode { get; set; }
+        public string SkuSpecDes { get; set; }
+        public int SellQuantity { get; set; }
+        public int LockQuantity { get; set; }
+        public int SumQuantity { get; set; }
+        public int MaxQuantity { get; set; }
+        public int RshQuantity { get; set; }
     }
     public class ReportService : BaseService
     {
@@ -240,7 +248,6 @@ namespace LocalS.Service.Api.Merch
                     IsOffSell = dt_Stock.IsOffSell,
                     SlotIds = slotIds
                 });
-
             }
 
 
@@ -250,37 +257,90 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult DeviceStockSumGet(string operater, string merchId, RopReportStoreStockRealDataGet rop)
+
+        public CustomJsonResult DeviceStockSummaryInit(string operater, string merchId)
         {
             var result = new CustomJsonResult();
 
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId && m.IsDelete == false).OrderByDescending(r => r.CreateTime).ToList();
 
-            string tradeStartTime = DateTime.Parse(CommonUtil.ConverToStartTime(rop.TradeDateArea[0]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-
-            string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-
-
-            StringBuilder sql = new StringBuilder(" select MerchId,StoreId,SkuId, ");
-            sql.Append(" SUM(SumQuantity) as SumQuantity ,");
-            sql.Append(" Sum(SellQuantity) as SellQuantity , ");
-            sql.Append(" Sum(WaitPayLockQuantity+WaitPickupLockQuantity) as LockQuantity , ");
-            sql.Append(" Sum(MaxQuantity) as MaxQuantity,  ");
-            sql.Append(" Sum(MaxQuantity-SumQuantity) as RshQuantity,");
-            sql.Append(" (select SUM(Quantity) from OrderSub where SkuId=a.SkuId and MerchId=a.merchId  and   ");
-            sql.Append("  PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "'  ) as SaleQuantity ");
-            sql.Append(" from SellChannelStock a where MerchId='" + merchId + "' group by MerchId,StoreId,SkuId ");
-
-            var dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
-
-            List<object> oList = new List<object>();
-
-            for (var i = 0; i < dtData.Rows.Count; i++)
+            List<object> optionsStores = new List<object>();
+            foreach (var d_Store in d_Stores)
             {
-
-
+                optionsStores.Add(new { Value = d_Store.Id, Label = d_Store.Name });
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", oList);
+            var ret = new { optionsStores = optionsStores };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
+        public CustomJsonResult<PageEntity<DeviceSkuSummaryModel>> DeviceStockSummaryGet(string operater, string merchId, RopReportDeviceSkuSummaryGet rop)
+        {
+            var result = new CustomJsonResult<PageEntity<DeviceSkuSummaryModel>>();
+
+
+            var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
+
+
+            var query = from p in CurrentDb.SellChannelStock
+
+                        where
+                         p.MerchId == merchId &&
+                         p.ShopMode == E_ShopMode.Device
+                        group p by new
+                        {
+                            p.MerchId,
+                            p.StoreId,
+                            p.SkuId
+                        }
+into g
+                        select new
+                        {
+                            g.Key,
+                            SellQuantity = g.Sum(p => p.SellQuantity),
+                            WaitPayLockQuantity = g.Sum(p => p.WaitPayLockQuantity),
+                            WaitPickupLockQuantity = g.Sum(p => p.WaitPickupLockQuantity),
+                            SumQuantity = g.Sum(p => p.SumQuantity),
+                            MaxQuantity = g.Sum(p => p.MaxQuantity),
+                        };
+
+            int total = query.Count();
+
+            int pageIndex = rop.Page - 1;
+            int pageSize = rop.Limit;
+
+            query = query.OrderByDescending(r => r.Key).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+
+            var list = query.ToList();
+
+            List<DeviceSkuSummaryModel> olist = new List<DeviceSkuSummaryModel>();
+
+
+            foreach (var item in list)
+            {
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(item.Key.MerchId, item.Key.SkuId);
+
+                var l_Store = d_Stores.Where(m => m.Id == item.Key.StoreId).FirstOrDefault();
+
+                olist.Add(new DeviceSkuSummaryModel
+                {
+                    StoreName = l_Store.Name,
+                    SkuName = r_Sku.Name,
+                    SkuCumCode = r_Sku.CumCode,
+                    SkuSpecDes = SpecDes.GetDescribe(r_Sku.SpecDes),
+                    SellQuantity = item.SellQuantity,
+                    LockQuantity = item.WaitPayLockQuantity + item.WaitPickupLockQuantity,
+                    SumQuantity = item.SumQuantity,
+                    MaxQuantity = item.MaxQuantity,
+                    RshQuantity = item.MaxQuantity - item.SumQuantity,
+                });
+            }
+
+            PageEntity<DeviceSkuSummaryModel> pageEntity = new PageEntity<DeviceSkuSummaryModel> { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult<PageEntity<DeviceSkuSummaryModel>>(ResultType.Success, ResultCode.Success, "", pageEntity);
 
             return result;
 
