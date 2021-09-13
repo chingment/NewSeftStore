@@ -34,7 +34,7 @@ namespace LocalS.Service.Api.StoreTerm
             int total = query.Count();
 
             int pageIndex = rop.Page;
-            int pageSize = int.MaxValue;
+            int pageSize = 10;
 
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
