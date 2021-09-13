@@ -7,7 +7,6 @@
             <template slot="title">报表服务</template>
             <el-menu-item index="/report/storesummary">店铺概况报表</el-menu-item>
             <el-menu-item index="/report/devicesummary">设备概况报表</el-menu-item>
-            <el-menu-item index="/report/devicesummary">设备概况报表</el-menu-item>
             <el-menu-item index="/report/devicestocksummary">设备实时总表</el-menu-item>
             <el-menu-item index="/report/devicestockrealdata">设备实时库存报表</el-menu-item>
             <el-menu-item index="/report/devicereplenishplan">设备补货计划报表</el-menu-item>
