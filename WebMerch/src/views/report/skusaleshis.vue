@@ -37,7 +37,7 @@
         </el-form-item>
 
         <el-form-item>
-         <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button> 
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
           <el-button :loading="downloadLoading" type="primary" style="margin-left:10px" icon="el-icon-document" @click="onDownload">
             导出
           </el-button>
@@ -102,7 +102,7 @@
           <span>{{ scope.row.payStatus }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="支付时间" align="left" width="160">
+      <el-table-column label="支付时间" align="left" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.payedTime }}</span>
         </template>
@@ -117,12 +117,12 @@
           <span>{{ scope.row.salePrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="left"  width="100">
+      <el-table-column label="数量" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.quantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="支付金额" align="left"  width="100">
+      <el-table-column label="支付金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
@@ -132,7 +132,7 @@
           <span>{{ scope.row.refundedQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" align="left"  width="100">
+      <el-table-column label="退款金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.refundedAmount }}</span>
         </template>
@@ -142,7 +142,7 @@
           <span>{{ scope.row.tradeQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结算金额" align="left"  width="100">
+      <el-table-column label="结算金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
@@ -162,7 +162,7 @@
 <script>
 import axios from 'axios'
 import fileDownload from 'js-file-download'
-import { skuSalesHisInit, skuSalesHisGet, checkRightExport } from '@/api/report'
+import { skuSalesHisInit, skuSalesHisGet, skuSalesHisExport, checkRightExport } from '@/api/report'
 import { parseTime } from '@/utils'
 import { getToken } from '@/utils/auth'
 import Pagination from '@/components/Pagination'
@@ -227,7 +227,7 @@ export default {
   },
   methods: {
     init() {
-      this.loading=true
+      this.loading = true
       skuSalesHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -274,22 +274,27 @@ export default {
         filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
       }
 
-     this.downloadLoading = true
+      this.downloadLoading = true
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           const data = this.listQuery
-          axios({
-            url: `http://api.merch.17fanju.com/api/report/SkuSalesHisExport`,
-            method: 'post',
-            data,
-            'responseType': 'arraybuffer',
-            headers: {
-              'X-Token': getToken()
-            }
-          }).then(res => {
+          skuSalesHisExport(data).then(res => {
             fileDownload(res.data, filename + '.xls')
-                        this.downloadLoading = false
+            this.downloadLoading = false
           })
+
+          // axios({
+          //   url: `http://api.merch.17fanju.com/api/report/SkuSalesHisExport`,
+          //   method: 'post',
+          //   data,
+          //   'responseType': 'arraybuffer',
+          //   headers: {
+          //     'X-Token': getToken()
+          //   }
+          // }).then(res => {
+          //   fileDownload(res.data, filename + '.xls')
+          //   this.downloadLoading = false
+          // })
         } else {
           this.downloadLoading = false
           this.$message({

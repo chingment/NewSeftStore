@@ -96,12 +96,12 @@
           <span>{{ scope.row.chargeAmount }}</span>
         </template>
       </el-table-column>
-        <el-table-column label="退款数量" align="left" width="100">
+      <el-table-column label="退款数量" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.refundedQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" align="left"  width="100">
+      <el-table-column label="退款金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.refundedAmount }}</span>
         </template>
@@ -111,13 +111,13 @@
           <span>{{ scope.row.tradeQuantity }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结算金额" align="left"  width="100">
+      <el-table-column label="结算金额" align="left" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeAmount }}</span>
         </template>
       </el-table-column>
     </el-table>
-        <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
     <el-alert
       title="提示：以订单单位维度来统计销售报表， 不统计测试模式"
@@ -128,11 +128,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import fileDownload from 'js-file-download'
-import { orderSalesHisInit, orderSalesHisGet, checkRightExport } from '@/api/report'
-import { parseTime } from '@/utils'
-import { getToken } from '@/utils/auth'
+import { orderSalesHisInit, orderSalesHisGet, orderSalesHisExport, checkRightExport } from '@/api/report'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'ReportOrderSalesDateHis',
@@ -181,7 +178,7 @@ export default {
   },
   methods: {
     init() {
-      this.loading=true
+      this.loading = true
       orderSalesHisInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -194,7 +191,7 @@ export default {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       orderSalesHisGet(this.listQuery).then(res => {
-         if (res.result === 1) {
+        if (res.result === 1) {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
@@ -215,8 +212,7 @@ export default {
       this.onGetList()
     },
     onDownload() {
-
-     if (this.listQuery.tradeDateTimeArea.length === 0) {
+      if (this.listQuery.tradeDateTimeArea.length === 0) {
         this.$message('请选择日期范围')
         return
       }
@@ -229,21 +225,13 @@ export default {
         filename = filename + '(' + this.listQuery.tradeDateTimeArea[0] + '~' + this.listQuery.tradeDateTimeArea[1] + ')'
       }
 
-     this.downloadLoading = true
+      this.downloadLoading = true
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           const data = this.listQuery
-          axios({
-            url: `http://api.merch.17fanju.com/api/report/OrderSalesHisExport`,
-            method: 'post',
-            data,
-            'responseType': 'arraybuffer',
-            headers: {
-              'X-Token': getToken()
-            }
-          }).then(res => {
+          orderSalesHisExport(data).then(res => {
             fileDownload(res.data, filename + '.xls')
-                        this.downloadLoading = false
+            this.downloadLoading = false
           })
         } else {
           this.downloadLoading = false
@@ -253,7 +241,6 @@ export default {
           })
         }
       })
-
     }
   }
 }

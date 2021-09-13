@@ -100,11 +100,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import fileDownload from 'js-file-download'
-import { deviceStockSummaryInit, deviceStockSummaryGet, checkRightExport } from '@/api/report'
-import { parseTime } from '@/utils'
-import { getToken } from '@/utils/auth'
+import { deviceStockSummaryInit, deviceStockSummaryGet, deviceStockSummaryExport, checkRightExport } from '@/api/report'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'ReportOrderSalesDateHis',
@@ -217,15 +214,7 @@ export default {
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           const data = this.listQuery
-          axios({
-            url: `http://api.merch.17fanju.com/api/report/deviceStockSummaryExport`,
-            method: 'post',
-            data,
-            'responseType': 'arraybuffer',
-            headers: {
-              'X-Token': getToken()
-            }
-          }).then(res => {
+          deviceStockSummaryExport(data).then(res => {
             fileDownload(res.data, filename + '.xls')
             this.downloadLoading = false
           })

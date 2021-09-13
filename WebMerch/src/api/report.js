@@ -48,6 +48,15 @@ export function skuSalesHisGet(data) {
   })
 }
 
+export function skuSalesHisExport(data) {
+  return request({
+    url: '/report/skuSalesHisExport',
+    method: 'post',
+    data,
+    'responseType': 'arraybuffer'
+  })
+}
+
 export function orderSalesHisInit(params) {
   return request({
     url: '/report/orderSalesHisInit',
@@ -61,6 +70,15 @@ export function orderSalesHisGet(data) {
     url: '/report/orderSalesHisGet',
     method: 'post',
     data
+  })
+}
+
+export function orderSalesHisExport(data) {
+  return request({
+    url: '/report/orderSalesHisExport',
+    method: 'post',
+    data,
+    'responseType': 'arraybuffer'
   })
 }
 
@@ -136,14 +154,24 @@ export function deviceStockSummaryGet(data) {
   })
 }
 
+export function deviceStockSummaryExport(data) {
+  return request({
+    url: '/report/deviceStockSummaryExport',
+    method: 'post',
+    data,
+    'responseType': 'arraybuffer'
+  })
+}
 
 export default {
   deviceStockRealDataInit: deviceStockRealDataInit,
   devicehStockRealDataGet: deviceStockRealDataGet,
   skuSalesHisInit: skuSalesHisInit,
   skuSalesHisGet: skuSalesHisGet,
+  skuSalesHisExport: skuSalesHisExport,
   orderSalesHisInit: orderSalesHisInit,
   orderSalesHisGet: orderSalesHisGet,
+  orderSalesHisExport: orderSalesHisExport,
   storeStockDateHisInit: storeStockDateHisInit,
   storeStockDateHisGet: storeStockDateHisGet,
   storeSummaryInit: storeSummaryInit,
@@ -151,6 +179,7 @@ export default {
   deviceSummaryInit: deviceSummaryInit,
   deviceSummaryGet: deviceSummaryGet,
   checkRightExport: checkRightExport,
-  deviceStockSummaryInit:deviceStockSummaryInit,
-  deviceStockSummaryGet:deviceStockSummaryGet
+  deviceStockSummaryInit: deviceStockSummaryInit,
+  deviceStockSummaryGet: deviceStockSummaryGet,
+  deviceStockSummaryExport: deviceStockSummaryExport
 }
