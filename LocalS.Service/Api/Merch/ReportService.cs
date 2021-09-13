@@ -122,6 +122,8 @@ namespace LocalS.Service.Api.Merch
         public int SumQuantity { get; set; }
         public int MaxQuantity { get; set; }
         public int RshQuantity { get; set; }
+
+        public int SaleQuantity { get; set; }
     }
     public class ReportService : BaseService
     {
@@ -279,6 +281,21 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult<PageEntity<DeviceSkuSummaryModel>>();
 
+            if (rop.TradeDateArea == null)
+            {
+                return new CustomJsonResult<PageEntity<DeviceSkuSummaryModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+            }
+
+            if (rop.TradeDateArea.Length != 2)
+            {
+                return new CustomJsonResult<PageEntity<DeviceSkuSummaryModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+            }
+
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateArea[0]);
+
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateArea[1]);
+
+            LogUtil.Info("tradeStartTime:" + tradeStartTime + ",tradeEndTime:" + tradeEndTime);
 
             var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
 
@@ -303,6 +320,15 @@ into g
                             WaitPickupLockQuantity = g.Sum(p => p.WaitPickupLockQuantity),
                             SumQuantity = g.Sum(p => p.SumQuantity),
                             MaxQuantity = g.Sum(p => p.MaxQuantity),
+                            SaleQuantity = (from a in CurrentDb.OrderSub
+                                            where
+               a.ShopMode == E_ShopMode.Device
+               && a.SkuId == g.Key.SkuId
+               && a.MerchId == merchId
+               && a.PayStatus == E_PayStatus.PaySuccess
+               && a.PayedTime >= tradeStartTime
+               && a.PayedTime <= tradeEndTime
+                                            select new { Quantity = a.Quantity - a.RefundedQuantity }).Select(m => m.Quantity).DefaultIfEmpty(0).Sum()
                         };
 
             int total = query.Count();
@@ -335,6 +361,7 @@ into g
                     SumQuantity = item.SumQuantity,
                     MaxQuantity = item.MaxQuantity,
                     RshQuantity = item.MaxQuantity - item.SumQuantity,
+                    SaleQuantity = item.SaleQuantity
                 });
             }
 

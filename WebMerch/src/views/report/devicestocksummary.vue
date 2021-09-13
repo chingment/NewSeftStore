@@ -13,15 +13,18 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="交易日期" style="max-width: 400px;">
+        <el-form-item label="交易日期" style="max-width: 600px;">
+
           <el-date-picker
             v-model="listQuery.tradeDateArea"
             type="daterange"
-            range-separator="-"
             value-format="yyyy-MM-dd"
+            :picker-options="pickerOptions"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            style="width: 100%"
+            align="right"
+            style="max-width: 400px;"
           />
         </el-form-item>
         <el-form-item>
@@ -86,8 +89,13 @@
           <span>{{ scope.row.rshQuantity }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="已销售数量" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.saleQuantity }}</span>
+        </template>
+      </el-table-column>
     </el-table>
-        <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
   </div>
 </template>
 
@@ -117,9 +125,36 @@ export default {
         page: 1,
         limit: 10,
         storeIds: [],
-        tradeDateArea: [],
+        tradeDateArea: []
       },
       optionsStores: [],
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -131,7 +166,7 @@ export default {
   },
   methods: {
     init() {
-      this.loading=true
+      this.loading = true
       deviceStockSummaryInit().then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -144,7 +179,7 @@ export default {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       deviceStockSummaryGet(this.listQuery).then(res => {
-         if (res.result === 1) {
+        if (res.result === 1) {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
@@ -165,8 +200,7 @@ export default {
       this.onGetList()
     },
     onDownload() {
-
-     if (this.listQuery.tradeDateArea.length === 0) {
+      if (this.listQuery.tradeDateArea.length === 0) {
         this.$message('请选择日期范围')
         return
       }
@@ -179,7 +213,7 @@ export default {
         filename = filename + '(' + this.listQuery.tradeDateArea[0] + '~' + this.listQuery.tradeDateArea[1] + ')'
       }
 
-     this.downloadLoading = true
+      this.downloadLoading = true
       checkRightExport({ fileName: filename }).then(res => {
         if (res.result === 1) {
           const data = this.listQuery
@@ -193,7 +227,7 @@ export default {
             }
           }).then(res => {
             fileDownload(res.data, filename + '.xls')
-                        this.downloadLoading = false
+            this.downloadLoading = false
           })
         } else {
           this.downloadLoading = false
@@ -203,7 +237,6 @@ export default {
           })
         }
       })
-
     }
   }
 }

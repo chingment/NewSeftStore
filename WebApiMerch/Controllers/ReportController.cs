@@ -102,7 +102,8 @@ namespace WebApiMerch.Controllers
                 "锁定数量",
                 "实际数量",
                 "最大数量",
-                "需补数量"
+                "需补数量",
+                "已销售数量"
             };
 
             for (int i = 0; i < titleNames.Length; i++)
@@ -133,7 +134,7 @@ namespace WebApiMerch.Controllers
                     cellRow.CreateCell(6, CellType.String).SetCellValue(items[i].SumQuantity);
                     cellRow.CreateCell(7, CellType.String).SetCellValue(items[i].MaxQuantity);
                     cellRow.CreateCell(8, CellType.String).SetCellValue(items[i].RshQuantity);
-
+                    cellRow.CreateCell(9, CellType.String).SetCellValue(items[i].SaleQuantity);
                 }
             }
 
