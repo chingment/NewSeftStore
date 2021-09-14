@@ -65,8 +65,6 @@ namespace Lumos.Web.Http
 
                 var responseHeaders = response.Headers;
 
-
-
                 Dictionary<string, string> _responseHeaders = new Dictionary<string, string>();
                 for (var i = 0; i < responseHeaders.Count; i++)
                 {

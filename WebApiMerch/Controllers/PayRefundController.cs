@@ -22,6 +22,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetDetails(string payRefundId)
+        {
+            var result = MerchServiceFactory.PayRefund.GetDetails(this.CurrentUserId, this.CurrentMerchId, payRefundId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse SearchOrder([FromUri]RupPayRefundSearchOrder rup)
         {
             var result = MerchServiceFactory.PayRefund.SearchOrder(this.CurrentUserId, this.CurrentMerchId, rup);

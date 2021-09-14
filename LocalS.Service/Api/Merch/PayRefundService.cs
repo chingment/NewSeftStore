@@ -114,6 +114,71 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult GetDetails(string operater, string merchId, string payRefundId)
+        {
+            var result = new CustomJsonResult();
+
+            //var ret = new RetPayRefundApplyDetails();
+
+            var d_PayRefund = CurrentDb.PayRefund.Where(m => m.MerchId == merchId && m.Id == payRefundId).FirstOrDefault();
+
+            var d_Order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == d_PayRefund.OrderId).FirstOrDefault();
+
+
+            //ret.Order.Id = order.Id;
+            //ret.Order.ClientUserName = order.ClientUserName;
+            //ret.Order.ClientUserId = order.ClientUserId;
+            //ret.Order.StoreName = order.StoreName;
+            //ret.Order.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
+            //ret.Order.ChargeAmount = order.ChargeAmount.ToF2Price();
+            //ret.Order.DiscountAmount = order.DiscountAmount.ToF2Price();
+            //ret.Order.OriginalAmount = order.OriginalAmount.ToF2Price();
+            //ret.Order.Quantity = order.Quantity;
+            //ret.Order.Status = BizFactory.Order.GetStatus(order.Status);
+            //ret.Order.SourceName = BizFactory.Order.GetSourceName(order.Source);
+            //ret.Order.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
+            //ret.Order.ExHandleRemark = order.ExHandleRemark;
+            //ret.Order.ExIsHappen = order.ExIsHappen;
+            //ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
+            //ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
+
+            //var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
+
+            //decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
+            //decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
+            //ret.Order.RefundedAmount = refundedAmount.ToF2Price();
+            //ret.Order.RefundingAmount = refundingAmount.ToF2Price();
+            //ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
+
+
+            //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+
+            //foreach (var orderSub in orderSubs)
+            //{
+            //    ret.Order.Skus.Add(new
+            //    {
+            //        UniqueId = orderSub.Id,
+            //        MainImgUrl = orderSub.SkuMainImgUrl,
+            //        Name = orderSub.SkuName,
+            //        Quantity = orderSub.Quantity,
+            //        SalePrice = orderSub.SalePrice,
+            //        ChargeAmount = orderSub.ChargeAmount,
+            //        PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
+            //        RefundedAmount = orderSub.RefundedAmount,
+            //        RefundedQuantity = orderSub.RefundedQuantity,
+            //        ApplyRefundedQuantity = orderSub.Quantity,
+            //        ApplyRefundedAmount = orderSub.ChargeAmount,
+            //        ApplySignRefunded = false,
+            //        ApplyCanSignRefunded = orderSub.IsRefunded == true ? false : true,
+            //    });
+            //}
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            return result;
+
+        }
+
         public CustomJsonResult SearchOrder(string operater, string merchId, RupPayRefundSearchOrder rup)
         {
             var result = new CustomJsonResult();
