@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.Merch
             //    });
             //}
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", null);
             return result;
 
         }
