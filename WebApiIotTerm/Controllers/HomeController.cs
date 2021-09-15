@@ -62,7 +62,7 @@ namespace WebApiIotTerm.Controllers
             //model.Add("订单取消", OrderCancle());
             //model.Add("商品添加", ProductAdd());
             //model.Add("商品修改", ProductEdit());
-            model.Add("订单销售记录", OrderSaleRecords());
+            //model.Add("订单销售记录", OrderSaleRecords());
             return View(model);
         }
 
