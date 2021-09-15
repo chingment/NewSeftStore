@@ -12,6 +12,7 @@ namespace LocalS.Service.Api.Merch
         public RetPayRefundDetails()
         {
             this.Order = new _Order();
+            this.Skus = new List<object>();
         }
 
         public string PayRefundId { get; set; }

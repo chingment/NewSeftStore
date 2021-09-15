@@ -8,6 +8,14 @@ export function getList(params) {
   })
 }
 
+export function getDetails(params) {
+  return request({
+    url: '/payrefund/getDetails',
+    method: 'get',
+    params
+  })
+}
+
 export function getListByHandle(params) {
   return request({
     url: '/payrefund/getListByHandle',
@@ -58,6 +66,7 @@ export function handle(data) {
 
 export default {
   getList: getList,
+  getDetails: getDetails,
   getListByHandle: getListByHandle,
   searchOrder: searchOrder,
   getApplyDetails: getApplyDetails,

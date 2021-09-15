@@ -146,10 +146,8 @@ namespace LocalS.Service.Api.Merch
 
                 ret.Skus.Add(new
                 {
-                    SkuId = d_Unique.SkuId,
-                    SkuCumCode = d_Unique.SkuCumCode,
-                    SkuName = d_Unique.SkuName,
-                    SkuMainImgUrl = d_Unique.SkuMainImgUrl,
+                    Name = d_Unique.SkuName,
+                    MainImgUrl = d_Unique.SkuMainImgUrl,
                     RefundedAmount = d_PayRefundSku.ApplyRefundedAmount,
                     RefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity,
                 });
@@ -190,7 +188,7 @@ namespace LocalS.Service.Api.Merch
                 });
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", null);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
             return result;
 
         }
