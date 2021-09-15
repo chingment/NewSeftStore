@@ -223,6 +223,7 @@
     <Compile Include="Api\Merch\MerchServiceFactory.cs" />
     <Compile Include="Api\Merch\HomeService.cs" />
     <Compile Include="Api\Merch\ReportService.cs" />
+    <Compile Include="Api\Merch\RModels\RetPayRefundDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopAdAddContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdEditContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />

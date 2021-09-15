@@ -119,60 +119,76 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            //var ret = new RetPayRefundApplyDetails();
+            var ret = new RetPayRefundDetails();
 
             var d_PayRefund = CurrentDb.PayRefund.Where(m => m.MerchId == merchId && m.Id == payRefundId).FirstOrDefault();
-
+            var d_PayRefundSkus = CurrentDb.PayRefundSku.Where(m => m.PayRefundId == payRefundId).ToList();
             var d_Order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == d_PayRefund.OrderId).FirstOrDefault();
+            var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
 
-            //ret.Order.Id = order.Id;
-            //ret.Order.ClientUserName = order.ClientUserName;
-            //ret.Order.ClientUserId = order.ClientUserId;
-            //ret.Order.StoreName = order.StoreName;
-            //ret.Order.SubmittedTime = order.SubmittedTime.ToUnifiedFormatDateTime();
-            //ret.Order.ChargeAmount = order.ChargeAmount.ToF2Price();
-            //ret.Order.DiscountAmount = order.DiscountAmount.ToF2Price();
-            //ret.Order.OriginalAmount = order.OriginalAmount.ToF2Price();
-            //ret.Order.Quantity = order.Quantity;
-            //ret.Order.Status = BizFactory.Order.GetStatus(order.Status);
-            //ret.Order.SourceName = BizFactory.Order.GetSourceName(order.Source);
-            //ret.Order.CanHandleEx = BizFactory.Order.GetCanHandleEx(order.ExIsHappen, order.ExIsHandle);
-            //ret.Order.ExHandleRemark = order.ExHandleRemark;
-            //ret.Order.ExIsHappen = order.ExIsHappen;
-            //ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
-            //ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
-
-            //var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
-
-            //decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
-            //decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
-            //ret.Order.RefundedAmount = refundedAmount.ToF2Price();
-            //ret.Order.RefundingAmount = refundingAmount.ToF2Price();
-            //ret.Order.RefundableAmount = (order.ChargeAmount - refundedAmount - refundingAmount).ToF2Price();
+            ret.PayRefundId = d_PayRefund.Id;
+            ret.ApplyMethod = GetMethod(d_PayRefund.ApplyMethod);
+            ret.ApplyAmount = d_PayRefund.ApplyAmount;
+            ret.ApplyTime = d_PayRefund.ApplyTime.ToUnifiedFormatDateTime();
+            ret.ApplyRemark = d_PayRefund.ApplyRemark;
+            ret.Status = GetStatus(d_PayRefund.Status);
+            ret.HandleRemark = d_PayRefund.HandleRemark;
+            ret.HandleTime = d_PayRefund.HandleTime.ToUnifiedFormatDateTime();
+            ret.RefundedRemark = d_PayRefund.RefundedRemark;
+            ret.RefundedTime = d_PayRefund.RefundedTime.ToUnifiedFormatDateTime();
+            ret.RefundedAmount = d_PayRefund.RefundedAmount;
 
 
-            //var orderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
+            foreach (var d_PayRefundSku in d_PayRefundSkus)
+            {
+                var d_Unique = d_OrderSubs.Where(m => m.Id == d_PayRefundSku.UniqueId).FirstOrDefault();
 
-            //foreach (var orderSub in orderSubs)
-            //{
-            //    ret.Order.Skus.Add(new
-            //    {
-            //        UniqueId = orderSub.Id,
-            //        MainImgUrl = orderSub.SkuMainImgUrl,
-            //        Name = orderSub.SkuName,
-            //        Quantity = orderSub.Quantity,
-            //        SalePrice = orderSub.SalePrice,
-            //        ChargeAmount = orderSub.ChargeAmount,
-            //        PickupStatus = BizFactory.Order.GetPickupStatus(orderSub.PickupStatus),
-            //        RefundedAmount = orderSub.RefundedAmount,
-            //        RefundedQuantity = orderSub.RefundedQuantity,
-            //        ApplyRefundedQuantity = orderSub.Quantity,
-            //        ApplyRefundedAmount = orderSub.ChargeAmount,
-            //        ApplySignRefunded = false,
-            //        ApplyCanSignRefunded = orderSub.IsRefunded == true ? false : true,
-            //    });
-            //}
+                ret.Skus.Add(new
+                {
+                    SkuId = d_Unique.SkuId,
+                    SkuCumCode = d_Unique.SkuCumCode,
+                    SkuName = d_Unique.SkuName,
+                    SkuMainImgUrl = d_Unique.SkuMainImgUrl,
+                    RefundedAmount = d_PayRefundSku.ApplyRefundedAmount,
+                    RefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity,
+                });
+            }
+
+            ret.Order.Id = d_Order.Id;
+            ret.Order.ClientUserName = d_Order.ClientUserName;
+            ret.Order.ClientUserId = d_Order.ClientUserId;
+            ret.Order.StoreName = d_Order.StoreName;
+            ret.Order.SubmittedTime = d_Order.SubmittedTime.ToUnifiedFormatDateTime();
+            ret.Order.ChargeAmount = d_Order.ChargeAmount.ToF2Price();
+            ret.Order.DiscountAmount = d_Order.DiscountAmount.ToF2Price();
+            ret.Order.OriginalAmount = d_Order.OriginalAmount.ToF2Price();
+            ret.Order.Quantity = d_Order.Quantity;
+            ret.Order.Status = BizFactory.Order.GetStatus(d_Order.Status);
+            ret.Order.SourceName = BizFactory.Order.GetSourceName(d_Order.Source);
+            ret.Order.CanHandleEx = BizFactory.Order.GetCanHandleEx(d_Order.ExIsHappen, d_Order.ExIsHandle);
+            ret.Order.ExHandleRemark = d_Order.ExHandleRemark;
+            ret.Order.ExIsHappen = d_Order.ExIsHappen;
+            ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(d_Order.DeviceId, d_Order.DeviceCumCode);
+            ret.Order.PayWay = BizFactory.Order.GetPayWay(d_Order.PayWay);
+            ret.Order.RefundedQuantity = d_Order.RefundedQuantity;
+            ret.Order.RefundedAmount = d_Order.RefundedAmount.ToF2Price();
+
+            foreach (var d_OrderSub in d_OrderSubs)
+            {
+                ret.Order.Skus.Add(new
+                {
+                    UniqueId = d_OrderSub.Id,
+                    MainImgUrl = d_OrderSub.SkuMainImgUrl,
+                    Name = d_OrderSub.SkuName,
+                    Quantity = d_OrderSub.Quantity,
+                    SalePrice = d_OrderSub.SalePrice,
+                    ChargeAmount = d_OrderSub.ChargeAmount,
+                    PickupStatus = BizFactory.Order.GetPickupStatus(d_OrderSub.PickupStatus),
+                    RefundedAmount = d_OrderSub.RefundedAmount,
+                    RefundedQuantity = d_OrderSub.RefundedQuantity
+                });
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", null);
             return result;
@@ -270,7 +286,7 @@ namespace LocalS.Service.Api.Merch
             ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
             ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
 
-           var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
+            var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
 
             decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
             decimal refundingAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Handling || m.Status == E_PayRefundStatus.WaitHandle).Sum(m => m.ApplyAmount);
