@@ -126,8 +126,10 @@ namespace LocalS.Service.Api.Merch
             var d_Order = CurrentDb.Order.Where(m => m.MerchId == merchId && m.Id == d_PayRefund.OrderId).FirstOrDefault();
             var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).OrderByDescending(m => m.PickupStartTime).ToList();
 
-
             ret.PayRefundId = d_PayRefund.Id;
+            ret.OrderId = d_PayRefund.OrderId;
+            ret.PayPartnerPayTransId = d_PayRefund.PayPartnerPayTransId;
+            ret.PayTransId = d_PayRefund.PayTransId;
             ret.ApplyMethod = GetMethod(d_PayRefund.ApplyMethod);
             ret.ApplyAmount = d_PayRefund.ApplyAmount;
             ret.ApplyTime = d_PayRefund.ApplyTime.ToUnifiedFormatDateTime();

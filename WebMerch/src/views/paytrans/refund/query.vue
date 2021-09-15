@@ -250,6 +250,15 @@
           <el-form-item label="退款单号:">
             {{ details.payRefundId }}
           </el-form-item>
+          <el-form-item label="订单号:">
+            {{ details.orderId }}
+          </el-form-item>
+          <el-form-item label="商户单号:">
+            {{ details.payTransId }}
+          </el-form-item>
+          <el-form-item label="交易单号:">
+            {{ details.payPartnerPayTransId }}
+          </el-form-item>
           <el-form-item label="退款商品:">
 
             <el-table

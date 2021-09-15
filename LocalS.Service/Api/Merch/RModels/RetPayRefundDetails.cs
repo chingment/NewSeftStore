@@ -16,6 +16,9 @@ namespace LocalS.Service.Api.Merch
         }
 
         public string PayRefundId { get; set; }
+        public string PayPartnerPayTransId { get; set; }
+        public string PayTransId { get; set; }
+        public string OrderId { get; set; }
         public StatusModel ApplyMethod { get; set; }
         public decimal ApplyAmount { get; set; }
         public string ApplyTime { get; set; }
