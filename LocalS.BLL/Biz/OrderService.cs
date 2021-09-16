@@ -2367,7 +2367,7 @@ namespace LocalS.BLL.Biz
                         }
                     }
 
-                    MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_handle_exception, "处理异常订单", new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
+                    MqFactory.Global.PushOperateLog(operater, rop.AppId, trgerId, EventCode.order_handle_exception, "处理异常订单：" + string.Join(",", s_Orders.Select(m => m.Id).ToArray()), new { Rop = rop, StockChangeRecords = s_StockChangeRecords });
 
                 });
 
