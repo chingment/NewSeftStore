@@ -74,6 +74,17 @@ namespace WebApiIotTerm
                     return;
                 }
 
+                string requstBody = null;
+
+                if (contentType.Contains("application/json"))
+                {
+                    Stream stream = request.InputStream;
+                    stream.Seek(0, SeekOrigin.Begin);
+                    requstBody = new StreamReader(stream).ReadToEnd();
+                }
+
+                MonitorLog.Log(request, requstBody);
+
                 if (httpMethod.ToUpper() != "POST")
                 {
                     OwnApiHttpResult result = new OwnApiHttpResult(ResultCode.Exception, "只允许POST方式");
@@ -121,12 +132,6 @@ namespace WebApiIotTerm
                 }
 
 
-                Stream stream = request.InputStream;
-                stream.Seek(0, SeekOrigin.Begin);
-
-                string post_data = new StreamReader(stream).ReadToEnd();
-
-
                 //检查key是否在数据库中存在
                 string api_secret = LocalS.BLL.Biz.BizFactory.Merch.GetIotApiSecret(arr_auth[0]);
                 if (string.IsNullOrEmpty(api_secret))
@@ -146,8 +151,7 @@ namespace WebApiIotTerm
                 }
 
 
-                string signStr = GetSign(arr_auth[0], api_secret, timestamp, post_data);
-
+                string signStr = GetSign(arr_auth[0], api_secret, timestamp, requstBody);
 
                 if (signStr != arr_auth[2])
                 {
@@ -167,6 +171,12 @@ namespace WebApiIotTerm
                 return;
             }
 
+        }
+
+        public override void OnActionExecuted(HttpActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+            MonitorLog.Log(filterContext);
         }
 
         public bool IsRequestTimeout(long app_timestamp)
