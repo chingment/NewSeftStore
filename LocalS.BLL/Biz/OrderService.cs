@@ -1099,304 +1099,311 @@ namespace LocalS.BLL.Biz
                     var d_Orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var d_Order in d_Orders)
                     {
-                        d_Order.ClientUserId = d_PayTrans.ClientUserId;
-                        d_Order.ClientUserName = d_PayTrans.ClientUserName;
-                        d_Order.PayedTime = d_PayTrans.PayedTime;
-                        d_Order.PayStatus = d_PayTrans.PayStatus;
-                        d_Order.PayWay = d_PayTrans.PayWay;
-                        d_Order.PayPartner = payPartner;
-                        d_Order.PayPartnerPayTransId = payPartnerPayTransId;
-                        d_Order.MendTime = DateTime.Now;
-                        d_Order.Mender = operater;
-
-                        switch (d_Order.ReceiveMode)
+                        if (d_Order.Status == E_OrderStatus.WaitPay)
                         {
-                            case E_ReceiveMode.Delivery:
-                                d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = "您已成功支付，等待发货";
-                                d_Order.PickupFlowLastTime = DateTime.Now;
-                                break;
-                            case E_ReceiveMode.SelfTakeByStore:
-                                d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_Order.ReceptionMarkName, d_Order.PickupCode);
-                                d_Order.PickupFlowLastTime = DateTime.Now;
-                                break;
-                            case E_ReceiveMode.SelfTakeByDevice:
-                                d_Order.Status = E_OrderStatus.Payed;
-                                d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到设备【{1}】,在取货界面输入取货码【{2}】", d_Order.ReceptionMarkName, d_Order.DeviceId, d_Order.PickupCode);
-                                d_Order.PickupFlowLastTime = DateTime.Now;
-                                break;
-                            case E_ReceiveMode.FeeByMember:
-                                d_Order.Status = E_OrderStatus.Completed;
-                                d_Order.PickupFlowLastDesc = "您已成功支付";
-                                d_Order.PickupFlowLastTime = DateTime.Now;
-                                d_Order.IsNoDisplayClient = false;
-                                break;
-                        }
 
-                        var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+                            d_Order.ClientUserId = d_PayTrans.ClientUserId;
+                            d_Order.ClientUserName = d_PayTrans.ClientUserName;
+                            d_Order.PayedTime = d_PayTrans.PayedTime;
+                            d_Order.PayStatus = d_PayTrans.PayStatus;
+                            d_Order.PayWay = d_PayTrans.PayWay;
+                            d_Order.PayPartner = payPartner;
+                            d_Order.PayPartnerPayTransId = payPartnerPayTransId;
+                            d_Order.MendTime = DateTime.Now;
+                            d_Order.Mender = operater;
 
-                        foreach (var d_OrderSub in d_OrderSubs)
-                        {
-                            d_OrderSub.PayWay = d_Order.PayWay;
-                            d_OrderSub.PayStatus = d_Order.PayStatus;
-                            d_OrderSub.PayedTime = d_Order.PayedTime;
-                            d_OrderSub.ClientUserId = d_Order.ClientUserId;
-                            d_OrderSub.Mender = operater;
-                            d_OrderSub.MendTime = DateTime.Now;
-
-                            if (d_OrderSub.ShopMethod == E_ShopMethod.Buy)
+                            switch (d_Order.ReceiveMode)
                             {
-                                #region Shop
-                                d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
-                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
-                                #endregion 
+                                case E_ReceiveMode.Delivery:
+                                    d_Order.Status = E_OrderStatus.Payed;
+                                    d_Order.PickupFlowLastDesc = "您已成功支付，等待发货";
+                                    d_Order.PickupFlowLastTime = DateTime.Now;
+                                    break;
+                                case E_ReceiveMode.SelfTakeByStore:
+                                    d_Order.Status = E_OrderStatus.Payed;
+                                    d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】,出示取货码【{1}】，给店员", d_Order.ReceptionMarkName, d_Order.PickupCode);
+                                    d_Order.PickupFlowLastTime = DateTime.Now;
+                                    break;
+                                case E_ReceiveMode.SelfTakeByDevice:
+                                    d_Order.Status = E_OrderStatus.Payed;
+                                    d_Order.PickupFlowLastDesc = string.Format("您已成功支付，请到店铺【{0}】找到设备【{1}】,在取货界面输入取货码【{2}】", d_Order.ReceptionMarkName, d_Order.DeviceId, d_Order.PickupCode);
+                                    d_Order.PickupFlowLastTime = DateTime.Now;
+                                    break;
+                                case E_ReceiveMode.FeeByMember:
+                                    d_Order.Status = E_OrderStatus.Completed;
+                                    d_Order.PickupFlowLastDesc = "您已成功支付";
+                                    d_Order.PickupFlowLastTime = DateTime.Now;
+                                    d_Order.IsNoDisplayClient = false;
+                                    break;
                             }
-                            else if (d_OrderSub.ShopMethod == E_ShopMethod.Rent)
+
+                            var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+
+                            foreach (var d_OrderSub in d_OrderSubs)
                             {
-                                #region  Rent
-                                d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
-                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
-                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
+                                d_OrderSub.PayWay = d_Order.PayWay;
+                                d_OrderSub.PayStatus = d_Order.PayStatus;
+                                d_OrderSub.PayedTime = d_Order.PayedTime;
+                                d_OrderSub.ClientUserId = d_Order.ClientUserId;
+                                d_OrderSub.Mender = operater;
+                                d_OrderSub.MendTime = DateTime.Now;
 
-                                var d_RentOrder = new RentOrder();
-                                d_RentOrder.Id = IdWorker.Build(IdType.NewGuid);
-                                d_RentOrder.MerchId = d_OrderSub.MerchId;
-                                d_RentOrder.OrdeId = d_OrderSub.OrderId;
-                                d_RentOrder.ClientUserId = d_OrderSub.ClientUserId;
-                                d_RentOrder.SpuId = d_OrderSub.SpuId;
-                                d_RentOrder.SkuId = d_OrderSub.SkuId;
-                                d_RentOrder.SkuName = d_OrderSub.SkuName;
-                                d_RentOrder.SkuCumCode = d_OrderSub.SkuCumCode;
-                                d_RentOrder.SkuBarCode = d_OrderSub.SkuBarCode;
-                                d_RentOrder.SkuSpecDes = d_OrderSub.SkuSpecDes;
-                                d_RentOrder.SkuProducer = d_OrderSub.SkuProducer;
-                                d_RentOrder.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
-                                d_RentOrder.DepositAmount = d_OrderSub.ChargeAmount;
-                                d_RentOrder.IsPayDeposit = true;
-                                d_RentOrder.PayDepositTime = DateTime.Now;
-                                d_RentOrder.RentTermUnit = d_OrderSub.RentTermUnit;
-                                d_RentOrder.RentTermValue = d_OrderSub.RentTermValue;
-                                d_RentOrder.RentTermUnitText = "月";
-                                d_RentOrder.RentAmount = d_OrderSub.RentAmount;
-                                d_RentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
-                                d_RentOrder.Creator = operater;
-                                d_RentOrder.CreateTime = DateTime.Now;
-                                CurrentDb.RentOrder.Add(d_RentOrder);
-
-                                var d_rentOrderTransRecord = new RentOrderTransRecord();
-                                d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
-                                d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
-                                d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
-                                d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
-                                d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
-                                d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
-                                d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
-                                d_rentOrderTransRecord.TransTime = DateTime.Now;
-                                d_rentOrderTransRecord.AmountType = E_RentAmountType.DepositAndRent;
-                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
-                                d_rentOrderTransRecord.Creator = operater;
-                                d_rentOrderTransRecord.CreateTime = DateTime.Now;
-                                d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_OrderSub.ChargeAmount);
-                                CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
-
-                                s_RentOrders.Add(d_RentOrder);
-
-                                #endregion
-                            }
-                            else if (d_OrderSub.ShopMethod == E_ShopMethod.RentFee)
-                            {
-                                #region RentFee
-
-                                var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == d_Order.PId).FirstOrDefault();
-                                if (d_RentOrder != null)
+                                if (d_OrderSub.ShopMethod == E_ShopMethod.Buy)
                                 {
-                                    d_RentOrder.NextPayRentTime = d_RentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
-                                    d_RentOrder.Mender = operater;
-                                    d_RentOrder.MendTime = DateTime.Now;
+                                    #region Shop
+                                    d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                    d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                    d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
+                                    #endregion
                                 }
-
-                                var d_rentOrderTransRecord = new RentOrderTransRecord();
-                                d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
-                                d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
-                                d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
-                                d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
-                                d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
-                                d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
-                                d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
-                                d_rentOrderTransRecord.TransTime = DateTime.Now;
-                                d_rentOrderTransRecord.AmountType = E_RentAmountType.Rent;
-                                d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
-                                d_rentOrderTransRecord.Creator = operater;
-                                d_rentOrderTransRecord.CreateTime = DateTime.Now;
-                                d_rentOrderTransRecord.Description = string.Format("您已支付租金：{0}", d_OrderSub.ChargeAmount);
-                                CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
-
-                                s_RentOrders.Add(d_RentOrder);
-
-                                #endregion
-                            }
-                            else if (d_OrderSub.ShopMethod == E_ShopMethod.MemberFee)
-                            {
-                                #region MemberFee
-                                d_OrderSub.PickupStatus = E_OrderPickupStatus.Taked;
-                                d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
-                                d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
-
-
-                                var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.SkuId).FirstOrDefault();
-                                if (d_memberFeeSt != null)
+                                else if (d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                                 {
-                                    var d_memberCouponSts = CurrentDb.MemberCouponSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.LevelStId == d_memberFeeSt.LevelStId).ToList();
+                                    #region  Rent
+                                    d_OrderSub.PickupStatus = E_OrderPickupStatus.WaitPickup;
+                                    d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                    d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
 
-                                    foreach (var d_memberCouponSt in d_memberCouponSts)
+                                    var d_RentOrder = new RentOrder();
+                                    d_RentOrder.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_RentOrder.MerchId = d_OrderSub.MerchId;
+                                    d_RentOrder.OrdeId = d_OrderSub.OrderId;
+                                    d_RentOrder.ClientUserId = d_OrderSub.ClientUserId;
+                                    d_RentOrder.SpuId = d_OrderSub.SpuId;
+                                    d_RentOrder.SkuId = d_OrderSub.SkuId;
+                                    d_RentOrder.SkuName = d_OrderSub.SkuName;
+                                    d_RentOrder.SkuCumCode = d_OrderSub.SkuCumCode;
+                                    d_RentOrder.SkuBarCode = d_OrderSub.SkuBarCode;
+                                    d_RentOrder.SkuSpecDes = d_OrderSub.SkuSpecDes;
+                                    d_RentOrder.SkuProducer = d_OrderSub.SkuProducer;
+                                    d_RentOrder.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
+                                    d_RentOrder.DepositAmount = d_OrderSub.ChargeAmount;
+                                    d_RentOrder.IsPayDeposit = true;
+                                    d_RentOrder.PayDepositTime = DateTime.Now;
+                                    d_RentOrder.RentTermUnit = d_OrderSub.RentTermUnit;
+                                    d_RentOrder.RentTermValue = d_OrderSub.RentTermValue;
+                                    d_RentOrder.RentTermUnitText = "月";
+                                    d_RentOrder.RentAmount = d_OrderSub.RentAmount;
+                                    d_RentOrder.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
+                                    d_RentOrder.Creator = operater;
+                                    d_RentOrder.CreateTime = DateTime.Now;
+                                    CurrentDb.RentOrder.Add(d_RentOrder);
+
+                                    var d_rentOrderTransRecord = new RentOrderTransRecord();
+                                    d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
+                                    d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
+                                    d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
+                                    d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
+                                    d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
+                                    d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
+                                    d_rentOrderTransRecord.TransTime = DateTime.Now;
+                                    d_rentOrderTransRecord.AmountType = E_RentAmountType.DepositAndRent;
+                                    d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
+                                    d_rentOrderTransRecord.Creator = operater;
+                                    d_rentOrderTransRecord.CreateTime = DateTime.Now;
+                                    d_rentOrderTransRecord.Description = string.Format("您已支付设备押金和租金，合计：{0}", d_OrderSub.ChargeAmount);
+                                    CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
+
+                                    s_RentOrders.Add(d_RentOrder);
+
+                                    #endregion
+                                }
+                                else if (d_OrderSub.ShopMethod == E_ShopMethod.RentFee)
+                                {
+                                    #region RentFee
+
+                                    var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == d_Order.PId).FirstOrDefault();
+                                    if (d_RentOrder != null)
                                     {
-                                        BizFactory.Coupon.Send("SysGive", IdWorker.Build(IdType.EmptyGuid), "PaySuccess", "开通会员赠送", d_OrderSub.MerchId, d_OrderSub.ClientUserId, d_memberCouponSt.CouponId, d_memberCouponSt.Quantity);
+                                        d_RentOrder.NextPayRentTime = d_RentOrder.NextPayRentTime.Value.AddMonths(d_OrderSub.RentTermValue);
+                                        d_RentOrder.Mender = operater;
+                                        d_RentOrder.MendTime = DateTime.Now;
                                     }
 
-                                    if (d_clientUser != null)
+                                    var d_rentOrderTransRecord = new RentOrderTransRecord();
+                                    d_rentOrderTransRecord.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_rentOrderTransRecord.MerchId = d_OrderSub.MerchId;
+                                    d_rentOrderTransRecord.OrdeId = d_OrderSub.OrderId;
+                                    d_rentOrderTransRecord.RentOrderId = d_RentOrder.Id;
+                                    d_rentOrderTransRecord.ClientUserId = d_OrderSub.ClientUserId;
+                                    d_rentOrderTransRecord.TransType = E_RentTransTpye.Pay;
+                                    d_rentOrderTransRecord.Amount = d_OrderSub.ChargeAmount;
+                                    d_rentOrderTransRecord.TransTime = DateTime.Now;
+                                    d_rentOrderTransRecord.AmountType = E_RentAmountType.Rent;
+                                    d_rentOrderTransRecord.NextPayRentTime = DateTime.Now.AddMonths(d_OrderSub.RentTermValue);
+                                    d_rentOrderTransRecord.Creator = operater;
+                                    d_rentOrderTransRecord.CreateTime = DateTime.Now;
+                                    d_rentOrderTransRecord.Description = string.Format("您已支付租金：{0}", d_OrderSub.ChargeAmount);
+                                    CurrentDb.RentOrderTransRecord.Add(d_rentOrderTransRecord);
+
+                                    s_RentOrders.Add(d_RentOrder);
+
+                                    #endregion
+                                }
+                                else if (d_OrderSub.ShopMethod == E_ShopMethod.MemberFee)
+                                {
+                                    #region MemberFee
+                                    d_OrderSub.PickupStatus = E_OrderPickupStatus.Taked;
+                                    d_OrderSub.PickupFlowLastDesc = d_Order.PickupFlowLastDesc;
+                                    d_OrderSub.PickupFlowLastTime = d_Order.PickupFlowLastTime;
+
+
+                                    var d_memberFeeSt = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.Id == d_OrderSub.SkuId).FirstOrDefault();
+                                    if (d_memberFeeSt != null)
                                     {
-                                        var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.Id == d_memberFeeSt.LevelStId).FirstOrDefault();
-                                        if (memberLevelSt != null)
+                                        var d_memberCouponSts = CurrentDb.MemberCouponSt.Where(m => m.MerchId == d_OrderSub.MerchId && m.LevelStId == d_memberFeeSt.LevelStId).ToList();
+
+                                        foreach (var d_memberCouponSt in d_memberCouponSts)
                                         {
-                                            d_clientUser.MemberLevel = memberLevelSt.Level;
-
-                                            switch (d_memberFeeSt.FeeType)
-                                            {
-                                                case E_MemberFeeSt_FeeType.TwelveMonth:
-                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(12);
-                                                    break;
-                                                case E_MemberFeeSt_FeeType.SixMonth:
-                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(6);
-                                                    break;
-                                                case E_MemberFeeSt_FeeType.ThreeMonth:
-                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(3);
-                                                    break;
-                                                case E_MemberFeeSt_FeeType.OneMonth:
-                                                    d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(1);
-                                                    break;
-                                                case E_MemberFeeSt_FeeType.LongTerm:
-                                                    d_clientUser.MemberExpireTime = DateTime.Parse("2099-12-31");
-                                                    break;
-                                            }
-
-                                            CurrentDb.SaveChanges();
+                                            BizFactory.Coupon.Send("SysGive", IdWorker.Build(IdType.EmptyGuid), "PaySuccess", "开通会员赠送", d_OrderSub.MerchId, d_OrderSub.ClientUserId, d_memberCouponSt.CouponId, d_memberCouponSt.Quantity);
                                         }
+
+                                        if (d_clientUser != null)
+                                        {
+                                            var memberLevelSt = CurrentDb.MemberLevelSt.Where(m => m.Id == d_memberFeeSt.LevelStId).FirstOrDefault();
+                                            if (memberLevelSt != null)
+                                            {
+                                                d_clientUser.MemberLevel = memberLevelSt.Level;
+
+                                                switch (d_memberFeeSt.FeeType)
+                                                {
+                                                    case E_MemberFeeSt_FeeType.TwelveMonth:
+                                                        d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(12);
+                                                        break;
+                                                    case E_MemberFeeSt_FeeType.SixMonth:
+                                                        d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(6);
+                                                        break;
+                                                    case E_MemberFeeSt_FeeType.ThreeMonth:
+                                                        d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(3);
+                                                        break;
+                                                    case E_MemberFeeSt_FeeType.OneMonth:
+                                                        d_clientUser.MemberExpireTime = DateTime.Now.AddMonths(1);
+                                                        break;
+                                                    case E_MemberFeeSt_FeeType.LongTerm:
+                                                        d_clientUser.MemberExpireTime = DateTime.Parse("2099-12-31");
+                                                        break;
+                                                }
+
+                                                CurrentDb.SaveChanges();
+                                            }
+                                        }
+
                                     }
 
+                                    #endregion
                                 }
 
-                                #endregion
-                            }
-
-                            //购物和租赁进行库存操作
-                            if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
-                            {
-                                var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_pay_success, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
-                                if (result_OperateStock.Result != ResultType.Success)
+                                //购物和租赁进行库存操作
+                                if (d_OrderSub.ShopMethod == E_ShopMethod.Buy || d_OrderSub.ShopMethod == E_ShopMethod.Rent)
                                 {
-                                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
+                                    var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_pay_success, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                                    if (result_OperateStock.Result != ResultType.Success)
+                                    {
+                                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
+                                    }
+
+                                    s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
                                 }
 
-                                s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
+                                if (!string.IsNullOrEmpty(d_Order.ReffUserId))
+                                {
+                                    var d_ClientReffSku = new ClientReffSku();
+                                    d_ClientReffSku.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_ClientReffSku.MerchId = d_OrderSub.MerchId;
+                                    d_ClientReffSku.ClientUserId = d_OrderSub.ClientUserId;
+                                    d_ClientReffSku.OrderId = d_OrderSub.OrderId;
+                                    d_ClientReffSku.OrderSubId = d_OrderSub.Id;
+                                    d_ClientReffSku.SkuId = d_OrderSub.SkuId;
+                                    d_ClientReffSku.SkuName = d_OrderSub.SkuName;
+                                    d_ClientReffSku.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
+                                    d_ClientReffSku.SkuBarCode = d_OrderSub.SkuBarCode;
+                                    d_ClientReffSku.SkuCumCode = d_OrderSub.SkuCumCode;
+                                    d_ClientReffSku.SkuSpecDes = d_OrderSub.SkuSpecDes;
+                                    d_ClientReffSku.SkuProducer = d_OrderSub.SkuProducer;
+                                    d_ClientReffSku.Quantity = d_OrderSub.Quantity;
+                                    d_ClientReffSku.Creator = d_OrderSub.Creator;
+                                    d_ClientReffSku.CreateTime = d_OrderSub.CreateTime;
+                                    d_ClientReffSku.ReffClientUserId = d_OrderSub.ReffUserId;
+                                    d_ClientReffSku.Status = E_ClientReffSkuStatus.Valid;
+                                    CurrentDb.ClientReffSku.Add(d_ClientReffSku);
+                                    CurrentDb.SaveChanges();
+                                }
+
+                                s_Orders.Add(d_Order);
                             }
 
-                            if (!string.IsNullOrEmpty(d_Order.ReffUserId))
+                            List<string> clientCouponIds = new List<string>();
+                            if (!string.IsNullOrEmpty(d_Order.CouponIdsByShop))
                             {
-                                var d_ClientReffSku = new ClientReffSku();
-                                d_ClientReffSku.Id = IdWorker.Build(IdType.NewGuid);
-                                d_ClientReffSku.MerchId = d_OrderSub.MerchId;
-                                d_ClientReffSku.ClientUserId = d_OrderSub.ClientUserId;
-                                d_ClientReffSku.OrderId = d_OrderSub.OrderId;
-                                d_ClientReffSku.OrderSubId = d_OrderSub.Id;
-                                d_ClientReffSku.SkuId = d_OrderSub.SkuId;
-                                d_ClientReffSku.SkuName = d_OrderSub.SkuName;
-                                d_ClientReffSku.SkuMainImgUrl = d_OrderSub.SkuMainImgUrl;
-                                d_ClientReffSku.SkuBarCode = d_OrderSub.SkuBarCode;
-                                d_ClientReffSku.SkuCumCode = d_OrderSub.SkuCumCode;
-                                d_ClientReffSku.SkuSpecDes = d_OrderSub.SkuSpecDes;
-                                d_ClientReffSku.SkuProducer = d_OrderSub.SkuProducer;
-                                d_ClientReffSku.Quantity = d_OrderSub.Quantity;
-                                d_ClientReffSku.Creator = d_OrderSub.Creator;
-                                d_ClientReffSku.CreateTime = d_OrderSub.CreateTime;
-                                d_ClientReffSku.ReffClientUserId = d_OrderSub.ReffUserId;
-                                d_ClientReffSku.Status = E_ClientReffSkuStatus.Valid;
-                                CurrentDb.ClientReffSku.Add(d_ClientReffSku);
-                                CurrentDb.SaveChanges();
+                                var l_couponIdsByShop = d_Order.CouponIdsByShop.ToJsonObject<List<string>>();
+
+                                clientCouponIds.AddRange(l_couponIdsByShop);
                             }
 
-                            s_Orders.Add(d_Order);
-                        }
+                            if (!string.IsNullOrEmpty(d_Order.CouponIdByRent))
+                            {
+                                clientCouponIds.Add(d_Order.CouponIdByRent);
+                            }
 
-                        List<string> clientCouponIds = new List<string>();
-                        if (!string.IsNullOrEmpty(d_Order.CouponIdsByShop))
+                            if (!string.IsNullOrEmpty(d_Order.CouponIdByDeposit))
+                            {
+                                clientCouponIds.Add(d_Order.CouponIdByDeposit);
+                            }
+
+                            BizFactory.Coupon.SignUsed(operater, clientCouponIds.ToArray());
+
+                            var d_orderPickupLog = new OrderPickupLog();
+                            d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
+                            d_orderPickupLog.OrderId = d_Order.Id;
+                            d_orderPickupLog.ShopMode = d_Order.ShopMode;
+                            d_orderPickupLog.MerchId = d_Order.MerchId;
+                            d_orderPickupLog.StoreId = d_Order.StoreId;
+                            d_orderPickupLog.ShopId = d_Order.ShopId;
+                            d_orderPickupLog.DeviceId = d_Order.DeviceId;
+                            d_orderPickupLog.UniqueId = d_Order.Id;
+                            d_orderPickupLog.UniqueType = E_UniqueType.Order;
+                            d_orderPickupLog.ActionRemark = d_Order.PickupFlowLastDesc;
+                            d_orderPickupLog.ActionTime = d_Order.PickupFlowLastTime;
+                            d_orderPickupLog.Remark = "";
+                            d_orderPickupLog.CreateTime = DateTime.Now;
+                            d_orderPickupLog.Creator = operater;
+                            CurrentDb.OrderPickupLog.Add(d_orderPickupLog);
+                            CurrentDb.SaveChanges();
+
+
+                            var d_PayTransSub = new PayTransSub();
+                            d_PayTransSub.Id = IdWorker.Build(IdType.NewGuid);
+                            d_PayTransSub.PayTransId = d_PayTrans.Id;
+                            d_PayTransSub.MerchId = d_PayTrans.MerchId;
+                            d_PayTransSub.MerchName = d_Order.MerchName;
+                            d_PayTransSub.StoreId = d_Order.StoreId;
+                            d_PayTransSub.StoreName = d_Order.StoreName;
+                            d_PayTransSub.ShopId = d_Order.ShopId;
+                            d_PayTransSub.ShopName = d_Order.ShopName;
+                            d_PayTransSub.OrderId = d_Order.Id;
+                            d_PayTransSub.OriginalAmount = d_Order.OriginalAmount;
+                            d_PayTransSub.DiscountAmount = d_Order.DiscountAmount;
+                            d_PayTransSub.ChargeAmount = d_Order.ChargeAmount;
+                            d_PayTransSub.Quantity = d_Order.Quantity;
+                            d_PayTransSub.IsTestMode = d_Order.IsTestMode;
+                            d_PayTransSub.AppId = d_Order.AppId;
+                            d_PayTransSub.ClientUserId = d_Order.ClientUserId;
+                            d_PayTransSub.ClientUserName = d_Order.ClientUserName;
+                            d_PayTransSub.SubmittedTime = d_Order.SubmittedTime;
+                            d_PayTransSub.Source = d_Order.Source;
+                            d_PayTransSub.CreateTime = DateTime.Now;
+                            d_PayTransSub.Creator = operater;
+                            d_PayTransSub.PayCaller = d_PayTrans.PayCaller;
+                            d_PayTransSub.PayPartner = d_PayTrans.PayPartner;
+                            d_PayTransSub.PayWay = d_PayTrans.PayWay;
+                            d_PayTransSub.PayStatus = d_PayTrans.PayStatus;
+                            CurrentDb.PayTransSub.Add(d_PayTransSub);
+                            CurrentDb.SaveChanges();
+                        }
+                        else
                         {
-                            var l_couponIdsByShop = d_Order.CouponIdsByShop.ToJsonObject<List<string>>();
-
-                            clientCouponIds.AddRange(l_couponIdsByShop);
+                            d_Order.IsTimeoutPayed = true;
                         }
-
-                        if (!string.IsNullOrEmpty(d_Order.CouponIdByRent))
-                        {
-                            clientCouponIds.Add(d_Order.CouponIdByRent);
-                        }
-
-                        if (!string.IsNullOrEmpty(d_Order.CouponIdByDeposit))
-                        {
-                            clientCouponIds.Add(d_Order.CouponIdByDeposit);
-                        }
-
-                        BizFactory.Coupon.SignUsed(operater, clientCouponIds.ToArray());
-
-                        var d_orderPickupLog = new OrderPickupLog();
-                        d_orderPickupLog.Id = IdWorker.Build(IdType.NewGuid);
-                        d_orderPickupLog.OrderId = d_Order.Id;
-                        d_orderPickupLog.ShopMode = d_Order.ShopMode;
-                        d_orderPickupLog.MerchId = d_Order.MerchId;
-                        d_orderPickupLog.StoreId = d_Order.StoreId;
-                        d_orderPickupLog.ShopId = d_Order.ShopId;
-                        d_orderPickupLog.DeviceId = d_Order.DeviceId;
-                        d_orderPickupLog.UniqueId = d_Order.Id;
-                        d_orderPickupLog.UniqueType = E_UniqueType.Order;
-                        d_orderPickupLog.ActionRemark = d_Order.PickupFlowLastDesc;
-                        d_orderPickupLog.ActionTime = d_Order.PickupFlowLastTime;
-                        d_orderPickupLog.Remark = "";
-                        d_orderPickupLog.CreateTime = DateTime.Now;
-                        d_orderPickupLog.Creator = operater;
-                        CurrentDb.OrderPickupLog.Add(d_orderPickupLog);
-                        CurrentDb.SaveChanges();
-
-
-                        var d_PayTransSub = new PayTransSub();
-                        d_PayTransSub.Id = IdWorker.Build(IdType.NewGuid);
-                        d_PayTransSub.PayTransId = d_PayTrans.Id;
-                        d_PayTransSub.MerchId = d_PayTrans.MerchId;
-                        d_PayTransSub.MerchName = d_Order.MerchName;
-                        d_PayTransSub.StoreId = d_Order.StoreId;
-                        d_PayTransSub.StoreName = d_Order.StoreName;
-                        d_PayTransSub.ShopId = d_Order.ShopId;
-                        d_PayTransSub.ShopName = d_Order.ShopName;
-                        d_PayTransSub.OrderId = d_Order.Id;
-                        d_PayTransSub.OriginalAmount = d_Order.OriginalAmount;
-                        d_PayTransSub.DiscountAmount = d_Order.DiscountAmount;
-                        d_PayTransSub.ChargeAmount = d_Order.ChargeAmount;
-                        d_PayTransSub.Quantity = d_Order.Quantity;
-                        d_PayTransSub.IsTestMode = d_Order.IsTestMode;
-                        d_PayTransSub.AppId = d_Order.AppId;
-                        d_PayTransSub.ClientUserId = d_Order.ClientUserId;
-                        d_PayTransSub.ClientUserName = d_Order.ClientUserName;
-                        d_PayTransSub.SubmittedTime = d_Order.SubmittedTime;
-                        d_PayTransSub.Source = d_Order.Source;
-                        d_PayTransSub.CreateTime = DateTime.Now;
-                        d_PayTransSub.Creator = operater;
-                        d_PayTransSub.PayCaller = d_PayTrans.PayCaller;
-                        d_PayTransSub.PayPartner = d_PayTrans.PayPartner;
-                        d_PayTransSub.PayWay = d_PayTrans.PayWay;
-                        d_PayTransSub.PayStatus = d_PayTrans.PayStatus;
-                        CurrentDb.PayTransSub.Add(d_PayTransSub);
-                        CurrentDb.SaveChanges();
-
                     }
 
 

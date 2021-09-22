@@ -148,5 +148,7 @@ namespace LocalS.Entity
         public string ReffUserId { get; set; }
 
         public string NotifyUrl { get; set; }
+
+        public bool IsTimeoutPayed { get; set; }
     }
 }
