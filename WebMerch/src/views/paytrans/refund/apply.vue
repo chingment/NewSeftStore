@@ -417,6 +417,14 @@ export default {
         }
       }
 
+      if(refundSkus.length<=0){
+        this.$message({
+          message: '至少标记一个退款商品',
+          type: 'error'
+        })
+        return
+      }
+
       _this.formByApply.refundSkus = refundSkus
 
       this.$refs['formByApply'].validate((valid) => {
