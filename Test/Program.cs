@@ -192,6 +192,12 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            string c = "{\"id\":\"\",\"name\":\"东华医院（总院）三楼泰安医院\",\"areaCode\":\"\",\"areaName\":\"\",\"address\":\"东华医院（总院）三楼泰安医院\",\"contactName\":\"\",\"contactPhone\":\"\",\"contactAddress\":\"\",\"briefDes\":\"东华医院（总院）三楼泰安医院\",\"displayImgUrls\":[{\"name\":\"头像80.png\",\"url\":\"https://file.17fanju.com/Upload/common/03e7442ec53f4ce69331aeb6cf49a76c_O.png\"}],\"addressDetails\":null}";
+
+            object d = c.ToJsonObject<RopShopSave>();
+
+
             //7481c293bbf2bc62aa2de2cf2ae2127cf946b3586cc73b1b02fe6f9c6bf0de08
             string cccc = GetSign("com.uplink.selfstore", "fanju", "7460e6512f1940f68c00fe1fdb2b7eb1", 1629083489, "{\"deviceId\":\"202108020005\",\"eventRemark\":\"商品取货\",\"appId\":\"com.uplink.selfstore\",\"content\":{\"signId\":1427105705646755840,\"orderId\":\"610696120210816110624974\",\"uniqueId\":\"6106961202108161106249747\",\"skuId\":\"c9c36d03379249f9b5beedaf917fd986\",\"cabinetId\":\"dsx01n01\",\"slotId\":\"1-8-35\",\"pickupStatus\":3011,\"actionId\":-1,\"actionName\":\"未知动作\",\"actionStatusCode\":0,\"actionStatusName\":\"\",\"pickupUseTime\":0,\"imgId\":\"\",\"imgId2\":\"\",\"remark\":\"发起取货\"},\"lat\":0,\"lng\":0,\"eventCode\":\"vending_pickup\"}");
 

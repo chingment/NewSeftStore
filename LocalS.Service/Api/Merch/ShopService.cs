@@ -163,8 +163,14 @@ namespace LocalS.Service.Api.Merch
                 d_Shop.Address = rop.Address;
                 d_Shop.AreaCode = rop.AreaCode;
                 d_Shop.AreaName = rop.AreaName;
-                d_Shop.Lat = rop.AddressDetails.Point.Lat;
-                d_Shop.Lng = rop.AddressDetails.Point.Lng;
+                if (rop.AddressDetails != null)
+                {
+                    if (rop.AddressDetails.Point != null)
+                    {
+                        d_Shop.Lat = rop.AddressDetails.Point.Lat;
+                        d_Shop.Lng = rop.AddressDetails.Point.Lng;
+                    }
+                }
                 d_Shop.ContactName = rop.ContactName;
                 d_Shop.ContactPhone = rop.ContactPhone;
                 d_Shop.ContactAddress = rop.ContactAddress;
@@ -195,8 +201,14 @@ namespace LocalS.Service.Api.Merch
                 d_Shop.Address = rop.Address;
                 d_Shop.AreaCode = rop.AreaCode;
                 d_Shop.AreaName = rop.AreaName;
-                d_Shop.Lat = rop.AddressDetails.Point.Lat;
-                d_Shop.Lng = rop.AddressDetails.Point.Lng;
+                if (rop.AddressDetails != null)
+                {
+                    if (rop.AddressDetails.Point != null)
+                    {
+                        d_Shop.Lat = rop.AddressDetails.Point.Lat;
+                        d_Shop.Lng = rop.AddressDetails.Point.Lng;
+                    }
+                }
                 d_Shop.ContactName = rop.ContactName;
                 d_Shop.ContactPhone = rop.ContactPhone;
                 d_Shop.ContactAddress = rop.ContactAddress;
