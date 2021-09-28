@@ -25,13 +25,6 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public OwnApiHttpResponse WxApiCode2Session(RopWxApiCode2Session rop)
-        {
-            var result = AccountServiceFactory.Own.GetWxApiCode2Session(rop);
-            return new OwnApiHttpResponse(result);
-        }
 
         [AllowAnonymous]
         [HttpPost]

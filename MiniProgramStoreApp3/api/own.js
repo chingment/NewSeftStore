@@ -54,7 +54,6 @@ function bindPhoneNumberByWx(dataParams) {
 
 module.exports = {
   loginByMinProgram: loginByMinProgram,
-  WxApiCode2Session: WxApiCode2Session,
   wxConfig: wxConfig,
   wxPhoneNumber: wxPhoneNumber,
   bindPhoneNumberByWx: bindPhoneNumberByWx,

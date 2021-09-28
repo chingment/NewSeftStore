@@ -499,7 +499,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
-            MqFactory.Global.PushOperateLog(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.login, "登录成功",new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
+            MqFactory.Global.PushOperateLog(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -945,7 +945,7 @@ namespace LocalS.Service.Api.Account
             }
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key, merchid = config.MyMerchId, storeid = config.MyStoreId });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openid = ret.openid, session_key = ret.session_key });
 
             return result;
         }
@@ -954,29 +954,30 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
+            var m_Config = new WxAppInfoConfig();
 
-            var config = BizFactory.Merch.GetWxMpAppInfoConfigByAppId(rop.AppId);
-
-            if (config == null)
+            var d_Merch = CurrentDb.Merch.Where(m => m.WxMpAppId == rop.AppId).FirstOrDefault();
+            if (d_Merch == null)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "配置信息失败");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息查找不到");
             }
 
-            var ret = SdkFactory.Wx.GetJsCode2Session(config, rop.Code);
+            m_Config.AppId = d_Merch.WxMpAppId;
+            m_Config.AppSecret = d_Merch.WxMpAppSecret;
+            m_Config.PayMchId = d_Merch.WxPayMchId;
+            m_Config.PayKey = d_Merch.WxPayKey;
+            m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
+            m_Config.SslCert_Path = d_Merch.WxPayCertPath;
+            m_Config.SslCert_Password = d_Merch.WxPayCertPassword;
+
+            var ret = SdkFactory.Wx.GetJsCode2Session(m_Config, rop.Code);
 
             if (ret == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            var d_clientUser = CurrentDb.SysClientUser.Where(m => m.WxMpOpenId == ret.openid).FirstOrDefault();
-            if (d_clientUser != null)
-            {
-
-
-            }
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = config.MyMerchId, storeId = config.MyStoreId });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = d_Merch.Id, storeId = d_Merch.MctStoreId });
 
             return result;
         }

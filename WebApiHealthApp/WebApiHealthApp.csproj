@@ -146,6 +146,7 @@
     <Compile Include="App_Start\OwnApi\OwnApiRequest.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\MonthReportController.cs" />
     <Compile Include="Controllers\OwnController.cs" />
     <Compile Include="Global.asax.cs">

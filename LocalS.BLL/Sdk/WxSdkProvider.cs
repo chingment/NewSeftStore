@@ -184,6 +184,12 @@ namespace LocalS.BLL
                 return wxAccessToken;
             }
 
+            if(!string.IsNullOrEmpty(config.TrdAccessToken))
+            {
+                return config.TrdAccessToken;
+            }
+            
+
             string key = string.Format("Wx_AppId_{0}_AccessToken", config.AppId);
 
             var redis = new RedisClient<string>();

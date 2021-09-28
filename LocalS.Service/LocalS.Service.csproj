@@ -156,6 +156,7 @@
     <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
     <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
     <Compile Include="Api\HealthApp\MonthReportService.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopConfigJsSdk.cs" />
     <Compile Include="Api\InsApp\HomeService.cs" />
     <Compile Include="Api\InsApp\InsAppServiceFactory.cs" />
     <Compile Include="Api\InsApp\InsCarService.cs" />
