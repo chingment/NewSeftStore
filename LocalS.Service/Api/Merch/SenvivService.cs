@@ -3,6 +3,7 @@ using LocalS.BLL.Biz;
 using LocalS.Entity;
 using LocalS.Service.UI;
 using Lumos;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1064,11 +1065,29 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.CreateTime
                        }).FirstOrDefault();
 
+            var d_SugSkus = CurrentDb.SenvivHealthMonthReportSugSku.Where(m => m.ReportId == reportId).ToList();
+
+            var sugSkus = new List<object>();
+
+            if (d_SugSkus != null)
+            {
+                foreach (var d_SugSku in d_SugSkus)
+                {
+                    var r_Sku = CacheServiceFactory.Product.GetSkuInfo(merchId, d_SugSku.SkuId);
+
+                    if (r_Sku != null)
+                    {
+                        sugSkus.Add(new { Id = r_Sku.Id, Name = r_Sku.Name, CumCode = r_Sku.CumCode });
+                    }
+                }
+            }
+
             var ret = new
             {
                 rpt.RptSummary,
                 rpt.RptSuggest,
-                rpt.IsSend
+                rpt.IsSend,
+                sugSkus
             };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -1086,6 +1105,27 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             rpt.RptSummary = rop.RptSummary;
             rpt.RptSuggest = rop.RptSuggest;
+
+            var d_SugSkus = CurrentDb.SenvivHealthMonthReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
+
+            foreach (var d_SugSku in d_SugSkus)
+            {
+                CurrentDb.SenvivHealthMonthReportSugSku.Remove(d_SugSku);
+            }
+
+            if (rop.SugSkus != null)
+            {
+                foreach (var sugSku in rop.SugSkus)
+                {
+                    var d_SugSku = new SenvivHealthMonthReportSugSku();
+                    d_SugSku.Id = IdWorker.Build(IdType.NewGuid);
+                    d_SugSku.ReportId = rop.ReportId;
+                    d_SugSku.SkuId = sugSku.Id;
+                    d_SugSku.CreateTime = DateTime.Now;
+                    d_SugSku.Creator = operater;
+                    CurrentDb.SenvivHealthMonthReportSugSku.Add(d_SugSku);
+                }
+            }
 
             if (rop.IsSend)
             {

@@ -83,7 +83,7 @@ namespace LocalS.DAL
         public IDbSet<SenvivHealthMonthReport> SenvivHealthMonthReport { get; set; }
         public IDbSet<SenvivHealthDayReportLabel> SenvivHealthDayReportLabel { get; set; }
         public IDbSet<SenvivHealthDayReportAdvice> SenvivHealthDayReportAdvice { get; set; }
-
+        public IDbSet<SenvivHealthMonthReportSugSku> SenvivHealthMonthReportSugSku { get; set; }
         public IDbSet<SenvivHealthMonthReportTag> SenvivHealthMonthReportTag { get; set; }
 
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }

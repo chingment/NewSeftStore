@@ -284,7 +284,7 @@
       </tbody>
     </table>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" type="primary" @click="handleOpenByDrawerBySug">评 价</el-button>
+      <el-button size="small" type="primary" @click="onOpenByDrawerBySug">评 价</el-button>
     </span>
 
     <el-drawer
@@ -305,7 +305,6 @@
             <el-tag v-if="formBySug.isSend" type="success">
               已发送
             </el-tag>
-
             <el-tag v-if="!formBySug.isSend" type="warning">
               未发送
             </el-tag>
@@ -315,7 +314,7 @@
               <span>健康总结</span>
             </div>
             <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="10" type="textarea" show-word-limit />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="5" type="textarea" show-word-limit />
               <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSummary }}</pre>
             </div>
           </el-card>
@@ -324,15 +323,80 @@
               <span>健康建议</span>
             </div>
             <div>
-              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="10" type="textarea" show-word-limit />
+              <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="5" type="textarea" show-word-limit />
               <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSuggest }}</pre>
+            </div>
+          </el-card>
+          <el-card class="box-card" style="margin-bottom:10px">
+            <div slot="header" class="clearfix">
+              <span>推荐商品</span>
+            </div>
+            <div>
+
+              <div v-if="!formBySug.isSend">
+                <el-autocomplete
+                  v-model="temp.searchSkuKey"
+                  :fetch-suggestions="onSearchSku"
+                  placeholder="商品名称/编码/条形码/首拼音母"
+                  clearable
+                  style="width: 75%"
+                  size="medium"
+                  @select="onSearchSkuSelect"
+                >
+                  <template slot-scope="{ item }">
+                    <div class="spu-search">
+                      <div class="name">{{ item.name }}</div>
+                      <div class="desc">[{{ item.cumCode }}]</div>
+                    </div>
+                  </template>
+                </el-autocomplete>
+
+                <el-button size="medium" style="width: 20%" @click="onAddSugSku">添加</el-button>
+              </div>
+
+              <div>
+                <el-table
+                  key="list_sugskus"
+                  :data="formBySug.sugSkus"
+                  fit
+                  highlight-current-row
+                  style="width: 100%;"
+                >
+                  <el-table-column label="商品名称" align="left" min-width="50%">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.name }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="编码" align="left" min-width="50%">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.cumCode }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    v-if="!formBySug.isSend"
+                    label="操作"
+                    align="right"
+                    width="180"
+                    class-name="small-padding fixed-width"
+                  >
+                    <template slot-scope="scope">
+                      <el-button
+                        type="text"
+                        size="mini"
+                        @click="onDeleteSugSku(scope.$index)"
+                      >删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+
             </div>
           </el-card>
         </div>
         <div style="display: flex;position: absolute; bottom: 0;width: 100%;padding: 10px 20px;    background: #fff;" class="drawer__footer">
-          <el-button style="flex:1" @click="handleCloseByDrawerBySug">取 消</el-button>
-          <el-button v-if="!formBySug.isSend" style="flex:1" type="primary" @click="handleSaveSug(false)">暂 存</el-button>
-          <el-button v-if="!formBySug.isSend" style="flex:1" type="success" @click="handleSaveSug(true)">保存并发送</el-button>
+          <el-button style="flex:1" @click="onCloseByDrawerBySug">取 消</el-button>
+          <el-button v-if="!formBySug.isSend" style="flex:1" type="primary" @click="onSaveSug(false)">暂 存</el-button>
+          <el-button v-if="!formBySug.isSend" style="flex:1" type="success" @click="onSaveSug(true)">保存并发送</el-button>
         </div>
       </div>
     </el-drawer>
@@ -345,7 +409,7 @@
 import { MessageBox } from 'element-ui'
 import echarts from 'echarts'
 import { getMonthReportDetail, saveMonthReportSug, getMonthReportSug } from '@/api/senviv'
-
+import { searchSku } from '@/api/product'
 var myChart1
 var myChart2
 
@@ -381,7 +445,12 @@ export default {
         reportId: '',
         rptSummary: '',
         rptSuggest: '',
-        isSend: false
+        isSend: false,
+        sugSkus: []
+      },
+      temp: {
+        searchSkuKey: '',
+        cur_search_sel_sku: { id: '', name: '', cumCode: '' }
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -398,7 +467,7 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this._getDayReportDetail()
+    this.onGetDayReportDetail()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -421,7 +490,7 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    _getDayReportDetail() {
+    onGetDayReportDetail() {
       this.loading = true
       getMonthReportDetail({ reportId: this.reportId }).then(res => {
         if (res.result === 1) {
@@ -430,14 +499,14 @@ export default {
           this.rd = d.reportData
 
           this.$nextTick(function() {
-            this.getChartByXl()
-            this.getChartByHrv()
+            this.onGetChartByXl()
+            this.onGetChartByHrv()
           }, 2000)
         }
         this.loading = false
       })
     },
-    getChartByXl() {
+    onGetChartByXl() {
       var rd = this.rd
       if (rd.datePt === null) { return }
       var datePt = rd.datePt
@@ -513,7 +582,7 @@ export default {
 
       myChart1.setOption(option, null)
     },
-    getChartByHrv() {
+    onGetChartByHrv() {
       var rd = this.rd
       if (rd.datePt === null) { return }
       var datePt = rd.datePt
@@ -590,14 +659,14 @@ export default {
 
       myChart2.setOption(option, null)
     },
-    handleCloseByDrawerBySug() {
+    onCloseByDrawerBySug() {
       this.drawerBySug.visible = false
     },
-    handleOpenByDrawerBySug() {
+    onOpenByDrawerBySug() {
       this.drawerBySug.visible = true
-      this._getMonthReportSug()
+      this.onGetMonthReportSug()
     },
-    _getMonthReportSug() {
+    onGetMonthReportSug() {
       this.loadingBySug = true
       getMonthReportSug({ reportId: this.reportId }).then(res => {
         this.loadingBySug = false
@@ -607,10 +676,11 @@ export default {
           this.formBySug.rptSummary = d.rptSummary
           this.formBySug.rptSuggest = d.rptSuggest
           this.formBySug.isSend = d.isSend
+          this.formBySug.sugSkus = d.sugSkus
         }
       })
     },
-    handleSaveSug(isSend) {
+    onSaveSug(isSend) {
       var tips = '确定要暂存'
       if (isSend) {
         tips = '确定要保存并发送'
@@ -620,7 +690,8 @@ export default {
         reportId: this.reportId,
         isSend: isSend,
         rptSuggest: this.formBySug.rptSuggest,
-        rptSummary: this.formBySug.rptSummary
+        rptSummary: this.formBySug.rptSummary,
+        sugSkus: this.formBySug.sugSkus
       }
       MessageBox.confirm(tips, '提示', {
         confirmButtonText: '确定',
@@ -633,7 +704,7 @@ export default {
               message: res.message,
               type: 'success'
             })
-            this._getMonthReportSug()
+            this.omGetMonthReportSug()
           } else {
             this.$message({
               message: res.message,
@@ -643,6 +714,57 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    onSearchSku(queryString, cb) {
+      searchSku({ key: queryString }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          var restaurants = []
+          for (var j = 0; j < d.length; j++) {
+            restaurants.push({
+              value: d[j].name,
+              mainImgUrl: d[j].mainImgUrl,
+              name: d[j].name,
+              skuId: d[j].skuId,
+              cumCode: d[j].cumCode
+            })
+          }
+
+          cb(restaurants)
+        }
+      })
+    },
+    onSearchSkuSelect(item) {
+      this.temp.cur_search_sel_sku.id = item.skuId
+      this.temp.cur_search_sel_sku.name = item.name
+      this.temp.cur_search_sel_sku.cumCode = item.cumCode
+    },
+    onAddSugSku() {
+      var list = this.formBySug.sugSkus
+      var id = this.temp.cur_search_sel_sku.id
+      var name = this.temp.cur_search_sel_sku.name
+      var cumCode = this.temp.cur_search_sel_sku.cumCode
+      if (id === '' || typeof id === 'undefined') {
+        this.$message('请选择商品')
+        return
+      }
+      const is_has = list.find(item => {
+        return item.id === id
+      })
+
+      if (is_has != null) {
+        this.$message('商品已存在')
+        return
+      }
+      list.push({ id: id, name: name, cumCode: cumCode })
+      this.temp.searchSkuKey = ''
+      this.temp.cur_search_sel_sku.id = ''
+      this.temp.cur_search_sel_sku.name = ''
+      this.temp.cur_search_sel_sku.cumCode = ''
+    },
+    onDeleteSugSku(index) {
+      var list = this.formBySug.sugSkus
+      list.splice(index, 1)
     }
   }
 }

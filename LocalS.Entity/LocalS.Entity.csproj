@@ -103,6 +103,7 @@
     <Compile Include="SenvivHealthDayReportAdvice.cs" />
     <Compile Include="SenvivHealthDayReportLabel.cs" />
     <Compile Include="SenvivHealthMonthReport.cs" />
+    <Compile Include="SenvivHealthMonthReportSugSku.cs" />
     <Compile Include="SenvivHealthMonthReportTag.cs" />
     <Compile Include="SenvivHealthTagExplain.cs" />
     <Compile Include="SenvivUser.cs" />
