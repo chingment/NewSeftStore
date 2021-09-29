@@ -203,6 +203,7 @@ namespace Test
 
             var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", configParams);
 
+            //OAuthApi.GetUserOpenIds(config.TrdAccessToken);
 
             //string openId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
             //string first = "您好，您的净水设备租约即使到期";
