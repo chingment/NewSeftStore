@@ -704,7 +704,7 @@ export default {
               message: res.message,
               type: 'success'
             })
-            this.omGetMonthReportSug()
+            this.onGetMonthReportSug()
           } else {
             this.$message({
               message: res.message,
