@@ -871,7 +871,7 @@ into g
             string tradeEndTime = DateTime.Parse(CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]).ToString()).ToString("yyyy-MM-dd HH:mm:ss");
 
             StringBuilder sql = new StringBuilder(" select StoreName,ShopName, DeviceCumCode,SumChargeAmount,SumCount, Convert(decimal(18,2),SumChargeAmount/SumCount) as PerCumPrice  from ( ");
-            sql.Append(" select StoreName,ShopName, DeviceCumCode,SUM(ChargeAmount) as SumChargeAmount,COUNT(*) as SumCount from dbo.[Order] where PayStatus=3 ");
+            sql.Append(" select StoreName,ShopName, DeviceCumCode,SUM(ChargeAmount)-Sum(RefundedAmount) as SumChargeAmount,COUNT(*) as SumCount from dbo.[Order] where PayStatus=3 ");
             sql.Append(" and IsTestMode=0 and MerchId='" + merchId + "' and PayedTime>='" + tradeStartTime + "' and PayedTime<='" + tradeEndTime + "' ");
             sql.Append(" group by  StoreName,ShopName,DeviceCumCode) tb ");
 
