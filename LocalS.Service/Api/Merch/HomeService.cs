@@ -215,7 +215,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret_RptSkuSaleRl = new RetRptSkuSaleRl();
 
-            StringBuilder sql = new StringBuilder("  select top 10 skuName ,sum(Quantity) as sumQuantity,sum(ChargeAmount) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by SkuName order by sumQuantity desc ");
+            StringBuilder sql = new StringBuilder("  select top 10 skuName ,sum(Quantity-RefundedQuantity) as sumQuantity,sum(ChargeAmount-RefundedQuantity) as sumTradeAmount  from OrderSub WITH(NOLOCK) where merchId='" + merchId + "' and IsTestMode=0 and PayStatus='3' group by SkuName order by sumQuantity desc ");
 
             DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0];
             for (int r = 0; r < dtData.Rows.Count; r++)
