@@ -12,14 +12,12 @@
         <el-input :value="form.fileUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.fileUrls"
-          :action="uploadImgServiceUrl"
+          :action="uploadServiceUrl"
           list-type="picture-card"
-          :before-upload="onFileBeforeUpload"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-error="handleError"
-          :file-list="uploadImglist"
+          :before-upload="onFileUploadBefore"
+          :on-success="onFileUploadSuccess"
+          :on-remove="onFileUploadRemove"
+          :on-error="onFileUploadError"
           :limit="1"
         >
           <i class="el-icon-plus" />
@@ -39,14 +37,14 @@
             <span class="el-upload-list__item-actions">
               <span
                 class="el-upload-list__item-preview"
-                @click="handlePreview(file)"
+                @click="onFileUploadPreview(file)"
               >
                 <i class="el-icon-zoom-in" />
               </span>
               <span
                 v-if="!disabled"
                 class="el-upload-list__item-delete"
-                @click="handleRemove(file)"
+                @click="onFileUploadRemove(file)"
               >
                 <i class="el-icon-delete" />
               </span>
@@ -106,7 +104,8 @@ export default {
         adSpaceName: '',
         adSpaceDescription: '',
         adSpaceSupportFormat: '',
-        belongs: []
+        belongs: [],
+        fileType: ''
       },
       form: {
         adSpaceId: 0,
@@ -123,11 +122,11 @@ export default {
       },
       belongsCheckAll: false,
       belongsIsIndeterminate: true,
-      uploadImglist: [],
+      uploadFilelist: [],
       uploadPreDialogFileName: '',
       uploadPreDialogFileUrl: '',
       uploadPreDialogVisible: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
+      uploadServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
   created() {
@@ -200,7 +199,7 @@ export default {
       }
       return _fileUrls
     },
-    onFileBeforeUpload(file) {
+    onFileUploadBeforeUpload(file) {
       if (this.temp.adSpaceSupportFormat === null || this.temp.adSpaceSupportFormat === '') {
         this.$message({
           message: '未设置文件格式',
@@ -217,27 +216,33 @@ export default {
         return false
       }
     },
-    handleRemove(file, fileList) {
-      this.uploadImglist = fileList
-      this.form.fileUrls = []
-      if (this.form.fileUrls.length === 0) {
+    onFileUploadRemove(file) {
+      if (this.uploadFilelist != null) {
+        for (var i = 0; i < this.uploadFilelist.length; i++) {
+          if (this.uploadFilelist[i].uid === file.uid) {
+            this.uploadFilelist.splice(i, 1)
+          }
+        }
+      }
+      this.form.fileUrls = this.getdisplayImgUrls(this.uploadFilelist)
+      if (this.form.fileUrls == null || this.form.fileUrls.length === 0) {
         var var1 = document.querySelector('.el-upload')
         var1.style.display = 'block'
       }
     },
-    handleSuccess(response, file, fileList) {
-      this.uploadImglist = fileList
+    onFileUploadSuccess(response, file, fileList) {
+      this.uploadFilelist = fileList
       this.form.fileUrls = this.getdisplayImgUrls(fileList)
       if (this.form.fileUrls.length === 1) {
         var var1 = document.querySelector('.el-upload')
         var1.style.display = 'none'
       }
     },
-    handleError(errs, file, fileList) {
-      this.uploadImglist = fileList
+    onFileUploadError(errs, file, fileList) {
+      this.uploadFilelist = fileList
       this.form.fileUrls = this.getdisplayImgUrls(fileList)
     },
-    handlePreview(file) {
+    onFileUploadPreview(file) {
       this.uploadPreDialogFileName = file.name
       this.uploadPreDialogFileUrl = file.url
       this.uploadPreDialogVisible = true

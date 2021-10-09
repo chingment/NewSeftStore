@@ -45,7 +45,18 @@
       </el-table-column>
       <el-table-column label="文件" prop="imgUrl" align="left" width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.url" style="width:80px;height:80px;">
+
+          <img v-if="scope.row.url.indexOf('png')>-1||scope.row.url.indexOf('jpg')>-1" :src="scope.row.url" style="width:80px;height:80px;">
+
+          <video
+            v-else-if="scope.row.url.indexOf('mp4')>-1"
+            :src="scope.row.url"
+            width="100"
+            height="100"
+            class="el-upload-list__item-thumbnail"
+            controls="controls"
+          />
+
         </template>
       </el-table-column>
       <el-table-column label="标题" prop="title" align="left" min-width="40%">
