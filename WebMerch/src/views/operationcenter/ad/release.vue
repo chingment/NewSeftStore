@@ -42,7 +42,6 @@
                 <i class="el-icon-zoom-in" />
               </span>
               <span
-                v-if="!disabled"
                 class="el-upload-list__item-delete"
                 @click="onFileUploadRemove(file)"
               >
@@ -199,7 +198,7 @@ export default {
       }
       return _fileUrls
     },
-    onFileUploadBeforeUpload(file) {
+    onFileUploadBefore(file) {
       if (this.temp.adSpaceSupportFormat === null || this.temp.adSpaceSupportFormat === '') {
         this.$message({
           message: '未设置文件格式',
