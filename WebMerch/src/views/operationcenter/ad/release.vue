@@ -23,7 +23,6 @@
           :limit="1"
         >
           <i class="el-icon-plus" />
-
           <div slot="file" slot-scope="{file}">
             <img
               v-if="file.name.indexOf('png')>-1||file.name.indexOf('jpg')>-1"
@@ -55,8 +54,13 @@
           </div>
 
         </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
+        <el-dialog :visible.sync="uploadPreDialogVisible">
+          <img v-if="uploadPreDialogFileName.indexOf('png')>-1||uploadPreDialogFileName.indexOf('jpg')>-1" width="100%" :src="uploadPreDialogFileUrl" alt="">
+          <video
+            v-else-if="uploadPreDialogFileName.indexOf('mp4')>-1"
+            :src="uploadPreDialogFileUrl"
+            controls="controls"
+          />
         </el-dialog>
         <div class="remark-tip"><span class="sign">*注</span>：{{ temp.adSpaceDescription }}</div>
       </el-form-item>
@@ -120,8 +124,9 @@ export default {
       belongsCheckAll: false,
       belongsIsIndeterminate: true,
       uploadImglist: [],
-      uploadImgPreImgDialogUrl: '',
-      uploadImgPreImgDialogVisible: false,
+      uploadPreDialogFileName: '',
+      uploadPreDialogFileUrl: '',
+      uploadPreDialogVisible: false,
       uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
     }
   },
@@ -233,8 +238,9 @@ export default {
       this.form.fileUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
+      this.uploadPreDialogFileName = file.name
+      this.uploadPreDialogFileUrl = file.url
+      this.uploadPreDialogVisible = true
     }
   }
 }
