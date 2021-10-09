@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    
+
     public enum E_AdSpaceId
     {
         Unknow = 0,
@@ -27,6 +27,7 @@ namespace LocalS.Entity
         public E_AdSpaceId Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string SupportFormat { get; set; }
         public string Creator { get; set; }
         public E_AdSpaceBelongType BelongType { get; set; }
         public DateTime CreateTime { get; set; }

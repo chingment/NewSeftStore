@@ -133,7 +133,7 @@ namespace LocalS.Service.Api.Merch
                 ret.AdSpaceId = d_AdSpace.Id;
                 ret.AdSpaceName = d_AdSpace.Name;
                 ret.AdSpaceDescription = d_AdSpace.Description;
-
+                ret.AdSpaceSupportFormat = d_AdSpace.SupportFormat;
                 if (d_AdSpace.BelongType == E_AdSpaceBelongType.App)
                 {
                     var d_Stores = CurrentDb.Store.Where(m => m.MerchId == merchId).ToList();
@@ -270,7 +270,7 @@ namespace LocalS.Service.Api.Merch
                 d_AdContent.MerchId = merchId;
                 d_AdContent.Priority = 0;
                 d_AdContent.Title = rop.Title;
-                d_AdContent.Url = rop.DisplayImgUrls[0].Url;
+                d_AdContent.Url = rop.FileUrls[0].Url;
                 d_AdContent.Status = E_AdContentStatus.Normal;
                 d_AdContent.Creator = operater;
                 d_AdContent.CreateTime = DateTime.Now;

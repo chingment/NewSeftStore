@@ -163,7 +163,7 @@ export default {
               message: res.message,
               type: 'success'
             })
-            this.getListData()
+            this.onGetList()
           } else {
             this.$message({
               message: res.message,

@@ -16,7 +16,7 @@ namespace LocalS.Service.Api.Merch
         public E_AdSpaceId AdSpaceId { get; set; }
         public string AdSpaceName { get; set; }
         public string AdSpaceDescription { get; set; }
-
+        public string AdSpaceSupportFormat { get; set; }
         public List<Object> Belongs { get; set; }
     }
 }

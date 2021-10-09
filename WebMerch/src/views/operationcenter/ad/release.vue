@@ -8,13 +8,14 @@
       <el-form-item label="标题" prop="title">
         <el-input v-model="form.title" clearable />
       </el-form-item>
-      <el-form-item label="图片" prop="displayImgUrls">
-        <el-input :value="form.displayImgUrls.toString()" style="display:none" />
+      <el-form-item label="文件" prop="fileUrls">
+        <el-input :value="form.fileUrls.toString()" style="display:none" />
         <el-upload
           ref="uploadImg"
-          v-model="form.displayImgUrls"
+          v-model="form.fileUrls"
           :action="uploadImgServiceUrl"
           list-type="picture-card"
+          :before-upload="onFileBeforeUpload"
           :on-success="handleSuccess"
           :on-remove="handleRemove"
           :on-error="handleError"
@@ -70,6 +71,7 @@ export default {
       temp: {
         adSpaceName: '',
         adSpaceDescription: '',
+        adSpaceSupportFormat: '',
         belongs: []
       },
       form: {
@@ -77,11 +79,11 @@ export default {
         title: '',
         belongIds: [],
         validDate: [],
-        displayImgUrls: []
+        fileUrls: []
       },
       rules: {
         title: [{ required: true, min: 1, max: 200, message: '必填,且不能超过200个字符', trigger: 'change' }],
-        displayImgUrls: [{ type: 'array', required: true, message: '至多上传一张', max: 1 }],
+        fileUrls: [{ type: 'array', required: true, message: '至多上传一个文件', max: 1 }],
         belongIds: [{ type: 'array', required: true, message: '至少选择一个对象', min: 1 }],
         validDate: [{ type: 'array', required: true, message: '请选择有效期' }]
       },
@@ -107,6 +109,7 @@ export default {
           this.form.adSpaceId = d.adSpaceId
           this.temp.adSpaceName = d.adSpaceName
           this.temp.adSpaceDescription = d.adSpaceDescription
+          this.temp.adSpaceSupportFormat = d.adSpaceSupportFormat
           this.temp.belongs = d.belongs
         }
         this.loading = false
@@ -154,33 +157,50 @@ export default {
       this.belongsIsIndeterminate = checkedCount > 0 && checkedCount < this.temp.belongs.length
     },
     getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
+      var _fileUrls = []
       for (var i = 0; i < fileList.length; i++) {
         if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
+          _fileUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
         }
       }
-      return _displayImgUrls
+      return _fileUrls
+    },
+    onFileBeforeUpload(file) {
+      if (this.temp.adSpaceSupportFormat === null || this.temp.adSpaceSupportFormat === '') {
+        this.$message({
+          message: '未设置文件格式',
+          type: 'error'
+        })
+        return false
+      }
+
+      if (this.temp.adSpaceSupportFormat.indexOf(file.type) === -1) {
+        this.$message({
+          message: '不支持该文件格式',
+          type: 'error'
+        })
+        return false
+      }
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-      if (this.form.displayImgUrls.length === 0) {
+      this.form.fileUrls = this.getdisplayImgUrls(fileList)
+      if (this.form.fileUrls.length === 0) {
         var var1 = document.querySelector('.el-upload')
         var1.style.display = 'block'
       }
     },
     handleSuccess(response, file, fileList) {
       this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-      if (this.form.displayImgUrls.length === 1) {
+      this.form.fileUrls = this.getdisplayImgUrls(fileList)
+      if (this.form.fileUrls.length === 1) {
         var var1 = document.querySelector('.el-upload')
         var1.style.display = 'none'
       }
     },
     handleError(errs, file, fileList) {
       this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
+      this.form.fileUrls = this.getdisplayImgUrls(fileList)
     },
     handlePreview(file) {
       this.uploadImgPreImgDialogUrl = file.url

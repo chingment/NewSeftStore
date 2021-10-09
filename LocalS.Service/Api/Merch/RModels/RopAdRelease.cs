@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
     {
         public E_AdSpaceId AdSpaceId { get; set; }
         public string Title { get; set; }
-        public List<ImgSet> DisplayImgUrls { get; set; }
+        public List<ImgSet>  FileUrls { get; set; }
         public List<string> BelongIds { get; set; }
         public string[] ValidDate { get; set; }
     }
