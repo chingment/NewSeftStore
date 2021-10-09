@@ -19,11 +19,41 @@
           :on-success="handleSuccess"
           :on-remove="handleRemove"
           :on-error="handleError"
-          :on-preview="handlePreview"
           :file-list="uploadImglist"
           :limit="1"
         >
           <i class="el-icon-plus" />
+
+          <div slot="file" slot-scope="{file}">
+            <img
+              v-if="file.name.indexOf('png')>-1||file.name.indexOf('jpg')>-1"
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            >
+            <video
+              v-else-if="file.name.indexOf('mp4')>-1"
+              :src="file.url"
+              class="el-upload-list__item-thumbnail"
+              controls="controls"
+            />
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePreview(file)"
+              >
+                <i class="el-icon-zoom-in" />
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete" />
+              </span>
+            </span>
+          </div>
+
         </el-upload>
         <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
           <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
@@ -184,7 +214,7 @@ export default {
     },
     handleRemove(file, fileList) {
       this.uploadImglist = fileList
-      this.form.fileUrls = this.getdisplayImgUrls(fileList)
+      this.form.fileUrls = []
       if (this.form.fileUrls.length === 0) {
         var var1 = document.querySelector('.el-upload')
         var1.style.display = 'block'
