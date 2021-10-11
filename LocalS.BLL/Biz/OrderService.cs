@@ -1099,18 +1099,21 @@ namespace LocalS.BLL.Biz
                     var d_Orders = CurrentDb.Order.Where(m => orderIds.Contains(m.Id)).ToList();
                     foreach (var d_Order in d_Orders)
                     {
+
+                        d_Order.ClientUserId = d_PayTrans.ClientUserId;
+                        d_Order.ClientUserName = d_PayTrans.ClientUserName;
+                        d_Order.PayedTime = d_PayTrans.PayedTime;
+                        d_Order.PayStatus = d_PayTrans.PayStatus;
+                        d_Order.PayWay = d_PayTrans.PayWay;
+                        d_Order.PayPartner = payPartner;
+                        d_Order.PayPartnerPayTransId = payPartnerPayTransId;
+                        d_Order.MendTime = DateTime.Now;
+                        d_Order.Mender = operater;
+
+
                         if (d_Order.Status == E_OrderStatus.WaitPay)
                         {
 
-                            d_Order.ClientUserId = d_PayTrans.ClientUserId;
-                            d_Order.ClientUserName = d_PayTrans.ClientUserName;
-                            d_Order.PayedTime = d_PayTrans.PayedTime;
-                            d_Order.PayStatus = d_PayTrans.PayStatus;
-                            d_Order.PayWay = d_PayTrans.PayWay;
-                            d_Order.PayPartner = payPartner;
-                            d_Order.PayPartnerPayTransId = payPartnerPayTransId;
-                            d_Order.MendTime = DateTime.Now;
-                            d_Order.Mender = operater;
 
                             switch (d_Order.ReceiveMode)
                             {

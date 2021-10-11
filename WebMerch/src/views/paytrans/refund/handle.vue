@@ -284,6 +284,11 @@
           <el-form-item label="备注:" prop="remark">
             <el-input v-model="formByHandle.remark" clearable />
           </el-form-item>
+          <!--
+          <el-form-item label="支付密码:" prop="remark">
+            <password-input style="width:250px" @get-pwd="getPwd" />
+          </el-form-item> -->
+
         </el-form>
 
       </div>
@@ -311,10 +316,10 @@
 import { getListByHandle, getHandleDetails, handle } from '@/api/payrefund'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { MessageBox } from 'element-ui'
-
+import PasswordInput from '@/components/PasswordInput'
 export default {
   name: 'PayTransRefundHandle',
-  components: { Pagination },
+  components: { Pagination, PasswordInput },
   data() {
     return {
       loading: false,
