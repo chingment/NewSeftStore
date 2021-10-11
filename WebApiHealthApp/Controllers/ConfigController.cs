@@ -14,13 +14,14 @@ namespace WebApiHealthApp.Controllers
     public class ConfigController : ApiController
     {
         [HttpPost]
+        [AllowAnonymous]
         public OwnApiHttpResponse JsSdk(RopConfigJsSdk rop)
         {
-            string accessToken = SdkFactory.Senviv.GetApiAccessToken();
+            //string accessToken = SdkFactory.Senviv.GetApiAccessToken();
             WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxf0d98b28bebd0c82";
-            config.AppSecret = "209576db0fa3a24d525b98f9b80676ae";
-            config.TrdAccessToken = accessToken;
+            config.AppId = "wxc6e80f8c575cf3f5";
+            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+            //config.TrdAccessToken = accessToken;
 
             var configParams = SdkFactory.Wx.GetJsApiConfigParams(config, rop.RequestUrl);
 

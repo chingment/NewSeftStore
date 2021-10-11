@@ -58,17 +58,27 @@
             <div class="ct">
               <div class="title">健康建议：</div>
               <div class="content"><pre style="white-space: pre-line;">{{ rd.rptSuggest }}</pre></div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- <wx-open-launch-weapp id="launch-btn" username="gh_a5cb8321daaa" path="pages/productdetails/productdetails.html?skuId=9aa7ab50e70b4b57ac0d4ffe4fc1412e&shopMethod=1">
+      <script type="text/wxtag-template">
+        <button class="open-launch-weapp-btn" style="background-color: transparent;border: none;color:#FDE6B0;font-size:12px;">去小程序</button>
+      </script>
+    </wx-open-launch-weapp> -->
+
   </div>
 </template>
 <script>
 
 import { getMonitor } from '@/api/monthreport'
 import DvItem from '@/components/DvItem.vue'
+import axios from 'axios'
+import wx from 'weixin-js-sdk'
 import 'swiper/dist/css/swiper.min.css'
 import 'swiper/dist/js/swiper.min'
 export default {
@@ -98,6 +108,25 @@ export default {
     }
   },
   created() {
+    axios({
+      method: 'post',
+      url: 'http://api.health.17fanju.com/api/config/jssdk',
+      data: { requestUrl: location.href.split('#')[0] } // 向服务端提供授权url参数，并且不需要#后面的部分
+    }).then((res) => {
+      // console.log(res.data)
+      var d = res.data.data.data
+      console.log(d)
+      wx.config({
+        debug: false, // 开启调试模式,
+        appId: d.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+        timestamp: d.timestamp, // 必填，生成签名的时间戳
+        nonceStr: d.nonceStr, // 必填，生成签名的随机串
+        signature: d.signature, // 必填，签名，见附录1
+        jsApiList: ['onMenuShareTimeline'],
+        openTagList: ['wx-open-launch-weapp']
+      })
+    })
+
     this._getMonitor()
   },
   methods: {

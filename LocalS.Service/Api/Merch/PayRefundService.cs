@@ -205,7 +205,6 @@ namespace LocalS.Service.Api.Merch
                          ((rup.OrderId != null && o.Id == rup.OrderId) ||
                          (rup.PayTransId != null && o.PayTransId == rup.PayTransId) ||
                          (rup.PayPartnerOrderId != null && o.PayPartnerPayTransId == rup.PayPartnerOrderId)) &&
-                         o.PayStatus == E_PayStatus.PaySuccess &&
                          o.MerchId == merchId
                          select new { o.Id, o.StoreId, o.StoreName, o.ReceiveMode, o.PayTransId, o.Status, o.PickupIsTrg, o.ExIsHappen, o.ExIsHandle, o.ReceiveModeName, o.DeviceId, o.ChargeAmount, o.DiscountAmount, o.OriginalAmount, o.Quantity, o.AppId, o.IsTestMode, o.ClientUserId, o.SubmittedTime, o.ClientUserName, o.Source, o.PayedTime, o.PayWay, o.CreateTime, o.PayStatus, o.PayPartnerPayTransId });
 
@@ -285,7 +284,7 @@ namespace LocalS.Service.Api.Merch
             ret.Order.ExIsHappen = order.ExIsHappen;
             ret.Order.DeviceCumCode = MerchServiceFactory.Device.GetCode(order.DeviceId, order.DeviceCumCode);
             ret.Order.PayWay = BizFactory.Order.GetPayWay(order.PayWay);
-
+            ret.Order.IsTimeoutPayed = order.IsTimeoutPayed;
             var payRefund = CurrentDb.PayRefund.Where(m => m.OrderId == orderId).ToList();
 
             decimal refundedAmount = payRefund.Where(m => m.Status == E_PayRefundStatus.Success).Sum(m => m.ApplyAmount);
@@ -391,8 +390,8 @@ namespace LocalS.Service.Api.Merch
                 payRefund.ClientUserId = order.ClientUserId;
                 payRefund.ClientUserName = order.ClientUserName;
                 payRefund.OrderId = order.Id;
-                payRefund.PayPartnerPayTransId = order.PayPartnerPayTransId;
-                payRefund.PayTransId = order.PayTransId;
+                payRefund.PayPartnerPayTransId = payTran.PayPartnerPayTransId;
+                payRefund.PayTransId = payTran.Id;
                 payRefund.ApplyTime = DateTime.Now;
                 payRefund.ApplyMethod = rop.Method;
                 payRefund.ApplyRemark = rop.Remark;
@@ -608,7 +607,7 @@ namespace LocalS.Service.Api.Merch
                     #region  线上处理
                     if (rop.Result == RopPayRefundHandle.E_Result.TurnToAutoRefund)
                     {
-                        switch (order.PayPartner)
+                        switch (payTran.PayPartner)
                         {
                             case E_PayPartner.Wx:
                                 #region Wx
@@ -690,11 +689,13 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
+                LogUtil.Info("refundStatus:" + refundStatus);
+
                 if (result.Result == ResultType.Success)
                 {
                     if (refundStatus == "HANDLING")
                     {
-                        Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, PayTransId = order.PayTransId, PayPartner = order.PayPartner });
+                        Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, PayTransId = payTran.Id, PayPartner = payTran.PayPartner });
                     }
 
                     MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.pay_refund_handle, string.Format("订单号:{0}，处理退款金额：{1}，提交成功，退款单号：{2}", payRefund.OrderId, payRefund.ApplyAmount.ToF2Price(), payRefund.Id), rop);

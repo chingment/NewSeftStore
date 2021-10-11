@@ -180,6 +180,15 @@
             </div>
           </el-col>
         </el-form>
+        <div v-if="details.order.isTimeoutPayed">
+
+          <el-alert
+            title="该订单是超时支付正常"
+            type="error"
+            :closable="false"
+          />
+
+        </div>
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>商品信息</h5>
           </div>
@@ -417,7 +426,7 @@ export default {
         }
       }
 
-      if(refundSkus.length<=0){
+      if (refundSkus.length <= 0) {
         this.$message({
           message: '至少标记一个退款商品',
           type: 'error'

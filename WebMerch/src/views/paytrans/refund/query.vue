@@ -369,7 +369,8 @@ export default {
           exHandleRemark: '',
           isRunning: false,
           skus: [],
-          payWay: { text: '' }
+          payWay: { text: '' },
+          isTimeoutPayed: false
         }
       },
       isDesktop: this.$store.getters.isDesktop

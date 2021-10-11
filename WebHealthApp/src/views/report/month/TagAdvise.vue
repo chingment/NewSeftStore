@@ -21,6 +21,7 @@
               <div class="content"><pre style="white-space: pre-line;">{{ rd.suggest }}</pre></div>
             </div>
           </div>
+
         </div>
 
       </div>
