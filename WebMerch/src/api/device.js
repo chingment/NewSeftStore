@@ -119,6 +119,14 @@ export function openPickupDoor(data) {
   })
 }
 
+export function updateApp(data) {
+  return request({
+    url: '/device/updateApp',
+    method: 'post',
+    data
+  })
+}
+
 export function bindShop(data) {
   return request({
     url: '/device/bindShop',
@@ -149,6 +157,7 @@ export default {
   setSysStatus: setSysStatus,
   setSysParams: setSysParams,
   getSysParams: getSysParams,
+  updateApp: updateApp,
   queryMsgPushResult: queryMsgPushResult,
   openPickupDoor: openPickupDoor,
   bindShop: bindShop,

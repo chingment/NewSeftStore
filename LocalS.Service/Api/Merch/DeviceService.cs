@@ -604,6 +604,14 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult UpdateApp(string operater, string merchId, RopDeviceOpenPickupDoor rop)
+        {
+
+            var result = BizFactory.Device.SendUpdateApp(operater, AppId.MERCH, merchId, rop.Id);
+
+            return result;
+        }
+
         public CustomJsonResult QueryMsgPushResult(string operater, string merchId, RopDeviceQueryMsgPushResult rop)
         {
 

@@ -241,6 +241,11 @@ namespace LocalS.BLL.Biz
             return SendCommand(operater, appId, merchId, deviceId, "open_pickup_door");
         }
 
+        public CustomJsonResult SendUpdateApp(string operater, string appId, string merchId, string deviceId)
+        {
+            return SendCommand(operater, appId, merchId, deviceId, "update_app");
+        }
+
         public CustomJsonResult SendDeviceShip(string operater, string appId, string merchId, string deviceId, object pms)
         {
             return SendCommand(operater, appId, merchId, deviceId, "device_ship", pms);

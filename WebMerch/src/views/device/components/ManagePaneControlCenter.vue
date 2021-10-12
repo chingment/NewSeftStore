@@ -7,6 +7,7 @@
 
         <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;" @click="onOpenDialogSetSysStatus">设置状态</el-button>
         <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onOpenDialogSetSysParams">参数设置</el-button>
+        <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onUpdateApp">远程更新</el-button>
         <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onRebootSys">重启系统</el-button>
         <el-button type="primary" style="margin-bottom:20px;margin-right: 10px;margin-left: 0px;" @click="onShutDownSys">关闭系统</el-button>
 
@@ -122,7 +123,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { rebootSys, shutdownSys, setSysStatus, getSysParams, setSysParams, openPickupDoor, queryMsgPushResult } from '@/api/device'
+import { rebootSys, shutdownSys, setSysStatus, getSysParams, setSysParams, openPickupDoor, updateApp, queryMsgPushResult } from '@/api/device'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -195,6 +196,31 @@ export default {
       }).then(() => {
         this.showLoading()
         rebootSys({ id: this.deviceId }).then(res => {
+          this.hideLoading()
+          if (res.result === 1) {
+            // this.onQueryMsgStatus(res.data.msgId)
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
+        })
+      }).catch(() => {
+      })
+    },
+    onUpdateApp() {
+      MessageBox.confirm('确定要远程更新App？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.showLoading()
+        updateApp({ id: this.deviceId }).then(res => {
           this.hideLoading()
           if (res.result === 1) {
             // this.onQueryMsgStatus(res.data.msgId)

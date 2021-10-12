@@ -114,6 +114,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse UpdateApp([FromBody]RopDeviceOpenPickupDoor rop)
+        {
+            var result = MerchServiceFactory.Device.UpdateApp(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         public OwnApiHttpResponse QueryMsgPushResult([FromBody]RopDeviceQueryMsgPushResult rop)
         {
             var result = MerchServiceFactory.Device.QueryMsgPushResult(this.CurrentUserId, this.CurrentMerchId, rop);
