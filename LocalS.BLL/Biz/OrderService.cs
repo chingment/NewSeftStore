@@ -2521,6 +2521,10 @@ namespace LocalS.BLL.Biz
                     {
                         order.RefundedQuantity += refundedQuantity;
                         order.RefundedAmount += refundAmount;
+                        if (order.RefundedAmount == order.ChargeAmount)
+                        {
+                            order.Status = E_OrderStatus.Completed;
+                        }
                         order.Mender = operater;
                         order.MendTime = DateTime.Now;
                     }
