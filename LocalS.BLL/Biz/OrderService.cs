@@ -2511,6 +2511,7 @@ namespace LocalS.BLL.Biz
                                 d_OrderSub.IsRefunded = true;
                                 d_OrderSub.RefundedAmount = d_PayRefundSku.ApplyRefundedAmount;
                                 d_OrderSub.RefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity;
+                                d_OrderSub.PickupStatus = E_OrderPickupStatus.UnTaked;
                                 refundedQuantity += d_PayRefundSku.ApplyRefundedQuantity;
                             }
                         }
