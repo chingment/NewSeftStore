@@ -1120,6 +1120,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     var d_SugSku = new SenvivHealthMonthReportSugSku();
                     d_SugSku.Id = IdWorker.Build(IdType.NewGuid);
                     d_SugSku.ReportId = rop.ReportId;
+                    d_SugSku.MerchId = merchId;
                     d_SugSku.SkuId = sugSku.Id;
                     d_SugSku.CreateTime = DateTime.Now;
                     d_SugSku.Creator = operater;

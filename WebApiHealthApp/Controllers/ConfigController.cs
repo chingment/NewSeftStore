@@ -15,7 +15,7 @@ namespace WebApiHealthApp.Controllers
     {
         [HttpPost]
         [AllowAnonymous]
-        public OwnApiHttpResponse JsSdk(RopConfigJsSdk rop)
+        public OwnApiHttpResponse<JsApiConfigParams> JsSdk(RopConfigJsSdk rop)
         {
             //string accessToken = SdkFactory.Senviv.GetApiAccessToken();
             WxAppInfoConfig config = new WxAppInfoConfig();
@@ -25,9 +25,7 @@ namespace WebApiHealthApp.Controllers
 
             var configParams = SdkFactory.Wx.GetJsApiConfigParams(config, rop.RequestUrl);
 
-            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", configParams);
-
-            return new OwnApiHttpResponse(result);
+            return new OwnApiHttpResponse<JsApiConfigParams>(configParams);
         }
     }
 }

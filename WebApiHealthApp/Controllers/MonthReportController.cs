@@ -40,6 +40,13 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetSugProducts([FromUri]string rptId)
+        {
+            var result = HealthAppServiceFactory.MonthReport.GetSugProducts(this.CurrentUserId, rptId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);

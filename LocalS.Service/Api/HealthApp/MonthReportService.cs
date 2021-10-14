@@ -318,6 +318,49 @@ namespace LocalS.Service.Api.HealthApp
             return result;
         }
 
+        public CustomJsonResult GetSugProducts(string operater, string rptId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SenvivHealthMonthReportSugSku
+                         where u.ReportId == rptId
+                         select new { u.Id, u.MerchId, u.SkuId, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = 0;
+            int pageSize = int.MaxValue;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                var r_Sku = CacheServiceFactory.Product.GetSkuInfo(item.MerchId, item.SkuId);
+                if (r_Sku != null)
+                {
+                    olist.Add(new
+                    {
+                        Id = r_Sku.Id,
+                        SpuId = r_Sku.SpuId,
+                        Name = r_Sku.Name,
+                        BriefDes = r_Sku.BriefDes,
+                        MainImgUrl = r_Sku.MainImgUrl
+                    });
+                }
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
         public CustomJsonResult UpdateVisitCount(string operater, string rptId)
         {
 

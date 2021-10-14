@@ -40,10 +40,19 @@ export function updateVisitCount(params) {
   })
 }
 
+export function getSugProducts(params) {
+  return request({
+    url: '/monthreport/getSugProducts',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getAdvise: getAdvise,
   getEnergy: getEnergy,
   getMonitor: getMonitor,
   getTagAdvise: getTagAdvise,
+  getSugProducts: getSugProducts,
   updateVisitCount: updateVisitCount
 }
