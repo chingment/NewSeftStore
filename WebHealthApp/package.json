@@ -31,6 +31,7 @@
     "vant": "^2.12.15",
     "vue": "2.6.10",
     "vue-baidu-map": "^0.21.22",
+    "vue-circle-counter": "^3.0.0",
     "vue-cookies": "^1.6.1",
     "vue-count-to": "^1.0.13",
     "vue-router": "3.0.6",

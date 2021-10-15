@@ -1,5 +1,9 @@
 <template>
   <div class="pg-monitor">
+    <!-- <circle-counter width="6rem" height="6rem" text="1" dash-count="100" active-count="20" dash-spacing="0" stroke-width="6" active-width="6">
+      <tspan font-weight="bold" font-size="60">1</tspan>
+      <tspan font-weight="bold" fill="#000">次</tspan>
+    </circle-counter> -->
     <div class="pt1">
       <div class="cd">
         <div class="lf">
@@ -77,9 +81,12 @@ import SugProduct from './components/SugProduct.vue'
 import wx from 'weixin-js-sdk'
 import 'swiper/dist/css/swiper.min.css'
 import 'swiper/dist/js/swiper.min'
+
+import CircleCounter from './components/CircleCounter.vue'
+
 export default {
   name: 'Report',
-  components: { SugProduct },
+  components: { SugProduct, CircleCounter },
   data() {
     return {
       loading: false,
