@@ -105,7 +105,9 @@ export default {
     }
   },
   created() {
-    jsSdk({ requestUrl: location.href.split('#')[0] }).then(res => {
+    this.rptId = this.$route.query.rptId
+
+    jsSdk({ requestUrl: location.href.split('#')[0], rptId: this.rptId }).then(res => {
       console.log(res)
 
       var d = res.data
@@ -140,7 +142,6 @@ export default {
     //   })
     // })
 
-    this.rptId = this.$route.query.rptId
     this._getMonitor()
   },
   methods: {

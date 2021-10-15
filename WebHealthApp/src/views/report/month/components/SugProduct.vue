@@ -1,17 +1,15 @@
 <template>
   <div class="sug-product" style="margin-top:20px">
-    <div class="sug-tag">------推荐产品------</div>
+    <div class="sug-tag">------ 健康商品 ------</div>
     <div class="its-skus prd-list-1">
       <div v-for="(sku,index) in skus" :key="index" :class="'it '+'it-'+index%2 ">
         <div class="imgurl">
           <img class="img" :src="sku.mainImgUrl" style="width: 100%;height:100%">
         </div>
         <div class="name">{{ sku.name }}</div>
-        <div class="briefInfo">{{ sku.briefDes }}</div>
-
         <wx-open-launch-weapp id="launch-btn" username="gh_1561f3c9d366" :path="'pages/productdetails/productdetails.html?skuId='+sku.id+'&shopMethod=1'">
           <script type="text/wxtag-template">
-            <button class="open-launch-weapp-btn" style="background-color: transparent;border: none;color:#FDE6B0;font-size:12px;">购买</button>
+            <button class="open-launch-weapp-btn" style="background-color:transparent;border: none;color:#ffb101;font-size:14px;">点击查看</button>
           </script>
         </wx-open-launch-weapp>
 
