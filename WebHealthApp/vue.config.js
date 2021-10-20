@@ -1,5 +1,7 @@
 'use strict'
+
 const path = require('path')
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -44,7 +46,29 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    plugins: [
+      // new SkeletonWebpackPlugin({
+      //   webpackConfig: {
+      //     entry: {
+      //       app: path.join(__dirname, './src/entry-skeleton.js')
+      //     }
+      //   },
+      //   minimize: true,
+      //   quiet: true,
+
+      //   // 如果不设置那么所有的路由都会共享这个骨架屏组件
+      //   router: {
+      //     mode: 'hash',
+
+      //     // 给对应的路由设置对应的骨架屏组件，skeletonId的值根据组件设置的id
+      //     routes: [
+      //       { path: '/', skeletonId: 'skeletonHomeIndex' }
+      //     ]
+      //   }
+      // })
+    ]
+
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test
@@ -95,6 +119,7 @@ module.exports = {
               inline: /runtime\..*\.js$/
             }])
             .end()
+
           config
             .optimization.splitChunks({
               chunks: 'all',

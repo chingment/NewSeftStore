@@ -113,7 +113,6 @@ export default {
   },
   created() {
     this.rptId = this.$route.query.rptId
-
     jsSdk({ requestUrl: location.href.split('#')[0], rptId: this.rptId }).then(res => {
       console.log(res)
 
@@ -154,7 +153,8 @@ export default {
   methods: {
     _getMonitor() {
       this.loading = true
-      getMonitor({ rptId: this.$route.query.rptId }).then(res => {
+
+      getMonitor({ rptId: this.rptId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo
@@ -164,7 +164,7 @@ export default {
       })
     },
     goEnery() {
-      this.$router.push('/report/month/energy?rptId=' + this.$route.query.rptId)
+      this.$router.push('/report/month/energy?rptId=' + this.rptId)
     },
     goAdvise(tagId) {
       this.$router.push('/report/month/tagadvise?tagId=' + tagId)

@@ -8,34 +8,33 @@ import Main_TagAdvise from '../views/report/month/TagAdvise.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'MainIndex',
-    component: Main_Index,
-    redirec: '/report/month/monitor',
-    children: [
-      {
-        path: '/report/month/monitor',
-        name: 'MainMonitor',
-        component: Main_Monitor
-      },
-      {
-        path: '/report/month/energy',
-        name: 'MainEnergy',
-        component: Main_Energy
-      },
-      {
-        path: '/report/month/tagadvise',
-        name: 'MainTagAdvise',
-        component: Main_TagAdvise
-      }
-    ]
-  }
-]
-
 const router = new VueRouter({
-  routes
+  mode: 'hash',
+  routes: [
+    {
+      path: '/',
+      name: 'MainIndex',
+      component: Main_Index,
+      redirec: '/report/month/monitor',
+      children: [
+        {
+          path: '/report/month/monitor',
+          name: 'MainMonitor',
+          component: Main_Monitor
+        },
+        {
+          path: '/report/month/energy',
+          name: 'MainEnergy',
+          component: Main_Energy
+        },
+        {
+          path: '/report/month/tagadvise',
+          name: 'MainTagAdvise',
+          component: Main_TagAdvise
+        }
+      ]
+    }
+  ]
 })
 
 export default router
