@@ -48,25 +48,25 @@ module.exports = {
       }
     },
     plugins: [
-      // new SkeletonWebpackPlugin({
-      //   webpackConfig: {
-      //     entry: {
-      //       app: path.join(__dirname, './src/entry-skeleton.js')
-      //     }
-      //   },
-      //   minimize: true,
-      //   quiet: true,
+      new SkeletonWebpackPlugin({
+        webpackConfig: {
+          entry: {
+            app: path.join(__dirname, './src/entry-skeleton.js')
+          }
+        },
+        minimize: true,
+        quiet: true,
 
-      //   // 如果不设置那么所有的路由都会共享这个骨架屏组件
-      //   router: {
-      //     mode: 'hash',
+        // 如果不设置那么所有的路由都会共享这个骨架屏组件
+        router: {
+          mode: 'hash',
 
-      //     // 给对应的路由设置对应的骨架屏组件，skeletonId的值根据组件设置的id
-      //     routes: [
-      //       { path: '/', skeletonId: 'skeletonHomeIndex' }
-      //     ]
-      //   }
-      // })
+          // 给对应的路由设置对应的骨架屏组件，skeletonId的值根据组件设置的id
+          routes: [
+            { path: /^\/report\/month\/monitor/, skeletonId: 'skeletonHomeIndex' }
+          ]
+        }
+      })
     ]
 
   },
