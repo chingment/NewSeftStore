@@ -2515,7 +2515,7 @@ namespace LocalS.BLL.Biz
 
                                 if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked || d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
                                 {
-                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_take, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_PayRefundSku.ApplyRefundedQuantity);
+                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_PayRefundSku.ApplyRefundedQuantity);
                                 }
 
                                 d_OrderSub.PickupStatus = E_OrderPickupStatus.UnTaked;
