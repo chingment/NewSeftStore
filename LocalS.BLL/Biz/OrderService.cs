@@ -2513,9 +2513,15 @@ namespace LocalS.BLL.Biz
                                 d_OrderSub.RefundedAmount = d_PayRefundSku.ApplyRefundedAmount;
                                 d_OrderSub.RefundedQuantity = d_PayRefundSku.ApplyRefundedQuantity;
 
-                                if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked || d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
+                                if (order.Status == E_OrderStatus.Payed || order.Status == E_OrderStatus.Completed)
                                 {
-                                    BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_PayRefundSku.ApplyRefundedQuantity);
+                                    if (!order.IsTimeoutPayed)
+                                    {
+                                        if (d_OrderSub.PickupStatus != E_OrderPickupStatus.Taked || d_OrderSub.PickupStatus != E_OrderPickupStatus.UnTaked)
+                                        {
+                                            BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, E_ShopMode.Device, d_OrderSub.MerchId, d_OrderSub.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_PayRefundSku.ApplyRefundedQuantity);
+                                        }
+                                    }
                                 }
 
                                 d_OrderSub.PickupStatus = E_OrderPickupStatus.UnTaked;
