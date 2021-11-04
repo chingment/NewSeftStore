@@ -449,6 +449,7 @@ export default {
               if (res.result === 1) {
                 this.isShowHandle = false
                 this.result.isShow = true
+                this.$emit('onGetSummary')
                 // var d = res.data
                 // this.$router.push({
                 //   path: '/paytrans/refund/query?payRefundId=' + d.payRefundId

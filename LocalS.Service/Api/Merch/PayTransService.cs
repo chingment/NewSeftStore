@@ -97,5 +97,20 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
+
+        public CustomJsonResult GetSummary(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+
+            var refundHandleCount = CurrentDb.PayRefund.Where(o => o.MerchId == merchId && (o.Status == E_PayRefundStatus.WaitHandle || o.Status == E_PayRefundStatus.Handling)).Count();
+
+
+            var ret = new { count = new { refundHandle = refundHandleCount } };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
     }
 }

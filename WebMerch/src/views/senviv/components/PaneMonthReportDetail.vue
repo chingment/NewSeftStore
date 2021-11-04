@@ -27,8 +27,10 @@
       <thead>
         <tr>
           <th style="width:10%" />
-          <th style="width:10%">入睡</th>
-          <th style="width:10%">清醒</th>
+          <th style="width:5%">上床</th>
+          <th style="width:5%">入睡</th>
+          <th style="width:5%">清醒</th>
+          <th style="width:5%">离床</th>
           <th style="width:10%">呼吸暂停</th>
           <th style="width:10%">体动</th>
           <th style="width:10%">平均呼吸</th>
@@ -41,8 +43,10 @@
       <tbody>
         <tr>
           <td>21:00~23:00</td>
+          <td>{{ rd.timeFrameStaPt.t1.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t1.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t1.pjHx }}</td>
@@ -53,8 +57,10 @@
         </tr>
         <tr>
           <td>23:00~01:00</td>
+          <td>{{ rd.timeFrameStaPt.t2.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t2.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t2.pjHx }}</td>
@@ -65,8 +71,10 @@
         </tr>
         <tr>
           <td>01:00~03:00</td>
+          <td>{{ rd.timeFrameStaPt.t3.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t3.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t3.pjHx }}</td>
@@ -77,8 +85,10 @@
         </tr>
         <tr>
           <td>03:00~05:00</td>
+          <td>{{ rd.timeFrameStaPt.t4.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t4.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t4.pjHx }}</td>
@@ -89,8 +99,10 @@
         </tr>
         <tr>
           <td>05:00~07:00</td>
+          <td>{{ rd.timeFrameStaPt.t5.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t5.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t5.pjHx }}</td>
@@ -101,8 +113,10 @@
         </tr>
         <tr>
           <td>07:00~09:00</td>
+          <td>{{ rd.timeFrameStaPt.t6.sccs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.rscs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.qxcs }}</td>
+          <td>{{ rd.timeFrameStaPt.t6.lccs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.hxZtcs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.tdcs }}</td>
           <td>{{ rd.timeFrameStaPt.t6.pjHx }}</td>

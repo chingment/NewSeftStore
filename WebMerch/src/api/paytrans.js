@@ -8,7 +8,16 @@ export function getList(params) {
   })
 }
 
+export function getSummary(params) {
+  return request({
+    url: '/paytrans/getSummary',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getList: getList
+  getList: getList,
+  getSummary: getSummary
 }
 

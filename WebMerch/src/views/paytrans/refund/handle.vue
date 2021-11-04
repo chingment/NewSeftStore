@@ -439,6 +439,7 @@ export default {
               if (res.result === 1) {
                 this.isShowHandle = false
                 this.result.isShow = true
+                this.$emit('onGetSummary')
               } else {
                 this.$message({
                   message: res.message,
