@@ -98,7 +98,7 @@
     </div>
     <div v-show="isShowDetials">
       <div v-loading="loadingByDetials">
-
+        <el-page-header class="my-page-header" content="退款查询" @back="onGoBack" />
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>

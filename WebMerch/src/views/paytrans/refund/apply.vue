@@ -90,7 +90,7 @@
 
     <div v-show="isShowHandle">
       <div v-loading="loadingByRefundApply">
-
+        <el-page-header class="my-page-header" content="申请退款" @back="onGoBack" />
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>基本信息</h5>
           </div>
@@ -302,8 +302,10 @@
 import { searchOrder, getApplyDetails, apply } from '@/api/payrefund'
 import { MessageBox } from 'element-ui'
 import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'PayTransRefundApply',
+  components: { PageHeader },
   data() {
     return {
       loading: false,
