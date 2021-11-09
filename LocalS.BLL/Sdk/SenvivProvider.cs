@@ -181,9 +181,9 @@ namespace LocalS.BLL
                 {
                     int count = data.Data.count;
                     int pageCount = (count + size - 1) / size;
-
+         
                     list.AddRange(data.Data.data);
-
+             
                     if (pageCount >= 2)
                     {
                         for (var i = 2; i <= pageCount; i++)
@@ -239,9 +239,9 @@ namespace LocalS.BLL
 
             var user = CurrentDb.SenvivUser.Where(m => m.Id == report.SvUserId).FirstOrDefault();
 
-            //var opendId = user.WechatId;
+            var opendId = user.WechatId;
             //var opendId = "on0dM57Q4XOgdHHx-vqmiibI547M";
-            var opendId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            //var opendId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
             var deptId = user.DeptId;
             var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
             var healthDate = report.HealthDate;

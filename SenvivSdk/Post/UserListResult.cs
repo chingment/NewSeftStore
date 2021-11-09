@@ -50,7 +50,7 @@ namespace SenvivSdk
             public string OtherFamilyhistory { get; set; }
             public string Medicine { get; set; }
             public string OtherMedicine { get; set; }
-            public string roles { get; set; }
+            public List<string> roles { get; set; }
             public string dic { get; set; }
             public string _id { get; set; }
             public string deptid { get; set; }
@@ -80,7 +80,7 @@ namespace SenvivSdk
             public string imsi { get; set; }
             public string longitude { get; set; }
             public string latitude { get; set; }
-            public string roles { get; set; }
+            public List<string> roles { get; set; }
             public string _id { get; set; }
             public string deptid { get; set; }
         }

@@ -193,6 +193,9 @@ namespace Test
         static void Main(string[] args)
         {
 
+            var senvivUsers = SdkFactory.Senviv.GetUserList();
+
+
             //string accessToken = SdkFactory.Senviv.GetApiAccessToken();
             WxAppInfoConfig config = new WxAppInfoConfig();
             config.AppId = "wxc6e80f8c575cf3f5";

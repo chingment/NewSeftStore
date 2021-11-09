@@ -544,7 +544,7 @@ export default {
           text: ''
         }],
         legend: {
-          data: ['当吃基准心率', '长期基准心率', '当次基准呼吸频率', '长期基准呼吸频率', '当夜呼吸暂停次数', 'AHI指数'],
+          data: ['当次基准心率', '长期基准心率', '当次基准呼吸频率', '长期基准呼吸频率', '当夜呼吸暂停次数', 'AHI指数'],
           y: 'bottom'
         },
         tooltip: {
@@ -559,7 +559,7 @@ export default {
         },
         series: [{
           type: 'line',
-          name: '当吃基准心率',
+          name: '当次基准心率',
           showSymbol: true,
           data: xlDcjzxlPt
         },
