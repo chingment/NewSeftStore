@@ -237,7 +237,6 @@
               <div class="card-panel-text">
                 客户信息
               </div>
-
             </div>
           </div>
         </el-col>
@@ -250,7 +249,6 @@
               <div class="card-panel-text">
                 健康日报
               </div>
-
             </div>
           </div>
         </el-col>
@@ -263,12 +261,12 @@
               <div class="card-panel-text">
                 健康月报
               </div>
-
             </div>
           </div>
         </el-col>
       </el-row>
 
+      <senviv-pane-console />
     </div>
 
   </div>
@@ -279,10 +277,13 @@ import CountTo from 'vue-count-to'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
 
+import SenvivPaneConsole from '@/views/senviv/components/PaneConsole.vue'
+
 export default {
   name: 'Home',
   components: {
-    CountTo
+    CountTo,
+    SenvivPaneConsole
   },
   directives: { permission },
   data() {

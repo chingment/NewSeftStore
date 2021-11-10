@@ -36,7 +36,6 @@
     <el-row v-loading="loading" :gutter="20">
 
       <el-col
-
         v-for="item in listData"
         :key="item.id"
         :span="5"

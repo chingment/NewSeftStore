@@ -193,14 +193,17 @@ namespace Test
         static void Main(string[] args)
         {
 
-            var senvivUsers = SdkFactory.Senviv.GetUserList();
+            //var senvivUsers = SdkFactory.Senviv.GetUserList();
+            //"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYTqsWr3w9CnC55XasyUWJC0="
 
-
-            //string accessToken = SdkFactory.Senviv.GetApiAccessToken();
+            string accessToken = SdkFactory.Senviv.GetApiAccessToken();
             WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxc6e80f8c575cf3f5";
+            config.AppId = "wxf0d98b28bebd0c82";
             config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
-            //config.TrdAccessToken = accessToken.Replace("\"","");
+            string sss = SdkFactory.Senviv.GetWxPaAccessToken("32");
+            //config.AppId = "wxc6e80f8c575cf3f5";
+            //config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+            config.TrdAccessToken = "w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYbodUOlsik14ZSQtyb3gJ6E=".Replace("\"", "");
 
             var configParams = SdkFactory.Wx.GetJsApiConfigParams(config, "dasd");
 

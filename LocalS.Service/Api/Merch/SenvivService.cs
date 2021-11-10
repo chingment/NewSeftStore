@@ -790,6 +790,18 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 query = query.Where(m => m.SvUserId == rup.UserId);
             }
 
+            if (rup.HealthDate != null && rup.HealthDate.Length == 2)
+            {
+                var d1 = rup.HealthDate[0];
+                var d2 = rup.HealthDate[1];
+                if (d1 == d2)
+                {
+                    query = query.Where(m => m.HealthDate == d1);
+                }
+            }
+
+
+
             int total = query.Count();
 
             int pageIndex = rup.Page - 1;
