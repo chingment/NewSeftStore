@@ -4,6 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
+    public enum E_SenvivUserCareLevel
+    {
+        None = 0,
+        One = 1,
+        Two = 2,
+        Three = 3,
+        Four = 4
+    }
+
     [Table("SenvivUser")]
     public class SenvivUser
     {
@@ -43,5 +52,6 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
+        public E_SenvivUserCareLevel CareLevel { get; set; }
     }
 }

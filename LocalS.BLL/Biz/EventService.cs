@@ -32,6 +32,9 @@ namespace LocalS.BLL.Biz
                     var devicePickupTestModel = model.EventContent.ToJsonObject<DeviceEventByPickupTestModel>();
                     HandleByPickupTest(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark, devicePickupTestModel);
                     break;
+                case EventCode.device_reboot:
+                    HandleByDeviceReboot(model.Operater, model.AppId, model.TrgerId, model.EventCode, model.EventRemark);
+                    break;
             }
         }
 
@@ -381,6 +384,26 @@ namespace LocalS.BLL.Biz
             }
 
             MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.vending_pickup_test, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, remark.ToString()), model);
+
+        }
+
+        private void HandleByDeviceReboot(string operater, string appId, string trgerId, string eventCode, string eventRemark)
+        {
+
+            string deviceId = trgerId;
+            var d_Device = CurrentDb.Device.Where(m => m.Id == deviceId).FirstOrDefault();
+
+            if (d_Device == null)
+                return;
+
+            d_Device.LastRequestTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
+            string storeName = BizFactory.Merch.GetStoreName(d_Device.CurUseMerchId, d_Device.CurUseStoreId);
+            string shopName = BizFactory.Merch.GetShopName(d_Device.CurUseMerchId, d_Device.CurUseShopId);
+            string operaterUserName = BizFactory.Merch.GetOperaterUserName(d_Device.CurUseMerchId, operater);
+
+            MqFactory.Global.PushOperateLog(operater, AppId.STORETERM, deviceId, EventCode.vending_pickup_test, string.Format("店铺：{0}，门店：{1}，设备：{2}，{3}", storeName, shopName, d_Device.Id, eventRemark), null);
 
         }
     }

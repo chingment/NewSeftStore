@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace LocalS.Service.Api.Merch
         public string Chronic { get; set; }
 
         public string Perplex { get; set; }
+
+        public E_SenvivUserCareLevel CareLevel { get; set; }
     }
 }

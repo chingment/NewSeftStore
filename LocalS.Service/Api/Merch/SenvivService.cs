@@ -146,7 +146,10 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(pred);
             }
 
-
+            if (rup.CareLevel != E_SenvivUserCareLevel.None)
+            {
+                query = query.Where(m => m.CareLevel == rup.CareLevel);
+            }
 
             int total = query.Count();
 

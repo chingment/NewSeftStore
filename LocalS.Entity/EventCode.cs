@@ -14,6 +14,8 @@ namespace LocalS.Entity
         public const string logout = "logout";
         [EventCodeRemark("D", "设备心跳包")]
         public const string device_status = "device_status";
+        [EventCodeRemark("D", "重启系统")]
+        public const string device_reboot = "device_reboot";
         [EventCodeRemark("A", "设备扫描货道")]
         public const string vending_scan_slots = "vending_scan_slots";
         [EventCodeRemark("D", "设备商品取货")]

@@ -34,7 +34,7 @@
         <el-card class="box-card box-card-menu" :body-style="{ padding: '0px'}" style="margin-top:10px;">
           <el-menu :default-active="activeMenu" style="background:#fff" @select="leftMenuChange">
             <el-menu-item-group>
-              <el-menu-item index="1">基本信息</el-menu-item>
+              <el-menu-item index="UserInfo">基本信息</el-menu-item>
               <el-menu-item index="DayReport">健康报告（日）</el-menu-item>
               <el-menu-item index="MonthReport">健康报告（月）</el-menu-item>
             </el-menu-item-group>
@@ -43,8 +43,8 @@
       </el-aside>
       <el-container>
         <el-main class="">
-
-          <pane-day-reporta v-show="activeMenu==='DayReport'" name="aaadadads" :user-id="userId" />
+          <pane-user-info v-show="activeMenu==='UserInfo'" :user-id="userId" />
+          <pane-day-report v-show="activeMenu==='DayReport'" :user-id="userId" />
           <pane-month-report v-show="activeMenu==='MonthReport'" :user-id="userId" />
         </el-main>
       </el-container>
@@ -56,13 +56,14 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import PaneDayReporta from './PaneDayReport.vue'
+import PaneDayReport from './PaneDayReport.vue'
 import PaneMonthReport from './PaneMonthReport.vue'
+import PaneUserInfo from './PaneUserInfo.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
   // name: 'SenvivPaneUserDetail',
-  components: { PaneDayReporta, PaneMonthReport },
+  components: { PaneDayReport, PaneMonthReport, PaneUserInfo },
   props: {
     userId: {
       type: String,
@@ -72,7 +73,7 @@ export default {
   data() {
     return {
       loading: false,
-      activeMenu: 'DayReport',
+      activeMenu: 'UserInfo',
       userDetail: {
         headImgurl: '',
         signName: '',
