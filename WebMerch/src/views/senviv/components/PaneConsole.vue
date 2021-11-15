@@ -45,64 +45,72 @@
           </div>
         </el-card>
       </el-aside>
-      <el-main style="padding:0px 20px 0px 20px">
+      <el-main style="padding:0px 0px 0px 20px">
 
-        <div id="senviv_user_list">
+        <el-card class="box-card box-card-1">
+          <div slot="header" class="clearfix">
+            <span>我的服务对象 {{ careLevelName }}</span>
+          </div>
+          <div class="body">
+            <div id="senviv_user_list">
 
-          <el-row v-loading="users.loading" :gutter="20">
+              <el-row v-loading="users.loading" :gutter="20">
 
-            <el-col
-              v-for="item in users.listData"
-              :key="item.id"
-              :span="6"
-              style="margin-bottom:10px"
-            >
-              <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
-                <div class="it-header clearfix">
-                  <div class="left">
-                    <div class="l1">
-                      <el-avatar :src="item.avatar" size="medium" />
+                <el-col
+                  v-for="item in users.listData"
+                  :key="item.id"
+                  :span="6"
+                  style="margin-bottom:10px"
+                >
+                  <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
+                    <div class="it-header clearfix">
+                      <div class="left">
+                        <div class="l1">
+                          <el-avatar :src="item.avatar" size="medium" />
+                        </div>
+                        <div class="l2">
+                          <span class="name">{{ item.signName }}</span>
+                        </div>
+                      </div>
+                      <div class="right">
+                        <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
+                      </div>
                     </div>
-                    <div class="l2">
-                      <span class="name">{{ item.signName }}</span>
+                    <div class="it-component">
+                      <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
+                      <div>
+
+                        <el-tag
+                          v-for="tag in item.signTags"
+                          :key="tag.name"
+                          style="margin-right: 10px;margin-bottom: 10px"
+                          :type="tag.type"
+                        >
+                          {{ tag.name }}
+                        </el-tag>
+
+                      </div>
                     </div>
-                  </div>
-                  <div class="right">
-                    <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
-                  </div>
-                </div>
-                <div class="it-component">
-                  <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
-                  <div>
+                  </el-card>
+                </el-col>
 
-                    <el-tag
-                      v-for="tag in item.signTags"
-                      :key="tag.name"
-                      style="margin-right: 10px;margin-bottom: 10px"
-                      :type="tag.type"
-                    >
-                      {{ tag.name }}
-                    </el-tag>
+                <el-col v-if="users.listData===null||users.listData.length===0" style="text-align: center;color: #909399">
 
-                  </div>
-                </div>
-              </el-card>
-            </el-col>
+                  <span>数据为空</span>
 
-            <el-col v-if="users.listData===null||users.listData.length===0" style="text-align: center;color: #909399">
+                </el-col>
 
-              <span>数据为空</span>
+              </el-row>
+              <pagination v-show="users.listTotal>0" :total="users.listTotal" :page.sync="users.listQuery.page" :limit.sync="users.listQuery.limit" @pagination="onGetUsers" />
 
-            </el-col>
+              <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
+                <pane-user-detail :user-id="selectUserId" />
+              </el-dialog>
 
-          </el-row>
-          <pagination v-show="users.listTotal>0" :total="users.listTotal" :page.sync="users.listQuery.page" :limit.sync="users.listQuery.limit" @pagination="onGetUsers" />
+            </div>
 
-          <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
-            <pane-user-detail :user-id="selectUserId" />
-          </el-dialog>
-
-        </div>
+          </div>
+        </el-card>
 
       </el-main>
     </el-container>
@@ -134,6 +142,7 @@ export default {
           careLevel: 0
         }
       },
+      careLevelName: '我的服务对象',
       consoleInfo: {
         loading: false,
         userCount: 0,
@@ -209,6 +218,25 @@ export default {
     },
     onCareLevelClick(level) {
       this.users.listQuery.careLevel = level
+
+      switch (level) {
+        case 0:
+          this.careLevelName = ''
+          break
+        case 1:
+          this.careLevelName = '紧紧关注'
+          break
+        case 2:
+          this.careLevelName = '密切关注'
+          break
+        case 3:
+          this.careLevelName = '中等关注'
+          break
+        case 4:
+          this.careLevelName = '轻微关注'
+          break
+      }
+
       this.onGetUsers()
     },
     handleFilter() {
