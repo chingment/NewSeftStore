@@ -36,14 +36,7 @@
             </el-row>
           </div>
         </el-card>
-        <el-card class="box-card box-card-1">
-          <div slot="header" class="clearfix">
-            <span>今日完成情况</span>
-          </div>
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ '列表内容 ' + o }}
-          </div>
-        </el-card>
+
       </el-aside>
       <el-main style="padding:0px 0px 0px 20px">
 
