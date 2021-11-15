@@ -23,11 +23,11 @@ namespace LocalS.Service.Api.HealthApp
                        select new
                        {
                            u.Id,
-                           tt.Nick,
+                           tt.NickName,
                            tt.Sex,
-                           tt.Account,
+                           tt.FullName,
                            tt.Birthday,
-                           tt.HeadImgurl,
+                           tt.Avatar,
                            u.SmTags,
                            u.TotalScore,
                            u.HealthDate,
@@ -98,8 +98,8 @@ namespace LocalS.Service.Api.HealthApp
                 Id = rpt.Id,
                 UserInfo = new
                 {
-                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
-                    HeadImgurl = rpt.HeadImgurl,
+                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    Avatar = rpt.Avatar,
                     Sex = SvUtil.GetSexName(rpt.Sex),
                     Age = SvUtil.GetAge(rpt.Birthday)
                 },

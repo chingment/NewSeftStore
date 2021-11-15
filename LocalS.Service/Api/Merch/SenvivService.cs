@@ -105,6 +105,48 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
+
+        public CustomJsonResult GetConsoleInfo(string operater, string merchId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+
+
+            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+
+            var deptIds = d_Merch.SenvivDepts.Split(',');
+
+
+            var users = CurrentDb.SenvivUser.Where(m => deptIds.Contains(m.DeptId)).ToList();
+
+            var userCount = users.Count();
+            var careLevel0 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.None).Count();
+            var careLevel1 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.One).Count();
+            var careLevel2 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Two).Count();
+            var careLevel3 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Three).Count();
+            var careLevel4 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Four).Count();
+
+            var ret = new
+            {
+                userCount = userCount,
+                careLevel = new
+                {
+                    level0 = careLevel0,
+                    level1 = careLevel1,
+                    level2 = careLevel2,
+                    level3 = careLevel3,
+                    level4 = careLevel4,
+                }
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -120,8 +162,8 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.SenvivUser
                          where
                          deptIds.Contains(u.DeptId)
-                         && ((rup.Name == null || u.Nick.Contains(rup.Name)) ||
-                         (rup.Name == null || u.Account.Contains(rup.Name)))
+                         && ((rup.Name == null || u.NickName.Contains(rup.Name)) ||
+                         (rup.Name == null || u.FullName.Contains(rup.Name)))
                          select u);
 
             if (rup.Sas != "0")
@@ -179,11 +221,11 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                string signName = item.Nick;
+                string signName = item.NickName;
 
-                if (!string.IsNullOrEmpty(item.Account) && item.Nick != item.Account)
+                if (!string.IsNullOrEmpty(item.FullName) && item.NickName != item.FullName)
                 {
-                    signName += "(" + item.Account + ")";
+                    signName += "(" + item.FullName + ")";
                 }
 
 
@@ -198,7 +240,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.Id,
                     SignName = signName,
-                    HeadImgurl = item.HeadImgurl,
+                    Avatar = item.Avatar,
                     SAS = SvUtil.GetSASName(item.SAS),
                     BreathingMachine = SvUtil.GetBreathingMachineName(item.BreathingMachine),
                     SignTags = SvUtil.GetSignTags(item.Perplex, item.OtherPerplex),
@@ -208,7 +250,7 @@ namespace LocalS.Service.Api.Merch
                     Age = age,
                     Height = item.Height,
                     Weight = item.Weight,
-                    Mobile = item.Mobile,
+                    PhoneNumber = item.PhoneNumber,
                     LastReportId = item.LastReportId,
                     LastReportTime = item.LastReportTime
                 });
@@ -228,7 +270,7 @@ namespace LocalS.Service.Api.Merch
 
             var d_SenvivUser = (from u in CurrentDb.SenvivUser
                                 where u.Id == userId
-                                select new { u.Id, u.Nick, u.HeadImgurl, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.Account, u.Sex, u.Mobile, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
+                                select new { u.Id, u.NickName, u.Avatar, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.FullName, u.Sex, u.PhoneNumber, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
 
             List<string> perplex = new List<string>();
 
@@ -250,9 +292,9 @@ namespace LocalS.Service.Api.Merch
             var ret = new
             {
                 Id = d_SenvivUser.Id,
-                SignName = SvUtil.GetSignName(d_SenvivUser.Nick, d_SenvivUser.Account),
+                SignName = SvUtil.GetSignName(d_SenvivUser.NickName, d_SenvivUser.FullName),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
-                HeadImgurl = d_SenvivUser.HeadImgurl,
+                Avatar = d_SenvivUser.Avatar,
                 SAS = SvUtil.GetSASName(d_SenvivUser.SAS),
                 BreathingMachine = SvUtil.GetBreathingMachineName(d_SenvivUser.BreathingMachine),
                 SignTags = SvUtil.GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.OtherPerplex),
@@ -261,7 +303,7 @@ namespace LocalS.Service.Api.Merch
                 Sex = SvUtil.GetSexName(d_SenvivUser.Sex),
                 Height = d_SenvivUser.Height,
                 Weight = d_SenvivUser.Weight,
-                Mobile = d_SenvivUser.Mobile,
+                PhoneNumber = d_SenvivUser.PhoneNumber,
                 LastReportId = d_SenvivUser.LastReportId,
                 LastReportTime = d_SenvivUser.LastReportTime
             };
@@ -291,12 +333,12 @@ namespace LocalS.Service.Api.Merch
                          select new
                          {
                              u.Id,
-                             tt.Nick,
+                             tt.NickName,
                              tt.Sex,
                              u.SvUserId,
-                             tt.Account,
+                             tt.FullName,
                              tt.Birthday,
-                             tt.HeadImgurl,
+                             tt.Avatar,
                              u.TotalScore,
                              u.HealthDate,
                              u.SmTags,
@@ -340,7 +382,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m => ((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
+                query = query.Where(m => ((rup.Name == null || m.NickName.Contains(rup.Name)) || (rup.Name == null || m.FullName.Contains(rup.Name))));
             }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
@@ -373,8 +415,8 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
-                    HeadImgurl = rpt.HeadImgurl,
+                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    Avatar = rpt.Avatar,
                     Sex = SvUtil.GetSexName(rpt.Sex),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
@@ -457,11 +499,11 @@ namespace LocalS.Service.Api.Merch
                          select new
                          {
                              u.Id,
-                             tt.Nick,
+                             tt.NickName,
                              tt.Sex,
-                             tt.Account,
+                             tt.FullName,
                              tt.Birthday,
-                             tt.HeadImgurl,
+                             tt.Avatar,
                              u.TotalScore,
                              u.HealthDate,
                              u.SmTags,
@@ -580,8 +622,8 @@ namespace LocalS.Service.Api.Merch
                 Id = d_Rpt.Id,
                 UserInfo = new
                 {
-                    SignName = SvUtil.GetSignName(d_Rpt.Nick, d_Rpt.Account),
-                    HeadImgurl = d_Rpt.HeadImgurl,
+                    SignName = SvUtil.GetSignName(d_Rpt.NickName, d_Rpt.FullName),
+                    Avatar = d_Rpt.Avatar,
                     Sex = SvUtil.GetSexName(d_Rpt.Sex),
                     Age = SvUtil.GetAge(d_Rpt.Birthday)
                 },
@@ -736,11 +778,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          select new
                          {
                              u.Id,
-                             tt.Nick,
+                             tt.NickName,
                              tt.Sex,
-                             tt.Account,
+                             tt.FullName,
                              tt.Birthday,
-                             tt.HeadImgurl,
+                             tt.Avatar,
                              u.TotalScore,
                              u.HealthDate,
                              u.MylGrfx,
@@ -784,7 +826,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m => ((rup.Name == null || m.Nick.Contains(rup.Name)) || (rup.Name == null || m.Account.Contains(rup.Name))));
+                query = query.Where(m => ((rup.Name == null || m.NickName.Contains(rup.Name)) || (rup.Name == null || m.FullName.Contains(rup.Name))));
             }
 
 
@@ -821,8 +863,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
-                    HeadImgurl = rpt.HeadImgurl,
+                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    Avatar = rpt.Avatar,
                     Sex = SvUtil.GetSexName(rpt.Sex),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     rpt.TotalScore,
@@ -905,11 +947,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                        select new
                        {
                            u.Id,
-                           tt.Nick,
+                           tt.NickName,
                            tt.Sex,
-                           tt.Account,
+                           tt.FullName,
                            tt.Birthday,
-                           tt.HeadImgurl,
+                           tt.Avatar,
                            u.SmTags,
                            u.TotalScore,
                            u.HealthDate,
@@ -976,8 +1018,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 Id = rpt.Id,
                 UserInfo = new
                 {
-                    SignName = SvUtil.GetSignName(rpt.Nick, rpt.Account),
-                    HeadImgurl = rpt.HeadImgurl,
+                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    Avatar = rpt.Avatar,
                     Sex = SvUtil.GetSexName(rpt.Sex),
                     Age = SvUtil.GetAge(rpt.Birthday)
                 },

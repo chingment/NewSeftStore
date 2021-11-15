@@ -19,27 +19,28 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string DeptId { get; set; }
-        public string Code { get; set; }
-        public string WechatId { get; set; }
-        public string Mobile { get; set; }
-        public string Email { get; set; }
-        public string Pwd { get; set; }
-        public string Nick { get; set; }
-        public string Account { get; set; }
-        public string HeadImgurl { get; set; }
-        public string Language { get; set; }
+        //public string Code { get; set; }
+        public string WxOpenId { get; set; }
+        public string PhoneNumber { get; set; }
+        //public string Email { get; set; }
+        //public string Pwd { get; set; }
+        public string NickName { get; set; }
+        public string FullName { get; set; }
+        public string Avatar { get; set; }
+        //public string Language { get; set; }
         public string Sex { get; set; }
         public DateTime? Birthday { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
         public string TargetValue { get; set; }
-        public string Remarks { get; set; }
-        public DateTime? LastloginTime { get; set; }
-        public string LoginCount { get; set; }
+        //public string Remarks { get; set; }
+        //public DateTime? LastLoginTime { get; set; }
+        //public string LoginCount { get; set; }
         public string LastReportId { get; set; }
         public DateTime? LastReportTime { get; set; }
-        public string Details { get; set; }
-        public string Status { get; set; }
+        //public string Details { get; set; }
+        public E_SenvivUserCareLevel CareLevel { get; set; }
+        //public string Status { get; set; }
         public string SAS { get; set; }
         public string BreathingMachine { get; set; }
         public string Perplex { get; set; }
@@ -52,6 +53,5 @@ namespace LocalS.Entity
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
         public DateTime? MendTime { get; set; }
-        public E_SenvivUserCareLevel CareLevel { get; set; }
     }
 }

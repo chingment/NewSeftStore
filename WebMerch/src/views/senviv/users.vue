@@ -45,7 +45,7 @@
           <div class="it-header clearfix">
             <div class="left">
               <div class="l1">
-                <el-avatar :src="item.headImgurl" size="medium" />
+                <el-avatar :src="item.avatar" size="medium" />
               </div>
               <div class="l2">
                 <span class="name">{{ item.signName }}</span>

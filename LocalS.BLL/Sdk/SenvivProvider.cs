@@ -113,7 +113,7 @@ namespace LocalS.BLL
 
             var d_RentOrder = CurrentDb.RentOrder.Where(m => m.OrdeId == pOrderId).FirstOrDefault();
 
-            var d_SenvivUsers = CurrentDb.SenvivUser.Where(m => m.Mobile == d_ClientUser.PhoneNumber).ToList();
+            var d_SenvivUsers = CurrentDb.SenvivUser.Where(m => m.PhoneNumber == d_ClientUser.PhoneNumber).ToList();
 
             foreach (var d_SenvivUser in d_SenvivUsers)
             {
@@ -124,9 +124,9 @@ namespace LocalS.BLL
                 foreach (var d_SenvivUserProduct in d_SenvivUserProducts)
                 {
                     LogUtil.Info("NotifyClientExpire.Sn2:" + d_SenvivUserProduct.Sn);
-                    LogUtil.Info("NotifyClientExpire.WechatId:" + d_SenvivUser.WechatId);
+                    LogUtil.Info("NotifyClientExpire.WxOpenId:" + d_SenvivUser.WxOpenId);
 
-                    string openId = d_SenvivUser.WechatId;
+                    string openId = d_SenvivUser.WxOpenId;
 
                     string first = string.Format("您好，您的{0}租约即使到期", skuName);
                     string keyword1 = d_SenvivUserProduct.Sn;
@@ -239,7 +239,7 @@ namespace LocalS.BLL
 
             var user = CurrentDb.SenvivUser.Where(m => m.Id == report.SvUserId).FirstOrDefault();
 
-            var opendId = user.WechatId;
+            var opendId = user.WxOpenId;
             //var opendId = "on0dM57Q4XOgdHHx-vqmiibI547M";
             //var opendId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
             var deptId = user.DeptId;

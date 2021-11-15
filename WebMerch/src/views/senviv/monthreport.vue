@@ -1,5 +1,5 @@
 <template>
-  <div id="senviv_user_list">
+  <div>
     <pane-month-report cache-query />
   </div>
 </template>

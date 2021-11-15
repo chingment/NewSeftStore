@@ -1,119 +1,117 @@
 <template>
 
-  <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <span>我的服务对象</span>
-    </div>
-    <div class="item">
-      <div class="app-container" style="padding:0px">
-        <el-container>
-          <el-aside width="400px">
-            <el-card class="box-card box-card-1">
-              <div slot="header" class="clearfix">
-                <span>关注情况</span>
-              </div>
-              <div class="body">
-                <el-row :gutter="20" style="margin-bottom:20px">
-                  <el-col :span="12"> <div class="num_box gz_1">
-                    <div class="tl">紧急关注</div>
-                    <div class="num">1</div>
-                  </div></el-col>
-                  <el-col :span="12">    <div class="num_box gz_2">
-                    <div class="tl">密切关注</div>
-                    <div class="num">1</div>
-                  </div></el-col>
-                </el-row>
-                <el-row :gutter="20">
-                  <el-col :span="12"> <div class="num_box gz_3">
-                    <div class="tl">中等关注</div>
-                    <div class="num">1</div>
-                  </div></el-col>
-                  <el-col :span="12">    <div class="num_box gz_4">
-                    <div class="tl">轻微关注</div>
-                    <div class="num">1</div>
-                  </div></el-col>
-                </el-row>
-              </div>
-            </el-card>
-            <el-card class="box-card box-card-1">
-              <div slot="header" class="clearfix">
-                <span>今日完成情况</span>
-              </div>
-              <div v-for="o in 4" :key="o" class="text item">
-                {{ '列表内容 ' + o }}
-              </div>
-            </el-card>
-          </el-aside>
-          <el-main style="padding:0px 20px 0px 20px">
+  <div class="app-container" style="padding:0px">
+    <el-container>
+      <el-aside width="400px">
+        <el-card v-loading="loadingConsoleInfo" class="box-card box-card-1">
+          <div slot="header" class="clearfix">
+            <span>关注情况</span>
+          </div>
+          <div class="body">
+            <el-row :gutter="20" style="margin-bottom:20px">
+              <el-col :span="24"> <div class="num_box gz_0" @click="onCareLevelClick(0)">
+                <div class="tl">我的服务对象</div>
+                <div class="num">{{ consoleInfo.userCount }}</div>
+              </div></el-col>
+            </el-row>
+            <el-row :gutter="20" style="margin-bottom:20px">
+              <el-col :span="12"> <div class="num_box gz_4" @click="onCareLevelClick(4)">
+                <div class="tl">紧急关注</div>
+                <div class="num">{{ consoleInfo.careLevel.level4 }}</div>
+              </div></el-col>
+              <el-col :span="12">    <div class="num_box gz_3" @click="onCareLevelClick(3)">
+                <div class="tl">密切关注</div>
+                <div class="num">{{ consoleInfo.careLevel.level3 }}</div>
+              </div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"> <div class="num_box gz_2" @click="onCareLevelClick(2)">
+                <div class="tl">中等关注</div>
+                <div class="num">{{ consoleInfo.careLevel.level2 }}</div>
+              </div></el-col>
+              <el-col :span="12">    <div class="num_box gz_1" @click="onCareLevelClick(1)">
+                <div class="tl">轻微关注</div>
+                <div class="num">{{ consoleInfo.careLevel.level1 }}</div>
+              </div></el-col>
+            </el-row>
+          </div>
+        </el-card>
+        <el-card class="box-card box-card-1">
+          <div slot="header" class="clearfix">
+            <span>今日完成情况</span>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">
+            {{ '列表内容 ' + o }}
+          </div>
+        </el-card>
+      </el-aside>
+      <el-main style="padding:0px 20px 0px 20px">
 
-            <div id="senviv_user_list">
+        <div id="senviv_user_list">
 
-              <el-row v-loading="loading" :gutter="20">
+          <el-row v-loading="users.loading" :gutter="20">
 
-                <el-col
-                  v-for="item in listData"
-                  :key="item.id"
-                  :span="6"
-                  style="margin-bottom:10px"
-                >
-                  <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
-                    <div class="it-header clearfix">
-                      <div class="left">
-                        <div class="l1">
-                          <el-avatar :src="item.headImgurl" size="medium" />
-                        </div>
-                        <div class="l2">
-                          <span class="name">{{ item.signName }}</span>
-                        </div>
-                      </div>
-                      <div class="right">
-                        <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
-                      </div>
+            <el-col
+              v-for="item in users.listData"
+              :key="item.id"
+              :span="6"
+              style="margin-bottom:10px"
+            >
+              <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
+                <div class="it-header clearfix">
+                  <div class="left">
+                    <div class="l1">
+                      <el-avatar :src="item.avatar" size="medium" />
                     </div>
-                    <div class="it-component">
-                      <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
-                      <div>
-
-                        <el-tag
-                          v-for="tag in item.signTags"
-                          :key="tag.name"
-                          style="margin-right: 10px;margin-bottom: 10px"
-                          :type="tag.type"
-                        >
-                          {{ tag.name }}
-                        </el-tag>
-
-                      </div>
+                    <div class="l2">
+                      <span class="name">{{ item.signName }}</span>
                     </div>
-                  </el-card>
-                </el-col>
+                  </div>
+                  <div class="right">
+                    <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
+                  </div>
+                </div>
+                <div class="it-component">
+                  <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
+                  <div>
 
-                <el-col v-if="listData===null||listData.length===0" style="text-align: center;color: #909399">
+                    <el-tag
+                      v-for="tag in item.signTags"
+                      :key="tag.name"
+                      style="margin-right: 10px;margin-bottom: 10px"
+                      :type="tag.type"
+                    >
+                      {{ tag.name }}
+                    </el-tag>
 
-                  <span>数据为空</span>
+                  </div>
+                </div>
+              </el-card>
+            </el-col>
 
-                </el-col>
+            <el-col v-if="users.listData===null||users.listData.length===0" style="text-align: center;color: #909399">
 
-              </el-row>
-              <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+              <span>数据为空</span>
 
-              <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
-                <pane-user-detail :user-id="selectUserId" />
-              </el-dialog>
+            </el-col>
 
-            </div>
+          </el-row>
+          <pagination v-show="users.listTotal>0" :total="users.listTotal" :page.sync="users.listQuery.page" :limit.sync="users.listQuery.limit" @pagination="onGetUsers" />
 
-          </el-main>
-        </el-container>
-      </div>
+          <el-dialog v-if="dialogIsShowByDetail" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
+            <pane-user-detail :user-id="selectUserId" />
+          </el-dialog>
 
-    </div>
-  </el-card>
+        </div>
+
+      </el-main>
+    </el-container>
+  </div>
 
 </template>
 
 <script>
-import { getUsers } from '@/api/senviv'
+import { getUsers, getConsoleInfo } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneUserDetail from '@/views/senviv/components/PaneUserDetail.vue'
 export default {
@@ -121,17 +119,31 @@ export default {
   components: { Pagination, PaneUserDetail },
   data() {
     return {
-      loading: false,
-      listKey: 0,
-      listData: null,
-      listTotal: 0,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        name: undefined,
-        sas: '0',
-        chronic: '0',
-        perplex: '0'
+      users: {
+        loading: false,
+        listKey: 0,
+        listData: null,
+        listTotal: 0,
+        listQuery: {
+          page: 1,
+          limit: 20,
+          name: undefined,
+          sas: '0',
+          chronic: '0',
+          perplex: '0',
+          careLevel: 0
+        }
+      },
+      consoleInfo: {
+        loading: false,
+        userCount: 0,
+        careLevel: {
+          level0: 0,
+          level1: 1,
+          level2: 2,
+          level3: 3,
+          level4: 4
+        }
       },
       perplexs: [
         { value: '0', label: '全部' },
@@ -169,24 +181,39 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.getListData()
+    this.onGetConsoleInfo()
+    this.onGetUsers()
   },
   methods: {
-    getListData() {
-      this.loading = true
-      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getUsers(this.listQuery).then(res => {
+    onGetConsoleInfo() {
+      this.consoleInfo.loading = true
+      getConsoleInfo({}).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.listData = d.items
-          this.listTotal = d.total
+          this.consoleInfo = d
         }
-        this.loading = false
+        this.consoleInfo.loading = false
       })
     },
+    onGetUsers() {
+      this.users.loading = true
+      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.users.listQuery })
+      getUsers(this.users.listQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.users.listData = d.items
+          this.users.listTotal = d.total
+        }
+        this.users.loading = false
+      })
+    },
+    onCareLevelClick(level) {
+      this.users.listQuery.careLevel = level
+      this.onGetUsers()
+    },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getListData()
+      this.users.listQuery.page = 1
+      this.onGetUsers()
     },
     handleOpenDialogByDetail(item) {
       this.selectUserId = item.id
@@ -207,6 +234,7 @@ border-radius: 4px!important;
 color:#fff;
 text-align: center;
 padding: 20px;
+cursor: pointer;
 .tl{
     height: 30px;
 }
@@ -217,17 +245,19 @@ padding: 20px;
     font-size: 24px;
 }
 }
-
-.gz_1{
-background-color: #ff8080;
-}
-.gz_2{
-    background-color: #6699ff;
-}
-.gz_3{
-   background-color: #6666cc;
+.gz_0{
+  background-color: #3fbdf3;
 }
 .gz_4{
+background-color: #ff8080;
+}
+.gz_3{
+    background-color: #6699ff;
+}
+.gz_2{
+   background-color: #6666cc;
+}
+.gz_1{
   background-color: #ffd580;
 }
 </style>

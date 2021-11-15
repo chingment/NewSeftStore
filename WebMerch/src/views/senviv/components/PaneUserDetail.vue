@@ -8,7 +8,7 @@
           <div class="it-header clearfix">
             <div class="left">
               <div class="l1">
-                <el-avatar :src="userDetail.headImgurl" size="medium" />
+                <el-avatar :src="userDetail.avatar" size="medium" />
               </div>
               <div class="l2">
                 <span class="name">{{ userDetail.signName }}</span>
@@ -75,7 +75,7 @@ export default {
       loading: false,
       activeMenu: 'UserInfo',
       userDetail: {
-        headImgurl: '',
+        avatar: '',
         signName: '',
         sex: '',
         age: '',

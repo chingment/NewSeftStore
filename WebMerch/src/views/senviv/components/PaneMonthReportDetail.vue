@@ -440,7 +440,7 @@ export default {
       loading: false,
       loadingBySug: false,
       userInfo: {
-        headImgurl: '',
+        avatar: '',
         signName: '',
         sex: '',
         age: '',

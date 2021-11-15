@@ -212,7 +212,7 @@ export default {
     return {
       loading: false,
       userInfo: {
-        headImgurl: '',
+        avatar: '',
         signName: '',
         sex: '',
         age: '',
