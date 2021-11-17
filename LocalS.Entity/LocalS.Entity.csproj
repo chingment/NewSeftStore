@@ -119,6 +119,7 @@
     <Compile Include="StoreKindSpu.cs" />
     <Compile Include="StoreShop.cs" />
     <Compile Include="Supplier.cs" />
+    <Compile Include="MerchOrg.cs" />
     <Compile Include="WxACode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

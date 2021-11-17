@@ -6,6 +6,7 @@
           <el-menu-item-group>
             <template slot="title">基础数据</template>
             <el-menu-item index="/setting/adminuser/list">用户权限</el-menu-item>
+            <el-menu-item index="/setting/merch/list">商户管理</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">日志服务</template>

@@ -205,6 +205,8 @@
     <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlanDetails.cs" />
     <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlans.cs" />
     <Compile Include="Api\IotTerm\StockService.cs" />
+    <Compile Include="Api\Merch\MerchService.cs" />
+    <Compile Include="Api\Merch\OrgService.cs" />
     <Compile Include="Api\Merch\AdService.cs" />
     <Compile Include="Api\Merch\ClientUserService.cs" />
     <Compile Include="Api\Merch\CommonService.cs" />
@@ -227,6 +229,11 @@
     <Compile Include="Api\Merch\RModels\RetPayRefundDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopAdAddContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdEditContentBelong.cs" />
+    <Compile Include="Api\Merch\RModels\RopMerchAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopMerchEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrgAdd.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrgEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrgSort.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentBelongStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopAdSetContentStatus.cs" />
     <Compile Include="Api\Merch\RModels\RopCouponSend.cs" />
@@ -283,6 +290,8 @@
     <Compile Include="Api\Merch\RModels\RopReporOrderSalesHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopReporStoreStockDateHisGet.cs" />
     <Compile Include="Api\Merch\RModels\RopShopSave.cs" />
+    <Compile Include="Api\Merch\RModels\RupMerchGetList.cs" />
+    <Compile Include="Api\Merch\RModels\RupOrgGetList.cs" />
     <Compile Include="Api\Merch\RModels\RupClientGetAvatars.cs" />
     <Compile Include="Api\Merch\RModels\RupCouponGetReceiveRecord.cs" />
     <Compile Include="Api\Merch\RModels\RopErpReplenishPlanNew.cs" />

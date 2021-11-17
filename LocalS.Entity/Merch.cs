@@ -9,6 +9,8 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+
+        public string PId { get; set; }
         public string MerchUserId { get; set; }
         public string Name { get; set; }
         public string ContactName { get; set; }

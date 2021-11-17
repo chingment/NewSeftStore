@@ -135,7 +135,7 @@ export default {
           careLevel: 0
         }
       },
-      careLevelName: '我的服务对象',
+      careLevelName: '',
       consoleInfo: {
         loading: false,
         userCount: 0,

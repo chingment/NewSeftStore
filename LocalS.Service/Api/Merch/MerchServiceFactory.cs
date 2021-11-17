@@ -161,5 +161,21 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static OrgService Org
+        {
+            get
+            {
+                return new OrgService();
+            }
+        }
+
+        public static MerchService Merch
+        {
+            get
+            {
+                return new MerchService();
+            }
+        }
+
     }
 }

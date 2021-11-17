@@ -171,7 +171,9 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\MemberRightController.cs" />
+    <Compile Include="Controllers\MerchController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\OrgController.cs" />
     <Compile Include="Controllers\PayRefundController.cs" />
     <Compile Include="Controllers\PayTransController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
