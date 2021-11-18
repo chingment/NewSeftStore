@@ -6,7 +6,7 @@
           <el-menu-item-group>
             <template slot="title">设备</template>
             <el-menu-item index="/device/vending">自助售卖机</el-menu-item>
-            <el-menu-item index="/device/senvivlite">悠护lite</el-menu-item>
+            <el-menu-item index="/device/senvivlite">心晓悠护</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>
