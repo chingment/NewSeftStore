@@ -71,7 +71,6 @@
         </el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -89,7 +88,7 @@ export default {
     },
     selectIds: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data() {
@@ -147,7 +146,7 @@ export default {
     },
     onSelect() {
       if (this.multiple) {
-        if (this.selectIdsByMultiple == null || this.selectIdsByMultiple.length == 0) {
+        if (this.selectIdsByMultiple == null || this.selectIdsByMultiple.length === 0) {
           this.$message('至少选择一个')
           return
         }
@@ -157,7 +156,7 @@ export default {
           this.selectIds.push(this.selectIdsByMultiple[i].id)
         }
       } else {
-        if (this.selectIdBySingle == '') {
+        if (this.selectIdBySingle === '') {
           this.$message('请选择')
           return
         }

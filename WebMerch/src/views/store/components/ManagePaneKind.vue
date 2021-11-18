@@ -334,7 +334,7 @@ import { searchSpu, getSpecs } from '@/api/product'
 import { isEmpty } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'ManagePaneKind',
+  name: 'StoreManagePaneShop',
   components: { Pagination },
   props: {
     storeId: {

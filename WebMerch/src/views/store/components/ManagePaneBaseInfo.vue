@@ -24,7 +24,7 @@
 import { initManageBaseInfo } from '@/api/store'
 import { isEmpty } from '@/utils/commonUtil'
 export default {
-  name: 'ManagePaneBaseInfo',
+  name: 'StoreManagePaneBaseInfo',
   props: {
     storeId: {
       type: String,

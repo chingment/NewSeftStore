@@ -116,7 +116,7 @@ import { getListByStock, getListByRelStock } from '@/api/log'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'ListByStockLog',
+  name: 'LogPaneStockLog',
   components: { Pagination },
   data() {
     return {

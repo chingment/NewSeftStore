@@ -60,12 +60,11 @@
 
 <script>
 
-import { MessageBox } from 'element-ui'
 import { getReceiveRecords } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'GetReceiveRecords',
+  name: 'PaneReceiveRecord',
   components: { Pagination },
   props: {
     couponId: {

@@ -16,16 +16,10 @@
 </template>
 
 <script>
-import { MessageBox } from 'element-ui'
-import { add, initAdd } from '@/api/adminuser'
-import fromReg from '@/utils/formReg'
-import { goBack } from '@/utils/commonUtil'
-import PageHeader from '@/components/PageHeader/index.vue'
 import ClientSelect from '@/views/client/components/select.vue'
 export default {
-  name: 'SettingAdminUserAdd',
+  name: 'PaneSendCoupon',
   components: {
-    PageHeader,
     ClientSelect
   },
   data() {
@@ -34,7 +28,7 @@ export default {
       form: {
         quantity: 0
       },
-      selectIds: ['253395d25b344825a7c8bdbe191e8f45', '55ca2c52278a4d9e8103dabde2956896'],
+      selectIds: [],
       rules: {
 
       }

@@ -62,7 +62,7 @@ import { isEmpty } from '@/utils/commonUtil'
 import managePaneShop from '@/views/shop/select'
 import managePaneDevice from '@/views/device/list'
 export default {
-  name: 'ManagePaneDevice',
+  name: 'StoreManagePaneShop',
   components: { managePaneShop, managePaneDevice },
   props: {
     storeId: {
@@ -103,7 +103,7 @@ export default {
         this.listQuery.storeId = this.storeId
         initManageShop({ id: this.storeId }).then(res => {
           if (res.result === 1) {
-            var d = res.data
+            // var d = res.data
           }
           this.loading = false
         })

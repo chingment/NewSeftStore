@@ -58,7 +58,7 @@
 <script>
 import { MessageBox } from 'element-ui'
 import { getFeeSts, setFeeSt } from '@/api/memberright'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'ManagePaneDevice',
   props: {

@@ -29,10 +29,8 @@
 </template>
 <script>
 import { MessageBox } from 'element-ui'
-import { edit, getLevelSt, setLevelSt } from '@/api/memberright'
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
-import Sortable from 'sortablejs'
-import { all } from 'q'
+import { getLevelSt, setLevelSt } from '@/api/memberright'
+import { isEmpty } from '@/utils/commonUtil'
 
 export default {
   name: 'ManagePaneBaseInfo',

@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'OperationCenterIndex',
+  name: 'StockIndex',
   data() {
     return {
       navActive: '/order/list',

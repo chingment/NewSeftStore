@@ -184,7 +184,7 @@ import { MessageBox } from 'element-ui'
 import { getSkus, addSku, editSku } from '@/api/memberright'
 import { searchSku } from '@/api/product'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import { isEmpty } from '@/utils/commonUtil'
 import { getStores } from '@/api/common'
 export default {
   name: 'ManagePaneSku',

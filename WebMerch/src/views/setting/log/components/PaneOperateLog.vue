@@ -66,7 +66,7 @@ import { getListByOperate } from '@/api/log'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'ListByOperateLog',
+  name: 'LogPaneOperateLog',
   components: { Pagination },
   data() {
     return {

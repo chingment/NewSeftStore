@@ -98,7 +98,7 @@
 import { MessageBox } from 'element-ui'
 import { getCoupons, removeCoupon, addCoupon, searchCoupon } from '@/api/memberright'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getUrlParam, isEmpty } from '@/utils/commonUtil'
+import { isEmpty } from '@/utils/commonUtil'
 
 export default {
   name: 'ManagePaneCoupon',

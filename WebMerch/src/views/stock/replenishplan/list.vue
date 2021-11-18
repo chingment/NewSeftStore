@@ -106,7 +106,7 @@ import { MessageBox } from 'element-ui'
 import Pagination from '@/components/Pagination'
 import { getList, initNewPlan, newPlan } from '@/api/erpreplenishplan'
 export default {
-  name: 'Devicereplenishplan',
+  name: 'StockReplenishPlanList',
   components: { Pagination },
   data() {
     return {

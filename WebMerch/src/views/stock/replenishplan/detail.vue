@@ -7,7 +7,7 @@
 
 import DeviceReplenishPlan from '@/views/report/devicereplenishplan.vue'
 export default {
-  name: 'SenvivDayReport',
+  name: 'StockRelenishPlanDetail',
   components: { DeviceReplenishPlan },
   data() {
     return {
