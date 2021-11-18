@@ -15,21 +15,21 @@
       </el-dropdown>
     </div>
     <el-tabs v-model="activeTab" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :device-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="库存信息" name="tabStock"><manage-pane-stock :device-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="控制中心" name="tabControlCenter"><manage-pane-control-center :device-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <pane-base-info :device-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="库存信息" name="tabStock"><pane-stock :device-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="控制中心" name="tabControlCenter"><pane-control-center :device-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import { initManage } from '@/api/device'
-import managePaneBaseInfo from './components/ManagePaneBaseInfo'
-import managePaneStock from './components/ManagePaneStock'
-import managePaneControlCenter from './components/ManagePaneControlCenter'
+import PaneBaseInfo from './components/PaneBaseInfo'
+import PaneStock from './components/PaneStock'
+import PaneControlCenter from './components/PaneControlCenter'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'DeviceManage',
-  components: { managePaneBaseInfo, managePaneStock, managePaneControlCenter, PageHeader },
+  components: { PaneBaseInfo, PaneStock, PaneControlCenter, PageHeader },
   data() {
     return {
       loading: false,

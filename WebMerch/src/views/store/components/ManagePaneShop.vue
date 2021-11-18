@@ -60,7 +60,7 @@ import { MessageBox } from 'element-ui'
 import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
 import { isEmpty } from '@/utils/commonUtil'
 import managePaneShop from '@/views/shop/select'
-import managePaneDevice from '@/views/device/list'
+import managePaneDevice from '@/views/device/vending'
 export default {
   name: 'StoreManagePaneShop',
   components: { managePaneShop, managePaneDevice },

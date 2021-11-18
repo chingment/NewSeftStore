@@ -5,7 +5,8 @@
         <el-menu router :default-active="navActive">
           <el-menu-item-group>
             <template slot="title">设备</template>
-            <el-menu-item index="/device/list">自助售卖机</el-menu-item>
+            <el-menu-item index="/device/vending">自助售卖机</el-menu-item>
+            <el-menu-item index="/device/senvivlite">悠护lite</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>
@@ -22,7 +23,7 @@ export default {
   name: 'DeviceIndex',
   data() {
     return {
-      navActive: '/device/list',
+      navActive: '/device/vending',
       isDesktop: this.$store.getters.isDesktop
     }
   },

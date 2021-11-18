@@ -1,5 +1,6 @@
 <template>
   <div id="device_list">
+
     <div class="circle-status-bar">
       <div class="circle-item"> <span class="icon-status icon-status-1" /> <span class="name">关闭</span></div>
       <div class="circle-item"> <span class="icon-status icon-status-2" /> <span class="name">正常</span></div>
@@ -226,7 +227,7 @@ export default {
     onManage(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
-        path: '/device/manage',
+        path: '/device/vending/manage',
         params: {
           id: item.id,
           tab: 'tabBaseInfo'
