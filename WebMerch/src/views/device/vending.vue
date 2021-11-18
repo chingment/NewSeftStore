@@ -159,7 +159,8 @@ export default {
         limit: 10,
         shopId: '',
         storeId: '',
-        id: ''
+        id: '',
+        type: 'vending'
       },
       loadingBySelect: false,
       listQueryBySelect: {
@@ -237,7 +238,7 @@ export default {
     onStock(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
-        path: '/device/manage',
+        path: '/device/vending/manage',
         params: {
           id: item.id,
           tab: 'tabStock'
@@ -247,7 +248,7 @@ export default {
     onControlCenter(item) {
       this.$router.push({
         name: 'MerchDeviceManage',
-        path: '/device/manage',
+        path: '/device/vending/manage',
         params: {
           id: item.id,
           tab: 'tabControlCenter'

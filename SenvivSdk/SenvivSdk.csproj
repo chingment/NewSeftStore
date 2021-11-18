@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="ApiDoRequest.cs" />
     <Compile Include="IApiPostRequest.cs" />
+    <Compile Include="Post\BoxListRequest.cs" />
+    <Compile Include="Post\BoxListResult.cs" />
     <Compile Include="Post\DeptSubordinateListRequest.cs" />
     <Compile Include="Post\DeptSubordinateListResult.cs" />
     <Compile Include="Post\GetAccessTokenRequest.cs" />

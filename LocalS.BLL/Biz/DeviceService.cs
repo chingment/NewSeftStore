@@ -83,7 +83,7 @@ namespace LocalS.BLL.Biz
                 var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == d_Device.CurUseMerchId && m.DeviceId == id).FirstOrDefault();
                 if (d_MerchDevice != null)
                 {
-                    m_Device.Name = d_MerchDevice.Name;
+                    m_Device.Name = d_Device.Name;
                     m_Device.LogoImgUrl = d_MerchDevice.LogoImgUrl;
                 }
 

@@ -20,7 +20,7 @@ namespace LocalS.Service.Api.IotTerm
                          where ((rop.device_id == null || u.DeviceId.Contains(rop.device_id)))
                          &&
                          u.MerchId == merchId
-                         select new { u.DeviceId, u.Name, u.CumCode, tt.Lat, tt.Lng, tt.RunStatus });
+                         select new { u.DeviceId, tt.Name, u.CumCode, tt.Lat, tt.Lng, tt.RunStatus });
 
 
             if (!string.IsNullOrEmpty(rop.device_id))

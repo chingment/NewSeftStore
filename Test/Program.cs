@@ -193,7 +193,7 @@ namespace Test
         static void Main(string[] args)
         {
 
-            //var senvivUsers = SdkFactory.Senviv.GetUserList();
+            var senvivUsers = SdkFactory.Senviv.GetBoxList();
             //"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYTqsWr3w9CnC55XasyUWJC0="
 
             string accessToken = SdkFactory.Senviv.GetApiAccessToken();

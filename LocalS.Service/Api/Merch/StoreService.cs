@@ -142,7 +142,7 @@ namespace LocalS.Service.Api.Merch
                          u.CurUseStoreId == rup.StoreId
                          &&
                          u.CurUseShopId == rup.ShopId
-                         select new { u.Id, u.DeviceId, tt.ExIsHas, u.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, u.DeviceId, tt.ExIsHas, tt.Name, u.CurUseStoreId, u.IsStopUse, u.CreateTime });
 
             var list = query.OrderBy(m => m.IsStopUse).ToList();
 

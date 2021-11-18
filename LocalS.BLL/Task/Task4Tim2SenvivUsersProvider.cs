@@ -140,6 +140,40 @@ namespace LocalS.BLL.Task
                         }
                     }
                 }
+
+
+                var senvivBoxs = SdkFactory.Senviv.GetBoxList();
+                foreach (var senvivBox in senvivBoxs)
+                {
+                    var d_Device = CurrentDb.Device.Where(m => m.Id == senvivBox.sn).FirstOrDefault();
+                    if (d_Device == null)
+                    {
+                        d_Device = new Entity.Device();
+                        d_Device.Id = senvivBox.sn;
+                        d_Device.Name = "非接触式生命体征检测仪";
+                        d_Device.Type = "senvivlite";
+                        d_Device.ImeiId = senvivBox.imei;
+                        d_Device.CurUseMerchId = "88273829";
+                        d_Device.Model = senvivBox.model;
+                        d_Device.Lat = float.Parse(senvivBox.latitude);
+                        d_Device.Lng = float.Parse(senvivBox.longitude);
+                        d_Device.AppVersionName = senvivBox.version;
+                        d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
+                        d_Device.CreateTime = DateTime.Now;
+                        CurrentDb.Device.Add(d_Device);
+                        CurrentDb.SaveChanges();
+
+                        var d_MerchDevice = new Entity.MerchDevice();
+                        d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
+                        d_MerchDevice.MerchId = d_Device.CurUseMerchId;
+                        d_MerchDevice.DeviceId = d_Device.Id;
+                        d_MerchDevice.Creator = d_Device.Creator;
+                        d_MerchDevice.CreateTime = d_Device.CreateTime;
+                        CurrentDb.MerchDevice.Add(d_MerchDevice);
+                        CurrentDb.SaveChanges();
+                    }
+
+                }
             }
             catch (Exception ex)
             {

@@ -206,6 +206,50 @@ namespace LocalS.BLL
             return list;
         }
 
+        public List<SenvivSdk.BoxListResult.DataModel> GetBoxList()
+        {
+            var list = new List<SenvivSdk.BoxListResult.DataModel>();
+
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            int page = 1;
+            int size = 10;
+
+            var boxListRequest = new SenvivSdk.BoxListRequest(GetApiAccessToken(), new { deptid = "32", size = size, page = page });
+            var result = api.DoPost(boxListRequest);
+            if (result.Result == ResultType.Success)
+            {
+                var data = result.Data;
+                if (data != null)
+                {
+                    int count = data.Data.count;
+                    int pageCount = (count + size - 1) / size;
+
+                    list.AddRange(data.Data.data);
+
+                    if (pageCount >= 2)
+                    {
+                        for (var i = 2; i <= pageCount; i++)
+                        {
+                            var userListRequest2 = new SenvivSdk.BoxListRequest(GetApiAccessToken(), new { deptid = "32", size = size, page = i });
+                            var result2 = api.DoPost(userListRequest2);
+                            if (result2.Result == ResultType.Success)
+                            {
+                                var data2 = result2.Data;
+                                if (data2 != null)
+                                {
+                                    list.AddRange(data2.Data.data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
+
         public ReportDetailListResult.DataModel GetUserHealthDayReport(string deptid, string userid)
         {
 

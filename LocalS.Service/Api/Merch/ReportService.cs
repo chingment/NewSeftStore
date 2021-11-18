@@ -752,7 +752,7 @@ into g
 
                     foreach (var storeDevice in storeDevices)
                     {
-                        optionsSellChannel.Children.Add(new OptionNode { Value = storeDevice.DeviceId, Label = storeDevice.Name });
+                        optionsSellChannel.Children.Add(new OptionNode { Value = storeDevice.DeviceId, Label = "" });
                     }
 
                     ret.OptionsStores.Add(optionsSellChannel);

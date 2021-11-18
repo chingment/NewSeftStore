@@ -17,8 +17,8 @@ namespace LocalS.Entity
         public string CurUseStoreId { get; set; }
         public string CurUseShopId { get; set; }
         public string CumCode { get; set; }
-        [MaxLength(128)]
-        public string Name { get; set; }
+        //[MaxLength(128)]
+        //public string Name { get; set; }
         public string LogoImgUrl { get; set; }
         //停止使用，当商户合约到期不使用
         public bool IsStopUse { get; set; }

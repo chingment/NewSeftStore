@@ -226,7 +226,6 @@ namespace LocalS.Service.Api.Admin
                 {
                     merchDevice = new MerchDevice();
                     merchDevice.Id = IdWorker.Build(IdType.NewGuid);
-                    merchDevice.Name = device.Name;
                     merchDevice.MerchId = rop.MerchId;
                     merchDevice.DeviceId = rop.DeviceId;
                     merchDevice.CumCode = rop.DeviceId;

@@ -94,7 +94,12 @@ namespace LocalS.Service.Api.Merch
                          where ((rup.Id == null || u.DeviceId.Contains(rup.Id)) || (rup.Id == null || u.CumCode.Contains(rup.Id)))
                          &&
                          u.MerchId == merchId
-                         select new { u.Id, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, u.Name, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, tt.Type, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
+
+            if (!string.IsNullOrEmpty(rup.Type))
+            {
+                query = query.Where(m => m.Type == rup.Type);
+            }
 
             if (rup.OpCode == "list")
             {
@@ -160,6 +165,8 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.DeviceId,
+                    Name = item.Name,
+                    Model = item.Model,
                     Code = GetCode(item.DeviceId, item.CumCode),
                     StoreId = item.CurUseStoreId,
                     ShopId = item.CurUseShopId,
@@ -264,7 +271,7 @@ namespace LocalS.Service.Api.Merch
                             s.MerchId == merchId
                             &&
                             s.DeviceId == deviceId
-                            select new { s.DeviceId, u.AppVersionCode, u.CtrlSdkVersionCode, s.CumCode, s.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
+                            select new { s.DeviceId, u.AppVersionCode, u.CtrlSdkVersionCode, s.CumCode, u.Name, s.LogoImgUrl, s.CurUseStoreId, s.CurUseShopId, u.RunStatus, u.LastRequestTime, u.ExIsHas, s.IsStopUse }).FirstOrDefault();
 
             ret.Id = d_Device.DeviceId;
             ret.Name = d_Device.Name;
@@ -726,7 +733,6 @@ namespace LocalS.Service.Api.Merch
                     d_MerchDevice.DeviceId = rop.DeviceId;
                     d_MerchDevice.CurUseStoreId = rop.StoreId;
                     d_MerchDevice.CurUseShopId = rop.ShopId;
-                    d_MerchDevice.Name = d_Device.Name;
                     d_MerchDevice.LogoImgUrl = d_Device.LogoImgUrl;
                     d_MerchDevice.Creator = operater;
                     d_MerchDevice.CreateTime = DateTime.Now;
