@@ -11,8 +11,6 @@ var config = {
   // 下面的地址配合云端 Server 工作
   host,
   // appId: `wx969a817779af7b53`,
-  // merchId: `d17df2252133478c99104180e8062230`,
-  //storeId: '21ae9399b1804dbc9ddd3c29e8b5c670',
   apiUrl: {
     ownLoginByMinProgram: `${host}/Own/LoginByMinProgram`,
     ownWxApiCode2Session: `${host}/Own/WxApiCode2Session`,

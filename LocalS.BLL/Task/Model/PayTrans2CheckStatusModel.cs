@@ -11,6 +11,7 @@ namespace LocalS.BLL.Task
     {
         public string Id { get; set; }
         public string MerchId { get; set; }
+        public string StoreId { get; set; }
         public E_PayCaller PayCaller { get; set; }
         public E_PayPartner PayPartner { get; set; }
         public List<string> OrderIds { get; set; }

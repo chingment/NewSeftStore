@@ -1,5 +1,5 @@
 <template>
-  <div id="adspace_release_list">
+  <div id="adspace_belongs">
     <page-header />
     <div class="row-title clearfix">
       <div class="pull-left"> <h5>内容信息</h5>

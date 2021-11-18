@@ -5,7 +5,6 @@ const key_accesstoken = "key_accesstoken"
 const key_store_id = "key_store_id"
 const key_shop_id = "key_shop_id"
 const key_open_id = "key_open_id"
-const key_merch_id = "key_merch_id"
 const key_session_key = "session_key"
 const key_last_saleoutlet_id = "key_last_saleoutlet_id"
 const key_reffsign = "key_reffsign"
@@ -74,14 +73,6 @@ function setOpenId(open_id) {
 }
 
 
-function getMerchId() {
-  return wx.getStorageSync(key_merch_id) || undefined
-}
-
-function setMerchId(merch_id) {
-  wx.setStorageSync(key_merch_id, merch_id)
-}
-
 function getSessionKey() {
   return wx.getStorageSync(key_session_key) || undefined
 }
@@ -123,8 +114,6 @@ module.exports = {
   setStoreId: setStoreId,
   getOpenId: getOpenId,
   setOpenId: setOpenId,
-  getMerchId: getMerchId,
-  setMerchId: setMerchId,
   getSessionKey: getSessionKey,
   setSessionKey: setSessionKey,
   getLastSaleOutletId: getLastSaleOutletId,

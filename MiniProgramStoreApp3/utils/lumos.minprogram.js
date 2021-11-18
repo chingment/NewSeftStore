@@ -226,7 +226,7 @@ const myWxRequest = (opts) => {
     const accountInfo = wx.getAccountInfoSync()
 
 
-    _url += "appId=" + accountInfo.miniProgram.appId + "&merchId=" + storeage.getMerchId() + "&token=" + storeage.getAccessToken()
+    _url += "appId=" + accountInfo.miniProgram.appId + "&token=" + storeage.getAccessToken()
 
     if (!isNullOrEmpty(_urlParams)) {
       _url += "&"
@@ -337,7 +337,7 @@ const myWxRequest = (opts) => {
 //     _url += "&"
 //   }
 
-//   _url += "appId=" + config.appId + "&merchId=" + merchid + "&token=" + storeage.getAccessToken()
+//   _url += "appId=" + config.appId + &token=" + storeage.getAccessToken()
 
 //   if (!isNullOrEmpty(_urlParams)) {
 //     _url += "&"

@@ -1,5 +1,5 @@
 <template>
-  <div id="clientuser_baseinfo">
+  <div id="shop_baseinfo">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="编码">
         {{ temp.id }}
@@ -131,7 +131,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-#clientuser_baseinfo{
+#shop_baseinfo{
 .el-form .el-form-item{
   max-width: 600px;
 }

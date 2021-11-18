@@ -701,7 +701,7 @@ namespace LocalS.Service.Api.StoreApp
             LocalS.BLL.Biz.RupOrderBuildPayOptions bizRup = new LocalS.BLL.Biz.RupOrderBuildPayOptions();
             bizRup.AppCaller = rup.AppCaller;
             bizRup.AppId = rup.AppId;
-            bizRup.MerchId = rup.MerchId;
+            bizRup.StoreId = rup.StoreId;
             bizRup.ClientUserId = clientUserId;
             return BLL.Biz.BizFactory.Order.BuildPayOptions(operater, bizRup);
         }

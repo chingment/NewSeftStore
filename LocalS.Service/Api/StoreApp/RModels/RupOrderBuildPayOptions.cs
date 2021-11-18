@@ -13,6 +13,6 @@ namespace LocalS.Service.Api.StoreApp
         public E_AppCaller AppCaller { get; set; }
         public string AppId { get; set; }
         //todo 删除MerchId
-        public string MerchId { get; set; }
+        public string StoreId { get; set; }
     }
 }

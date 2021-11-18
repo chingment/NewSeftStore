@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.Merch
                          u.MerchId == merchId
                          &&
                          u.IsDelete == false
-                         select new { u.Id, u.Name, u.SctMode, u.MainImgUrl, u.BriefDes, u.ContactPhone, u.ContactName, u.ContactAddress, u.CreateTime });
+                         select new { u.Id, u.Name, u.MainImgUrl, u.BriefDes, u.ContactPhone, u.ContactName, u.ContactAddress, u.CreateTime });
 
 
             int total = query.Count();
@@ -51,8 +51,7 @@ namespace LocalS.Service.Api.Merch
                     BriefDes = item.BriefDes,
                     ContactName = item.ContactName,
                     ContactPhone = item.ContactPhone,
-                    ContactAddress = item.ContactAddress,
-                    SctMode = item.SctMode
+                    ContactAddress = item.ContactAddress
                 });
             }
 
@@ -82,10 +81,9 @@ namespace LocalS.Service.Api.Merch
                         ret.CurStore = new StoreModel();
                         ret.CurStore.Id = d_Store.Id;
                         ret.CurStore.Name = d_Store.Name;
-                        ret.CurStore.SctMode = d_Store.SctMode;
                     }
 
-                    ret.Stores.Add(new StoreModel { Id = d_Store.Id, Name = d_Store.Name, SctMode = d_Store.SctMode });
+                    ret.Stores.Add(new StoreModel { Id = d_Store.Id, Name = d_Store.Name });
                 }
             }
 
@@ -116,8 +114,7 @@ namespace LocalS.Service.Api.Merch
                 ContactPhone = d_Store.ContactPhone,
                 BriefDes = d_Store.BriefDes,
                 MainImgUrl = d_Store.MainImgUrl,
-                IsTestMode = d_Store.IsTestMode,
-                SctMode = d_Store.SctMode
+                IsTestMode = d_Store.IsTestMode
             };
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -128,11 +125,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-
-            var d_Store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
-
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { SctMode = d_Store.SctMode });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new {  });
             return result;
         }
 
@@ -576,7 +569,6 @@ namespace LocalS.Service.Api.Merch
                     MainImgUrl = item.MainImgUrl,
                     Address = item.Address,
                     Status = MerchServiceFactory.Shop.GetStatus(item.IsOpen),
-                    StcMode = d_Store.SctMode,
                     DeviceCount = l_DeviceCount,
                     CreateTime = item.CreateTime,
                 });

@@ -38,7 +38,7 @@ Page({
 
     apiOwn.bindPhoneNumberByWx({
       appId: _this.data.appId,
-      merchId: storeage.getMerchId(),
+      storeId: storeage.getStoreId(),
       openId: openId,
       phoneNumber: phoneNumber,
     }).then(function (res) {

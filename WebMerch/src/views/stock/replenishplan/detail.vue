@@ -1,6 +1,6 @@
 <template>
   <div>
-    <device-replenish-plan :plan-id="planId" /></device-replenish-plan></div>
+    <device-replenish-plan :plan-id="planId" /></div>
 </template>
 
 <script>

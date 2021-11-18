@@ -1,5 +1,5 @@
 <template>
-  <div id="adminuser_add">
+  <div id="pane_send_coupon">
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="优惠券" />
       <el-form-item label="数量">

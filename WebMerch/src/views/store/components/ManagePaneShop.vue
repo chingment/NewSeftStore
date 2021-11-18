@@ -21,7 +21,7 @@
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
               <ul>
-                <li v-if="item.stcMode.indexOf('K')>-1"><el-button type="text" @click="onDialogOpenByDevice(item)">({{ item.deviceCount }}台)设备</el-button></li>
+                <li><el-button type="text" @click="onDialogOpenByDevice(item)">({{ item.deviceCount }}台)设备</el-button></li>
               </ul>
             </div>
           </div>

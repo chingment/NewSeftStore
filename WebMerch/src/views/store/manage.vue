@@ -36,8 +36,7 @@ export default {
       activeTab: 'tabBaseInfo',
       activeDropdown: {
         id: '',
-        name: '',
-        sctMode: ''
+        name: ''
       },
       dropdownOptions: []
     }

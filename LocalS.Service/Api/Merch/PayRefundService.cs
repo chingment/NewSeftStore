@@ -611,7 +611,7 @@ namespace LocalS.Service.Api.Merch
                         {
                             case E_PayPartner.Wx:
                                 #region Wx
-                                var wx_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTran.MerchId);
+                                var wx_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetWxMpAppInfoConfig(payTran.StoreId);
                                 api_Result = SdkFactory.Wx.PayRefund(wx_AppInfoConfig, order.PayTransId, rop.PayRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
                                 if (api_Result == null)
                                 {
@@ -630,7 +630,7 @@ namespace LocalS.Service.Api.Merch
                                 break;
                             case E_PayPartner.Zfb:
                                 #region 
-                                var zfb_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTran.MerchId);
+                                var zfb_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetZfbMpAppInfoConfig(payTran.StoreId);
                                 api_Result = SdkFactory.Zfb.PayRefund(zfb_AppInfoConfig, order.PayTransId, rop.PayRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
                                 if (api_Result.Status == "SUCCESS")
                                 {
@@ -647,7 +647,7 @@ namespace LocalS.Service.Api.Merch
                                 #endregion
                                 break;
                             case E_PayPartner.Xrt:
-                                var xrt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTran.MerchId);
+                                var xrt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetXrtPayInfoConfg(payTran.StoreId);
                                 api_Result = SdkFactory.XrtPay.PayRefund(xrt_AppInfoConfig, order.PayTransId, rop.PayRefundId, payTran.ChargeAmount, rop.Amount, rop.Remark);
                                 break;
 
@@ -695,7 +695,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     if (refundStatus == "HANDLING")
                     {
-                        Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, PayTransId = payTran.Id, PayPartner = payTran.PayPartner });
+                        Task4Factory.Tim2Global.Enter(Task4TimType.PayRefundCheckStatus, rop.PayRefundId, DateTime.Now.AddDays(3), new PayRefund2CheckStatusModel { Id = rop.PayRefundId, MerchId = order.MerchId, StoreId = order.StoreId, PayTransId = payTran.Id, PayPartner = payTran.PayPartner });
                     }
 
                     MqFactory.Global.PushOperateLog(operater, AppId.MERCH, merchId, EventCode.pay_refund_handle, string.Format("订单号:{0}，处理退款金额：{1}，提交成功，退款单号：{2}", payRefund.OrderId, payRefund.ApplyAmount.ToF2Price(), payRefund.Id), rop);

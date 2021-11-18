@@ -1,5 +1,5 @@
 <template>
-  <div id="report_list">
+  <div id="replenishplan_list">
 
     <div class="filter-container">
       <el-form ref="form" label-width="120px" class="query-box">

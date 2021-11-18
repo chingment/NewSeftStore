@@ -1,5 +1,5 @@
 <template>
-  <div id="pay_list">
+  <div id="pay_query_list">
     <div class="filter-container">
 
       <el-form ref="form" label-width="120px" class="query-box">

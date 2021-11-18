@@ -30,13 +30,6 @@ namespace LocalS.Service.Api.StoreApp
             string storeId = rup.StoreId;
 
 
-            if (d_Store.SctMode.Contains("K"))
-            {
-                ret.IsSupMachineShop = true;
-
-            }
-
-
             ret.Store.Id = d_Store.Id;
             ret.Store.Name = d_Store.Name;
 
@@ -70,7 +63,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetIndexSugProducts();
 
-            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.ShopId == "0" && m.DeviceId == "0" && m.ShopMode == E_ShopMode.Mall && m.IsUseRent == true).Take(2).ToList();
+            var d_sellChannelStocks = CurrentDb.SellChannelStock.Where(m => m.StoreId == rup.StoreId && m.ShopId == "0" && m.DeviceId == "0" && m.ShopMode == E_ShopMode.Mall && m.IsUseRent == true).Take(2).ToList();
 
             var m_pdRent = new PdRentModel();
 
@@ -78,7 +71,7 @@ namespace LocalS.Service.Api.StoreApp
 
             foreach (var d_sellChannelStock in d_sellChannelStocks)
             {
-                var r_Sku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, rup.MerchId, rup.StoreId, "0", null, d_sellChannelStock.SkuId);
+                var r_Sku = CacheServiceFactory.Product.GetSkuStock(E_ShopMode.Mall, d_sellChannelStock.MerchId, rup.StoreId, "0", null, d_sellChannelStock.SkuId);
                 if (r_Sku != null && r_Sku.Stocks != null && r_Sku.Stocks.Count > 0)
                 {
                     var m_Sku = new SkuModel();
@@ -106,7 +99,7 @@ namespace LocalS.Service.Api.StoreApp
 
             var m_pdArea = new PdAreaModel();
 
-            var d_storeKinds = CurrentDb.StoreKind.Where(m => m.MerchId == rup.MerchId && m.StoreId == rup.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
+            var d_storeKinds = CurrentDb.StoreKind.Where(m => m.StoreId == rup.StoreId && m.IsDelete == false).OrderBy(m => m.Priority).ToList();
 
             foreach (var d_storeKind in d_storeKinds)
             {

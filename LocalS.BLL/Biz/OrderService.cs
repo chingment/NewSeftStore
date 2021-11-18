@@ -1800,7 +1800,7 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayPartner = E_PayPartner.Wx;
                                 payTrans.PayWay = E_PayWay.Wx;
                                 payTrans.PayStatus = E_PayStatus.Paying;
-                                var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
+                                var wxByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetWxMpAppInfoConfig(payTrans.StoreId);
                                 var wx_PayBuildQrCode = SdkFactory.Wx.PayBuildQrCode(wxByNt_AppInfoConfig, E_PayCaller.WxByNt, payTrans.MerchId, payTrans.StoreId, "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(wx_PayBuildQrCode.CodeUrl))
                                 {
@@ -1823,7 +1823,7 @@ namespace LocalS.BLL.Biz
                                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到该用户数据");
                                 }
 
-                                var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Merch.GetWxMpAppInfoConfig(payTrans.MerchId);
+                                var wxByMp_AppInfoConfig = BLL.Biz.BizFactory.Store.GetWxMpAppInfoConfig(payTrans.StoreId);
 
                                 if (wxByMp_AppInfoConfig == null)
                                 {
@@ -1861,7 +1861,7 @@ namespace LocalS.BLL.Biz
                                 payTrans.PayPartner = E_PayPartner.Zfb;
                                 payTrans.PayWay = E_PayWay.Zfb;
                                 payTrans.PayStatus = E_PayStatus.Paying;
-                                var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetZfbMpAppInfoConfig(payTrans.MerchId);
+                                var zfbByNt_AppInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetZfbMpAppInfoConfig(payTrans.StoreId);
                                 var zfbByNt_PayBuildQrCode = SdkFactory.Zfb.PayBuildQrCode(zfbByNt_AppInfoConfig, E_PayCaller.ZfbByNt, payTrans.MerchId, "", "", payTrans.Id, payTrans.ChargeAmount, "", Lumos.CommonUtil.GetIP(), "自助商品", payTrans.PayExpireTime.Value);
                                 if (string.IsNullOrEmpty(zfbByNt_PayBuildQrCode.CodeUrl))
                                 {
@@ -1881,7 +1881,7 @@ namespace LocalS.BLL.Biz
                     case E_PayPartner.Tg:
                         #region 通莞商户支付
 
-                        var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetTgPayInfoConfg(payTrans.MerchId);
+                        var tgPayInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetTgPayInfoConfg(payTrans.StoreId);
 
                         payTrans.PayPartner = E_PayPartner.Tg;
                         payTrans.PayStatus = E_PayStatus.Paying;
@@ -1913,7 +1913,7 @@ namespace LocalS.BLL.Biz
 
                         // todo 发布去掉
 
-                        var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Merch.GetXrtPayInfoConfg(payTrans.MerchId);
+                        var xrtPayInfoConfig = LocalS.BLL.Biz.BizFactory.Store.GetXrtPayInfoConfg(payTrans.StoreId);
 
                         payTrans.PayPartner = E_PayPartner.Xrt;
                         payTrans.PayStatus = E_PayStatus.Paying;
@@ -2016,7 +2016,7 @@ namespace LocalS.BLL.Biz
 
                 if (rop.PayPartner == E_PayPartner.Wx || rop.PayPartner == E_PayPartner.Zfb || rop.PayPartner == E_PayPartner.Tg || rop.PayPartner == E_PayPartner.Xrt)
                 {
-                    Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
+                    Task4Factory.Tim2Global.Enter(Task4TimType.PayTrans2CheckStatus, payTrans.Id, payTrans.PayExpireTime.Value, new PayTrans2CheckStatusModel { Id = payTrans.Id, MerchId = payTrans.MerchId, StoreId = payTrans.StoreId, PayCaller = payTrans.PayCaller, PayPartner = payTrans.PayPartner });
                 }
 
                 if (result.Code == "1040")
@@ -2041,10 +2041,10 @@ namespace LocalS.BLL.Biz
             switch (rup.AppCaller)
             {
                 case E_AppCaller.Wxmp:
-                    var merch = CurrentDb.Merch.Where(m => m.Id == rup.MerchId).FirstOrDefault();
-                    if (merch != null)
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+                    if (d_Store != null)
                     {
-                        var options = merch.WxmpAppPayOptions.ToJsonObject<List<PayOption>>();
+                        var options = d_Store.WxmpAppPayOptions.ToJsonObject<List<PayOption>>();
                         if (options != null)
                         {
                             foreach (var option in options)

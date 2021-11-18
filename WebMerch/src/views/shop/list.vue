@@ -61,15 +61,13 @@ export default {
         limit: 10,
         name: undefined
       },
-      listData: [],
-      mctMode: ''
+      listData: []
     }
   },
   created() {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.mctMode = this.$store.getters.userInfo.mctMode
     this.onGetList()
   },
   methods: {

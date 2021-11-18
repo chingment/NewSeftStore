@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.Account
         [DllImport(@"BioVein.x64.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern int FV_MatchFeature([MarshalAs(UnmanagedType.LPArray)] byte[] featureDataMatch, [MarshalAs(UnmanagedType.LPArray)]  byte[] featureDataReg, byte RegCnt, byte flag, byte securityLevel, int[] diff, [MarshalAs(UnmanagedType.LPArray)] byte[] AIDataBuf, int[] AIDataLen);
 
-        private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId, string mctMode = "")
+        private List<MenuNode> GetMenus(Enumeration.BelongSite belongSite, string userId)
         {
             List<MenuNode> menuNodes = new List<MenuNode>();
 
@@ -34,53 +34,14 @@ namespace LocalS.Service.Api.Account
             if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
             {
                 sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
-
-                if (belongSite == Enumeration.BelongSite.Merch)
-                {
-                    if (!string.IsNullOrEmpty(mctMode))
-                    {
-                        //M多店铺
-                        //S单店铺
-                        //线上商城 F
-                        //线下设备 K
-
-
-                        mctMode = (mctMode.Replace("M", "")).Replace("S", "");
-
-                        if (mctMode == "F")
-                        {
-                            sysMenus = sysMenus.Where(m => m.BelongMctMode != "K").ToList();
-                        }
-
-
-                    }
-                }
-
             }
-
-            //foreach (var sysMenu in sysMenus)
-            //{
-            //    MenuNode menuNode = new MenuNode();
-            //    menuNode.Id = sysMenu.Id;
-            //    menuNode.PId = sysMenu.PId;
-            //    menuNode.Path = sysMenu.Path;
-            //    menuNode.Name = sysMenu.Name;
-            //    menuNode.Icon = sysMenu.Icon;
-            //    menuNode.Title = sysMenu.Title;
-            //    menuNode.Component = sysMenu.Component;
-            //    menuNode.IsSidebar = sysMenu.IsSidebar;
-            //    menuNode.IsNavbar = sysMenu.IsNavbar;
-            //    menuNode.IsRouter = sysMenu.IsRouter;
-            //    menuNodes.Add(menuNode);
-            //}
-
 
             menuNodes = GetMenuTree("10000000000000000000000000000025", sysMenus);
             return menuNodes;
 
         }
 
-        private List<MenuNode> GetMenus2(Enumeration.BelongSite belongSite, string userId, string mctMode = "")
+        private List<MenuNode> GetMenus2(Enumeration.BelongSite belongSite, string userId)
         {
             List<MenuNode> menuNodes = new List<MenuNode>();
 
@@ -89,20 +50,6 @@ namespace LocalS.Service.Api.Account
             if (belongSite == Enumeration.BelongSite.Admin || belongSite == Enumeration.BelongSite.Merch)
             {
                 sysMenus = (from menu in CurrentDb.SysMenu where (from rolemenu in CurrentDb.SysRoleMenu where (from sysUserRole in CurrentDb.SysUserRole where sysUserRole.UserId == userId select sysUserRole.RoleId).Contains(rolemenu.RoleId) select rolemenu.MenuId).Contains(menu.Id) && menu.BelongSite == belongSite select menu).Where(m => m.Depth != 0).OrderBy(m => m.Priority).ToList();
-
-                if (belongSite == Enumeration.BelongSite.Merch)
-                {
-                    if (!string.IsNullOrEmpty(mctMode))
-                    {
-                        mctMode = (mctMode.Replace("M", "")).Replace("S", "");
-
-                        if (mctMode == "F")
-                        {
-                            sysMenus = sysMenus.Where(m => m.BelongMctMode != "K").ToList();
-                        }
-                    }
-                }
-
             }
 
             foreach (var sysMenu in sysMenus)
@@ -269,7 +216,7 @@ namespace LocalS.Service.Api.Account
 
                 tokenInfo.BelongId = merchUser.MerchId;
                 tokenInfo.BelongType = Enumeration.BelongType.Merch;
-                tokenInfo.MctMode = merch.MctMode;
+
 
                 MqFactory.Global.PushOperateLog(sysUser.Id, AppId.MERCH, merchUser.MerchId, EventCode.login, "登录成功", new LoginLogModel { LoginAccount = sysUser.UserName, LoginFun = Enumeration.LoginFun.Account, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = rop.LoginWay, LoginIp = rop.Ip });
 
@@ -370,21 +317,21 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
             var ret = new RetOwnLoginByMinProgram();
 
-            var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId && m.WxMpAppId == rop.AppId).FirstOrDefault();
 
-            if (merch == null)
+            if (d_Store == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败[01]");
             }
 
             var wxAppInfoConfig = new WxAppInfoConfig();
 
-            wxAppInfoConfig.AppId = merch.WxMpAppId;
-            wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-            wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-            wxAppInfoConfig.PayKey = merch.WxPayKey;
-            wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-            wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+            wxAppInfoConfig.AppId = d_Store.WxMpAppId;
+            wxAppInfoConfig.AppSecret = d_Store.WxMpAppSecret;
+            wxAppInfoConfig.PayMchId = d_Store.WxPayMchId;
+            wxAppInfoConfig.PayKey = d_Store.WxPayKey;
+            wxAppInfoConfig.PayResultNotifyUrl = d_Store.WxPayResultNotifyUrl;
+            wxAppInfoConfig.NotifyEventUrlToken = d_Store.WxPaNotifyEventUrlToken;
 
             UserInfoModelByMinProramJsCode wxUserInfo = null;
             WxPhoneNumber wxPhoneNumber = null;
@@ -445,7 +392,7 @@ namespace LocalS.Service.Api.Account
                 d_clientUser.CreateTime = DateTime.Now;
                 d_clientUser.Creator = d_clientUser.Id;
                 d_clientUser.BelongType = Enumeration.BelongType.Client;
-                d_clientUser.MerchId = rop.MerchId;
+                d_clientUser.MerchId = d_Store.MerchId;
                 d_clientUser.WxMpOpenId = rop.OpenId;
                 d_clientUser.WxMpAppId = rop.AppId;
                 d_clientUser.ReffSign = rop.ReffSign;
@@ -499,7 +446,7 @@ namespace LocalS.Service.Api.Account
 
             SSOUtil.SetTokenInfo(ret.Token, tokenInfo, new TimeSpan(24 * 7, 0, 0));
 
-            MqFactory.Global.PushOperateLog(d_clientUser.Id, AppId.WXMINPRAGROM, merch.MctStoreId, EventCode.login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
+            MqFactory.Global.PushOperateLog(d_clientUser.Id, AppId.WXMINPRAGROM, d_Store.Id, EventCode.login, "登录成功", new LoginLogModel { LoginAccount = d_clientUser.UserName, LoginFun = Enumeration.LoginFun.MpAuth, LoginResult = Enumeration.LoginResult.LoginSuccess, LoginWay = Enumeration.LoginWay.Wxmp, LoginIp = rop.Ip });
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "登录成功", ret);
 
@@ -724,9 +671,7 @@ namespace LocalS.Service.Api.Account
                         ret.Roles = GetRoles(Enumeration.BelongSite.Account, userId);
                         break;
                     case "merch":
-                        var tokenInfo = SSOUtil.GetTokenInfo(rup.Token);
-                        ret.MctMode = tokenInfo.MctMode;
-                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId, tokenInfo.MctMode);
+                        ret.Menus = GetMenus(Enumeration.BelongSite.Merch, userId);
                         ret.Roles = GetRoles(Enumeration.BelongSite.Merch, userId);
                         break;
                 }
@@ -930,7 +875,7 @@ namespace LocalS.Service.Api.Account
             var result = new CustomJsonResult();
 
 
-            var config = BizFactory.Merch.GetWxMpAppInfoConfigByAppId(rop.AppId);
+            var config = BizFactory.Store.GetWxMpAppInfoConfigByAppId(rop.AppId);
 
             if (config == null)
             {
@@ -956,19 +901,19 @@ namespace LocalS.Service.Api.Account
 
             var m_Config = new WxAppInfoConfig();
 
-            var d_Merch = CurrentDb.Merch.Where(m => m.WxMpAppId == rop.AppId).FirstOrDefault();
-            if (d_Merch == null)
+            var d_Store = CurrentDb.Store.Where(m => m.WxMpAppId == rop.AppId).FirstOrDefault();
+            if (d_Store == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "商户信息查找不到");
             }
 
-            m_Config.AppId = d_Merch.WxMpAppId;
-            m_Config.AppSecret = d_Merch.WxMpAppSecret;
-            m_Config.PayMchId = d_Merch.WxPayMchId;
-            m_Config.PayKey = d_Merch.WxPayKey;
-            m_Config.PayResultNotifyUrl = d_Merch.WxPayResultNotifyUrl;
-            m_Config.SslCert_Path = d_Merch.WxPayCertPath;
-            m_Config.SslCert_Password = d_Merch.WxPayCertPassword;
+            m_Config.AppId = d_Store.WxMpAppId;
+            m_Config.AppSecret = d_Store.WxMpAppSecret;
+            m_Config.PayMchId = d_Store.WxPayMchId;
+            m_Config.PayKey = d_Store.WxPayKey;
+            m_Config.PayResultNotifyUrl = d_Store.WxPayResultNotifyUrl;
+            m_Config.SslCert_Path = d_Store.WxPayCertPath;
+            m_Config.SslCert_Password = d_Store.WxPayCertPassword;
 
             var ret = SdkFactory.Wx.GetJsCode2Session(m_Config, rop.Code);
 
@@ -977,7 +922,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解释信息失败");
             }
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, merchId = d_Merch.Id, storeId = d_Merch.MctStoreId });
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new { openId = ret.openid, sessionKey = ret.session_key, storeId = d_Store.Id });
 
             return result;
         }
@@ -1044,21 +989,21 @@ namespace LocalS.Service.Api.Account
                 if (d_WxACode == null)
                 {
 
-                    var merch = CurrentDb.Merch.Where(m => m.Id == rop.MerchId && m.WxMpAppId == rop.AppId).FirstOrDefault();
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == rop.StoreId && m.WxMpAppId == rop.AppId).FirstOrDefault();
 
-                    if (merch == null)
+                    if (d_Store == null)
                     {
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[01]");
                     }
 
                     var wxAppInfoConfig = new WxAppInfoConfig();
 
-                    wxAppInfoConfig.AppId = merch.WxMpAppId;
-                    wxAppInfoConfig.AppSecret = merch.WxMpAppSecret;
-                    wxAppInfoConfig.PayMchId = merch.WxPayMchId;
-                    wxAppInfoConfig.PayKey = merch.WxPayKey;
-                    wxAppInfoConfig.PayResultNotifyUrl = merch.WxPayResultNotifyUrl;
-                    wxAppInfoConfig.NotifyEventUrlToken = merch.WxPaNotifyEventUrlToken;
+                    wxAppInfoConfig.AppId = d_Store.WxMpAppId;
+                    wxAppInfoConfig.AppSecret = d_Store.WxMpAppSecret;
+                    wxAppInfoConfig.PayMchId = d_Store.WxPayMchId;
+                    wxAppInfoConfig.PayKey = d_Store.WxPayKey;
+                    wxAppInfoConfig.PayResultNotifyUrl = d_Store.WxPayResultNotifyUrl;
+                    wxAppInfoConfig.NotifyEventUrlToken = d_Store.WxPaNotifyEventUrlToken;
 
                     var result_WxACodeUnlimit = SdkFactory.Wx.GetWxACodeUnlimit(wxAppInfoConfig, id, "pages/main/main");
 
@@ -1098,7 +1043,7 @@ namespace LocalS.Service.Api.Account
 
                     d_WxACode = new WxACode();
                     d_WxACode.Id = id;
-                    d_WxACode.MerchId = rop.MerchId;
+                    d_WxACode.MerchId = d_Store.MerchId;
                     d_WxACode.AppId = rop.AppId;
                     d_WxACode.OpenId = rop.OpenId;
                     d_WxACode.Type = rop.Type;

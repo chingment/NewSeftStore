@@ -54,6 +54,5 @@ namespace LocalS.BLL.Biz
         public string BriefDes { get; set; }
         public List<ImgSet> DisplayImgUrls { get; set; }
         public bool IsTestMode { get; set; }
-        public string SctMode { get; set; }
     }
 }

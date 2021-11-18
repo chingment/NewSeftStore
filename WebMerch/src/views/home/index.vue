@@ -16,7 +16,7 @@
             </div>
           </div>
         </el-col>
-        <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleDeviceCount('messages')">
             <div class="card-panel-icon-wrapper icon-select">
               <svg-icon icon-class="t_machine" class-name="card-panel-icon" />
@@ -55,7 +55,7 @@
             </div>
           </div>
         </el-col>
-        <el-col v-if="mctMode.indexOf('M')>-1" :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleReplenishCount('shoppings')">
             <div class="card-panel-icon-wrapper icon-select">
               <svg-icon icon-class="t_buhuo" class-name="card-panel-icon" />
@@ -87,7 +87,7 @@
               <div class="it">
                 <div class="t1" @click="todayGmvClick"><span class="m2">  {{ todayGmv.sumTradeAmount }}</span><br> <span class="d1">今日营业额</span></div>
               </div>
-              <div v-if="mctMode.indexOf('M')>-1" class="it">
+              <div class="it">
                 <div class="t1" @click="sumExHdByDeviceSelfTakeClick"><span class="m3">  {{ todaySummary.sumExHdByDeviceSelfTake }}</span><br> <span class="d1">设备异常订单</span></div>
               </div>
             </div>
@@ -310,12 +310,10 @@ export default {
       get7DayGmv: [],
       todayStoreGmvRl: [],
       storeGmvRl: [],
-      skuSaleRl: [],
-      mctMode: ''
+      skuSaleRl: []
     }
   },
   created() {
-    this.mctMode = this.$store.getters.userInfo.mctMode
     this._getIndexPageData()
     this._getTodaySummary()
     this._get7DayGmv()

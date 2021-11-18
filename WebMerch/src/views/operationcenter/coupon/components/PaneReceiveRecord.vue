@@ -1,5 +1,5 @@
 <template>
-  <div id="shop_list">
+  <div id="pane_receive_record">
     <div class="filter-container">
 
       <el-row :gutter="16">

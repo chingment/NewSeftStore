@@ -80,8 +80,6 @@ namespace LocalS.BLL.Biz
                 m_Device.CsrPhoneNumber = d_Merch.CsrPhoneNumber;
                 m_Device.CsrHelpTip = d_Merch.CsrHelpTip;
 
-                m_Device.PayOptions = d_Merch.TermAppPayOptions.ToJsonObject<List<PayOption>>();
-
                 var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == d_Device.CurUseMerchId && m.DeviceId == id).FirstOrDefault();
                 if (d_MerchDevice != null)
                 {
@@ -94,6 +92,7 @@ namespace LocalS.BLL.Biz
                 {
                     m_Device.StoreId = d_Store.Id;
                     m_Device.StoreName = d_Store.Name;
+                    m_Device.PayOptions = d_Store.TermAppPayOptions.ToJsonObject<List<PayOption>>();
                 }
 
                 var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();

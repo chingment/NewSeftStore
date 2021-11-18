@@ -94,12 +94,8 @@ App({
 
               storeage.setOpenId(d.openId)
               storeage.setSessionKey(d.sessionKey)
-              storeage.setMerchId(d.merchId)
-              storeage.setStoreId(d.storeId) //指定设置单店铺模式，为NULL 多店铺模式
-              if (d.storeId != null) {
-                storeage.setStoreId(d.storeId) //设置当前店铺
-              }
-
+              storeage.setStoreId(d.storeId) 
+      
               _this.globalData.checkConfig = true
               if (_this.checkConfigReadyCallback) {
                 _this.checkConfigReadyCallback(d);

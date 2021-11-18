@@ -37,20 +37,6 @@
           </div>
         </el-card>
       </el-col>
-
-      <!-- <el-col v-if="mctMode.indexOf('M')>-1" :span="6" :xs="24" style="margin-bottom:20px">
-        <el-card class="box-card">
-          <div slot="header" class="it-header clearfix">
-            <div class="left" />
-            <el-button type="text" @click="handleCreate">新建</el-button>
-          </div>
-          <div class="it-component">
-
-            <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card" @click="handleCreate"><i data-v-62e19c49="" class="el-icon-plus" /></div>
-
-          </div>
-        </el-card>
-      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -68,15 +54,13 @@ export default {
         limit: 10,
         name: undefined
       },
-      listData: [],
-      mctMode: ''
+      listData: []
     }
   },
   created() {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.mctMode = this.$store.getters.userInfo.mctMode
     this.onGetList()
   },
   methods: {

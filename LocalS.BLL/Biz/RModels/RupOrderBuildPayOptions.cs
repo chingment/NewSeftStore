@@ -11,7 +11,7 @@ namespace LocalS.BLL.Biz
     {
         public E_AppCaller AppCaller { get; set; }
         public string AppId { get; set; }
-        public string MerchId { get; set; }
+        public string StoreId { get; set; }
         public string ClientUserId { get; set; }
     }
 }

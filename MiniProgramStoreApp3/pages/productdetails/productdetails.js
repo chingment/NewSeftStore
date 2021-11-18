@@ -340,7 +340,7 @@ Page({
     // 设置转发内容
     var shareObj = {
       title: _this.data.sku.name,
-      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId(), // 默认是当前页面，必须是以‘/’开头的完整路径
+      path: '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId , // 默认是当前页面，必须是以‘/’开头的完整路径
       imageUrl: _this.data.sku.mainImgUrl, //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
       success: function (res) { // 转发成功之后的回调　　　　　
         if (res.errMsg == 'shareAppMessage:ok') {}
@@ -381,10 +381,10 @@ Page({
 
     var accountInfo = wx.getAccountInfoSync()
     var appId = accountInfo.miniProgram.appId
-    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId + "&merchId=" + storeage.getMerchId()
+    var wxacode_data = '/pages/productdetails/productdetails?reffSign=' + storeage.getOpenId() + '&skuId=' + _data.sku.id + '&shopMode=' + _data.shopMode + '&shopMethod=' + _data.shopMethod + '&storeId=' + _data.storeId
     apiOwn.getWxACodeUnlimit({
       appId: appId,
-      merchId: storeage.getMerchId(),
+      storeId: storeage.getStoreId(),
       openId: storeage.getOpenId(),
       data: wxacode_data,
       type: 'url',

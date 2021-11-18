@@ -1,5 +1,5 @@
 <template>
-  <div id="refund_list">
+  <div id="refund_query">
 
     <div v-show="isShowList">
       <div class="filter-container">

@@ -59,7 +59,7 @@ Page({
     var _this = this
     apiOwn.loginByMinProgram({
       appId: _this.data.appId,
-      merchId: storeage.getMerchId(),
+      storeId: storeage.getStoreId(),
       openId: openId,
       reffSign: storeage.getReffSign(),
       userInfoEp: userInfoEp,

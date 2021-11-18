@@ -379,7 +379,8 @@ Page({
   buildPayOptions: function () {
     var _this = this
     apiOrder.buildPayOptions({
-      appCaller: 1
+      appCaller: 1,
+      storeId:_this.data.storeId
     }).then(function (res) {
       if (res.result == 1) {
         _this.setData({
