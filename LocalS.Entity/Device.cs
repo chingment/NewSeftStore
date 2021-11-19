@@ -24,13 +24,11 @@ namespace LocalS.Entity
         public string ImeiId { get; set; }
         public string CharTags { get; set; }
         public string Model { get; set; }
-        //public string DeviceId { get; set; }
         public string MainImgUrl { get; set; }
         [MaxLength(128)]
         public string MacAddress { get; set; }
         public float Lat { get; set; }
         public float Lng { get; set; }
-        //public string JPushRegId { get; set; }
         public string CurUseMerchId { get; set; }
         public string CurUseStoreId { get; set; }
         public string CurUseShopId { get; set; }

@@ -155,8 +155,8 @@ namespace LocalS.BLL.Task
                         d_Device.ImeiId = senvivBox.imei;
                         d_Device.CurUseMerchId = "88273829";
                         d_Device.Model = senvivBox.model;
-                        d_Device.Lat = float.Parse(senvivBox.latitude);
-                        d_Device.Lng = float.Parse(senvivBox.longitude);
+                        //d_Device.Lat = float.Parse(senvivBox.latitude);
+                        //d_Device.Lng = float.Parse(senvivBox.longitude);
                         d_Device.AppVersionName = senvivBox.version;
                         d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
                         d_Device.CreateTime = DateTime.Now;
