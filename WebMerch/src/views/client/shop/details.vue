@@ -1,18 +1,16 @@
 <template>
   <div id="shop_details">
     <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <details-pane-base-info :client-user-id="id" /></el-tab-pane>
-      <el-tab-pane label="订单信息" name="tabOrder"><details-pane-order :client-user-id="id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <pane-base-info :client-user-id="id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import { getUrlParam } from '@/utils/commonUtil'
-import detailsPaneBaseInfo from './components/DetailsPaneBaseInfo'
-import detailsPaneOrder from '@/views/order/list'
+import PaneBaseInfo from './components/PaneBaseInfo'
 export default {
   name: 'ClientUserDetails',
-  components: { detailsPaneBaseInfo, detailsPaneOrder },
+  components: { PaneBaseInfo },
   data() {
     return {
       activeName: 'tabBaseInfo',

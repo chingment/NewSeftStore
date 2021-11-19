@@ -8,11 +8,11 @@
 </template>
 <script>
 
-import paneOperateLog from './components/PaneOperateLog'
-import paneStockLog from './components/PaneStockLog'
+import PaneOperateLog from './components/PaneOperateLog'
+import PaneStockLog from './components/PaneStockLog'
 export default {
   name: 'SettingLogList',
-  components: { paneOperateLog, paneStockLog },
+  components: { PaneOperateLog, PaneStockLog },
   data() {
     return {
       activeName: 'tabOperate'

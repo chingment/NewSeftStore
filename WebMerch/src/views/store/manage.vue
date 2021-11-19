@@ -15,21 +15,21 @@
       </el-dropdown>
     </div>
     <el-tabs v-model="activeTab" v-loading="loading" type="card">
-      <el-tab-pane label="基本信息" name="tabBaseInfo"> <manage-pane-base-info :store-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="商品分类" name="tabKind"><manage-pane-kind :store-id="activeDropdown.id" /></el-tab-pane>
-      <el-tab-pane label="关联门店" name="tabShop"><manage-pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="基本信息" name="tabBaseInfo"> <pane-base-info :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="商品分类" name="tabKind"><pane-kind :store-id="activeDropdown.id" /></el-tab-pane>
+      <el-tab-pane label="关联门店" name="tabShop"><pane-shop :store-id="activeDropdown.id" /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import { initManage } from '@/api/store'
-import managePaneBaseInfo from './components/ManagePaneBaseInfo'
-import managePaneShop from './components/ManagePaneShop'
-import managePaneKind from './components/ManagePaneKind'
+import PaneBaseInfo from './components/PaneBaseInfo'
+import PaneShop from './components/PaneShop'
+import PaneKind from './components/PaneKind'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'StoreManage',
-  components: { managePaneBaseInfo, managePaneKind, managePaneShop, PageHeader },
+  components: { PaneBaseInfo, PaneKind, PaneShop, PageHeader },
   data() {
     return {
       loading: false,

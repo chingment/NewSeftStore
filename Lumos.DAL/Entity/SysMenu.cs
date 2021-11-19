@@ -24,15 +24,15 @@ namespace Lumos.DbRelay
         [MaxLength(512)]
         public string Description { get; set; }
         public int Priority { get; set; }
-        public string Creator { get; set; }
-        public DateTime CreateTime { get; set; }
-        public string Mender { get; set; }
-        public DateTime? MendTime { get; set; }
         public Enumeration.BelongSite BelongSite { get; set; }
         public bool IsRouter { get; set; }
         public bool IsSidebar { get; set; }
         public bool IsNavbar { get; set; }
         public int Depth { get; set; }
         public string Redirect { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreateTime { get; set; }
+        public string Mender { get; set; }
+        public DateTime? MendTime { get; set; }
     }
 }
