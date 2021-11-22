@@ -49,7 +49,8 @@ Component({
 
       apiSaleOutlet.list({
         lat: 0,
-        lng: 0
+        lng: 0,
+        storeId:storeage.getStoreId(),
       }).then(function (res) {
         if (res.result == 1) {
           var d = res.data

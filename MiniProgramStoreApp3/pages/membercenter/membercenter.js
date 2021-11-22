@@ -62,6 +62,7 @@ Page({
     })
 
     apiMember.getPayLevelSt({
+      storeId:storeage.getStoreId(),
       saleOutletId: storeage.getLastSaleOutletId()
     }).then(function (res) {
       if (res.result == 1) {

@@ -16,11 +16,13 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+
             var query = (from s in CurrentDb.StoreShop
                                    join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
                                    from u in temp.DefaultIfEmpty()
                                    where
-                             u.MerchId == rup.MerchId
+                             u.MerchId == d_Store.MerchId
                                  && s.StoreId == rup.StoreId
                                    select new { u.Id, u.Name, u.Address, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime });
 

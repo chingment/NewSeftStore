@@ -8,7 +8,6 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RupMemberGetPromSt
     {
-        public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string OpenId { get; set; }
     }

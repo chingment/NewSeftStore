@@ -49,7 +49,8 @@ Page({
   getPromSt: function () {
     var _this = this
     apiMember.getPromSt({
-      openId: storeage.getOpenId()
+      openId: storeage.getOpenId(),
+      storeId:storeage.getStoreId()
     }).then(function (res) {
       if (res.result == 1) {
 

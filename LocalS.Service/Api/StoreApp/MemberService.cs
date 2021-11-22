@@ -19,12 +19,13 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetMemberPromSt();
 
-
             ret.UserInfo = StoreAppServiceFactory.Personal.GetUserInfo(clientUserId, rup.OpenId);
 
-            var d_merch = CurrentDb.Merch.Where(m => m.Id == rup.MerchId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
-            ret.IsOpenMemberRight = d_merch.IsOpenMemberRight;
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_Store.MerchId).FirstOrDefault();
+
+            ret.IsOpenMemberRight = d_Merch.IsOpenMemberRight;
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -40,7 +41,9 @@ namespace LocalS.Service.Api.StoreApp
             ret.IsOptSaleOutlet = true;
             ret.CurlevelSt = 2;
 
-            var d_saleOutlet = CurrentDb.SaleOutlet.Where(m => m.MerchId == rup.MerchId && m.Id == rup.SaleOutletId).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+
+            var d_saleOutlet = CurrentDb.SaleOutlet.Where(m => m.MerchId == d_Store.MerchId && m.Id == rup.SaleOutletId).FirstOrDefault();
             if (d_saleOutlet == null)
             {
                 ret.CurSaleOutlet = new RetMemberPayLevelSt.SaleOutletModel { Id = "", TagName = "服务网点", TagTip = "地址信息", ContentBm = "请选择", ContentSm = "" };
@@ -51,8 +54,8 @@ namespace LocalS.Service.Api.StoreApp
             }
 
 
-            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == rup.MerchId).ToList();
-            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == rup.MerchId && m.IsStop == false).ToList();
+            var d_memberLevelSts = CurrentDb.MemberLevelSt.Where(m => m.MerchId == d_Store.MerchId).ToList();
+            var d_memberFeeSts = CurrentDb.MemberFeeSt.Where(m => m.MerchId == d_Store.MerchId && m.IsStop == false).ToList();
 
             var d_memberLevelSt_1 = d_memberLevelSts.Where(m => m.Level == 1).FirstOrDefault();
 

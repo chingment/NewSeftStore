@@ -45,6 +45,7 @@ Page({
   getRightDescSt: function () {
     var _this = this
     apiMember.getRightDescSt({
+      storeId:storeage.getStoreId(),
       openId: storeage.getOpenId()
     }).then(function (res) {
       if (res.result == 1) {

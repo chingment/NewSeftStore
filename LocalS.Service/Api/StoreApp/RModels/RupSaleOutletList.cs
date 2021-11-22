@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RupSaleOutletList
     {
-        public string MerchId { get; set; }
+        public string StoreId { get; set; }
     }
 }

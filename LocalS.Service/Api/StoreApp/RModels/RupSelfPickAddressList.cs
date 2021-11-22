@@ -8,7 +8,6 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RupSelfPickAddressList
     {
-        public string MerchId { get; set; }
 
         public string StoreId { get; set; }
     }

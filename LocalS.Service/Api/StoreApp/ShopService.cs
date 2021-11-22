@@ -18,11 +18,13 @@ namespace LocalS.Service.Api.StoreApp
 
             LogUtil.Info("rup:" + rup.ToJsonString());
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+
             var d_Shops = (from s in CurrentDb.StoreShop
                            join m in CurrentDb.Shop on s.ShopId equals m.Id into temp
                            from u in temp.DefaultIfEmpty()
                            where
-                           s.MerchId == rup.MerchId
+                           s.MerchId == d_Store.MerchId
                            && s.StoreId == rup.StoreId
                            select new { u.Id, u.Name, u.Address, u.Lat, u.Lng, u.MainImgUrl, u.IsOpen, u.AreaCode, u.AreaName, u.MerchId, s.StoreId, u.ContactName, u.ContactPhone, u.ContactAddress, u.CreateTime }).ToList();
 

@@ -8,10 +8,8 @@ namespace LocalS.Service.Api.StoreApp
 {
     public class RupMemberGetRightDescSt
     {
-        public string MerchId { get; set; }
         public string StoreId { get; set; }
         public string OpenId { get; set; }
-
         public string Right { get; set; }
     }
 }

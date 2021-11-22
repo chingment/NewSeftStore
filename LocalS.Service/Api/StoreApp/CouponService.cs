@@ -518,7 +518,9 @@ namespace LocalS.Service.Api.StoreApp
 
             var ret = new RetCouponRevCenterSt();
 
-            var d_CouponRevPosSt = CurrentDb.CouponRevPosSt.Where(m => m.MerchId == rup.MerchId && m.Code == rup.PosCode).FirstOrDefault();
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
+
+            var d_CouponRevPosSt = CurrentDb.CouponRevPosSt.Where(m => m.MerchId == d_Store.MerchId && m.Code == rup.PosCode).FirstOrDefault();
 
             if (d_CouponRevPosSt != null)
             {

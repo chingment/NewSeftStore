@@ -14,10 +14,11 @@ namespace LocalS.Service.Api.StoreApp
         {
             var result = new CustomJsonResult();
 
+            var d_Store = CurrentDb.Store.Where(m => m.Id == rup.StoreId).FirstOrDefault();
 
             var query = (from u in CurrentDb.SaleOutlet
                          where
-u.MerchId == rup.MerchId
+u.MerchId == d_Store.MerchId
                          select new { u.Id, u.Name, u.ContactName, u.ContactAddress, u.ContactPhone, u.CreateTime });
 
             var list = query.ToList();
