@@ -133,7 +133,7 @@ import { MessageBox } from 'element-ui'
 import { getList, initGetList, bindShop, unBindShop } from '@/api/devvending'
 
 export default {
-  name: 'DeviceList',
+  name: 'VendingList',
   props: {
     opCode: {
       type: String,

@@ -33,27 +33,14 @@ namespace LocalS.Service.Api.Merch
             var query = (from u in CurrentDb.MerchDevice
                          join m in CurrentDb.Device on u.DeviceId equals m.Id into temp
                          from tt in temp.DefaultIfEmpty()
+                         join q in CurrentDb.Merch on u.MerchId equals q.Id into temp2
+                         from tt1 in temp2.DefaultIfEmpty()
                          where ((rup.Id == null || u.DeviceId.Contains(rup.Id)) || (rup.Id == null || u.CumCode.Contains(rup.Id)))
                          &&
                          merchIds.Contains(u.MerchId)
-                         select new { u.Id, tt.Type, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
-
-            if (!string.IsNullOrEmpty(rup.Type))
-            {
-                query = query.Where(m => m.Type == rup.Type);
-            }
-
-
-            if (!string.IsNullOrEmpty(rup.StoreId))
-            {
-                query = query.Where(m => m.CurUseStoreId == rup.StoreId);
-            }
-
-            if (!string.IsNullOrEmpty(rup.ShopId))
-            {
-                query = query.Where(m => m.CurUseShopId == rup.ShopId);
-            }
-
+                         &&
+                         tt.Type == "senvivlite"
+                         select new { u.Id, tt.Type, MerchName = tt1.Name, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
 
 
             int total = query.Count();
@@ -61,7 +48,7 @@ namespace LocalS.Service.Api.Merch
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
 
-            query = query.OrderByDescending(r => r.CurUseStoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.OrderBy(m => m.IsStopUse).ToList();
 
@@ -73,6 +60,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = item.DeviceId,
                     Name = item.Name,
+                    MerchName = item.MerchName,
                     Model = item.Model,
                     Code = GetCode(item.DeviceId, item.CumCode),
                     MainImgUrl = item.MainImgUrl,

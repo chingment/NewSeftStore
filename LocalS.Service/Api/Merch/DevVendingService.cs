@@ -16,8 +16,6 @@ namespace LocalS.Service.Api.Merch
 {
     public class DevVendingService : DeviceService
     {
-
-
         public StatusModel GetStatus(string curUseShopId, bool isStopUse, bool isEx, E_DeviceRunStatus runstatus, DateTime? lastRequestTime)
         {
             var status = new StatusModel();

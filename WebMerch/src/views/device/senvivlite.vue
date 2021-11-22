@@ -52,9 +52,9 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属机构" prop="createTime" align="left" min-width="15%">
+      <el-table-column label="主体商户" prop="createTime" align="left" min-width="15%">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.merchName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
@@ -74,7 +74,7 @@
 import { getList } from '@/api/devsenvivlite'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'ClientUserList',
+  name: 'SenvivLiteList',
   components: { Pagination },
   data() {
     return {
