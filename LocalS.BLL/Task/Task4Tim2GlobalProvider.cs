@@ -197,7 +197,7 @@ namespace LocalS.BLL.Task
                                     {
                                         case E_PayPartner.Wx:
                                             #region Wx
-                                            var wxByMp_AppInfoConfig = BizFactory.Store.GetWxMpAppInfoConfig(payRefund.MerchId);
+                                            var wxByMp_AppInfoConfig = BizFactory.Store.GetWxMpAppInfoConfig(payRefund.StoreId);
                                             content = SdkFactory.Wx.PayRefundQuery(wxByMp_AppInfoConfig, payRefund.PayTransId, payRefund.Id);
                                             #endregion
                                             break;
