@@ -143,11 +143,16 @@ namespace LocalS.BLL.Task
 
 
                 var senvivBoxs = SdkFactory.Senviv.GetBoxList();
+
+                LogUtil.Info(TAG, "senvivBoxs.Length:" + senvivBoxs.Count);
+
                 foreach (var senvivBox in senvivBoxs)
                 {
                     var d_Device = CurrentDb.Device.Where(m => m.Id == senvivBox.sn).FirstOrDefault();
                     if (d_Device == null)
                     {
+                        LogUtil.Info(TAG, senvivBox.sn + ",不存在");
+
                         d_Device = new Entity.Device();
                         d_Device.Id = senvivBox.sn;
                         d_Device.Name = "非接触式生命体征检测仪";
@@ -158,6 +163,8 @@ namespace LocalS.BLL.Task
                         //d_Device.Lat = float.Parse(senvivBox.latitude);
                         //d_Device.Lng = float.Parse(senvivBox.longitude);
                         d_Device.AppVersionName = senvivBox.version;
+                        d_Device.FingerVeinnerIsUse = false;
+                        d_Device.ImIsUse = false;
                         d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
                         d_Device.CreateTime = DateTime.Now;
                         CurrentDb.Device.Add(d_Device);
@@ -171,6 +178,10 @@ namespace LocalS.BLL.Task
                         d_MerchDevice.CreateTime = d_Device.CreateTime;
                         CurrentDb.MerchDevice.Add(d_MerchDevice);
                         CurrentDb.SaveChanges();
+                    }
+                    else
+                    {
+                        LogUtil.Info(TAG, senvivBox.sn + ",已存在");
                     }
 
                 }

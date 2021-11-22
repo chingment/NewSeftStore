@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: '/device/getlist',
+    url: '/devvending/getlist',
     method: 'get',
     params
   })
@@ -10,14 +10,14 @@ export function getList(params) {
 
 export function initGetList() {
   return request({
-    url: '/device/initGetList',
+    url: '/devvending/initGetList',
     method: 'get'
   })
 }
 
 export function edit(data) {
   return request({
-    url: '/device/edit',
+    url: '/devvending/edit',
     method: 'post',
     data
   })
@@ -25,7 +25,7 @@ export function edit(data) {
 
 export function initManage(params) {
   return request({
-    url: '/device/initManage',
+    url: '/devvending/initManage',
     method: 'get',
     params
   })
@@ -33,7 +33,7 @@ export function initManage(params) {
 
 export function initManageBaseInfo(params) {
   return request({
-    url: '/device/initManageBaseInfo',
+    url: '/devvending/initManageBaseInfo',
     method: 'get',
     params
   })
@@ -41,7 +41,7 @@ export function initManageBaseInfo(params) {
 
 export function initManageStock(params) {
   return request({
-    url: '/device/initManageStock',
+    url: '/devvending/initManageStock',
     method: 'get',
     params
   })
@@ -49,7 +49,7 @@ export function initManageStock(params) {
 
 export function manageStockGetStocks(params) {
   return request({
-    url: '/device/manageStockGetStocks',
+    url: '/devvending/manageStockGetStocks',
     method: 'get',
     params
   })
@@ -57,7 +57,7 @@ export function manageStockGetStocks(params) {
 
 export function manageStockEditStock(data) {
   return request({
-    url: '/device/manageStockEditStock',
+    url: '/devvending/manageStockEditStock',
     method: 'post',
     data
   })
@@ -65,7 +65,7 @@ export function manageStockEditStock(data) {
 
 export function rebootSys(data) {
   return request({
-    url: '/device/rebootSys',
+    url: '/devvending/rebootSys',
     method: 'post',
     data
   })
@@ -73,7 +73,7 @@ export function rebootSys(data) {
 
 export function shutdownSys(data) {
   return request({
-    url: '/device/shutdownSys',
+    url: '/devvending/shutdownSys',
     method: 'post',
     data
   })
@@ -81,7 +81,7 @@ export function shutdownSys(data) {
 
 export function setSysStatus(data) {
   return request({
-    url: '/device/setSysStatus',
+    url: '/devvending/setSysStatus',
     method: 'post',
     data
   })
@@ -89,7 +89,7 @@ export function setSysStatus(data) {
 
 export function getSysParams(params) {
   return request({
-    url: '/device/getSysParams',
+    url: '/devvending/getSysParams',
     method: 'get',
     params
   })
@@ -97,15 +97,7 @@ export function getSysParams(params) {
 
 export function setSysParams(data) {
   return request({
-    url: '/device/setSysParams',
-    method: 'post',
-    data
-  })
-}
-
-export function queryMsgPushResult(data) {
-  return request({
-    url: '/device/queryMsgPushResult',
+    url: '/devvending/setSysParams',
     method: 'post',
     data
   })
@@ -113,7 +105,7 @@ export function queryMsgPushResult(data) {
 
 export function openPickupDoor(data) {
   return request({
-    url: '/device/openPickupDoor',
+    url: '/devvending/openPickupDoor',
     method: 'post',
     data
   })
@@ -121,7 +113,7 @@ export function openPickupDoor(data) {
 
 export function updateApp(data) {
   return request({
-    url: '/device/updateApp',
+    url: '/devvending/updateApp',
     method: 'post',
     data
   })
@@ -129,7 +121,7 @@ export function updateApp(data) {
 
 export function bindShop(data) {
   return request({
-    url: '/device/bindShop',
+    url: '/devvending/bindShop',
     method: 'post',
     data
   })
@@ -137,7 +129,7 @@ export function bindShop(data) {
 
 export function unBindShop(data) {
   return request({
-    url: '/device/unBindShop',
+    url: '/devvending/unBindShop',
     method: 'post',
     data
   })
@@ -158,7 +150,6 @@ export default {
   setSysParams: setSysParams,
   getSysParams: getSysParams,
   updateApp: updateApp,
-  queryMsgPushResult: queryMsgPushResult,
   openPickupDoor: openPickupDoor,
   bindShop: bindShop,
   unBindShop: unBindShop

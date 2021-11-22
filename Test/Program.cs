@@ -33,8 +33,18 @@ using XrtPaySdk;
 
 namespace Test
 {
+
+    public class Merc
+    {
+        public string Id { get; set; }
+        public string PId { get; set; }
+
+        public string Name { get; set; }
+    }
+
     class Program
     {
+
 
 
         public static sbyte[] a(byte[] myByte)
@@ -189,11 +199,76 @@ namespace Test
             return str;
         }
 
+        public static string[] GetSons(string pId)
+        {
+            List<Merc> list = new List<Merc>();
+            list.Add(new Merc { Id = "1", Name = "1", PId = "0" });
+            list.Add(new Merc { Id = "2", Name = "2", PId = "1" });
+            list.Add(new Merc { Id = "3", Name = "3", PId = "2" });
+            list.Add(new Merc { Id = "4", Name = "4", PId = "0" });
+            list.Add(new Merc { Id = "5", Name = "5", PId = "0" });
+
+            var query = list.Where(m => m.Id == pId).ToList();
+
+            var list2 = query.Concat(GetSonList(list, pId));
+
+            var arr = list2.Select(m => m.Id).ToArray();
+
+            return arr;
+        }
+
+        public static IEnumerable<Merc> GetSonList(List<Merc> list, string id)
+        {
+            var query = list.Where(m => m.PId == id).ToList();
+
+            return query.ToList().Concat(query.ToList().SelectMany(t => GetSonList(list, t.Id)));
+        }
 
         static void Main(string[] args)
         {
+
+
+            var sss222 = GetSons("1");
+
+
+
             double s = double.Parse("114.35808563232422");
+
+            var senvivUsersss = SdkFactory.Senviv.GetUserList();
+
+            var t1 = senvivUsersss.Select(m => m.userid).Distinct().ToArray();
+
+
             var senvivUsers = SdkFactory.Senviv.GetBoxList();
+
+            var ss5 = senvivUsers.Where(m => m.sn == "1004BEBFB258").ToList();
+
+            ///  var s1 = senvivUsers.Select(m => m.sn).Distinct().ToArray();
+
+            Dictionary<string, string> ss = new Dictionary<string, string>();
+
+            foreach (var senvivUser in senvivUsers)
+            {
+                if (!ss.ContainsKey(senvivUser.sn))
+                {
+                    ss.Add(senvivUser.sn, senvivUser.sn);
+                }
+                else
+                {
+                    Console.WriteLine(senvivUser.sn);
+                }
+            }
+            //1004BEBFB258
+            //1004BEBFB402
+            //1004BEBFB34B
+            //1004BEBFB5DB
+            //1004BEBFB373
+            //1004BEBFB5ED
+            //1004BEBFAF3F
+            //1004C7B07BE8
+            //1004C7B07C88
+            //1004C7B07D61
+
             //"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYTqsWr3w9CnC55XasyUWJC0="
 
             string accessToken = SdkFactory.Senviv.GetApiAccessToken();

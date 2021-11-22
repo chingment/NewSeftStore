@@ -131,7 +131,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/device'
+import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/api/devvending'
 import { isEmpty } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
 export default {

@@ -51,7 +51,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { edit, initManageBaseInfo } from '@/api/device'
+import { edit, initManageBaseInfo } from '@/api/devvending'
 import { isEmpty } from '@/utils/commonUtil'
 
 export default {

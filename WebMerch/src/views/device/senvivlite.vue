@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/device'
+import { getList } from '@/api/devsenvivlite'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'ClientUserList',

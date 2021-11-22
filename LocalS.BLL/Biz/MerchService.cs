@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MyWeiXinSdk;
 using TgPaySdk;
 using XrtPaySdk;
+using LocalS.Entity;
 
 namespace LocalS.BLL.Biz
 {
@@ -104,6 +105,26 @@ namespace LocalS.BLL.Biz
                 return null;
 
             return d_Merch.IotApiSecret;
+        }
+
+        public string[] GetRelIds(string merchId)
+        {
+            var list = CurrentDb.Merch.ToList();
+
+            var query = list.Where(m => m.Id == merchId).ToList();
+
+            var list2 = query.Concat(GetSonList(list, merchId));
+
+            var arr = list2.Select(m => m.Id).ToArray();
+
+            return arr;
+        }
+
+        private IEnumerable<Merch> GetSonList(List<Merch> list, string id)
+        {
+            var query = list.Where(m => m.PId == id).ToList();
+
+            return query.ToList().Concat(query.ToList().SelectMany(t => GetSonList(list, t.Id)));
         }
     }
 }

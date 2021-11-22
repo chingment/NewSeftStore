@@ -123,7 +123,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { rebootSys, shutdownSys, setSysStatus, getSysParams, setSysParams, openPickupDoor, updateApp, queryMsgPushResult } from '@/api/device'
+import { rebootSys, shutdownSys, setSysStatus, getSysParams, setSysParams, openPickupDoor, updateApp } from '@/api/devvending'
 
 export default {
   name: 'ManagePaneBaseInfo',
@@ -198,7 +198,6 @@ export default {
         rebootSys({ id: this.deviceId }).then(res => {
           this.hideLoading()
           if (res.result === 1) {
-            // this.onQueryMsgStatus(res.data.msgId)
             this.$message({
               message: res.message,
               type: 'success'
@@ -223,7 +222,6 @@ export default {
         updateApp({ id: this.deviceId }).then(res => {
           this.hideLoading()
           if (res.result === 1) {
-            // this.onQueryMsgStatus(res.data.msgId)
             this.$message({
               message: res.message,
               type: 'success'
@@ -252,7 +250,6 @@ export default {
               message: res.message,
               type: 'success'
             })
-            // this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -299,7 +296,6 @@ export default {
                   message: res.message,
                   type: 'success'
                 })
-                // this.onQueryMsgStatus(res.data.msgId)
               } else {
                 this.$message({
                   message: res.message,
@@ -329,7 +325,6 @@ export default {
                   message: res.message,
                   type: 'success'
                 })
-                // this.onQueryMsgStatus(res.data.msgId)
               } else {
                 this.$message({
                   message: res.message,
@@ -356,7 +351,6 @@ export default {
               message: res.message,
               type: 'success'
             })
-            // this.onQueryMsgStatus(res.data.msgId)
           } else {
             this.$message({
               message: res.message,
@@ -366,42 +360,6 @@ export default {
         })
       }).catch(() => {
       })
-    },
-    onQueryMsgStatus(msgId) {
-      var _this = this
-      const loading = _this.$loading({
-        lock: true,
-        text: '正常处理中，请耐心等候，大概需要10秒',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-
-      var timeout = null
-      var interval = window.setInterval(function() {
-        queryMsgPushResult({ deviceId: _this.deviceId, msgId: msgId }).then(res => {
-          if (res.result === 1) {
-            loading.close()
-
-            _this.$message({
-              message: res.message,
-              type: 'success'
-            })
-
-            if (timeout != null) {
-              window.clearInterval(interval)
-              window.clearTimeout(timeout)
-            }
-          }
-        })
-      }, 1000)
-
-      timeout = window.setTimeout(() => {
-        loading.close()
-        window.clearInterval(interval)
-        queryMsgPushResult({ deviceId: _this.deviceId, msgId: msgId }).then(res => {
-          _this.$message(res.message)
-        })
-      }, 10000)
     },
     showLoading() {
       this.handleLoading = this.$loading({

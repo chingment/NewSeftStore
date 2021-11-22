@@ -567,7 +567,7 @@ namespace LocalS.Service
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "500~1200";
-            if (val < 2300)
+            if (val < 500)
             {
                 jd.Set("低", "↓", CA_1);
             }
@@ -588,7 +588,7 @@ namespace LocalS.Service
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "520~1200";
-            if (val < 2300)
+            if (val < 520)
             {
                 jd.Set("低", "↓", CA_1);
             }

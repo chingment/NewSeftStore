@@ -166,10 +166,11 @@
     <Compile Include="Controllers\ClientUserController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
+    <Compile Include="Controllers\DevSenvivLiteController.cs" />
     <Compile Include="Controllers\ErpReplenishPlanController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
-    <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\DevVendingController.cs" />
     <Compile Include="Controllers\MemberRightController.cs" />
     <Compile Include="Controllers\MerchController.cs" />
     <Compile Include="Controllers\OrderController.cs" />

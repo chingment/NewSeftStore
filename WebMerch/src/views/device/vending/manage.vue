@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { initManage } from '@/api/device'
+import { initManage } from '@/api/devvending'
 import PaneBaseInfo from './components/PaneBaseInfo'
 import PaneStock from './components/PaneStock'
 import PaneControlCenter from './components/PaneControlCenter'

@@ -48,6 +48,22 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static DevVendingService DevVending
+        {
+            get
+            {
+                return new DevVendingService();
+            }
+        }
+
+        public static DevSenvivLiteService DevSenvivLite
+        {
+            get
+            {
+                return new DevSenvivLiteService();
+            }
+        }
+
         public static DeviceService Device
         {
             get

@@ -154,6 +154,7 @@
     <Compile Include="Api\Admin\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupMerchMasterGetList.cs" />
     <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\Merch\DeviceService.cs" />
     <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
     <Compile Include="Api\HealthApp\MonthReportService.cs" />
     <Compile Include="Api\HealthApp\RModels\RopConfigJsSdk.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlanDetails.cs" />
     <Compile Include="Api\IotTerm\RModels\RopStockRelienishPlans.cs" />
     <Compile Include="Api\IotTerm\StockService.cs" />
+    <Compile Include="Api\Merch\DevSenvivLiteService.cs" />
     <Compile Include="Api\Merch\MerchService.cs" />
     <Compile Include="Api\Merch\OrgService.cs" />
     <Compile Include="Api\Merch\AdService.cs" />
@@ -213,7 +215,7 @@
     <Compile Include="Api\Merch\CouponService.cs" />
     <Compile Include="Api\Merch\ErpReplenishPlanService.cs" />
     <Compile Include="Api\Merch\LogService.cs" />
-    <Compile Include="Api\Merch\DeviceService.cs" />
+    <Compile Include="Api\Merch\DevVendingService.cs" />
     <Compile Include="Api\Merch\MemberRightService.cs" />
     <Compile Include="Api\Merch\Models\CouponModel.cs" />
     <Compile Include="Api\Merch\Models\DeviceModel.cs" />

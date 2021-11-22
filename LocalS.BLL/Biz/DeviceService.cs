@@ -107,42 +107,6 @@ namespace LocalS.BLL.Biz
             return m_Device;
         }
 
-        //public DeviceBelongModel GetBelong(string id)
-        //{
-        //    var m_Device = new DeviceBelongModel();
-
-        //    var d_Device = CurrentDb.Device.Where(m => m.Id == id).FirstOrDefault();
-
-        //    if (d_Device == null)
-        //        return null;
-
-        //    m_Device.DeviceId = d_Device.Id;
-
-        //    var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_Device.CurUseMerchId).FirstOrDefault();
-
-        //    if (d_Merch != null)
-        //    {
-        //        m_Device.MerchId = d_Merch.Id;
-        //        m_Device.MerchName = d_Merch.Name;
-
-        //        var d_Store = CurrentDb.Store.Where(m => m.Id == d_Device.CurUseStoreId).FirstOrDefault();
-        //        if (d_Store != null)
-        //        {
-        //            m_Device.StoreId = d_Store.Id;
-        //            m_Device.StoreName = d_Store.Name;
-        //        }
-
-        //        var d_Shop = CurrentDb.Shop.Where(m => m.Id == d_Device.CurUseShopId).FirstOrDefault();
-        //        if (d_Shop != null)
-        //        {
-        //            m_Device.ShopId = d_Shop.Id;
-        //            m_Device.ShopName = d_Shop.Name;
-        //        }
-        //    }
-
-        //    return m_Device;
-        //}
-
 
         public Dictionary<string, AdModel> GetAds(string id)
         {
@@ -279,7 +243,7 @@ namespace LocalS.BLL.Biz
         //    return PushService.SendPaySuccess(operater, appId, merchId, deviceId, content);
         //}
 
-        public CustomJsonResult EventNotify(string operater, string appId, string deviceId, string eventCode, string eventRemark,int eventMsgId, string eventMsgMode, object content)
+        public CustomJsonResult EventNotify(string operater, string appId, string deviceId, string eventCode, string eventRemark, int eventMsgId, string eventMsgMode, object content)
         {
             MqFactory.Global.PushEventNotify(operater, appId, deviceId, eventCode, eventRemark, eventMsgId, eventMsgMode, content);
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");

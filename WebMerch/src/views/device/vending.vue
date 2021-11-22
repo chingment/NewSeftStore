@@ -130,7 +130,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getList, initGetList, bindShop, unBindShop } from '@/api/device'
+import { getList, initGetList, bindShop, unBindShop } from '@/api/devvending'
 
 export default {
   name: 'DeviceList',
@@ -156,7 +156,7 @@ export default {
       listQuery: {
         opCode: 'list',
         page: 1,
-        limit: 10,
+        limit: 1000,
         shopId: '',
         storeId: '',
         id: '',
