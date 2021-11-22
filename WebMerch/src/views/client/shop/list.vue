@@ -69,7 +69,7 @@
 import { getList } from '@/api/clientuser'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'ClientUserList',
+  name: 'ClientShopList',
   components: { Pagination },
   data() {
     return {

@@ -33,7 +33,7 @@ import { getLevelSt, setLevelSt } from '@/api/memberright'
 import { isEmpty } from '@/utils/commonUtil'
 
 export default {
-  name: 'ManagePaneBaseInfo',
+  name: 'OperationCenterMemberRightPaneBaseInfo',
   props: {
     levelstId: {
       type: String,

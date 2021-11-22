@@ -9,7 +9,7 @@
 import { getUrlParam } from '@/utils/commonUtil'
 import PaneBaseInfo from './components/PaneBaseInfo'
 export default {
-  name: 'ClientUserDetails',
+  name: 'ClientShopDetails',
   components: { PaneBaseInfo },
   data() {
     return {

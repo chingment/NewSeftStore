@@ -187,7 +187,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { isEmpty } from '@/utils/commonUtil'
 import { getStores } from '@/api/common'
 export default {
-  name: 'ManagePaneSku',
+  name: 'OperationCenterMemberRightPaneSku',
   components: { Pagination },
   props: {
     levelstId: {

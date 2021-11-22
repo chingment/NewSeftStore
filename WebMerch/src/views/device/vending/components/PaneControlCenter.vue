@@ -126,7 +126,7 @@ import { MessageBox } from 'element-ui'
 import { rebootSys, shutdownSys, setSysStatus, getSysParams, setSysParams, openPickupDoor, updateApp } from '@/api/devvending'
 
 export default {
-  name: 'ManagePaneBaseInfo',
+  name: 'DeviceVendingPaneBaseInfo',
   props: {
     deviceId: {
       type: String,

@@ -64,7 +64,7 @@ import { getReceiveRecords } from '@/api/coupon'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'PaneReceiveRecord',
+  name: 'OperationCenterCouponPaneReceiveRecord',
   components: { Pagination },
   props: {
     couponId: {

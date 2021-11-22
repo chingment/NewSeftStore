@@ -280,7 +280,7 @@ import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySu
 import SenvivPaneConsole from '@/views/senviv/components/PaneConsole.vue'
 
 export default {
-  name: 'Home',
+  name: 'HomeIndex',
   components: {
     CountTo,
     SenvivPaneConsole

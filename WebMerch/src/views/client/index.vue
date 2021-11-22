@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'ReportIndex',
+  name: 'ClientIndex',
   data() {
     return {
       navActive: '/clientuser/shop/list',

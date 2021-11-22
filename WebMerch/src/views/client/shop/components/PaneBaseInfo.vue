@@ -37,7 +37,7 @@ import { initDetailsBaseInfo, edit } from '@/api/clientuser'
 import { getUrlParam } from '@/utils/commonUtil'
 
 export default {
-  name: 'ManagePaneBaseInfo',
+  name: 'ClientShopPaneBaseInfo',
   data() {
     return {
       isEdit: false,

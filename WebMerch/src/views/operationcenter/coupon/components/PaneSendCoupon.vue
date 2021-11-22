@@ -18,7 +18,7 @@
 <script>
 import ClientSelect from '@/views/client/components/select.vue'
 export default {
-  name: 'PaneSendCoupon',
+  name: 'OperationCenterCouponPaneSendCoupon',
   components: {
     ClientSelect
   },

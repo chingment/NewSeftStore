@@ -60,7 +60,7 @@ import { MessageBox } from 'element-ui'
 import { getFeeSts, setFeeSt } from '@/api/memberright'
 import { isEmpty } from '@/utils/commonUtil'
 export default {
-  name: 'ManagePaneDevice',
+  name: 'OperationCenterMemberRightPaneFee',
   props: {
     levelstId: {
       type: String,

@@ -126,7 +126,7 @@ import { getUrlParam } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'OperationCenterAdContents',
+  name: 'OperationCenterAdContentBelongs',
   components: {
     PageHeader, Pagination
   },

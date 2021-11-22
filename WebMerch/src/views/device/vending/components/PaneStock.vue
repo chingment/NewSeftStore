@@ -135,7 +135,7 @@ import { initManageStock, manageStockGetStocks, manageStockEditStock } from '@/a
 import { isEmpty } from '@/utils/commonUtil'
 import fromReg from '@/utils/formReg'
 export default {
-  name: 'ManagePaneStock',
+  name: 'DeviceVendingPaneStock',
   props: {
     deviceId: {
       type: String,

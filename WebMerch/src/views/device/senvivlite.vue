@@ -74,7 +74,7 @@
 import { getList } from '@/api/devsenvivlite'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'SenvivLiteList',
+  name: 'DeviceSenvivLite',
   components: { Pagination },
   data() {
     return {

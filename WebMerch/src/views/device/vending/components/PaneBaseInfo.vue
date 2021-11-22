@@ -55,7 +55,7 @@ import { edit, initManageBaseInfo } from '@/api/devvending'
 import { isEmpty } from '@/utils/commonUtil'
 
 export default {
-  name: 'ManagePaneBaseInfo',
+  name: 'DeviceVendingPaneBaseInfo',
   props: {
     deviceId: {
       type: String,

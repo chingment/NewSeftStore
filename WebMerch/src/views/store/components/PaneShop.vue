@@ -62,7 +62,7 @@ import { isEmpty } from '@/utils/commonUtil'
 import managePaneShop from '@/views/shop/select'
 import managePaneDevice from '@/views/device/vending'
 export default {
-  name: 'StoreManagePaneShop',
+  name: 'StorePaneShop',
   components: { managePaneShop, managePaneDevice },
   props: {
     storeId: {

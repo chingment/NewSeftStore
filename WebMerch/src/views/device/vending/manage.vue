@@ -28,7 +28,7 @@ import PaneStock from './components/PaneStock'
 import PaneControlCenter from './components/PaneControlCenter'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
-  name: 'DeviceManage',
+  name: 'DeviceVendingManage',
   components: { PaneBaseInfo, PaneStock, PaneControlCenter, PageHeader },
   data() {
     return {

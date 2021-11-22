@@ -16,16 +16,16 @@
     </div>
     <el-tabs v-model="activeTab" type="card">
       <el-tab-pane label="基本信息" name="tabBaseInfo">
-        <manage-pane-base-info :levelst-id="activeDropdown.id" />
+        <pane-base-info :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="会费设置" name="tabFee">
-        <manage-pane-fee :levelst-id="activeDropdown.id" />
+        <pane-fee :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="赠券设置" name="tabCoupon">
-        <manage-pane-coupon :levelst-id="activeDropdown.id" />
+        <pane-coupon :levelst-id="activeDropdown.id" />
       </el-tab-pane>
       <el-tab-pane label="优惠商品" name="tabSku">
-        <manage-pane-sku :levelst-id="activeDropdown.id" />
+        <pane-sku :levelst-id="activeDropdown.id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -33,14 +33,14 @@
 
 <script>
 import { initManage } from '@/api/memberright'
-import managePaneBaseInfo from './components/ManagePaneBaseInfo'
-import managePaneFee from './components/ManagePaneFee'
-import managePaneSku from './components/ManagePaneSku'
-import managePaneCoupon from './components/ManagePaneCoupon'
+import PaneBaseInfo from './components/PaneBaseInfo'
+import PaneFee from './components/PaneFee'
+import PaneSku from './components/PaneSku'
+import PaneCoupon from './components/PaneCoupon'
 import PageHeader from '@/components/PageHeader/index.vue'
 export default {
   name: 'OperationCenterMemberRightManage',
-  components: { managePaneBaseInfo, managePaneFee, managePaneSku, managePaneCoupon, PageHeader },
+  components: { PaneBaseInfo, PaneFee, PaneSku, PaneCoupon, PageHeader },
   data() {
     return {
       activeTab: 'tabBaseInfo',

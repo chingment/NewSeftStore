@@ -101,7 +101,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { isEmpty } from '@/utils/commonUtil'
 
 export default {
-  name: 'ManagePaneCoupon',
+  name: 'OperationCenterMemberRightPaneCoupon',
   components: { Pagination },
   props: {
     levelstId: {
