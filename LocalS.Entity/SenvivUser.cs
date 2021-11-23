@@ -19,6 +19,7 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string DeptId { get; set; }
+        public string MerchId { get; set; }
         //public string Code { get; set; }
         public string WxOpenId { get; set; }
         public string PhoneNumber { get; set; }

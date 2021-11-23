@@ -151,17 +151,17 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
+            var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
-
-            var deptIds = d_Merch.SenvivDepts.Split(',');
+            ///var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+            //var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var query = (from u in CurrentDb.SenvivUser
                          where
-                         deptIds.Contains(u.DeptId)
+                         merchIds.Contains(u.MerchId)
                          && ((rup.Name == null || u.NickName.Contains(rup.Name)) ||
                          (rup.Name == null || u.FullName.Contains(rup.Name)))
                          select u);
@@ -317,19 +317,23 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            var merchIds = BizFactory.Merch.GetRelIds(merchId);
+
+            //var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
 
-            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
 
-            var deptIds = d_Merch.SenvivDepts.Split(',');
+            //var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var query = (from u in CurrentDb.SenvivHealthDayReport
 
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where u.IsValid == true
+                         &&
+                         merchIds.Contains(tt.MerchId)
                          select new
                          {
                              u.Id,
@@ -762,19 +766,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         {
             var result = new CustomJsonResult();
 
-            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
+            //var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
 
-            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
+            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
+            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
 
-            var deptIds = d_Merch.SenvivDepts.Split(',');
+            //var deptIds = d_Merch.SenvivDepts.Split(',');
+
+            var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
             var query = (from u in CurrentDb.SenvivHealthMonthReport
 
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
-
+                         where 
+                         merchIds.Contains(tt.MerchId)
                          select new
                          {
                              u.Id,
