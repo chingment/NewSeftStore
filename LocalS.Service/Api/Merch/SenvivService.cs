@@ -110,16 +110,10 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
 
+            var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-                return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
-
-            var deptIds = d_Merch.SenvivDepts.Split(',');
-
-
-            var users = CurrentDb.SenvivUser.Where(m => deptIds.Contains(m.DeptId)).ToList();
+            var users = CurrentDb.SenvivUser.Where(m => merchIds.Contains(m.MerchId)).ToList();
 
             var userCount = users.Count();
             var careLevel0 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.None).Count();
@@ -780,7 +774,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
-                         where 
+                         where
                          merchIds.Contains(tt.MerchId)
                          select new
                          {

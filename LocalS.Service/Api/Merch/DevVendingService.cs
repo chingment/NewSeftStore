@@ -110,7 +110,7 @@ namespace LocalS.Service.Api.Merch
 
             query = query.OrderByDescending(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
 
-            var list = query.OrderBy(m => m.IsStopUse).ToList();
+            var list = query.OrderByDescending(m => m.CurUseShopId).ToList();
 
             List<object> olist = new List<object>();
 
