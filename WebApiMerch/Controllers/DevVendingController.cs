@@ -27,6 +27,20 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetListByShop([FromUri]RupDeviceGetList rup)
+        {
+            var result = MerchServiceFactory.DevVending.GetListByShop(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse GetListBySbShop([FromUri]RupDeviceGetList rup)
+        {
+            var result = MerchServiceFactory.DevVending.GetListBySbShop(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
 
         [HttpGet]
         public OwnApiHttpResponse InitManage([FromUri]string id = "")

@@ -8,6 +8,14 @@ export function getList(params) {
   })
 }
 
+export function getListBySbStore(params) {
+  return request({
+    url: '/shop/getListBySbStore',
+    method: 'get',
+    params
+  })
+}
+
 export function getDetails(params) {
   return request({
     url: '/shop/getDetails',
@@ -26,6 +34,7 @@ export function save(data) {
 
 export default {
   getList: getList,
+  getListBySbStore: getListBySbStore,
   getDetails: getDetails,
   save: save
 }

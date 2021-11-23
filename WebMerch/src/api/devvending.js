@@ -23,6 +23,22 @@ export function edit(data) {
   })
 }
 
+export function getListByShop(params) {
+  return request({
+    url: '/devvending/getListByShop',
+    method: 'get',
+    params
+  })
+}
+
+export function getListBySbShop(params) {
+  return request({
+    url: '/devvending/getListBySbShop',
+    method: 'get',
+    params
+  })
+}
+
 export function initManage(params) {
   return request({
     url: '/devvending/initManage',
@@ -138,6 +154,8 @@ export function unBindShop(data) {
 export default {
   initGetList: initGetList,
   getList: getList,
+  getListByShop: getListByShop,
+  getListBySbShop: getListBySbShop,
   edit: edit,
   initManage: initManage,
   initManageBaseInfo: initManageBaseInfo,

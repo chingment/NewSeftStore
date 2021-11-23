@@ -102,7 +102,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [HttpPost]
         public OwnApiHttpResponse RemoveShop([FromBody]RopStoreRemoveShop rop)
         {

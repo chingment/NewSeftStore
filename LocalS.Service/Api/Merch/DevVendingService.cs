@@ -93,25 +93,15 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.Type == rup.Type);
             }
 
-            if (rup.OpCode == "list")
-            {
-                if (!string.IsNullOrEmpty(rup.StoreId))
-                {
-                    query = query.Where(m => m.CurUseStoreId == rup.StoreId);
-                }
 
-                if (!string.IsNullOrEmpty(rup.ShopId))
-                {
-                    query = query.Where(m => m.CurUseShopId == rup.ShopId);
-                }
-            }
-            else if (rup.OpCode == "listbyshop")
+            if (!string.IsNullOrEmpty(rup.StoreId))
             {
-                query = query.Where(m => m.CurUseStoreId == rup.StoreId && m.CurUseShopId == rup.ShopId);
+                query = query.Where(m => m.CurUseStoreId == rup.StoreId);
             }
-            else if (rup.OpCode == "listbyunbindshop")
-            {
 
+            if (!string.IsNullOrEmpty(rup.ShopId))
+            {
+                query = query.Where(m => m.CurUseShopId == rup.ShopId);
             }
 
             int total = query.Count();
@@ -137,21 +127,155 @@ namespace LocalS.Service.Api.Merch
                     shopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
                 }
 
+                olist.Add(new
+                {
+                    Id = item.DeviceId,
+                    Name = item.Name,
+                    Model = item.Model,
+                    Code = GetCode(item.DeviceId, item.CumCode),
+                    StoreId = item.CurUseStoreId,
+                    ShopId = item.CurUseShopId,
+                    MainImgUrl = item.MainImgUrl,
+                    Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
+                    LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
+                    ShopName = shopName
+                });
+
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+        }
+
+
+        public CustomJsonResult GetListByShop(string operater, string merchId, RupDeviceGetList rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.MerchDevice
+                         join m in CurrentDb.Device on u.DeviceId equals m.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where ((rup.Id == null || u.DeviceId.Contains(rup.Id)) || (rup.Id == null || u.CumCode.Contains(rup.Id)))
+                         &&
+                         u.MerchId == merchId
+                         select new { u.Id, tt.Type, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
+
+            if (!string.IsNullOrEmpty(rup.Type))
+            {
+                query = query.Where(m => m.Type == rup.Type);
+            }
+
+            query = query.Where(m => m.CurUseStoreId == rup.StoreId && m.CurUseShopId == rup.ShopId);
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.CurUseStoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.OrderBy(m => m.IsStopUse).ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                string shopName = "未绑定门店";
+
+                if (!string.IsNullOrEmpty(item.CurUseShopId))
+                {
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
+                    var d_Shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
+
+                    shopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
+                }
+
+                olist.Add(new
+                {
+                    Id = item.DeviceId,
+                    Name = item.Name,
+                    Model = item.Model,
+                    Code = GetCode(item.DeviceId, item.CumCode),
+                    StoreId = item.CurUseStoreId,
+                    ShopId = item.CurUseShopId,
+                    MainImgUrl = item.MainImgUrl,
+                    Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
+                    LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
+                    ShopName = shopName
+                });
+
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+        }
+
+
+        public CustomJsonResult GetListBySbShop(string operater, string merchId, RupDeviceGetList rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.MerchDevice
+                         join m in CurrentDb.Device on u.DeviceId equals m.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where ((rup.Id == null || u.DeviceId.Contains(rup.Id)) || (rup.Id == null || u.CumCode.Contains(rup.Id)))
+                         &&
+                         u.MerchId == merchId
+                         select new { u.Id, tt.Type, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
+
+            if (!string.IsNullOrEmpty(rup.Type))
+            {
+                query = query.Where(m => m.Type == rup.Type);
+            }
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.OrderBy(m => m.CurUseShopId).ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                string shopName = "未绑定门店";
+
+                if (!string.IsNullOrEmpty(item.CurUseShopId))
+                {
+                    var d_Store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
+                    var d_Shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
+
+                    shopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
+                }
+
                 string opTips = "";
 
                 bool isCanSelect = false;
 
-                if (rup.OpCode == "listbyunbindshop")
-                {
-                    if (string.IsNullOrEmpty(item.CurUseShopId))
-                    {
-                        isCanSelect = true;
-                    }
-                    else
-                    {
-                        opTips = "已绑定";
-                    }
 
+                if (string.IsNullOrEmpty(item.CurUseShopId))
+                {
+                    isCanSelect = true;
+                }
+                else
+                {
+                    opTips = "已绑定";
                 }
 
                 olist.Add(new

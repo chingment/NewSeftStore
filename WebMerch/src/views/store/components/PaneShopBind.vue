@@ -53,17 +53,13 @@
 
 <script>
 
-import { getList } from '@/api/shop'
+import { getListBySbStore } from '@/api/shop'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
   name: 'ShopSelect',
   components: { Pagination },
   props: {
-    opCode: {
-      type: String,
-      default: 'list'
-    },
     storeId: {
       type: String,
       default: ''
@@ -105,7 +101,7 @@ export default {
     onGetList() {
       this.loading = true
       this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
-      getList(this.listQuery).then(res => {
+      getListBySbStore(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

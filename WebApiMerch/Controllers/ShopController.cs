@@ -19,6 +19,13 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
+        public OwnApiHttpResponse GetListBySbStore([FromUri]RupShopGetList rup)
+        {
+            var result = MerchServiceFactory.Shop.GetListBySbStore(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
         public OwnApiHttpResponse GetDetails([FromUri]RupShopGetDetails rup)
         {
             var result = MerchServiceFactory.Shop.GetDetails(this.CurrentUserId, this.CurrentMerchId, rup);

@@ -17,9 +17,6 @@
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
             查询
           </el-button>
-          <el-button v-if="opCode==='bindshop'" class="filter-item" type="primary" icon="el-icon-plus" @click="onDialogByOpenSelect(false,null)">
-            添加
-          </el-button>
         </el-col>
       </el-row>
     </div>
@@ -35,7 +32,6 @@
             </div>
             <div class="right">
               <el-button v-if="opCode==='list'" type="text" @click="onManage(item)">管理</el-button>
-              <el-button v-if="opCode==='bindshop'" type="text" @click="onUnBindShop(item)">解绑</el-button>
             </div>
           </div>
           <div class="storeName" style="font-size:12px;white-space: nowrap">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
@@ -71,110 +67,28 @@
     <div v-show="listData.length<=0&&deviceCount>0" class="list-empty">
       <span>暂无数据</span>
     </div>
-    <el-dialog v-if="dialogByOpenSelectIsVisible" :title="'选择设备'" width="600px" :visible.sync="dialogByOpenSelectIsVisible" append-to-body>
-      <div style="width:100%;height:400px">
 
-        <div class="filter-container">
-          <el-row :gutter="16">
-            <el-col :span="8" :xs="24" style="margin-bottom:20px">
-              <el-input v-model="listQueryBySelect.id" clearable style="width: 100%" placeholder="编号" class="filter-item" />
-            </el-col>
-            <el-col :span="8" :xs="24" style="margin-bottom:20px">
-              <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilterBySelect">
-                查询
-              </el-button>
-            </el-col>
-          </el-row>
-
-        </div>
-        <el-table
-          :key="listKey"
-          v-loading="loadingBySelect"
-          :data="listDataBySelect"
-          fit
-          highlight-current-row
-          style="width: 100%;"
-        >
-          <el-table-column label="序号" prop="id" align="left" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.$index+1 }} </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="编号" align="left" min-width="45%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.code }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="门店" align="left" min-width="55%">
-            <template slot-scope="scope">
-              <span>{{ scope.row.shopName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="right" width="100" class-name="small-padding fixed-width">
-            <template slot-scope="{row}">
-              <template v-if="opCode==='bindshop'">
-                <el-button v-if="row.isCanSelect" type="primary" size="mini" @click="onSelect(row)">
-                  选择
-                </el-button>
-                <el-button v-else type="text" disabled>{{ row.opTips }}</el-button>
-              </template>
-            </template>
-          </el-table-column>
-        </el-table>
-
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { MessageBox } from 'element-ui'
-import { getList, initGetList, bindShop, unBindShop } from '@/api/devvending'
+import { getList, initGetList } from '@/api/devvending'
 
 export default {
   name: 'DeviceVending',
-  props: {
-    opCode: {
-      type: String,
-      default: 'list'
-    },
-    storeId: {
-      type: String,
-      default: ''
-    },
-    shopId: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       loading: true,
       listKey: 'listQuery',
-      listKeyBySelect: 'listQueryBySelectss',
       listQuery: {
-        opCode: 'list',
         page: 1,
         limit: 1000,
-        shopId: '',
-        storeId: '',
         id: '',
         type: 'vending'
       },
-      loadingBySelect: false,
-      listQueryBySelect: {
-        opCode: 'bindshop',
-        page: 1,
-        limit: 10,
-        shopId: '',
-        storeId: '',
-        id: ''
-      },
-      dialogByOpenSelectIsVisible: false,
       deviceCount: 0,
       listData: [],
-      listDataBySelect: [],
       span: 6,
       isDesktop: this.$store.getters.isDesktop
     }
@@ -183,20 +97,11 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.span = this.opCode === 'list' ? 6 : 12
     this.init()
   },
   methods: {
     init() {
       this.loading = true
-      this.listQuery.storeId = this.storeId
-      this.listQuery.shopId = this.shopId
-
-      if (this.opCode === 'bindshop') {
-        this.listQuery.opCode = 'listbyshop'
-      } else {
-        this.listQuery.opCode = 'list'
-      }
 
       initGetList().then(res => {
         if (res.result === 1) {
@@ -254,74 +159,6 @@ export default {
           tab: 'tabControlCenter'
         }
       })
-    },
-    onGetListBySelect() {
-      this.listQueryBySelect.storeId = this.storeId
-      this.listQueryBySelect.shopId = this.shopId
-      this.listQueryBySelect.opCode = 'listbyunbindshop'
-      this.loadingBySelect = true
-      getList(this.listQueryBySelect).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.listDataBySelect = d.items
-        }
-        this.loadingBySelect = false
-      })
-    },
-    onFilterBySelect() {
-      this.listQueryBySelect.page = 1
-      this.onGetListBySelect()
-    },
-    onDialogByOpenSelect() {
-      this.dialogByOpenSelectIsVisible = true
-      this.onGetListBySelect()
-    },
-    onUnBindShop: function(item) {
-      MessageBox.confirm('确定要解绑该设备，解绑后库存将被清空，请谨慎操作！', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        unBindShop({ deviceId: item.id, storeId: item.storeId, shopId: item.shopId }).then(res => {
-          if (res.result === 1) {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
-            this.onGetList()
-          } else {
-            this.$message({
-              message: res.message,
-              type: 'error'
-            })
-          }
-        })
-      })
-    },
-    onSelect: function(item) {
-      if (this.opCode === 'bindshop') {
-        MessageBox.confirm('确定绑定设备', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          bindShop({ deviceId: item.id, storeId: this.storeId, shopId: this.shopId }).then(res => {
-            if (res.result === 1) {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
-              this.onGetList()
-              this.dialogByOpenSelectIsVisible = false
-            } else {
-              this.$message({
-                message: res.message,
-                type: 'error'
-              })
-            }
-          })
-        })
-      }
     }
   }
 }

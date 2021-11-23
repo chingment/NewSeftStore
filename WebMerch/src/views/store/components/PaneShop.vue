@@ -42,13 +42,13 @@
 
     <el-dialog v-if="dialogByDeviceIsVisible" :title="'设备管理'" width="800px" :visible.sync="dialogByDeviceIsVisible" @close="onGetList(listQuery)">
       <div style="width:100%;height:600px">
-        <manage-pane-device op-code="bindshop" :store-id="storeId" :shop-id="shopId" />
+        <pane-device-bind :store-id="storeId" :shop-id="shopId" />
       </div>
     </el-dialog>
 
     <el-dialog v-if="dialogByShopIsVisible" :title="'选择门店'" width="800px" :visible.sync="dialogByShopIsVisible">
       <div style="width:100%;height:600px">
-        <manage-pane-shop op-code="select" :store-id="storeId" :select-method="onAddShop" />
+        <pane-shop-bind :store-id="storeId" :select-method="onAddShop" />
       </div>
     </el-dialog>
 
@@ -59,11 +59,11 @@
 import { MessageBox } from 'element-ui'
 import { initManageShop, getShops, addShop, removeShop } from '@/api/store'
 import { isEmpty } from '@/utils/commonUtil'
-import managePaneShop from '@/views/shop/select'
-import managePaneDevice from '@/views/device/vending'
+import PaneShopBind from './PaneShopBind'
+import PaneDeviceBind from './PaneDeviceBind'
 export default {
   name: 'StorePaneShop',
-  components: { managePaneShop, managePaneDevice },
+  components: { PaneShopBind, PaneDeviceBind },
   props: {
     storeId: {
       type: String,

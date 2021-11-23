@@ -56,12 +56,58 @@ namespace LocalS.Service.Api.Merch
 
             var list = query.ToList();
 
-            List<string> d_shopIds = new List<string>();
+            List<object> olist = new List<object>();
 
-            if (rup.OpCode == "select")
+            foreach (var item in list)
             {
-                d_shopIds = CurrentDb.StoreShop.Where(m => m.StoreId == rup.StoreId).Select(m => m.ShopId).Distinct().ToList();
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    MainImgUrl = item.MainImgUrl,
+                    BriefDes = item.BriefDes,
+                    Address = item.Address,
+                    ContactAddress = item.ContactAddress,
+                    ContactPhone = item.ContactPhone,
+                    ContactName = item.ContactName,
+                    CreateTime = item.CreateTime
+                });
             }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+
+            return result;
+        }
+
+        public CustomJsonResult GetListBySbStore(string operater, string merchId, RupShopGetList rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.Shop
+                         where (rup.Name == null || u.Name.Contains(rup.Name))
+                         &&
+                         u.MerchId == merchId
+                         &&
+                         u.IsDelete == false
+                         select new { u.Id, u.Name, u.MainImgUrl, u.IsOpen, u.BriefDes, u.Address, u.AreaName, u.ContactAddress, u.ContactPhone, u.ContactName, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<string> d_shopIds = CurrentDb.StoreShop.Where(m => m.StoreId == rup.StoreId).Select(m => m.ShopId).Distinct().ToList();
+
 
             List<object> olist = new List<object>();
 
@@ -71,17 +117,13 @@ namespace LocalS.Service.Api.Merch
 
                 bool isCanSelect = false;
 
-                if (rup.OpCode == "select")
+                if (!d_shopIds.Contains(item.Id))
                 {
-                    if (!d_shopIds.Contains(item.Id))
-                    {
-                        isCanSelect = true;
-                    }
-                    else
-                    {
-                        opTips = "已选择";
-                    }
-
+                    isCanSelect = true;
+                }
+                else
+                {
+                    opTips = "已选择";
                 }
 
                 olist.Add(new

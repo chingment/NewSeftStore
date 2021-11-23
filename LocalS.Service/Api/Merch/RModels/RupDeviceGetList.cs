@@ -14,8 +14,6 @@ namespace LocalS.Service.Api.Merch
 
         public string ShopId { get; set; }
 
-        public string OpCode { get; set; }
-
         public string Type { get; set; }
     }
 }
