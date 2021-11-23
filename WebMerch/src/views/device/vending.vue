@@ -21,26 +21,21 @@
       </el-row>
     </div>
     <el-row v-loading="loading" :gutter="24">
-
       <el-col v-for="item in listData" v-show="deviceCount!==0" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="span" class="my-col">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
             <div class="left">
-
               <div class="circle-item"> <span :class="'icon-status icon-status-'+item.status.value" /> <span class="name">{{ item.code }} <span style="font-size:12px;"> ({{ item.status.text }})</span></span></div>
-
             </div>
             <div class="right">
-              <el-button v-if="opCode==='list'" type="text" @click="onManage(item)">管理</el-button>
+              <el-button type="text" @click="onManage(item)">管理</el-button>
             </div>
           </div>
           <div class="storeName" style="font-size:12px;white-space: nowrap">{{ item.shopName }} [{{ item.lastRequestTime }}]</div>
-
           <div class="it-component">
-
             <div class="img"> <img :src="item.mainImgUrl" alt=""> </div>
             <div class="describe">
-              <ul v-if="opCode==='list'">
+              <ul>
                 <li><el-button type="text" style="padding:0px;color:#67c23a" @click="onStock(item)">库存查看</el-button></li>
                 <li><el-button type="text" style="padding:0px;color:#f38b3f" @click="onControlCenter(item)">控制中心</el-button></li>
               </ul>
@@ -48,7 +43,6 @@
           </div>
         </el-card>
       </el-col>
-
       <el-col v-show="deviceCount===0" :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom:20px">
         <el-card class="box-card">
           <div slot="header" class="it-header clearfix">
@@ -56,9 +50,7 @@
             <el-button type="text">暂无设备，请联系您的客户经理绑定！</el-button>
           </div>
           <div class="it-component">
-
             <div style="margin:auto;height:120px !important;width:120px !important; line-height:125px;" class="el-upload el-upload--picture-card"><i data-v-62e19c49="" class="el-icon-plus" /></div>
-
           </div>
         </el-card>
       </el-col>

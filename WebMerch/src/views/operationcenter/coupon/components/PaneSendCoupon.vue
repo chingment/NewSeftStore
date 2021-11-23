@@ -7,7 +7,7 @@
       </el-form-item>
       <el-form-item label="客户">
 
-        <client-select multiple :select-ids="selectIds" @GetSelectIds="getClientUserIds" />
+        <pane-client-select multiple :select-ids="selectIds" @GetSelectIds="getClientUserIds" />
 
       </el-form-item>
     </el-form>
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import ClientSelect from '@/views/client/components/select.vue'
+import PaneClientSelect from '@/views/client/components/select.vue'
 export default {
   name: 'OperationCenterCouponPaneSendCoupon',
   components: {
-    ClientSelect
+    PaneClientSelect
   },
   data() {
     return {

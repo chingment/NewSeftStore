@@ -93,7 +93,6 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.Type == rup.Type);
             }
 
-
             if (!string.IsNullOrEmpty(rup.StoreId))
             {
                 query = query.Where(m => m.CurUseStoreId == rup.StoreId);
@@ -109,7 +108,7 @@ namespace LocalS.Service.Api.Merch
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
 
-            query = query.OrderByDescending(r => r.CurUseStoreId).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.OrderBy(m => m.IsStopUse).ToList();
 
@@ -123,7 +122,6 @@ namespace LocalS.Service.Api.Merch
                 {
                     var d_Store = CurrentDb.Store.Where(m => m.Id == item.CurUseStoreId).FirstOrDefault();
                     var d_Shop = CurrentDb.Shop.Where(m => m.Id == item.CurUseShopId).FirstOrDefault();
-
                     shopName = string.Format("{0}/{1}", d_Store.Name, d_Shop.Name);
                 }
 
@@ -135,10 +133,10 @@ namespace LocalS.Service.Api.Merch
                     Code = GetCode(item.DeviceId, item.CumCode),
                     StoreId = item.CurUseStoreId,
                     ShopId = item.CurUseShopId,
+                    ShopName = shopName,
                     MainImgUrl = item.MainImgUrl,
                     Status = GetStatus(item.CurUseShopId, item.IsStopUse, item.ExIsHas, item.RunStatus, item.LastRequestTime),
                     LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
-                    ShopName = shopName
                 });
 
             }
