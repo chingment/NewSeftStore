@@ -30,5 +30,22 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public CustomJsonResult SaveWorkBench(string operater, string merchId, RopHomeSaveWorkBench rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            var d_SysMerchUser = CurrentDb.SysMerchUser.Where(m => m.Id == operater).FirstOrDefault();
+
+            d_SysMerchUser.WorkBench = rop.WorkBench;
+
+            CurrentDb.SaveChanges();
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+
+
+            return result;
+        }
     }
 }

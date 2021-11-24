@@ -20,5 +20,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse SaveWorkBench([FromBody]RopHomeSaveWorkBench rop)
+        {
+            var result = MerchServiceFactory.Home.SaveWorkBench(this.CurrentUserId, this.CurrentMerchId, rop);
+
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

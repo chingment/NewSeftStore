@@ -8,6 +8,15 @@ export function getInitData(params) {
   })
 }
 
+export function saveWorkBench(data) {
+  return request({
+    url: '/home/saveWorkBench',
+    method: 'post',
+    data
+  })
+}
+
 export default {
-  getInitData: getInitData
+  getInitData: getInitData,
+  saveWorkBench: saveWorkBench
 }
