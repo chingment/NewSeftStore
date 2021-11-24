@@ -175,7 +175,7 @@ namespace LocalS.Service.Api.Merch
                 merchUser.RegisterTime = DateTime.Now;
                 merchUser.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
                 merchUser.ImIsUse = rop.ImIsUse;
-
+                merchUser.WorkBench = rop.WorkBench;
 
                 if (rop.ImIsUse)
                 {
@@ -247,6 +247,7 @@ namespace LocalS.Service.Api.Merch
             ret.NickName = merchUser.NickName;
             ret.IsDisable = merchUser.IsDisable;
             ret.ImIsUse = merchUser.ImIsUse;
+            ret.WorkBench = merchUser.WorkBench;
             ret.Roles = GetRoleTree();
             ret.RoleIds = (from m in CurrentDb.SysUserRole where m.UserId == merchUser.Id select m.RoleId).ToList();
 
@@ -279,6 +280,7 @@ namespace LocalS.Service.Api.Merch
                 merchUser.MendTime = DateTime.Now;
                 merchUser.Mender = operater;
                 merchUser.ImIsUse = rop.ImIsUse;
+                merchUser.WorkBench = rop.WorkBench;
                 if (rop.ImIsUse)
                 {
                     var imCountLimit = CurrentDb.Merch.Where(m => m.Id == merchId).First().ImAccountLimit;

@@ -180,6 +180,8 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SenvivController.cs" />
+    <Compile Include="Controllers\SenvivWorkBenchController.cs" />
+    <Compile Include="Controllers\ShopWorkBenchController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />

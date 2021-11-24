@@ -143,6 +143,7 @@ namespace LocalS.Service.Api.Merch
                 user.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 user.Email = rop.Email;
                 user.PhoneNumber = rop.PhoneNumber;
+                user.WorkBench = rop.WorkBench;
                 user.BelongType = Enumeration.BelongType.Merch;
                 user.IsDelete = false;
                 user.IsDisable = false;
@@ -217,7 +218,7 @@ namespace LocalS.Service.Api.Merch
             string email = d_User.Email;
             string fullName = d_User.FullName;
             bool isDisable = d_User.IsDisable;
-
+            int workBench = d_User.WorkBench;
             ret = new
             {
                 merchId = id,
@@ -226,6 +227,7 @@ namespace LocalS.Service.Api.Merch
                 email = email,
                 fullName = fullName,
                 isDisable = isDisable,
+                workBench = workBench
             };
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
@@ -249,9 +251,9 @@ namespace LocalS.Service.Api.Merch
                 d_User.Email = rop.Email;
                 d_User.PhoneNumber = rop.PhoneNumber;
                 d_User.IsDisable = rop.IsDisable;
+                d_User.WorkBench = rop.WorkBench;
                 d_User.MendTime = DateTime.Now;
                 d_User.Mender = operater;
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

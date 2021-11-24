@@ -31,6 +31,15 @@
       <el-form-item label="禁用">
         <el-switch v-model="form.isDisable" />
       </el-form-item>
+      <el-form-item label="工作台">
+        <el-radio-group v-model="form.workBench">
+          <el-radio :label="1">商城</el-radio>
+          <el-radio :label="2">心晓</el-radio>
+        </el-radio-group>
+        <div>
+          <el-image :src="'http://file.17fanju.com/upload/WorkBench'+form.workBench+'.png'" />
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -59,7 +68,8 @@ export default {
         password: '',
         fullName: '',
         phoneNumber: '',
-        email: ''
+        email: '',
+        workBench: 1
       },
       rules: {
         password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
@@ -84,6 +94,7 @@ export default {
           this.form.fullName = d.fullName
           this.form.phoneNumber = d.phoneNumber
           this.form.email = d.email
+          this.form.workBench = d.workBench
         }
         this.loading = false
       })

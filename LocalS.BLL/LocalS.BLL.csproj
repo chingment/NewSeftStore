@@ -155,7 +155,7 @@
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="SpecDes.cs" />
     <Compile Include="Task\BaseProgram.cs" />
-    <Compile Include="Task\ITask.cs" />
+    <Compile Include="Task\Model\ITask.cs" />
     <Compile Include="Task\Launcher.cs" />
     <Compile Include="Task\Model\Order2CheckPayModel.cs" />
     <Compile Include="Task\Model\Order2CheckPickupTimeoutModel.cs" />

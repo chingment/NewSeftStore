@@ -346,6 +346,8 @@
     <Compile Include="Api\Merch\RModels\SenvivSaveTagExplain.cs" />
     <Compile Include="Api\Merch\RopReportCheckRightExport.cs" />
     <Compile Include="Api\Merch\SenvivService.cs" />
+    <Compile Include="Api\Merch\SenvivWorkBenchService.cs" />
+    <Compile Include="Api\Merch\ShopWorkBenchService.cs" />
     <Compile Include="Api\Merch\ShopService.cs" />
     <Compile Include="Api\Merch\StoreService.cs" />
     <Compile Include="Api\Merch\AdminUserService.cs" />

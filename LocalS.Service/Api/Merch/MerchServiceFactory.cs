@@ -193,5 +193,20 @@ namespace LocalS.Service.Api.Merch
             }
         }
 
+        public static ShopWorkBenchService ShopWorkBench
+        {
+            get
+            {
+                return new ShopWorkBenchService();
+            }
+        }
+
+        public static SenvivWorkBenchService SenvivWorkBench
+        {
+            get
+            {
+                return new SenvivWorkBenchService();
+            }
+        }
     }
 }

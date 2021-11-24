@@ -33,10 +33,53 @@ namespace LocalS.BLL.Task
                 return DateTime.Now;
             }
         }
+
+
         public void Execute(IJobExecutionContext context)
         {
             try
             {
+                var senvivBoxs = SdkFactory.Senviv.GetBoxList();
+                LogUtil.Info(TAG, "senvivBoxs.Length:" + senvivBoxs.Count);
+                foreach (var senvivBox in senvivBoxs)
+                {
+                    var d_Device = CurrentDb.Device.Where(m => m.Id == senvivBox.sn).FirstOrDefault();
+                    if (d_Device == null)
+                    {
+                        LogUtil.Info(TAG, senvivBox.sn + ",不存在");
+                        d_Device = new Entity.Device();
+                        d_Device.Id = senvivBox.sn;
+                        d_Device.Name = "非接触式生命体征检测仪";
+                        d_Device.Type = "senvivlite";
+                        d_Device.ImeiId = senvivBox.imei;
+                        d_Device.CurUseMerchId = "88273829";
+                        d_Device.Model = senvivBox.model;
+                        //d_Device.Lat = float.Parse(senvivBox.latitude);
+                        //d_Device.Lng = float.Parse(senvivBox.longitude);
+                        d_Device.AppVersionName = senvivBox.version;
+                        d_Device.FingerVeinnerIsUse = false;
+                        d_Device.ImIsUse = false;
+                        d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
+                        d_Device.CreateTime = DateTime.Now;
+                        CurrentDb.Device.Add(d_Device);
+                        CurrentDb.SaveChanges();
+
+                        var d_MerchDevice = new Entity.MerchDevice();
+                        d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
+                        d_MerchDevice.MerchId = d_Device.CurUseMerchId;
+                        d_MerchDevice.DeviceId = d_Device.Id;
+                        d_MerchDevice.Creator = d_Device.Creator;
+                        d_MerchDevice.CreateTime = d_Device.CreateTime;
+                        CurrentDb.MerchDevice.Add(d_MerchDevice);
+                        CurrentDb.SaveChanges();
+                    }
+                    else
+                    {
+                        LogUtil.Info(TAG, senvivBox.sn + ",已存在");
+                    }
+                }
+
+
                 var senvivUsers = SdkFactory.Senviv.GetUserList();
 
                 foreach (var senvivUser in senvivUsers)
@@ -104,9 +147,10 @@ namespace LocalS.BLL.Task
                     var products = senvivUser.products;
                     if (products != null)
                     {
-
                         foreach (var product in products)
                         {
+
+
                             var d_SenvivUserProduct = CurrentDb.SenvivUserProduct.Where(m => m.Id == product._id).FirstOrDefault();
                             if (d_SenvivUserProduct == null)
                             {
@@ -139,50 +183,6 @@ namespace LocalS.BLL.Task
                                 CurrentDb.SaveChanges();
                             }
                         }
-                    }
-                }
-
-
-                var senvivBoxs = SdkFactory.Senviv.GetBoxList();
-
-                LogUtil.Info(TAG, "senvivBoxs.Length:" + senvivBoxs.Count);
-
-                foreach (var senvivBox in senvivBoxs)
-                {
-                    var d_Device = CurrentDb.Device.Where(m => m.Id == senvivBox.sn).FirstOrDefault();
-                    if (d_Device == null)
-                    {
-                        LogUtil.Info(TAG, senvivBox.sn + ",不存在");
-
-                        d_Device = new Entity.Device();
-                        d_Device.Id = senvivBox.sn;
-                        d_Device.Name = "非接触式生命体征检测仪";
-                        d_Device.Type = "senvivlite";
-                        d_Device.ImeiId = senvivBox.imei;
-                        d_Device.CurUseMerchId = "88273829";
-                        d_Device.Model = senvivBox.model;
-                        //d_Device.Lat = float.Parse(senvivBox.latitude);
-                        //d_Device.Lng = float.Parse(senvivBox.longitude);
-                        d_Device.AppVersionName = senvivBox.version;
-                        d_Device.FingerVeinnerIsUse = false;
-                        d_Device.ImIsUse = false;
-                        d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
-                        d_Device.CreateTime = DateTime.Now;
-                        CurrentDb.Device.Add(d_Device);
-                        CurrentDb.SaveChanges();
-
-                        var d_MerchDevice = new Entity.MerchDevice();
-                        d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
-                        d_MerchDevice.MerchId = d_Device.CurUseMerchId;
-                        d_MerchDevice.DeviceId = d_Device.Id;
-                        d_MerchDevice.Creator = d_Device.Creator;
-                        d_MerchDevice.CreateTime = d_Device.CreateTime;
-                        CurrentDb.MerchDevice.Add(d_MerchDevice);
-                        CurrentDb.SaveChanges();
-                    }
-                    else
-                    {
-                        LogUtil.Info(TAG, senvivBox.sn + ",已存在");
                     }
                 }
             }

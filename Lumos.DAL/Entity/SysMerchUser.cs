@@ -16,5 +16,6 @@ namespace Lumos.DbRelay
         public string ImPassword { get; set; }
         public string CharTags { get; set; }
         public string BriefDes { get; set; }
+        public int WorkBench { get; set; }
     }
 }

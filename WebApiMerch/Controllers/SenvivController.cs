@@ -12,12 +12,6 @@ namespace WebApiMerch.Controllers
     public class SenvivController : OwnApiBaseController
     {
 
-        [HttpGet]
-        public OwnApiHttpResponse GetConsoleInfo()
-        {
-            var result = MerchServiceFactory.Senviv.GetConsoleInfo(this.CurrentUserId, this.CurrentMerchId);
-            return new OwnApiHttpResponse(result);
-        }
 
         [HttpGet]
         public OwnApiHttpResponse GetUsers([FromUri]RupSenvivGetUsers rup)

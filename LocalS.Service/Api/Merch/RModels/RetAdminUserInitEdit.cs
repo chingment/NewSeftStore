@@ -18,6 +18,8 @@ namespace LocalS.Service.Api.Merch
         public string Email { get; set; }
         public bool IsDisable { get; set; }
         public bool ImIsUse { get; set; }
+
+        public int WorkBench { get; set; }
         public List<string> OrgIds { get; set; }
 
         public List<TreeNode> Orgs { get; set; }

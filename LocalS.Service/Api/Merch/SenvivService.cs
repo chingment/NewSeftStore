@@ -106,41 +106,6 @@ namespace LocalS.Service.Api.Merch
         }
 
 
-        public CustomJsonResult GetConsoleInfo(string operater, string merchId)
-        {
-            var result = new CustomJsonResult();
-
-
-            var merchIds = BizFactory.Merch.GetRelIds(merchId);
-
-            var users = CurrentDb.SenvivUser.Where(m => merchIds.Contains(m.MerchId)).ToList();
-
-            var userCount = users.Count();
-            var careLevel0 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.None).Count();
-            var careLevel1 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.One).Count();
-            var careLevel2 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Two).Count();
-            var careLevel3 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Three).Count();
-            var careLevel4 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Four).Count();
-
-            var ret = new
-            {
-                userCount = userCount,
-                careLevel = new
-                {
-                    level0 = careLevel0,
-                    level1 = careLevel1,
-                    level2 = careLevel2,
-                    level3 = careLevel3,
-                    level4 = careLevel4,
-                }
-            };
-
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
-
-            return result;
-        }
-
-
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();

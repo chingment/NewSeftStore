@@ -17,6 +17,15 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" />
       </el-form-item>
+      <el-form-item label="工作台">
+        <el-radio-group v-model="form.workBench">
+          <el-radio :label="1">商城</el-radio>
+          <el-radio :label="2">心晓</el-radio>
+        </el-radio-group>
+        <div>
+          <el-image :src="'http://file.17fanju.com/upload/WorkBench'+form.workBench+'.png'" />
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -44,7 +53,8 @@ export default {
         password: '',
         fullName: '',
         phoneNumber: '',
-        email: ''
+        email: '',
+        workBench: 1
       },
       rules: {
         fullName: [{ required: true, message: '必填', trigger: 'change' }],

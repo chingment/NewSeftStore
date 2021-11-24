@@ -1,35 +1,39 @@
 <template>
   <div id="home_container" class="app-container">
-    <div v-permission="['Merch_Home_Shop']">
-      <pane-shop-console />
-    </div>
-    <div v-permission="['Merch_Home_Senviv']">
-      <pane-senviv-console />
-    </div>
+    <pane-shop-work-bench v-if="workBench===1" />
+    <pane-senviv-work-bench v-else-if="workBench===2" />
   </div>
 </template>
 <script>
 
 import permission from '@/directive/permission/index.js' // 权限判断指令
-import PaneShopConsole from '@/views/home/components/PaneShopConsole.vue'
-import PaneSenvivConsole from '@/views/home/components/PaneSenvivConsole.vue'
-
+import PaneShopWorkBench from '@/views/home/components/PaneShopWorkBench.vue'
+import PaneSenvivWorkBench from '@/views/home/components/PaneSenvivWorkBench.vue'
+import { getInitData } from '@/api/home'
 export default {
   name: 'HomeIndex',
   components: {
-    PaneShopConsole,
-    PaneSenvivConsole
+    PaneShopWorkBench,
+    PaneSenvivWorkBench
   },
   directives: { permission },
   data() {
     return {
+      workBench: 0
     }
   },
   created() {
-
+    this.init()
   },
   methods: {
-
+    init() {
+      getInitData().then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.workBench = d.workBench
+        }
+      })
+    }
   }
 }
 

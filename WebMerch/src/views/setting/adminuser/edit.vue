@@ -62,6 +62,15 @@
           <el-checkbox v-for="option in checkbox_group_role_options" :key="option.id" style="display:block" :label="option.id">{{ option.label }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
+      <el-form-item label="工作台">
+        <el-radio-group v-model="form.workBench">
+          <el-radio :label="1">商城</el-radio>
+          <el-radio :label="2">心晓</el-radio>
+        </el-radio-group>
+        <div>
+          <el-image :src="'http://file.17fanju.com/upload/WorkBench'+form.workBench+'.png'" />
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -96,7 +105,8 @@ export default {
         orgIds: [],
         roleIds: [],
         imIsUse: false,
-        isDisable: false
+        isDisable: false,
+        workBench: 1
       },
       rules: {
         password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
@@ -136,6 +146,7 @@ export default {
           this.form.imIsUse = d.imIsUse
           this.form.avatar = d.avatar
           this.form.isDisable = d.isDisable
+          this.form.workBench = d.workBench
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
 

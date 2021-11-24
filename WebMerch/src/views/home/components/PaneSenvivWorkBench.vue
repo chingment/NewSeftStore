@@ -150,7 +150,9 @@
 </template>
 
 <script>
-import { getUsers, getConsoleInfo } from '@/api/senviv'
+
+import { getInitData } from '@/api/senvivworkbench'
+import { getUsers } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneUserDetail from '@/views/senviv/components/PaneUserDetail.vue'
 export default {
@@ -222,13 +224,13 @@ export default {
     if (this.$store.getters.listPageQuery.has(this.$route.path)) {
       this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
     }
-    this.onGetConsoleInfo()
+    this.init()
     this.onGetUsers()
   },
   methods: {
-    onGetConsoleInfo() {
+    init() {
       this.consoleInfo.loading = true
-      getConsoleInfo({}).then(res => {
+      getInitData({}).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.consoleInfo = d

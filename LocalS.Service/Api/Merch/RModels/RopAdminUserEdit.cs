@@ -18,5 +18,6 @@ namespace LocalS.Service.Api.Merch
         public bool IsDisable { get; set; }
         public List<string> RoleIds { get; set; }
         public bool ImIsUse { get; set; }
+        public int WorkBench { get; set; }
     }
 }

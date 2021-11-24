@@ -225,7 +225,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getIndexPageData } from '@/api/home'
+import { getSkuSaleRl, getStoreGmvRl, getTodayStoreGmvRl, get7DayGmv, getTodaySummary, getInitData } from '@/api/shopworkbench'
 export default {
   name: 'HomeIndex',
   components: {
@@ -259,7 +259,7 @@ export default {
     }
   },
   created() {
-    this._getIndexPageData()
+    this._getInitData()
     this._getTodaySummary()
     this._get7DayGmv()
     this._getTodayStoreGmvRl()
@@ -267,8 +267,8 @@ export default {
     this._getStoreGmvRl()
   },
   methods: {
-    _getIndexPageData: function() {
-      getIndexPageData().then(res => {
+    _getInitData: function() {
+      getInitData().then(res => {
         if (res.result === 1) {
           var d = res.data
           this.storeCount = d.storeCount

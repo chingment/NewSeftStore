@@ -9,16 +9,13 @@ using System.Web.Http;
 
 namespace WebApiMerch.Controllers
 {
-    public class HomeController : OwnApiBaseController
+    public class SenvivWorkBenchController : OwnApiBaseController
     {
-
         [HttpGet]
         public OwnApiHttpResponse GetInitData()
         {
-            var result = MerchServiceFactory.Home.GetInitData(this.CurrentUserId, this.CurrentMerchId);
-
+            var result = MerchServiceFactory.SenvivWorkBench.GetInitData(this.CurrentUserId, this.CurrentMerchId);
             return new OwnApiHttpResponse(result);
         }
-
     }
 }
