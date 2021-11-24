@@ -337,7 +337,7 @@ export default {
     },
     handleDeviceCount() {
       this.$router.push({
-        path: '/device/list'
+        path: '/device/vending'
       })
     },
     handleSumTradeAmount() {

@@ -42,6 +42,7 @@ namespace LocalS.BLL.Task
                 foreach (var senvivUser in senvivUsers)
                 {
                     var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == senvivUser.userid).FirstOrDefault();
+
                     if (d_SenvivUser == null)
                     {
                         d_SenvivUser = new Entity.SenvivUser();
@@ -183,7 +184,6 @@ namespace LocalS.BLL.Task
                     {
                         LogUtil.Info(TAG, senvivBox.sn + ",已存在");
                     }
-
                 }
             }
             catch (Exception ex)

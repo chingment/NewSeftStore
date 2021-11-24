@@ -26,5 +26,19 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse UnBindMerch([FromBody]RopDeviceUnBindMerch rop)
+        {
+            var result = MerchServiceFactory.DevSenvivLite.UnBindMerch(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse BindMerch([FromBody]RopDeviceBindMerch rop)
+        {
+            var result = MerchServiceFactory.DevSenvivLite.BindMerch(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

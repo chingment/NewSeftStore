@@ -231,6 +231,8 @@
     <Compile Include="Api\Merch\RModels\RetPayRefundDetails.cs" />
     <Compile Include="Api\Merch\RModels\RopAdAddContentBelong.cs" />
     <Compile Include="Api\Merch\RModels\RopAdEditContentBelong.cs" />
+    <Compile Include="Api\Merch\RModels\RopDeviceBindMerch.cs" />
+    <Compile Include="Api\Merch\RModels\RopDeviceUnBindMerch.cs" />
     <Compile Include="Api\Merch\RModels\RopMerchAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopMerchEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopOrgAdd.cs" />

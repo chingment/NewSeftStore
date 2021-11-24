@@ -64,8 +64,11 @@ export function generateRoutes(data) {
     component: Layout,
     redirect: '/home',
     children: routers
-  },
-  { path: '*', redirect: '/404', hidden: true }]
+  }, {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }]
 
   router.addRoutes(_routers)
 }

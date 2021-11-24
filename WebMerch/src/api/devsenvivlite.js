@@ -15,7 +15,25 @@ export function initGetList() {
   })
 }
 
+export function bindMerch(data) {
+  return request({
+    url: '/devsenvivlite/bindMerch',
+    method: 'post',
+    data
+  })
+}
+
+export function unBindMerch(data) {
+  return request({
+    url: '/devsenvivlite/unBindMerch',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initGetList: initGetList,
-  getList: getList
+  getList: getList,
+  bindMerch: bindMerch,
+  unBindMerch: unBindMerch
 }

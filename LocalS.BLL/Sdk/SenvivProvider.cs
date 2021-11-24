@@ -213,7 +213,7 @@ namespace LocalS.BLL
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
             int page = 1;
-            int size = 10;
+            int size = 1000;
 
             var boxListRequest = new SenvivSdk.BoxListRequest(GetApiAccessToken(), new { deptid = "32", size = size, page = page });
             var result = api.DoPost(boxListRequest);
