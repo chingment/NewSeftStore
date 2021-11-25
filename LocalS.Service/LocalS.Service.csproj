@@ -563,6 +563,10 @@
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>
       <Name>Lumos</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SenvivSdk\SenvivSdk.csproj">
+      <Project>{5d319fe7-2758-4a61-99df-fdf033ad4a8b}</Project>
+      <Name>SenvivSdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WeiXinSdk\MyWeiXinSdk.csproj">
       <Project>{636311A8-0485-4953-841E-35CA27EEA436}</Project>
       <Name>MyWeiXinSdk</Name>

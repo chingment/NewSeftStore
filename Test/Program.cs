@@ -227,7 +227,7 @@ namespace Test
         static void Main(string[] args)
         {
 
-            var d1 = SdkFactory.Senviv.GetUserHealthDayReport("32", "321x847d01270E5C00");
+            var d1 = SdkFactory.Senviv.GetBox("1004C7B08289");
 
 
             var sss222 = GetSons("1");

@@ -196,9 +196,23 @@ namespace LocalS.Service.Api.Merch
                     d_PMerchDevice.CreateTime = DateTime.Now;
                 }
 
+
+
+                var box = SdkFactory.Senviv.GetBox(d_Device.Id);
+                if (box != null)
+                {
+                    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == box.userid).FirstOrDefault();
+                    if (d_SenvivUser != null)
+                    {
+                        d_SenvivUser.MerchId = rop.MerchId;
+                    }
+                }
+
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
+
+
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 

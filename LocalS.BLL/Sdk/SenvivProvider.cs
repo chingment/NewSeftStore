@@ -181,9 +181,9 @@ namespace LocalS.BLL
                 {
                     int count = data.Data.count;
                     int pageCount = (count + size - 1) / size;
-         
+
                     list.AddRange(data.Data.data);
-             
+
                     if (pageCount >= 2)
                     {
                         for (var i = 2; i <= pageCount; i++)
@@ -247,6 +247,30 @@ namespace LocalS.BLL
             }
 
             return list;
+        }
+
+        public SenvivSdk.BoxListResult.DataModel GetBox(string keyword)
+        {
+            SenvivSdk.BoxListResult.DataModel model = null;
+
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            int page = 1;
+            int size = 1;
+
+            var boxListRequest = new SenvivSdk.BoxListRequest(GetApiAccessToken(), new { deptid = "32", size = size, page = page, keyword = keyword });
+            var result = api.DoPost(boxListRequest);
+            if (result.Result == ResultType.Success)
+            {
+                var data = result.Data;
+                if (data != null)
+                {
+                    model = data.Data.data[0];
+                }
+
+            }
+
+            return model;
         }
 
 
