@@ -162,11 +162,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import fileDownload from 'js-file-download'
 import { skuSalesHisInit, skuSalesHisGet, skuSalesHisExport, checkRightExport } from '@/api/report'
-import { parseTime } from '@/utils'
-import { getToken } from '@/utils/auth'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'ReportSkuSalesDateHis',

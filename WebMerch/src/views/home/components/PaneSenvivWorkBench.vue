@@ -1,6 +1,6 @@
 <template>
   <div style="padding:0px">
-    <el-row :gutter="40" class="panel-group">
+    <!-- <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSenvivUsers">
           <div class="card-panel-icon-wrapper icon-select">
@@ -37,7 +37,7 @@
           </div>
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
 
     <el-container>
       <el-aside width="400px">
@@ -82,7 +82,7 @@
           <div slot="header" class="clearfix">
             <span>我的服务对象 {{ careLevelName }}</span>
           </div>
-          <div class="body">
+          <div class="body" style="min-height:340px">
             <div id="senviv_user_list">
 
               <el-row v-loading="users.loading" :gutter="20">
