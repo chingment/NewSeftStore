@@ -92,14 +92,16 @@ namespace LocalS.Service.Api.Account
                 menuNode.IsSidebar = p_sysMenu.IsSidebar;
                 menuNode.IsNavbar = p_sysMenu.IsNavbar;
                 menuNode.IsRouter = p_sysMenu.IsRouter;
-                menuNode.Redirect = p_sysMenu.Redirect;
-
 
                 var children = GetMenuTree(p_sysMenu.Id, sysMenus);
                 if (children != null)
                 {
                     if (children.Count > 0)
                     {
+
+                        var redirect = sysMenus.Where(m => m.PId == p_sysMenu.Id).OrderBy(m => m.Priority).FirstOrDefault();
+
+                        menuNode.Redirect = p_sysMenu + "/" + redirect.Path;
                         menuNode.Children = new List<MenuNode>();
                         menuNode.Children = children;
                     }

@@ -18,6 +18,8 @@ namespace WebApiMerch.Controllers
             var result = MerchServiceFactory.Home.GetInitData(this.CurrentUserId, this.CurrentMerchId);
 
             return new OwnApiHttpResponse(result);
+
+
         }
 
         [HttpPost]
