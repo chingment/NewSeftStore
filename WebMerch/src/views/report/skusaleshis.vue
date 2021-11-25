@@ -35,7 +35,9 @@
             <el-radio-button v-for="item in options_ReceiveModes" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-
+        <el-form-item label="商品">
+          <el-input v-model="listQuery.product" clearable placeholder="编码/名称" style="width: 300px;" />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
           <el-button :loading="downloadLoading" type="primary" style="margin-left:10px" icon="el-icon-document" @click="onDownload">
@@ -187,6 +189,7 @@ export default {
         storeIds: [],
         tradeDateTimeArea: [],
         pickupStatus: '',
+        product: '',
         receiveMode: '0'
       },
       options_PickupStatus: [{
