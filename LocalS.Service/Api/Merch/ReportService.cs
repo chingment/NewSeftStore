@@ -549,6 +549,11 @@ into g
                 query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
             }
 
+            if (!string.IsNullOrEmpty(rop.Product))
+            {
+                query = query.Where(u => u.SkuCumCode == rop.Product || u.SkuName.StartsWith(rop.Product));
+            }
+
             int total = query.Count();
 
             int pageIndex = rop.Page - 1;

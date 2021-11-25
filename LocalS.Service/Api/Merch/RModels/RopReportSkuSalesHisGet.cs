@@ -16,5 +16,7 @@ namespace LocalS.Service.Api.Merch
         public string PickupStatus { get; set; }
 
         public E_ReceiveMode ReceiveMode { get; set; }
+
+        public string Product { get; set; }
     }
 }
