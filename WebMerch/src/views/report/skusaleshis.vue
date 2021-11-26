@@ -51,6 +51,8 @@
       v-loading="loading"
       border
       :data="listData"
+      :summary-method="getSummaries"
+      show-summary
       fit
       highlight-current-row
     >
@@ -180,6 +182,14 @@ export default {
       listKey: 0,
       listData: null,
       listTotal: 0,
+      listSummaries: {
+        quantity: 0,
+        chargeAmount: 0,
+        refundedQuantity: 0,
+        refundedAmount: 0,
+        tradeQuantity: 0,
+        tradeAmount: 0
+      },
       listQuery: {
         page: 1,
         limit: 10,
@@ -244,6 +254,7 @@ export default {
           var d = res.data
           this.listData = d.items
           this.listTotal = d.total
+          this.listSummaries = d.extend
         } else {
           this.$message({
             message: res.message,
@@ -303,6 +314,30 @@ export default {
           })
         }
       })
+    },
+    getSummaries(param) {
+      const { columns } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = ''
+          return
+        } else if (index === 13) {
+          sums[index] = this.listSummaries.quantity
+        } else if (index === 14) {
+          sums[index] = this.listSummaries.chargeAmount
+        } else if (index === 15) {
+          sums[index] = this.listSummaries.refundedQuantity
+        } else if (index === 16) {
+          sums[index] = this.listSummaries.refundedAmount
+        } else if (index === 17) {
+          sums[index] = this.listSummaries.tradeQuantity
+        } else if (index === 18) {
+          sums[index] = this.listSummaries.tradeAmount
+        }
+      })
+
+      return sums
     }
   }
 }

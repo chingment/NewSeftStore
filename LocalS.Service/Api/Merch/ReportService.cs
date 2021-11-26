@@ -619,6 +619,171 @@ into g
             }
 
 
+            rop.Page = 1;
+            rop.Limit = int.MaxValue;
+
+            var result_His = MerchServiceFactory.Report.SkuSalesHisGet2(operater, merchId, rop);
+            object extend = new { };
+            if (result_His.Result == ResultType.Success)
+            {
+                var data = result_His.Data;
+                var items = data.Items;
+
+                int quantity = items.Sum(m => m.Quantity);
+                decimal chargeAmount = items.Sum(m => m.ChargeAmount);
+                int refundedQuantity = items.Sum(m => m.RefundedQuantity);
+                decimal refundedAmount = items.Sum(m => m.RefundedAmount);
+                int tradeQuantity = quantity - refundedQuantity;
+                decimal tradeAmount = chargeAmount - refundedAmount;
+
+                extend = new
+                {
+                    Quantity = quantity,
+                    ChargeAmount = chargeAmount,
+                    RefundedQuantity = refundedQuantity,
+                    RefundedAmount = refundedAmount,
+                    TradeQuantity = tradeQuantity,
+                    TradeAmount = tradeAmount
+                };
+            }
+
+            var pageEntity = new PageEntity<SkuSaleModel> { PageSize = pageSize, Total = total, Items = olist, Extend = extend };
+
+            result = new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+
+        public CustomJsonResult<PageEntity<SkuSaleModel>> SkuSalesHisGet2(string operater, string merchId, RopReportSkuSalesHisGet rop)
+        {
+
+            var result = new CustomJsonResult<PageEntity<SkuSaleModel>>();
+
+            if (rop.TradeDateTimeArea == null)
+            {
+                return new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+            }
+
+            if (rop.TradeDateTimeArea.Length != 2)
+            {
+                return new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Failure, ResultCode.Failure, "请选择日期", null);
+            }
+
+            DateTime? tradeStartTime = CommonUtil.ConverToStartTime(rop.TradeDateTimeArea[0]);
+
+            DateTime? tradeEndTime = CommonUtil.ConverToEndTime(rop.TradeDateTimeArea[1]);
+
+
+            //if ((tradeEndTime.Value - tradeStartTime.Value).Days > 60)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "日期范围不能超过60天");
+            //}
+
+
+            var query = (from u in CurrentDb.OrderSub
+                         where u.MerchId == merchId && (u.PayStatus == Entity.E_PayStatus.PaySuccess)
+                        && (u.PayedTime >= tradeStartTime && u.PayedTime <= tradeEndTime) &&
+                        u.IsTestMode == false
+                         select new { u.StoreName, u.StoreId, u.DeviceId, u.RefundedQuantity, u.RefundedAmount, u.PayStatus, u.ShopName, u.ReceiveModeName, u.ReceiveMode, u.DeviceCumCode, u.PayedTime, u.OrderId, u.SkuBarCode, u.SkuCumCode, u.SkuName, u.SkuSpecDes, u.SkuProducer, u.Quantity, u.SalePrice, u.ChargeAmount, u.PayWay, u.PickupStatus });
+
+            if (rop.StoreIds != null && rop.StoreIds.Count > 0)
+            {
+                query = query.Where(u => rop.StoreIds.Contains(u.StoreId));
+            }
+
+            if (rop.PickupStatus == "1")
+            {
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Payed
+                || m.PickupStatus == Entity.E_OrderPickupStatus.WaitPickup
+                || m.PickupStatus == Entity.E_OrderPickupStatus.SendPickupCmd
+                || m.PickupStatus == Entity.E_OrderPickupStatus.Pickuping
+                || m.PickupStatus == Entity.E_OrderPickupStatus.Exception);
+            }
+            else if (rop.PickupStatus == "2")
+            {
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.UnTaked);
+            }
+            else if (rop.PickupStatus == "3")
+            {
+                query = query.Where(m => m.PickupStatus == Entity.E_OrderPickupStatus.Taked);
+            }
+
+            if (rop.ReceiveMode != Entity.E_ReceiveMode.Unknow)
+            {
+                query = query.Where(u => u.ReceiveMode == rop.ReceiveMode);
+            }
+
+            if (!string.IsNullOrEmpty(rop.Product))
+            {
+                query = query.Where(u => u.SkuCumCode == rop.Product || u.SkuName.StartsWith(rop.Product));
+            }
+
+            int total = query.Count();
+
+            int pageIndex = rop.Page - 1;
+            int pageSize = rop.Limit;
+
+            query = query.OrderByDescending(r => r.PayedTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<SkuSaleModel> olist = new List<SkuSaleModel>();
+
+            foreach (var item in list)
+            {
+                string pickupStatus = "";
+                if (item.PickupStatus == Entity.E_OrderPickupStatus.Taked)
+                {
+                    pickupStatus = "已取货";
+                }
+                else if (item.PickupStatus == Entity.E_OrderPickupStatus.UnTaked)
+                {
+                    pickupStatus = "未取货";
+                }
+                else if (item.PickupStatus == Entity.E_OrderPickupStatus.Exception)
+                {
+                    pickupStatus = "取货异常待处理";
+                }
+                else
+                {
+                    pickupStatus = "待取货";
+                }
+
+                var receiveRemark = "";
+
+                if (item.ReceiveMode == Entity.E_ReceiveMode.SelfTakeByDevice)
+                {
+                    receiveRemark = string.Format("{0},{1}", item.ShopName, MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode));
+                }
+
+                olist.Add(new SkuSaleModel
+                {
+                    StoreName = item.StoreName,
+                    ShopName = item.ShopName,
+                    DeviceCode = MerchServiceFactory.Device.GetCode(item.DeviceId, item.DeviceCumCode),
+                    ReceiveMode = item.ReceiveModeName,
+                    OrderId = item.OrderId,
+                    PayedTime = item.PayedTime.ToUnifiedFormatDateTime(),
+                    SkuName = item.SkuName,
+                    SkuBarCode = item.SkuBarCode,
+                    SkuCumCode = item.SkuCumCode,
+                    SkuSpecDes = SpecDes.GetDescribe(item.SkuSpecDes),
+                    SkuProducer = item.SkuProducer,
+                    Quantity = item.Quantity,
+                    SalePrice = item.SalePrice,
+                    ChargeAmount = item.ChargeAmount,
+                    RefundedAmount = item.RefundedAmount,
+                    RefundedQuantity = item.RefundedQuantity,
+                    TradeQuantity = item.Quantity - item.RefundedQuantity,
+                    TradeAmount = item.ChargeAmount - item.RefundedAmount,
+                    PayWay = BizFactory.Order.GetPayWay(item.PayWay).Text,
+                    PayStatus = BizFactory.Order.GetPayStatus(item.PayStatus).Text,
+                    PickupStatus = pickupStatus
+                });
+            }
+
+
             PageEntity<SkuSaleModel> pageEntity = new PageEntity<SkuSaleModel> { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult<PageEntity<SkuSaleModel>>(ResultType.Success, ResultCode.Success, "", pageEntity);
@@ -989,7 +1154,6 @@ into g
             return result;
 
         }
-
 
         public CustomJsonResult DeviceReplenishPlanInit(string operater, string merchId)
         {

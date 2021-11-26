@@ -27,6 +27,8 @@ namespace Lumos
         public int PageCount { get; set; }
         public int PageIndex { get; set; }
         public List<T> Items { get; set; }
+
+        public object Extend { get; set; }
     }
 
     public class PageEntity<T1,T2>
