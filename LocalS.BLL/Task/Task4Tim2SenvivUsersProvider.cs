@@ -108,35 +108,17 @@ namespace LocalS.BLL.Task
                     {
                         foreach (var product in products)
                         {
-                            var d_SenvivUserProduct = CurrentDb.SenvivUserProduct.Where(m => m.Id == product._id).FirstOrDefault();
-                            if (d_SenvivUserProduct == null)
+                            var d_d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.Id == product._id).FirstOrDefault();
+                            if (d_d_SenvivUserDevice == null)
                             {
-                                d_SenvivUserProduct = new Entity.SenvivUserProduct();
-                                d_SenvivUserProduct.Id = product._id;
-                                d_SenvivUserProduct.SvUserId = d_SenvivUser.Id;
-                                d_SenvivUserProduct.DeptName = product.deptName;
-                                d_SenvivUserProduct.Sn = product.sn;
-                                d_SenvivUserProduct.QrcodeUrl = product.qrcodeUrl;
-                                d_SenvivUserProduct.DeviceQRCode = product.deviceQRCode;
-                                d_SenvivUserProduct.TcpAddress = product.tcpAddress;
-                                d_SenvivUserProduct.WebUrl = product.webUrl;
-                                d_SenvivUserProduct.LastOnlineTime = Convert2DateTime(product.LastOnlineTime);
-                                d_SenvivUserProduct.Model = product.model;
-                                d_SenvivUserProduct.BindTime = Convert2DateTime(product.bindtime);
-                                d_SenvivUserProduct.Status = product.status;
-                                d_SenvivUserProduct.Version = product.version;
-                                d_SenvivUserProduct.Remarks = product.remarks;
-                                d_SenvivUserProduct.Batch = product.batch;
-                                d_SenvivUserProduct.Scmver = product.scmver;
-                                d_SenvivUserProduct.Sovn = product.sovn;
-                                d_SenvivUserProduct.Epromvn = product.epromvn;
-                                d_SenvivUserProduct.Imsi = product.imsi;
-                                d_SenvivUserProduct.Longitude = product.longitude;
-                                d_SenvivUserProduct.Latitude = product.latitude;
-                                d_SenvivUserProduct.DeptId = product.deptid;
-                                d_SenvivUserProduct.Creator = IdWorker.Build(IdType.EmptyGuid);
-                                d_SenvivUserProduct.CreateTime = DateTime.Now;
-                                CurrentDb.SenvivUserProduct.Add(d_SenvivUserProduct);
+                                d_d_SenvivUserDevice = new Entity.SenvivUserDevice();
+                                d_d_SenvivUserDevice.Id = product._id;
+                                d_d_SenvivUserDevice.SvUserId = d_SenvivUser.Id;
+                                d_d_SenvivUserDevice.DeviceId = product.sn;
+                                d_d_SenvivUserDevice.BindTime = Convert2DateTime(product.bindtime);
+                                d_d_SenvivUserDevice.Creator = IdWorker.Build(IdType.EmptyGuid);
+                                d_d_SenvivUserDevice.CreateTime = DateTime.Now;
+                                CurrentDb.SenvivUserDevice.Add(d_d_SenvivUserDevice);
                                 CurrentDb.SaveChanges();
                             }
                         }

@@ -117,19 +117,19 @@ namespace LocalS.BLL
 
             foreach (var d_SenvivUser in d_SenvivUsers)
             {
-                LogUtil.Info("NotifyClientExpire.Sn:" + d_RentOrder.SkuDeviceSn);
+                LogUtil.Info("NotifyClientExpire.DeviceId:" + d_RentOrder.SkuDeviceSn);
 
-                var d_SenvivUserProducts = CurrentDb.SenvivUserProduct.Where(m => m.SvUserId == d_SenvivUser.Id && m.Sn == d_RentOrder.SkuDeviceSn).ToList();
+                var d_SenvivUserDevices = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == d_SenvivUser.Id && m.DeviceId == d_RentOrder.SkuDeviceSn).ToList();
 
-                foreach (var d_SenvivUserProduct in d_SenvivUserProducts)
+                foreach (var d_SenvivUserDevice in d_SenvivUserDevices)
                 {
-                    LogUtil.Info("NotifyClientExpire.Sn2:" + d_SenvivUserProduct.Sn);
+                    LogUtil.Info("NotifyClientExpire.DeviceId2:" + d_SenvivUserDevice.DeviceId);
                     LogUtil.Info("NotifyClientExpire.WxOpenId:" + d_SenvivUser.WxOpenId);
 
                     string openId = d_SenvivUser.WxOpenId;
 
                     string first = string.Format("您好，您的{0}租约即使到期", skuName);
-                    string keyword1 = d_SenvivUserProduct.Sn;
+                    string keyword1 = d_SenvivUserDevice.DeviceId;
                     string keyword2 = skuName;
                     string keyword3 = string.Format("{0}到期", expireDate.ToString("yyyy年MM月dd日"));
                     string remark = "请尽快续费，以免影响您的设备使用！";
@@ -152,7 +152,7 @@ namespace LocalS.BLL
                     sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
                     sb.Append("}}");
 
-                    WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(GetWxPaAccessToken(d_SenvivUserProduct.DeptId), WxPostDataType.Text, sb.ToString());
+                    WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(GetWxPaAccessToken(""), WxPostDataType.Text, sb.ToString());
                     WxApi c = new WxApi();
 
                     var r = c.DoPost(templateSend);

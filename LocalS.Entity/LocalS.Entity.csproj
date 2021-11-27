@@ -107,7 +107,7 @@
     <Compile Include="SenvivHealthMonthReportTag.cs" />
     <Compile Include="SenvivHealthTagExplain.cs" />
     <Compile Include="SenvivUser.cs" />
-    <Compile Include="SenvivUserProduct.cs" />
+    <Compile Include="SenvivUserDevice.cs" />
     <Compile Include="Shop.cs" />
     <Compile Include="Spg\SpgItem.cs" />
     <Compile Include="Spg\SpgItemSub.cs" />
