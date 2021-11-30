@@ -56,7 +56,7 @@
         <div class="filter-container">
           <el-row :gutter="16">
             <el-col :span="8" :xs="24" style="margin-bottom:20px">
-              <el-input v-model="listQueryBySbShop.id" clearable style="width: 100%" placeholder="编号" class="filter-item" />
+              <el-input v-model="listQueryBySbShop.id" clearable style="width: 100%" placeholder="设备编码" class="filter-item" />
             </el-col>
             <el-col :span="8" :xs="24" style="margin-bottom:20px">
               <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilterBySbShop">
@@ -79,7 +79,7 @@
               <span>{{ scope.$index+1 }} </span>
             </template>
           </el-table-column>
-          <el-table-column label="编号" align="left" min-width="45%">
+          <el-table-column label="编码" align="left" min-width="45%">
             <template slot-scope="scope">
               <span>{{ scope.row.code }}</span>
             </template>

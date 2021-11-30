@@ -11,7 +11,7 @@
 
       <el-row :gutter="24">
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px">
-          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编号" class="filter-item" />
+          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编码" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="8" :xl="span" style="margin-bottom:20px;display:flex;">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">

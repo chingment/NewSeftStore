@@ -2,10 +2,10 @@
   <div id="device_baseinfo" v-loading="loading">
 
     <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px" :hide-required-asterisk="!isEdit">
-      <el-form-item label="设备编号">
+      <el-form-item label="设备编码">
         {{ temp.id }}
       </el-form-item>
-      <el-form-item label="自定义编号">
+      <el-form-item label="自定义编码">
         <el-input v-show="isEdit" v-model="form.cumCode" clearable />
         <span v-show="!isEdit">{{ temp.cumCode }}</span>
       </el-form-item>

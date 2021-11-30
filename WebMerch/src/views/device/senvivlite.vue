@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
-          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编号" class="filter-item" />
+          <el-input v-model="listQuery.id" clearable style="width: 100%" placeholder="设备编码" class="filter-item" />
         </el-col>
         <el-col :xs="24" :sm="12" :lg="6" :xl="4" style="margin-bottom:20px">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="onFilter">
@@ -67,7 +67,7 @@
 
     <el-dialog title="分配...." :visible.sync="dialogIsVisibleByBindMerch" width="600px">
       <el-form ref="formByBindMerch" :model="formByBindMerch" :rules="rulesByBindMerch" label-position="left" label-width="80px">
-        <el-form-item label="设备编号">
+        <el-form-item label="设备编码">
           <span>{{ formByBindMerch.deviceCumCode }}</span>
         </el-form-item>
         <el-form-item label="商户名称" prop="merchId">

@@ -35,8 +35,9 @@
           <el-menu :default-active="activeMenu" style="background:#fff" @select="leftMenuChange">
             <el-menu-item-group>
               <el-menu-item index="UserInfo">基本信息</el-menu-item>
-              <el-menu-item index="DayReport">健康报告（日）</el-menu-item>
-              <el-menu-item index="MonthReport">健康报告（月）</el-menu-item>
+              <el-menu-item index="DayReport">回访记录</el-menu-item>
+              <el-menu-item index="DayReport">健康（日）报告</el-menu-item>
+              <el-menu-item index="MonthReport">健康（月）报告</el-menu-item>
             </el-menu-item-group>
           </el-menu>
         </el-card>
