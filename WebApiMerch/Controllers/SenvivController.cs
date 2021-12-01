@@ -82,5 +82,13 @@ namespace WebApiMerch.Controllers
             var result = MerchServiceFactory.Senviv.SaveTagExplain(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+
+        [HttpGet]
+        public OwnApiHttpResponse GetVisitRecords([FromUri]RupSenvivGetVisitRecords rup)
+        {
+            var result = MerchServiceFactory.Senviv.GetVisitRecords(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

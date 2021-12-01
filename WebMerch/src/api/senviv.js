@@ -1,13 +1,5 @@
 import request from '@/utils/request'
 
-export function getConsoleInfo(params) {
-  return request({
-    url: '/senviv/getConsoleInfo',
-    method: 'get',
-    params
-  })
-}
-
 export function getUsers(params) {
   return request({
     url: '/senviv/getUsers',
@@ -88,8 +80,16 @@ export function saveTagExplain(data) {
   })
 }
 
+export function getVisitRecords(params) {
+  return request({
+    url: '/senviv/getVisitRecords',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getConsoleInfo: getConsoleInfo,
+  getVisitRecords: getVisitRecords,
   getUsers: getUsers,
   getUserDetail: getUserDetail,
   getDayReports: getDayReports,

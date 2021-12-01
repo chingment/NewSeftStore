@@ -151,7 +151,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult GetListByShop(string operater, string merchId, RupDeviceGetList rup)
         {
             var result = new CustomJsonResult();
@@ -220,7 +219,6 @@ namespace LocalS.Service.Api.Merch
 
             return result;
         }
-
 
         public CustomJsonResult GetListBySbShop(string operater, string merchId, RupDeviceGetList rup)
         {

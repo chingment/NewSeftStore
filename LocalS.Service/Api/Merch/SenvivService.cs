@@ -1251,5 +1251,58 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
 
         }
+
+
+        public CustomJsonResult GetVisitRecords(string operater, string merchId, RupSenvivGetVisitRecords rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SenvivVisitRecord
+                         where
+                         u.MerchId == merchId
+                         &&
+                         u.SvUserId == rup.UserId
+                         select new { u.Id, u.VisitType, u.Content, u.VisitTime, u.NextTime, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                string visitType = "";
+                if (item.VisitType == E_SenvivVisitRecordVisitType.Callout)
+                {
+                    visitType = "电话回访";
+                }
+                else if (item.VisitType == E_SenvivVisitRecordVisitType.WxPa)
+                {
+                    visitType = "公众号告知";
+                }
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    VisitType = visitType,
+                    Content = item.Content,
+                    VisitTime = item.VisitTime.ToUnifiedFormatDateTime(),
+                    NextTime = item.NextTime.ToUnifiedFormatDateTime(),
+                    CreateTime = item.CreateTime,
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
     }
 }

@@ -35,7 +35,7 @@
           <el-menu :default-active="activeMenu" style="background:#fff" @select="leftMenuChange">
             <el-menu-item-group>
               <el-menu-item index="UserInfo">基本信息</el-menu-item>
-              <el-menu-item index="DayReport">回访记录</el-menu-item>
+              <el-menu-item index="VisitRecord">回访告知</el-menu-item>
               <el-menu-item index="DayReport">健康（日）报告</el-menu-item>
               <el-menu-item index="MonthReport">健康（月）报告</el-menu-item>
             </el-menu-item-group>
@@ -45,6 +45,7 @@
       <el-container>
         <el-main class="">
           <pane-user-info v-show="activeMenu==='UserInfo'" :user-id="userId" />
+          <pane-visit-record v-show="activeMenu==='VisitRecord'" :user-id="userId" />
           <pane-day-report v-show="activeMenu==='DayReport'" :user-id="userId" />
           <pane-month-report v-show="activeMenu==='MonthReport'" :user-id="userId" />
         </el-main>
@@ -60,11 +61,12 @@ import { MessageBox } from 'element-ui'
 import PaneDayReport from './PaneDayReport.vue'
 import PaneMonthReport from './PaneMonthReport.vue'
 import PaneUserInfo from './PaneUserInfo.vue'
+import PaneVisitRecord from './PaneVisitRecord.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
   // name: 'SenvivPaneUserDetail',
-  components: { PaneDayReport, PaneMonthReport, PaneUserInfo },
+  components: { PaneDayReport, PaneMonthReport, PaneUserInfo, PaneVisitRecord },
   props: {
     userId: {
       type: String,

@@ -86,7 +86,7 @@ namespace LocalS.DAL
         public IDbSet<SenvivHealthDayReportAdvice> SenvivHealthDayReportAdvice { get; set; }
         public IDbSet<SenvivHealthMonthReportSugSku> SenvivHealthMonthReportSugSku { get; set; }
         public IDbSet<SenvivHealthMonthReportTag> SenvivHealthMonthReportTag { get; set; }
-
+        public IDbSet<SenvivVisitRecord> SenvivVisitRecord { get; set; }
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }
 
         public IDbSet<DeviceMqttMessage> DeviceMqttMessage { get; set; }
@@ -96,6 +96,8 @@ namespace LocalS.DAL
 
         public IDbSet<ErpReplenishPlan> ErpReplenishPlan { get; set; }
         public IDbSet<ErpReplenishPlanDevice> ErpReplenishPlanDevice { get; set; }
+
+
 
         public IDbSet<ErpReplenishPlanDeviceDetail> ErpReplenishPlanDeviceDetail { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
