@@ -7,7 +7,7 @@
           <el-button class="filter-item" type="primary" @click="onOpenDialogVisitByTelePhone">
             电话回访
           </el-button>
-          <el-button class="filter-item" type="primary">
+          <el-button class="filter-item" type="primary" @click="onOpenDialogVisitByPapush">
             公众号告知
           </el-button>
         </el-col>
@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="onDetails(row)">
+          <el-button type="text" size="mini">
             查看
           </el-button>
         </template>
@@ -58,6 +58,8 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
     <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
+    <dialog-visit-by-papush v-if="isVisibleDialogVisitByPapush" :user-id="userId" :visible.sync="isVisibleDialogVisitByPapush" @aftersave="onAfterSaveDialogVisitByPapush" />
+
   </div>
 </template>
 
@@ -65,10 +67,10 @@
 import { getVisitRecords } from '@/api/senviv'
 import Pagination from '@/components/Pagination'
 import DialogVisitByTelephone from './DialogVisitByTelephone'
-
+import DialogVisitByPapush from './DialogVisitByPapush'
 export default {
   name: 'PaneVisitRecord',
-  components: { Pagination, DialogVisitByTelephone },
+  components: { Pagination, DialogVisitByTelephone, DialogVisitByPapush },
   props: {
     userId: {
       type: String,
@@ -82,6 +84,7 @@ export default {
       listData: null,
       listTotal: 0,
       isVisibleDialogVisitByTelephone: false,
+      isVisibleDialogVisitByPapush: false,
       listQuery: {
         page: 1,
         limit: 10,
@@ -115,10 +118,11 @@ export default {
     onAfterSaveDialogVisitByTelephone() {
       this.onGetList()
     },
-    onDetails(item) {
-      this.$router.push({
-        path: '/client/shop/details?id=' + item.id
-      })
+    onOpenDialogVisitByPapush() {
+      this.isVisibleDialogVisitByPapush = true
+    },
+    onAfterSaveDialogVisitByPapush() {
+      this.onGetList()
     }
   }
 }

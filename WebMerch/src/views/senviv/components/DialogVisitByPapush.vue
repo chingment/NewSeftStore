@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-if="visible" title="电话回访" :visible.sync="visible" width="400" custom-class="dialog_visit_by_telephone" append-to-body :before-close="onBeforeClose">
+  <el-dialog v-if="visible" title="公众告知" :visible.sync="visible" width="400" custom-class="dialog_visit_by_telephone" append-to-body :before-close="onBeforeClose">
     <div v-loading="loading">
       <el-row>
         <el-col :span="12">
@@ -8,7 +8,7 @@
             最新记录
           </div>
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="回访时间" prop="visitTime">
+            <el-form-item label="回访时间" prop="userName">
               <el-date-picker
                 v-model="form.visitTime"
                 type="datetime"
@@ -17,7 +17,7 @@
                 :picker-options="pickerOptions"
               />
             </el-form-item>
-            <el-form-item label="回访记录" prop="content">
+            <el-form-item label="回访记录" prop="userName">
               <el-input
                 v-model="form.content"
                 type="textarea"
@@ -25,7 +25,7 @@
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="下次预约" prop="nextTime">
+            <el-form-item label="下次预约" prop="userName">
               <el-date-picker
                 v-model="form.nextTime"
                 type="datetime"
@@ -93,10 +93,7 @@ export default {
         content: '',
         userId: ''
       },
-      rules: {
-        visitTime: [{ required: true, message: '必选', trigger: 'change' }],
-        content: [{ required: true, message: '必填', trigger: 'change' }]
-      },
+      rules: {},
       recordsKey: 0,
       recordsData: null,
       recordsTotal: 0,
