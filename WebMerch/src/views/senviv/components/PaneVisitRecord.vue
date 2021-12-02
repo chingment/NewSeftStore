@@ -4,7 +4,7 @@
 
       <el-row :gutter="12">
         <el-col :xs="24" style="margin-bottom:20px">
-          <el-button class="filter-item" type="primary" @click="onVisitByTelePhone">
+          <el-button class="filter-item" type="primary" @click="onOpenDialogVisitByTelePhone">
             电话回访
           </el-button>
           <el-button class="filter-item" type="primary">
@@ -57,7 +57,7 @@
     </el-table>
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
-    <dialog-visit-by-telephone :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" />
+    <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
   </div>
 </template>
 
@@ -109,8 +109,11 @@ export default {
         this.loading = false
       })
     },
-    onVisitByTelePhone() {
+    onOpenDialogVisitByTelePhone() {
       this.isVisibleDialogVisitByTelephone = true
+    },
+    onAfterSaveDialogVisitByTelephone() {
+      this.onGetList()
     },
     onDetails(item) {
       this.$router.push({

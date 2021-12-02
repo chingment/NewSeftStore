@@ -195,6 +195,20 @@ namespace Lumos
 
         }
 
+        public static DateTime? ConverToDateTime(string strDate)
+        {
+            DateTime? d = null;
+            try
+            {
+                d = DateTime.Parse(strDate);
+            }
+            catch
+            {
+
+            }
+            return d;
+
+        }
 
         public static bool IsNumber(string str)
         {
@@ -402,7 +416,7 @@ namespace Lumos
             }
             else
             {
-                if (dspNow > dspWorkingDayPM&& dspNow> dspWorkingDayAM)
+                if (dspNow > dspWorkingDayPM && dspNow > dspWorkingDayAM)
                 {
                     return true;
                 }

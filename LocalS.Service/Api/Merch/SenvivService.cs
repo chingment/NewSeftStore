@@ -1252,7 +1252,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-
         public CustomJsonResult GetVisitRecords(string operater, string merchId, RupSenvivGetVisitRecords rup)
         {
             var result = new CustomJsonResult();
@@ -1269,7 +1268,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.VisitTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -1286,6 +1285,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     visitType = "公众号告知";
                 }
+                string s_Operater = "";
+                var d_Operater = CurrentDb.SysMerchUser.Where(m => m.Id == operater).FirstOrDefault();
+                if (d_Operater != null)
+                {
+                    s_Operater = d_Operater.FullName;
+                }
 
                 olist.Add(new
                 {
@@ -1295,12 +1300,36 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     VisitTime = item.VisitTime.ToUnifiedFormatDateTime(),
                     NextTime = item.NextTime.ToUnifiedFormatDateTime(),
                     CreateTime = item.CreateTime,
+                    Operater = s_Operater,
                 });
             }
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult SaveVisitRecordByTelePhone(string operater, string merchId, RopSenvivSaveVisitRecordByTelePhone rop)
+        {
+            var result = new CustomJsonResult();
+
+
+            var d_SenvivVisitRecord = new SenvivVisitRecord();
+            d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
+            d_SenvivVisitRecord.MerchId = merchId;
+            d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;
+            d_SenvivVisitRecord.Content = rop.Content;
+            d_SenvivVisitRecord.VisitTime = CommonUtil.ConverToDateTime(rop.VisitTime).Value;
+            d_SenvivVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime).Value;
+            d_SenvivVisitRecord.Creator = operater;
+            d_SenvivVisitRecord.CreateTime = DateTime.Now;
+            CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }

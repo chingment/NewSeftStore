@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.Merch
 {
-    public class RupSenvivGetVisitRecords : RupBaseGetList
+    public class RopSenvivSaveVisitRecordByTelePhone
     {
+        public string Content { get; set; }
+        public string VisitTime { get; set; }
+        public string NextTime { get; set; }
         public string UserId { get; set; }
-
     }
 }

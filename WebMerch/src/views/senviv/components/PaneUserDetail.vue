@@ -44,10 +44,10 @@
       </el-aside>
       <el-container>
         <el-main class="">
-          <pane-user-info v-show="activeMenu==='UserInfo'" :user-id="userId" />
-          <pane-visit-record v-show="activeMenu==='VisitRecord'" :user-id="userId" />
-          <pane-day-report v-show="activeMenu==='DayReport'" :user-id="userId" />
-          <pane-month-report v-show="activeMenu==='MonthReport'" :user-id="userId" />
+          <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" />
+          <pane-visit-record v-if="activeMenu==='VisitRecord'" :user-id="userId" />
+          <pane-day-report v-if="activeMenu==='DayReport'" :user-id="userId" />
+          <pane-month-report v-if="activeMenu==='MonthReport'" :user-id="userId" />
         </el-main>
       </el-container>
     </el-container>

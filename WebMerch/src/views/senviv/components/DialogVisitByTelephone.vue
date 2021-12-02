@@ -1,11 +1,14 @@
 <template>
-  <div id="dialog_visit_telephone">
-    <el-dialog v-if="visible" title="电话回访" :visible.sync="visible" width="400" append-to-body :before-close="onBeforeClose">
-
+  <el-dialog v-if="visible" title="电话回访" :visible.sync="visible" width="400" custom-class="dialog_visit_by_telephone" append-to-body :before-close="onBeforeClose">
+    <div v-loading="loading">
       <el-row>
         <el-col :span="12">
-          <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="时间" prop="userName">
+
+          <div style="font-size: 18px;color: #303133;line-height:50px ">
+            最新记录
+          </div>
+          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+            <el-form-item label="回访时间" prop="userName">
               <el-date-picker
                 v-model="form.visitTime"
                 type="datetime"
@@ -14,7 +17,7 @@
                 :picker-options="pickerOptions"
               />
             </el-form-item>
-            <el-form-item label="记录" prop="userName">
+            <el-form-item label="回访记录" prop="userName">
               <el-input
                 v-model="form.content"
                 type="textarea"
@@ -32,30 +35,43 @@
               />
             </el-form-item>
           </el-form>
+
         </el-col>
         <el-col :span="12">
-          <el-timeline :reverse="reverse">
-            <el-timeline-item
-              v-for="(activity, index) in activities"
-              :key="index"
-              :timestamp="activity.timestamp"
-            >
-              {{ activity.content }}
-            </el-timeline-item>
-          </el-timeline>
+          <div style="font-size: 18px;color: #303133;line-height:50px ">
+            最近记录
+          </div>
+          <div class="block">
+            <el-timeline>
+
+              <el-timeline-item
+                v-for="(record, index) in recordsData"
+                :key="index"
+                :timestamp="record.visitTime"
+                placement="top"
+              >
+                <el-card>
+                  <h4>{{ record.content }}</h4>
+                  <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
+                </el-card>
+              </el-timeline-item>
+
+            </el-timeline>
+          </div>
+
         </el-col>
       </el-row>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" @click="onSave">保存</el-button>
-        <el-button size="small" @click="onClose">关闭</el-button>
-      </span>
-    </el-dialog>
-  </div>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button size="small" type="primary" @click="onSave">保存</el-button>
+      <el-button size="small" @click="onClose">关闭</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
-
+import { MessageBox } from 'element-ui'
+import { saveVisitRecordByTelePhone, getVisitRecords } from '@/api/senviv'
 export default {
   name: 'PaneVisitRecord',
   props: {
@@ -74,20 +90,18 @@ export default {
       form: {
         visitTime: '',
         nextTime: '',
-        content: ''
+        content: '',
+        userId: ''
       },
-      rules: [],
-      reverse: true,
-      activities: [{
-        content: '活动按期开始',
-        timestamp: '2018-04-15'
-      }, {
-        content: '通过审核',
-        timestamp: '2018-04-13'
-      }, {
-        content: '创建成功',
-        timestamp: '2018-04-11'
-      }],
+      rules: {},
+      recordsKey: 0,
+      recordsData: null,
+      recordsTotal: 0,
+      recordsQuery: {
+        page: 1,
+        limit: 10,
+        userId: undefined
+      },
       pickerOptions: {
         shortcuts: [{
           text: '今天',
@@ -114,14 +128,53 @@ export default {
     }
   },
   created() {
-
+    this.form.userId = this.userId
+    this.onGetVisitRecords()
   },
   methods: {
+    onGetVisitRecords() {
+      this.loading = true
+      this.recordsQuery.userId = this.userId
+      getVisitRecords(this.recordsQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.recordsData = d.items
+          this.recordsTotal = d.total
+        }
+        this.loading = false
+      })
+    },
     onBeforeClose() {
       this.$emit('update:visible', false)
     },
     onSave() {
-
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              saveVisitRecordByTelePhone(this.form).then(res => {
+                if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
+                  this.onClose()
+                  this.$emit('aftersave')
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
+                }
+              })
+            })
+            .catch(() => {})
+        }
+      })
     },
     onClose() {
       this.$emit('update:visible', false)
@@ -129,3 +182,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.dialog_visit_by_telephone{
+
+     height: 400px !important;
+
+}
+</style>
