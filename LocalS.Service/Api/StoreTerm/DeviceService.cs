@@ -87,7 +87,7 @@ namespace LocalS.Service.Api.StoreTerm
             ret.Device.Im.UserName = m_Device.ImUserName;
             ret.Device.Im.Password = m_Device.ImPassword;
             ret.Device.Lights = m_Device.Lights;
-
+            ret.Device.IsOpenLog = true;
             ret.Device.Mqtt = new MqttModel
             {
                 Type = "exmq",

@@ -42,8 +42,8 @@ namespace LocalS.Service.Api.StoreTerm
         public MqttModel Mqtt { get; set; }
         public ImModel Im { get; set; }
         public int PicInSampleSize { get; set; }
-
         public Dictionary<string, string> Lights { get; set; }
+        public bool IsOpenLog { get; set; }
     }
 
 }

@@ -8,16 +8,17 @@
             最新记录
           </div>
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="回访时间" prop="userName">
-              <el-date-picker
-                v-model="form.visitTime"
-                type="datetime"
-                placeholder="选择日期时间"
-                align="right"
-                :picker-options="pickerOptions"
-              />
+            <el-form-item label="模板" prop="visitTemplate">
+              <el-select v-model="form.visitTemplate" placeholder="请选择">
+                <el-option
+                  v-for="item in optionsByVisitTemplate"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
-            <el-form-item label="回访记录" prop="userName">
+            <el-form-item label="异常结果" prop="">
               <el-input
                 v-model="form.content"
                 type="textarea"
@@ -25,13 +26,28 @@
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="下次预约" prop="userName">
-              <el-date-picker
-                v-model="form.nextTime"
-                type="datetime"
-                placeholder="选择日期时间"
-                align="right"
-                :picker-options="pickerOptions"
+            <el-form-item label="风险因素" prop="userName">
+              <el-input
+                v-model="form.content"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
+              />
+            </el-form-item>
+            <el-form-item label="健康建议" prop="userName">
+              <el-input
+                v-model="form.content"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
+              />
+            </el-form-item>
+            <el-form-item label="备注" prop="userName">
+              <el-input
+                v-model="form.content"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
               />
             </el-form-item>
           </el-form>
@@ -88,11 +104,15 @@ export default {
     return {
       loading: false,
       form: {
-        visitTime: '',
+        visitTemplate: '',
         nextTime: '',
         content: '',
         userId: ''
       },
+      optionsByVisitTemplate: [{
+        value: '1',
+        label: '监测异常提醒'
+      }],
       rules: {},
       recordsKey: 0,
       recordsData: null,
