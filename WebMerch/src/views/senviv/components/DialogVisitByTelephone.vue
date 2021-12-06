@@ -100,7 +100,7 @@ export default {
       },
       rules: {
         visitTime: [{ required: true, message: '必选', trigger: 'change' }],
-        content: [{ required: true, message: '必填', trigger: 'change' }]
+        remark: [{ required: true, message: '必填', trigger: 'change' }]
       },
       recordsKey: 0,
       recordsData: null,

@@ -37,7 +37,7 @@
       </el-timeline-item>
 
     </el-timeline>
-
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
     <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
     <dialog-visit-by-papush v-if="isVisibleDialogVisitByPapush" :user-id="userId" :visible.sync="isVisibleDialogVisitByPapush" @aftersave="onAfterSaveDialogVisitByPapush" />
 
