@@ -105,7 +105,6 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
-
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -1384,7 +1383,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             return result;
         }
-
 
         public CustomJsonResult SaveVisitRecordByPapush(string operater, string merchId, RopSenvivSaveVisitRecordByPapush rop)
         {
