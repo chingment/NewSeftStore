@@ -11,6 +11,13 @@ namespace LocalS.Entity
         WxPa = 2
     }
 
+    public enum E_SenvivVisitRecordVisitTemplate
+    {
+        None = 0,
+        CalloutRecord = 1,
+        WxPaByHealthException = 2
+    }
+
     [Table("SenvivVisitRecord")]
     public class SenvivVisitRecord
     {
@@ -19,8 +26,8 @@ namespace LocalS.Entity
         public string SvUserId { get; set; }
         public string MerchId { get; set; }
         public E_SenvivVisitRecordVisitType VisitType { get; set; }
-        //public string Template { get; set; }
-        public string Content { get; set; }
+        public E_SenvivVisitRecordVisitTemplate VisitTemplate { get; set; }
+        public string VisitContent { get; set; }
         //public string RiskResult { get; set; }
         //public string RiskFactor { get; set; }
         //public string HealthAdvice { get; set; }

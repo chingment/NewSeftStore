@@ -18,35 +18,35 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="异常结果" prop="">
+            <el-form-item label="异常结果" prop="keyword1">
               <el-input
-                v-model="form.content"
+                v-model="form.keyword1"
                 type="textarea"
-                :rows="5"
+                :rows="3"
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="风险因素" prop="userName">
+            <el-form-item label="风险因素" prop="keyword2">
               <el-input
-                v-model="form.content"
+                v-model="form.keyword2"
                 type="textarea"
-                :rows="5"
+                :rows="3"
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="健康建议" prop="userName">
+            <el-form-item label="健康建议" prop="keyword3">
               <el-input
-                v-model="form.content"
+                v-model="form.keyword3"
                 type="textarea"
-                :rows="5"
+                :rows="3"
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="备注" prop="userName">
+            <el-form-item label="备注" prop="remark">
               <el-input
-                v-model="form.content"
+                v-model="form.remark"
                 type="textarea"
-                :rows="5"
+                :rows="3"
                 placeholder="请输入内容"
               />
             </el-form-item>
@@ -66,10 +66,17 @@
                 :timestamp="record.visitTime"
                 placement="top"
               >
-                <el-card>
-                  <h4>{{ record.content }}</h4>
+
+                <el-card class="box-card">
+                  <div slot="header" class="clearfix">
+                    <span>{{ record.visitType }}</span>
+                  </div>
+                  <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
+                    {{ item.key +' ' + item.value }}
+                  </div>
                   <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
                 </el-card>
+
               </el-timeline-item>
 
             </el-timeline>
@@ -87,7 +94,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { saveVisitRecordByTelePhone, getVisitRecords } from '@/api/senviv'
+import { SaveVisitRecordByPapush, getVisitRecords } from '@/api/senviv'
 export default {
   name: 'PaneVisitRecord',
   props: {
@@ -110,10 +117,15 @@ export default {
         userId: ''
       },
       optionsByVisitTemplate: [{
-        value: '1',
+        value: '2',
         label: '监测异常提醒'
       }],
-      rules: {},
+      rules: {
+        visitTemplate: [{ required: true, message: '请选择模板', trigger: 'change' }],
+        keyword1: [{ required: true, message: '必填', trigger: 'change' }],
+        keyword2: [{ required: true, message: '必填', trigger: 'change' }],
+        keyword3: [{ required: true, message: '必填', trigger: 'change' }]
+      },
       recordsKey: 0,
       recordsData: null,
       recordsTotal: 0,
@@ -176,7 +188,17 @@ export default {
             type: 'warning'
           })
             .then(() => {
-              saveVisitRecordByTelePhone(this.form).then(res => {
+              var _from = {
+                userId: this.form.userId,
+                visitTemplate: this.form.visitTemplate,
+                visitContent: {
+                  keyword1: this.form.keyword1,
+                  keyword2: this.form.keyword2,
+                  keyword3: this.form.keyword3,
+                  remark: this.form.remark
+                }
+              }
+              SaveVisitRecordByPapush(_from).then(res => {
                 if (res.result === 1) {
                   this.$message({
                     message: res.message,

@@ -17,9 +17,9 @@
                 :picker-options="pickerOptions"
               />
             </el-form-item>
-            <el-form-item label="回访记录" prop="content">
+            <el-form-item label="回访记录" prop="remark">
               <el-input
-                v-model="form.content"
+                v-model="form.remark"
                 type="textarea"
                 :rows="5"
                 placeholder="请输入内容"
@@ -50,8 +50,13 @@
                 :timestamp="record.visitTime"
                 placement="top"
               >
-                <el-card>
-                  <h4>{{ record.content }}</h4>
+                <el-card class="box-card">
+                  <div slot="header" class="clearfix">
+                    <span>{{ record.visitType }}</span>
+                  </div>
+                  <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
+                    {{ item.key +' ' + item.value }}
+                  </div>
                   <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
                 </el-card>
               </el-timeline-item>
@@ -90,7 +95,7 @@ export default {
       form: {
         visitTime: '',
         nextTime: '',
-        content: '',
+        remark: '',
         userId: ''
       },
       rules: {
@@ -159,7 +164,13 @@ export default {
             type: 'warning'
           })
             .then(() => {
-              saveVisitRecordByTelePhone(this.form).then(res => {
+              var _from = {
+                userId: this.form.userId,
+                visitTime: this.form.visitTime,
+                nextTime: this.form.nextTime,
+                visitContent: { remark: this.form.remark }
+              }
+              saveVisitRecordByTelePhone(_from).then(res => {
                 if (res.result === 1) {
                   this.$message({
                     message: res.message,

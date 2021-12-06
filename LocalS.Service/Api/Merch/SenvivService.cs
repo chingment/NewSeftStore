@@ -1261,7 +1261,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          u.MerchId == merchId
                          &&
                          u.SvUserId == rup.UserId
-                         select new { u.Id, u.VisitType, u.Content, u.VisitTime, u.NextTime, u.CreateTime });
+                         select new { u.Id, u.VisitType, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
 
             int total = query.Count();
@@ -1285,6 +1285,56 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     visitType = "公众号告知";
                 }
+
+                List<object> arr_VisitContent = new List<object>();
+
+                if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.CalloutRecord)
+                {
+                    Dictionary<string, string> dic_Content = item.VisitContent.ToJsonObject<Dictionary<string, string>>();
+
+                    string remark = "";
+                    if (dic_Content.ContainsKey("remark"))
+                    {
+                        remark = dic_Content["remark"].ToString();
+                    }
+
+                    arr_VisitContent.Add(new { key = "回访记录", value = remark });
+                }
+                else if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthException)
+                {
+                    Dictionary<string, string> dic_Content = item.VisitContent.ToJsonObject<Dictionary<string, string>>();
+
+                    string remark = "";
+                    if (dic_Content.ContainsKey("remark"))
+                    {
+                        remark = dic_Content["remark"].ToString();
+                    }
+
+                    string keyword1 = "";
+                    if (dic_Content.ContainsKey("keyword1"))
+                    {
+                        keyword1 = dic_Content["keyword1"].ToString();
+                    }
+
+                    string keyword2 = "";
+                    if (dic_Content.ContainsKey("keyword2"))
+                    {
+                        keyword2 = dic_Content["keyword2"].ToString();
+                    }
+
+                    string keyword3 = "";
+                    if (dic_Content.ContainsKey("keyword3"))
+                    {
+                        keyword3 = dic_Content["keyword3"].ToString();
+                    }
+
+                    arr_VisitContent.Add(new { key = "异常结果", value = keyword1 });
+                    arr_VisitContent.Add(new { key = "风险因素", value = keyword2 });
+                    arr_VisitContent.Add(new { key = "健康建议", value = keyword3 });
+                    arr_VisitContent.Add(new { key = "备注", value = remark });
+                }
+
+
                 string s_Operater = "";
                 var d_Operater = CurrentDb.SysMerchUser.Where(m => m.Id == operater).FirstOrDefault();
                 if (d_Operater != null)
@@ -1296,7 +1346,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     Id = item.Id,
                     VisitType = visitType,
-                    Content = item.Content,
+                    VisitContent = arr_VisitContent,
                     VisitTime = item.VisitTime.ToUnifiedFormatDateTime(),
                     NextTime = item.NextTime.ToUnifiedFormatDateTime(),
                     CreateTime = item.CreateTime,
@@ -1321,9 +1371,46 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SenvivVisitRecord.MerchId = merchId;
             d_SenvivVisitRecord.SvUserId = rop.UserId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;
-            d_SenvivVisitRecord.Content = rop.Content;
+            d_SenvivVisitRecord.VisitTemplate = E_SenvivVisitRecordVisitTemplate.CalloutRecord;
+            d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
             d_SenvivVisitRecord.VisitTime = CommonUtil.ConverToDateTime(rop.VisitTime).Value;
-            d_SenvivVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime).Value;
+            d_SenvivVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime);
+            d_SenvivVisitRecord.Creator = operater;
+            d_SenvivVisitRecord.CreateTime = DateTime.Now;
+            CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+        }
+
+
+        public CustomJsonResult SaveVisitRecordByPapush(string operater, string merchId, RopSenvivSaveVisitRecordByPapush rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_SenvivVisitRecord = new SenvivVisitRecord();
+            d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
+            d_SenvivVisitRecord.MerchId = merchId;
+            d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.WxPa;
+            d_SenvivVisitRecord.VisitTemplate = rop.VisitTemplate;
+
+            //string str_Content = "";
+            //if(rop.VisitTemplate== E_SenvivVisitRecordVisitTemplate.WxPaByHealthException)
+            //{
+            //    Dictionary<string, string> dic_Content = rop.Content.ToJsonObject<>();
+
+            //    str_Content += "检测异常提醒：\n";
+            //    str_Content += "异常结果："+ dic_Content[""]+ "\n";
+            //    str_Content += "风险因素：" + dic_Content[""] + "\n";
+            //    str_Content += "健康建议：" + dic_Content[""] + "\n";
+            //    str_Content += "备注：" + dic_Content[""] + "\n";
+            //}
+
+            d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
+            d_SenvivVisitRecord.VisitTime = DateTime.Now;
             d_SenvivVisitRecord.Creator = operater;
             d_SenvivVisitRecord.CreateTime = DateTime.Now;
             CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);

@@ -14,49 +14,30 @@
       </el-row>
 
     </div>
-    <el-table
-      :key="listKey"
-      v-loading="loading"
-      :data="listData"
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <el-table-column label="序号" prop="id" align="left" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.$index+1 }} </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="方式" prop="visitType" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.visitType }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="时间" prop="visitTime" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.visitTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="内容" prop="content" align="left" min-width="20%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.content }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" prop="createTime" align="left" min-width="15%">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="text" size="mini">
-            查看
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
+    <el-timeline>
+
+      <el-timeline-item
+        v-for="(record, index) in listData"
+        :key="index"
+        :timestamp="record.visitTime"
+        placement="top"
+      >
+
+        <el-card class="box-card" style="width:600px">
+          <div slot="header" class="clearfix">
+            <span>{{ record.visitType }}</span>
+          </div>
+          <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
+            {{ item.key +' ' + item.value }}
+          </div>
+          <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
+        </el-card>
+
+      </el-timeline-item>
+
+    </el-timeline>
+
     <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
     <dialog-visit-by-papush v-if="isVisibleDialogVisitByPapush" :user-id="userId" :visible.sync="isVisibleDialogVisitByPapush" @aftersave="onAfterSaveDialogVisitByPapush" />
 

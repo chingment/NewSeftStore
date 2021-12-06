@@ -92,10 +92,17 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveVisitRecordByTelePhone([FromBody]RopSenvivSaveVisitRecordByTelePhone rup)
+        public OwnApiHttpResponse SaveVisitRecordByTelePhone([FromBody]RopSenvivSaveVisitRecordByTelePhone rop)
         {
-            var result = MerchServiceFactory.Senviv.SaveVisitRecordByTelePhone(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Senviv.SaveVisitRecordByTelePhone(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
+        [HttpPost]
+        public OwnApiHttpResponse SaveVisitRecordByPapush([FromBody]RopSenvivSaveVisitRecordByPapush rop)
+        {
+            var result = MerchServiceFactory.Senviv.SaveVisitRecordByPapush(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }
