@@ -312,7 +312,7 @@
       >
         <div
           v-loading="loadingBySug"
-          style="display:flex;flex-direction: column;max-height: calc(100%);"
+          style="display:flex;flex-direction: column;height:100%;overflow: hidden;"
         >
           <div class="drawer__content" style="-webkit-box-flex: 1;-ms-flex: 1;flex: 1;overflow: auto;padding:0 20px ">
 
@@ -408,7 +408,7 @@
               </div>
             </el-card>
           </div>
-          <div class="drawer__footer" style="padding: 10px 20px;text-align:center ">
+          <div class="drawer__footer" style="padding: 10px 20px;text-align:center; ">
             <el-button size="small" @click="onCloseByDrawerBySug">取 消</el-button>
             <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
             <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
