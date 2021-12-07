@@ -21,7 +21,7 @@
           <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
         </el-form-item>
       </el-form>
     </div>

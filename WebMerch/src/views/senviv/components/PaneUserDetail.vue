@@ -1,6 +1,6 @@
 <template>
 
-  <el-dialog v-if="visible" :lock-scroll="false" title="详情" :visible.sync="visible" width="80%" custom-class="user-detail" append-to-body>
+  <el-dialog v-if="visible" :lock-scroll="false" title="详情" :visible.sync="visible" width="80%" custom-class="user-detail" append-to-body :before-close="onBeforeClose">
     <div id="senviv_user_detail" v-loading="loading" class="app-container my-container2">
 
       <el-container>
@@ -115,6 +115,9 @@ export default {
     },
     leftMenuChange(index, indexPath) {
       this.activeMenu = index
+    },
+    onBeforeClose() {
+      this.$emit('update:visible', false)
     }
   }
 }
