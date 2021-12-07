@@ -82,9 +82,7 @@
     </el-row>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <el-dialog v-if="dialogIsShowByDetail" :lock-scroll="false" title="详情" :visible.sync="dialogIsShowByDetail" width="80%" custom-class="user-detail" append-to-body>
-      <pane-user-detail :user-id="selectUserId" />
-    </el-dialog>
+    <pane-user-detail v-if="dialogIsShowByDetail" :visible.sync="dialogIsShowByDetail" :user-id="selectUserId" />
 
   </div>
 </template>

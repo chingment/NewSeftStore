@@ -1,194 +1,198 @@
 <template>
-  <div id="day_report_detail" v-loading="loading">
-    <div class="row-title clearfix">
-      <div class="pull-left"> <h5>数据标签</h5>
+
+  <el-dialog v-if="visible" title="健康报告（日）" :visible.sync="visible" width="1000px" custom-class="user-detail" append-to-body :before-close="onBeforeClose">
+    <div id="day_report_detail" v-loading="loading">
+      <div class="row-title clearfix">
+        <div class="pull-left"> <h5>数据标签</h5>
+        </div>
+        <div class="pull-right" />
       </div>
-      <div class="pull-right" />
-    </div>
 
-    <div v-if="rd!=null">
+      <div v-if="rd!=null">
 
-      <el-tag
-        v-for="tag in rd.dsTags"
-        :key="tag"
-        style="margin-right: 10px;margin-bottom: 10px"
-      >
-        {{ tag }}
-      </el-tag>
-    </div>
-    <div class="row-title clearfix">
-      <div class="pull-left"> <h5>监测数据图</h5>
+        <el-tag
+          v-for="tag in rd.dsTags"
+          :key="tag"
+          style="margin-right: 10px;margin-bottom: 10px"
+        >
+          {{ tag }}
+        </el-tag>
       </div>
-      <div class="pull-right" />
-    </div>
-    <div ref="echart_sm_zx" style="width: 960px;height: 400px;margin:auto" />
-    <div class="row-title clearfix">
-      <div class="pull-left"> <h5>睡眠结构</h5>
+      <div class="row-title clearfix">
+        <div class="pull-left"> <h5>监测数据图</h5>
+        </div>
+        <div class="pull-right" />
       </div>
-      <div class="pull-right" />
-    </div>
-    <div ref="echart_sm_bi" style="width: 960px;height: 400px;margin:auto" />
-
-    <div class="row-title clearfix">
-      <div class="pull-left"> <h5>数据指标</h5>
+      <div ref="echart_sm_zx" style="width: 960px;height: 400px;margin:auto" />
+      <div class="row-title clearfix">
+        <div class="pull-left"> <h5>睡眠结构</h5>
+        </div>
+        <div class="pull-right" />
       </div>
-      <div class="pull-right" />
+      <div ref="echart_sm_bi" style="width: 960px;height: 400px;margin:auto" />
+
+      <div class="row-title clearfix">
+        <div class="pull-left"> <h5>数据指标</h5>
+        </div>
+        <div class="pull-right" />
+      </div>
+
+      <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%">
+        <thead>
+          <tr>
+            <th>类别</th>
+            <th>指标</th>
+            <th>测量值</th>
+            <th>判断</th>
+            <th>参考范围</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="7">睡眠</td></tr>
+          <tr>
+            <td>实际睡眠时长</td>
+            <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.value }}</span> </td>
+            <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.sign }}</span></td>
+            <td><span>{{ rd.smSmsc.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>浅度睡眠</td>
+            <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.value }}</span> </td>
+            <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.sign }}</span></td>
+            <td><span>{{ rd.smQdsmsc.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>深度睡眠</td>
+            <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.value }}</span> </td>
+            <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.sign }}</span></td>
+            <td><span>{{ rd.smSdsmsc.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>REM睡眠</td>
+            <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span> </td>
+            <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.sign }}</span></td>
+            <td><span>{{ rd.smRemsmsc.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>睡眠周期</td>
+            <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.value }}</span> </td>
+            <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.sign }}</span></td>
+            <td><span>{{ rd.smSmzq.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>体动次数</td>
+            <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.value }}</span> </td>
+            <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.sign }}</span></td>
+            <td><span>{{ rd.smTdcs.refRange }}</span></td>
+          </tr>
+
+          <tr><td rowspan="4">心率</td></tr>
+          <tr>
+            <td>当次基准心率</td>
+            <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.value }}</span> </td>
+            <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.sign }}</span></td>
+            <td><span>{{ rd.xlDcjzxl.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>长期基准心率</td>
+            <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.value }}</span> </td>
+            <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.sign }}</span></td>
+            <td><span>{{ rd.xlCqjzxl.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>当次平均心率</td>
+            <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.value }}</span> </td>
+            <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.sign }}</span></td>
+            <td><span>{{ rd.xlDcpjxl.refRange }}</span></td>
+          </tr>
+
+          <tr><td rowspan="6">呼吸</td></tr>
+          <tr>
+            <td>当次基准呼吸</td>
+            <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.value }}</span> </td>
+            <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.sign }}</span></td>
+            <td><span>{{ rd.hxDcjzhx.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>长期基准呼吸</td>
+            <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.value }}</span> </td>
+            <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.sign }}</span></td>
+            <td><span>{{ rd.hxCqjzhx.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>平均呼吸</td>
+            <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span> </td>
+            <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.sign }}</span></td>
+            <td><span>{{ rd.hxDcpjhx.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>呼吸暂停次数</td>
+            <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.value }}</span> </td>
+            <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.sign }}</span></td>
+            <td><span>{{ rd.hxZtcs.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>AHI指数</td>
+            <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span> </td>
+            <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.sign }}</span></td>
+            <td><span>{{ rd.hxZtahizs.refRange }}</span></td>
+          </tr>
+
+          <tr><td rowspan="9">HRV</td></tr>
+          <tr>
+            <td>心率失常风险</td>
+            <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.value }}</span> </td>
+            <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.sign }}</span></td>
+            <td><span>{{ rd.jbfxXlscfx.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>心率减力</td>
+            <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.value }}</span> </td>
+            <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.sign }}</span></td>
+            <td><span>{{ rd.jbfxXljsl.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>心脏总能量</td>
+            <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.sign }}</span></td>
+            <td><span>{{ rd.hrvXzznl.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>交感神经张力指数</td>
+            <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.sign }}</span></td>
+            <td><span>{{ rd.hrvJgsjzlzs.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>迷走神经张力指数</td>
+            <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.sign }}</span></td>
+            <td><span>{{ rd.hrvMzsjzlzs.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>自主神经平衡指数</td>
+            <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.sign }}</span></td>
+            <td><span>{{ rd.hrvZzsjzlzs.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>荷尔蒙指数</td>
+            <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.sign }}</span></td>
+            <td><span>{{ rd.hrvHermzs.refRange }}</span></td>
+          </tr>
+          <tr>
+            <td>体温及血管舒缩指数</td>
+            <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.value }}</span> </td>
+            <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.sign }}</span></td>
+            <td><span>{{ rd.hrvTwjxgsszs.refRange }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
+  </el-dialog>
 
-    <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%">
-      <thead>
-        <tr>
-          <th>类别</th>
-          <th>指标</th>
-          <th>测量值</th>
-          <th>判断</th>
-          <th>参考范围</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td rowspan="7">睡眠</td></tr>
-        <tr>
-          <td>实际睡眠时长</td>
-          <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.value }}</span> </td>
-          <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.sign }}</span></td>
-          <td><span>{{ rd.smSmsc.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>浅度睡眠</td>
-          <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.value }}</span> </td>
-          <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.sign }}</span></td>
-          <td><span>{{ rd.smQdsmsc.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>深度睡眠</td>
-          <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.value }}</span> </td>
-          <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.sign }}</span></td>
-          <td><span>{{ rd.smSdsmsc.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>REM睡眠</td>
-          <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span> </td>
-          <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.sign }}</span></td>
-          <td><span>{{ rd.smRemsmsc.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>睡眠周期</td>
-          <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.value }}</span> </td>
-          <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.sign }}</span></td>
-          <td><span>{{ rd.smSmzq.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>体动次数</td>
-          <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.value }}</span> </td>
-          <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.sign }}</span></td>
-          <td><span>{{ rd.smTdcs.refRange }}</span></td>
-        </tr>
-
-        <tr><td rowspan="4">心率</td></tr>
-        <tr>
-          <td>当次基准心率</td>
-          <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.value }}</span> </td>
-          <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.sign }}</span></td>
-          <td><span>{{ rd.xlDcjzxl.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>长期基准心率</td>
-          <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.value }}</span> </td>
-          <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.sign }}</span></td>
-          <td><span>{{ rd.xlCqjzxl.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>当次平均心率</td>
-          <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.value }}</span> </td>
-          <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.sign }}</span></td>
-          <td><span>{{ rd.xlDcpjxl.refRange }}</span></td>
-        </tr>
-
-        <tr><td rowspan="6">呼吸</td></tr>
-        <tr>
-          <td>当次基准呼吸</td>
-          <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.value }}</span> </td>
-          <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.sign }}</span></td>
-          <td><span>{{ rd.hxDcjzhx.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>长期基准呼吸</td>
-          <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.value }}</span> </td>
-          <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.sign }}</span></td>
-          <td><span>{{ rd.hxCqjzhx.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>平均呼吸</td>
-          <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span> </td>
-          <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.sign }}</span></td>
-          <td><span>{{ rd.hxDcpjhx.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>呼吸暂停次数</td>
-          <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.value }}</span> </td>
-          <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.sign }}</span></td>
-          <td><span>{{ rd.hxZtcs.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>AHI指数</td>
-          <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span> </td>
-          <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.sign }}</span></td>
-          <td><span>{{ rd.hxZtahizs.refRange }}</span></td>
-        </tr>
-
-        <tr><td rowspan="9">HRV</td></tr>
-        <tr>
-          <td>心率失常风险</td>
-          <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.value }}</span> </td>
-          <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.sign }}</span></td>
-          <td><span>{{ rd.jbfxXlscfx.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>心率减力</td>
-          <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.value }}</span> </td>
-          <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.sign }}</span></td>
-          <td><span>{{ rd.jbfxXljsl.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>心脏总能量</td>
-          <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.sign }}</span></td>
-          <td><span>{{ rd.hrvXzznl.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>交感神经张力指数</td>
-          <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.sign }}</span></td>
-          <td><span>{{ rd.hrvJgsjzlzs.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>迷走神经张力指数</td>
-          <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.sign }}</span></td>
-          <td><span>{{ rd.hrvMzsjzlzs.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>自主神经平衡指数</td>
-          <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.sign }}</span></td>
-          <td><span>{{ rd.hrvZzsjzlzs.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>荷尔蒙指数</td>
-          <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.sign }}</span></td>
-          <td><span>{{ rd.hrvHermzs.refRange }}</span></td>
-        </tr>
-        <tr>
-          <td>体温及血管舒缩指数</td>
-          <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.value }}</span> </td>
-          <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.sign }}</span></td>
-          <td><span>{{ rd.hrvTwjxgsszs.refRange }}</span></td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
 </template>
 
 <script>
@@ -206,6 +210,10 @@ export default {
     reportId: {
       type: String,
       default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -229,19 +237,18 @@ export default {
     }
   },
   mounted() {
-    if (!myChart1) {
-      myChart1 = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
-    }
+    // if (!myChart1) {
+    //   myChart1 = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
+    // }
 
-    if (!myChart2) {
-      myChart2 = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
-    }
+    // if (!myChart2) {
+    //   myChart2 = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
+    // }
 
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
     this._getDayReportDetail()
-    // this.getPie()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -277,12 +284,15 @@ export default {
             this.getZxt()
           }, 2000)
         }
+
         this.loading = false
       })
     },
     getPie() {
       // 绘制图表
-
+      if (!myChart1) {
+        myChart1 = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
+      }
       // 指定图表的配置项和数据
       var option = {
         // 标题
@@ -372,6 +382,9 @@ export default {
       return y + '/' + MM + '/' + d + ' ' + h + ':' + m
     },
     getZxt() {
+      if (!myChart2) {
+        myChart2 = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
+      }
       // var hx_point_d= [20, 18, 16, 19, 16, 19, 19, 18, 18, 16, 17, 14, 15, 15, 15, 15, 16, 9, 12, 16, 15, 18, 18, 19, 10, 18, 11, 17, 13, 18, 18, 18, 19, 19, 20, 19, 21, 19, 19, 19, 19, 17, 19, 18, 19, 19, 17, 18, 17, 14, 16, 9, 17, 17, 18, 17, 17, 17, 17, 17, 17, 18, 19, 18, 16, 18, 17, 18, 18, 18, 18, 17, 18, 18, 17, 16, 17, 18, 17, 17, 18, 18, 17, 18, 17, 18, 17, 18, 18, 18, 17, 18, 17, 17, 18, 17, 17, 17, 18, 17, 17, 20, 21, 18, 20, 20, 17, 17, 18, 17, 18, 13, 10, 14, 18, 18, 18, 18, 17, 18, 17, 17, 17, 9, 17, 15, 16, 18, 17, 16, 17, 17, 17, 17, 17, 15, 17, 10, 17, 16, 16, 17, 17, 16, 17, 16, 17, 17, 17, 18, 16, 16, 17, 16, 16, 17, 17, 17, 16, 16, 17, 16, 17, 17, 17, 19, 17, 17, 17, 17, 20, 15, 16, 17, 18, 17, 18, 21, 18, 18, 16, 17, 18, 16, 17, 17, 17, 17, 16, 16, 16, 16, 16, 8, 10, 17, 17, 15, 15, 16, 16, 15, 15, 16, 15, 17, 15, 16, 16, 16, 16, 15, 16, 16, 15, 16, 18, 17, 16, 17, 17, 15, 16, 15, 15, 17, 16, 14, 15, 16, 16, 17, 16, 16, 15, 16, 15, 16, 16, 16, 17, 17, 16, 16, 16, 16, 15, 16, 16, 15, 15, 16, 16, 15, 16, 11, 16, 10, 17, 16, 16, 15, 16, 12, 13, 16, 17, 16, 14, 17, 18, 16, 16, 16, 16, 16, 15, 12, 15, 16, 16, 16, 16, 16, 13, 11, 17, 16, 16, 15, 15, 14, 15, 15, 16, 16, 15, 15, 15, 16, 16, 10, 16, 14, 15, 11, 16, 17, 16, 17, 17, 17, 18, 18, 17, 16, 16, 17, 17, 17, 16, 17, 17, 17, 17, 18, 17, 18, 18, 17, 16, 17, 16, 18, 19, 19, 18, 18, 18, 19, 20, 19, 19, 21, 16, 17, 15, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 15, 15, 15, 16, 16, 16, 16, 16, 15, 16, 16, 15, 15, 15, 16, 16, 16, 15, 15, 16, 15, 15, 15, 15, 15, 17, 17, 16, 16, 16, 16, 16, 16, 16, 17, 19, 18, 18, 18, 16, 10, 14, 16, 15, 14, 15, 15, 15, 16, 10, 12, 11, 12, 14]
 
       if (this.rd.hxPoint === null) { return }
@@ -759,6 +772,9 @@ export default {
       }
 
       myChart2.setOption(option, null)
+    },
+    onBeforeClose() {
+      this.$emit('update:visible', false)
     }
   }
 }

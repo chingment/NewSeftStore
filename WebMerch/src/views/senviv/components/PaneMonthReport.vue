@@ -21,7 +21,7 @@
           <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onFilter">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -420,19 +420,18 @@
       <el-table-column label="操作" align="center" width="120" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
 
-          <el-link v-if="scope.row.isSend" type="primary" size="mini" @click="handleOpenDialogByDetial(scope.row)">查看</el-link>
-          <el-link v-else type="warning" size="mini" @click="handleOpenDialogByDetial(scope.row)">评价 </el-link>
+          <el-link v-if="scope.row.isSend" type="primary" size="mini" @click="onOpenDialogByDetial(scope.row)">查看</el-link>
+          <el-link v-else type="warning" size="mini" @click="onOpenDialogByDetial(scope.row)">评价 </el-link>
 
         </template>
       </el-table-column>
 
     </el-table>
 
-    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
+    <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
-    <el-dialog v-if="dialogIsShowByReportDetail" title="健康报告（月）" :visible.sync="dialogIsShowByReportDetail" width="1000px" custom-class="user-detail" append-to-body @close="getListData">
-      <pane-month-report-detail :report-id="selectReportId" />
-    </el-dialog>
+    <pane-month-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" :report-id="selectReportId" @aftersavesug="onAfterSaveMonthReportSug" />
+
   </div>
 </template>
 
@@ -485,10 +484,10 @@ export default {
       }
     }
     this.listQuery.userId = this.userId
-    this.getListData()
+    this.onGetList()
   },
   methods: {
-    getListData() {
+    onGetList() {
       this.loading = true
       if (this.cacheQuery) {
         this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
@@ -502,17 +501,20 @@ export default {
         this.loading = false
       })
     },
-    handleFilter() {
+    onFilter() {
       this.listQuery.page = 1
       this.getListData()
     },
-    handleOpenDialogByDetial(row) {
+    onOpenDialogByDetial(row) {
       this.selectReportId = row.id
       this.dialogIsShowByReportDetail = true
     },
-    handleOpenDialogByClient(row) {
+    onOpenDialogByClient(row) {
       this.selectUserId = row.svUserId
       this.dialogIsShowByClientDetail = true
+    },
+    onAfterSaveMonthReportSug() {
+      this.onGetList()
     }
   }
 }
