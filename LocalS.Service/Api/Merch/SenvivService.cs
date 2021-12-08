@@ -350,8 +350,8 @@ namespace LocalS.Service.Api.Merch
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
             {
 
-                DateTime? startTime = CommonUtil.ConverToStartTime(rup.HealthDate[0]);
-                DateTime? endTime = CommonUtil.ConverToEndTime(rup.HealthDate[1]);
+                DateTime? startTime = Lumos.CommonUtil.ConverToStartTime(rup.HealthDate[0]);
+                DateTime? endTime = Lumos.CommonUtil.ConverToEndTime(rup.HealthDate[1]);
 
                 query = query.Where(m => m.HealthDate >= startTime && m.HealthDate <= endTime);
             }
@@ -1152,8 +1152,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (rop.IsSend)
             {
-
-                var isSend = SdkFactory.Senviv.SendMonthReport(rop.ReportId);
+                string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
+                string url = "http://health.17fanju.com/#/report/month/monitor?rptId=" + rpt.Id;
+                string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
+                string keyword2 = "总体评分" + rpt.TotalScore + "分";
+                string remark = "感谢您的支持，如需查看详情报告信息请点击";
+                var isSend = SdkFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
                 if (isSend)
                 {
                     rpt.IsSend = true;
@@ -1413,6 +1417,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SenvivVisitRecord.CreateTime = DateTime.Now;
             CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
             CurrentDb.SaveChanges();
+
+
+
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
