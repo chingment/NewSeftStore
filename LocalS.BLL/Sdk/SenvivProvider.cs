@@ -300,15 +300,23 @@ namespace LocalS.BLL
             return null;
         }
 
-
         public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
 
-            var user = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_User.MerchId).FirstOrDefault();
+            if(d_Merch.IsSenvivAlone)
+            {
 
-            var opend_id = user.WxOpenId;
-            var deptId = user.DeptId;
-            string access_token = GetWxPaAccessToken(deptId);
+            }
+            else
+            {
+
+            }
+
+            var opend_id = d_User.WxOpenId;
+            var dept_id = d_User.DeptId;
+            string access_token = GetWxPaAccessToken(dept_id);
             var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
 
             StringBuilder sb = new StringBuilder();
@@ -337,7 +345,7 @@ namespace LocalS.BLL
         {
             var opend_id = "";
             var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
-            var access_token = "";
+            var access_token = GetWxPaAccessToken(deptId);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + opend_id + "\",");
