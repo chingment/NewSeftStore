@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.Merch
             {
                 List<string> l_SpuIds = new List<string>();
                 var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
-                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key,true);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key, true);
                 if (search1 != null)
                 {
                     var l_SpuId = search1.Select(m => m.SpuId).Distinct().ToArray();
@@ -371,6 +371,7 @@ namespace LocalS.Service.Api.Merch
                 d_Spu.BriefDes = rop.BriefDes;
                 d_Spu.DetailsDes = rop.DetailsDes.ToJsonString();
                 d_Spu.DisplayImgUrls = rop.DisplayImgUrls.ToJsonString();
+                d_Spu.MainImgUrl = ImgSet.GetMain_O(d_Spu.DisplayImgUrls);
                 d_Spu.IsTrgVideoService = rop.IsTrgVideoService;
                 d_Spu.IsRevService = rop.IsRevService;
                 d_Spu.IsSupRentService = rop.IsSupRentService;
@@ -534,7 +535,7 @@ namespace LocalS.Service.Api.Merch
             {
                 List<string> l_SpuIds = new List<string>();
                 var search1 = CacheServiceFactory.Product.SearchSpu(merchId, "All", rup.Key);
-                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key,true);
+                var search2 = CacheServiceFactory.Product.SearchSku(merchId, "All", rup.Key, true);
                 if (search1 != null)
                 {
                     var l_SpuId = search1.Select(m => m.SpuId).Distinct().ToArray();
@@ -619,7 +620,7 @@ namespace LocalS.Service.Api.Merch
 
         public CustomJsonResult SearchSku(string operater, string merchId, string key)
         {
-            var r_Skus = CacheServiceFactory.Product.SearchSku(merchId, "All", key,true);
+            var r_Skus = CacheServiceFactory.Product.SearchSku(merchId, "All", key, true);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", r_Skus);
         }
