@@ -55,7 +55,7 @@ namespace LocalS.BLL
                     r_Spu.Name = d_Spu.Name.NullToEmpty();
                     r_Spu.SpuCode = d_Spu.SpuCode.NullToEmpty();
                     r_Spu.DisplayImgUrls = d_Spu.DisplayImgUrls.ToJsonObject<List<ImgSet>>();
-                    r_Spu.MainImgUrl = d_Spu.MainImgUrl;
+                    r_Spu.MainImgUrl = ImgSet.GetMain_O(d_Spu.DisplayImgUrls);
                     r_Spu.DetailsDes = d_Spu.DetailsDes.ToJsonObject<List<ImgSet>>();
                     r_Spu.BriefDes = d_Spu.BriefDes.NullToEmpty();
                     r_Spu.SpecItems = d_Spu.SpecItems.ToJsonObject<List<SpecItem>>();
