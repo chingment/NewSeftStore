@@ -24,7 +24,7 @@ namespace LocalS.Entity
         public bool IsOpenCouponRight { get; set; }
         public string SenvivDepts { get; set; }
         public string IotApiSecret { get; set; }
-        public bool IsSenvivAlone { get; set; }
+        //public bool IsSenvivAlone { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

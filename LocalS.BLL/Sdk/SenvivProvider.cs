@@ -10,6 +10,15 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
+    public class WxTemplateModel
+    {
+        public string OpenId { get; set; }
+        public string AccessToken { get; set; }
+        public string TemplateId { get; set; }
+
+        public string SenvivDeptId { get; set; }
+
+    }
     public class SenvivProvider : BaseService
     {
         public string GetApiAccessToken()
@@ -302,26 +311,11 @@ namespace LocalS.BLL
 
         public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
-
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_Merch = CurrentDb.Merch.Where(m => m.Id == d_User.MerchId).FirstOrDefault();
-            if(d_Merch.IsSenvivAlone)
-            {
-
-            }
-            else
-            {
-
-            }
-
-            var opend_id = d_User.WxOpenId;
-            var dept_id = d_User.DeptId;
-            string access_token = GetWxPaAccessToken(dept_id);
-            var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+            var template = GetTemplate(userId, "month_report");
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("{\"touser\":\"" + opend_id + "\",");
-            sb.Append("\"template_id\":\"" + template_id + "\",");
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
             sb.Append("\"url\":\"" + url + "\", ");
             sb.Append("\"data\":{");
             sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
@@ -330,7 +324,7 @@ namespace LocalS.BLL
             sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
             sb.Append("}}");
 
-            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(access_token, WxPostDataType.Text, sb.ToString());
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
             WxApi c = new WxApi();
 
             var ret = c.DoPost(templateSend);
@@ -343,13 +337,11 @@ namespace LocalS.BLL
 
         public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
-            var opend_id = "";
-            var template_id = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
-            var access_token = GetWxPaAccessToken(deptId);
+            var template = GetTemplate(userId, "health_monitor");
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("{\"touser\":\"" + opend_id + "\",");
-            sb.Append("\"template_id\":\"" + template_id + "\",");
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
             sb.Append("\"url\":\"\", ");
             sb.Append("\"data\":{");
             sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
@@ -359,7 +351,7 @@ namespace LocalS.BLL
             sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
             sb.Append("}}");
 
-            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(access_token, WxPostDataType.Text, sb.ToString());
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
             WxApi c = new WxApi();
 
             var ret = c.DoPost(templateSend);
@@ -368,6 +360,31 @@ namespace LocalS.BLL
                 return false;
 
             return true;
+        }
+
+
+        public WxTemplateModel GetTemplate(string userId, string template)
+        {
+            var model = new WxTemplateModel();
+
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_User.DeptId).FirstOrDefault();
+
+            model.OpenId = d_User.WxOpenId;
+            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            model.SenvivDeptId = d_User.DeptId;
+            model.AccessToken = GetWxPaAccessToken(d_User.DeptId);
+            switch (template)
+            {
+                case "month_report":
+                    model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    break;
+                case "health_monitor":
+                    model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
+                    break;
+            }
+
+            return model;
         }
     }
 }

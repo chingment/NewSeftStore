@@ -11,8 +11,8 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string DeptId { get; set; }
-        public string WxMonthRptTmpId { get; set; }
-        public string WxHealthExTmpId { get; set; }
+        public string TplIdMonthReport { get; set; }
+        public string TplIdHealthMonitor { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

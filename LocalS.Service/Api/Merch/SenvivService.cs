@@ -1303,7 +1303,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
                     arr_VisitContent.Add(new { key = "回访记录", value = remark });
                 }
-                else if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthException)
+                else if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthMonitor)
                 {
                     Dictionary<string, string> dic_Content = item.VisitContent.ToJsonObject<Dictionary<string, string>>();
 
@@ -1418,9 +1418,17 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
             CurrentDb.SaveChanges();
 
-
-
-
+            if (rop.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthMonitor)
+            {
+                var dic = rop.VisitContent.ToJsonObject<Dictionary<string, string>>();
+                string first = "亲，您近期的监测结果显示异常";
+                string keyword1 = dic["keyword1"];
+                string keyword2 = dic["keyword2"];
+                string keyword3 = dic["keyword3"];
+                string remark = dic["remark"];
+                string url = "";
+                SdkFactory.Senviv.SendHealthMonitor(rop.UserId, first, keyword1, keyword2, keyword3, remark);
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

@@ -15,7 +15,7 @@ namespace LocalS.Entity
     {
         None = 0,
         CalloutRecord = 1,
-        WxPaByHealthException = 2
+        WxPaByHealthMonitor = 2
     }
 
     [Table("SenvivVisitRecord")]

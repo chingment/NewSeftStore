@@ -227,6 +227,11 @@ namespace Test
         static void Main(string[] args)
         {
 
+            var odd = new { aa = "1", bb = "2" };
+
+            var jt = odd.ToJsonObject<Dictionary<string, string>>();
+
+
             var d1 = SdkFactory.Senviv.GetBox("1004C7B08289");
 
 

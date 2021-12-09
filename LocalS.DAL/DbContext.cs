@@ -87,6 +87,8 @@ namespace LocalS.DAL
         public IDbSet<SenvivHealthMonthReportSugSku> SenvivHealthMonthReportSugSku { get; set; }
         public IDbSet<SenvivHealthMonthReportTag> SenvivHealthMonthReportTag { get; set; }
         public IDbSet<SenvivVisitRecord> SenvivVisitRecord { get; set; }
+
+        public IDbSet<SenvivMerchConfig> SenvivMerchConfig { get; set; }
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }
 
         public IDbSet<DeviceMqttMessage> DeviceMqttMessage { get; set; }
