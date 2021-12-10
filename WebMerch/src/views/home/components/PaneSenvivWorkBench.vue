@@ -96,7 +96,7 @@
       </el-aside>
       <el-main style="padding:0px 0px 0px 20px">
 
-        <el-card class="box-card box-card-1">
+        <el-card v-show="isShowByUsers" class="box-card box-card-1">
           <div slot="header" class="clearfix">
             <span>我的服务对象 {{ careLevelName }}</span>
           </div>
@@ -159,6 +159,16 @@
           </div>
         </el-card>
 
+        <el-card v-show="isShowByTodoTask" class="box-card box-card-1">
+          <div slot="header" class="clearfix">
+            <span>待办事项</span>
+          </div>
+          <div class="body" style="min-height:340px">
+            待办事项
+
+          </div>
+        </el-card>
+
       </el-main>
     </el-container>
   </div>
@@ -177,6 +187,8 @@ export default {
   data() {
     return {
       loadingConsoleInfo: false,
+      isShowByUsers: true,
+      isShowByTodoTask: false,
       users: {
         loading: false,
         listKey: 0,
@@ -271,6 +283,8 @@ export default {
       })
     },
     onCareLevelClick(level) {
+      this.isShowByUsers = true
+      this.isShowByTodoTask = false
       this.users.listQuery.careLevel = level
 
       switch (level) {
@@ -294,7 +308,8 @@ export default {
       this.onGetUsers()
     },
     onTodoTaskClick(level) {
-
+      this.isShowByUsers = false
+      this.isShowByTodoTask = true
     },
     onOpenDialogByDetail(item) {
       this.selectUserId = item.id
