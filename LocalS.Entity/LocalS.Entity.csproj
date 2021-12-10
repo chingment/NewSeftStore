@@ -107,6 +107,7 @@
     <Compile Include="SenvivHealthMonthReportTag.cs" />
     <Compile Include="SenvivHealthTagExplain.cs" />
     <Compile Include="SenvivMerchConfig.cs" />
+    <Compile Include="SenvivTask.cs" />
     <Compile Include="SenvivUser.cs" />
     <Compile Include="SenvivUserDevice.cs" />
     <Compile Include="SenvivVisitRecord.cs" />

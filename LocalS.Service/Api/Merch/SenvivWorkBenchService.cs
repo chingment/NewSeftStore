@@ -40,6 +40,11 @@ namespace LocalS.Service.Api.Merch
                     level2 = careLevel2,
                     level3 = careLevel3,
                     level4 = careLevel4,
+                },
+                todoTask = new
+                {
+                    waitHandle = 0,
+                    handled = 0
                 }
             };
 

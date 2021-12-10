@@ -75,6 +75,24 @@
           </div>
         </el-card>
 
+        <el-card v-loading="loadingConsoleInfo" class="box-card box-card-1">
+          <div slot="header" class="clearfix">
+            <span>待办事项</span>
+          </div>
+          <div class="body">
+            <el-row :gutter="20" style="margin-bottom:20px">
+              <el-col :span="12"> <div class="num_box todotask_1" @click="onTodoTaskClick(1)">
+                <div class="tl">待处理</div>
+                <div class="num">{{ consoleInfo.todoTask.waitHandle }}</div>
+              </div></el-col>
+              <el-col :span="12">    <div class="num_box todotask_2" @click="onTodoTaskClick(2)">
+                <div class="tl">已处理</div>
+                <div class="num">{{ consoleInfo.todoTask.handled }}</div>
+              </div></el-col>
+            </el-row>
+          </div>
+        </el-card>
+
       </el-aside>
       <el-main style="padding:0px 0px 0px 20px">
 
@@ -104,7 +122,7 @@
                         </div>
                       </div>
                       <div class="right">
-                        <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
+                        <el-button type="text" @click="onOpenDialogByDetail(item)">查看</el-button>
                       </div>
                     </div>
                     <div class="it-component">
@@ -184,6 +202,10 @@ export default {
           level2: 2,
           level3: 3,
           level4: 4
+        },
+        todoTask: {
+          waitHandle: 0,
+          handled: 0
         }
       },
       perplexs: [
@@ -271,28 +293,12 @@ export default {
 
       this.onGetUsers()
     },
-    handleFilter() {
-      this.users.listQuery.page = 1
-      this.onGetUsers()
+    onTodoTaskClick(level) {
+
     },
-    handleOpenDialogByDetail(item) {
+    onOpenDialogByDetail(item) {
       this.selectUserId = item.id
       this.dialogIsShowByDetail = true
-    },
-    handleSenvivUsers() {
-      this.$router.push({
-        path: '/senviv/users'
-      })
-    },
-    handleSenvivDayReport() {
-      this.$router.push({
-        path: '/senviv/dayreport'
-      })
-    },
-    handleSenvivMonthReport() {
-      this.$router.push({
-        path: '/senviv/monthreport'
-      })
     }
   }
 }
@@ -334,6 +340,14 @@ background-color: #ff8080;
 }
 .gz_1{
   background-color: #ffd580;
+}
+
+.todotask_1{
+background-color: #ff8080;
+}
+
+.todotask_2{
+ background-color: #66cccc;
 }
 
 .today-sum{
