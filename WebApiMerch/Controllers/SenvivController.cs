@@ -12,7 +12,6 @@ namespace WebApiMerch.Controllers
     public class SenvivController : OwnApiBaseController
     {
 
-
         [HttpGet]
         public OwnApiHttpResponse GetUsers([FromUri]RupSenvivGetUsers rup)
         {
@@ -83,7 +82,6 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
         [HttpGet]
         public OwnApiHttpResponse GetVisitRecords([FromUri]RupSenvivGetVisitRecords rup)
         {
@@ -104,5 +102,11 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetTasks([FromUri]RupSenvivGetUsers rup)
+        {
+            var result = MerchServiceFactory.Senviv.GetTasks(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

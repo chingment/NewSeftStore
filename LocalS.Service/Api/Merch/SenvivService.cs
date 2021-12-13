@@ -1434,5 +1434,72 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             return result;
         }
+
+
+        public CustomJsonResult GetTasks(string operater, string merchId, RupSenvivGetUsers rup)
+        {
+            var result = new CustomJsonResult();
+
+
+            var merchIds = BizFactory.Merch.GetRelIds(merchId);
+
+            var query = (from u in CurrentDb.SenvivTask
+                         where
+                         merchIds.Contains(u.MerchId)
+                         select new { u.Id, u.TaskType, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    TaskType = item.TaskType,
+                    Title = item.Title,
+                    Status = GetTaskStatus(item.Status),
+                    CreateTime = item.CreateTime
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public StatusModel GetTaskStatus(E_SenvivTaskStatus status)
+        {
+            var statusModel = new StatusModel();
+
+            switch (status)
+            {
+                case E_SenvivTaskStatus.WaitHandle:
+                    statusModel = new StatusModel(1, "待处理");
+                    break;
+                case E_SenvivTaskStatus.Handling:
+                    statusModel = new StatusModel(2, "处理中");
+                    break;
+                case E_SenvivTaskStatus.Handled:
+                    statusModel = new StatusModel(3, "已处理");
+                    break;
+            }
+
+            return statusModel;
+        }
+
     }
 }

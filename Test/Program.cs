@@ -226,6 +226,10 @@ namespace Test
 
         static void Main(string[] args)
         {
+            var tt2 = SdkFactory.Senviv.GetBoxList();
+
+            string ssss = tt2.ToJsonString();
+
 
             var odd = new { aa = "1", bb = "2" };
 

@@ -87,21 +87,15 @@ namespace LocalS.DAL
         public IDbSet<SenvivHealthMonthReportSugSku> SenvivHealthMonthReportSugSku { get; set; }
         public IDbSet<SenvivHealthMonthReportTag> SenvivHealthMonthReportTag { get; set; }
         public IDbSet<SenvivVisitRecord> SenvivVisitRecord { get; set; }
-
         public IDbSet<SenvivMerchConfig> SenvivMerchConfig { get; set; }
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }
-
         public IDbSet<DeviceMqttMessage> DeviceMqttMessage { get; set; }
-
-        
         public IDbSet<SenvivHealthTagExplain> SenvivHealthTagExplain { get; set; }
-
         public IDbSet<ErpReplenishPlan> ErpReplenishPlan { get; set; }
         public IDbSet<ErpReplenishPlanDevice> ErpReplenishPlanDevice { get; set; }
-
-
-
         public IDbSet<ErpReplenishPlanDeviceDetail> ErpReplenishPlanDeviceDetail { get; set; }
+        public IDbSet<SenvivTask> SenvivTask { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
