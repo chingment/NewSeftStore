@@ -99,7 +99,7 @@
     <Compile Include="Biz\Models\DeviceModel.cs" />
     <Compile Include="Biz\Models\OrderSkuByPickupModel.cs" />
     <Compile Include="Biz\Models\ScannerModel.cs" />
-    <Compile Include="Biz\Models\StatusModel.cs" />
+    <Compile Include="Biz\Models\FieldModel.cs" />
     <Compile Include="Biz\Models\StoreModel.cs" />
     <Compile Include="Biz\Models\DeviceSkuStockModel.cs" />
     <Compile Include="Biz\Models\UseAreaModel.cs" />

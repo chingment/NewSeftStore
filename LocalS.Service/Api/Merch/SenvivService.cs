@@ -70,35 +70,35 @@ namespace LocalS.Service.Api.Merch
 
     public class SenvivService : BaseService
     {
-        public StatusModel GetReportStatus(E_SenvivHealthReportStatus status)
+        public FieldModel GetReportStatus(E_SenvivHealthReportStatus status)
         {
-            var statusModel = new StatusModel();
+            var statusModel = new FieldModel();
 
             switch (status)
             {
                 case E_SenvivHealthReportStatus.WaitBuild:
-                    statusModel = new StatusModel(1, "待生成");
+                    statusModel = new FieldModel(1, "待生成");
                     break;
                 case E_SenvivHealthReportStatus.Building:
-                    statusModel = new StatusModel(2, "生成中");
+                    statusModel = new FieldModel(2, "生成中");
                     break;
                 case E_SenvivHealthReportStatus.BuildSuccess:
-                    statusModel = new StatusModel(3, "已生成");
+                    statusModel = new FieldModel(3, "已生成");
                     break;
                 case E_SenvivHealthReportStatus.BuildFailure:
-                    statusModel = new StatusModel(4, "生成失败");
+                    statusModel = new FieldModel(4, "生成失败");
                     break;
                 case E_SenvivHealthReportStatus.WaitSend:
-                    statusModel = new StatusModel(5, "待评价");
+                    statusModel = new FieldModel(5, "待评价");
                     break;
                 case E_SenvivHealthReportStatus.Sending:
-                    statusModel = new StatusModel(6, "发送中");
+                    statusModel = new FieldModel(6, "发送中");
                     break;
                 case E_SenvivHealthReportStatus.SendSuccess:
-                    statusModel = new StatusModel(7, "已发送");
+                    statusModel = new FieldModel(7, "已发送");
                     break;
                 case E_SenvivHealthReportStatus.SendFailure:
-                    statusModel = new StatusModel(8, "发送失败");
+                    statusModel = new FieldModel(8, "发送失败");
                     break;
             }
 
@@ -1436,7 +1436,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         }
 
 
-        public CustomJsonResult GetTasks(string operater, string merchId, RupSenvivGetUsers rup)
+        public CustomJsonResult GetTasks(string operater, string merchId, RupSenvivGetTasks rup)
         {
             var result = new CustomJsonResult();
 
@@ -1452,7 +1452,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
+
+            if (rup.Status == 0)
+            {
+                query = query.Where(m => m.Status == E_SenvivTaskStatus.Handling || m.Status == E_SenvivTaskStatus.WaitHandle);
+            }
+            else if (rup.Status == 1)
+            {
+                query = query.Where(m => m.Status == E_SenvivTaskStatus.Handled);
+            }
+
+
+
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+
+
 
             var list = query.ToList();
 
@@ -1460,13 +1475,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             foreach (var item in list)
             {
-
-
-
                 olist.Add(new
                 {
                     Id = item.Id,
-                    TaskType = item.TaskType,
+                    TaskType = GetTaskType(item.TaskType),
                     Title = item.Title,
                     Status = GetTaskStatus(item.Status),
                     CreateTime = item.CreateTime
@@ -1481,25 +1493,47 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
         }
 
-        public StatusModel GetTaskStatus(E_SenvivTaskStatus status)
+        public FieldModel GetTaskStatus(E_SenvivTaskStatus status)
         {
-            var statusModel = new StatusModel();
+            var statusModel = new FieldModel();
 
             switch (status)
             {
                 case E_SenvivTaskStatus.WaitHandle:
-                    statusModel = new StatusModel(1, "待处理");
+                    statusModel = new FieldModel(1, "待处理");
                     break;
                 case E_SenvivTaskStatus.Handling:
-                    statusModel = new StatusModel(2, "处理中");
+                    statusModel = new FieldModel(2, "处理中");
                     break;
                 case E_SenvivTaskStatus.Handled:
-                    statusModel = new StatusModel(3, "已处理");
+                    statusModel = new FieldModel(3, "已处理");
                     break;
             }
 
             return statusModel;
         }
 
+        public FieldModel GetTaskType(E_SenvivTaskType type)
+        {
+            var statusModel = new FieldModel();
+
+            switch (type)
+            {
+                case E_SenvivTaskType.FisrtDay:
+                    statusModel = new FieldModel(1, "首次回访");
+                    break;
+                case E_SenvivTaskType.SeventhDay:
+                    statusModel = new FieldModel(2, "一周回访");
+                    break;
+                case E_SenvivTaskType.FourteenthDay:
+                    statusModel = new FieldModel(3, "两周回访");
+                    break;
+                case E_SenvivTaskType.PerMonth:
+                    statusModel = new FieldModel(4, "每月回访");
+                    break;
+            }
+
+            return statusModel;
+        }
     }
 }

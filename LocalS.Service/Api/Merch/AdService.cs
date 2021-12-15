@@ -15,9 +15,9 @@ namespace LocalS.Service.Api.Merch
 {
     public class AdService : BaseService
     {
-        public StatusModel GetContentStatus(E_AdContentStatus status)
+        public FieldModel GetContentStatus(E_AdContentStatus status)
         {
-            var statusModel = new StatusModel();
+            var statusModel = new FieldModel();
 
             switch (status)
             {
@@ -35,9 +35,9 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
-        public StatusModel GetBelongStatus(E_AdContentStatus content_status, E_AdContentBelongStatus belong_status)
+        public FieldModel GetBelongStatus(E_AdContentStatus content_status, E_AdContentBelongStatus belong_status)
         {
-            var statusModel = new StatusModel();
+            var statusModel = new FieldModel();
 
             switch (content_status)
             {

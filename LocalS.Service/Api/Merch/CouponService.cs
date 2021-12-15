@@ -139,21 +139,21 @@ namespace LocalS.Service.Api.Merch
             return str_faceValue;
         }
 
-        public StatusModel GetStatus(DateTime startTime, DateTime endTime)
+        public FieldModel GetStatus(DateTime startTime, DateTime endTime)
         {
-            var status = new StatusModel();
+            var status = new FieldModel();
 
             if (DateTime.Now < startTime)
             {
-                status = new StatusModel(1, "未生效");
+                status = new FieldModel(1, "未生效");
             }
             else if (DateTime.Now >= startTime && DateTime.Now <= endTime)
             {
-                status = new StatusModel(2, "已生效");
+                status = new FieldModel(2, "已生效");
             }
             else
             {
-                status = new StatusModel(3, "已过期");
+                status = new FieldModel(3, "已过期");
             }
 
             return status;

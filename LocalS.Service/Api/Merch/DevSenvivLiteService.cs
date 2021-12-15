@@ -69,15 +69,15 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                var distributeStatus = new StatusModel();
+                var distributeStatus = new FieldModel();
 
                 if (item.CurUseMerchId == merchId)
                 {
-                    distributeStatus = new StatusModel(1, "未分配");
+                    distributeStatus = new FieldModel(1, "未分配");
                 }
                 else
                 {
-                    distributeStatus = new StatusModel(2, "已分配");
+                    distributeStatus = new FieldModel(2, "已分配");
                 }
 
                 olist.Add(new

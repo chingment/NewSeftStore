@@ -39,7 +39,7 @@ namespace LocalS.Service.Api.StoreTerm
             public string SlotId { get; set; }
             public bool CanHandle { get; set; }
             public int SignStatus { get; set; }
-            public StatusModel Status { get; set; }
+            public FieldModel Status { get; set; }
         }
 
         public class ExReason

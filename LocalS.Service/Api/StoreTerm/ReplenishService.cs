@@ -44,14 +44,14 @@ namespace LocalS.Service.Api.StoreTerm
 
             foreach (var item in list)
             {
-                var m_Status = new StatusModel();
+                var m_Status = new FieldModel();
                 if (item.RshTime == null)
                 {
-                    m_Status = new StatusModel(1, "未完成");
+                    m_Status = new FieldModel(1, "未完成");
                 }
                 else
                 {
-                    m_Status = new StatusModel(2, "已完成");
+                    m_Status = new FieldModel(2, "已完成");
                 }
 
                 olist.Add(new

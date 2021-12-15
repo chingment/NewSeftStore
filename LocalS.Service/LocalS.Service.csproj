@@ -306,6 +306,7 @@
     <Compile Include="Api\Merch\RModels\RupPrdProductGetListBySale.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetDayReports.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetTags.cs" />
+    <Compile Include="Api\Merch\RModels\RupSenvivGetTasks.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetUsers.cs" />
     <Compile Include="Api\Merch\RModels\RopSenvivSaveVisitRecordByTelePhone.cs" />
     <Compile Include="Api\Merch\RModels\RupShopGetDetails.cs" />

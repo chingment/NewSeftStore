@@ -16,9 +16,9 @@ namespace LocalS.Service.Api.Merch
 {
     public class ShopService : BaseService
     {
-        public StatusModel GetStatus(bool isOpen)
+        public FieldModel GetStatus(bool isOpen)
         {
-            var status = new StatusModel();
+            var status = new FieldModel();
 
             if (isOpen)
             {

@@ -16,9 +16,9 @@ namespace LocalS.Service.Api.Merch
 {
     public class PayRefundService : BaseService
     {
-        public StatusModel GetStatus(E_PayRefundStatus status)
+        public FieldModel GetStatus(E_PayRefundStatus status)
         {
-            var model = new StatusModel();
+            var model = new FieldModel();
 
             switch (status)
             {
@@ -46,9 +46,9 @@ namespace LocalS.Service.Api.Merch
             return model;
         }
 
-        public StatusModel GetMethod(E_PayRefundMethod method)
+        public FieldModel GetMethod(E_PayRefundMethod method)
         {
-            var model = new StatusModel();
+            var model = new FieldModel();
 
             switch (method)
             {

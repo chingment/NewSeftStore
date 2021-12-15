@@ -16,30 +16,30 @@ namespace LocalS.Service.Api.Merch
 {
     public class DevVendingService : DeviceService
     {
-        public StatusModel GetStatus(string curUseShopId, bool isStopUse, bool isEx, E_DeviceRunStatus runstatus, DateTime? lastRequestTime)
+        public FieldModel GetStatus(string curUseShopId, bool isStopUse, bool isEx, E_DeviceRunStatus runstatus, DateTime? lastRequestTime)
         {
-            var status = new StatusModel();
+            var status = new FieldModel();
 
             if (isStopUse)
             {
-                return new StatusModel(1, "停止使用");
+                return new FieldModel(1, "停止使用");
             }
 
             if (string.IsNullOrEmpty(curUseShopId))
             {
-                return new StatusModel(1, "未绑定门店");
+                return new FieldModel(1, "未绑定门店");
             }
 
             if (isEx)
             {
-                return new StatusModel(3, "异常");
+                return new FieldModel(3, "异常");
             }
 
             if (lastRequestTime != null)
             {
                 if ((DateTime.Now - lastRequestTime.Value).TotalMinutes > 15)
                 {
-                    return new StatusModel(3, "离线");
+                    return new FieldModel(3, "离线");
                 }
             }
 

@@ -22,9 +22,9 @@ namespace LocalS.BLL.Biz
 {
     public class OrderService : BaseService
     {
-        public StatusModel GetExStatus(bool isHasEx, bool isHandleComplete)
+        public FieldModel GetExStatus(bool isHasEx, bool isHandleComplete)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             if (isHasEx)
             {
@@ -56,9 +56,9 @@ namespace LocalS.BLL.Biz
             return false;
         }
 
-        public StatusModel GetStatus(E_OrderStatus orderStatus)
+        public FieldModel GetStatus(E_OrderStatus orderStatus)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             switch (orderStatus)
             {
@@ -86,9 +86,9 @@ namespace LocalS.BLL.Biz
             return m_Status;
         }
 
-        public StatusModel GetPickupStatus(E_OrderPickupStatus pickupStatus)
+        public FieldModel GetPickupStatus(E_OrderPickupStatus pickupStatus)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             switch (pickupStatus)
             {
@@ -136,9 +136,9 @@ namespace LocalS.BLL.Biz
             return m_Status;
         }
 
-        public StatusModel GetPayStatus(E_PayStatus payStatus)
+        public FieldModel GetPayStatus(E_PayStatus payStatus)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             switch (payStatus)
             {
@@ -170,9 +170,9 @@ namespace LocalS.BLL.Biz
             return m_Status;
         }
 
-        public StatusModel GetPayWay(E_PayWay payWay)
+        public FieldModel GetPayWay(E_PayWay payWay)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             switch (payWay)
             {
@@ -193,9 +193,9 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public StatusModel GetPayPartner(E_PayPartner payPartner)
+        public FieldModel GetPayPartner(E_PayPartner payPartner)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             switch (payPartner)
             {
@@ -224,9 +224,9 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public StatusModel GetPickupTrgStatus(E_ReceiveMode receiveMode, bool pickupIsTrg)
+        public FieldModel GetPickupTrgStatus(E_ReceiveMode receiveMode, bool pickupIsTrg)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             if (pickupIsTrg)
             {

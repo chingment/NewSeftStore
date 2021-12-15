@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.Merch
             public string DiscountAmount { get; set; }
             public string OriginalAmount { get; set; }
             public int Quantity { get; set; }
-            public StatusModel Status { get; set; }
+            public FieldModel Status { get; set; }
             public string SourceName { get; set; }
             public List<object> Skus { get; set; }
             public string RefundedAmount { get; set; }
@@ -42,7 +42,7 @@ namespace LocalS.Service.Api.Merch
             public bool ExIsHappen { get; set; }
             public string DeviceCumCode { get; set; }
             public bool IsTimeoutPayed { get; set; }
-            public StatusModel PayWay { get; set; }
+            public FieldModel PayWay { get; set; }
         }
     }
 }

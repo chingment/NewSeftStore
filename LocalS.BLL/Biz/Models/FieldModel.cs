@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL.Biz
 {
-    public class StatusModel
+    public class FieldModel
     {
-        public StatusModel()
+        public FieldModel()
         {
 
         }
 
-        public StatusModel(int value, string text)
+        public FieldModel(int value, string text)
         {
             this.Value = value;
             this.Text = text;

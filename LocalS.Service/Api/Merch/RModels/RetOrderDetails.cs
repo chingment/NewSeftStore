@@ -26,7 +26,7 @@ namespace LocalS.Service.Api.Merch
         public string OriginalAmount { get; set; }
         public int Quantity { get; set; }
         public string CreateTime { get; set; }
-        public StatusModel Status { get; set; }
+        public FieldModel Status { get; set; }
         public string SourceName { get; set; }
         public bool CanHandleEx { get; set; }
         public string ExHandleRemark { get; set; }
@@ -40,6 +40,6 @@ namespace LocalS.Service.Api.Merch
         public List<object> Skus { get; set; }
         public List<object> RefundRecords { get; set; }
 
-        public StatusModel PayWay { get; set; }
+        public FieldModel PayWay { get; set; }
     }
 }

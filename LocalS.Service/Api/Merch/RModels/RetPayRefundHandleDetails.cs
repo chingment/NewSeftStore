@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Merch
             this.Order = new _Order();
         }
         public string PayRefundId { get; set; }
-        public StatusModel ApplyMethod { get; set; }
+        public FieldModel ApplyMethod { get; set; }
         public string ApplyAmount { get; set; }
         public string ApplyTime { get; set; }
         public string ApplyRemark { get; set; }
@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.Merch
             public string DiscountAmount { get; set; }
             public string OriginalAmount { get; set; }
             public int Quantity { get; set; }
-            public StatusModel Status { get; set; }
+            public FieldModel Status { get; set; }
             public string SourceName { get; set; }
             public List<object> Skus { get; set; }
             public string RefundedAmount { get; set; }
@@ -50,7 +50,7 @@ namespace LocalS.Service.Api.Merch
 
             public string DeviceCumCode { get; set; }
 
-            public StatusModel PayWay { get; set; }
+            public FieldModel PayWay { get; set; }
         }
     }
 }

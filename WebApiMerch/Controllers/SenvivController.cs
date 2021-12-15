@@ -103,7 +103,7 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetTasks([FromUri]RupSenvivGetUsers rup)
+        public OwnApiHttpResponse GetTasks([FromUri]RupSenvivGetTasks rup)
         {
             var result = MerchServiceFactory.Senviv.GetTasks(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);

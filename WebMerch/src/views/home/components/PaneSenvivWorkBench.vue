@@ -81,11 +81,11 @@
           </div>
           <div class="body">
             <el-row :gutter="20" style="margin-bottom:20px">
-              <el-col :span="12"> <div class="num_box todotask_1" @click="onTodoTaskClick(1)">
+              <el-col :span="12"> <div class="num_box todotask_1" @click="onTodoTaskClick(0)">
                 <div class="tl">待处理</div>
                 <div class="num">{{ consoleInfo.todoTask.waitHandle }}</div>
               </div></el-col>
-              <el-col :span="12">    <div class="num_box todotask_2" @click="onTodoTaskClick(2)">
+              <el-col :span="12">    <div class="num_box todotask_2" @click="onTodoTaskClick(1)">
                 <div class="tl">已处理</div>
                 <div class="num">{{ consoleInfo.todoTask.handled }}</div>
               </div></el-col>
@@ -164,7 +164,48 @@
             <span>待办事项</span>
           </div>
           <div class="body" style="min-height:340px">
-            待办事项
+
+            <el-table
+              :key="tasks.listKey"
+              v-loading="tasks.loading"
+              :data="tasks.listData"
+              fit
+              highlight-current-row
+              style="width: 100%;"
+            >
+              <el-table-column label="序号" prop="id" align="left" width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.$index+1 }} </span>
+                </template>
+              </el-table-column>
+              <el-table-column label="类型" align="left" min-width="10%">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.taskType.text }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="标题" align="left" min-width="65%">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.title }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="状态" align="left" min-width="10%">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.status.text }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="时间" align="left" min-width="15%">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.createTime }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
+                <template slot-scope="{row}">
+                  <el-button type="text" size="mini">
+                    查看
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
 
           </div>
         </el-card>
@@ -178,7 +219,7 @@
 <script>
 
 import { getInitData } from '@/api/senvivworkbench'
-import { getUsers } from '@/api/senviv'
+import { getUsers, getTasks } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneUserDetail from '@/views/senviv/components/PaneUserDetail.vue'
 export default {
@@ -202,6 +243,17 @@ export default {
           chronic: '0',
           perplex: '0',
           careLevel: 0
+        }
+      },
+      tasks: {
+        loading: false,
+        listKey: 0,
+        listData: null,
+        listTotal: 0,
+        listQuery: {
+          page: 1,
+          limit: 20,
+          status: 0
         }
       },
       careLevelName: '',
@@ -282,6 +334,18 @@ export default {
         this.users.loading = false
       })
     },
+    onGetTasks() {
+      this.tasks.loading = true
+      this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.tasks.listQuery })
+      getTasks(this.tasks.listQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.tasks.listData = d.items
+          this.tasks.listTotal = d.total
+        }
+        this.tasks.loading = false
+      })
+    },
     onCareLevelClick(level) {
       this.isShowByUsers = true
       this.isShowByTodoTask = false
@@ -307,9 +371,11 @@ export default {
 
       this.onGetUsers()
     },
-    onTodoTaskClick(level) {
+    onTodoTaskClick(status) {
       this.isShowByUsers = false
       this.isShowByTodoTask = true
+      this.tasks.listQuery.status = status
+      this.onGetTasks()
     },
     onOpenDialogByDetail(item) {
       this.selectUserId = item.id

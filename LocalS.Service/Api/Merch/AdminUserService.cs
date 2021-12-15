@@ -18,9 +18,9 @@ namespace LocalS.Service.Api.Merch
 {
     public class AdminUserService : BaseService
     {
-        public StatusModel GetStatus(bool isDisable)
+        public FieldModel GetStatus(bool isDisable)
         {
-            var status = new StatusModel();
+            var status = new FieldModel();
 
             if (isDisable)
             {

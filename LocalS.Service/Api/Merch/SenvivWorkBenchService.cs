@@ -30,6 +30,9 @@ namespace LocalS.Service.Api.Merch
             var careLevel3 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Three).Count();
             var careLevel4 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Four).Count();
 
+            var tasks = CurrentDb.SenvivTask.Where(m => merchIds.Contains(m.MerchId)).ToList();
+            var waitHandle = tasks.Where(m => m.Status == E_SenvivTaskStatus.WaitHandle || m.Status == E_SenvivTaskStatus.Handling).Count();
+            var handled = tasks.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
             var ret = new
             {
                 userCount = userCount,
@@ -43,8 +46,8 @@ namespace LocalS.Service.Api.Merch
                 },
                 todoTask = new
                 {
-                    waitHandle = 0,
-                    handled = 0
+                    waitHandle = waitHandle,
+                    handled = handled
                 }
             };
 

@@ -17,25 +17,25 @@ namespace LocalS.Service.Api.Merch
 {
     public class ErpReplenishPlanService : BaseService
     {
-        public StatusModel GetStatus(E_ErpReplenishPlan_Status status)
+        public FieldModel GetStatus(E_ErpReplenishPlan_Status status)
         {
-            var m_Status = new StatusModel();
+            var m_Status = new FieldModel();
 
             if (status == E_ErpReplenishPlan_Status.Submit)
             {
-                m_Status = new StatusModel(1, "已提交");
+                m_Status = new FieldModel(1, "已提交");
             }
             else if (status == E_ErpReplenishPlan_Status.Building)
             {
-                m_Status = new StatusModel(2, "生成中");
+                m_Status = new FieldModel(2, "生成中");
             }
             else if (status == E_ErpReplenishPlan_Status.BuildSuccess)
             {
-                m_Status = new StatusModel(3, "生成成功");
+                m_Status = new FieldModel(3, "生成成功");
             }
             else if (status == E_ErpReplenishPlan_Status.BuildFailure)
             {
-                m_Status = new StatusModel(4, "生成失败");
+                m_Status = new FieldModel(4, "生成失败");
             }
 
             return m_Status;

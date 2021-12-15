@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Merch
         public string CumCode { get; set; }
         public string LogoImgUrl { get; set; }
         public string LastRequestTime { get; set; }
-        public StatusModel Status { get; set; }
+        public FieldModel Status { get; set; }
         public string AppVersion { get; set; }
         public string CtrlSdkVersion { get; set; }
         public string ShopId { get; set; }
