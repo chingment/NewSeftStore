@@ -1444,8 +1444,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
             var query = (from u in CurrentDb.SenvivTask
+                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
                          where
-                         merchIds.Contains(u.MerchId)
+                         merchIds.Contains(tt.MerchId)
                          select new { u.Id, u.TaskType, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
 
             int total = query.Count();

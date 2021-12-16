@@ -26,7 +26,6 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
-        public string MerchId { get; set; }
         public E_SenvivTaskType TaskType { get; set; }
         public string SvUserId { get; set; }
         public string Title { get; set; }

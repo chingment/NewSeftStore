@@ -66,742 +66,781 @@ namespace LocalS.BLL
             }
         }
 
-        private void BuildReport(string userId, string rptType, DateTime rptStartTime, DateTime rptEndTime)
+        private void BuildTask(string operater, string userId, E_SenvivTaskType taskType, Dictionary<string, object> taskParams)
         {
+            string rptId = "";
 
-            var d_StageReport = CurrentDb.SenvivHealthMonthReport.Where(m => m.SvUserId == userId && m.RptType == rptType && m.RptStartTime == rptStartTime && m.RptEndTime == rptEndTime).FirstOrDefault();
-
-            if (d_StageReport != null)
-                return;
-
-            LogUtil.Info("userId：" + userId + ",d_StageReport is not null");
-
-            var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == userId && m.IsValid == true && m.HealthDate == rptStartTime && m.HealthDate == rptEndTime).ToList();
-            if (d_DayReports.Count > 0)
+            if (taskType == E_SenvivTaskType.Health_Monitor_FisrtDay)
             {
-                var t1BySccs = 0;
-                var t2BySccs = 0;
-                var t3BySccs = 0;
-                var t4BySccs = 0;
-                var t5BySccs = 0;
-                var t6BySccs = 0;
-                var t7BySccs = 0;
-
-                var t1ByRscs = 0;
-                var t2ByRscs = 0;
-                var t3ByRscs = 0;
-                var t4ByRscs = 0;
-                var t5ByRscs = 0;
-                var t6ByRscs = 0;
-                var t7ByRscs = 0;
-
-                var t1ByQxcs = 0;
-                var t2ByQxcs = 0;
-                var t3ByQxcs = 0;
-                var t4ByQxcs = 0;
-                var t5ByQxcs = 0;
-                var t6ByQxcs = 0;
-                var t7ByQxcs = 0;
-
-                var t1ByLccs = 0;
-                var t2ByLccs = 0;
-                var t3ByLccs = 0;
-                var t4ByLccs = 0;
-                var t5ByLccs = 0;
-                var t6ByLccs = 0;
-                var t7ByLccs = 0;
-
-                var t1ByHxZtcs = 0;
-                var t2ByHxZtcs = 0;
-                var t3ByHxZtcs = 0;
-                var t4ByHxZtcs = 0;
-                var t5ByHxZtcs = 0;
-                var t6ByHxZtcs = 0;
-                var t7ByHxZtcs = 0;
-
-                var t1ByTdcs = 0;
-                var t2ByTdcs = 0;
-                var t3ByTdcs = 0;
-                var t4ByTdcs = 0;
-                var t5ByTdcs = 0;
-                var t6ByTdcs = 0;
-                var t7ByTdcs = 0;
-
-                var t1ByPjXl = new List<int>();
-                var t2ByPjXl = new List<int>();
-                var t3ByPjXl = new List<int>();
-                var t4ByPjXl = new List<int>();
-                var t5ByPjXl = new List<int>();
-                var t6ByPjXl = new List<int>();
-                var t7ByPjXl = new List<int>();
-
-                var t1ByPjHx = new List<int>();
-                var t2ByPjHx = new List<int>();
-                var t3ByPjHx = new List<int>();
-                var t4ByPjHx = new List<int>();
-                var t5ByPjHx = new List<int>();
-                var t6ByPjHx = new List<int>();
-                var t7ByPjHx = new List<int>();
-
-                var t1ByQd = 0;
-                var t2ByQd = 0;
-                var t3ByQd = 0;
-                var t4ByQd = 0;
-                var t5ByQd = 0;
-                var t6ByQd = 0;
-                var t7ByQd = 0;
-
-                var t1BySd = 0;
-                var t2BySd = 0;
-                var t3BySd = 0;
-                var t4BySd = 0;
-                var t5BySd = 0;
-                var t6BySd = 0;
-                var t7BySd = 0;
-
-                var t1ByRem = 0;
-                var t2ByRem = 0;
-                var t3ByRem = 0;
-                var t4ByRem = 0;
-                var t5ByRem = 0;
-                var t6ByRem = 0;
-                var t7ByRem = 0;
-                foreach (var dayReport in d_DayReports)
+                rptId = taskParams["rpt_id"].ToString();
+            }
+            else
+            {
+                DateTime rptStartTime = (DateTime)taskParams["start_time"];
+                DateTime rptEndTime = (DateTime)taskParams["end_time"];
+                string rptType = "";
+                switch (taskType)
                 {
-                    #region 上床时间
-                    if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "21:00", "23:00"))
-                    {
-                        t1BySccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "23:00", "01:00"))
-                    {
-                        t2BySccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "01:00", "03:00"))
-                    {
-                        t3BySccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "03:00", "05:00"))
-                    {
-                        t4BySccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "05:00", "07:00"))
-                    {
-                        t5BySccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "07:00", "09:00"))
-                    {
-                        t6BySccs++;
-                    }
-                    else
-                    {
-                        t7BySccs++;
-                    }
-                    #endregion
+                    case E_SenvivTaskType.Health_Monitor_SeventhDay:
+                        rptType = "seventh_day";
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_FourteenthDay:
+                        rptType = "fourteenth_day:";
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_PerMonth:
+                        rptType = "per_month";
+                        break;
+                }
 
-                    #region 入睡时间
-                    if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "21:00", "23:00"))
-                    {
-                        t1ByRscs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "23:00", "01:00"))
-                    {
-                        t2ByRscs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "01:00", "03:00"))
-                    {
-                        t3ByRscs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "03:00", "05:00"))
-                    {
-                        t4ByRscs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "05:00", "07:00"))
-                    {
-                        t5ByRscs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "07:00", "09:00"))
-                    {
-                        t6ByRscs++;
-                    }
-                    else
-                    {
-                        t7ByRscs++;
-                    }
-                    #endregion
+                var d_StageReport = CurrentDb.SenvivHealthMonthReport.Where(m => m.SvUserId == userId && m.RptType == rptType && m.RptStartTime == rptStartTime && m.RptEndTime == rptEndTime).FirstOrDefault();
 
-                    #region 清醒时间
+                if (d_StageReport != null)
+                    return;
 
-                    if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "21:00", "23:00"))
-                    {
-                        t1ByQxcs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "23:00", "01:00"))
-                    {
-                        t2ByQxcs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "01:00", "03:00"))
-                    {
-                        t3ByQxcs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "03:00", "05:00"))
-                    {
-                        t4ByQxcs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "05:00", "07:00"))
-                    {
-                        t5ByQxcs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "07:00", "09:00"))
-                    {
-                        t6ByQxcs++;
-                    }
-                    else
-                    {
-                        t7ByQxcs++;
-                    }
+                LogUtil.Info("userId：" + userId + ",d_StageReport is not null");
 
-                    #endregion
+                var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == userId && m.IsValid == true && m.HealthDate == rptStartTime && m.HealthDate == rptEndTime).ToList();
+                if (d_DayReports.Count > 0)
+                {
+                    var t1BySccs = 0;
+                    var t2BySccs = 0;
+                    var t3BySccs = 0;
+                    var t4BySccs = 0;
+                    var t5BySccs = 0;
+                    var t6BySccs = 0;
+                    var t7BySccs = 0;
 
-                    #region 离床时间
+                    var t1ByRscs = 0;
+                    var t2ByRscs = 0;
+                    var t3ByRscs = 0;
+                    var t4ByRscs = 0;
+                    var t5ByRscs = 0;
+                    var t6ByRscs = 0;
+                    var t7ByRscs = 0;
 
-                    if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "21:00", "23:00"))
-                    {
-                        t1ByLccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "23:00", "01:00"))
-                    {
-                        t2ByLccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "01:00", "03:00"))
-                    {
-                        t3ByLccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "03:00", "05:00"))
-                    {
-                        t4ByLccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "05:00", "07:00"))
-                    {
-                        t5ByLccs++;
-                    }
-                    else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "07:00", "09:00"))
-                    {
-                        t6ByLccs++;
-                    }
-                    else
-                    {
-                        t7ByLccs++;
-                    }
+                    var t1ByQxcs = 0;
+                    var t2ByQxcs = 0;
+                    var t3ByQxcs = 0;
+                    var t4ByQxcs = 0;
+                    var t5ByQxcs = 0;
+                    var t6ByQxcs = 0;
+                    var t7ByQxcs = 0;
 
-                    #endregion
+                    var t1ByLccs = 0;
+                    var t2ByLccs = 0;
+                    var t3ByLccs = 0;
+                    var t4ByLccs = 0;
+                    var t5ByLccs = 0;
+                    var t6ByLccs = 0;
+                    var t7ByLccs = 0;
 
-                    #region 呼吸暂停
-                    var hxZtcsPoint = dayReport.HxZtcsPoint.ToJsonObject<List<ReportDetailListResult.D_ReportOfBreathPause>>();
-                    if (hxZtcsPoint != null)
+                    var t1ByHxZtcs = 0;
+                    var t2ByHxZtcs = 0;
+                    var t3ByHxZtcs = 0;
+                    var t4ByHxZtcs = 0;
+                    var t5ByHxZtcs = 0;
+                    var t6ByHxZtcs = 0;
+                    var t7ByHxZtcs = 0;
+
+                    var t1ByTdcs = 0;
+                    var t2ByTdcs = 0;
+                    var t3ByTdcs = 0;
+                    var t4ByTdcs = 0;
+                    var t5ByTdcs = 0;
+                    var t6ByTdcs = 0;
+                    var t7ByTdcs = 0;
+
+                    var t1ByPjXl = new List<int>();
+                    var t2ByPjXl = new List<int>();
+                    var t3ByPjXl = new List<int>();
+                    var t4ByPjXl = new List<int>();
+                    var t5ByPjXl = new List<int>();
+                    var t6ByPjXl = new List<int>();
+                    var t7ByPjXl = new List<int>();
+
+                    var t1ByPjHx = new List<int>();
+                    var t2ByPjHx = new List<int>();
+                    var t3ByPjHx = new List<int>();
+                    var t4ByPjHx = new List<int>();
+                    var t5ByPjHx = new List<int>();
+                    var t6ByPjHx = new List<int>();
+                    var t7ByPjHx = new List<int>();
+
+                    var t1ByQd = 0;
+                    var t2ByQd = 0;
+                    var t3ByQd = 0;
+                    var t4ByQd = 0;
+                    var t5ByQd = 0;
+                    var t6ByQd = 0;
+                    var t7ByQd = 0;
+
+                    var t1BySd = 0;
+                    var t2BySd = 0;
+                    var t3BySd = 0;
+                    var t4BySd = 0;
+                    var t5BySd = 0;
+                    var t6BySd = 0;
+                    var t7BySd = 0;
+
+                    var t1ByRem = 0;
+                    var t2ByRem = 0;
+                    var t3ByRem = 0;
+                    var t4ByRem = 0;
+                    var t5ByRem = 0;
+                    var t6ByRem = 0;
+                    var t7ByRem = 0;
+                    foreach (var dayReport in d_DayReports)
                     {
-                        foreach (var item in hxZtcsPoint)
+                        #region 上床时间
+                        if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "21:00", "23:00"))
                         {
-                            var t1 = TicksToDate(item.StartTime);
-
-                            if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
-                            {
-                                t1ByHxZtcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
-                            {
-                                t2ByHxZtcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
-                            {
-                                t3ByHxZtcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
-                            {
-                                t4ByHxZtcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
-                            {
-                                t5ByHxZtcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
-                            {
-                                t6ByHxZtcs++;
-                            }
-                            else
-                            {
-                                t7ByHxZtcs++;
-                            }
+                            t1BySccs++;
                         }
-                    }
-
-                    #endregion
-
-                    #region 体动次数
-                    var smTdcsPoint = dayReport.SmTdcsPoint.ToJsonObject<List<ReportDetailListResult.D_Move>>();
-                    if (smTdcsPoint != null)
-                    {
-                        foreach (var item in smTdcsPoint)
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "23:00", "01:00"))
                         {
-                            var t1 = TicksToDate(item.starttime);
-
-                            if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
-                            {
-                                t1ByTdcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
-                            {
-                                t2ByTdcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
-                            {
-                                t3ByTdcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
-                            {
-                                t4ByTdcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
-                            {
-                                t5ByTdcs++;
-                            }
-                            else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
-                            {
-                                t6ByTdcs++;
-
-                            }
-                            else
-                            {
-                                t7ByTdcs++;
-                            }
+                            t2BySccs++;
                         }
-                    }
-
-                    #endregion
-
-                    #region 平均心率
-                    var xlPoint = dayReport.XlPoint.ToJsonObject<DateValuePoint>();
-
-                    if (xlPoint != null)
-                    {
-                        if (xlPoint.DataTime != null)
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "01:00", "03:00"))
                         {
-                            for (int i = 0; i < xlPoint.DataTime.Count; i++)
+                            t3BySccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "03:00", "05:00"))
+                        {
+                            t4BySccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "05:00", "07:00"))
+                        {
+                            t5BySccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmScsj, "07:00", "09:00"))
+                        {
+                            t6BySccs++;
+                        }
+                        else
+                        {
+                            t7BySccs++;
+                        }
+                        #endregion
+
+                        #region 入睡时间
+                        if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "21:00", "23:00"))
+                        {
+                            t1ByRscs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "23:00", "01:00"))
+                        {
+                            t2ByRscs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "01:00", "03:00"))
+                        {
+                            t3ByRscs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "03:00", "05:00"))
+                        {
+                            t4ByRscs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "05:00", "07:00"))
+                        {
+                            t5ByRscs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmRssj, "07:00", "09:00"))
+                        {
+                            t6ByRscs++;
+                        }
+                        else
+                        {
+                            t7ByRscs++;
+                        }
+                        #endregion
+
+                        #region 清醒时间
+
+                        if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "21:00", "23:00"))
+                        {
+                            t1ByQxcs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "23:00", "01:00"))
+                        {
+                            t2ByQxcs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "01:00", "03:00"))
+                        {
+                            t3ByQxcs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "03:00", "05:00"))
+                        {
+                            t4ByQxcs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "05:00", "07:00"))
+                        {
+                            t5ByQxcs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmQxsj, "07:00", "09:00"))
+                        {
+                            t6ByQxcs++;
+                        }
+                        else
+                        {
+                            t7ByQxcs++;
+                        }
+
+                        #endregion
+
+                        #region 离床时间
+
+                        if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "21:00", "23:00"))
+                        {
+                            t1ByLccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "23:00", "01:00"))
+                        {
+                            t2ByLccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "01:00", "03:00"))
+                        {
+                            t3ByLccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "03:00", "05:00"))
+                        {
+                            t4ByLccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "05:00", "07:00"))
+                        {
+                            t5ByLccs++;
+                        }
+                        else if (Lumos.CommonUtil.GetTimeSpan(dayReport.SmLcsj, "07:00", "09:00"))
+                        {
+                            t6ByLccs++;
+                        }
+                        else
+                        {
+                            t7ByLccs++;
+                        }
+
+                        #endregion
+
+                        #region 呼吸暂停
+                        var hxZtcsPoint = dayReport.HxZtcsPoint.ToJsonObject<List<ReportDetailListResult.D_ReportOfBreathPause>>();
+                        if (hxZtcsPoint != null)
+                        {
+                            foreach (var item in hxZtcsPoint)
                             {
-                                DateTime t1 = TicksToDate(xlPoint.DataTime[i] * 1000);
+                                var t1 = TicksToDate(item.StartTime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
-                                    t1ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t1ByHxZtcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
                                 {
-                                    t2ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t2ByHxZtcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
                                 {
-                                    t3ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t3ByHxZtcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
                                 {
-                                    t4ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t4ByHxZtcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
                                 {
-                                    t5ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t5ByHxZtcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
                                 {
-                                    t6ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t6ByHxZtcs++;
                                 }
                                 else
                                 {
-                                    t7ByPjXl.Add(xlPoint.DataValue[i]);
+                                    t7ByHxZtcs++;
                                 }
                             }
                         }
-                    }
 
-                    #endregion
+                        #endregion
 
-                    #region 平均呼吸
-                    var hxPoint = dayReport.HxPoint.ToJsonObject<DateValuePoint>();
-
-                    if (hxPoint != null)
-                    {
-                        if (hxPoint.DataTime != null)
+                        #region 体动次数
+                        var smTdcsPoint = dayReport.SmTdcsPoint.ToJsonObject<List<ReportDetailListResult.D_Move>>();
+                        if (smTdcsPoint != null)
                         {
-                            for (int i = 0; i < hxPoint.DataTime.Count; i++)
+                            foreach (var item in smTdcsPoint)
                             {
-                                DateTime t1 = TicksToDate(hxPoint.DataTime[i] * 1000);
+                                var t1 = TicksToDate(item.starttime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
-                                    t1ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t1ByTdcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
                                 {
-                                    t2ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t2ByTdcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
                                 {
-                                    t3ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t3ByTdcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
                                 {
-                                    t4ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t4ByTdcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
                                 {
-                                    t5ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t5ByTdcs++;
                                 }
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
                                 {
-                                    t6ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t6ByTdcs++;
+
                                 }
                                 else
                                 {
-                                    t7ByPjHx.Add(hxPoint.DataValue[i]);
+                                    t7ByTdcs++;
                                 }
                             }
                         }
-                    }
 
-                    #endregion
+                        #endregion
 
-                    #region 深度，浅度，REM
+                        #region 平均心率
+                        var xlPoint = dayReport.XlPoint.ToJsonObject<DateValuePoint>();
 
-                    var smPoint = dayReport.SmPoint.ToJsonObject<SmPointModel>();
-                    if (smPoint != null)
-                    {
-                        if (smPoint.DataValue != null)
+                        if (xlPoint != null)
                         {
-                            if (smPoint.DataValue.Count > 0)
+                            if (xlPoint.DataTime != null)
                             {
-                                foreach (var item in smPoint.DataValue)
+                                for (int i = 0; i < xlPoint.DataTime.Count; i++)
                                 {
-                                    var t1 = TicksToDate(item.starttime * 1000);
-
-                                    //LogUtil.Info("datatime=>:" + t1.ToUnifiedFormatDateTime() + "type=>:" + item.type);
+                                    DateTime t1 = TicksToDate(xlPoint.DataTime[i] * 1000);
 
                                     if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                     {
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t1ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t1ByRem++;
-                                                break;
-                                            case 5:
-                                                t1BySd++;
-                                                break;
-                                            case 6:
-                                                t1ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t1ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
                                     {
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t2ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t2ByRem++;
-                                                break;
-                                            case 5:
-                                                t2BySd++;
-                                                break;
-                                            case 6:
-                                                t2ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t2ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
                                     {
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t3ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t3ByRem++;
-                                                break;
-                                            case 5:
-                                                t3BySd++;
-                                                break;
-                                            case 6:
-                                                t3ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t3ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
                                     {
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t4ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t4ByRem++;
-                                                break;
-                                            case 5:
-                                                t4BySd++;
-                                                break;
-                                            case 6:
-                                                t4ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t4ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
                                     {
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t5ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t5ByRem++;
-                                                break;
-                                            case 5:
-                                                t5BySd++;
-                                                break;
-                                            case 6:
-                                                t5ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t5ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
                                     {
-
-                                        switch (item.type)
-                                        {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t6ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t6ByRem++;
-                                                break;
-                                            case 5:
-                                                t6BySd++;
-                                                break;
-                                            case 6:
-                                                t6ByQd++;
-                                                break;
-                                            default:
-                                                break;
-                                        }
+                                        t6ByPjXl.Add(xlPoint.DataValue[i]);
                                     }
                                     else
                                     {
-                                        switch (item.type)
+                                        t7ByPjXl.Add(xlPoint.DataValue[i]);
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+
+                        #region 平均呼吸
+                        var hxPoint = dayReport.HxPoint.ToJsonObject<DateValuePoint>();
+
+                        if (hxPoint != null)
+                        {
+                            if (hxPoint.DataTime != null)
+                            {
+                                for (int i = 0; i < hxPoint.DataTime.Count; i++)
+                                {
+                                    DateTime t1 = TicksToDate(hxPoint.DataTime[i] * 1000);
+
+                                    if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
+                                    {
+                                        t1ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                    {
+                                        t2ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                    {
+                                        t3ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                    {
+                                        t4ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                    {
+                                        t5ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                    {
+                                        t6ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                    else
+                                    {
+                                        t7ByPjHx.Add(hxPoint.DataValue[i]);
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+
+                        #region 深度，浅度，REM
+
+                        var smPoint = dayReport.SmPoint.ToJsonObject<SmPointModel>();
+                        if (smPoint != null)
+                        {
+                            if (smPoint.DataValue != null)
+                            {
+                                if (smPoint.DataValue.Count > 0)
+                                {
+                                    foreach (var item in smPoint.DataValue)
+                                    {
+                                        var t1 = TicksToDate(item.starttime * 1000);
+
+                                        //LogUtil.Info("datatime=>:" + t1.ToUnifiedFormatDateTime() + "type=>:" + item.type);
+
+                                        if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                         {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                t7ByQd++;
-                                                break;
-                                            case 2:
-                                                break;
-                                            case 3:
-                                                break;
-                                            case 4:
-                                                t7ByRem++;
-                                                break;
-                                            case 5:
-                                                t7BySd++;
-                                                break;
-                                            case 6:
-                                                t7ByQd++;
-                                                break;
-                                            default:
-                                                break;
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t1ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t1ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t1BySd++;
+                                                    break;
+                                                case 6:
+                                                    t1ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "23:00", "01:00"))
+                                        {
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t2ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t2ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t2BySd++;
+                                                    break;
+                                                case 6:
+                                                    t2ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "01:00", "03:00"))
+                                        {
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t3ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t3ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t3BySd++;
+                                                    break;
+                                                case 6:
+                                                    t3ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "03:00", "05:00"))
+                                        {
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t4ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t4ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t4BySd++;
+                                                    break;
+                                                case 6:
+                                                    t4ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "05:00", "07:00"))
+                                        {
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t5ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t5ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t5BySd++;
+                                                    break;
+                                                case 6:
+                                                    t5ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
+                                        {
+
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t6ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t6ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t6BySd++;
+                                                    break;
+                                                case 6:
+                                                    t6ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            switch (item.type)
+                                            {
+                                                case 0:
+                                                    break;
+                                                case 1:
+                                                    t7ByQd++;
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                                case 4:
+                                                    t7ByRem++;
+                                                    break;
+                                                case 5:
+                                                    t7BySd++;
+                                                    break;
+                                                case 6:
+                                                    t7ByQd++;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+
+                        #endregion
                     }
 
-                    #endregion
-                }
-
-                var timeFrameStaPt = new
-                {
-                    t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs, pjXl = t1ByPjXl.Count == 0 ? 0 : Math.Round(t1ByPjXl.Average(), 2), pjHx = t1ByPjHx.Count == 0 ? 0 : Math.Round(t1ByPjHx.Average(), 2), qd = t1ByQd, sd = t1BySd, rem = t1ByRem },
-                    t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs, pjXl = t2ByPjXl.Count == 0 ? 0 : Math.Round(t2ByPjXl.Average(), 2), pjHx = t2ByPjHx.Count == 0 ? 0 : Math.Round(t2ByPjHx.Average(), 2), qd = t2ByQd, sd = t2BySd, rem = t2ByRem },
-                    t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs, pjXl = t3ByPjXl.Count == 0 ? 0 : Math.Round(t3ByPjXl.Average(), 2), pjHx = t3ByPjHx.Count == 0 ? 0 : Math.Round(t3ByPjHx.Average(), 2), qd = t3ByQd, sd = t3BySd, rem = t3ByRem },
-                    t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs, pjXl = t4ByPjXl.Count == 0 ? 0 : Math.Round(t4ByPjXl.Average(), 2), pjHx = t4ByPjHx.Count == 0 ? 0 : Math.Round(t4ByPjHx.Average(), 2), qd = t4ByQd, sd = t4BySd, rem = t4ByRem },
-                    t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs, pjXl = t5ByPjXl.Count == 0 ? 0 : Math.Round(t5ByPjXl.Average(), 2), pjHx = t5ByPjHx.Count == 0 ? 0 : Math.Round(t5ByPjHx.Average(), 2), qd = t5ByQd, sd = t5BySd, rem = t5ByRem },
-                    t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs, pjXl = t6ByPjXl.Count == 0 ? 0 : Math.Round(t6ByPjXl.Average(), 2), pjHx = t6ByPjHx.Count == 0 ? 0 : Math.Round(t6ByPjHx.Average(), 2), qd = t6ByQd, sd = t6BySd, rem = t6ByRem },
-                    t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : Math.Round(t7ByPjXl.Average(), 2), pjHx = t7ByPjHx.Count == 0 ? 0 : Math.Round(t7ByPjHx.Average(), 2), qd = t7ByQd, sd = t7BySd, rem = t7ByRem },
-                };
-
-                d_StageReport = new SenvivHealthMonthReport();
-                d_StageReport.Id = IdWorker.Build(IdType.NewGuid);
-                d_StageReport.TimeFrameStaPt = timeFrameStaPt.ToJsonString();
-                d_StageReport.RptStartTime = rptStartTime;
-                d_StageReport.RptEndTime = rptEndTime;
-                d_StageReport.RptType = rptType;
-                var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
-
-                List<string> smTags = new List<string>();
-                foreach (var s in _smTags)
-                {
-                    var arr = s.ToJsonObject<List<string>>();
-                    if (arr != null)
+                    var timeFrameStaPt = new
                     {
-                        smTags.AddRange(arr);
-                    }
-                }
+                        t1 = new { sccs = t1BySccs, rscs = t1ByRscs, qxcs = t1ByQxcs, lccs = t1ByLccs, hxZtcs = t1ByHxZtcs, tdcs = t1ByTdcs, pjXl = t1ByPjXl.Count == 0 ? 0 : Math.Round(t1ByPjXl.Average(), 2), pjHx = t1ByPjHx.Count == 0 ? 0 : Math.Round(t1ByPjHx.Average(), 2), qd = t1ByQd, sd = t1BySd, rem = t1ByRem },
+                        t2 = new { sccs = t2BySccs, rscs = t2ByRscs, qxcs = t2ByQxcs, lccs = t2ByLccs, hxZtcs = t2ByHxZtcs, tdcs = t2ByTdcs, pjXl = t2ByPjXl.Count == 0 ? 0 : Math.Round(t2ByPjXl.Average(), 2), pjHx = t2ByPjHx.Count == 0 ? 0 : Math.Round(t2ByPjHx.Average(), 2), qd = t2ByQd, sd = t2BySd, rem = t2ByRem },
+                        t3 = new { sccs = t3BySccs, rscs = t3ByRscs, qxcs = t3ByQxcs, lccs = t3ByLccs, hxZtcs = t3ByHxZtcs, tdcs = t3ByTdcs, pjXl = t3ByPjXl.Count == 0 ? 0 : Math.Round(t3ByPjXl.Average(), 2), pjHx = t3ByPjHx.Count == 0 ? 0 : Math.Round(t3ByPjHx.Average(), 2), qd = t3ByQd, sd = t3BySd, rem = t3ByRem },
+                        t4 = new { sccs = t4BySccs, rscs = t4ByRscs, qxcs = t4ByQxcs, lccs = t4ByLccs, hxZtcs = t4ByHxZtcs, tdcs = t4ByTdcs, pjXl = t4ByPjXl.Count == 0 ? 0 : Math.Round(t4ByPjXl.Average(), 2), pjHx = t4ByPjHx.Count == 0 ? 0 : Math.Round(t4ByPjHx.Average(), 2), qd = t4ByQd, sd = t4BySd, rem = t4ByRem },
+                        t5 = new { sccs = t5BySccs, rscs = t5ByRscs, qxcs = t5ByQxcs, lccs = t5ByLccs, hxZtcs = t5ByHxZtcs, tdcs = t5ByTdcs, pjXl = t5ByPjXl.Count == 0 ? 0 : Math.Round(t5ByPjXl.Average(), 2), pjHx = t5ByPjHx.Count == 0 ? 0 : Math.Round(t5ByPjHx.Average(), 2), qd = t5ByQd, sd = t5BySd, rem = t5ByRem },
+                        t6 = new { sccs = t6BySccs, rscs = t6ByRscs, qxcs = t6ByQxcs, lccs = t6ByLccs, hxZtcs = t6ByHxZtcs, tdcs = t6ByTdcs, pjXl = t6ByPjXl.Count == 0 ? 0 : Math.Round(t6ByPjXl.Average(), 2), pjHx = t6ByPjHx.Count == 0 ? 0 : Math.Round(t6ByPjHx.Average(), 2), qd = t6ByQd, sd = t6BySd, rem = t6ByRem },
+                        t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : Math.Round(t7ByPjXl.Average(), 2), pjHx = t7ByPjHx.Count == 0 ? 0 : Math.Round(t7ByPjHx.Average(), 2), qd = t7ByQd, sd = t7BySd, rem = t7ByRem },
+                    };
 
+                    d_StageReport = new SenvivHealthMonthReport();
+                    d_StageReport.Id = IdWorker.Build(IdType.NewGuid);
+                    d_StageReport.TimeFrameStaPt = timeFrameStaPt.ToJsonString();
+                    d_StageReport.RptStartTime = rptStartTime;
+                    d_StageReport.RptEndTime = rptEndTime;
+                    d_StageReport.RptType = rptType;
+                    var _smTags = d_DayReports.Select(m => m.SmTags).ToList();
 
-                d_StageReport.SvUserId = userId;
-                d_StageReport.DayCount = d_DayReports.Count;
-                d_StageReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
-
-                d_StageReport.MylGrfx = Decimal.Parse(d_DayReports.Select(m => m.MylGrfx).Average().ToString());//
-                d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
-                d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
-                d_StageReport.MbGxbgk = Decimal.Parse(d_DayReports.Select(m => m.MbGxbgk).Average().ToString());//
-                d_StageReport.MbGxygk = Decimal.Parse(d_DayReports.Select(m => m.MbGxygk).Average().ToString());//
-                d_StageReport.MbTlbgk = Decimal.Parse(d_DayReports.Select(m => m.MbTlbgk).Average().ToString());//
-                d_StageReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
-                d_StageReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
-                d_StageReport.SmQdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmbl).Average().ToString());//
-                d_StageReport.SmSdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmsc).Average().ToString());//
-                d_StageReport.SmSdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmbl).Average().ToString());//
-                d_StageReport.SmRemsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmsc).Average().ToString());//
-                d_StageReport.SmRemsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmbl).Average().ToString());//
-                d_StageReport.SmTdcs = Decimal.Parse(d_DayReports.Select(m => m.SmTdcs).Average().ToString());//
-                d_StageReport.SmSmzq = Decimal.Parse(d_DayReports.Select(m => m.SmSmzq).Average().ToString());//
-
-                d_StageReport.QxxlQxyj = Decimal.Parse(d_DayReports.Select(m => m.QxxlQxyj).Average().ToString());//
-                d_StageReport.QxxlKynl = Decimal.Parse(d_DayReports.Select(m => m.QxxlKynl).Average().ToString());//
-                d_StageReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
-                d_StageReport.HxDcpjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
-                d_StageReport.HxDcjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcjzhx).Average().ToString());//
-                d_StageReport.HxCqjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxCqjzhx).Average().ToString());//
-                d_StageReport.XlDcpjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
-                d_StageReport.XlDcjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcjzxl).Average().ToString());//
-
-                d_StageReport.XlCqjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlCqjzxl).Average().ToString());//
-
-                d_StageReport.HxZtahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
-                d_StageReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
-
-
-                d_StageReport.HrvJgsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvJgsjzlzs).Average().ToString());//
-                d_StageReport.HrvMzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvMzsjzlzs).Average().ToString());//
-                d_StageReport.HrvZzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvZzsjzlzs).Average().ToString());//
-                d_StageReport.HrvHermzs = Decimal.Parse(d_DayReports.Select(m => m.HrvHermzs).Average().ToString());//
-                d_StageReport.HrvTwjxgsszs = Decimal.Parse(d_DayReports.Select(m => m.HrvTwjxgsszs).Average().ToString());//
-
-                d_StageReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
-                d_StageReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
-
-                d_StageReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
-
-
-                d_StageReport.TotalScorePt = d_DayReports.Select(m => m.TotalScore).ToJsonString();
-
-                d_StageReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
-
-                // d_MonthReport.SmDtqcsPt = d_DayReports.Select(m => m.SmDtqcs).ToJsonString();
-                d_StageReport.XlDcjzxlPt = d_DayReports.Select(m => m.XlDcjzxl).ToJsonString();//
-                d_StageReport.XlCqjzxlPt = d_DayReports.Select(m => m.XlCqjzxl).ToJsonString();//
-                d_StageReport.HrvXzznlPt = d_DayReports.Select(m => m.HrvXzznl).ToJsonString();//
-                d_StageReport.HxZtcsPt = d_DayReports.Select(m => m.HxZtcs).ToJsonString();//
-                d_StageReport.HxDcjzhxPt = d_DayReports.Select(m => m.HxDcjzhx).ToJsonString();//
-                d_StageReport.HxCqjzhxPt = d_DayReports.Select(m => m.HxCqjzhx).ToJsonString();//
-                d_StageReport.HxZtahizsPt = d_DayReports.Select(m => m.HxZtahizs).ToJsonString();//
-                d_StageReport.HrvJgsjzlzsPt = d_DayReports.Select(m => m.HrvJgsjzlzs).ToJsonString();//
-                d_StageReport.HrvMzsjzlzsPt = d_DayReports.Select(m => m.HrvMzsjzlzs).ToJsonString();//
-                d_StageReport.HrvZzsjzlzsPt = d_DayReports.Select(m => m.HrvZzsjzlzs).ToJsonString();//
-                d_StageReport.HrvHermzsPt = d_DayReports.Select(m => m.HrvHermzs).ToJsonString();//
-                d_StageReport.HrvTwjxgsszsPt = d_DayReports.Select(m => m.HrvTwjxgsszs).ToJsonString();//
-                d_StageReport.JbfxXlscfxPt = d_DayReports.Select(m => m.JbfxXlscfx).ToJsonString();//
-                d_StageReport.JbfxXljslPt = d_DayReports.Select(m => m.JbfxXljsl).ToJsonString();//
-
-                var smTags_Count = smTags.GroupBy(s => s).Select(group => new { Name = group.Key, Count = group.Count() });
-
-
-                foreach (var smTag in smTags_Count)
-                {
-                    var d_smTag = new SenvivHealthMonthReportTag();
-                    d_smTag.Id = IdWorker.Build(IdType.NewGuid);
-                    d_smTag.SvUserId = userId;
-                    d_smTag.ReportId = d_StageReport.Id;
-
-                    var d_tag = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagName == smTag.Name).FirstOrDefault();
-                    if (d_tag != null)
+                    List<string> smTags = new List<string>();
+                    foreach (var s in _smTags)
                     {
-                        d_smTag.TagId = d_tag.TagId;
+                        var arr = s.ToJsonObject<List<string>>();
+                        if (arr != null)
+                        {
+                            smTags.AddRange(arr);
+                        }
                     }
 
-                    d_smTag.TagName = smTag.Name;
-                    d_smTag.TagCount = smTag.Count;
 
-                    CurrentDb.SenvivHealthMonthReportTag.Add(d_smTag);
+                    d_StageReport.SvUserId = userId;
+                    d_StageReport.DayCount = d_DayReports.Count;
+                    d_StageReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
+
+                    d_StageReport.MylGrfx = Decimal.Parse(d_DayReports.Select(m => m.MylGrfx).Average().ToString());//
+                    d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
+                    d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
+                    d_StageReport.MbGxbgk = Decimal.Parse(d_DayReports.Select(m => m.MbGxbgk).Average().ToString());//
+                    d_StageReport.MbGxygk = Decimal.Parse(d_DayReports.Select(m => m.MbGxygk).Average().ToString());//
+                    d_StageReport.MbTlbgk = Decimal.Parse(d_DayReports.Select(m => m.MbTlbgk).Average().ToString());//
+                    d_StageReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
+                    d_StageReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
+                    d_StageReport.SmQdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmbl).Average().ToString());//
+                    d_StageReport.SmSdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmsc).Average().ToString());//
+                    d_StageReport.SmSdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmSdsmbl).Average().ToString());//
+                    d_StageReport.SmRemsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmsc).Average().ToString());//
+                    d_StageReport.SmRemsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmRemsmbl).Average().ToString());//
+                    d_StageReport.SmTdcs = Decimal.Parse(d_DayReports.Select(m => m.SmTdcs).Average().ToString());//
+                    d_StageReport.SmSmzq = Decimal.Parse(d_DayReports.Select(m => m.SmSmzq).Average().ToString());//
+
+                    d_StageReport.QxxlQxyj = Decimal.Parse(d_DayReports.Select(m => m.QxxlQxyj).Average().ToString());//
+                    d_StageReport.QxxlKynl = Decimal.Parse(d_DayReports.Select(m => m.QxxlKynl).Average().ToString());//
+                    d_StageReport.HrvXzznl = Decimal.Parse(d_DayReports.Select(m => m.HrvXzznl).Average().ToString());//
+                    d_StageReport.HxDcpjhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcpjhx).Average().ToString());//
+                    d_StageReport.HxDcjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxDcjzhx).Average().ToString());//
+                    d_StageReport.HxCqjzhx = Decimal.Parse(d_DayReports.Select(m => m.HxCqjzhx).Average().ToString());//
+                    d_StageReport.XlDcpjxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcpjxl).Average().ToString());//
+                    d_StageReport.XlDcjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlDcjzxl).Average().ToString());//
+
+                    d_StageReport.XlCqjzxl = Decimal.Parse(d_DayReports.Select(m => m.XlCqjzxl).Average().ToString());//
+
+                    d_StageReport.HxZtahizs = Decimal.Parse(d_DayReports.Select(m => m.HxZtahizs).Average().ToString());//
+                    d_StageReport.HxZtcs = Decimal.Parse(d_DayReports.Select(m => m.HxZtcs).Average().ToString());//
+
+
+                    d_StageReport.HrvJgsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvJgsjzlzs).Average().ToString());//
+                    d_StageReport.HrvMzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvMzsjzlzs).Average().ToString());//
+                    d_StageReport.HrvZzsjzlzs = Decimal.Parse(d_DayReports.Select(m => m.HrvZzsjzlzs).Average().ToString());//
+                    d_StageReport.HrvHermzs = Decimal.Parse(d_DayReports.Select(m => m.HrvHermzs).Average().ToString());//
+                    d_StageReport.HrvTwjxgsszs = Decimal.Parse(d_DayReports.Select(m => m.HrvTwjxgsszs).Average().ToString());//
+
+                    d_StageReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
+                    d_StageReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
+
+                    d_StageReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
+
+
+                    d_StageReport.TotalScorePt = d_DayReports.Select(m => m.TotalScore).ToJsonString();
+
+                    d_StageReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
+
+                    // d_MonthReport.SmDtqcsPt = d_DayReports.Select(m => m.SmDtqcs).ToJsonString();
+                    d_StageReport.XlDcjzxlPt = d_DayReports.Select(m => m.XlDcjzxl).ToJsonString();//
+                    d_StageReport.XlCqjzxlPt = d_DayReports.Select(m => m.XlCqjzxl).ToJsonString();//
+                    d_StageReport.HrvXzznlPt = d_DayReports.Select(m => m.HrvXzznl).ToJsonString();//
+                    d_StageReport.HxZtcsPt = d_DayReports.Select(m => m.HxZtcs).ToJsonString();//
+                    d_StageReport.HxDcjzhxPt = d_DayReports.Select(m => m.HxDcjzhx).ToJsonString();//
+                    d_StageReport.HxCqjzhxPt = d_DayReports.Select(m => m.HxCqjzhx).ToJsonString();//
+                    d_StageReport.HxZtahizsPt = d_DayReports.Select(m => m.HxZtahizs).ToJsonString();//
+                    d_StageReport.HrvJgsjzlzsPt = d_DayReports.Select(m => m.HrvJgsjzlzs).ToJsonString();//
+                    d_StageReport.HrvMzsjzlzsPt = d_DayReports.Select(m => m.HrvMzsjzlzs).ToJsonString();//
+                    d_StageReport.HrvZzsjzlzsPt = d_DayReports.Select(m => m.HrvZzsjzlzs).ToJsonString();//
+                    d_StageReport.HrvHermzsPt = d_DayReports.Select(m => m.HrvHermzs).ToJsonString();//
+                    d_StageReport.HrvTwjxgsszsPt = d_DayReports.Select(m => m.HrvTwjxgsszs).ToJsonString();//
+                    d_StageReport.JbfxXlscfxPt = d_DayReports.Select(m => m.JbfxXlscfx).ToJsonString();//
+                    d_StageReport.JbfxXljslPt = d_DayReports.Select(m => m.JbfxXljsl).ToJsonString();//
+
+                    var smTags_Count = smTags.GroupBy(s => s).Select(group => new { Name = group.Key, Count = group.Count() });
+
+
+                    foreach (var smTag in smTags_Count)
+                    {
+                        var d_smTag = new SenvivHealthMonthReportTag();
+                        d_smTag.Id = IdWorker.Build(IdType.NewGuid);
+                        d_smTag.SvUserId = userId;
+                        d_smTag.ReportId = d_StageReport.Id;
+
+                        var d_tag = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagName == smTag.Name).FirstOrDefault();
+                        if (d_tag != null)
+                        {
+                            d_smTag.TagId = d_tag.TagId;
+                        }
+
+                        d_smTag.TagName = smTag.Name;
+                        d_smTag.TagCount = smTag.Count;
+
+                        CurrentDb.SenvivHealthMonthReportTag.Add(d_smTag);
+                    }
+
+                    d_StageReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
+
+                    d_StageReport.IsSend = false;
+                    d_StageReport.VisitCount = 0;
+                    d_StageReport.Status = E_SenvivHealthReportStatus.WaitSend;
+                    d_StageReport.CreateTime = DateTime.Now;
+                    d_StageReport.Creator = IdWorker.Build(IdType.NewGuid);
+                    CurrentDb.SenvivHealthMonthReport.Add(d_StageReport);
+                    CurrentDb.SaveChanges();
                 }
+            }
 
-                d_StageReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
-
-                d_StageReport.IsSend = false;
-                d_StageReport.VisitCount = 0;
-                d_StageReport.Status = E_SenvivHealthReportStatus.WaitSend;
-                d_StageReport.CreateTime = DateTime.Now;
-                d_StageReport.Creator = IdWorker.Build(IdType.NewGuid);
-                CurrentDb.SenvivHealthMonthReport.Add(d_StageReport);
+            if (string.IsNullOrEmpty(rptId))
+            {
+                var d_SenvivTask = new SenvivTask();
+                d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
+                d_SenvivTask.SvUserId = userId;
+                d_SenvivTask.TaskType = taskType;
+                d_SenvivTask.Title = "";
+                d_SenvivTask.Params = (new { rptId = rptId }).ToJsonString();
+                d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
+                d_SenvivTask.CreateTime = DateTime.Now;
+                d_SenvivTask.Creator = IdWorker.Build(IdType.NewGuid);
+                CurrentDb.SenvivTask.Add(d_SenvivTask);
                 CurrentDb.SaveChanges();
             }
 
@@ -1263,10 +1302,10 @@ namespace LocalS.BLL
                                 rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
                                 rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
+                                taskParams.Add("rpt_id", d_DayReport.Id);
                                 taskParams.Add("start_time", rptStartTime);
                                 taskParams.Add("end_time", rptEndTime);
-
-                                //MqFactory.Global.PushSenvivBuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FisrtDay, taskParams);
+                                BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FisrtDay, taskParams);
                             }
                             else if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
                             {
@@ -1276,7 +1315,7 @@ namespace LocalS.BLL
                                 taskParams.Add("start_time", rptStartTime);
                                 taskParams.Add("end_time", rptEndTime);
 
-                                //MqFactory.Global.PushSenvivBuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_SeventhDay, taskParams);
+                                BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_SeventhDay, taskParams);
                             }
                             else if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
                             {
@@ -1286,7 +1325,7 @@ namespace LocalS.BLL
                                 taskParams.Add("start_time", rptStartTime);
                                 taskParams.Add("end_time", rptEndTime);
 
-                                //MqFactory.Global.PushSenvivBuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
+                                BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
                             }
                             else
                             {
@@ -1302,7 +1341,7 @@ namespace LocalS.BLL
                                     taskParams.Add("start_time", rptStartTime);
                                     taskParams.Add("end_time", rptEndTime);
 
-                                    //MqFactory.Global.PushSenvivBuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_PerMonth, taskParams);
+                                    BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_PerMonth, taskParams);
                                 }
                             }
                         }
