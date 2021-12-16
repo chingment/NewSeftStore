@@ -206,7 +206,7 @@
                 </template>
               </el-table-column>
             </el-table>
-
+            <pagination v-show="tasks.listTotal>0" :total="tasks.listTotal" :page.sync="tasks.listQuery.page" :limit.sync="tasks.listQuery.limit" @pagination="onGetTasks" />
           </div>
         </el-card>
 

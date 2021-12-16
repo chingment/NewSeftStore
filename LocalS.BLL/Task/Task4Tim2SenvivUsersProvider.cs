@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.BLL.Biz;
+using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
 using MyWeiXinSdk;
@@ -34,7 +35,6 @@ namespace LocalS.BLL.Task
             }
         }
 
-
         public void Execute(IJobExecutionContext context)
         {
             try
@@ -60,8 +60,8 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.Height = senvivUser.height;
                         d_SenvivUser.Weight = senvivUser.weight;
                         d_SenvivUser.TargetValue = senvivUser.TargetValue;
-                        d_SenvivUser.LastReportId = senvivUser.lastReportId;
-                        d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
+                        //d_SenvivUser.LastReportId = senvivUser.lastReportId;
+                        //d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
                         d_SenvivUser.SAS = senvivUser.SAS;
                         d_SenvivUser.BreathingMachine = senvivUser.BreathingMachine;
                         d_SenvivUser.Perplex = senvivUser.Perplex;
@@ -88,8 +88,8 @@ namespace LocalS.BLL.Task
                         d_SenvivUser.Height = senvivUser.height;
                         d_SenvivUser.Weight = senvivUser.weight;
                         d_SenvivUser.TargetValue = senvivUser.TargetValue;
-                        d_SenvivUser.LastReportId = senvivUser.lastReportId;
-                        d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
+                        //d_SenvivUser.LastReportId = senvivUser.lastReportId;
+                        //d_SenvivUser.LastReportTime = Convert2DateTime(senvivUser.lastReportTime);
                         d_SenvivUser.SAS = senvivUser.SAS;
                         d_SenvivUser.BreathingMachine = senvivUser.BreathingMachine;
                         d_SenvivUser.Perplex = senvivUser.Perplex;
@@ -123,6 +123,8 @@ namespace LocalS.BLL.Task
                             }
                         }
                     }
+
+                    BizFactory.Senviv.BuildDayReport(d_SenvivUser.Id, d_SenvivUser.DeptId);
                 }
 
 

@@ -1519,16 +1519,16 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             switch (type)
             {
-                case E_SenvivTaskType.FisrtDay:
+                case E_SenvivTaskType.Health_Monitor_FisrtDay:
                     statusModel = new FieldModel(1, "首次回访");
                     break;
-                case E_SenvivTaskType.SeventhDay:
+                case E_SenvivTaskType.Health_Monitor_SeventhDay:
                     statusModel = new FieldModel(2, "一周回访");
                     break;
-                case E_SenvivTaskType.FourteenthDay:
+                case E_SenvivTaskType.Health_Monitor_FourteenthDay:
                     statusModel = new FieldModel(3, "两周回访");
                     break;
-                case E_SenvivTaskType.PerMonth:
+                case E_SenvivTaskType.Health_Monitor_PerMonth:
                     statusModel = new FieldModel(4, "每月回访");
                     break;
             }

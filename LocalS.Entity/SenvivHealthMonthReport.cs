@@ -178,6 +178,11 @@ namespace LocalS.Entity
         public string SugByQxyl { get; set; }
         public string RptSummary { get; set; }
         public string RptSuggest { get; set; }
+
+        public string RptType { get; set; }
+        public DateTime? RptStartTime { get; set; }
+
+        public DateTime? RptEndTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

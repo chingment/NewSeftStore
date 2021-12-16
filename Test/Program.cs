@@ -226,6 +226,11 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            DateTime dt1 = DateTime.Parse("2021-12-30 00:00:00");
+            DateTime dt2 = DateTime.Parse("2022-01-01 00:00:00");
+            int Month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
+
             var tt2 = SdkFactory.Senviv.GetBoxList();
 
             string ssss = tt2.ToJsonString();

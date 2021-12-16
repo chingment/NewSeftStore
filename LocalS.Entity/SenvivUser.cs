@@ -37,8 +37,12 @@ namespace LocalS.Entity
         //public string Remarks { get; set; }
         //public DateTime? LastLoginTime { get; set; }
         //public string LoginCount { get; set; }
+
+        public DateTime? FisrtReportTime { get; set; }
+
         public string LastReportId { get; set; }
         public DateTime? LastReportTime { get; set; }
+
         //public string Details { get; set; }
         public E_SenvivUserCareLevel CareLevel { get; set; }
         //public string Status { get; set; }

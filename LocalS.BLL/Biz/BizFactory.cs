@@ -102,5 +102,13 @@ namespace LocalS.BLL.Biz
                 return new ErpService();
             }
         }
+
+        public static SenvivService Senviv
+        {
+            get
+            {
+                return new SenvivService();
+            }
+        }
     }
 }

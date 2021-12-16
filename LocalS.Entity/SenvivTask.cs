@@ -7,10 +7,10 @@ namespace LocalS.Entity
     public enum E_SenvivTaskType
     {
         Unknow = 0,
-        FisrtDay = 1,
-        SeventhDay = 2,
-        FourteenthDay = 3,
-        PerMonth = 4
+        Health_Monitor_FisrtDay = 1,
+        Health_Monitor_SeventhDay = 2,
+        Health_Monitor_FourteenthDay = 3,
+        Health_Monitor_PerMonth = 4
     }
 
     public enum E_SenvivTaskStatus

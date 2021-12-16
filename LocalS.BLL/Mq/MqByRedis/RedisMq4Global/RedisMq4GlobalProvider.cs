@@ -95,5 +95,6 @@ namespace LocalS.BLL.Mq.MqByRedis
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
         }
+
     }
 }
