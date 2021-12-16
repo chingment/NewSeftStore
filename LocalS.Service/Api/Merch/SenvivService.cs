@@ -734,7 +734,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var query = (from u in CurrentDb.SenvivHealthMonthReport
+            var query = (from u in CurrentDb.SenvivHealthStageReport
 
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
@@ -904,7 +904,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+            var rpt = (from u in CurrentDb.SenvivHealthStageReport
 
                        join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                        from tt in temp.DefaultIfEmpty()
@@ -1075,7 +1075,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+            var rpt = (from u in CurrentDb.SenvivHealthStageReport
                        where u.Id == reportId
                        select new
                        {
@@ -1087,7 +1087,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.CreateTime
                        }).FirstOrDefault();
 
-            var d_SugSkus = CurrentDb.SenvivHealthMonthReportSugSku.Where(m => m.ReportId == reportId).ToList();
+            var d_SugSkus = CurrentDb.SenvivHealthStageReportSugSku.Where(m => m.ReportId == reportId).ToList();
 
             var sugSkus = new List<object>();
 
@@ -1123,30 +1123,30 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+            var rpt = CurrentDb.SenvivHealthStageReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
 
             rpt.RptSummary = rop.RptSummary;
             rpt.RptSuggest = rop.RptSuggest;
 
-            var d_SugSkus = CurrentDb.SenvivHealthMonthReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
+            var d_SugSkus = CurrentDb.SenvivHealthStageReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
 
             foreach (var d_SugSku in d_SugSkus)
             {
-                CurrentDb.SenvivHealthMonthReportSugSku.Remove(d_SugSku);
+                CurrentDb.SenvivHealthStageReportSugSku.Remove(d_SugSku);
             }
 
             if (rop.SugSkus != null)
             {
                 foreach (var sugSku in rop.SugSkus)
                 {
-                    var d_SugSku = new SenvivHealthMonthReportSugSku();
+                    var d_SugSku = new SenvivHealthStageReportSugSku();
                     d_SugSku.Id = IdWorker.Build(IdType.NewGuid);
                     d_SugSku.ReportId = rop.ReportId;
                     d_SugSku.MerchId = merchId;
                     d_SugSku.SkuId = sugSku.Id;
                     d_SugSku.CreateTime = DateTime.Now;
                     d_SugSku.Creator = operater;
-                    CurrentDb.SenvivHealthMonthReportSugSku.Add(d_SugSku);
+                    CurrentDb.SenvivHealthStageReportSugSku.Add(d_SugSku);
                 }
             }
 

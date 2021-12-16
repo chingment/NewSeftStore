@@ -81,11 +81,11 @@ namespace LocalS.DAL
         public IDbSet<SenvivUserDevice> SenvivUserDevice { get; set; }
         public IDbSet<SenvivDept> SenvivDept { get; set; }
         public IDbSet<SenvivHealthDayReport> SenvivHealthDayReport { get; set; }
-        public IDbSet<SenvivHealthMonthReport> SenvivHealthMonthReport { get; set; }
+        public IDbSet<SenvivHealthStageReport> SenvivHealthStageReport { get; set; }
         public IDbSet<SenvivHealthDayReportLabel> SenvivHealthDayReportLabel { get; set; }
         public IDbSet<SenvivHealthDayReportAdvice> SenvivHealthDayReportAdvice { get; set; }
-        public IDbSet<SenvivHealthMonthReportSugSku> SenvivHealthMonthReportSugSku { get; set; }
-        public IDbSet<SenvivHealthMonthReportTag> SenvivHealthMonthReportTag { get; set; }
+        public IDbSet<SenvivHealthStageReportSugSku> SenvivHealthStageReportSugSku { get; set; }
+        public IDbSet<SenvivHealthStageReportTag> SenvivHealthStageReportTag { get; set; }
         public IDbSet<SenvivVisitRecord> SenvivVisitRecord { get; set; }
         public IDbSet<SenvivMerchConfig> SenvivMerchConfig { get; set; }
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }

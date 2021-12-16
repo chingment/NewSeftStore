@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+            var rpt = (from u in CurrentDb.SenvivHealthStageReport
 
                        join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                        from tt in temp.DefaultIfEmpty()
@@ -74,7 +74,7 @@ namespace LocalS.Service.Api.HealthApp
 
 
 
-            var sum_TotalScores = CurrentDb.SenvivHealthMonthReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
+            var sum_TotalScores = CurrentDb.SenvivHealthStageReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
             int scoreRatio = 80;
             if (sum_TotalScores.Count > 0)
             {
@@ -84,7 +84,7 @@ namespace LocalS.Service.Api.HealthApp
                 scoreRatio = Convert.ToInt32(r);
             }
 
-            var d_SmTags = CurrentDb.SenvivHealthMonthReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SenvivHealthStageReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -174,7 +174,7 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+            var rpt = (from u in CurrentDb.SenvivHealthStageReport
                        where u.Id == rptId
                        select new
                        {
@@ -203,7 +203,7 @@ namespace LocalS.Service.Api.HealthApp
                        }).FirstOrDefault();
 
 
-            var d_SmTags = CurrentDb.SenvivHealthMonthReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SenvivHealthStageReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -247,7 +247,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthMonthReport
+            var rpt = (from u in CurrentDb.SenvivHealthStageReport
                        where u.Id == rptId
                        select new
                        {
@@ -280,7 +280,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rptTag = (from u in CurrentDb.SenvivHealthMonthReportTag
+            var rptTag = (from u in CurrentDb.SenvivHealthStageReportTag
                           where u.Id == tagId
                           select new
                           {
@@ -323,7 +323,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SenvivHealthMonthReportSugSku
+            var query = (from u in CurrentDb.SenvivHealthStageReportSugSku
                          where u.ReportId == rptId
                          select new { u.Id, u.MerchId, u.SkuId, u.CreateTime });
 
@@ -366,7 +366,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SenvivHealthMonthReport.Where(m => m.Id == rptId).FirstOrDefault();
+            var rpt = CurrentDb.SenvivHealthStageReport.Where(m => m.Id == rptId).FirstOrDefault();
             if (rpt != null)
             {
                 rpt.VisitCount += 1;

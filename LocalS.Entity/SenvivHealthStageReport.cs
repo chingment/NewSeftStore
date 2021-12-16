@@ -17,8 +17,8 @@ namespace LocalS.Entity
         SendFailure = 8
     }
 
-    [Table("SenvivHealthMonthReport")]
-    public class SenvivHealthMonthReport
+    [Table("SenvivHealthStageReport")]
+    public class SenvivHealthStageReport
     {
         [Key]
         public string Id { get; set; }

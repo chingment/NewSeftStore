@@ -92,7 +92,7 @@ namespace LocalS.BLL
                         break;
                 }
 
-                var d_StageReport = CurrentDb.SenvivHealthMonthReport.Where(m => m.SvUserId == userId && m.RptType == rptType && m.RptStartTime == rptStartTime && m.RptEndTime == rptEndTime).FirstOrDefault();
+                var d_StageReport = CurrentDb.SenvivHealthStageReport.Where(m => m.SvUserId == userId && m.RptType == rptType && m.RptStartTime == rptStartTime && m.RptEndTime == rptEndTime).FirstOrDefault();
 
                 if (d_StageReport != null)
                     return;
@@ -709,7 +709,7 @@ namespace LocalS.BLL
                         t7 = new { sccs = t7BySccs, rscs = t7ByRscs, qxcs = t7ByQxcs, lccs = t7ByLccs, hxZtcs = t7ByHxZtcs, tdcs = t7ByTdcs, pjXl = t7ByPjXl.Count == 0 ? 0 : Math.Round(t7ByPjXl.Average(), 2), pjHx = t7ByPjHx.Count == 0 ? 0 : Math.Round(t7ByPjHx.Average(), 2), qd = t7ByQd, sd = t7BySd, rem = t7ByRem },
                     };
 
-                    d_StageReport = new SenvivHealthMonthReport();
+                    d_StageReport = new SenvivHealthStageReport();
                     d_StageReport.Id = IdWorker.Build(IdType.NewGuid);
                     d_StageReport.TimeFrameStaPt = timeFrameStaPt.ToJsonString();
                     d_StageReport.RptStartTime = rptStartTime;
@@ -800,7 +800,7 @@ namespace LocalS.BLL
 
                     foreach (var smTag in smTags_Count)
                     {
-                        var d_smTag = new SenvivHealthMonthReportTag();
+                        var d_smTag = new SenvivHealthStageReportTag();
                         d_smTag.Id = IdWorker.Build(IdType.NewGuid);
                         d_smTag.SvUserId = userId;
                         d_smTag.ReportId = d_StageReport.Id;
@@ -814,7 +814,7 @@ namespace LocalS.BLL
                         d_smTag.TagName = smTag.Name;
                         d_smTag.TagCount = smTag.Count;
 
-                        CurrentDb.SenvivHealthMonthReportTag.Add(d_smTag);
+                        CurrentDb.SenvivHealthStageReportTag.Add(d_smTag);
                     }
 
                     d_StageReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
@@ -824,7 +824,7 @@ namespace LocalS.BLL
                     d_StageReport.Status = E_SenvivHealthReportStatus.WaitSend;
                     d_StageReport.CreateTime = DateTime.Now;
                     d_StageReport.Creator = IdWorker.Build(IdType.NewGuid);
-                    CurrentDb.SenvivHealthMonthReport.Add(d_StageReport);
+                    CurrentDb.SenvivHealthStageReport.Add(d_StageReport);
                     CurrentDb.SaveChanges();
                 }
             }
