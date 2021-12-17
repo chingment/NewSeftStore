@@ -430,7 +430,7 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
-    <pane-month-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" :report-id="selectReportId" @aftersavesug="onAfterSaveMonthReportSug" />
+    <pane-stage-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" :report-id="selectReportId" @aftersavesug="onAfterSaveMonthReportSug" />
 
   </div>
 </template>
@@ -438,11 +438,11 @@
 <script>
 import { getMonthReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import PaneMonthReportDetail from './PaneMonthReportDetail.vue'
+import PaneStageReportDetail from './PaneStageReportDetail.vue'
 import DvItem from './DvItem.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneMonthReportDetail, DvItem },
+  components: { Pagination, PaneStageReportDetail, DvItem },
   props: {
     userId: {
       type: String,

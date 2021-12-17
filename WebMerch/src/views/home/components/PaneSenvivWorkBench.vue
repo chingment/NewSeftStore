@@ -199,8 +199,11 @@
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
-                <template slot-scope="{row}">
-                  <el-button type="text" size="mini">
+                <template slot-scope="scope">
+                  <el-button v-if="scope.row.status.value===1||scope.row.status.value===2" type="text" size="mini" @click="onHandleTask(scope.row)">
+                    处理
+                  </el-button>
+                  <el-button v-else-if="scope.row.status.value===3" type="text" size="mini" @click="onHandleTask(scope.row)">
                     查看
                   </el-button>
                 </template>
@@ -212,6 +215,9 @@
 
       </el-main>
     </el-container>
+
+    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" @aftersavesug="onAfterSaveStageReportSug" />
+    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" />
   </div>
 
 </template>
@@ -222,9 +228,11 @@ import { getInitData } from '@/api/senvivworkbench'
 import { getUsers, getTasks } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneUserDetail from '@/views/senviv/components/PaneUserDetail.vue'
+import PaneDayReportDetail from '@/views/senviv/components/PaneDayReportDetail.vue'
+import PaneStageReportDetail from '@/views/senviv/components/PaneStageReportDetail.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneUserDetail },
+  components: { Pagination, PaneUserDetail, PaneDayReportDetail, PaneStageReportDetail },
   data() {
     return {
       loadingConsoleInfo: false,
@@ -301,6 +309,10 @@ export default {
       ],
       selectUserId: '',
       dialogIsShowByDetail: false,
+      dialogIsShowByStageReport: false,
+      selectStageReportId: '',
+      dialogIsShowByDayReport: false,
+      selectDayReportId: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -380,6 +392,15 @@ export default {
     onOpenDialogByDetail(item) {
       this.selectUserId = item.id
       this.dialogIsShowByDetail = true
+    },
+    onHandleTask(item) {
+      if (item.taskType.value === 1) {
+        this.dialogIsShowByDayReport = true
+        this.selectDayReportId = item.params.rptId
+      } else if (item.taskType.value === 2 || item.taskType.value === 3 || item.taskType.value === 4) {
+        this.dialogIsShowByStageReport = true
+        this.selectStageReportId = item.params.rptId
+      }
     }
   }
 }

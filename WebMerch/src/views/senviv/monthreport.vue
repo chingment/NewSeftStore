@@ -1,15 +1,15 @@
 <template>
   <div>
-    <pane-month-report cache-query />
+    <pane-stage-report cache-query />
   </div>
 </template>
 
 <script>
 
-import PaneMonthReport from './components/PaneMonthReport.vue'
+import PaneStageReport from './components/PaneStageReport.vue'
 export default {
   name: 'SenvivMonthReport',
-  components: { PaneMonthReport },
+  components: { PaneStageReport },
   data() {
     return {
       loading: false,

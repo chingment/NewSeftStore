@@ -49,7 +49,7 @@
             <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" />
             <pane-visit-record v-if="activeMenu==='VisitRecord'" :user-id="userId" />
             <pane-day-report v-if="activeMenu==='DayReport'" :user-id="userId" />
-            <pane-month-report v-if="activeMenu==='MonthReport'" :user-id="userId" />
+            <pane-stage-report v-if="activeMenu==='MonthReport'" :user-id="userId" />
           </el-main>
         </el-container>
       </el-container>
@@ -63,14 +63,14 @@
 
 import { MessageBox } from 'element-ui'
 import PaneDayReport from './PaneDayReport.vue'
-import PaneMonthReport from './PaneMonthReport.vue'
+import PaneStageReport from './PaneStageReport.vue'
 import PaneUserInfo from './PaneUserInfo.vue'
 import PaneVisitRecord from './PaneVisitRecord.vue'
 import { getUserDetail } from '@/api/senviv'
 
 export default {
   // name: 'SenvivPaneUserDetail',
-  components: { PaneDayReport, PaneMonthReport, PaneUserInfo, PaneVisitRecord },
+  components: { PaneDayReport, PaneStageReport, PaneUserInfo, PaneVisitRecord },
   props: {
     userId: {
       type: String,

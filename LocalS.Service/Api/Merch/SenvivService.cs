@@ -1448,7 +1448,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          from tt in temp.DefaultIfEmpty()
                          where
                          merchIds.Contains(tt.MerchId)
-                         select new { u.Id, u.TaskType, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
+                         select new { u.Id, u.TaskType, u.Params, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
 
             int total = query.Count();
 
@@ -1483,6 +1483,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     TaskType = GetTaskType(item.TaskType),
                     Title = item.Title,
                     Status = GetTaskStatus(item.Status),
+                    Params = item.Params.ToJsonObject<Dictionary<string, string>>(),
                     CreateTime = item.CreateTime
                 });
             }
