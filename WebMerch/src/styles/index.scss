@@ -569,3 +569,27 @@ border: 1px solid #909399;
 .dialog_visit_by_telephone{
   height: 600px;
 }
+
+
+.senviv-stage-detail{
+  background-color:#fbfbfb;
+  height: 90%;
+
+  .el-dialog__body{
+    overflow: hidden;
+    padding-bottom: 10px;
+
+    .report-detail{
+      width: 1000px;
+      float: left;
+      height: 100%;
+      overflow: auto;
+      }
+
+      .report-fun{
+        width:550px;
+        float:left;
+      }
+  }
+
+}
