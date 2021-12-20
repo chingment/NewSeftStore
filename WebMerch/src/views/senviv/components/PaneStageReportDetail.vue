@@ -3,7 +3,7 @@
   <el-dialog v-if="visible" title="健康报告（月）" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
 
     <el-container style="height: 100%;">
-      <el-aside style="width:1000px;margin-right:10px;">
+      <el-aside style="flex:1;padding:0px 20px">
 
         <div class="row-title clearfix">
           <div class="pull-left"> <h5>数据标签</h5>
@@ -304,18 +304,18 @@
         </table>
 
       </el-aside>
-      <el-container>
+      <el-container style="flex:none;width:420px;padding:0px">
         <div style="width:100%">
-          <div style="padding:0 20px">
+          <div style="padding:0px 20px;">
             <el-button size="small" type="primary" @click="onOpenByDrawerBySug">评 价</el-button>
           <!-- <el-button size="small" type="primary" @click="onOpenByDrawerBySug">电话回访</el-button>
         <el-button size="small" type="primary" @click="onOpenByDrawerBySug">公众号告知</el-button> -->
           </div>
           <div
             v-show="drawerBySug.visible"
-            style="display:flex;flex-direction: column;overflow: hidden;"
+            style="display: flex;flex-direction: column;overflow: hidden;height: 100%;"
           >
-            <div v-loading="loadingBySug" class="drawer__content" style="-webkit-box-flex: 1;-ms-flex: 1;flex: 1;overflow: auto;padding:0 20px ">
+            <div v-loading="loadingBySug" class="drawer__content" style="flex-direction: column;height: 100%;overflow: auto;padding:0px 20px">
 
               <div style="margin:10px 0px">
                 <el-tag v-if="formBySug.isSend" type="success">
@@ -409,14 +409,15 @@
                 </div>
               </el-card>
             </div>
-            <div class="drawer__footer" style="padding: 10px 20px;text-align:center; ">
+            <div class="drawer__footer" style="padding: 10px 0px;text-align: center;height: 100px;">
               <el-button size="small" @click="onCloseByDrawerBySug">关 闭</el-button>
               <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
               <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
             </div>
           </div>
 
-        </div></el-container>
+        </div>
+      </el-container>
     </el-container>
 
   </el-dialog>

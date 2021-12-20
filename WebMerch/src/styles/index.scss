@@ -574,11 +574,11 @@ border: 1px solid #909399;
 .senviv-stage-detail{
   background-color:#fbfbfb;
   height: 90%;
-
+ 
   .el-dialog__body{
     overflow: hidden;
     padding-bottom: 10px;
-
+    padding: 0px;
     .report-detail{
       width: 1000px;
       float: left;
