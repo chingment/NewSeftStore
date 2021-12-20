@@ -34,9 +34,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetDayReportDetail([FromUri]string reportId)
+        public OwnApiHttpResponse GetDayReportDetail([FromUri]string reportId, [FromUri]string taskId)
         {
-            var result = MerchServiceFactory.Senviv.GetDayReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetDayReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId, taskId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -48,9 +48,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetMonthReportDetail([FromUri]string reportId)
+        public OwnApiHttpResponse GetMonthReportDetail([FromUri]string reportId, [FromUri]string taskId)
         {
-            var result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId, taskId);
             return new OwnApiHttpResponse(result);
         }
 

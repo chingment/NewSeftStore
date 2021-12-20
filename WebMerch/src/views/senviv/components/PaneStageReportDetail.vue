@@ -1,6 +1,6 @@
 <template>
 
-  <el-dialog v-if="visible" title="健康报告（月）" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
+  <el-dialog v-if="visible" :title="dialog.title" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
     <el-container class="brech-work">
       <el-aside class="brech-work-aside">
 
@@ -373,12 +373,12 @@
                       highlight-current-row
                       style="width: 100%;"
                     >
-                      <el-table-column label="商品名称" align="left" min-width="50%">
+                      <el-table-column label="商品名称" align="left" min-width="60%">
                         <template slot-scope="scope">
                           <span>{{ scope.row.name }}</span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="编码" align="left" min-width="50%">
+                      <el-table-column label="编码" align="left" min-width="40%">
                         <template slot-scope="scope">
                           <span>{{ scope.row.cumCode }}</span>
                         </template>
@@ -387,7 +387,7 @@
                         v-if="!formBySug.isSend"
                         label="操作"
                         align="right"
-                        width="180"
+                        width="50"
                         class-name="small-padding fixed-width"
                       >
                         <template slot-scope="scope">
@@ -433,6 +433,10 @@ export default {
       type: String,
       default: ''
     },
+    taskId: {
+      type: String,
+      default: ''
+    },
     visible: {
       type: Boolean,
       default: false
@@ -441,7 +445,8 @@ export default {
   data() {
     return {
       dialog: {
-        width: '1000px'
+        width: '1000px',
+        title: ''
       },
       loading: false,
       loadingBySug: false,
@@ -510,7 +515,7 @@ export default {
     },
     onGetDayReportDetail() {
       this.loading = true
-      getMonthReportDetail({ reportId: this.reportId }).then(res => {
+      getMonthReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo

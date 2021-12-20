@@ -449,7 +449,7 @@ namespace LocalS.Service.Api.Merch
 
         }
 
-        public CustomJsonResult GetDayReportDetail(string operater, string merchId, string reportId)
+        public CustomJsonResult GetDayReportDetail(string operater, string merchId, string reportId, string taskId)
         {
             var result = new CustomJsonResult();
 
@@ -899,7 +899,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-        public CustomJsonResult GetMonthReportDetail(string operater, string merchId, string reportId)
+        public CustomJsonResult GetMonthReportDetail(string operater, string merchId, string reportId, string taskId)
         {
 
             var result = new CustomJsonResult();

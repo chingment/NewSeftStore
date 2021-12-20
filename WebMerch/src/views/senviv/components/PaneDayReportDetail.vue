@@ -211,6 +211,10 @@ export default {
       type: String,
       default: ''
     },
+    taskId: {
+      type: String,
+      default: ''
+    },
     visible: {
       type: Boolean,
       default: false
@@ -273,7 +277,7 @@ export default {
     },
     _getDayReportDetail() {
       this.loading = true
-      getDayReportDetail({ reportId: this.reportId }).then(res => {
+      getDayReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo

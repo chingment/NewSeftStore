@@ -216,8 +216,8 @@
       </el-main>
     </el-container>
 
-    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" @aftersavesug="onAfterSaveStageReportSug" />
-    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" />
+    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" :task-id="selectTaskId" @aftersavesug="onAfterSaveStageReportSug" />
+    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" :task-id="selectTaskId" />
   </div>
 
 </template>
@@ -313,6 +313,7 @@ export default {
       selectStageReportId: '',
       dialogIsShowByDayReport: false,
       selectDayReportId: '',
+      selectTaskId: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },
@@ -394,6 +395,7 @@ export default {
       this.dialogIsShowByDetail = true
     },
     onHandleTask(item) {
+      this.selectTaskId = item.id
       if (item.taskType.value === 1) {
         this.dialogIsShowByDayReport = true
         this.selectDayReportId = item.params.rptId
