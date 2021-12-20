@@ -593,3 +593,42 @@ border: 1px solid #909399;
   }
 
 }
+
+.brech-work{
+  height: 100%;
+
+  .brech-work-aside{
+    flex:1;
+    padding:0px 20px;
+  }
+
+  .brech-work-container{
+    flex:none;
+    width:420px;
+    padding:0px;
+    display: flex;
+    flex-direction: column;
+
+    .header{
+      padding:0px 20px;
+    }
+
+    .drawer{
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 100%;
+
+      .drawer_content{
+        height: 100%;
+        overflow: auto;
+        padding:0px 20px;
+      }
+
+      .drawer_footer{
+        padding: 10px 0px;
+        text-align: center;
+      }
+    }
+  }
+}
