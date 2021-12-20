@@ -1,7 +1,6 @@
 <template>
 
   <el-dialog v-if="visible" title="健康报告（月）" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
-
     <el-container style="height: 100%;">
       <el-aside style="flex:1;padding:0px 20px">
 
@@ -312,116 +311,116 @@
         <el-button size="small" type="primary" @click="onOpenByDrawerBySug">公众号告知</el-button> -->
           </div>
           <div
-            v-show="drawerBySug.visible"
+            class="drawer"
             style="display: flex;flex-direction: column;overflow: hidden;height: 100%;"
           >
-            <div v-loading="loadingBySug" class="drawer__content" style="flex-direction: column;height: 100%;overflow: auto;padding:0px 20px">
-
-              <div style="margin:10px 0px">
-                <el-tag v-if="formBySug.isSend" type="success">
-                  已发送
-                </el-tag>
-                <el-tag v-if="!formBySug.isSend" type="warning">
-                  未发送
-                </el-tag>
-              </div>
-              <el-card class="box-card" style="margin-bottom:10px">
-                <div slot="header" class="clearfix">
-                  <span>健康总结</span>
+            <div class="drawer__content" style="flex-direction: column;height: 100%;overflow: auto;padding:0px 20px">
+              <div v-show="drawerBySug.visible" v-loading="loadingBySug">
+                <div style="margin:10px 0px">
+                  <el-tag v-if="formBySug.isSend" type="success">
+                    已发送
+                  </el-tag>
+                  <el-tag v-if="!formBySug.isSend" type="warning">
+                    未发送
+                  </el-tag>
                 </div>
-                <div>
-                  <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="5" type="textarea" show-word-limit />
-                  <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSummary }}</pre>
-                </div>
-              </el-card>
-              <el-card class="box-card" style="margin-bottom:10px">
-                <div slot="header" class="clearfix">
-                  <span>健康建议</span>
-                </div>
-                <div>
-                  <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="5" type="textarea" show-word-limit />
-                  <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSuggest }}</pre>
-                </div>
-              </el-card>
-              <el-card class="box-card" style="margin-bottom:10px">
-                <div slot="header" class="clearfix">
-                  <span>推荐商品</span>
-                </div>
-                <div>
-
-                  <div v-if="!formBySug.isSend">
-                    <el-autocomplete
-                      v-model="temp.searchSkuKey"
-                      :fetch-suggestions="onSearchSku"
-                      placeholder="商品名称/编码/条形码/首拼音母"
-                      clearable
-                      style="width: 75%"
-                      size="medium"
-                      @select="onSearchSkuSelect"
-                    >
-                      <template slot-scope="{ item }">
-                        <div class="spu-search">
-                          <div class="name">{{ item.name }}</div>
-                          <div class="desc">[{{ item.cumCode }}]</div>
-                        </div>
-                      </template>
-                    </el-autocomplete>
-
-                    <el-button size="medium" style="width: 20%" @click="onAddSugSku">添加</el-button>
+                <el-card class="box-card" style="margin-bottom:10px">
+                  <div slot="header" class="clearfix">
+                    <span>健康总结</span>
                   </div>
-
                   <div>
-                    <el-table
-                      key="list_sugskus"
-                      :data="formBySug.sugSkus"
-                      fit
-                      highlight-current-row
-                      style="width: 100%;"
-                    >
-                      <el-table-column label="商品名称" align="left" min-width="50%">
-                        <template slot-scope="scope">
-                          <span>{{ scope.row.name }}</span>
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="编码" align="left" min-width="50%">
-                        <template slot-scope="scope">
-                          <span>{{ scope.row.cumCode }}</span>
-                        </template>
-                      </el-table-column>
-                      <el-table-column
-                        v-if="!formBySug.isSend"
-                        label="操作"
-                        align="right"
-                        width="180"
-                        class-name="small-padding fixed-width"
-                      >
-                        <template slot-scope="scope">
-                          <el-button
-                            type="text"
-                            size="mini"
-                            @click="onDeleteSugSku(scope.$index)"
-                          >删除</el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
+                    <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="5" type="textarea" show-word-limit />
+                    <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSummary }}</pre>
                   </div>
+                </el-card>
+                <el-card class="box-card" style="margin-bottom:10px">
+                  <div slot="header" class="clearfix">
+                    <span>健康建议</span>
+                  </div>
+                  <div>
+                    <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="5" type="textarea" show-word-limit />
+                    <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSuggest }}</pre>
+                  </div>
+                </el-card>
+                <el-card class="box-card" style="margin-bottom:10px">
+                  <div slot="header" class="clearfix">
+                    <span>推荐商品</span>
+                  </div>
+                  <div>
 
-                </div>
-              </el-card>
+                    <div v-if="!formBySug.isSend">
+                      <el-autocomplete
+                        v-model="temp.searchSkuKey"
+                        :fetch-suggestions="onSearchSku"
+                        placeholder="商品名称/编码/条形码/首拼音母"
+                        clearable
+                        style="width: 75%"
+                        size="medium"
+                        @select="onSearchSkuSelect"
+                      >
+                        <template slot-scope="{ item }">
+                          <div class="spu-search">
+                            <div class="name">{{ item.name }}</div>
+                            <div class="desc">[{{ item.cumCode }}]</div>
+                          </div>
+                        </template>
+                      </el-autocomplete>
+
+                      <el-button size="medium" style="width: 20%" @click="onAddSugSku">添加</el-button>
+                    </div>
+
+                    <div>
+                      <el-table
+                        key="list_sugskus"
+                        :data="formBySug.sugSkus"
+                        fit
+                        highlight-current-row
+                        style="width: 100%;"
+                      >
+                        <el-table-column label="商品名称" align="left" min-width="50%">
+                          <template slot-scope="scope">
+                            <span>{{ scope.row.name }}</span>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="编码" align="left" min-width="50%">
+                          <template slot-scope="scope">
+                            <span>{{ scope.row.cumCode }}</span>
+                          </template>
+                        </el-table-column>
+                        <el-table-column
+                          v-if="!formBySug.isSend"
+                          label="操作"
+                          align="right"
+                          width="180"
+                          class-name="small-padding fixed-width"
+                        >
+                          <template slot-scope="scope">
+                            <el-button
+                              type="text"
+                              size="mini"
+                              @click="onDeleteSugSku(scope.$index)"
+                            >删除</el-button>
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                    </div>
+
+                  </div>
+                </el-card>
+              </div>
             </div>
             <div class="drawer__footer" style="padding: 10px 0px;text-align: center;height: 100px;">
-              <el-button size="small" @click="onCloseByDrawerBySug">关 闭</el-button>
-              <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
-              <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
+              <div v-show="drawerBySug.visible">
+                <el-button size="small" @click="onCloseByDrawerBySug">关 闭</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
+              </div>
             </div>
           </div>
-
         </div>
       </el-container>
     </el-container>
-
   </el-dialog>
-
 </template>
 
 <script>
