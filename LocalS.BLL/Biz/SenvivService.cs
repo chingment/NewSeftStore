@@ -831,17 +831,22 @@ namespace LocalS.BLL
 
             if (string.IsNullOrEmpty(rptId))
             {
-                var d_SenvivTask = new SenvivTask();
-                d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
-                d_SenvivTask.SvUserId = userId;
-                d_SenvivTask.TaskType = taskType;
-                d_SenvivTask.Title = "";
-                d_SenvivTask.Params = (new { rptId = rptId }).ToJsonString();
-                d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
-                d_SenvivTask.CreateTime = DateTime.Now;
-                d_SenvivTask.Creator = IdWorker.Build(IdType.NewGuid);
-                CurrentDb.SenvivTask.Add(d_SenvivTask);
-                CurrentDb.SaveChanges();
+                var d_SenvivTask = CurrentDb.SenvivTask.Where(m => m.ReportId == rptId).FirstOrDefault();
+                if (d_SenvivTask == null)
+                {
+                    d_SenvivTask = new SenvivTask();
+                    d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
+                    d_SenvivTask.SvUserId = userId;
+                    d_SenvivTask.TaskType = taskType;
+                    d_SenvivTask.Title = "";
+                    d_SenvivTask.ReportId = rptId;
+                    d_SenvivTask.Params = (new { rptId = rptId }).ToJsonString();
+                    d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
+                    d_SenvivTask.CreateTime = DateTime.Now;
+                    d_SenvivTask.Creator = IdWorker.Build(IdType.NewGuid);
+                    CurrentDb.SenvivTask.Add(d_SenvivTask);
+                    CurrentDb.SaveChanges();
+                }
             }
 
         }
