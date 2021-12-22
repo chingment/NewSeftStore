@@ -1,7 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.Entity;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using Lumos.Redis;
 using System;
@@ -179,13 +179,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
-                string signName = item.NickName;
-
-                if (!string.IsNullOrEmpty(item.FullName) && item.NickName != item.FullName)
-                {
-                    signName += "(" + item.FullName + ")";
-                }
-
+ 
 
                 string age = "-";
 
@@ -197,7 +191,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
-                    SignName = signName,
+                    SignName = SvUtil.GetSignName(item.FullName, item.NickName),
                     Avatar = item.Avatar,
                     SAS = SvUtil.GetSASName(item.SAS),
                     BreathingMachine = SvUtil.GetBreathingMachineName(item.BreathingMachine),

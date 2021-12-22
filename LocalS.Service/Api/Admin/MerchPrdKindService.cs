@@ -1,7 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using Lumos.Redis;
 using System;

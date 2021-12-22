@@ -1,6 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using Lumos.DbRelay;
 using System;

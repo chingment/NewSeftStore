@@ -1,7 +1,7 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.Entity;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using System;
 using System.Collections.Generic;

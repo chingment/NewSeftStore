@@ -155,6 +155,9 @@
     <Compile Include="Sdk\WxSdkProvider.cs" />
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="SpecDes.cs" />
+    <Compile Include="SvDataJd.cs" />
+    <Compile Include="SvDataJdUtil.cs" />
+    <Compile Include="SvUtil.cs" />
     <Compile Include="Task\BaseProgram.cs" />
     <Compile Include="Task\ITask.cs" />
     <Compile Include="Task\Launcher.cs" />
@@ -171,6 +174,20 @@
     <Compile Include="Task\Task4Tim2GlobalProvider.cs" />
     <Compile Include="Task\Task4Tim2SenvivUsersProvider.cs" />
     <Compile Include="Task\Task4Tim2WxUpdateUsersInfoProvider.cs" />
+    <Compile Include="UI\Badge.cs" />
+    <Compile Include="UI\EleTag.cs" />
+    <Compile Include="UI\FsBlock.cs" />
+    <Compile Include="UI\FsBlockByField.cs" />
+    <Compile Include="UI\FsButton.cs" />
+    <Compile Include="UI\FsField.cs" />
+    <Compile Include="UI\FsQrCode.cs" />
+    <Compile Include="UI\FsReceiptInfo.cs" />
+    <Compile Include="UI\FsTag.cs" />
+    <Compile Include="UI\FsTemplateData.cs" />
+    <Compile Include="UI\FsText.cs" />
+    <Compile Include="UI\MenuNode.cs" />
+    <Compile Include="UI\OptionNode.cs" />
+    <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\alipay-sdk-NET20161213174056\AopSdk.csproj">

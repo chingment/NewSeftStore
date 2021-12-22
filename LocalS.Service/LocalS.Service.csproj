@@ -508,23 +508,6 @@
     <Compile Include="Api\StoreTerm\StockSettingService.cs" />
     <Compile Include="Api\StoreTerm\StoreTermServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SvDataJd.cs" />
-    <Compile Include="SvDataJdUtil.cs" />
-    <Compile Include="SvUtil.cs" />
-    <Compile Include="UI\Badge.cs" />
-    <Compile Include="UI\EleTag.cs" />
-    <Compile Include="UI\FsBlock.cs" />
-    <Compile Include="UI\FsBlockByField.cs" />
-    <Compile Include="UI\FsButton.cs" />
-    <Compile Include="UI\FsField.cs" />
-    <Compile Include="UI\FsQrcode.cs" />
-    <Compile Include="UI\FsReceiptInfo.cs" />
-    <Compile Include="UI\FsTag.cs" />
-    <Compile Include="UI\FsTemplateData.cs" />
-    <Compile Include="UI\FsText.cs" />
-    <Compile Include="UI\MenuNode.cs" />
-    <Compile Include="UI\OptionNode.cs" />
-    <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Api\Admin\Models\" />

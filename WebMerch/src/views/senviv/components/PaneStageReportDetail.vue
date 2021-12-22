@@ -4,6 +4,12 @@
     <el-container class="brech-work">
       <el-aside class="brech-work-aside">
         <div>
+          <el-descriptions title="用户信息">
+            <el-descriptions-item label="姓名">{{ userInfo.signName }}</el-descriptions-item>
+            <el-descriptions-item label="性别">{{ userInfo.sex }}</el-descriptions-item>
+            <el-descriptions-item label="年龄">{{ userInfo.age }}</el-descriptions-item>
+          </el-descriptions>
+
           <div class="row-title clearfix">
             <div class="pull-left"> <h5>数据标签</h5>
             </div>
@@ -490,7 +496,7 @@
                   </el-form>
                 </div>
 
-                <el-timeline>
+                <el-timeline style="padding:0px">
 
                   <el-timeline-item
                     v-for="(record, index) in recordsData"

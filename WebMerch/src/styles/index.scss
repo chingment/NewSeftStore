@@ -597,6 +597,10 @@ border: 1px solid #909399;
 .brech-work{
   height: 100%;
 
+  .el-descriptions__body{
+    background-color: transparent;
+}
+
   .brech-work-aside{
     flex:1;
     padding:0px 20px;

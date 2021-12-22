@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.UI;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -37,13 +38,13 @@ namespace LocalS.Service.Api.StoreApp
 
             var d_clientCart_Quantity = CurrentDb.ClientCart.Where(m => m.ClientUserId == clientUserId && m.StoreId == rup.StoreId && m.Status == E_ClientCartStatus.WaitSettle).ToList().Sum(m => m.Quantity);
 
-            ret.BadgeByCart = new UI.Badge { Type = "number", Value = d_clientCart_Quantity.ToString() };
+            ret.BadgeByCart = new Badge { Type = "number", Value = d_clientCart_Quantity.ToString() };
 
             var d_ordersByWaitpay_Count = CurrentDb.Order.Where(m => m.ClientUserId == clientUserId && m.Status == E_OrderStatus.WaitPay && m.IsNoDisplayClient == false).Count();
 
             if (d_ordersByWaitpay_Count > 0)
             {
-                ret.BadgeByPersonal = new UI.Badge { Type = "dot", Value = "" };
+                ret.BadgeByPersonal = new Badge { Type = "dot", Value = "" };
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);

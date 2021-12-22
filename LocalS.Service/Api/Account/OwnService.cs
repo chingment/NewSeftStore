@@ -1,5 +1,5 @@
 ﻿using LocalS.BLL;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using Lumos.DbRelay;
 using Lumos.Session;

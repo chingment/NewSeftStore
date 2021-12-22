@@ -2,7 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.BLL.Mq;
 using LocalS.Entity;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using Lumos;
 using Lumos.Redis;
 using Newtonsoft.Json.Linq;

@@ -1,5 +1,5 @@
 ﻿using LocalS.BLL.Biz;
-using LocalS.Service.UI;
+using LocalS.BLL.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

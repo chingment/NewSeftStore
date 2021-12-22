@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.UI
+namespace LocalS.BLL.UI
 {
     public class FsTemplateData
     {

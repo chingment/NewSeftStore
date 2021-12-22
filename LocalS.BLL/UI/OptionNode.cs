@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocalS.Service.UI
+namespace LocalS.BLL.UI
 {
-    public class Badge
+    public class OptionNode
     {
-
         public string Value { get; set; }
-        public string Type { get; set; }
+        public string Label { get; set; }
+        public List<OptionNode> Children { get; set; }
     }
 }

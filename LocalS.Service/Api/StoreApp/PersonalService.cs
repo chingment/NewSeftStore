@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.UI;
 using LocalS.Entity;
 using Lumos;
 using System;
@@ -23,7 +24,7 @@ namespace LocalS.Service.Api.StoreApp
 
             if (d_ordersByWaitpay_Count > 0)
             {
-                ret.BadgeByWaitPayOrders = new UI.Badge { Type = "number", Value = d_ordersByWaitpay_Count.ToString() };
+                ret.BadgeByWaitPayOrders = new Badge { Type = "number", Value = d_ordersByWaitpay_Count.ToString() };
             }
 
             if (ret.UserInfo.IsHasProm || ret.UserInfo.IsStaff)

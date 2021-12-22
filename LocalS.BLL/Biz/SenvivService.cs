@@ -76,6 +76,7 @@ namespace LocalS.BLL
             }
             else
             {
+                #region build
                 DateTime rptStartTime = (DateTime)taskParams["start_time"];
                 DateTime rptEndTime = (DateTime)taskParams["end_time"];
                 string rptType = "";
@@ -827,6 +828,8 @@ namespace LocalS.BLL
                     CurrentDb.SenvivHealthStageReport.Add(d_StageReport);
                     CurrentDb.SaveChanges();
                 }
+
+                #endregion
             }
 
             if (string.IsNullOrEmpty(rptId))
@@ -838,7 +841,29 @@ namespace LocalS.BLL
                     d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
                     d_SenvivTask.SvUserId = userId;
                     d_SenvivTask.TaskType = taskType;
-                    d_SenvivTask.Title = "";
+                    var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+                    var signName = SvUtil.GetSignName(d_User.FullName, d_User.NickName);
+
+                    DateTime rptStartTime = (DateTime)taskParams["start_time"];
+                    DateTime rptEndTime = (DateTime)taskParams["end_time"];
+
+                    string title = "";
+                    switch (taskType)
+                    {
+                        case E_SenvivTaskType.Health_Monitor_FisrtDay:
+                            title = string.Format("客户（{0}），在{1}首次使用报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
+                            break;
+                        case E_SenvivTaskType.Health_Monitor_SeventhDay:
+                            title = string.Format("客户（{0}），在已使用7天({1}~{2})，报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                            break;
+                        case E_SenvivTaskType.Health_Monitor_FourteenthDay:
+                            title = string.Format("客户（{0}），在已使用14天({1}~{2})，报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                            break;
+                        case E_SenvivTaskType.Health_Monitor_PerMonth:
+                            title = string.Format("客户（{0}），{1}月报告已生成，需进行回访", signName, rptEndTime.ToString("yyyy-MM"));
+                            break;
+                    }
+                    d_SenvivTask.Title = title;
                     d_SenvivTask.ReportId = rptId;
                     d_SenvivTask.Params = (new { rptId = rptId }).ToJsonString();
                     d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
