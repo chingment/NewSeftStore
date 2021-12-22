@@ -41,6 +41,8 @@ namespace LocalS.BLL.Task
             {
                 var senvivUsers = SdkFactory.Senviv.GetUserList();
 
+                LogUtil.Info(TAG, "SenvivUsers.Count:" + senvivUsers.Count);
+
                 foreach (var senvivUser in senvivUsers)
                 {
                     var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == senvivUser.userid).FirstOrDefault();

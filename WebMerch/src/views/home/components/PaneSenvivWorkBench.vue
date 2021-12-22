@@ -260,7 +260,7 @@ export default {
         listTotal: 0,
         listQuery: {
           page: 1,
-          limit: 20,
+          limit: 10,
           status: 0
         }
       },
@@ -400,10 +400,10 @@ export default {
       this.selectTaskId = item.id
       if (item.taskType.value === 1) {
         this.dialogIsShowByDayReport = true
-        this.selectDayReportId = item.params.rptId
+        this.selectDayReportId = item.reportId
       } else if (item.taskType.value === 2 || item.taskType.value === 3 || item.taskType.value === 4) {
         this.dialogIsShowByStageReport = true
-        this.selectStageReportId = item.params.rptId
+        this.selectStageReportId = item.reportId
       }
     },
     onAfterSaveStageReport() {

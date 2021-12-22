@@ -78,7 +78,7 @@ namespace SenvivSdk
 
                 this.responseString = doPost.ResponseString;
 
-                LogUtil.Info(TAG, responseString);
+                //LogUtil.Info(TAG, responseString);
 
                 T data = JsonConvert.DeserializeObject<T>(responseString);
 

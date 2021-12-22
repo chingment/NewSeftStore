@@ -873,7 +873,6 @@ export default {
     onGetMonthReportSug() {
       this.loadingBySug = true
       getMonthReportSug({ reportId: this.reportId }).then(res => {
-        this.loadingBySug = false
         if (res.result === 1) {
           var d = res.data
 
@@ -882,6 +881,7 @@ export default {
           this.formBySug.isSend = d.isSend
           this.formBySug.sugSkus = d.sugSkus
         }
+        this.loadingBySug = false
       })
     },
     onGetVisitRecords() {

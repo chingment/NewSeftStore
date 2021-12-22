@@ -179,7 +179,7 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
- 
+
 
                 string age = "-";
 
@@ -1261,12 +1261,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          u.SvUserId == rup.UserId
                          select new { u.Id, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
-            if (string.IsNullOrEmpty(rup.TaskId))
+            if (!string.IsNullOrEmpty(rup.TaskId))
             {
                 query = query.Where(m => m.TaskId == rup.TaskId);
             }
 
-            if (string.IsNullOrEmpty(rup.ReportId))
+            if (!string.IsNullOrEmpty(rup.ReportId))
             {
                 query = query.Where(m => m.ReportId == rup.ReportId);
             }
@@ -1457,7 +1457,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          from tt in temp.DefaultIfEmpty()
                          where
                          merchIds.Contains(tt.MerchId)
-                         select new { u.Id, u.TaskType, u.Params, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
+                         select new { u.Id, u.ReportId, u.TaskType, u.Params, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
 
             var waitHandle = query.Where(m => m.Status == E_SenvivTaskStatus.WaitHandle || m.Status == E_SenvivTaskStatus.Handling).Count();
             var handled = query.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
@@ -1496,6 +1496,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     TaskType = GetTaskType(item.TaskType),
                     Title = item.Title,
                     Status = GetTaskStatus(item.Status),
+                    ReportId = item.ReportId,
                     Params = item.Params.ToJsonObject<Dictionary<string, string>>(),
                     CreateTime = item.CreateTime
                 });
