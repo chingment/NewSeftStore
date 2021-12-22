@@ -13,5 +13,6 @@ namespace LocalS.Service.Api.Merch
         public object VisitContent { get; set; }
         public string UserId { get; set; }
         public string ReportId { get; set; }
+        public string TaskId { get; set; }
     }
 }

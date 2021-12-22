@@ -12,6 +12,8 @@ namespace LocalS.Service.Api.Merch
         {
             this.SugSkus = new List<SugSkuModel>();
         }
+
+        public string TaskId { get; set; }
         public string ReportId { get; set; }
         public string RptSummary { get; set; }
         public string RptSuggest { get; set; }

@@ -590,7 +590,8 @@ export default {
       recordsQuery: {
         page: 1,
         limit: 10,
-        userId: undefined
+        userId: undefined,
+        reportId: undefined
       },
       temp: {
         searchSkuKey: '',
@@ -879,7 +880,9 @@ export default {
     },
     onGetVisitRecords() {
       this.loading = true
-      this.recordsQuery.userId = this.userId
+      this.recordsQuery.userId = this.userInfo.userId
+      this.recordsQuery.reportId = this.reportId
+      this.recordsQuery.taskId = this.taskId
       getVisitRecords(this.recordsQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -896,6 +899,7 @@ export default {
       }
 
       var form = {
+        taskId: this.taskId,
         reportId: this.reportId,
         isSend: isSend,
         rptSuggest: this.formBySug.rptSuggest,
@@ -1013,6 +1017,7 @@ export default {
             .then(() => {
               if (visitType === '1') {
                 var _from = {
+                  taskId: this.taskId,
                   userId: this.userInfo.userId,
                   reportId: this.reportId,
                   visitTime: this.formByVisitTelephone.visitTime,
@@ -1025,6 +1030,7 @@ export default {
                       message: res.message,
                       type: 'success'
                     })
+                    this.$emit('aftersave')
                   } else {
                     this.$message({
                       message: res.message,
@@ -1035,6 +1041,7 @@ export default {
               } else if (visitType === '2') {
                 console.log(visitType)
                 var _from2 = {
+                  taskId: this.taskId,
                   userId: this.userInfo.userId,
                   reportId: this.reportId,
                   visitTemplate: this.formByVisitPapush.visitTemplate,
@@ -1051,6 +1058,7 @@ export default {
                       message: res.message,
                       type: 'success'
                     })
+                    this.$emit('aftersave')
                   } else {
                     this.$message({
                       message: res.message,

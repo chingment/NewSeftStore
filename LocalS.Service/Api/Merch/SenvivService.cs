@@ -1173,6 +1173,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
                 if (isSend)
                 {
+                    SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
                 }
                 else
@@ -1263,8 +1265,17 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var query = (from u in CurrentDb.SenvivVisitRecord
                          where
                          u.SvUserId == rup.UserId
-                         select new { u.Id, u.VisitType, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
+                         select new { u.Id, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
+            if (string.IsNullOrEmpty(rup.TaskId))
+            {
+                query = query.Where(m => m.TaskId == rup.TaskId);
+            }
+
+            if (string.IsNullOrEmpty(rup.ReportId))
+            {
+                query = query.Where(m => m.ReportId == rup.ReportId);
+            }
 
             int total = query.Count();
 
@@ -1372,6 +1383,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
             d_SenvivVisitRecord.SvUserId = rop.UserId;
             d_SenvivVisitRecord.ReportId = rop.ReportId;
+            d_SenvivVisitRecord.TaskId = rop.TaskId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;
             d_SenvivVisitRecord.VisitTemplate = E_SenvivVisitRecordVisitTemplate.CalloutRecord;
             d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
@@ -1381,6 +1393,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SenvivVisitRecord.CreateTime = DateTime.Now;
             CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
             CurrentDb.SaveChanges();
+
+            SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -1395,6 +1409,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
             d_SenvivVisitRecord.SvUserId = rop.UserId;
             d_SenvivVisitRecord.ReportId = rop.ReportId;
+            d_SenvivVisitRecord.TaskId = rop.TaskId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.WxPa;
             d_SenvivVisitRecord.VisitTemplate = rop.VisitTemplate;
 
@@ -1429,11 +1444,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 SdkFactory.Senviv.SendHealthMonitor(rop.UserId, first, keyword1, keyword2, keyword3, remark);
             }
 
+            SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }
-
 
         public CustomJsonResult GetTasks(string operater, string merchId, RupSenvivGetTasks rup)
         {
@@ -1448,6 +1464,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          where
                          merchIds.Contains(tt.MerchId)
                          select new { u.Id, u.TaskType, u.Params, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
+
+            var waitHandle = query.Where(m => m.Status == E_SenvivTaskStatus.WaitHandle || m.Status == E_SenvivTaskStatus.Handling).Count();
+            var handled = query.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
+
 
             int total = query.Count();
 
@@ -1488,9 +1508,37 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             }
 
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+            var pageEntity = new
+            {
+                PageSize = pageSize,
+                Total = total,
+                Items = olist,
+                Count = new
+                {
+                    WaitHandle = waitHandle,
+                    Handled = handled
+                }
+            };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
+
+        public CustomJsonResult SignTaskStatus(string operater, string taskId, E_SenvivTaskStatus status)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Task = CurrentDb.SenvivTask.Where(m => m.Id == taskId).FirstOrDefault();
+            if (d_Task != null)
+            {
+                d_Task.Status = status;
+                d_Task.Mender = operater;
+                d_Task.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
             return result;
         }

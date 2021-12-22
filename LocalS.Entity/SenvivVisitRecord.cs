@@ -31,6 +31,7 @@ namespace LocalS.Entity
         //public string RiskFactor { get; set; }
         //public string HealthAdvice { get; set; }
         public string ReportId { get; set; }
+        public string TaskId { get; set; }
         public DateTime VisitTime { get; set; }
         public DateTime? NextTime { get; set; }
         public string Creator { get; set; }
