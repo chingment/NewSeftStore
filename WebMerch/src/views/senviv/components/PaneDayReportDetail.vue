@@ -242,6 +242,7 @@
               </div>
             </div>
           </el-tab-pane>
+
         </el-tabs>
 
       </el-container>
@@ -319,7 +320,7 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this.onGetDayReportDetail()
+    this.onGetReportDetail()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -342,7 +343,7 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    onGetDayReportDetail() {
+    onGetReportDetail() {
       this.loading = true
       getDayReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
@@ -897,6 +898,12 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    onBrechWorkTabs(tab, event) {
+      var active = this.brechWorkTabs.active
+      if (active === 'sug') {
+        this.onGetReportSug()
+      }
     },
     onBeforeClose() {
       this.$emit('update:visible', false)

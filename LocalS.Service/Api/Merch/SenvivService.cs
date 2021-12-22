@@ -447,8 +447,21 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Rpt = (from u in CurrentDb.SenvivHealthDayReport
+            var d_Task = CurrentDb.SenvivTask.Where(m => m.Id == taskId).FirstOrDefault();
 
+            object task = null;
+
+            if (d_Task != null)
+            {
+                task = new
+                {
+                    TaskId = d_Task.Id,
+                    Title = d_Task.Title,
+                    Status = d_Task.Status
+                };
+            }
+
+            var d_Rpt = (from u in CurrentDb.SenvivHealthDayReport
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where u.Id == reportId
@@ -576,6 +589,7 @@ namespace LocalS.Service.Api.Merch
             var ret = new
             {
                 Id = d_Rpt.Id,
+                Task = task,
                 UserInfo = new
                 {
                     SignName = SvUtil.GetSignName(d_Rpt.NickName, d_Rpt.FullName),
@@ -1203,7 +1217,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.CreateTime
                        }).FirstOrDefault();
 
- 
+
             var ret = new
             {
                 rpt.RptSummary,
