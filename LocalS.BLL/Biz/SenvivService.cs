@@ -851,16 +851,16 @@ namespace LocalS.BLL
                     switch (taskType)
                     {
                         case E_SenvivTaskType.Health_Monitor_FisrtDay:
-                            title = string.Format("客户（{0}），在{1}首次使用报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
+                            title = string.Format("客户[{0}]的首份报告（{0}）已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
                             break;
                         case E_SenvivTaskType.Health_Monitor_SeventhDay:
-                            title = string.Format("客户（{0}），已使用7天({1}~{2})，报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                            title = string.Format("客户[{0}]的首次7天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
                             break;
                         case E_SenvivTaskType.Health_Monitor_FourteenthDay:
-                            title = string.Format("客户（{0}），已使用14天({1}~{2})，报告已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                            title = string.Format("客户[{0}]的首次14天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
                             break;
                         case E_SenvivTaskType.Health_Monitor_PerMonth:
-                            title = string.Format("客户（{0}），{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
+                            title = string.Format("客户[{0}]的{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
                             break;
                     }
                     d_SenvivTask.Title = title;

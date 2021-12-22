@@ -721,7 +721,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
             var query = (from u in CurrentDb.SenvivHealthStageReport
-
                          join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where
@@ -1186,7 +1185,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
 
         }
-
 
         public CustomJsonResult GetDayReportSug(string operater, string merchId, string reportId)
         {
