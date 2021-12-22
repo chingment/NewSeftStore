@@ -237,8 +237,8 @@
                 </el-card>
               </div>
               <div class="drawer_footer">
-                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
-                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveReportSug(false)">暂 存</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveReportSug(true)">保存并发送</el-button>
               </div>
             </div>
           </el-tab-pane>
@@ -255,7 +255,7 @@
 
 import { MessageBox } from 'element-ui'
 import echarts from 'echarts'
-import { getDayReportDetail } from '@/api/senviv'
+import { getDayReportDetail, getDayReportSug, saveDayReportSug } from '@/api/senviv'
 
 var myChart1
 var myChart2
@@ -319,7 +319,7 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this._getDayReportDetail()
+    this.onGetDayReportDetail()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -342,7 +342,7 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    _getDayReportDetail() {
+    onGetDayReportDetail() {
       this.loading = true
       getDayReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
@@ -843,6 +843,60 @@ export default {
       }
 
       myChart2.setOption(option, null)
+    },
+    onGetReportSug() {
+      this.loadingBySug = true
+      getDayReportSug({ reportId: this.reportId }).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+
+          this.formBySug.rptSummary = d.rptSummary
+          this.formBySug.rptSuggest = d.rptSuggest
+          this.formBySug.isSend = d.isSend
+          this.formBySug.sugSkus = d.sugSkus
+        }
+        this.loadingBySug = false
+      })
+    },
+    onSaveReportSug(isSend) {
+      var tips = '确定要暂存'
+      if (isSend) {
+        tips = '确定要保存并发送'
+      }
+
+      var form = {
+        taskId: this.taskId,
+        reportId: this.reportId,
+        isSend: isSend,
+        rptSuggest: this.formBySug.rptSuggest,
+        rptSummary: this.formBySug.rptSummary,
+        sugSkus: this.formBySug.sugSkus
+      }
+      MessageBox.confirm(tips, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        saveDayReportSug(form).then(res => {
+          if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            this.onGetReportSug()
+
+            if (isSend) {
+              this.$emit('aftersave')
+            }
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
+        })
+      }).catch(() => {
+      })
     },
     onBeforeClose() {
       this.$emit('update:visible', false)

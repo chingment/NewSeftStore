@@ -72,6 +72,22 @@ export function getStageReportSug(params) {
   })
 }
 
+export function saveDayReportSug(data) {
+  return request({
+    url: '/senviv/saveDayReportSug',
+    method: 'post',
+    data
+  })
+}
+
+export function getDayReportSug(params) {
+  return request({
+    url: '/senviv/getDayReportSug',
+    method: 'get',
+    params
+  })
+}
+
 export function getTagExplains(params) {
   return request({
     url: '/senviv/getTagExplains',
@@ -123,6 +139,8 @@ export default {
   getStageReportDetail: getStageReportDetail,
   saveStageReportSug: saveStageReportSug,
   getStageReportSug: getStageReportSug,
+  saveDayReportSug: saveDayReportSug,
+  getDayReportSug: getDayReportSug,
   getTagExplains: getTagExplains,
   saveTagExplain: saveTagExplain,
   saveVisitRecordByTelePhone: saveVisitRecordByTelePhone,

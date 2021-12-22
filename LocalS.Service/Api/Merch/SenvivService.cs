@@ -1187,6 +1187,92 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
+
+        public CustomJsonResult GetDayReportSug(string operater, string merchId, string reportId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = (from u in CurrentDb.SenvivHealthDayReport
+                       where u.Id == reportId
+                       select new
+                       {
+                           u.Id,
+                           u.RptSummary,
+                           u.RptSuggest,
+                           u.IsSend,
+                           u.Status,
+                           u.CreateTime
+                       }).FirstOrDefault();
+
+ 
+            var ret = new
+            {
+                rpt.RptSummary,
+                rpt.RptSuggest,
+                rpt.IsSend
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+
+        }
+
+        public CustomJsonResult SaveDayReportSug(string operater, string merchId, SenvivSaveMonthReportSug rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+
+            rpt.RptSummary = rop.RptSummary;
+            rpt.RptSuggest = rop.RptSuggest;
+
+            if (rop.IsSend)
+            {
+                string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
+                string url = "http://health.17fanju.com/#/report/month/monitor?rptId=" + rpt.Id;
+                string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
+                string keyword2 = "总体评分" + rpt.TotalScore + "分";
+                string remark = "感谢您的支持，如需查看详情报告信息请点击";
+                var isSend = SdkFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
+                if (isSend)
+                {
+                    rpt.IsSend = true;
+                    rpt.Status = E_SenvivHealthReportStatus.SendSuccess;
+                }
+                else
+                {
+                    rpt.Status = E_SenvivHealthReportStatus.SendFailure;
+                }
+
+                CurrentDb.SaveChanges();
+
+                if (isSend)
+                {
+                    SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
+                }
+                else
+                {
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送失败");
+                }
+            }
+            else
+            {
+                CurrentDb.SaveChanges();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            }
+
+
+            return result;
+
+        }
+
         public CustomJsonResult GetTagExplains(string operater, string merchId, RupSenvivGetTags rup)
         {
 
