@@ -49,7 +49,7 @@
             <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" />
             <pane-visit-record v-if="activeMenu==='VisitRecord'" :user-id="userId" />
             <pane-day-report v-if="activeMenu==='DayReport'" :user-id="userId" />
-            <pane-stage-report v-if="activeMenu==='MonthReport'" :user-id="userId" />
+            <pane-stage-report v-if="activeMenu==='MonthReport'" :user-id="userId" rpt-type="per_month" />
           </el-main>
         </el-container>
       </el-container>

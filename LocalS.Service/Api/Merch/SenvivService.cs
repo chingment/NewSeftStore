@@ -714,17 +714,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-        public CustomJsonResult GetMonthReports(string operater, string merchId, RupSenvivGetDayReports rup)
+        public CustomJsonResult GetStageReports(string operater, string merchId, RupSenvivGetDayReports rup)
         {
             var result = new CustomJsonResult();
-
-            //var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-
-
-            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
-
-            //var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
@@ -780,8 +772,14 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              u.VisitCount,
                              u.Status,
                              u.SvUserId,
+                             u.RptType,
                              u.CreateTime
                          });
+
+            if (!string.IsNullOrEmpty(rup.RptType))
+            {
+                query = query.Where(m => m.RptType == rup.RptType);
+            }
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
@@ -893,7 +891,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-        public CustomJsonResult GetMonthReportDetail(string operater, string merchId, string reportId, string taskId)
+        public CustomJsonResult GetStageReportDetail(string operater, string merchId, string reportId, string taskId)
         {
 
             var result = new CustomJsonResult();
@@ -1065,7 +1063,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-        public CustomJsonResult GetMonthReportSug(string operater, string merchId, string reportId)
+        public CustomJsonResult GetStageReportSug(string operater, string merchId, string reportId)
         {
 
             var result = new CustomJsonResult();
@@ -1113,7 +1111,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         }
 
-        public CustomJsonResult SaveMonthReportSug(string operater, string merchId, SenvivSaveMonthReportSug rop)
+        public CustomJsonResult SaveStageReportSug(string operater, string merchId, SenvivSaveMonthReportSug rop)
         {
 
             var result = new CustomJsonResult();

@@ -436,7 +436,7 @@
 </template>
 
 <script>
-import { getMonthReports } from '@/api/senviv'
+import { getStageReports } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneStageReportDetail from './PaneStageReportDetail.vue'
 import DvItem from './DvItem.vue'
@@ -445,6 +445,10 @@ export default {
   components: { Pagination, PaneStageReportDetail, DvItem },
   props: {
     userId: {
+      type: String,
+      default: ''
+    },
+    rptType: {
       type: String,
       default: ''
     },
@@ -484,6 +488,7 @@ export default {
       }
     }
     this.listQuery.userId = this.userId
+    this.listQuery.rptType = this.rptType
     this.onGetList()
   },
   methods: {
@@ -492,7 +497,7 @@ export default {
       if (this.cacheQuery) {
         this.$store.dispatch('app/saveListPageQuery', { path: this.$route.path, query: this.listQuery })
       }
-      getMonthReports(this.listQuery).then(res => {
+      getStageReports(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.listData = d.items

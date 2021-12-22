@@ -41,30 +41,30 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetMonthReports([FromUri]RupSenvivGetDayReports rup)
+        public OwnApiHttpResponse GetStageReports([FromUri]RupSenvivGetDayReports rup)
         {
-            var result = MerchServiceFactory.Senviv.GetMonthReports(this.CurrentUserId, this.CurrentMerchId, rup);
+            var result = MerchServiceFactory.Senviv.GetStageReports(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetMonthReportDetail([FromUri]string reportId, [FromUri]string taskId)
+        public OwnApiHttpResponse GetStageReportDetail([FromUri]string reportId, [FromUri]string taskId)
         {
-            var result = MerchServiceFactory.Senviv.GetMonthReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId, taskId);
+            var result = MerchServiceFactory.Senviv.GetStageReportDetail(this.CurrentUserId, this.CurrentMerchId, reportId, taskId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetMonthReportSug([FromUri]string reportId)
+        public OwnApiHttpResponse GetStageReportSug([FromUri]string reportId)
         {
-            var result = MerchServiceFactory.Senviv.GetMonthReportSug(this.CurrentUserId, this.CurrentMerchId, reportId);
+            var result = MerchServiceFactory.Senviv.GetStageReportSug(this.CurrentUserId, this.CurrentMerchId, reportId);
             return new OwnApiHttpResponse(result);
         }
 
         [HttpPost]
-        public OwnApiHttpResponse SaveMonthReportSug([FromBody]SenvivSaveMonthReportSug rop)
+        public OwnApiHttpResponse SaveStageReportSug([FromBody]SenvivSaveMonthReportSug rop)
         {
-            var result = MerchServiceFactory.Senviv.SaveMonthReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
+            var result = MerchServiceFactory.Senviv.SaveStageReportSug(this.CurrentUserId, this.CurrentMerchId, rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -108,5 +108,6 @@ namespace WebApiMerch.Controllers
             var result = MerchServiceFactory.Senviv.GetTasks(this.CurrentUserId, this.CurrentMerchId, rup);
             return new OwnApiHttpResponse(result);
         }
+
     }
 }

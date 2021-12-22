@@ -412,118 +412,6 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="回访告知" name="visit">
-            <div class="drawer">
-              <div class="drawer_content">
-                <div style="margin-bottom:20px">
-                  <el-radio v-model="visitType" label="1" border size="medium" @change="onVisitTypeChange">电话回访</el-radio>
-                  <el-radio v-model="visitType" label="2" border size="medium" @change="onVisitTypeChange">微信告知</el-radio>
-                </div>
-                <div v-show="visitType==='1'">
-                  <el-form ref="formByVisitTelephone" :model="formByVisitTelephone" :rules="rulesByVisitTelephone" label-width="80px">
-                    <el-form-item label="回访时间" prop="visitTime">
-                      <el-date-picker
-                        v-model="formByVisitTelephone.visitTime"
-                        type="datetime"
-                        placeholder="选择日期时间"
-                        align="right"
-                        :picker-options="pickerOptions"
-                      />
-                    </el-form-item>
-                    <el-form-item label="回访记录" prop="remark">
-                      <el-input
-                        v-model="formByVisitTelephone.remark"
-                        type="textarea"
-                        :rows="5"
-                        placeholder="请输入内容"
-                      />
-                    </el-form-item>
-                    <el-form-item label="下次预约" prop="nextTime">
-                      <el-date-picker
-                        v-model="formByVisitTelephone.nextTime"
-                        type="datetime"
-                        placeholder="选择日期时间"
-                        align="right"
-                        :picker-options="pickerOptions"
-                      />
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <div v-show="visitType==='2'">
-                  <el-form ref="formByVisitPapush" :model="formByVisitPapush" :rules="rulesByVisitPapush" label-width="80px">
-                    <el-form-item label="模板" prop="visitTemplate">
-                      <el-select v-model="formByVisitPapush.visitTemplate" placeholder="请选择">
-                        <el-option
-                          v-for="item in visitTemplateOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        />
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="异常结果" prop="keyword1">
-                      <el-input
-                        v-model="formByVisitPapush.keyword1"
-                        type="textarea"
-                        :rows="3"
-                        placeholder="请输入内容"
-                      />
-                    </el-form-item>
-                    <el-form-item label="风险因素" prop="keyword2">
-                      <el-input
-                        v-model="formByVisitPapush.keyword2"
-                        type="textarea"
-                        :rows="3"
-                        placeholder="请输入内容"
-                      />
-                    </el-form-item>
-                    <el-form-item label="健康建议" prop="keyword3">
-                      <el-input
-                        v-model="formByVisitPapush.keyword3"
-                        type="textarea"
-                        :rows="3"
-                        placeholder="请输入内容"
-                      />
-                    </el-form-item>
-                    <el-form-item label="备注" prop="remark">
-                      <el-input
-                        v-model="formByVisitPapush.remark"
-                        type="textarea"
-                        :rows="3"
-                        placeholder="请输入内容"
-                      />
-                    </el-form-item>
-                  </el-form>
-                </div>
-
-                <el-timeline style="padding:0px">
-
-                  <el-timeline-item
-                    v-for="(record, index) in recordsData"
-                    :key="index"
-                    :timestamp="record.visitTime"
-                    placement="top"
-                  >
-                    <el-card class="box-card">
-                      <div slot="header" class="clearfix">
-                        <span>{{ record.visitType }}</span>
-                      </div>
-                      <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
-                        {{ item.key +' ' + item.value }}
-                      </div>
-                      <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
-                    </el-card>
-                  </el-timeline-item>
-
-                </el-timeline>
-
-              </div>
-              <div class="drawer_footer">
-                <el-button size="small" type="primary" @click="onSaveVisit">保存</el-button>
-              </div>
-            </div>
-          </el-tab-pane>
-
         </el-tabs>
 
       </el-container>
@@ -535,11 +423,8 @@
 
 import { MessageBox } from 'element-ui'
 import echarts from 'echarts'
-import { getMonthReportDetail, saveMonthReportSug, getMonthReportSug, getVisitRecords, saveVisitRecordByPapush, saveVisitRecordByTelePhone } from '@/api/senviv'
+import { getStageReportDetail, saveStageReportSug, getStageReportSug } from '@/api/senviv'
 import { searchSku } from '@/api/product'
-import Pagination from '@/components/Pagination'
-import DialogVisitByTelephone from './DialogVisitByTelephone'
-import DialogVisitByPapush from './DialogVisitByPapush'
 var myChart1
 var myChart2
 
@@ -590,68 +475,9 @@ export default {
         isSend: false,
         sugSkus: []
       },
-      recordsKey: 0,
-      recordsData: null,
-      recordsTotal: 0,
-      recordsQuery: {
-        page: 1,
-        limit: 10,
-        userId: undefined,
-        reportId: undefined
-      },
       temp: {
         searchSkuKey: '',
         cur_search_sel_sku: { id: '', name: '', cumCode: '' }
-      },
-      isVisibleDialogVisitByTelephone: false,
-      isVisibleDialogVisitByPapush: false,
-      visitType: '1',
-      formByVisitTelephone: {
-        visitTime: '',
-        nextTime: '',
-        remark: ''
-      },
-      rulesByVisitTelephone: {
-        visitTime: [{ required: true, message: '必选', trigger: 'change' }],
-        remark: [{ required: true, message: '必填', trigger: 'change' }]
-      },
-      formByVisitPapush: {
-        visitTemplate: '',
-        nextTime: '',
-        content: '',
-        userId: ''
-      },
-      rulesByVisitPapush: {
-        visitTemplate: [{ required: true, message: '请选择模板', trigger: 'change' }],
-        keyword1: [{ required: true, message: '必填', trigger: 'change' }],
-        keyword2: [{ required: true, message: '必填', trigger: 'change' }],
-        keyword3: [{ required: true, message: '必填', trigger: 'change' }]
-      },
-      visitTemplateOptions: [{
-        value: '2',
-        label: '监测异常提醒'
-      }],
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -668,7 +494,7 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this.onGetDayReportDetail()
+    this.onGetStageReportDetail()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -691,9 +517,9 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    onGetDayReportDetail() {
+    onGetStageReportDetail() {
       this.loading = true
-      getMonthReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
+      getStageReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo
@@ -870,9 +696,9 @@ export default {
 
       myChart2.setOption(option, null)
     },
-    onGetMonthReportSug() {
+    onGetStageReportSug() {
       this.loadingBySug = true
-      getMonthReportSug({ reportId: this.reportId }).then(res => {
+      getStageReportSug({ reportId: this.reportId }).then(res => {
         if (res.result === 1) {
           var d = res.data
 
@@ -882,20 +708,6 @@ export default {
           this.formBySug.sugSkus = d.sugSkus
         }
         this.loadingBySug = false
-      })
-    },
-    onGetVisitRecords() {
-      this.loading = true
-      this.recordsQuery.userId = this.userInfo.userId
-      this.recordsQuery.reportId = this.reportId
-      this.recordsQuery.taskId = this.taskId
-      getVisitRecords(this.recordsQuery).then(res => {
-        if (res.result === 1) {
-          var d = res.data
-          this.recordsData = d.items
-          this.recordsTotal = d.total
-        }
-        this.loading = false
       })
     },
     onSaveSug(isSend) {
@@ -917,13 +729,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        saveMonthReportSug(form).then(res => {
+        saveStageReportSug(form).then(res => {
           if (res.result === 1) {
             this.$message({
               message: res.message,
               type: 'success'
             })
-            this.onGetMonthReportSug()
+            this.onGetStageReportSug()
 
             if (isSend) {
               this.$emit('aftersave')
@@ -989,94 +801,14 @@ export default {
       var list = this.formBySug.sugSkus
       list.splice(index, 1)
     },
-    onBeforeClose() {
-      this.$emit('update:visible', false)
-    },
     onBrechWorkTabs(tab, event) {
       var active = this.brechWorkTabs.active
       if (active === 'sug') {
-        this.onGetMonthReportSug()
-      } else if (active === 'visit') {
-        this.onGetVisitRecords()
+        this.onGetStageReportSug()
       }
     },
-    onVisitTypeChange() {
-      // this.$refs['formByVisitTelephone'].resetFields()
-      // this.$refs['formByVisitPapush'].resetFields()
-    },
-    onSaveVisit() {
-      var visitType = this.visitType
-      var refFrom = ''
-      if (visitType === '1') {
-        refFrom = 'formByVisitTelephone'
-      } else if (visitType === '2') {
-        refFrom = 'formByVisitPapush'
-      }
-
-      this.$refs[refFrom].validate(valid => {
-        if (valid) {
-          MessageBox.confirm('确定要保存', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          })
-            .then(() => {
-              if (visitType === '1') {
-                var _from = {
-                  taskId: this.taskId,
-                  userId: this.userInfo.userId,
-                  reportId: this.reportId,
-                  visitTime: this.formByVisitTelephone.visitTime,
-                  nextTime: this.formByVisitTelephone.nextTime,
-                  visitContent: { remark: this.formByVisitTelephone.remark }
-                }
-                saveVisitRecordByTelePhone(_from).then(res => {
-                  if (res.result === 1) {
-                    this.$message({
-                      message: res.message,
-                      type: 'success'
-                    })
-                    this.$emit('aftersave')
-                  } else {
-                    this.$message({
-                      message: res.message,
-                      type: 'error'
-                    })
-                  }
-                })
-              } else if (visitType === '2') {
-                console.log(visitType)
-                var _from2 = {
-                  taskId: this.taskId,
-                  userId: this.userInfo.userId,
-                  reportId: this.reportId,
-                  visitTemplate: this.formByVisitPapush.visitTemplate,
-                  visitContent: {
-                    keyword1: this.formByVisitPapush.keyword1,
-                    keyword2: this.formByVisitPapush.keyword2,
-                    keyword3: this.formByVisitPapush.keyword3,
-                    remark: this.formByVisitPapush.remark
-                  }
-                }
-                saveVisitRecordByPapush(_from2).then(res => {
-                  if (res.result === 1) {
-                    this.$message({
-                      message: res.message,
-                      type: 'success'
-                    })
-                    this.$emit('aftersave')
-                  } else {
-                    this.$message({
-                      message: res.message,
-                      type: 'error'
-                    })
-                  }
-                })
-              }
-            })
-            .catch(() => {})
-        }
-      })
+    onBeforeClose() {
+      this.$emit('update:visible', false)
     }
   }
 }

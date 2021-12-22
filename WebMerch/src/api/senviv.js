@@ -40,33 +40,33 @@ export function getDayReportDetail(params) {
   })
 }
 
-export function getMonthReports(params) {
+export function getStageReports(params) {
   return request({
-    url: '/senviv/getMonthReports',
+    url: '/senviv/getStageReports',
     method: 'get',
     params
   })
 }
 
-export function getMonthReportDetail(params) {
+export function getStageReportDetail(params) {
   return request({
-    url: '/senviv/getMonthReportDetail',
+    url: '/senviv/getStageReportDetail',
     method: 'get',
     params
   })
 }
 
-export function saveMonthReportSug(data) {
+export function saveStageReportSug(data) {
   return request({
-    url: '/senviv/saveMonthReportSug',
+    url: '/senviv/saveStageReportSug',
     method: 'post',
     data
   })
 }
 
-export function getMonthReportSug(params) {
+export function getStageReportSug(params) {
   return request({
-    url: '/senviv/getMonthReportSug',
+    url: '/senviv/getStageReportSug',
     method: 'get',
     params
   })
@@ -119,10 +119,10 @@ export default {
   getTasks: getTasks,
   getDayReports: getDayReports,
   getDayReportDetail: getDayReportDetail,
-  getMonthReports: getMonthReports,
-  getMonthReportDetail: getMonthReportDetail,
-  saveMonthReportSug: saveMonthReportSug,
-  getMonthReportSug: getMonthReportSug,
+  getStageReports: getStageReports,
+  getStageReportDetail: getStageReportDetail,
+  saveStageReportSug: saveStageReportSug,
+  getStageReportSug: getStageReportSug,
   getTagExplains: getTagExplains,
   saveTagExplain: saveTagExplain,
   saveVisitRecordByTelePhone: saveVisitRecordByTelePhone,

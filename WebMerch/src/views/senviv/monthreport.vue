@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pane-stage-report cache-query />
+    <pane-stage-report cache-query rpt-type="per_month" />
   </div>
 </template>
 

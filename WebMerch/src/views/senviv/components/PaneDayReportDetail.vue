@@ -1,196 +1,252 @@
 <template>
 
-  <el-dialog v-if="visible" title="健康报告（日）" :visible.sync="visible" width="1000px" custom-class="user-detail" append-to-body :before-close="onBeforeClose">
-    <div id="day_report_detail" v-loading="loading">
-      <div class="row-title clearfix">
-        <div class="pull-left"> <h5>数据标签</h5>
+  <el-dialog v-if="visible" title="健康报告（日）" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
+
+    <el-container class="brech-work">
+      <el-aside class="brech-work-aside">
+        <div>
+          <el-descriptions title="用户信息">
+            <el-descriptions-item label="姓名">{{ userInfo.signName }}</el-descriptions-item>
+            <el-descriptions-item label="性别">{{ userInfo.sex }}</el-descriptions-item>
+            <el-descriptions-item label="年龄">{{ userInfo.age }}</el-descriptions-item>
+          </el-descriptions>
+
+          <div id="day_report_detail" v-loading="loading">
+            <div class="row-title clearfix">
+              <div class="pull-left"> <h5>数据标签</h5>
+              </div>
+              <div class="pull-right" />
+            </div>
+
+            <div v-if="rd!=null">
+
+              <el-tag
+                v-for="tag in rd.dsTags"
+                :key="tag"
+                style="margin-right: 10px;margin-bottom: 10px"
+              >
+                {{ tag }}
+              </el-tag>
+            </div>
+            <div class="row-title clearfix">
+              <div class="pull-left"> <h5>监测数据图</h5>
+              </div>
+              <div class="pull-right" />
+            </div>
+            <div ref="echart_sm_zx" style="width: 960px;height: 400px;margin:auto" />
+            <div class="row-title clearfix">
+              <div class="pull-left"> <h5>睡眠结构</h5>
+              </div>
+              <div class="pull-right" />
+            </div>
+            <div ref="echart_sm_bi" style="width: 960px;height: 400px;margin:auto" />
+
+            <div class="row-title clearfix">
+              <div class="pull-left"> <h5>数据指标</h5>
+              </div>
+              <div class="pull-right" />
+            </div>
+
+            <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%">
+              <thead>
+                <tr>
+                  <th>类别</th>
+                  <th>指标</th>
+                  <th>测量值</th>
+                  <th>判断</th>
+                  <th>参考范围</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td rowspan="7">睡眠</td></tr>
+                <tr>
+                  <td>实际睡眠时长</td>
+                  <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.value }}</span> </td>
+                  <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.sign }}</span></td>
+                  <td><span>{{ rd.smSmsc.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>浅度睡眠</td>
+                  <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.value }}</span> </td>
+                  <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.sign }}</span></td>
+                  <td><span>{{ rd.smQdsmsc.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>深度睡眠</td>
+                  <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.value }}</span> </td>
+                  <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.sign }}</span></td>
+                  <td><span>{{ rd.smSdsmsc.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>REM睡眠</td>
+                  <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span> </td>
+                  <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.sign }}</span></td>
+                  <td><span>{{ rd.smRemsmsc.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>睡眠周期</td>
+                  <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.value }}</span> </td>
+                  <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.sign }}</span></td>
+                  <td><span>{{ rd.smSmzq.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>体动次数</td>
+                  <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.value }}</span> </td>
+                  <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.sign }}</span></td>
+                  <td><span>{{ rd.smTdcs.refRange }}</span></td>
+                </tr>
+
+                <tr><td rowspan="4">心率</td></tr>
+                <tr>
+                  <td>当次基准心率</td>
+                  <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.value }}</span> </td>
+                  <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.sign }}</span></td>
+                  <td><span>{{ rd.xlDcjzxl.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>长期基准心率</td>
+                  <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.value }}</span> </td>
+                  <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.sign }}</span></td>
+                  <td><span>{{ rd.xlCqjzxl.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>当次平均心率</td>
+                  <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.value }}</span> </td>
+                  <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.sign }}</span></td>
+                  <td><span>{{ rd.xlDcpjxl.refRange }}</span></td>
+                </tr>
+
+                <tr><td rowspan="6">呼吸</td></tr>
+                <tr>
+                  <td>当次基准呼吸</td>
+                  <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.value }}</span> </td>
+                  <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.sign }}</span></td>
+                  <td><span>{{ rd.hxDcjzhx.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>长期基准呼吸</td>
+                  <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.value }}</span> </td>
+                  <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.sign }}</span></td>
+                  <td><span>{{ rd.hxCqjzhx.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>平均呼吸</td>
+                  <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span> </td>
+                  <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.sign }}</span></td>
+                  <td><span>{{ rd.hxDcpjhx.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>呼吸暂停次数</td>
+                  <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.sign }}</span></td>
+                  <td><span>{{ rd.hxZtcs.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>AHI指数</td>
+                  <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.sign }}</span></td>
+                  <td><span>{{ rd.hxZtahizs.refRange }}</span></td>
+                </tr>
+
+                <tr><td rowspan="9">HRV</td></tr>
+                <tr>
+                  <td>心率失常风险</td>
+                  <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.value }}</span> </td>
+                  <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.sign }}</span></td>
+                  <td><span>{{ rd.jbfxXlscfx.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>心率减力</td>
+                  <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.value }}</span> </td>
+                  <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.sign }}</span></td>
+                  <td><span>{{ rd.jbfxXljsl.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>心脏总能量</td>
+                  <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.sign }}</span></td>
+                  <td><span>{{ rd.hrvXzznl.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>交感神经张力指数</td>
+                  <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.sign }}</span></td>
+                  <td><span>{{ rd.hrvJgsjzlzs.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>迷走神经张力指数</td>
+                  <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.sign }}</span></td>
+                  <td><span>{{ rd.hrvMzsjzlzs.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>自主神经平衡指数</td>
+                  <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.sign }}</span></td>
+                  <td><span>{{ rd.hrvZzsjzlzs.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>荷尔蒙指数</td>
+                  <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.sign }}</span></td>
+                  <td><span>{{ rd.hrvHermzs.refRange }}</span></td>
+                </tr>
+                <tr>
+                  <td>体温及血管舒缩指数</td>
+                  <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.value }}</span> </td>
+                  <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.sign }}</span></td>
+                  <td><span>{{ rd.hrvTwjxgsszs.refRange }}</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
         </div>
-        <div class="pull-right" />
-      </div>
+      </el-aside>
+      <el-container class="brech-work-container">
+        <el-tabs v-model="brechWorkTabs.active" class="brech-work-tabs" @tab-click="onBrechWorkTabs">
+          <el-tab-pane label="健康评价" name="sug">
+            <div v-loading="loadingBySug" class="drawer">
+              <div class="drawer_content">
+                <div style="margin-bottom:10px">
+                  <el-tag v-if="formBySug.isSend" type="success">
+                    已发送
+                  </el-tag>
+                  <el-tag v-if="!formBySug.isSend" type="warning">
+                    未发送
+                  </el-tag>
+                </div>
+                <el-card class="box-card" style="margin-bottom:10px">
+                  <div slot="header" class="clearfix">
+                    <span>健康总结</span>
+                  </div>
+                  <div>
+                    <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSummary" rows="5" type="textarea" show-word-limit />
+                    <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSummary }}</pre>
+                  </div>
+                </el-card>
+                <el-card class="box-card" style="margin-bottom:10px">
+                  <div slot="header" class="clearfix">
+                    <span>健康建议</span>
+                  </div>
+                  <div>
+                    <el-input v-if="!formBySug.isSend" v-model="formBySug.rptSuggest" rows="5" type="textarea" show-word-limit />
+                    <pre v-if="formBySug.isSend" style="white-space: pre-line;line-height: 23px;">{{ formBySug.rptSuggest }}</pre>
+                  </div>
+                </el-card>
+              </div>
+              <div class="drawer_footer">
+                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
 
-      <div v-if="rd!=null">
+      </el-container>
+    </el-container>
 
-        <el-tag
-          v-for="tag in rd.dsTags"
-          :key="tag"
-          style="margin-right: 10px;margin-bottom: 10px"
-        >
-          {{ tag }}
-        </el-tag>
-      </div>
-      <div class="row-title clearfix">
-        <div class="pull-left"> <h5>监测数据图</h5>
-        </div>
-        <div class="pull-right" />
-      </div>
-      <div ref="echart_sm_zx" style="width: 960px;height: 400px;margin:auto" />
-      <div class="row-title clearfix">
-        <div class="pull-left"> <h5>睡眠结构</h5>
-        </div>
-        <div class="pull-right" />
-      </div>
-      <div ref="echart_sm_bi" style="width: 960px;height: 400px;margin:auto" />
-
-      <div class="row-title clearfix">
-        <div class="pull-left"> <h5>数据指标</h5>
-        </div>
-        <div class="pull-right" />
-      </div>
-
-      <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%">
-        <thead>
-          <tr>
-            <th>类别</th>
-            <th>指标</th>
-            <th>测量值</th>
-            <th>判断</th>
-            <th>参考范围</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td rowspan="7">睡眠</td></tr>
-          <tr>
-            <td>实际睡眠时长</td>
-            <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.value }}</span> </td>
-            <td><span :style="{'color': rd.smSmsc.color}">{{ rd.smSmsc.sign }}</span></td>
-            <td><span>{{ rd.smSmsc.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>浅度睡眠</td>
-            <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.value }}</span> </td>
-            <td><span :style="{'color': rd.smQdsmsc.color}">{{ rd.smQdsmsc.sign }}</span></td>
-            <td><span>{{ rd.smQdsmsc.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>深度睡眠</td>
-            <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.value }}</span> </td>
-            <td><span :style="{'color': rd.smSdsmsc.color}">{{ rd.smSdsmsc.sign }}</span></td>
-            <td><span>{{ rd.smSdsmsc.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>REM睡眠</td>
-            <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.value }}</span> </td>
-            <td><span :style="{'color': rd.smRemsmsc.color}">{{ rd.smRemsmsc.sign }}</span></td>
-            <td><span>{{ rd.smRemsmsc.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>睡眠周期</td>
-            <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.value }}</span> </td>
-            <td><span :style="{'color': rd.smSmzq.color}">{{ rd.smSmzq.sign }}</span></td>
-            <td><span>{{ rd.smSmzq.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>体动次数</td>
-            <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.value }}</span> </td>
-            <td><span :style="{'color': rd.smTdcs.color}">{{ rd.smTdcs.sign }}</span></td>
-            <td><span>{{ rd.smTdcs.refRange }}</span></td>
-          </tr>
-
-          <tr><td rowspan="4">心率</td></tr>
-          <tr>
-            <td>当次基准心率</td>
-            <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.value }}</span> </td>
-            <td><span :style="{'color': rd.xlDcjzxl.color}">{{ rd.xlDcjzxl.sign }}</span></td>
-            <td><span>{{ rd.xlDcjzxl.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>长期基准心率</td>
-            <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.value }}</span> </td>
-            <td><span :style="{'color': rd.xlCqjzxl.color}">{{ rd.xlCqjzxl.sign }}</span></td>
-            <td><span>{{ rd.xlCqjzxl.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>当次平均心率</td>
-            <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.value }}</span> </td>
-            <td><span :style="{'color': rd.xlDcpjxl.color}">{{ rd.xlDcpjxl.sign }}</span></td>
-            <td><span>{{ rd.xlDcpjxl.refRange }}</span></td>
-          </tr>
-
-          <tr><td rowspan="6">呼吸</td></tr>
-          <tr>
-            <td>当次基准呼吸</td>
-            <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.value }}</span> </td>
-            <td><span :style="{'color': rd.hxDcjzhx.color}">{{ rd.hxDcjzhx.sign }}</span></td>
-            <td><span>{{ rd.hxDcjzhx.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>长期基准呼吸</td>
-            <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.value }}</span> </td>
-            <td><span :style="{'color': rd.hxCqjzhx.color}">{{ rd.hxCqjzhx.sign }}</span></td>
-            <td><span>{{ rd.hxCqjzhx.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>平均呼吸</td>
-            <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.value }}</span> </td>
-            <td><span :style="{'color': rd.hxDcpjhx.color}">{{ rd.hxDcpjhx.sign }}</span></td>
-            <td><span>{{ rd.hxDcpjhx.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>呼吸暂停次数</td>
-            <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.value }}</span> </td>
-            <td><span :style="{'color': rd.hxZtcs.color}">{{ rd.hxZtcs.sign }}</span></td>
-            <td><span>{{ rd.hxZtcs.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>AHI指数</td>
-            <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.value }}</span> </td>
-            <td><span :style="{'color': rd.hxZtahizs.color}">{{ rd.hxZtahizs.sign }}</span></td>
-            <td><span>{{ rd.hxZtahizs.refRange }}</span></td>
-          </tr>
-
-          <tr><td rowspan="9">HRV</td></tr>
-          <tr>
-            <td>心率失常风险</td>
-            <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.value }}</span> </td>
-            <td><span :style="{'color': rd.jbfxXlscfx.color}">{{ rd.jbfxXlscfx.sign }}</span></td>
-            <td><span>{{ rd.jbfxXlscfx.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>心率减力</td>
-            <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.value }}</span> </td>
-            <td><span :style="{'color': rd.jbfxXljsl.color}">{{ rd.jbfxXljsl.sign }}</span></td>
-            <td><span>{{ rd.jbfxXljsl.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>心脏总能量</td>
-            <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvXzznl.color}">{{ rd.hrvXzznl.sign }}</span></td>
-            <td><span>{{ rd.hrvXzznl.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>交感神经张力指数</td>
-            <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvJgsjzlzs.color}">{{ rd.hrvJgsjzlzs.sign }}</span></td>
-            <td><span>{{ rd.hrvJgsjzlzs.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>迷走神经张力指数</td>
-            <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvMzsjzlzs.color}">{{ rd.hrvMzsjzlzs.sign }}</span></td>
-            <td><span>{{ rd.hrvMzsjzlzs.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>自主神经平衡指数</td>
-            <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvZzsjzlzs.color}">{{ rd.hrvZzsjzlzs.sign }}</span></td>
-            <td><span>{{ rd.hrvZzsjzlzs.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>荷尔蒙指数</td>
-            <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvHermzs.color}">{{ rd.hrvHermzs.sign }}</span></td>
-            <td><span>{{ rd.hrvHermzs.refRange }}</span></td>
-          </tr>
-          <tr>
-            <td>体温及血管舒缩指数</td>
-            <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.value }}</span> </td>
-            <td><span :style="{'color': rd.hrvTwjxgsszs.color}">{{ rd.hrvTwjxgsszs.sign }}</span></td>
-            <td><span>{{ rd.hrvTwjxgsszs.refRange }}</span></td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
   </el-dialog>
 
 </template>
@@ -223,6 +279,7 @@ export default {
   data() {
     return {
       loading: false,
+      loadingBySug: false,
       userInfo: {
         avatar: '',
         signName: '',
@@ -236,6 +293,16 @@ export default {
         hxPoint: [],
         xlPoint: [],
         smPoint: []
+      },
+      brechWorkTabs: {
+        active: 'sug'
+      },
+      formBySug: {
+        reportId: '',
+        rptSummary: '',
+        rptSuggest: '',
+        isSend: false,
+        sugSkus: []
       },
       isDesktop: this.$store.getters.isDesktop
     }
