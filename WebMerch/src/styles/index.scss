@@ -622,12 +622,31 @@ border: 1px solid #909399;
       .drawer_content{
         height: 100%;
         overflow: auto;
-        padding:0px 20px;
+        padding: 0px 20px;
       }
 
       .drawer_footer{
         padding: 10px 0px;
         text-align: center;
+      }
+    }
+  }
+
+  .brech-work-tabs{
+    padding:0;
+    display:flex;
+    flex-direction: column;
+    height: 100%;
+
+    .el-tabs__header{
+      padding: 0 20px;
+    }
+    
+    .el-tabs__content{
+      height: 100%;
+
+      .el-tab-pane{
+        height: 100%;
       }
     }
   }

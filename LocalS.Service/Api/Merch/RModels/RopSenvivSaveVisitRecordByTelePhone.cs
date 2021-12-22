@@ -12,5 +12,7 @@ namespace LocalS.Service.Api.Merch
         public string VisitTime { get; set; }
         public string NextTime { get; set; }
         public string UserId { get; set; }
+
+        public string ReportId { get; set; }
     }
 }

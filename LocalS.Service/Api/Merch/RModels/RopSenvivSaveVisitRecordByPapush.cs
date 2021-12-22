@@ -12,5 +12,6 @@ namespace LocalS.Service.Api.Merch
         public E_SenvivVisitRecordVisitTemplate VisitTemplate { get; set; }
         public object VisitContent { get; set; }
         public string UserId { get; set; }
+        public string ReportId { get; set; }
     }
 }

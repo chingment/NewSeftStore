@@ -24,7 +24,6 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        public string MerchId { get; set; }
         public E_SenvivVisitRecordVisitType VisitType { get; set; }
         public E_SenvivVisitRecordVisitTemplate VisitTemplate { get; set; }
         public string VisitContent { get; set; }

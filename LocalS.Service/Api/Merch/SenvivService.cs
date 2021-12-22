@@ -983,6 +983,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 Id = rpt.Id,
                 UserInfo = new
                 {
+                    UserId = rpt.SvUserId,
                     SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
                     Avatar = rpt.Avatar,
                     Sex = SvUtil.GetSexName(rpt.Sex),
@@ -1261,8 +1262,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var query = (from u in CurrentDb.SenvivVisitRecord
                          where
-                         u.MerchId == merchId
-                         &&
                          u.SvUserId == rup.UserId
                          select new { u.Id, u.VisitType, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
@@ -1371,8 +1370,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var d_SenvivVisitRecord = new SenvivVisitRecord();
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.MerchId = merchId;
             d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.ReportId = rop.ReportId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;
             d_SenvivVisitRecord.VisitTemplate = E_SenvivVisitRecordVisitTemplate.CalloutRecord;
             d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
@@ -1394,8 +1393,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var d_SenvivVisitRecord = new SenvivVisitRecord();
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.MerchId = merchId;
             d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.ReportId = rop.ReportId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.WxPa;
             d_SenvivVisitRecord.VisitTemplate = rop.VisitTemplate;
 

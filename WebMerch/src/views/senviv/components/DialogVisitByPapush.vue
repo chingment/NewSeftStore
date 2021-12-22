@@ -94,7 +94,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { SaveVisitRecordByPapush, getVisitRecords } from '@/api/senviv'
+import { saveVisitRecordByPapush, getVisitRecords } from '@/api/senviv'
 export default {
   name: 'PaneVisitRecord',
   props: {
@@ -198,7 +198,7 @@ export default {
                   remark: this.form.remark
                 }
               }
-              SaveVisitRecordByPapush(_from).then(res => {
+              saveVisitRecordByPapush(_from).then(res => {
                 if (res.result === 1) {
                   this.$message({
                     message: res.message,

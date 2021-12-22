@@ -96,9 +96,9 @@ export function saveVisitRecordByTelePhone(data) {
   })
 }
 
-export function SaveVisitRecordByPapush(data) {
+export function saveVisitRecordByPapush(data) {
   return request({
-    url: '/senviv/SaveVisitRecordByPapush',
+    url: '/senviv/saveVisitRecordByPapush',
     method: 'post',
     data
   })
@@ -126,5 +126,5 @@ export default {
   getTagExplains: getTagExplains,
   saveTagExplain: saveTagExplain,
   saveVisitRecordByTelePhone: saveVisitRecordByTelePhone,
-  SaveVisitRecordByPapush: SaveVisitRecordByPapush
+  saveVisitRecordByPapush: saveVisitRecordByPapush
 }
