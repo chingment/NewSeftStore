@@ -1,5 +1,5 @@
 <template>
-  <div class="sug-product" style="margin-top:20px">
+  <div v-if="skus!=null&&skus.length>0" class="sug-product" style="margin-top:20px">
     <div class="sug-tag">------ 健康商品 ------</div>
     <div class="its-skus prd-list-1">
       <div v-for="(sku,index) in skus" :key="index" :class="'it '+'it-'+index%2 ">
