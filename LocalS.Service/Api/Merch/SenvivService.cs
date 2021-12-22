@@ -1545,11 +1545,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var handled = query.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
 
 
-            int total = query.Count();
-
-            int pageIndex = rup.Page - 1;
-            int pageSize = rup.Limit;
-
             if (rup.Status == 0)
             {
                 query = query.Where(m => m.Status == E_SenvivTaskStatus.Handling || m.Status == E_SenvivTaskStatus.WaitHandle);
@@ -1558,6 +1553,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             {
                 query = query.Where(m => m.Status == E_SenvivTaskStatus.Handled);
             }
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
 
 
 

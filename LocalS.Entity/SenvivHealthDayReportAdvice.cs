@@ -9,7 +9,7 @@ namespace LocalS.Entity
     {
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        public string DayReportId { get; set; }
+        public string ReportId { get; set; }
         public string SuggestCode { get; set; }
         public string SuggestName { get; set; }
         public string Summary{ get; set; }

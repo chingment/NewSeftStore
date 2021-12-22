@@ -31,6 +31,7 @@ namespace LocalS.Entity
         public string Title { get; set; }
         public string HandleTime { get; set; }
         public string Handler { get; set; }
+        public string HandleContent { get; set; }
         public string ReportId { get; set; }
         public string Params { get; set; }
         public E_SenvivTaskStatus Status { get; set; }

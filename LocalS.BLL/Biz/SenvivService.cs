@@ -933,7 +933,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "QxxlQxyj";
                                         d_Label.TypeName = "情绪应激";
@@ -948,7 +948,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "QxxlKynl";
                                         d_Label.TypeName = "抗压能力";
@@ -963,7 +963,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "MylMylZs";
                                         d_Label.TypeName = "免疫力指数";
@@ -979,7 +979,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "MylGrfx";
                                         d_Label.TypeName = "感染风险";
@@ -995,7 +995,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "MbGxbgk";
                                         d_Label.TypeName = "高血压管控";
@@ -1010,7 +1010,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "MbTlbgk";
                                         d_Label.TypeName = "糖尿病管控";
@@ -1027,7 +1027,7 @@ namespace LocalS.BLL
 
                                         d_Label = new SenvivHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.DayReportId = d_DayReport.Id;
+                                        d_Label.ReportId = d_DayReport.Id;
                                         d_Label.SvUserId = d_DayReport.SvUserId;
                                         d_Label.TypeCode = "QxxlJlqx";
                                         d_Label.TypeName = "焦虑情绪";
@@ -1134,7 +1134,7 @@ namespace LocalS.BLL
                                 //{
                                 var d_Label = new SenvivHealthDayReportLabel();
                                 d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                d_Label.DayReportId = d_DayReport.Id;
+                                d_Label.ReportId = d_DayReport.Id;
                                 d_Label.SvUserId = d_DayReport.SvUserId;
                                 d_Label.TypeName = label.TagName;
                                 d_Label.Explain = label.Explain;
@@ -1160,7 +1160,7 @@ namespace LocalS.BLL
                         {
                             var d_Advice = new SenvivHealthDayReportAdvice();
                             d_Advice.Id = IdWorker.Build(IdType.NewGuid);
-                            d_Advice.DayReportId = d_DayReport.Id;
+                            d_Advice.ReportId = d_DayReport.Id;
                             d_Advice.SvUserId = d_DayReport.SvUserId;
                             d_Advice.SuggestCode = advice.suggestcode;
                             d_Advice.SuggestName = advice.suggestion;

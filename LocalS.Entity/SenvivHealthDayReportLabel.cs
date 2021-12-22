@@ -10,7 +10,7 @@ namespace LocalS.Entity
     {
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        public string DayReportId { get; set; }
+        public string ReportId { get; set; }
         public string TypeClass { get; set; }
         public decimal Score { get; set; }
         public string TypeCode { get; set; }

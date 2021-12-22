@@ -390,6 +390,7 @@ export default {
       this.isShowByUsers = false
       this.isShowByTodoTask = true
       this.tasks.listQuery.status = status
+      this.tasks.listQuery.page = 1
       this.onGetTasks()
     },
     onOpenDialogByDetail(item) {
