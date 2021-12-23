@@ -626,12 +626,14 @@ border: 1px solid #909399;
       .drawer_content{
         height: 100%;
         overflow: auto;
-        padding: 0px 20px;
+        padding: 20px 20px;
       }
 
       .drawer_footer{
         padding: 10px 0px;
         text-align: center;
+        background-color: #f5f7fa;
+        border-top: 1px solid #e4e7ed;
       }
     }
   }
@@ -648,7 +650,7 @@ border: 1px solid #909399;
     
     .el-tabs__content{
       height: 100%;
-
+      padding: 0px;
       .el-tab-pane{
         height: 100%;
       }
