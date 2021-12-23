@@ -216,8 +216,8 @@
       </el-main>
     </el-container>
 
-    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" :task-id="selectTaskId" :type="dialogType" @aftersave="onAfterSaveStageReport" />
-    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" :task-id="selectTaskId" :type="dialogType" @aftersave="onAfterSaveDayReport" />
+    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" :task-id="selectTaskId" :work-type="selectTaskWorkType" @aftersave="onAfterSaveStageReport" />
+    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" :task-id="selectTaskId" :work-type="selectTaskWorkType" @aftersave="onAfterSaveDayReport" />
   </div>
 
 </template>
@@ -312,7 +312,7 @@ export default {
       dialogIsShowByStageReport: false,
       selectStageReportId: '',
       dialogIsShowByDayReport: false,
-      dialogType: '',
+      selectTaskWorkType: '',
       selectDayReportId: '',
       selectTaskId: '',
       isDesktop: this.$store.getters.isDesktop
@@ -398,9 +398,9 @@ export default {
       this.selectUserId = item.id
       this.dialogIsShowByDetail = true
     },
-    onHandleTask(item, type) {
+    onHandleTask(item, workType) {
       this.selectTaskId = item.id
-      this.dialogType = type
+      this.selectTaskWorkType = workType
       if (item.taskType.value === 1) {
         this.dialogIsShowByDayReport = true
         this.selectDayReportId = item.reportId

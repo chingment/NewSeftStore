@@ -437,7 +437,7 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
-    <pane-day-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" type="day_saw" :report-id="selectReportId" />
+    <pane-day-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" work-type="day_saw" :report-id="selectReportId" />
 
   </div>
 </template>

@@ -561,7 +561,7 @@ export default {
       type: String,
       default: ''
     },
-    type: {
+    workType: {
       type: String,
       default: ''
     },
@@ -668,28 +668,20 @@ export default {
     }
   },
   mounted() {
-    // if (!myChart1) {
-    //   myChart1 = echarts.init(this.$refs.echart_xl, null, { renderer: 'svg' })
-    // }
-
-    // if (!myChart2) {
-    //   myChart2 = echarts.init(this.$refs.echart_hrv, null, { renderer: 'svg' })
-    // }
-
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    if (this.type === 'task_saw') {
+    if (this.workType === 'task_saw') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = false
       this.brechWorkTabs.isShowByVisitWaPush = false
       this.brechWorkTabs.isShowHandleRecord = true
-    } else if (this.type === 'task_handle') {
+    } else if (this.workType === 'task_handle') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = true
       this.brechWorkTabs.isShowByVisitWaPush = true
       this.brechWorkTabs.isShowHandleRecord = true
-    } else if (this.type === 'health_sug') {
+    } else if (this.workType === 'health_sug') {
       this.brechWorkTabs.isShowByHealthSug = true
       this.brechWorkTabs.isShowByVisitTelephone = false
       this.brechWorkTabs.isShowByVisitWaPush = false

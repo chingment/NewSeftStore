@@ -377,7 +377,7 @@ export default {
       type: String,
       default: ''
     },
-    type: {
+    workType: {
       type: String,
       default: ''
     },
@@ -388,6 +388,10 @@ export default {
   },
   data() {
     return {
+      dialog: {
+        width: '1000px',
+        title: ''
+      },
       loading: false,
       loadingBySug: false,
       loadingByHandleRecord: false,
@@ -478,28 +482,20 @@ export default {
     }
   },
   mounted() {
-    // if (!myChart1) {
-    //   myChart1 = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
-    // }
-
-    // if (!myChart2) {
-    //   myChart2 = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
-    // }
-
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    if (this.type === 'task_saw') {
+    if (this.workType === 'task_saw') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = false
       this.brechWorkTabs.isShowByVisitWaPush = false
       this.brechWorkTabs.isShowHandleRecord = true
-    } else if (this.type === 'task_handle') {
+    } else if (this.workType === 'task_handle') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = true
       this.brechWorkTabs.isShowByVisitWaPush = true
       this.brechWorkTabs.isShowHandleRecord = true
-    } else if (this.type === 'day_saw') {
+    } else if (this.workType === 'day_saw') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = false
       this.brechWorkTabs.isShowByVisitWaPush = false
@@ -539,15 +535,15 @@ export default {
           this.rd = d.reportData
 
           this.$nextTick(function() {
-            this.getPie()
-            this.getZxt()
+            this.onGetPieBySmjg()
+            this.onGetChartByJcsj()
           }, 2000)
         }
 
         this.loading = false
       })
     },
-    getPie() {
+    onGetPieBySmjg() {
       // 绘制图表
       if (!myChart1) {
         myChart1 = echarts.init(this.$refs.echart_sm_bi, null, { renderer: 'svg' })
@@ -610,37 +606,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart1.setOption(option)
     },
-    datetimeFormat(longTypeDate) {
-      const date = new Date(longTypeDate * 1000)
-      const y = date.getFullYear()
-      let MM = date.getMonth() + 1
-      MM = MM < 10 ? ('0' + MM) : MM
-      let d = date.getDate()
-      d = d < 10 ? ('0' + d) : d
-      let h = date.getHours()
-      h = h < 10 ? ('0' + h) : h
-      let m = date.getMinutes()
-      m = m < 10 ? ('0' + m) : m
-      let s = date.getSeconds()
-      s = s < 10 ? ('0' + s) : s
-      return y + '/' + MM + '/' + d + ' ' + h + ':' + m
-    },
-    datetimeFormat2(longTypeDate, ts) {
-      const date = new Date(longTypeDate * 1000 + ts)
-      const y = date.getFullYear()
-      let MM = date.getMonth() + 1
-      MM = MM < 10 ? ('0' + MM) : MM
-      let d = date.getDate()
-      d = d < 10 ? ('0' + d) : d
-      let h = date.getHours()
-      h = h < 10 ? ('0' + h) : h
-      let m = date.getMinutes()
-      m = m < 10 ? ('0' + m) : m
-      let s = date.getSeconds()
-      s = s < 10 ? ('0' + s) : s
-      return y + '/' + MM + '/' + d + ' ' + h + ':' + m
-    },
-    getZxt() {
+    onGetChartByJcsj() {
       if (!myChart2) {
         myChart2 = echarts.init(this.$refs.echart_sm_zx, null, { renderer: 'svg' })
       }
@@ -1189,6 +1155,36 @@ export default {
     },
     onBeforeClose() {
       this.$emit('update:visible', false)
+    },
+    datetimeFormat(longTypeDate) {
+      const date = new Date(longTypeDate * 1000)
+      const y = date.getFullYear()
+      let MM = date.getMonth() + 1
+      MM = MM < 10 ? ('0' + MM) : MM
+      let d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+      let h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      let m = date.getMinutes()
+      m = m < 10 ? ('0' + m) : m
+      let s = date.getSeconds()
+      s = s < 10 ? ('0' + s) : s
+      return y + '/' + MM + '/' + d + ' ' + h + ':' + m
+    },
+    datetimeFormat2(longTypeDate, ts) {
+      const date = new Date(longTypeDate * 1000 + ts)
+      const y = date.getFullYear()
+      let MM = date.getMonth() + 1
+      MM = MM < 10 ? ('0' + MM) : MM
+      let d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+      let h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      let m = date.getMinutes()
+      m = m < 10 ? ('0' + m) : m
+      let s = date.getSeconds()
+      s = s < 10 ? ('0' + s) : s
+      return y + '/' + MM + '/' + d + ' ' + h + ':' + m
     }
   }
 }
