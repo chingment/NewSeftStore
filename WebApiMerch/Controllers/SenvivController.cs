@@ -123,5 +123,12 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetHandleRecords([FromUri]RupSenvivGetVisitRecords rup)
+        {
+            var result = MerchServiceFactory.Senviv.GetVisitRecords(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
     }
 }

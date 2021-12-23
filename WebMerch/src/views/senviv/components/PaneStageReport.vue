@@ -430,7 +430,7 @@
 
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
 
-    <pane-stage-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" :report-id="selectReportId" @aftersave="onAfterSaveMonthReportSug" />
+    <pane-stage-report-detail v-if="dialogIsShowByReportDetail" :visible.sync="dialogIsShowByReportDetail" type="health_sug" :report-id="selectReportId" @aftersave="onAfterSaveMonthReportSug" />
 
   </div>
 </template>

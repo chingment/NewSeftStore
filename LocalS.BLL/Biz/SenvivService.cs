@@ -834,43 +834,47 @@ namespace LocalS.BLL
 
             if (!string.IsNullOrEmpty(rptId))
             {
-                var d_SenvivTask = CurrentDb.SenvivTask.Where(m => m.ReportId == rptId && m.TaskType == taskType).FirstOrDefault();
-                if (d_SenvivTask == null)
+                if (taskType == E_SenvivTaskType.Health_Monitor_FisrtDay || taskType == E_SenvivTaskType.Health_Monitor_SeventhDay || taskType == E_SenvivTaskType.Health_Monitor_FourteenthDay)
                 {
-                    d_SenvivTask = new SenvivTask();
-                    d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
-                    d_SenvivTask.SvUserId = userId;
-                    d_SenvivTask.TaskType = taskType;
-                    var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-                    var signName = SvUtil.GetSignName(d_User.FullName, d_User.NickName);
-
-                    DateTime rptStartTime = (DateTime)taskParams["start_time"];
-                    DateTime rptEndTime = (DateTime)taskParams["end_time"];
-
-                    string title = "";
-                    switch (taskType)
-                    {
-                        case E_SenvivTaskType.Health_Monitor_FisrtDay:
-                            title = string.Format("客户[{0}]的首份报告（{0}）已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
-                            break;
-                        case E_SenvivTaskType.Health_Monitor_SeventhDay:
-                            title = string.Format("客户[{0}]的首次7天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
-                            break;
-                        case E_SenvivTaskType.Health_Monitor_FourteenthDay:
-                            title = string.Format("客户[{0}]的首次14天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
-                            break;
-                        case E_SenvivTaskType.Health_Monitor_PerMonth:
-                            title = string.Format("客户[{0}]的{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
-                            break;
-                    }
-                    d_SenvivTask.Title = title;
-                    d_SenvivTask.ReportId = rptId;
-                    d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
-                    d_SenvivTask.CreateTime = DateTime.Now;
-                    d_SenvivTask.Creator = IdWorker.Build(IdType.NewGuid);
-                    CurrentDb.SenvivTask.Add(d_SenvivTask);
-                    CurrentDb.SaveChanges();
+                    var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.TaskType == taskType).FirstOrDefault();
+                    if (d_Task != null)
+                        return;
                 }
+
+                SenvivTask d_SenvivTask = new SenvivTask();
+                d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
+                d_SenvivTask.SvUserId = userId;
+                d_SenvivTask.TaskType = taskType;
+                var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+                var signName = SvUtil.GetSignName(d_User.FullName, d_User.NickName);
+
+                DateTime rptStartTime = (DateTime)taskParams["start_time"];
+                DateTime rptEndTime = (DateTime)taskParams["end_time"];
+
+                string title = "";
+                switch (taskType)
+                {
+                    case E_SenvivTaskType.Health_Monitor_FisrtDay:
+                        title = string.Format("客户[{0}]的首份报告（{0}）已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_SeventhDay:
+                        title = string.Format("客户[{0}]的首次7天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_FourteenthDay:
+                        title = string.Format("客户[{0}]的首次14天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_PerMonth:
+                        title = string.Format("客户[{0}]的{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
+                        break;
+                }
+                d_SenvivTask.Title = title;
+                d_SenvivTask.ReportId = rptId;
+                d_SenvivTask.Status = E_SenvivTaskStatus.WaitHandle;
+                d_SenvivTask.CreateTime = DateTime.Now;
+                d_SenvivTask.Creator = IdWorker.Build(IdType.NewGuid);
+                CurrentDb.SenvivTask.Add(d_SenvivTask);
+                CurrentDb.SaveChanges();
+
             }
         }
 

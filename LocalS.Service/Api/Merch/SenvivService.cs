@@ -1353,9 +1353,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.SenvivVisitRecord
-                         where
-                         u.SvUserId == rup.UserId
-                         select new { u.Id, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
+                         select new { u.Id, u.SvUserId, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
+
+            if (!string.IsNullOrEmpty(rup.UserId))
+            {
+                query = query.Where(m => m.SvUserId == rup.UserId);
+            }
 
             if (!string.IsNullOrEmpty(rup.TaskId))
             {

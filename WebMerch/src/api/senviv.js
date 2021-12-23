@@ -128,8 +128,17 @@ export function getVisitRecords(params) {
   })
 }
 
+export function getHandleRecords(params) {
+  return request({
+    url: '/senviv/getHandleRecords',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getVisitRecords: getVisitRecords,
+  getHandleRecords: getHandleRecords,
   getUsers: getUsers,
   getUserDetail: getUserDetail,
   getTasks: getTasks,

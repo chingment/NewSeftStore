@@ -200,10 +200,10 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                  <el-button v-if="scope.row.status.value===1||scope.row.status.value===2" type="text" size="mini" @click="onHandleTask(scope.row)">
+                  <el-button v-if="scope.row.status.value===1||scope.row.status.value===2" type="text" size="mini" @click="onHandleTask(scope.row,'task_handle')">
                     处理
                   </el-button>
-                  <el-button v-else-if="scope.row.status.value===3" type="text" size="mini" @click="onHandleTask(scope.row)">
+                  <el-button v-else-if="scope.row.status.value===3" type="text" size="mini" @click="onHandleTask(scope.row,'task_saw')">
                     查看
                   </el-button>
                 </template>
@@ -216,8 +216,8 @@
       </el-main>
     </el-container>
 
-    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" :task-id="selectTaskId" @aftersave="onAfterSaveStageReport" />
-    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" :task-id="selectTaskId" />
+    <pane-stage-report-detail v-if="dialogIsShowByStageReport" :visible.sync="dialogIsShowByStageReport" :report-id="selectStageReportId" :task-id="selectTaskId" :type="dialogType" @aftersave="onAfterSaveStageReport" />
+    <pane-day-report-detail v-if="dialogIsShowByDayReport" :visible.sync="dialogIsShowByDayReport" :report-id="selectDayReportId" :task-id="selectTaskId" :type="dialogType" @aftersave="onAfterSaveDayReport" />
   </div>
 
 </template>
@@ -312,6 +312,7 @@ export default {
       dialogIsShowByStageReport: false,
       selectStageReportId: '',
       dialogIsShowByDayReport: false,
+      dialogType: '',
       selectDayReportId: '',
       selectTaskId: '',
       isDesktop: this.$store.getters.isDesktop
@@ -397,8 +398,9 @@ export default {
       this.selectUserId = item.id
       this.dialogIsShowByDetail = true
     },
-    onHandleTask(item) {
+    onHandleTask(item, type) {
       this.selectTaskId = item.id
+      this.dialogType = type
       if (item.taskType.value === 1) {
         this.dialogIsShowByDayReport = true
         this.selectDayReportId = item.reportId
@@ -408,6 +410,9 @@ export default {
       }
     },
     onAfterSaveStageReport() {
+      this.onGetTasks()
+    },
+    onAfterSaveDayReport() {
       this.onGetTasks()
     }
   }

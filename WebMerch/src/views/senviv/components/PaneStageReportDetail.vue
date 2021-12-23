@@ -4,12 +4,16 @@
     <el-container class="brech-work">
       <el-aside class="brech-work-aside">
         <div>
-          <el-descriptions title="用户信息">
+          <div class="row-title clearfix">
+            <div class="pull-left"> <h5>客户信息</h5>
+            </div>
+            <div class="pull-right" />
+          </div>
+          <el-descriptions title="">
             <el-descriptions-item label="姓名">{{ userInfo.signName }}</el-descriptions-item>
             <el-descriptions-item label="性别">{{ userInfo.sex }}</el-descriptions-item>
             <el-descriptions-item label="年龄">{{ userInfo.age }}</el-descriptions-item>
           </el-descriptions>
-
           <div class="row-title clearfix">
             <div class="pull-left"> <h5>数据标签</h5>
             </div>
@@ -310,8 +314,8 @@
         </div>
       </el-aside>
       <el-container class="brech-work-container">
-        <el-tabs v-model="brechWorkTabs.active" class="brech-work-tabs" @tab-click="onBrechWorkTabs">
-          <el-tab-pane label="健康评价" name="sug">
+        <el-tabs class="brech-work-tabs" @tab-click="onBrechWorkTabs">
+          <el-tab-pane v-if="brechWorkTabs.isShowByHealthSug" label="健康评价">
             <div v-loading="loadingBySug" class="drawer">
               <div class="drawer_content">
                 <div style="margin-bottom:10px">
@@ -407,11 +411,128 @@
                 </el-card>
               </div>
               <div class="drawer_footer">
-                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveSug(false)">暂 存</el-button>
-                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveSug(true)">保存并发送</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="primary" @click="onSaveReportSug(false)">暂 存</el-button>
+                <el-button v-if="!formBySug.isSend" size="small" type="success" @click="onSaveReportSug(true)">保存并发送</el-button>
               </div>
             </div>
           </el-tab-pane>
+          <el-tab-pane v-if="brechWorkTabs.isShowByVisitTelephone" label="电话回访">
+            <div class="drawer">
+              <div class="drawer_content">
+                <el-form ref="formByVisitTelephone" :model="formByVisitTelephone" :rules="rulesByVisitTelephone" label-width="80px">
+                  <el-form-item label="回访时间" prop="visitTime">
+                    <el-date-picker
+                      v-model="formByVisitTelephone.visitTime"
+                      type="datetime"
+                      placeholder="选择日期时间"
+                      align="right"
+                      :picker-options="pickerOptions"
+                    />
+                  </el-form-item>
+                  <el-form-item label="回访记录" prop="remark">
+                    <el-input
+                      v-model="formByVisitTelephone.remark"
+                      type="textarea"
+                      :rows="5"
+                      placeholder="请输入内容"
+                    />
+                  </el-form-item>
+                  <el-form-item label="下次预约" prop="nextTime">
+                    <el-date-picker
+                      v-model="formByVisitTelephone.nextTime"
+                      type="datetime"
+                      placeholder="选择日期时间"
+                      align="right"
+                      :picker-options="pickerOptions"
+                    />
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div class="drawer_footer">
+                <el-button size="small" type="primary" @click="onSaveVisitTelephone(false)">保 存</el-button>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane v-if="brechWorkTabs.isShowByVisitWaPush" label="微信告知">
+            <div class="drawer">
+              <div class="drawer_content">
+                <el-form ref="formByVisitPapush" :model="formByVisitPapush" :rules="rulesByVisitPapush" label-width="80px">
+                  <el-form-item label="模板" prop="visitTemplate">
+                    <el-select v-model="formByVisitPapush.visitTemplate" placeholder="请选择">
+                      <el-option
+                        v-for="item in visitTemplateOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="异常结果" prop="keyword1">
+                    <el-input
+                      v-model="formByVisitPapush.keyword1"
+                      type="textarea"
+                      :rows="3"
+                      placeholder="请输入内容"
+                    />
+                  </el-form-item>
+                  <el-form-item label="风险因素" prop="keyword2">
+                    <el-input
+                      v-model="formByVisitPapush.keyword2"
+                      type="textarea"
+                      :rows="3"
+                      placeholder="请输入内容"
+                    />
+                  </el-form-item>
+                  <el-form-item label="健康建议" prop="keyword3">
+                    <el-input
+                      v-model="formByVisitPapush.keyword3"
+                      type="textarea"
+                      :rows="3"
+                      placeholder="请输入内容"
+                    />
+                  </el-form-item>
+                  <el-form-item label="备注" prop="remark">
+                    <el-input
+                      v-model="formByVisitPapush.remark"
+                      type="textarea"
+                      :rows="3"
+                      placeholder="请输入内容"
+                    />
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div class="drawer_footer">
+                <el-button size="small" type="primary" @click="onSaveVisitWapush(false)">保 存</el-button>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane v-if="brechWorkTabs.isShowHandleRecord" label="历史记录">
+            <div class="drawer">
+              <div v-loading="loadingByHandleRecord" class="drawer_content">
+                <el-timeline style="padding:0px">
+
+                  <el-timeline-item
+                    v-for="(record, index) in recordsData"
+                    :key="index"
+                    :timestamp="record.visitTime"
+                    placement="top"
+                  >
+                    <el-card class="box-card">
+                      <div slot="header" class="clearfix">
+                        <span>{{ record.visitType }}</span>
+                      </div>
+                      <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
+                        {{ item.key +' ' + item.value }}
+                      </div>
+                      <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
+                    </el-card>
+                  </el-timeline-item>
+
+                </el-timeline>
+              </div>
+            </div>
+          </el-tab-pane>
+
         </el-tabs>
 
       </el-container>
@@ -423,7 +544,7 @@
 
 import { MessageBox } from 'element-ui'
 import echarts from 'echarts'
-import { getStageReportDetail, saveStageReportSug, getStageReportSug } from '@/api/senviv'
+import { getStageReportDetail, saveStageReportSug, getStageReportSug, saveVisitRecordByTelePhone, saveVisitRecordByPapush, getHandleRecords } from '@/api/senviv'
 import { searchSku } from '@/api/product'
 var myChart1
 var myChart2
@@ -440,6 +561,10 @@ export default {
       type: String,
       default: ''
     },
+    type: {
+      type: String,
+      default: ''
+    },
     visible: {
       type: Boolean,
       default: false
@@ -453,6 +578,7 @@ export default {
       },
       loading: false,
       loadingBySug: false,
+      loadingByHandleRecord: false,
       userInfo: {
         userId: '',
         avatar: '',
@@ -466,7 +592,10 @@ export default {
       rd: {
       },
       brechWorkTabs: {
-        active: 'sug'
+        isShowByHealthSug: false,
+        isShowByVisitTelephone: true,
+        isShowByVisitWaPush: true,
+        isShowHandleRecord: true
       },
       formBySug: {
         reportId: '',
@@ -474,6 +603,62 @@ export default {
         rptSuggest: '',
         isSend: false,
         sugSkus: []
+      },
+      formByVisitTelephone: {
+        visitTime: '',
+        nextTime: '',
+        remark: ''
+      },
+      rulesByVisitTelephone: {
+        visitTime: [{ required: true, message: '必选', trigger: 'change' }],
+        remark: [{ required: true, message: '必填', trigger: 'change' }]
+      },
+      formByVisitPapush: {
+        visitTemplate: '',
+        nextTime: '',
+        content: '',
+        userId: ''
+      },
+      rulesByVisitPapush: {
+        visitTemplate: [{ required: true, message: '请选择模板', trigger: 'change' }],
+        keyword1: [{ required: true, message: '必填', trigger: 'change' }],
+        keyword2: [{ required: true, message: '必填', trigger: 'change' }],
+        keyword3: [{ required: true, message: '必填', trigger: 'change' }]
+      },
+      recordsKey: 0,
+      recordsData: null,
+      recordsTotal: 0,
+      recordsQuery: {
+        page: 1,
+        limit: 10,
+        userId: undefined,
+        reportId: undefined
+      },
+      visitTemplateOptions: [{
+        value: '2',
+        label: '监测异常提醒'
+      }],
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
       },
       temp: {
         searchSkuKey: '',
@@ -494,7 +679,25 @@ export default {
     window.addEventListener('beforeunload', this.clearChart)
   },
   created() {
-    this.onGetStageReportDetail()
+    if (this.type === 'task_saw') {
+      this.brechWorkTabs.isShowByHealthSug = false
+      this.brechWorkTabs.isShowByVisitTelephone = false
+      this.brechWorkTabs.isShowByVisitWaPush = false
+      this.brechWorkTabs.isShowHandleRecord = true
+    } else if (this.type === 'task_handle') {
+      this.brechWorkTabs.isShowByHealthSug = false
+      this.brechWorkTabs.isShowByVisitTelephone = true
+      this.brechWorkTabs.isShowByVisitWaPush = true
+      this.brechWorkTabs.isShowHandleRecord = true
+    } else if (this.type === 'health_sug') {
+      this.brechWorkTabs.isShowByHealthSug = true
+      this.brechWorkTabs.isShowByVisitTelephone = false
+      this.brechWorkTabs.isShowByVisitWaPush = false
+      this.brechWorkTabs.isShowHandleRecord = true
+    }
+
+    this.onGetReportDetail()
+    this.onGetHandleRecords()
   },
   beforeDestroy() {
     if (myChart1) {
@@ -517,7 +720,7 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    onGetStageReportDetail() {
+    onGetReportDetail() {
       this.loading = true
       getStageReportDetail({ reportId: this.reportId, taskId: this.taskId }).then(res => {
         if (res.result === 1) {
@@ -530,7 +733,7 @@ export default {
             this.onGetChartByHrv()
           }, 2000)
 
-          this.onBrechWorkTabs()
+          this.onGetReportSug()
         }
         this.loading = false
       })
@@ -696,7 +899,7 @@ export default {
 
       myChart2.setOption(option, null)
     },
-    onGetStageReportSug() {
+    onGetReportSug() {
       this.loadingBySug = true
       getStageReportSug({ reportId: this.reportId }).then(res => {
         if (res.result === 1) {
@@ -710,7 +913,21 @@ export default {
         this.loadingBySug = false
       })
     },
-    onSaveSug(isSend) {
+    onGetHandleRecords() {
+      this.loadingByHandleRecord = true
+      this.recordsQuery.userId = this.userInfo.userId
+      this.recordsQuery.reportId = this.reportId
+      this.recordsQuery.taskId = this.taskId
+      getHandleRecords(this.recordsQuery).then(res => {
+        if (res.result === 1) {
+          var d = res.data
+          this.recordsData = d.items
+          this.recordsTotal = d.total
+        }
+        this.loadingByHandleRecord = false
+      })
+    },
+    onSaveReportSug(isSend) {
       var tips = '确定要暂存'
       if (isSend) {
         tips = '确定要保存并发送'
@@ -749,6 +966,96 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    onSaveVisitTelephone() {
+      this.$refs['formByVisitTelephone'].validate(valid => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              var _from = {
+                taskId: this.taskId,
+                userId: this.userInfo.userId,
+                reportId: this.reportId,
+                visitTime: this.formByVisitTelephone.visitTime,
+                nextTime: this.formByVisitTelephone.nextTime,
+                visitContent: { remark: this.formByVisitTelephone.remark }
+              }
+              saveVisitRecordByTelePhone(_from).then(res => {
+                if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
+                  this.$emit('aftersave')
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
+                }
+              })
+            })
+            .catch(() => {})
+        }
+      })
+    },
+    onSaveVisitWapush() {
+      this.$refs['formByVisitPapush'].validate(valid => {
+        if (valid) {
+          MessageBox.confirm('确定要保存', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              var _from = {
+                taskId: this.taskId,
+                userId: this.userInfo.userId,
+                reportId: this.reportId,
+                visitTemplate: this.formByVisitPapush.visitTemplate,
+                visitContent: {
+                  keyword1: this.formByVisitPapush.keyword1,
+                  keyword2: this.formByVisitPapush.keyword2,
+                  keyword3: this.formByVisitPapush.keyword3,
+                  remark: this.formByVisitPapush.remark
+                }
+              }
+              saveVisitRecordByPapush(_from).then(res => {
+                if (res.result === 1) {
+                  this.$message({
+                    message: res.message,
+                    type: 'success'
+                  })
+                  this.$emit('aftersave')
+                } else {
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  })
+                }
+              })
+            })
+            .catch(() => {})
+        }
+      })
+    },
+    onBrechWorkTabs(tab, event) {
+      var tabInnerText = event.target.innerText
+
+      if (tabInnerText === '电话回访') {
+
+      } else if (tabInnerText === '微信告知') {
+
+      } else if (tabInnerText === '历史记录') {
+        this.onGetHandleRecords()
+      }
+    },
+    onBeforeClose() {
+      this.$emit('update:visible', false)
     },
     onSearchSku(queryString, cb) {
       searchSku({ key: queryString }).then(res => {
@@ -800,15 +1107,6 @@ export default {
     onDeleteSugSku(index) {
       var list = this.formBySug.sugSkus
       list.splice(index, 1)
-    },
-    onBrechWorkTabs(tab, event) {
-      var active = this.brechWorkTabs.active
-      if (active === 'sug') {
-        this.onGetStageReportSug()
-      }
-    },
-    onBeforeClose() {
-      this.$emit('update:visible', false)
     }
   }
 }
