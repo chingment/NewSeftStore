@@ -14,15 +14,8 @@ namespace LocalS.Service.Api.StoreTerm
         public RetDeviceInitData()
         {
             this.Device = new DeviceModel();
-            this.Ads = new Dictionary<string, AdModel>();
-            this.Skus = new Dictionary<string, SkuModel>();
-            this.Kinds = new List<KindModel>();
         }
         public DeviceModel Device { get; set; }
-        public Dictionary<string, SkuModel> Skus { get; set; }
-        public List<KindModel> Kinds { get; set; }
-        public Dictionary<string, AdModel> Ads { get; set; }
-
         public object CustomData { get; set; }
     }
 }
