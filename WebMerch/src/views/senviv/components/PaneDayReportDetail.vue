@@ -341,7 +341,7 @@
                       <div slot="header" class="clearfix">
                         <span>{{ record.visitType }}</span>
                       </div>
-                      <div v-for="item in record.visitContent" :key="item" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
+                      <div v-for="(item, index2) in record.visitContent" :key="index2" class="text item" style=" margin-bottom: 18px;font-size: 14px;">
                         {{ item.key +' ' + item.value }}
                       </div>
                       <p>{{ record.operater }} 提交于 {{ record.visitTime }}</p>
