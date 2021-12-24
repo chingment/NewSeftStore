@@ -38,6 +38,7 @@ Component({
     myAnimationData: {},
     myShow: false,
     myStop: true,
+    shopId: '0',
     myCart: {
       blocks: [],
       count: 0,
@@ -118,6 +119,7 @@ Component({
         quantity: 1,
         selected: sku.selected,
         shopMode: sku.shopMode,
+        shopId:_this.data.shopId,
         shopMethod: 1
       });
 

@@ -195,6 +195,7 @@ Component({
         id: skuId,
         quantity: _this.data.myQuantity,
         selected: true,
+        shopId:0,
         shopMode: _this.data.shopMode
       });
 
