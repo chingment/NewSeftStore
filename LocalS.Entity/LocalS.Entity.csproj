@@ -111,6 +111,7 @@
     <Compile Include="SenvivTask.cs" />
     <Compile Include="SenvivUser.cs" />
     <Compile Include="SenvivUserDevice.cs" />
+    <Compile Include="SenvivGravida.cs" />
     <Compile Include="SenvivVisitRecord.cs" />
     <Compile Include="Shop.cs" />
     <Compile Include="Spg\SpgItem.cs" />

@@ -136,6 +136,14 @@ export function getHandleRecords(params) {
   })
 }
 
+export function getArticles(params) {
+  return request({
+    url: '/senviv/getArticles',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   getVisitRecords: getVisitRecords,
   getHandleRecords: getHandleRecords,
@@ -153,5 +161,6 @@ export default {
   getTagExplains: getTagExplains,
   saveTagExplain: saveTagExplain,
   saveVisitRecordByTelePhone: saveVisitRecordByTelePhone,
-  saveVisitRecordByPapush: saveVisitRecordByPapush
+  saveVisitRecordByPapush: saveVisitRecordByPapush,
+  getArticles: getArticles
 }

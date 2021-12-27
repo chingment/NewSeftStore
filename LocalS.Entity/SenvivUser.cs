@@ -13,6 +13,13 @@ namespace LocalS.Entity
         Four = 4
     }
 
+    public enum E_SenvivUserCareMode
+    {
+        None = 0,
+        Normal = 1,
+        Gravida = 2
+    }
+
     [Table("SenvivUser")]
     public class SenvivUser
     {
@@ -43,6 +50,7 @@ namespace LocalS.Entity
         public DateTime? LastReportTime { get; set; }
         //public string Details { get; set; }
         public E_SenvivUserCareLevel CareLevel { get; set; }
+        public E_SenvivUserCareMode CareMode { get; set; }
         //public string Status { get; set; }
         public string SAS { get; set; }
         public string BreathingMachine { get; set; }
@@ -52,6 +60,10 @@ namespace LocalS.Entity
         public string OtherFamilyhistory { get; set; }
         public string Medicine { get; set; }
         public string OtherMedicine { get; set; }
+        public string Infection { get; set; }
+        public string OtherInfection { get; set; }
+        public string Allergy { get; set; }
+        public string OtherAllergy { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

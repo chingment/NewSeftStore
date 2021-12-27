@@ -1680,5 +1680,63 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             return statusModel;
         }
+
+        public CustomJsonResult GetArticles(string operater, string merchId, RupSenvivGetTasks rup)
+        {
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SenvivArticle
+                         where u.MerchId == merchId
+                         select new { u.Id, u.Title, u.Category, u.CategoryValue, u.CreateTime, u.Creator });
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                FieldModel category = new FieldModel();
+                if (item.Category == E_SenvivArticleCategory.SolarTerm)
+                {
+                    category = new FieldModel(1, string.Format("节气之{0}", item.CategoryValue));
+                }
+                else if (item.Category == E_SenvivArticleCategory.Pregnancy)
+                {
+                    category = new FieldModel(1, string.Format("孕期之{0}周", item.CategoryValue));
+                }
+                else if (item.Category == E_SenvivArticleCategory.AfterDelivery)
+                {
+                    category = new FieldModel(1, string.Format("产后之{0}周", item.CategoryValue));
+                }
+
+
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    Category = category,
+                    CreateTime = item.CreateTime
+                });
+            }
+
+
+            var pageEntity = new
+            {
+                PageSize = pageSize,
+                Total = total,
+                Items = olist
+            };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+        }
     }
 }
