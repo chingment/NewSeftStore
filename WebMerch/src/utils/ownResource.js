@@ -41,6 +41,7 @@ export function getSideBars() {
   var menus = store.getters.userInfo.menus
   var routers = []
   _generateRoutes(routers, menus)
+  console.log(JSON.stringify(routers))
   return routers
 }
 
