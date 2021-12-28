@@ -144,6 +144,22 @@ export function getArticles(params) {
   })
 }
 
+export function getArticle(params) {
+  return request({
+    url: '/senviv/getArticle',
+    method: 'get',
+    params
+  })
+}
+
+export function saveArticle(data) {
+  return request({
+    url: '/senviv/saveArticle',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getVisitRecords: getVisitRecords,
   getHandleRecords: getHandleRecords,
@@ -162,5 +178,7 @@ export default {
   saveTagExplain: saveTagExplain,
   saveVisitRecordByTelePhone: saveVisitRecordByTelePhone,
   saveVisitRecordByPapush: saveVisitRecordByPapush,
-  getArticles: getArticles
+  getArticles: getArticles,
+  getArticle: getArticle,
+  saveArticle: saveArticle
 }

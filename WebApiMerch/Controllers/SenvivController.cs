@@ -137,6 +137,20 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse GetArticle([FromUri]string id)
+        {
+            var result = MerchServiceFactory.Senviv.GetArticle(this.CurrentUserId, this.CurrentMerchId, id);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveArticle([FromBody]RopSenvivSaveArticle rop)
+        {
+            var result = MerchServiceFactory.Senviv.SaveArticle(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
 
     }
 }

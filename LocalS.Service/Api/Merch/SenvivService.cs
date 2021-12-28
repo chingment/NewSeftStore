@@ -1687,7 +1687,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var query = (from u in CurrentDb.SenvivArticle
                          where u.MerchId == merchId
-                         select new { u.Id, u.Title, u.Category, u.CategoryValue, u.CreateTime, u.Creator });
+                         select new { u.Id, u.Title, u.Tags, u.CreateTime, u.Creator });
 
             int total = query.Count();
 
@@ -1702,26 +1702,12 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             foreach (var item in list)
             {
-                FieldModel category = new FieldModel();
-                if (item.Category == E_SenvivArticleCategory.SolarTerm)
-                {
-                    category = new FieldModel(1, string.Format("节气之{0}", item.CategoryValue));
-                }
-                else if (item.Category == E_SenvivArticleCategory.Pregnancy)
-                {
-                    category = new FieldModel(1, string.Format("孕期之{0}周", item.CategoryValue));
-                }
-                else if (item.Category == E_SenvivArticleCategory.AfterDelivery)
-                {
-                    category = new FieldModel(1, string.Format("产后之{0}周", item.CategoryValue));
-                }
-
 
                 olist.Add(new
                 {
                     Id = item.Id,
                     Title = item.Title,
-                    Category = category,
+                    Tags = item.Tags,
                     CreateTime = item.CreateTime
                 });
             }
@@ -1738,5 +1724,68 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             return result;
         }
+
+
+        public CustomJsonResult GetArticle(string operater, string merchId, string articleId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_SenvivArticle = CurrentDb.SenvivArticle.Where(m => m.Id == articleId).FirstOrDefault();
+
+            var ret = new
+            {
+
+                Id = d_SenvivArticle.Id,
+                Title = d_SenvivArticle.Title,
+                Tags = string.IsNullOrEmpty(d_SenvivArticle.Tags) == true ? null : d_SenvivArticle.Tags.Split(new char[] { ',' }),
+                Content = d_SenvivArticle.Content
+            };
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult SaveArticle(string operater, string merchId, RopSenvivSaveArticle rop)
+        {
+            var result = new CustomJsonResult();
+
+            if (string.IsNullOrEmpty(rop.Title))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "标题不能为空");
+
+            if (string.IsNullOrEmpty(rop.Content))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "内容不能为空");
+
+
+            if (string.IsNullOrEmpty(rop.Id))
+            {
+                var d_SenvivArticle = new SenvivArticle();
+                d_SenvivArticle.Id = IdWorker.Build(IdType.NewGuid);
+                d_SenvivArticle.MerchId = merchId;
+                d_SenvivArticle.Title = rop.Title;
+                d_SenvivArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
+                d_SenvivArticle.Content = rop.Content;
+                d_SenvivArticle.CreateTime = DateTime.Now;
+                d_SenvivArticle.Creator = operater;
+                CurrentDb.SenvivArticle.Add(d_SenvivArticle);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                var d_SenvivArticle = CurrentDb.SenvivArticle.Where(m => m.Id == rop.Id).FirstOrDefault();
+                d_SenvivArticle.Title = rop.Title;
+                d_SenvivArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
+                d_SenvivArticle.Content = rop.Content;
+                d_SenvivArticle.MendTime = DateTime.Now;
+                d_SenvivArticle.Mender = operater;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+        }
+
     }
 }
