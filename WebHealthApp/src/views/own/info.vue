@@ -1,89 +1,107 @@
 <template>
-  <div id="own_info" class="own-info">
+  <div
+    id="own_info"
+    class="own-info"
+    style="display: flex;
+    flex-direction: column;
+    height: 100%;"
+  >
+    <div class="page-header">
+      <span>客户信息</span>
+    </div>
+    <div class="page-bodyer" style="flex:1;overflow: auto;">
+      <mt-field v-model="form.fullName" label="姓名" placeholder="请输入姓名" />
+      <mt-field v-model="form.age" label="年龄" placeholder="请输入年龄" type="number" />
+      <mt-cell title="孕周" class="mint-field" @click.native="openPickerByGesWeek">
+        <span>{{ form.gesWeek }}周+{{ form.gesDay }}</span>
+        <i class="mint-cell-allow-right" />
+      </mt-cell>
+      <mt-cell title="分娩时间" class="mint-field" @click.native="openPickerByDeliveryTime">
+        <span>{{ form.deliveryTime }}</span>
+        <i class="mint-cell-allow-right" />
+      </mt-cell>
+      <mt-cell title="分娩后异常" class="mint-field">
+        <div class="c_radio clear">
+          <mt-checklist
+            v-model="form.deliveryExState"
+            title=""
+            :options="[
+              {label: '出血量多',value: 1},
+              {label: '伤口发炎',value: 2},
+              {label: '发烧',value: 3},
+              {label: '其它',value: 99}]"
+          />
+        </div>
+      </mt-cell>
+      <mt-field v-model="form.chiefComplaint" label="主诉症状" placeholder="请输入主诉症状" />
+      <mt-field v-model="form.complication" label="孕期合并症" placeholder="请输入孕期合并症" />
+      <mt-cell title="孕期用药" class="mint-field">
+        <div class="c_radio clear">
+          <mt-radio
+            v-model="form.isMedicine"
+            title=""
+            :options="[ {label: '无',value: '0'},
+                        {label: '有',value: '1'},]"
+          />
+        </div>
+      </mt-cell>
+      <mt-field v-if="form.isMedicine==='1'" v-model="form.fullName" label="用药情况" placeholder="请输入用药情况" />
+      <mt-field v-model="form.medicalhistory" label="病史" placeholder="请输入病史" />
+      <mt-cell title="分娩方式" class="mint-field">
+        <div class="c_radio clear">
+          <mt-radio
+            v-model="form.deliveryWay"
+            title=""
+            :options="[ {label: '自然顺产',value: '1'},
+                        {label: '剖腹产',value: '2'},]"
+          />
+        </div>
+      </mt-cell>
+      <mt-field v-if="form.deliveryWay==='2'" v-model="form.cesareanReason" label="剖腹产原因" placeholder="请输入剖腹产原因" />
+      <mt-cell title="产钳" class="mint-field">
+        <div class="c_radio clear">
+          <mt-radio
+            v-model="form.isForcep"
+            title=""
+            :options="[ {label: '使用',value: '1'},
+                        {label: '无',value: '0'},]"
+          />
+        </div>
+      </mt-cell>
+      <mt-field v-model="form.fmsSituation" label="产时情况" placeholder="请输入产时情况" />
+      <mt-cell title="产时尿管" class="mint-field">
+        <div class="c_radio clear">
+          <mt-radio
+            v-model="form.isUreter"
+            title=""
+            :options="[ {label: '插',value: '1'},
+                        {label: '未插',value: '0'},]"
+          />
+        </div>
+      </mt-cell>
+      <mt-cell title="产时胎膜" class="mint-field">
+        <div class="c_radio clear">
+          <mt-radio
+            v-model="form.fmsMembrane"
+            title=""
+            :options="[ {label: '自然',value: '1'},
+                        {label: '早破',value: '2'},
+                        {label: '人工',value: '3'},
+                        {label: '残留',value: '4'}]"
+          />
+        </div>
+      </mt-cell>
+      <mt-field v-model="form.foodProhibited" label="食物禁忌" placeholder="请输入食物禁忌况" />
+      <mt-field v-model="form.fullName" label="备注" placeholder="请输入备注" />
+    </div>
 
-    <mt-field v-model="form.fullName" label="姓名" placeholder="请输入姓名" />
-    <mt-field v-model="form.age" label="年龄" placeholder="请输入年龄" type="number" />
-    <mt-cell title="孕周" class="mint-field" @click.native="openPickerByGesWeek">
-      <span>{{ form.gesWeek }}周+{{ form.gesDay }}</span>
-      <i class="mint-cell-allow-right" />
-    </mt-cell>
-    <mt-cell title="分娩时间" class="mint-field" @click.native="openPickerByDeliveryTime">
-      <span>{{ form.deliveryTime }}</span>
-      <i class="mint-cell-allow-right" />
-    </mt-cell>
-    <mt-cell title="分娩后异常" class="mint-field">
-      <div class="c_radio clear">
-        <mt-checklist
-          v-model="form.deliveryExState"
-          title=""
-          :options="[
-            {label: '出血量多',value: 1},
-            {label: '伤口发炎',value: 2},
-            {label: '发烧',value: 3},
-            {label: '其它',value: 99}]"
-        />
-      </div>
-    </mt-cell>
-    <mt-field v-model="form.chiefComplaint" label="主诉症状" placeholder="请输入主诉症状" />
-    <mt-field v-model="form.complication" label="孕期合并症" placeholder="请输入孕期合并症" />
-    <mt-cell title="孕期用药" class="mint-field">
-      <div class="c_radio clear">
-        <mt-radio
-          v-model="form.isMedicine"
-          title=""
-          :options="[ {label: '无',value: '0'},
-                      {label: '有',value: '1'},]"
-        />
-      </div>
-    </mt-cell>
-    <mt-field v-if="form.isMedicine==='1'" v-model="form.fullName" label="用药情况" placeholder="请输入用药情况" />
-    <mt-field v-model="form.medicalhistory" label="病史" placeholder="请输入病史" />
-    <mt-cell title="分娩方式" class="mint-field">
-      <div class="c_radio clear">
-        <mt-radio
-          v-model="form.deliveryWay"
-          title=""
-          :options="[ {label: '自然顺产',value: '1'},
-                      {label: '剖腹产',value: '2'},]"
-        />
-      </div>
-    </mt-cell>
-    <mt-field v-if="form.deliveryWay==='2'" v-model="form.cesareanReason" label="剖腹产原因" placeholder="请输入剖腹产原因" />
-    <mt-cell title="产钳" class="mint-field">
-      <div class="c_radio clear">
-        <mt-radio
-          v-model="form.isForcep"
-          title=""
-          :options="[ {label: '使用',value: '1'},
-                      {label: '无',value: '0'},]"
-        />
-      </div>
-    </mt-cell>
-    <mt-field v-model="form.fmsSituation" label="产时情况" placeholder="请输入产时情况" />
-    <mt-cell title="产时尿管" class="mint-field">
-      <div class="c_radio clear">
-        <mt-radio
-          v-model="form.isUreter"
-          title=""
-          :options="[ {label: '插',value: '1'},
-                      {label: '未插',value: '0'},]"
-        />
-      </div>
-    </mt-cell>
-    <mt-cell title="产时胎膜" class="mint-field">
-      <div class="c_radio clear">
-        <mt-radio
-          v-model="form.fmsMembrane"
-          title=""
-          :options="[ {label: '自然',value: '1'},
-                      {label: '早破',value: '2'},
-                      {label: '人工',value: '3'},
-                      {label: '残留',value: '4'}]"
-        />
-      </div>
-    </mt-cell>
-    <mt-field v-model="form.foodProhibited" label="食物禁忌" placeholder="请输入食物禁忌况" />
-    <mt-field v-model="form.fullName" label="备注" placeholder="请输入备注" />
+    <div
+      class="page-footer"
+      style="width: 100%;text-align: center; padding: 10px 0px;border-top: solid 1px #eaeaea;"
+    >
+      <mt-button type="primary" style="width:80%">保存 </mt-button>
+    </div>
+
     <mt-datetime-picker
       ref="pickerByDeliveryTime"
       v-model="selectedValueByDeliveryTime"
@@ -203,7 +221,18 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scope>
+
+.page-header{
+   // color: $pr;
+    height: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    font-size: 24px;
+}
 
 .mint-cell-title{
   width: 105px;
@@ -235,7 +264,7 @@ background-size: 120% 0px;
 background-size: 120% 0px;
 }
 
-.c_radio .mint-radiolist-label{
+.c_radio .mint-radiolist-label, .c_radio .mint-checklist-label{
      font-weight: normal;
      padding: 0;
 }
