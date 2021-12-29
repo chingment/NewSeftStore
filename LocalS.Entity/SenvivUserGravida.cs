@@ -4,21 +4,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("SenvivGravida")]
-    public class SenvivGravida
+    public enum SenvivUserGravidaDeliveryWay
+    {
+        None = 0,
+        NaturalLabour = 1,
+        Cesarean = 2
+    }
+
+    [Table("SenvivUserGravida")]
+    public class SenvivUserGravida
     {
         [Key]
         public string Id { get; set; }
         public string SvUserId { get; set; }
+        //孕周
         public int GesWeek { get; set; }
         public int GesDay { get; set; }
+        //分娩时间
         public DateTime DeliveryTime { get; set; }
+        //分娩后异常
         public string DeliveryExState { get; set; }
+        //主诉症状
         public string ChiefComplaint { get; set; }
+        //孕期合并症
         public string Complication { get; set; }
-        public string DeliveryWay { get; set; }
+        //分娩方式
+        public SenvivUserGravidaDeliveryWay DeliveryWay { get; set; }
         public string CesareanReason { get; set; }
         public string CesareanIncision { get; set; }
+        //产钳
         public bool IsForcep { get; set; }
         public string FmsSituation { get; set; }
         public bool FmsIsUreter { get; set; }

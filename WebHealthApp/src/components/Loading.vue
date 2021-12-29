@@ -1,6 +1,6 @@
 <template>
   <div class="loading_box">
-    <van-loading size="36px" class="loading" color="#FFF" vertical>加载中...</van-loading>
+    <mt-spinner type="snake" />
   </div>
 </template>
 

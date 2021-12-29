@@ -121,7 +121,7 @@ namespace LocalS.BLL
         }
 
         //既往史
-        public static string GetMedicalhistoryName(string value)
+        public static string GetMedicalHisName(string value)
         {
             switch (value)
             {

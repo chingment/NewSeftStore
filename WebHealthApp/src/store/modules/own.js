@@ -4,8 +4,7 @@ import router from '@/router'
 
 const state = {
   token: getToken(),
-  userInfo: null,
-  navBar: []
+  userInfo: null
 }
 
 const mutations = {
@@ -14,9 +13,6 @@ const mutations = {
   },
   SET_USERINFO: (state, userInfo) => {
     state.userInfo = userInfo
-  },
-  SET_NAVBAR: (state, navBar) => {
-    state.navBar = navBar
   }
 }
 

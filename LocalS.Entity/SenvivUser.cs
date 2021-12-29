@@ -52,18 +52,18 @@ namespace LocalS.Entity
         public E_SenvivUserCareLevel CareLevel { get; set; }
         public E_SenvivUserCareMode CareMode { get; set; }
         //public string Status { get; set; }
-        public string SAS { get; set; }
-        public string BreathingMachine { get; set; }
+        public string Sas { get; set; }
+        public bool IsUseBreathMach{ get; set; }
         public string Perplex { get; set; }
-        public string OtherPerplex { get; set; }
-        public string Medicalhistory { get; set; }
-        public string OtherFamilyhistory { get; set; }
+        public string PerplexOt { get; set; }
+        public string MedicalHis { get; set; }
+        public string MedicalHisOt{ get; set; }
         public string Medicine { get; set; }
-        public string OtherMedicine { get; set; }
+        public string MedicineOt { get; set; }
         public string Infection { get; set; }
-        public string OtherInfection { get; set; }
+        public string InfectionOt { get; set; }
         public string Allergy { get; set; }
-        public string OtherAllergy { get; set; }
+        public string AllergyOt { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

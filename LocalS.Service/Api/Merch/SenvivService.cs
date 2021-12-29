@@ -109,13 +109,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
-
-            ///var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
-            //var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var query = (from u in CurrentDb.SenvivUser
                          where
@@ -126,10 +120,8 @@ namespace LocalS.Service.Api.Merch
 
             if (rup.Sas != "0")
             {
-                query = query.Where(m => m.SAS == rup.Sas);
+                query = query.Where(m => m.Sas == rup.Sas);
             }
-
-
 
             if (rup.Chronic != "0")
             {
@@ -163,24 +155,6 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                List<string> perplex = new List<string>();
-
-                if (!string.IsNullOrEmpty(item.Perplex))
-                {
-                    string[] arrs = item.Perplex.Split(',');
-
-                    foreach (var val in arrs)
-                    {
-                        var name = SvUtil.GetPerplexName(val);
-                        if (!string.IsNullOrEmpty(name))
-                        {
-                            perplex.Add(name);
-                        }
-                    }
-                }
-
-
-
                 string age = "-";
 
                 if (item.Birthday != null)
@@ -188,15 +162,41 @@ namespace LocalS.Service.Api.Merch
                     age = CommonUtil.GetAgeByBirthdate(item.Birthday.Value).ToString();
                 }
 
+                List<EleTag> signTags = new List<EleTag>();
+
+                if (item.CareMode == E_SenvivUserCareMode.Normal)
+                {
+                    signTags = SvUtil.GetSignTags(item.Perplex, item.PerplexOt);
+                }
+                else if (item.CareMode == E_SenvivUserCareMode.Gravida)
+                {
+                    var d_Gravida = CurrentDb.SenvivUserGravida.Where(m => m.SvUserId == item.Id).FirstOrDefault();
+                    if (d_Gravida != null)
+                    {
+                        signTags.Add(new EleTag(string.Format("{0}周+{1}", d_Gravida.GesWeek, d_Gravida.GesDay), ""));
+
+                        if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
+                        {
+                            signTags.Add(new EleTag("自然顺产", ""));
+                        }
+                        else if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.Cesarean)
+                        {
+                            signTags.Add(new EleTag("剖腹产", ""));
+                        }
+
+                    }
+                }
+
+
                 olist.Add(new
                 {
                     Id = item.Id,
                     SignName = SvUtil.GetSignName(item.FullName, item.NickName),
                     Avatar = item.Avatar,
-                    SAS = SvUtil.GetSASName(item.SAS),
-                    BreathingMachine = SvUtil.GetBreathingMachineName(item.BreathingMachine),
-                    SignTags = SvUtil.GetSignTags(item.Perplex, item.OtherPerplex),
-                    Medicalhistory = SvUtil.GetMedicalhistoryName(item.Medicalhistory),
+                    SAS = SvUtil.GetSASName(item.Sas),
+                    IsUseBreathMach = item.IsUseBreathMach == true ? "是" : "否",
+                    SignTags = signTags,
+                    MedicalHis = SvUtil.GetMedicalHisName(item.MedicalHis),
                     Medicine = SvUtil.GetMedicineNames(item.Medicine),
                     Sex = SvUtil.GetSexName(item.Sex),
                     Age = age,
@@ -222,35 +222,17 @@ namespace LocalS.Service.Api.Merch
 
             var d_SenvivUser = (from u in CurrentDb.SenvivUser
                                 where u.Id == userId
-                                select new { u.Id, u.NickName, u.Avatar, u.Birthday, u.SAS, u.Perplex, u.Height, u.Weight, u.Medicalhistory, u.Medicine, u.OtherPerplex, u.BreathingMachine, u.FullName, u.Sex, u.PhoneNumber, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
-
-            List<string> perplex = new List<string>();
-
-            if (!string.IsNullOrEmpty(d_SenvivUser.Perplex))
-            {
-                string[] arrs = d_SenvivUser.Perplex.Split(',');
-
-                foreach (var val in arrs)
-                {
-                    var name = SvUtil.GetPerplexName(val);
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        perplex.Add(name);
-                    }
-                }
-            }
-
-
+                                select new { u.Id, u.NickName, u.Avatar, u.Birthday, u.Sas, u.Perplex, u.Height, u.Weight, u.MedicalHis, u.Medicine, u.PerplexOt, u.IsUseBreathMach, u.FullName, u.Sex, u.PhoneNumber, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
             var ret = new
             {
                 Id = d_SenvivUser.Id,
                 SignName = SvUtil.GetSignName(d_SenvivUser.NickName, d_SenvivUser.FullName),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
                 Avatar = d_SenvivUser.Avatar,
-                SAS = SvUtil.GetSASName(d_SenvivUser.SAS),
-                BreathingMachine = SvUtil.GetBreathingMachineName(d_SenvivUser.BreathingMachine),
-                SignTags = SvUtil.GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.OtherPerplex),
-                Medicalhistory = SvUtil.GetMedicalhistoryName(d_SenvivUser.Medicalhistory),
+                Sas = SvUtil.GetSASName(d_SenvivUser.Sas),
+                IsUseBreathMach = d_SenvivUser.IsUseBreathMach == true ? "是" : "否",
+                SignTags = SvUtil.GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.PerplexOt),
+                MedicalHis = SvUtil.GetMedicalHisName(d_SenvivUser.MedicalHis),
                 Medicine = SvUtil.GetMedicineNames(d_SenvivUser.Medicine),
                 Sex = SvUtil.GetSexName(d_SenvivUser.Sex),
                 Height = d_SenvivUser.Height,
