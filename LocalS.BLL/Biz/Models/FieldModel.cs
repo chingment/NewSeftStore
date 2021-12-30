@@ -13,13 +13,13 @@ namespace LocalS.BLL.Biz
 
         }
 
-        public FieldModel(int value, string text)
+        public FieldModel(object value, string text)
         {
             this.Value = value;
             this.Text = text;
         }
 
-        public int Value { get; set; }
+        public object Value { get; set; }
         public string Text { get; set; }
     }
 }

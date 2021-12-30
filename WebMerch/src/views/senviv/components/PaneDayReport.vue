@@ -68,7 +68,12 @@
         label="性别"
         width="60"
         align="center"
-      />
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.sex.text }} </span>
+        </template>
+
+      </el-table-column>
 
       <el-table-column
         v-if="userId===''"

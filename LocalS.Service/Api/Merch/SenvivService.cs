@@ -105,6 +105,36 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
+        public List<EleTag> GetSignTags(SenvivUser user)
+        {
+            List<EleTag> signTags = new List<EleTag>();
+
+            if (user.CareMode == E_SenvivUserCareMode.Normal)
+            {
+                signTags = SvUtil.GetSignTags(user.Perplex, user.PerplexOt);
+            }
+            else if (user.CareMode == E_SenvivUserCareMode.Gravida)
+            {
+                var d_Gravida = CurrentDb.SenvivUserGravida.Where(m => m.SvUserId == user.Id).FirstOrDefault();
+                if (d_Gravida != null)
+                {
+                    signTags.Add(new EleTag(string.Format("{0}周+{1}", d_Gravida.GesWeek, d_Gravida.GesDay), ""));
+
+                    if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
+                    {
+                        signTags.Add(new EleTag("自然顺产", ""));
+                    }
+                    else if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.Cesarean)
+                    {
+                        signTags.Add(new EleTag("剖腹产", ""));
+                    }
+
+                }
+            }
+
+            return signTags;
+        }
+
         public CustomJsonResult GetUsers(string operater, string merchId, RupSenvivGetUsers rup)
         {
             var result = new CustomJsonResult();
@@ -155,51 +185,14 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
-                string age = "-";
-
-                if (item.Birthday != null)
-                {
-                    age = CommonUtil.GetAgeByBirthdate(item.Birthday.Value).ToString();
-                }
-
-                List<EleTag> signTags = new List<EleTag>();
-
-                if (item.CareMode == E_SenvivUserCareMode.Normal)
-                {
-                    signTags = SvUtil.GetSignTags(item.Perplex, item.PerplexOt);
-                }
-                else if (item.CareMode == E_SenvivUserCareMode.Gravida)
-                {
-                    var d_Gravida = CurrentDb.SenvivUserGravida.Where(m => m.SvUserId == item.Id).FirstOrDefault();
-                    if (d_Gravida != null)
-                    {
-                        signTags.Add(new EleTag(string.Format("{0}周+{1}", d_Gravida.GesWeek, d_Gravida.GesDay), ""));
-
-                        if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
-                        {
-                            signTags.Add(new EleTag("自然顺产", ""));
-                        }
-                        else if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.Cesarean)
-                        {
-                            signTags.Add(new EleTag("剖腹产", ""));
-                        }
-
-                    }
-                }
-
-
                 olist.Add(new
                 {
                     Id = item.Id,
                     SignName = SvUtil.GetSignName(item.FullName, item.NickName),
                     Avatar = item.Avatar,
-                    SAS = SvUtil.GetSASName(item.Sas),
-                    IsUseBreathMach = item.IsUseBreathMach == true ? "是" : "否",
-                    SignTags = signTags,
-                    MedicalHis = SvUtil.GetMedicalHisName(item.MedicalHis),
-                    Medicine = SvUtil.GetMedicineNames(item.Medicine),
-                    Sex = SvUtil.GetSexName(item.Sex),
-                    Age = age,
+                    SignTags = GetSignTags(item),
+                    Sex = new FieldModel(item.Sex, SvUtil.GetSexName(item.Sex)),
+                    Age = SvUtil.GetAge(item.Birthday),
                     Height = item.Height,
                     Weight = item.Weight,
                     PhoneNumber = item.PhoneNumber,
@@ -220,23 +213,27 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
+
             var d_SenvivUser = (from u in CurrentDb.SenvivUser
                                 where u.Id == userId
-                                select new { u.Id, u.NickName, u.Avatar, u.Birthday, u.Sas, u.Perplex, u.Height, u.Weight, u.MedicalHis, u.Medicine, u.PerplexOt, u.IsUseBreathMach, u.FullName, u.Sex, u.PhoneNumber, u.LastReportId, u.LastReportTime, u.CreateTime }).FirstOrDefault();
+                                select u).FirstOrDefault();
+
             var ret = new
             {
                 Id = d_SenvivUser.Id,
                 SignName = SvUtil.GetSignName(d_SenvivUser.NickName, d_SenvivUser.FullName),
+                SignTags = GetSignTags(d_SenvivUser),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
-                Avatar = d_SenvivUser.Avatar,
-                Sas = SvUtil.GetSASName(d_SenvivUser.Sas),
-                IsUseBreathMach = d_SenvivUser.IsUseBreathMach == true ? "是" : "否",
-                SignTags = SvUtil.GetSignTags(d_SenvivUser.Perplex, d_SenvivUser.PerplexOt),
-                MedicalHis = SvUtil.GetMedicalHisName(d_SenvivUser.MedicalHis),
-                Medicine = SvUtil.GetMedicineNames(d_SenvivUser.Medicine),
-                Sex = SvUtil.GetSexName(d_SenvivUser.Sex),
                 Height = d_SenvivUser.Height,
                 Weight = d_SenvivUser.Weight,
+                Avatar = d_SenvivUser.Avatar,
+                FullName = d_SenvivUser.FullName,
+                NickName = d_SenvivUser.NickName,
+                Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
+                Sas = new FieldModel(d_SenvivUser.Sas, SvUtil.GetSasName(d_SenvivUser.Sas)),
+                IsUseBreathMach = new FieldModel(d_SenvivUser.IsUseBreathMach, SvUtil.GetIsUseBreathMachName(d_SenvivUser.IsUseBreathMach)),
+                MedicalHis = new FieldModel(d_SenvivUser.MedicalHis, SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis)),
+                Medicine = new FieldModel(d_SenvivUser.Medicine, SvUtil.GetMedicineNames(d_SenvivUser.Medicine)),
                 PhoneNumber = d_SenvivUser.PhoneNumber,
                 LastReportId = d_SenvivUser.LastReportId,
                 LastReportTime = d_SenvivUser.LastReportTime
@@ -253,13 +250,6 @@ namespace LocalS.Service.Api.Merch
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            //var d_Merch = CurrentDb.Merch.Where(m => m.Id == merchId).FirstOrDefault();
-
-
-            //if (string.IsNullOrEmpty(d_Merch.SenvivDepts))
-            //    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", new PageEntity());
-
-            //var deptIds = d_Merch.SenvivDepts.Split(',');
 
             var query = (from u in CurrentDb.SenvivHealthDayReport
 
@@ -355,7 +345,7 @@ namespace LocalS.Service.Api.Merch
                     SvUserId = rpt.SvUserId,
                     SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
                     Avatar = rpt.Avatar,
-                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
                     TotalScore = rpt.TotalScore,
@@ -576,7 +566,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     SignName = SvUtil.GetSignName(d_Rpt.NickName, d_Rpt.FullName),
                     Avatar = d_Rpt.Avatar,
-                    Sex = SvUtil.GetSexName(d_Rpt.Sex),
+                    Sex = new FieldModel(d_Rpt.Sex, SvUtil.GetSexName(d_Rpt.Sex)),
                     Age = SvUtil.GetAge(d_Rpt.Birthday)
                 },
                 ReportData = new
@@ -817,7 +807,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     SvUserId = rpt.SvUserId,
                     SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
                     Avatar = rpt.Avatar,
-                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     rpt.TotalScore,
                     rpt.HealthDate,
@@ -973,7 +963,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     UserId = rpt.SvUserId,
                     SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
                     Avatar = rpt.Avatar,
-                    Sex = SvUtil.GetSexName(rpt.Sex),
+                    Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday)
                 },
                 ReportData = new

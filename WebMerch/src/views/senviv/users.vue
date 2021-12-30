@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="it-component">
-            <div class="t1"><span class="sex">{{ item.sex }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
+            <div class="t1"><span class="sex">{{ item.sex.text }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
             <div>
 
               <el-tag

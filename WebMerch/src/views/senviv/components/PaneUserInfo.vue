@@ -4,12 +4,11 @@
       <div class="pull-left"> <h5>基本信息</h5>
       </div>
       <div class="pull-right">
-        <el-button v-show="!isEditBaseInfo" class="btn_in" type="text" @click="onOpenEditBaseInfo">修改</el-button>
-        <el-button v-show="isEditBaseInfo" class="btn_in" type="text" @click="onSaveEditBaseInfo">保存</el-button>
+        <!-- <el-button v-show="!isEditBaseInfo" class="btn_in" type="text" @click="onOpenEditBaseInfo">修改</el-button>
+        <el-button v-show="isEditBaseInfo" class="btn_in" type="text" @click="onSaveEditBaseInfo">保存</el-button> -->
       </div>
     </div>
     <div>
-
       <el-form ref="formByBaseInfo" style="display:flex" :model="formByBaseInfo" :rules="rulesByBaseInfo" size="small">
         <el-col :span="24">
           <el-row>
@@ -37,7 +36,7 @@
             <el-col :span="6">
 
               <el-form-item label-width="100px" label="性别" :show-message="isEditBaseInfo" prop="sex">
-                <span v-show="!isEditBaseInfo">{{ formByBaseInfo.sex }}</span>
+                <span v-show="!isEditBaseInfo">{{ formByBaseInfo.sex.text }}</span>
 
                 <el-radio-group v-show="isEditBaseInfo" v-model="formByBaseInfo.sex">
                   <el-radio label="1">男</el-radio>
@@ -117,6 +116,10 @@ export default {
     reportId: {
       type: String,
       default: ''
+    },
+    initData: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -125,6 +128,7 @@ export default {
       formByBaseInfo: {
         docNum: '',
         fullName: '',
+        nickName: '',
         sex: '',
         age: '-',
         height: '-',
@@ -141,8 +145,15 @@ export default {
       isDesktop: this.$store.getters.isDesktop
     }
   },
+  watch: {
+    initData: function(val, oldval) {
+      this.formByBaseInfo = val
+      // console.log(this.initData)
+    }
+  },
   created() {
-
+    // console.log(this.initData)
+    this.formByBaseInfo = this.initData
   },
   methods: {
     onOpenEditBaseInfo() {
@@ -150,14 +161,7 @@ export default {
       this.rulesByBaseInfo.docNum[0].required = true
     },
     onSaveEditBaseInfo() {
-      // this.isEditBaseInfo = false
-      // this.rulesByBaseInfo.docNum[0].required = false
 
-      this.$refs['formByBaseInfo'].validate((valid) => {
-        if (valid) {
-
-        }
-      })
     }
   }
 }

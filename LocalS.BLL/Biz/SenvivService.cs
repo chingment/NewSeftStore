@@ -855,7 +855,7 @@ namespace LocalS.BLL
                 switch (taskType)
                 {
                     case E_SenvivTaskType.Health_Monitor_FisrtDay:
-                        title = string.Format("客户[{0}]的首份报告（{0}）已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate());
+                        title = string.Format("客户[{0}]的首份报告已生成，需进行回访", signName);
                         break;
                     case E_SenvivTaskType.Health_Monitor_SeventhDay:
                         title = string.Format("客户[{0}]的首次7天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());

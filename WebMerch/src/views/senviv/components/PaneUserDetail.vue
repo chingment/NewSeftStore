@@ -18,7 +18,7 @@
               </div>
             </div>
             <div class="it-component">
-              <div class="t1"><span class="sex">{{ userDetail.sex }}</span> <span class="age">{{ userDetail.age }}岁</span> <span class="height">身高：{{ userDetail.height }}</span><span class="weight">体重：{{ userDetail.weihgt }}</span></div>
+              <div class="t1"><span class="sex">{{ userDetail.sex.text }}</span> <span class="age">{{ userDetail.age }}岁</span> <span class="height">身高：{{ userDetail.height }}</span><span class="weight">体重：{{ userDetail.weihgt }}</span></div>
               <div>
 
                 <el-tag
@@ -46,7 +46,7 @@
         </el-aside>
         <el-container>
           <el-main class="">
-            <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" />
+            <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" :init-data="userDetail" />
             <pane-visit-record v-if="activeMenu==='VisitRecord'" :user-id="userId" />
             <pane-day-report v-if="activeMenu==='DayReport'" :user-id="userId" />
             <pane-stage-report v-if="activeMenu==='MonthReport'" :user-id="userId" rpt-type="per_month" />
@@ -101,10 +101,10 @@ export default {
 
   },
   created() {
-    this._getUserDetail()
+    this.onGetUserDetail()
   },
   methods: {
-    _getUserDetail() {
+    onGetUserDetail() {
       this.loading = true
       getUserDetail({ userId: this.userId }).then(res => {
         if (res.result === 1) {

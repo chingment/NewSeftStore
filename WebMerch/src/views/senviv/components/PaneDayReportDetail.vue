@@ -10,7 +10,7 @@
           </div>
           <el-descriptions title="">
             <el-descriptions-item label="姓名">{{ userInfo.signName }}</el-descriptions-item>
-            <el-descriptions-item label="性别">{{ userInfo.sex }}</el-descriptions-item>
+            <el-descriptions-item label="性别">{{ userInfo.sex.text }}</el-descriptions-item>
             <el-descriptions-item label="年龄">{{ userInfo.age }}</el-descriptions-item>
           </el-descriptions>
           <div class="row-title clearfix">

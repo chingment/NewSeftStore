@@ -24,7 +24,7 @@ namespace LocalS.BLL
         }
 
         //呼吸暂停综合证
-        public static string GetSASName(string value)
+        public static string GetSasName(string value)
         {
             switch (value)
             {
@@ -42,16 +42,15 @@ namespace LocalS.BLL
         }
 
         //呼吸机
-        public static string GetBreathingMachineName(string value)
+        public static string GetIsUseBreathMachName(bool value)
         {
-            switch (value)
+            if (value)
             {
-                case "1":
-                    return "是";
-                case "2":
-                    return "否";
-                default:
-                    return "";
+                return "是";
+            }
+            else
+            {
+                return "否";
             }
         }
 
@@ -93,7 +92,6 @@ namespace LocalS.BLL
             }
         }
 
-
         public static List<EleTag> GetSignTags(string perplex, string otherPerplex)
         {
             var tags = new List<EleTag>();
@@ -121,7 +119,7 @@ namespace LocalS.BLL
         }
 
         //既往史
-        public static string GetMedicalHisName(string value)
+        private static string GetMedicalHisName(string value)
         {
             switch (value)
             {
@@ -138,8 +136,33 @@ namespace LocalS.BLL
             }
         }
 
+        public static string GetMedicalHisNames(string value)
+        {
+            List<string> names = new List<string>();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] arrs = value.Split(',');
+
+                if (arrs != null)
+                {
+                    foreach (var val in arrs)
+                    {
+                        var name = GetMedicalHisName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            names.Add(name);
+                        }
+                    }
+                }
+            }
+
+            return string.Join(",", names);
+
+        }
+
         //用药情况
-        public static string GetMedicineName(string value)
+        private static string GetMedicineName(string value)
         {
             switch (value)
             {
@@ -162,25 +185,29 @@ namespace LocalS.BLL
             }
         }
 
-        public static List<string> GetMedicineNames(string medicine)
+        public static string GetMedicineNames(string value)
         {
             List<string> names = new List<string>();
 
-            if (!string.IsNullOrEmpty(medicine))
+            if (!string.IsNullOrEmpty(value))
             {
-                string[] arrs = medicine.Split(',');
 
-                foreach (var val in arrs)
+                string[] arrs = value.Split(',');
+
+                if (arrs != null)
                 {
-                    var name = GetMedicineName(val);
-                    if (!string.IsNullOrEmpty(name))
+                    foreach (var val in arrs)
                     {
-                        names.Add(name);
+                        var name = GetMedicineName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            names.Add(name);
+                        }
                     }
                 }
             }
 
-            return names;
+            return string.Join(",", names);
         }
 
         //肺炎情况
