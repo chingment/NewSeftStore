@@ -456,6 +456,19 @@ namespace Lumos
             return weekModel;
         }
 
+        public static DateTime GetPregnancyTime(int week, int day)
+        {
 
+
+            int toal = week * 7 + 2;
+
+            DateTime t = DateTime.Now.AddDays(toal);
+            //double week = totalDays / 7;
+
+            //weekModel.Week = (int)Math.Floor(week);
+            //weekModel.Day = (int)(totalDays - weekModel.Week * 7);
+
+          return t;
+        }
     }
 }

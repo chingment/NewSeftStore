@@ -113,25 +113,25 @@ namespace LocalS.Service.Api.Merch
             {
                 signTags = SvUtil.GetSignTags(user.Perplex, user.PerplexOt);
             }
-            else if (user.CareMode == E_SenvivUserCareMode.Gravida)
+            else if (user.CareMode == E_SenvivUserCareMode.Pregnancy)
             {
-                var d_Gravida = CurrentDb.SenvivUserGravida.Where(m => m.SvUserId == user.Id).FirstOrDefault();
-                if (d_Gravida != null)
+                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
+                if (d_Women != null)
                 {
-                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Gravida.PregnancyTime, DateTime.Now);
+                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
 
                     signTags.Add(new EleTag(string.Format("{0}周+{1}", week.Week, week.Day), ""));
-
-                    if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
-                    {
-                        signTags.Add(new EleTag("自然顺产", ""));
-                    }
-                    else if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.Cesarean)
-                    {
-                        signTags.Add(new EleTag("剖腹产", ""));
-                    }
-
                 }
+
+                //if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
+                //{
+                //    signTags.Add(new EleTag("自然顺产", ""));
+                //}
+                //else if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.Cesarean)
+                //{
+                //    signTags.Add(new EleTag("剖腹产", ""));
+                //}
+
             }
 
             return signTags;
@@ -220,17 +220,38 @@ namespace LocalS.Service.Api.Merch
                                 where u.Id == userId
                                 select u).FirstOrDefault();
 
+
+            object pregnancy = null;
+
+            if (d_SenvivUser.CareMode == E_SenvivUserCareMode.Pregnancy)
+            {
+                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SenvivUser.Id).FirstOrDefault();
+                if (d_Women != null)
+                {
+                    var ges = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
+
+                    pregnancy = new
+                    {
+                        GesWeek = ges.Week,
+                        GesDay = ges.Day,
+                        DeliveryTime = d_Women.DeliveryTime.ToUnifiedFormatDate()
+                    };
+                }
+            }
+
             var ret = new
             {
-                Id = d_SenvivUser.Id,
+                UserId = d_SenvivUser.Id,
                 SignName = SvUtil.GetSignName(d_SenvivUser.NickName, d_SenvivUser.FullName),
                 SignTags = GetSignTags(d_SenvivUser),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
+                Birthday = d_SenvivUser.Birthday.ToUnifiedFormatDate(),
                 Height = d_SenvivUser.Height,
                 Weight = d_SenvivUser.Weight,
                 Avatar = d_SenvivUser.Avatar,
                 FullName = d_SenvivUser.FullName,
                 NickName = d_SenvivUser.NickName,
+                CareMode = GetCareMode(d_SenvivUser.CareMode),
                 Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
                 Sas = new FieldModel(d_SenvivUser.Sas, SvUtil.GetSasName(d_SenvivUser.Sas)),
                 IsUseBreathMach = new FieldModel(d_SenvivUser.IsUseBreathMach, SvUtil.GetIsUseBreathMachName(d_SenvivUser.IsUseBreathMach)),
@@ -238,13 +259,55 @@ namespace LocalS.Service.Api.Merch
                 Medicine = new FieldModel(d_SenvivUser.Medicine, SvUtil.GetMedicineNames(d_SenvivUser.Medicine)),
                 PhoneNumber = d_SenvivUser.PhoneNumber,
                 LastReportId = d_SenvivUser.LastReportId,
-                LastReportTime = d_SenvivUser.LastReportTime
+                LastReportTime = d_SenvivUser.LastReportTime,
+                Pregnancy = pregnancy
             };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;
         }
+
+        public CustomJsonResult SaveUserDetail(string operater, string merchId, RopSenvivSaveUserDetail rop)
+        {
+            var result = new CustomJsonResult();
+
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == rop.UserId).FirstOrDefault();
+
+            if (d_User != null)
+            {
+                d_User.FullName = rop.FullName;
+                d_User.Sex = rop.Sex;
+                d_User.Birthday = rop.Birthday;
+                d_User.Height = rop.Height;
+                d_User.Weight = rop.Weight;
+                d_User.CareMode = rop.CareMode;
+                if (rop.Pregnancy != null)
+                {
+                    Dictionary<string, string> pregnancy = new Dictionary<string, string>();
+
+
+                    var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_User.Id).FirstOrDefault();
+                    if (d_Women == null)
+                    {
+
+                    }
+                    else
+                    {
+                        d_Women.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(pregnancy["gesWeek"].ToString()), int.Parse(pregnancy["gesDay"].ToString()));
+                        d_Women.DeliveryTime = DateTime.Parse(pregnancy["deliveryTime"]);
+                    }
+                }
+
+                CurrentDb.SaveChanges();
+            }
+
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+        }
+
 
         public CustomJsonResult GetDayReports(string operater, string merchId, RupSenvivGetDayReports rup)
         {
@@ -1655,6 +1718,29 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return statusModel;
         }
 
+        public FieldModel GetCareMode(E_SenvivUserCareMode mode)
+        {
+            var statusModel = new FieldModel();
+
+            switch (mode)
+            {
+                case E_SenvivUserCareMode.Normal:
+                    statusModel = new FieldModel(1, "正常模式");
+                    break;
+                case E_SenvivUserCareMode.PrePregnancy:
+                    statusModel = new FieldModel(24, "备孕中");
+                    break;
+                case E_SenvivUserCareMode.Pregnancy:
+                    statusModel = new FieldModel(25, "怀孕中");
+                    break;
+                case E_SenvivUserCareMode.Postpartum:
+                    statusModel = new FieldModel(26, "产后");
+                    break;
+            }
+
+            return statusModel;
+        }
+
         public CustomJsonResult GetArticles(string operater, string merchId, RupSenvivGetTasks rup)
         {
             var result = new CustomJsonResult();
@@ -1698,7 +1784,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             return result;
         }
-
 
         public CustomJsonResult GetArticle(string operater, string merchId, string articleId)
         {

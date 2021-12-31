@@ -16,6 +16,14 @@ export function getUserDetail(params) {
   })
 }
 
+export function saveUserDetail(data) {
+  return request({
+    url: '/senviv/saveUserDetail',
+    method: 'post',
+    data
+  })
+}
+
 export function getTasks(params) {
   return request({
     url: '/senviv/getTasks',
@@ -165,6 +173,7 @@ export default {
   getHandleRecords: getHandleRecords,
   getUsers: getUsers,
   getUserDetail: getUserDetail,
+  saveUserDetail: saveUserDetail,
   getTasks: getTasks,
   getDayReports: getDayReports,
   getDayReportDetail: getDayReportDetail,

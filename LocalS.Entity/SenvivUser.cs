@@ -17,7 +17,9 @@ namespace LocalS.Entity
     {
         None = 0,
         Normal = 1,
-        Gravida = 2
+        PrePregnancy = 24,
+        Pregnancy = 25,
+        Postpartum = 26
     }
 
     [Table("SenvivUser")]
@@ -27,37 +29,27 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string DeptId { get; set; }
         public string MerchId { get; set; }
-        //public string Code { get; set; }
         public string WxOpenId { get; set; }
         public string PhoneNumber { get; set; }
-        //public string Email { get; set; }
-        //public string Pwd { get; set; }
         public string NickName { get; set; }
         public string FullName { get; set; }
         public string Avatar { get; set; }
-        //public string Language { get; set; }
         public string Sex { get; set; }
         public DateTime? Birthday { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
         public string TargetValue { get; set; }
-        //public string Remarks { get; set; }
-        //public DateTime? LastLoginTime { get; set; }
-        //public string LoginCount { get; set; }
-
         public DateTime? FisrtReportTime { get; set; }
         public string LastReportId { get; set; }
         public DateTime? LastReportTime { get; set; }
-        //public string Details { get; set; }
         public E_SenvivUserCareLevel CareLevel { get; set; }
         public E_SenvivUserCareMode CareMode { get; set; }
-        //public string Status { get; set; }
         public string Sas { get; set; }
-        public bool IsUseBreathMach{ get; set; }
+        public bool IsUseBreathMach { get; set; }
         public string Perplex { get; set; }
         public string PerplexOt { get; set; }
         public string MedicalHis { get; set; }
-        public string MedicalHisOt{ get; set; }
+        public string MedicalHisOt { get; set; }
         public string Medicine { get; set; }
         public string MedicineOt { get; set; }
         public string Infection { get; set; }

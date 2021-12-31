@@ -26,6 +26,13 @@ namespace WebApiMerch.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse SaveUserDetail([FromBody]RopSenvivSaveUserDetail rop)
+        {
+            var result = MerchServiceFactory.Senviv.SaveUserDetail(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
         [HttpGet]
         public OwnApiHttpResponse GetDayReports([FromUri]RupSenvivGetDayReports rup)
         {
