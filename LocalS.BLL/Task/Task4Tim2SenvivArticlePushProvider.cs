@@ -21,22 +21,38 @@ namespace LocalS.BLL.Task
 
             foreach (var d_Gravida in d_Gravidas)
             {
-                var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Gravida.PregnancyTime, DateTime.Now);
-
-                string startsWith = string.Format("孕期{0}周", week);
-
-                var d_Article = CurrentDb.SenvivArticle.Where(m => m.Tags.StartsWith(startsWith)).FirstOrDefault();
-
-                if (d_Article != null)
+                var term = Lumos.CommonUtil.GetPregnancyWeeks(d_Gravida.PregnancyTime, DateTime.Now);
+                string search_tag = string.Format("孕期{0}周", term.Week);
+                string cdType = "wx_tpl_pregnancy_remind";
+                string cdValue = term.Week.ToString();
+                var pushMessageLog = CurrentDb.PushMessageLog.Where(m => m.UserId == d_Gravida.SvUserId && m.CdType == cdType && m.CdValue == cdValue).FirstOrDefault();
+                if (pushMessageLog == null)
                 {
-                    string first = "您好";
-                    string url = "http://health.17fanju.com/#/article/bw/details?id=" + d_Article.Id;
-                    string keyword1 = "162天";
-                    string keyword2 = d_Article.Title;
-                    string remark = "感谢您的支持,祝您的宝宝健康成长";
+                    var d_Article = CurrentDb.SenvivArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                    if (d_Article != null)
+                    {
+                        string first = "您好";
+                        string url = string.Format("http://health.17fanju.com/#/article/bw/details?id={0}&uid={1}", d_Article.Id, d_Gravida.SvUserId);
+                        string keyword1 = "162天";
+                        string keyword2 = d_Article.Title;
+                        string remark = "感谢您的支持,祝您的宝宝健康成长";
 
-                    bool isFlag = SdkFactory.Senviv.SendArticle(d_Gravida.SvUserId, first, keyword1, keyword2, remark, url);
+                        bool isFlag = SdkFactory.Senviv.SendArticle(d_Gravida.SvUserId, first, keyword1, keyword2, remark, url);
 
+                        if (isFlag)
+                        {
+                            pushMessageLog = new Entity.PushMessageLog();
+                            pushMessageLog.Id = IdWorker.Build(IdType.NewGuid);
+                            pushMessageLog.UserId = d_Gravida.SvUserId;
+                            pushMessageLog.CdType = "wx_tpl_pregnancy_remind";
+                            pushMessageLog.CdValue = cdValue;
+                            pushMessageLog.Creator = IdWorker.Build(IdType.EmptyGuid);
+                            pushMessageLog.CreateTime = DateTime.Now;
+                            CurrentDb.PushMessageLog.Add(pushMessageLog);
+                            CurrentDb.SaveChanges();
+                        }
+
+                    }
                 }
 
             }

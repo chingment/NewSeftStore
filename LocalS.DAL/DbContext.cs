@@ -97,7 +97,8 @@ namespace LocalS.DAL
         public IDbSet<ErpReplenishPlanDeviceDetail> ErpReplenishPlanDeviceDetail { get; set; }
         public IDbSet<SenvivTask> SenvivTask { get; set; }
         public IDbSet<SenvivUserGravida> SenvivUserGravida { get; set; }
-
+        public IDbSet<PushMessageLog> PushMessageLog { get; set; }
+        
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

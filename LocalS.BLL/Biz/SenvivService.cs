@@ -1,7 +1,6 @@
 ﻿using LocalS.BLL.Mq;
 using LocalS.Entity;
 using Lumos;
-using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
 using SenvivSdk;
