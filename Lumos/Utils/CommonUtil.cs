@@ -9,6 +9,13 @@ using System.Web;
 
 namespace Lumos
 {
+    public class PregnancyWeekModel
+    {
+        public int Week { get; set; }
+
+        public int Day { get; set; }
+    }
+
     public static class CommonUtil
     {
         #region "获取Ip"
@@ -428,5 +435,27 @@ namespace Lumos
 
             return false;
         }
+
+
+        public static PregnancyWeekModel GetPregnancyWeeks(DateTime dtBegin, DateTime dtEnd)
+        {
+            var weekModel = new PregnancyWeekModel();
+
+            if (dtEnd <= dtBegin)
+            {
+                return weekModel;
+            }
+
+            double totalDays = (dtEnd - dtBegin).TotalDays;
+
+            double week = totalDays / 7;
+
+            weekModel.Week = (int)Math.Floor(week);
+            weekModel.Day = (int)(totalDays - weekModel.Week * 7);
+
+            return weekModel;
+        }
+
+
     }
 }

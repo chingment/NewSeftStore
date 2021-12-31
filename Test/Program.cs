@@ -224,11 +224,55 @@ namespace Test
             return query.ToList().Concat(query.ToList().SelectMany(t => GetSonList(list, t.Id)));
         }
 
+        public static int GetWeeksCountBetweenTime(int gesWeek, int gesDay, DateTime dtBegin, DateTime dtEnd)
+        {
+            if (dtEnd <= dtBegin)
+            {
+                return 0;
+            }
+
+            double totalDays = (dtEnd - dtBegin).TotalDays;
+
+            totalDays = gesWeek * 7 + 2 + totalDays;
+
+            double week = totalDays / 7;
+
+            double t1 = Math.Floor(week);
+            double t2 = totalDays - t1 * 7;
+
+
+            //double weeks = 0;
+            //if (dtBegin.DayOfWeek == DayOfWeek.Monday)
+            //{
+            //    weeks = Math.Ceiling(totalDays / 7);
+            //}
+            //else
+            //{
+            //    if (dtBegin.DayOfWeek == DayOfWeek.Sunday)
+            //    {
+            //        totalDays -= 1;
+            //    }
+            //    else
+            //    {
+            //        totalDays -= 7 - ((int)dtBegin.DayOfWeek - 1);
+            //    }
+            //    weeks = Math.Ceiling(totalDays / 7) + 1;
+            //}
+            //如果算某天是某段时间内的第几周，实际上就是算以这个时间作为结束时间的周数,直接调用该函数，dtEnd传入某天的值即可。
+            return 0;
+        }
+
         static void Main(string[] args)
         {
 
-            DateTime dt1 = DateTime.Parse("2021-12-30 00:00:00");
-            DateTime dt2 = DateTime.Parse("2022-01-01 00:00:00");
+
+            DateTime dt1 = DateTime.Parse("2021-12-10 00:00:00");
+            DateTime dt2 = DateTime.Parse("2021-12-17 00:00:00");
+
+            /// int ccc = GetWeeksCountBetweenTime(7, 2, dt1, dt2);
+
+            var cccc =Lumos.CommonUtil.GetPregnancyWeeks(dt1, dt2);
+
             int Month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
 
             var tt2 = SdkFactory.Senviv.GetBoxList();

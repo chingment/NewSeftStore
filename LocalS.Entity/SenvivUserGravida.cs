@@ -17,9 +17,8 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        //孕周
-        public int GesWeek { get; set; }
-        public int GesDay { get; set; }
+        //怀孕时间
+        public DateTime PregnancyTime { get; set; }
         //分娩时间
         public DateTime DeliveryTime { get; set; }
         //分娩后异常

@@ -102,6 +102,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
+import axios from 'axios'
 import { getArticles, getArticle, saveArticle } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import tinymce from 'tinymce/tinymce'
@@ -165,7 +166,7 @@ export default {
         language: 'zh_CN', // 语言
         height: 430,
         skin_url: '/static/tinymce/skins/ui/oxide',
-        images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+        // images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
         menubar: false, // 隐藏最上方menu菜单
         browser_spellcheck: true, // 拼写检查
         branding: false, // 去水印
@@ -179,9 +180,47 @@ export default {
         // ],
         toolbar: ['undo redo | bold italic underline strikethrough | link unlink | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | code | removeforma t| lists image media'],
         images_upload_handler: (blobInfo, success, failure) => {
-          console.log(blobInfo)
-          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-          success(img)
+          // console.log(blobInfo)
+
+          // if (blobInfo.blob().size > self.maxSize) {
+          // failure('文件体积过大')
+          // }
+
+          uploadPic()
+
+          function uploadPic() {
+            const formData = new FormData()
+            // 服务端接收文件的参数名，文件数据，文件名
+            formData.append('upfile', blobInfo.blob(), blobInfo.filename())
+            formData.append('folder', 'article')
+            axios({
+              method: 'POST',
+              // 这里是你的上传地址
+              url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+              data: formData
+            })
+              .then((res) => {
+                if (res.status === 200) {
+                  var d = res.data
+                  // console.log(d)
+                  if (d.result === 1) {
+                    var dd = d.data
+                    // 这里返回的是你图片的地址
+                    success(dd.url)
+                  } else {
+                    failure('服务上传失败..')
+                  }
+                } else {
+                  failure('服务上传失败.')
+                }
+              })
+              .catch(() => {
+                failure('上传失败')
+              })
+          }
+
+          // const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+          // success(img)
         }
       },
       isDesktop: this.$store.getters.isDesktop

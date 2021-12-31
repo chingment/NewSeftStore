@@ -118,7 +118,9 @@ namespace LocalS.Service.Api.Merch
                 var d_Gravida = CurrentDb.SenvivUserGravida.Where(m => m.SvUserId == user.Id).FirstOrDefault();
                 if (d_Gravida != null)
                 {
-                    signTags.Add(new EleTag(string.Format("{0}周+{1}", d_Gravida.GesWeek, d_Gravida.GesDay), ""));
+                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Gravida.PregnancyTime, DateTime.Now);
+
+                    signTags.Add(new EleTag(string.Format("{0}周+{1}", week.Week, week.Day), ""));
 
                     if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
                     {

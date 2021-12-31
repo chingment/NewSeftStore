@@ -172,6 +172,7 @@
     <Compile Include="Task\Task4Mq2GlobalProvder.cs" />
     <Compile Include="Task\Task4Mqtt2DeviceProvder.cs" />
     <Compile Include="Task\Task4Tim2GlobalProvider.cs" />
+    <Compile Include="Task\Task4Tim2SenvivArticlePushProvider.cs" />
     <Compile Include="Task\Task4Tim2SenvivUsersProvider.cs" />
     <Compile Include="Task\Task4Tim2WxUpdateUsersInfoProvider.cs" />
     <Compile Include="UI\Badge.cs" />
