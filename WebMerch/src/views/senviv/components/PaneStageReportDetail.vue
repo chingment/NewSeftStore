@@ -944,7 +944,7 @@ export default {
               message: res.message,
               type: 'success'
             })
-            this.onGetStageReportSug()
+            this.onGetReportSug()
 
             if (isSend) {
               this.$emit('aftersave')
