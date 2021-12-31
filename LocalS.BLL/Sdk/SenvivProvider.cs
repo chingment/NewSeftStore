@@ -335,6 +335,32 @@ namespace LocalS.BLL
             return true;
         }
 
+        public bool SendArticle(string userId, string first, string keyword1, string keyword2, string remark, string url)
+        {
+            var template = GetTemplate(userId, "pregnancy_remind");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
         public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
             var template = GetTemplate(userId, "health_monitor");
@@ -362,7 +388,6 @@ namespace LocalS.BLL
             return true;
         }
 
-
         public WxTemplateModel GetTemplate(string userId, string template)
         {
             var model = new WxTemplateModel();
@@ -370,8 +395,8 @@ namespace LocalS.BLL
             var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_User.DeptId).FirstOrDefault();
 
-            model.OpenId = d_User.WxOpenId;
-            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            //model.OpenId = d_User.WxOpenId;
+            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
             model.SenvivDeptId = d_User.DeptId;
             model.AccessToken = GetWxPaAccessToken(d_User.DeptId);
             switch (template)
@@ -381,6 +406,9 @@ namespace LocalS.BLL
                     break;
                 case "health_monitor":
                     model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
+                    break;
+                case "pregnancy_remind":
+                    model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
                     break;
             }
 
