@@ -97,11 +97,13 @@ namespace LocalS.BLL
                 if (d_StageReport != null)
                     return;
 
-                LogUtil.Info("userId：" + userId + ",d_StageReport is not null");
+                LogUtil.Info("userId：" + userId + ",rptType:" + rptType + ",d_StageReport is null");
 
-                var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == userId && m.IsValid == true && m.HealthDate == rptStartTime && m.HealthDate == rptEndTime).ToList();
+                var d_DayReports = CurrentDb.SenvivHealthDayReport.Where(m => m.SvUserId == userId && m.IsValid == true && m.HealthDate >= rptStartTime && m.HealthDate <= rptEndTime).ToList();
                 if (d_DayReports.Count > 0)
                 {
+                    LogUtil.Info("userId：" + userId + ",rptType:" + rptType + ",d_DayReports:" + d_DayReports.Count);
+
                     var t1BySccs = 0;
                     var t2BySccs = 0;
                     var t3BySccs = 0;
@@ -826,6 +828,8 @@ namespace LocalS.BLL
                     d_StageReport.Creator = IdWorker.Build(IdType.NewGuid);
                     CurrentDb.SenvivHealthStageReport.Add(d_StageReport);
                     CurrentDb.SaveChanges();
+
+                    rptId = d_StageReport.Id;
                 }
 
                 #endregion
@@ -839,6 +843,7 @@ namespace LocalS.BLL
                     if (d_Task != null)
                         return;
                 }
+
 
                 SenvivTask d_SenvivTask = new SenvivTask();
                 d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
@@ -899,11 +904,11 @@ namespace LocalS.BLL
                     d_User.FisrtReportTime = DateTime.Now;
                 }
 
-                d_User.LastReportTime = DateTime.Now;
-                d_User.LastReportId = d1.reportId;
-
                 DateTime? fisrtReportTime = d_User.FisrtReportTime;
                 DateTime? lastReportTime = d_User.LastReportTime;
+
+                d_User.LastReportTime = DateTime.Now;
+                d_User.LastReportId = d1.reportId;
 
                 var d_DayReport = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == d1.reportId).FirstOrDefault();
 
@@ -1379,7 +1384,7 @@ namespace LocalS.BLL
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
                     }
 
-                    LogUtil.Info(TAG, "Health_Monitor_PerMonth");
+                    LogUtil.Info(TAG, "Health_Monitor_PerMonth:" + lastReportTime.Value.ToUnifiedFormatDateTime());
 
                     DateTime dt1 = lastReportTime.Value;
                     DateTime dt2 = DateTime.Now;

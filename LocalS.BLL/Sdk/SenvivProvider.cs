@@ -395,8 +395,8 @@ namespace LocalS.BLL
             var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_User.DeptId).FirstOrDefault();
 
-            //model.OpenId = d_User.WxOpenId;
-            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            model.OpenId = d_User.WxOpenId;
+            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
             model.SenvivDeptId = d_User.DeptId;
             model.AccessToken = GetWxPaAccessToken(d_User.DeptId);
             switch (template)

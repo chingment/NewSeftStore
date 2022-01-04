@@ -266,8 +266,21 @@ namespace Test
         {
 
 
-            DateTime dt1 = DateTime.Parse("2021-12-10 00:00:00");
-            DateTime dt2 = DateTime.Parse("2021-12-17 00:00:00");
+            DateTime dt1 = DateTime.Parse("2021-12-31");
+            DateTime dt2 = DateTime.Now;
+            int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
+            if (month >= 1)
+            {
+               DateTime? rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
+               DateTime? rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
+
+
+            }
+
+
+
+            //DateTime dt1 = DateTime.Parse("2021-12-10 00:00:00");
+            //DateTime dt2 = DateTime.Parse("2021-12-17 00:00:00");
 
             /// int ccc = GetWeeksCountBetweenTime(7, 2, dt1, dt2);
 
