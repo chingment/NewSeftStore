@@ -15,6 +15,7 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
+    "@ditdot-dev/vue-flow-form": "^1.1.6",
     "@riophae/vue-treeselect": "^0.1.0",
     "@tinymce/tinymce-vue": "^2.1.0",
     "axios": "0.18.1",

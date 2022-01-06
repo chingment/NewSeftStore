@@ -13,7 +13,23 @@ const router = new VueRouter({
   routes: [
     {
       path: '/own/info',
+      name: 'OwnInfo',
       component: () => import('@/views/own/info')
+    },
+    {
+      path: '/device/bind',
+      name: 'DeviceBind',
+      component: () => import('@/views/device/bind')
+    },
+    {
+      path: '/device/info',
+      name: 'DeviceInfo',
+      component: () => import('@/views/device/info')
+    },
+    {
+      path: '/quest/fill/tp1',
+      name: 'QuestFillTp1',
+      component: () => import('@/views/quest/fill/tp1')
     },
     {
       path: '/report/month/monitor',

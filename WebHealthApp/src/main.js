@@ -10,7 +10,7 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 import 'mint-ui/lib/style.css'
 import Mint from 'mint-ui'
-
+import '@/icons' // icon
 import '@/permission' // permission control
 
 /**

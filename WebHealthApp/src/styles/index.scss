@@ -510,3 +510,21 @@ border: 1px solid #909399;
   height: 90%;
   }
 
+
+.mint-cell:first-child{
+    .mint-cell-wrapper{
+      background-size: 120% 0px;
+    }
+}
+
+.lm-header-big{
+    .bg-title{
+    color: $primaryColor;
+    font-size: 25px;
+    }
+    .sm-title{
+     color: #949494;
+     font-size: 16px;
+     padding: 10px 0px;
+    }
+}
