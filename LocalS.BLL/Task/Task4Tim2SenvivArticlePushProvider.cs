@@ -32,7 +32,7 @@ namespace LocalS.BLL.Task
                     if (d_Article != null)
                     {
                         string first = "您好";
-                        string url = string.Format("http://health.17fanju.com/#/article/bw/details?id={0}&uid={1}", d_Article.Id, d_Women.SvUserId);
+                        string url = string.Format("http://health.17fanju.com/article/bw/details?id={0}&uid={1}", d_Article.Id, d_Women.SvUserId);
                         string keyword1 = "162天";
                         string keyword2 = d_Article.Title;
                         string remark = "感谢您的支持,祝您的宝宝健康成长";

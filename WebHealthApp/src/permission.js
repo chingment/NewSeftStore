@@ -25,6 +25,8 @@ router.beforeEach(async(to, from, next) => {
   //   next()
   // }
 
+  // http://health.17fanju.com/index?merchId=82272232?redirectUrl=dsadaddddadad
+
   next()
   NProgress.done()
 })

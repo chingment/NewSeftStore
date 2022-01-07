@@ -9,42 +9,39 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   routes: [
     {
+      path: '/index',
+      component: () => import('@/views/index/index')
+    },
+    {
       path: '/own/info',
-      name: 'OwnInfo',
       component: () => import('@/views/own/info')
     },
     {
       path: '/device/bind',
-      name: 'DeviceBind',
       component: () => import('@/views/device/bind')
     },
     {
       path: '/device/info',
-      name: 'DeviceInfo',
       component: () => import('@/views/device/info')
     },
     {
       path: '/quest/fill/tp1',
-      name: 'QuestFillTp1',
       component: () => import('@/views/quest/fill/tp1')
     },
     {
       path: '/report/month/monitor',
-      name: 'MainIndex',
       component: () => import('@/views/report/month/Index'),
       redirec: '/report/month/monitor',
       children: [
         {
           path: '/report/month/monitor',
-          name: 'MainMonitor',
           component: () => import('@/views/report/month/Monitor')
         },
         {
           path: '/report/month/energy',
-          name: 'MainEnergy',
           component: () => import('@/views/report/month/Energy')
         },
         {

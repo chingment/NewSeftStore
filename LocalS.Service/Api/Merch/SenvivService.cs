@@ -1196,7 +1196,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             if (rop.IsSend)
             {
                 string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
-                string url = "http://health.17fanju.com/#/report/month/monitor?rptId=" + rpt.Id;
+                string url = "http://health.17fanju.com/report/month/monitor?rptId=" + rpt.Id;
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
                 string keyword2 = "总体评分" + rpt.TotalScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
@@ -1281,7 +1281,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             if (rop.IsSend)
             {
                 string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
-                string url = "http://health.17fanju.com/#/report/month/monitor?rptId=" + rpt.Id;
+                string url = "http://health.17fanju.com/report/month/monitor?rptId=" + rpt.Id;
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
                 string keyword2 = "总体评分" + rpt.TotalScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
