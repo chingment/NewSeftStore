@@ -12,7 +12,20 @@ namespace LocalS.Service.Api.HealthApp
     {
         public CustomJsonResult InitBind(string operater, string userId)
         {
-            return null;
+            var result = new CustomJsonResult();
+
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            var ret = new
+            {
+                UserInfo = new
+                {
+                    NickName = d_SenvivUser.NickName
+                }
+
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
         public CustomJsonResult InitInfo(string operater, string userId)

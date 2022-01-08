@@ -30,7 +30,7 @@ namespace WebApiHealthApp
                 {
                     var session = new Session();
                     var token_val = session.Get<Dictionary<string, string>>(string.Format("token:{0}", token));
-                    if (token != null)
+                    if (token_val != null)
                     {
                         userId = token_val["userId"];
                         LogUtil.Info("userId2:" + userId);

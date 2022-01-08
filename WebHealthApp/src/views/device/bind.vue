@@ -6,7 +6,8 @@
         <div class="sm-title">点击扫一扫，或输入S/N号进行绑定</div>
       </div>
       <div class="form">
-        <mt-field label="" placeholder="请输入S/N号">
+        <mt-cell title="使用者" :value="userInfo.nickName" />
+        <mt-field label="设备号" :value="formByBind.deviceSn" placeholder="请输入S/N号">
           <img src="@/assets/images/icon_scan_code.png" height="32px" width="32px">
         </mt-field>
       </div>
@@ -20,9 +21,10 @@
       </div>
 
       <div class="form">
-        <mt-cell title="设备号" value="SN32244DD55" />
-        <mt-field label="手机号" placeholder="请输入手机号码" />
-        <mt-field label="验证码" placeholder="请输入手机验证码">
+        <mt-cell title="设备号" :value="formByBind.deviceSn" />
+        <mt-cell title="使用者" :value="userInfo.nickName" />
+        <mt-field label="手机号" :value="formByBind.phoneNumber" placeholder="请输入手机号码" />
+        <mt-field label="验证码" :value="formByBind.validCode" placeholder="请输入手机验证码">
           <mt-button type="primary" size="small" plain>获取</mt-button>
         </mt-field>
       </div>
@@ -58,6 +60,14 @@ export default {
   data() {
     return {
       loading: false,
+      userInfo: {
+        nickName: ''
+      },
+      formByBind: {
+        deviceSn: '',
+        phoneNumber: '',
+        validCode: ''
+      },
       step: 1,
       popupVisibleByPaQrCode: false
     }
@@ -71,6 +81,8 @@ export default {
       this.loading = true
       initBind({}).then(res => {
         if (res.result === 1) {
+          var d = res.data
+          this.userInfo = d.userInfo
         }
         this.loading = false
       })

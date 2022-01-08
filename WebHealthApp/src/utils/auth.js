@@ -3,7 +3,9 @@ import Cookies from 'js-cookie'
 const TokenKey = 'vue_token'
 
 export function getToken() {
-  return Cookies.get(TokenKey)
+  var token = Cookies.get(TokenKey)
+  if (typeof token === 'undefined') { return null }
+  return token
 }
 
 export function setToken(token) {

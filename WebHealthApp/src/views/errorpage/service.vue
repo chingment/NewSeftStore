@@ -5,6 +5,7 @@
 
 </template>
 <script>
+import { removeToken } from '@/utils/auth'
 export default {
   name: 'Index',
   components: {
@@ -15,7 +16,7 @@ export default {
     }
   },
   created() {
-
+    removeToken()
   },
   methods: {
 
