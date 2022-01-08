@@ -175,20 +175,20 @@
     <Compile Include="Task\Task4Tim2SenvivArticlePushProvider.cs" />
     <Compile Include="Task\Task4Tim2SenvivUsersProvider.cs" />
     <Compile Include="Task\Task4Tim2WxUpdateUsersInfoProvider.cs" />
-    <Compile Include="Task\UI\Badge.cs" />
-    <Compile Include="Task\UI\EleTag.cs" />
-    <Compile Include="Task\UI\FsBlock.cs" />
-    <Compile Include="Task\UI\FsBlockByField.cs" />
-    <Compile Include="Task\UI\FsButton.cs" />
-    <Compile Include="Task\UI\FsField.cs" />
-    <Compile Include="Task\UI\FsQrCode.cs" />
-    <Compile Include="Task\UI\FsReceiptInfo.cs" />
-    <Compile Include="Task\UI\FsTag.cs" />
-    <Compile Include="Task\UI\FsTemplateData.cs" />
-    <Compile Include="Task\UI\FsText.cs" />
-    <Compile Include="Task\UI\MenuNode.cs" />
-    <Compile Include="Task\UI\OptionNode.cs" />
-    <Compile Include="Task\UI\TreeNode.cs" />
+    <Compile Include="UI\Badge.cs" />
+    <Compile Include="UI\EleTag.cs" />
+    <Compile Include="UI\FsBlock.cs" />
+    <Compile Include="UI\FsBlockByField.cs" />
+    <Compile Include="UI\FsButton.cs" />
+    <Compile Include="UI\FsField.cs" />
+    <Compile Include="UI\FsQrCode.cs" />
+    <Compile Include="UI\FsReceiptInfo.cs" />
+    <Compile Include="UI\FsTag.cs" />
+    <Compile Include="UI\FsTemplateData.cs" />
+    <Compile Include="UI\FsText.cs" />
+    <Compile Include="UI\MenuNode.cs" />
+    <Compile Include="UI\OptionNode.cs" />
+    <Compile Include="UI\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\alipay-sdk-NET20161213174056\AopSdk.csproj">

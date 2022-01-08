@@ -53,6 +53,7 @@ router.beforeEach(async(to, from, next) => {
         await authInfo({ merchId: merchId, deviceId: deviceId, code: code }).then((res) => {
           if (res.result === 1) {
             var d = res.data
+            console.log('token1:' + d.token)
             setToken(d.token)
             isGoAuth = false
           } else {

@@ -50,6 +50,7 @@
 
 </template>
 <script>
+import { initBind } from '@/api/device'
 export default {
   name: 'App',
   components: {
@@ -61,7 +62,19 @@ export default {
       popupVisibleByPaQrCode: false
     }
   },
+  created() {
+    console.log('created')
+    this.onInit()
+  },
   methods: {
+    onInit() {
+      this.loading = true
+      initBind({}).then(res => {
+        if (res.result === 1) {
+        }
+        this.loading = false
+      })
+    },
     onSaveStep1() {
       this.popupVisibleByPaQrCode = true
     },

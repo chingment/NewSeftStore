@@ -41,5 +41,12 @@ namespace LocalS.Service.Api.HealthApp
 
             return new CustomJsonResult<SenvivUser>(ResultType.Success,ResultCode.Success,"", d_SenvivUser);
         }
+
+
+
+        public CustomJsonResult InitInfo(string operater, string userId)
+        {
+            return null;
+        }
     }
 }

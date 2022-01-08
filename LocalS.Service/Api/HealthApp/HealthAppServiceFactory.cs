@@ -23,5 +23,29 @@ namespace LocalS.Service.Api.HealthApp
                 return new OwnService();
             }
         }
+        public static QuestService Quest
+        {
+            get
+            {
+                return new QuestService();
+            }
+        }
+
+        public static DayReportService DayReport
+        {
+            get
+            {
+                return new DayReportService();
+            }
+        }
+
+        public static DeviceService Device
+        {
+            get
+            {
+                return new DeviceService();
+            }
+        }
+
     }
 }

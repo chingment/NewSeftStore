@@ -55,8 +55,8 @@ namespace WebApiHealthApp.Controllers
                         var token_val = new { userId = data.Id };
 
                         var session = new Session();
-                        token = string.Format("token:{0}", IdWorker.Build(IdType.NewGuid));
-                        session.Set<Object>(token, token_val, new TimeSpan(24, 0, 0));
+                        token = IdWorker.Build(IdType.NewGuid);
+                        session.Set<Object>(string.Format("token:{0}", token), token_val, new TimeSpan(24, 0, 0));
                     }
                 }
             }
@@ -74,6 +74,11 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-
+        [HttpGet]
+        public OwnApiHttpResponse InitInfo()
+        {
+            var result = HealthAppServiceFactory.Own.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }

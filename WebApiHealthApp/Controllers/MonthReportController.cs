@@ -12,6 +12,7 @@ namespace WebApiHealthApp.Controllers
     public class MonthReportController : OwnApiBaseController
     {
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse GetMonitor([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetMonitor(this.CurrentUserId, rptId);
@@ -19,6 +20,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse GetEnergy([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetEnergy(this.CurrentUserId, rptId);
@@ -26,6 +28,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse GetAdvise([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetAdvise(this.CurrentUserId, rptId);
@@ -33,6 +36,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse GetTagAdvise([FromUri]string tagId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetTagAdvise(this.CurrentUserId, tagId);
@@ -40,6 +44,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse GetSugProducts([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.GetSugProducts(this.CurrentUserId, rptId);
@@ -47,6 +52,7 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.MonthReport.UpdateVisitCount(this.CurrentUserId, rptId);

@@ -5,6 +5,7 @@ using Lumos.Web.Http;
 using Lumos.Session;
 using System.IO;
 using System;
+using System.Collections.Generic;
 
 namespace WebApiHealthApp
 {
@@ -15,76 +16,30 @@ namespace WebApiHealthApp
         {
             LogUtil.SetTrackId();
         }
-        public string Token
-        {
-            get
-            {
-                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                string token = request.QueryString["token"];
-                if (string.IsNullOrEmpty(token))
-                {
-                    token = request.Headers["token"];
-                }
-                return token;
-            }
-        }
-        public string AppId
-        {
-            get
-            {
-                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                string open_id = request.Headers["app_id"];
-                return open_id;
-            }
-        }
-        public string OpenId
-        {
-            get
-            {
-                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                string open_id = request.Headers["open_id"];
-                return open_id;
-            }
-        }
-        private TokenInfo TokenInfo
-        {
-            get
-            {
-                var tokenInfo = SSOUtil.GetTokenInfo(this.Token);
-                if (tokenInfo == null)
-                {
-                    tokenInfo = new TokenInfo();
-                    tokenInfo.UserId = "";
-                }
-                return tokenInfo;
-            }
-        }
+
         public string CurrentUserId
         {
             get
             {
-                return this.TokenInfo.UserId;
+                string userId = null;
+
+                var request = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
+                string token = request.Headers["X-Token"];
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    var session = new Session();
+                    var token_val = session.Get<Dictionary<string, string>>(string.Format("token:{0}", token));
+                    if (token != null)
+                    {
+                        userId = token_val["userId"];
+                        LogUtil.Info("userId2:" + userId);
+                    }
+                }
+
+                return userId;
             }
         }
-        public string GetRequestContent()
-        {
-            string content = null;
 
-            try
-            {
-                var myRequest = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request;
-                Stream stream = myRequest.InputStream;
-                stream.Seek(0, SeekOrigin.Begin);
-
-                content = new StreamReader(stream).ReadToEnd();
-            }
-            catch
-            {
-                content = null;
-            }
-
-            return content;
-
-        }
     }
 }
