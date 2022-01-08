@@ -15,6 +15,7 @@ namespace Lumos.Session
         public static void SetTokenInfo(string key, TokenInfo userInfo, TimeSpan expireIn)
         {
             var session = new Session();
+
             session.Set(string.Format("{0}:{1}", sign, key), userInfo, expireIn);
         }
 

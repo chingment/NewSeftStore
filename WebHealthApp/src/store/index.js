@@ -7,9 +7,6 @@ const store = new Vuex.Store({
     isLoading: false// loading全局开关
   },
   mutations: {
-    changeisLoading(state, data) {
-      state.isLoading = data
-    }
   }
 })
 

@@ -27,5 +27,7 @@ namespace WebApiHealthApp.Controllers
 
             return new OwnApiHttpResponse<JsApiConfigParams>(configParams);
         }
+
+  
     }
 }

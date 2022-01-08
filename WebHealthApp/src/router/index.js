@@ -13,23 +13,38 @@ const router = new VueRouter({
   routes: [
     {
       path: '/index',
-      component: () => import('@/views/index/index')
+      component: () => import('@/views/index/index'),
+      meta: { title: '', isAuth: true }
     },
     {
       path: '/own/info',
-      component: () => import('@/views/own/info')
+      component: () => import('@/views/own/info'),
+      meta: { isAuth: true }
     },
     {
       path: '/device/bind',
-      component: () => import('@/views/device/bind')
+      component: () => import('@/views/device/bind'),
+      meta: { title: '', isAuth: true }
     },
     {
       path: '/device/info',
-      component: () => import('@/views/device/info')
+      component: () => import('@/views/device/info'),
+      meta: { title: '', isAuth: true }
     },
     {
       path: '/quest/fill/tp1',
-      component: () => import('@/views/quest/fill/tp1')
+      component: () => import('@/views/quest/fill/tp1'),
+      meta: { isAuth: true }
+    },
+    {
+      path: '/errorpage/invalid',
+      component: () => import('@/views/errorpage/invalid'),
+      meta: { isAuth: false }
+    },
+    {
+      path: '/errorpage/service',
+      component: () => import('@/views/errorpage/service'),
+      meta: { isAuth: false }
     },
     {
       path: '/report/month/monitor',

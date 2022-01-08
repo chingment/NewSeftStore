@@ -1,33 +1,87 @@
 import router from './router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-
+import { isEmpty } from '@/utils/commonUtil'
+import { authUrl, authInfo } from '@/api/own'
+import { getToken, setToken } from '@/utils/auth'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
+
+function delUrlParams(url, names) {
+  if (typeof (names) === 'string') {
+    names = [names]
+  }
+  //  http:/dsfsfsfs/?dfdsf=32321&code=33
+  if (url.indexOf('?') > -1) {
+    var href_cp = url.split('?')
+    var loc_url = href_cp[0]
+    var loc_qry = href_cp[1]
+    var obj = {}
+    var arr = loc_qry.split('&')
+    // 获取参数转换为object
+    for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i].split('=')
+      obj[arr[i][0]] = arr[i][1]
+    }
+    // 删除指定参数
+    for (var j = 0; j < names.length; j++) {
+      delete obj[names[j]]
+    }
+    // 重新拼接url
+    url = loc_url + '?' + JSON.stringify(obj).replace(/[\"\{\}]/g, '').replace(/\:/g, '=').replace(/\,/g, '&')
+  }
+  return url
+}
 
 router.beforeEach(async(to, from, next) => {
   NProgress.start()
 
-  // // var redriect_uri = encodeURIComponent(window.location.href)
-  // var redriect_uri = encodeURIComponent('http://health.17fanju.com/#/own/info')
-  // console.log(redriect_uri)
-  // if (to.name !== 'auth') { // 判断当前是不是新建的auth路由空白页面
-  //   const _token = sessionStorage.getItem('wechataccess_token')
-  //   if (!_token) { // 若是没有token,则让它受权
-  //     // 保存当前路由地址，受权后还会跳到此地址
-  //     sessionStorage.setItem('beforeUrl', to.fullPath)
+  // 判断是否需要微信授权
+  if (to.meta.isAuth) {
+    var token = getToken()
+    var isGoAuth = true
+    if (token != null) {
+      isGoAuth = false
+      // 检查token是否过期
+    }
 
-  //     // 受权请求,并跳转http://m.water.ui-tech.cn/auth路由页面
-  //     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc6e80f8c575cf3f5&redirect_uri=' + redriect_uri + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-  //   } else {
-  //     next()
-  //   }
-  // } else {
-  //   next()
-  // }
+    var code = to.query.code
+    var merchId = to.query.merchId
+    var deviceId = to.query.deviceId
 
-  // http://health.17fanju.com/index?merchId=82272232?redirectUrl=dsadaddddadad
+    if (isGoAuth) {
+      if (!isEmpty(code)) {
+        await authInfo({ merchId: merchId, deviceId: deviceId, code: code }).then((res) => {
+          if (res.result === 1) {
+            var d = res.data
+            setToken(d.token)
+            isGoAuth = false
+          } else {
+            next('/errorpage/service')
+          }
+        })
+      }
+    }
 
-  next()
+    if (isGoAuth) {
+      if (isEmpty(merchId) && isEmpty(deviceId)) {
+        next('/errorpage/invalid')
+      } else {
+        var redriect_Url = encodeURIComponent(delUrlParams(window.location.href, ['code', 'state']))
+        await authUrl({ merchId: merchId, deviceId: deviceId, redriectUrl: redriect_Url }).then((res) => {
+          if (res.result === 1) {
+            var d = res.data
+            window.location.href = d.url
+          } else {
+            next('/errorpage/service')
+          }
+        })
+      }
+    }
+    next()
+  } else {
+    next()
+  }
+
   NProgress.done()
 })
 

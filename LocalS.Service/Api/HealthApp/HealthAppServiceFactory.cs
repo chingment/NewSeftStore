@@ -15,5 +15,13 @@ namespace LocalS.Service.Api.HealthApp
                 return new MonthReportService();
             }
         }
+
+        public static OwnService Own
+        {
+            get
+            {
+                return new OwnService();
+            }
+        }
     }
 }

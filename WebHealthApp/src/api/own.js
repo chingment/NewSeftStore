@@ -1,31 +1,22 @@
 import request from '@/utils/request'
 
-export function getInfo(token, website) {
+export function authUrl(data) {
   return request({
-    url: '/own/getInfo',
-    method: 'get',
-    params: { token, website }
+    url: '/own/authUrl',
+    method: 'post',
+    data
   })
 }
 
-export function checkPermission(website, tpye, content) {
+export function authInfo(data) {
   return request({
-    url: '/own/checkPermission',
-    method: 'get',
-    params: { website, tpye, content }
-  })
-}
-
-export function changePassword(data) {
-  return request({
-    url: '/own/changePassword',
+    url: '/own/authInfo',
     method: 'post',
     data
   })
 }
 
 export default {
-  getInfo: getInfo,
-  checkPermission: checkPermission,
-  changePassword: changePassword
+  authInfo: authInfo,
+  authUrl: authUrl
 }

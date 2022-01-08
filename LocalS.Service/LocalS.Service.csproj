@@ -154,6 +154,9 @@
     <Compile Include="Api\Admin\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupMerchMasterGetList.cs" />
     <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\HealthApp\OwnService.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopOwnAuthInfo.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopOwnAuthUrl.cs" />
     <Compile Include="Api\Merch\DeviceService.cs" />
     <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
     <Compile Include="Api\HealthApp\MonthReportService.cs" />
