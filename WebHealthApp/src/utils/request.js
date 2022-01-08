@@ -18,7 +18,6 @@ service.interceptors.request.use(
   config => {
     store.state.isLoading = true
     var token = getToken()
-    console.log('token:' + token)
     config.headers['X-Token'] = token
     return config
   },
@@ -46,12 +45,6 @@ service.interceptors.response.use(
     // console.log(JSON.stringify(res))
     // if the custom code is not 20000, it is judged as an error.
     if (res.result === 1 || res.result === 2) {
-      if (res.result === 2) {
-        if (res.code === 5000) {
-
-        }
-      }
-
       return res
     } else {
       return Promise.reject(new Error(res.message || 'Error'))

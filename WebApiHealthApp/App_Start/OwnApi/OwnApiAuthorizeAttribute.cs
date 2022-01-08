@@ -19,10 +19,8 @@ namespace WebApiHealthApp
         {
             try
             {
-                DateTime requestTime = DateTime.Now;
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
                 var requestMethod = request.HttpMethod;
-
                 bool skipAuthorization = actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
                 if (skipAuthorization)
                 {
