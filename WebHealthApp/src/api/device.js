@@ -8,7 +8,25 @@ export function initBind(params) {
   })
 }
 
+export function bindSerialNo(data) {
+  return request({
+    url: '/device/bindSerialNo',
+    method: 'post',
+    data
+  })
+}
+
+export function bindPhoneNumber(data) {
+  return request({
+    url: '/device/bindPhoneNumber',
+    method: 'post',
+    data
+  })
+}
+
 export default {
-  initBind: initBind
+  initBind: initBind,
+  bindSerialNo: bindSerialNo,
+  bindPhoneNumber: bindPhoneNumber
 }
 

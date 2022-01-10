@@ -1,310 +1,104 @@
 <template>
-  <div>
-    <flow-form
-      ref="flowform"
-      :questions="questions"
-      :language="language"
-      :standalone="true"
-      @complete="onComplete"
-      @submit="onSubmit"
-    >
-      <!-- Custom content for the Complete/Submit screen slots in the FlowForm component -->
-      <!-- We've overriden the default "complete" slot content -->
-      <template v-slot:complete>
-        <div class="f-section-wrap">
-          <p>
-            <span class="fh2">Thank you. 🙏</span>
-            <span class="f-section-text">
-              Great work, the survey is completed, and our demo is done. You can review your answers or press submit.
-            </span>
-          </p>
-          <p class="f-description">Note: No data will be saved and/or sent in this demo.</p>
-        </div>
-      </template>
-
-      <!-- We've overriden the default "completeButton" slot content -->
-      <template v-slot:completeButton>
-        <div v-if="!submitted" class="f-submit">
-          <button
-            ref="button"
-            class="o-btn-action"
-            type="submit"
-            href="#"
-            aria-label="Press to submit"
-            @click.prevent="onSendData()"
-          >
-            <span>{{ language.submitText }}</span>
-          </button>
-          <a
-            class="f-enter-desc"
-            href="#"
-            @click.prevent="onSendData()"
-            v-html="language.formatString(language.pressEnter)"
-          />
-        </div>
-
-        <p v-if="submitted" class="text-success">Submitted succesfully.</p>
-      </template>
-    </flow-form>
+  <div class="quest-fill-tp1">
+    <div class="lm-header-big">
+      <div class="bg-title">资料完善</div>
+      <div class="sm-title">完善资料更准更好的为你服务</div>
+    </div>
+    <flow-form :questions="questions" />
   </div>
 </template>
 <script>
-import FlowForm, { QuestionModel, QuestionType, ChoiceOption, LanguageModel } from '@ditdot-dev/vue-flow-form'
+
+import FlowForm from '@/components/FlowForm/Index.vue'
 export default {
   name: 'Example',
-
   components: {
     FlowForm
   },
   data() {
     return {
-      submitted: false,
-      completed: false,
-      language: new LanguageModel(),
-      // Create question list with QuestionModel instances
       questions: [
-        new QuestionModel({
-          id: 'first_name',
-          tagline: 'Hi! Welcome to our demo survey 😊',
-          title: 'What is your first name?',
-          type: QuestionType.Text,
-          required: true,
-          placeholder: 'Start typing here...'
-        }),
-        new QuestionModel({
-          id: 'email',
-          tagline: "Nice to meet you 👀, let's continue",
-          title: 'Provide an example email.',
-          type: QuestionType.Email,
-          required: true,
-          placeholder: 'Start typing here...'
-        }),
-        new QuestionModel({
-          id: 'multiple_choice_image',
-          tagline: "Let's take it one step further...",
-          title: 'Tell us what is your favorite social network hangout.',
-          helpTextShow: false,
-          type: QuestionType.MultiplePictureChoice,
-          multiple: false,
-          required: true,
+        {
+          id: 'fullName',
+          title: '您好，请输入你的真实姓名',
+          type: 'input',
+          value: ''
+        },
+        {
+          id: 'birthday',
+          title: '生日',
+          type: 'date',
+          value: ''
+        },
+        {
+          id: 'sex',
+          title: '性别',
+          type: 'radio',
           options: [
-            new ChoiceOption({
-              imageSrc: require('@/assets/images/icon_close.png'),
-              imageAlt: 'Facebook logo',
-              label: 'Facebook'
-            }),
-            new ChoiceOption({
-              imageSrc: require('@/assets/images/icon_close.png'),
-              imageAlt: 'Twitter logo',
-              label: 'Twitter'
-            }),
-            new ChoiceOption({
-              imageSrc: require('@/assets/images/icon_close.png'),
-              imageAlt: 'Instagram logo',
-              label: 'Instagram'
-            }),
-            new ChoiceOption({
-              imageSrc: require('@/assets/images/icon_close.png'),
-              imageAlt: 'TikTok logo',
-              label: 'TikTok'
-            })
-          ]
-        }),
-        new QuestionModel({
-          id: 'phone',
-          title: 'Doing great! 👍 Go ahead and try with a phone number.',
-          type: QuestionType.Phone,
-          required: true,
-          mask: '(###) ###-####'
-        }),
-        new QuestionModel({
-          id: 'movies',
-          title: 'List your favorite movies. 🍿',
-          type: QuestionType.LongText,
-          required: true,
-          placeholder: 'Start typing here...'
-        }),
-        new QuestionModel({
-          id: 'multiple_choice',
-          tagline: 'FYI, You can always go back 👈, use the up arrow on the bottom.',
-          title: 'Multiple choice question:',
-          helpTextShow: false,
-          type: QuestionType.MultipleChoice,
-          multiple: false,
-          allowOther: true,
-          required: true,
-          options: [
-            new ChoiceOption({
-              label: 'Answer 1'
-            }),
-            new ChoiceOption({
-              label: 'Answer 2'
-            }),
-            new ChoiceOption({
-              label: 'Answer 3'
-            })
-          ]
-        }),
-        new QuestionModel({
-          id: 'multiple_choices',
-          title: 'Multiple choices question:',
-          type: QuestionType.MultipleChoice,
-          multiple: true,
-          helpText: 'Select all that apply. 👇',
-          required: true,
-          options: [
-            new ChoiceOption({
-              label: 'Answer 1'
-            }),
-            new ChoiceOption({
-              label: 'Answer 2'
-            }),
-            new ChoiceOption({
-              label: 'Answer 3'
-            }),
-            new ChoiceOption({
-              label: 'Answer 4'
-            })
-          ]
-        }),
-        new QuestionModel({
-          id: 'break_1',
-          title: 'Awesome, thank you. 🙏',
-          content: 'You arrived at the section break of our little demo survey. To continue exploring, just press enter or use the continue button.',
-          description: 'Note: We will take a look at our multiple path feature next.',
-          type: QuestionType.SectionBreak
-        }),
-        new QuestionModel({
-          id: 'choose_path',
-          tagline: 'Where would you like to go? 🤔',
-          title: 'Choose your path:',
-          type: QuestionType.Dropdown,
-          multiple: false,
-          placeholder: 'Select',
-          inline: true,
-          required: true,
-          options: [
-            new ChoiceOption({
-              label: 'Path A'
-            }),
-            new ChoiceOption({
-              label: 'Path B',
-              value: 'path_b'
-            })
+            { label: '男', value: '1' },
+            { label: '女', value: '2' }
           ],
           jump: {
-            path_b: 'path_b'
-          }
-        }),
-        new QuestionModel({
-          id: 'path_a',
-          title: 'Excellent choice! 🥳',
-          content: 'Press enter or use the continue button for the final submit screen.',
-          type: QuestionType.SectionBreak,
-          jump: {
-            _other: '_submit'
-          }
-        }),
-        new QuestionModel({
-          id: 'path_b',
-          tagline: 'Path B',
-          title: 'Hmm, are you sure?',
-          helpText: 'Path A sounds like a winner! 😉',
-          type: QuestionType.MultipleChoice,
-          multiple: false,
-          required: true,
+            '1': 'isTest',
+            '2': 'isPregnant'
+          },
+          value: ''
+        },
+        {
+          id: 'isTest',
+          title: '近期困扰',
+          type: 'radio',
           options: [
-            new ChoiceOption({
-              label: 'Ok, let\'s go with A',
-              value: 'path_a'
-            }),
-            new ChoiceOption({
-              label: 'Yes, finish the survey'
-            })
+            { label: '睡眠', value: '1' },
+            { label: '睡眠1', value: '2' },
+            { label: '睡眠2', value: '3' },
+            { label: '睡眠3', value: '4' }
           ],
-          jump: {
-            path_a: 'path_a'
-          }
-        })
+          value: ''
+        },
+        {
+          id: 'isPregnant',
+          title: '是否已怀孕',
+          type: 'radio',
+          options: [
+            { label: '暂无孕产计划', value: '1' },
+            { label: '备孕', value: '2' },
+            { label: '孕妈', value: '3' },
+            { label: '宝妈', value: '4' }
+          ],
+          value: ''
+        },
+        {
+          id: 'absds',
+          title: '新得下一个问题',
+          type: 'radio',
+          options: [
+            { label: 'A', value: '1' },
+            { label: 'B', value: '2' },
+            { label: 'C', value: '3' },
+            { label: '宝D妈', value: '4' }
+          ],
+          value: ''
+        }
       ]
     }
   },
 
   mounted() {
-    document.addEventListener('keyup', this.onKeyListener)
+
   },
 
   methods: {
-    onKeyListener($event) {
-      // We've overriden the default "complete" slot so
-      // we need to implement the "keyup" listener manually.
 
-      if ($event.key === 'Enter' && this.completed && !this.submitted) {
-        this.onSendData()
-      }
-    },
-
-    /* eslint-disable-next-line no-unused-vars */
-    onComplete(completed, questionList) {
-      // This method is called whenever the "completed" status is changed.
-      this.completed = completed
-    },
-
-    /* eslint-disable-next-line no-unused-vars */
-    onSubmit(questionList) {
-      // This method will only be called if you don't override the
-      // completeButton slot.
-      this.onSendData()
-    },
-
-    onSendData() {
-      // Set `submitted` to true so the form knows not to allow back/forward
-      // navigation anymore.
-      this.$refs.flowform.submitted = true
-
-      this.submitted = true
-
-      /* eslint-disable-next-line no-unused-vars */
-      const data = this.getData()
-      /*
-          You can use Fetch API to send the data to your server, eg.:
-
-          fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          })
-        */
-    },
-
-    getData() {
-      const data = {
-        questions: [],
-        answers: []
-      }
-
-      this.questions.forEach(question => {
-        if (question.title) {
-          let answer = question.answer
-          if (Array.isArray(answer)) {
-            answer = answer.join(', ')
-          }
-
-          data.questions.push(question.title)
-          data.answers.push(answer)
-        }
-      })
-
-      return data
-    }
-  },
-  beforeUnmount() {
-    document.removeEventListener('keyup', this.onKeyListener)
   }
 }
 </script>
 <style lang="scss" scope>
+
+.quest-fill-tp1{
+  background-color: #f6f6f8;
+  height: 100%;
+   padding: 20px;
+}
 
 </style>

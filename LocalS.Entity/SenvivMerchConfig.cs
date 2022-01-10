@@ -11,9 +11,12 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string DeptId { get; set; }
-        public string TplIdMonthReport { get; set; }
-        public string TplIdHealthMonitor { get; set; }
-        public string TplIdPregnancyRemind { get; set; }
+        public string WxPaAppId { get; set; }
+        public string WxPaAppSecret { get; set; }
+        public string WxPaQrCode { get; set; }
+        public string WxPaTplIdMonthReport { get; set; }
+        public string WxPaTplIdHealthMonitor { get; set; }
+        public string WxPaTplIdPregnancyRemind { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

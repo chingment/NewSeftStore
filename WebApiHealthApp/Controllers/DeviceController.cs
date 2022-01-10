@@ -11,9 +11,9 @@ namespace WebApiHealthApp.Controllers
     public class DeviceController : OwnApiBaseController
     {
         [HttpGet]
-        public OwnApiHttpResponse InitBind()
+        public OwnApiHttpResponse InitBind(string deviceId = null)
         {
-            var result = HealthAppServiceFactory.Device.InitBind(this.CurrentUserId, this.CurrentUserId);
+            var result = HealthAppServiceFactory.Device.InitBind(this.CurrentUserId, this.CurrentUserId, deviceId);
             return new OwnApiHttpResponse(result);
         }
 
@@ -21,6 +21,27 @@ namespace WebApiHealthApp.Controllers
         public OwnApiHttpResponse InitInfo()
         {
             var result = HealthAppServiceFactory.Device.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse BindSerialNo(RopDeviceBindSerialNo rop)
+        {
+            var result = HealthAppServiceFactory.Device.BindSerialNo(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse BindPhoneNumber(RopDeviceBindPhoneNumber rop)
+        {
+            var result = HealthAppServiceFactory.Device.BindPhoneNumber(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse BindInfoFill(RopDeviceBindInfoFill rop)
+        {
+            var result = HealthAppServiceFactory.Device.BindInfoFill(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

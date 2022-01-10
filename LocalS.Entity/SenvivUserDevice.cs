@@ -13,6 +13,9 @@ namespace LocalS.Entity
         public string SvUserId { get; set; }
         public string DeviceId { get; set; }
         public DateTime? BindTime { get; set; }
+        public DateTime? BindDeviceTime{ get; set; }
+        public DateTime? BindPhoneTime { get; set; }
+        public DateTime? BindInfoFillTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
