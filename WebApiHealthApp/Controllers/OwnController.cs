@@ -7,6 +7,7 @@ using LocalS.Service.Api.HealthApp;
 using MyWeiXinSdk;
 using LocalS.BLL;
 using Lumos.Redis;
+using System.Collections.Generic;
 
 namespace WebApiHealthApp.Controllers
 {
@@ -78,6 +79,28 @@ namespace WebApiHealthApp.Controllers
         public OwnApiHttpResponse InitInfo()
         {
             var result = HealthAppServiceFactory.Own.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public OwnApiHttpResponse AuthTokenCheck(string token)
+        {
+            var result = new CustomJsonResult();
+
+            var session = new Session();
+
+            var token_val = session.Get<Dictionary<string, string>>(string.Format("token:{0}", token));
+
+            if (token_val == null)
+            {
+                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure2Sign, "");
+            }
+            else
+            {
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            }
+
             return new OwnApiHttpResponse(result);
         }
     }

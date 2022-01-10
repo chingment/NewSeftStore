@@ -16,7 +16,16 @@ export function authInfo(data) {
   })
 }
 
+export function authTokenCheck(params) {
+  return request({
+    url: '/own/authTokenCheck',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   authInfo: authInfo,
-  authUrl: authUrl
+  authUrl: authUrl,
+  authTokenCheck: authTokenCheck
 }
