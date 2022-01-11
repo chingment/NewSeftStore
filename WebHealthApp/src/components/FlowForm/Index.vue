@@ -152,7 +152,7 @@ export default {
         }
       }
 
-      console.log(isFlag)
+      // console.log(isFlag)
 
       return isFlag
     },
@@ -189,7 +189,7 @@ export default {
           }
         }
       } else {
-        // console.log(this.nextSkip)
+        console.log(this.nextSkip)
         if (this.nextSkip == null) {
           jump_to = q_idx + 1
         } else {
