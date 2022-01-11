@@ -24,30 +24,29 @@ export default {
       appInfo: {},
       questions: [
         {
-          id: 'isTest',
-          title: '近期困扰',
-          type: 'radio',
-          allowOther: true,
-          options: [
-            { label: '睡眠', value: '1' },
-            { label: '睡眠1', value: '2' },
-            { label: '睡眠2', value: '3' },
-            { label: '睡眠3', value: '4' }
-          ],
-          value: ''
-        },
-        {
           id: 'fullName',
           title: '您好，请输入你的真实姓名',
           type: 'input',
           value: ''
         },
-        {
-          id: 'birthday',
-          title: '生日',
-          type: 'date',
-          value: ''
-        },
+        // {
+        //   id: 'birthday',
+        //   title: '生日',
+        //   type: 'date',
+        //   value: ''
+        // },
+        // {
+        //   id: 'height',
+        //   title: '身高',
+        //   type: 'input',
+        //   value: ''
+        // },
+        // {
+        //   id: 'weight',
+        //   title: '体重',
+        //   type: 'input',
+        //   value: ''
+        // },
         {
           id: 'sex',
           title: '性别',
@@ -57,7 +56,7 @@ export default {
             { label: '女', value: '2' }
           ],
           jump: {
-            '1': 'isTest',
+            '1': 'perplexs',
             '2': 'isPregnant'
           },
           value: ''
@@ -75,29 +74,67 @@ export default {
           value: ''
         },
         {
-          id: 'absds',
-          title: '新得下一个问题',
-          type: 'radio',
-          options: [
-            { label: 'A', value: '1' },
-            { label: 'B', value: '2' },
-            { label: 'C', value: '3' },
-            { label: '宝D妈', value: '4' }
-          ],
-          value: ''
-        },
-        {
-          id: 'checklist',
-          title: '多选',
+          id: 'perplexs',
+          title: '睡眠困扰',
           type: 'checklist',
           options: [
-            { label: '多选1', value: '1' },
-            { label: '多选2', value: '2' },
-            { label: '多选3', value: '3' },
-            { label: '多选4', value: '4' },
-            { label: '多选5', value: '5' },
-            { label: '多选6', value: '6' },
-            { label: '多选7', value: '7' }
+            { label: '打鼾', value: '1' },
+            { label: '失眠', value: '2' },
+            { label: '易醒', value: '3' },
+            { label: '难以入睡', value: '4' },
+            { label: '呼吸暂停综合症', value: '5' }
+          ],
+          value: []
+        },
+        {
+          id: 'subhealth',
+          title: '亚健康困扰',
+          type: 'checklist',
+          options: [
+            { label: '疲乏无力', value: '1' },
+            { label: '情绪波动', value: '2' },
+            { label: '精力不足', value: '3' },
+            { label: '怕冷怕冷', value: '4' },
+            { label: '头昏头痛', value: '5' },
+            { label: '易于干嘛', value: '6' },
+            { label: '记忆力下降', value: '7' },
+            { label: '胸闷', value: '8' },
+            { label: '肠胃问题', value: '9' }
+          ],
+          value: []
+        },
+        {
+          id: 'chronicdisease',
+          title: '慢性困扰',
+          type: 'checklist',
+          options: [
+            { label: '高血压', value: '1' },
+            { label: '糖尿病', value: '2' },
+            { label: '冠心病', value: '3' }
+          ],
+          value: []
+        },
+        {
+          id: 'medicalhis',
+          title: '既往病史',
+          type: 'checklist',
+          options: [
+            { label: '重大手术史', value: '1' },
+            { label: '输血史（非献血）', value: '2' },
+            { label: '传染病史', value: '3' }
+          ],
+          value: []
+        },
+        {
+          id: 'medicine',
+          title: '服用何种药物',
+          type: 'checklist',
+          options: [
+            { label: '高血压药物', value: '1' },
+            { label: '心脏病药物', value: '2' },
+            { label: '糖尿病药物', value: '3' },
+            { label: '脑梗塞药物', value: '4' },
+            { label: '治疗失眠药物', value: '5' }
           ],
           value: []
         }
