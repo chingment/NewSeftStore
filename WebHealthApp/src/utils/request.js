@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-
+import { Indicator } from 'mint-ui'
 axios.defaults.retry = 4
 axios.defaults.retryDelay = 1000
 
@@ -17,11 +17,15 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     store.state.isLoading = true
+
+    Indicator.open({ text: '加载中...', spinnerType: 'fading-circle' })
+
     var token = getToken()
     config.headers['X-Token'] = token
     return config
   },
   error => {
+    Indicator.close()
     console.log(error) // for debug
     return Promise.reject(error)
   }
@@ -40,10 +44,9 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    Indicator.close()
     store.state.isLoading = false
     const res = response.data
-    // console.log(JSON.stringify(res))
-    // if the custom code is not 20000, it is judged as an error.
     if (res.result === 1 || res.result === 2) {
       return res
     } else {
@@ -51,12 +54,8 @@ service.interceptors.response.use(
     }
   },
   error => {
-    // console.log('err' + error) // for debug
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
+    Indicator.close()
+
     // return Promise.reject(error)
 
     var config = error.config

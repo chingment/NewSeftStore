@@ -3,6 +3,7 @@ using LocalS.Entity;
 using Lumos;
 using Lumos.DbRelay;
 using Lumos.Redis;
+using MyWeiXinSdk;
 using SenvivSdk;
 using System;
 using System.Collections.Generic;
@@ -1410,6 +1411,23 @@ namespace LocalS.BLL
         }
 
 
+        public WxAppInfoConfig GetWxAppInfoConfigByUserId(string userId)
+        {
+            WxAppInfoConfig config = new WxAppInfoConfig();
+            config.AppId = "wxc6e80f8c575cf3f5";
+            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+
+            return config;
+        }
+
+        public WxAppInfoConfig GetWxAppInfoConfigByMerchIdAndDeviceId(string merchId,string deviceId)
+        {
+            WxAppInfoConfig config = new WxAppInfoConfig();
+            config.AppId = "wxc6e80f8c575cf3f5";
+            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+
+            return config;
+        }
 
     }
 }

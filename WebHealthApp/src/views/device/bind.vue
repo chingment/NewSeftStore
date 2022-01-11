@@ -49,7 +49,6 @@
 </template>
 <script>
 import { initBind, bindSerialNo, bindPhoneNumber } from '@/api/device'
-import { Toast } from 'mint-ui'
 export default {
   name: 'App',
   components: {
@@ -91,6 +90,7 @@ export default {
     },
     onSaveStep1() {
       this.loading = true
+
       bindSerialNo({ deviceId: this.formByBind.deviceId }).then(res => {
         if (res.result === 1) {
           this.step = 2
@@ -98,7 +98,7 @@ export default {
           if (res.code === 2801) {
             this.popupVisibleByPaQrCode = true
           } else {
-            Toast(res.message)
+            this.$toast(res.message)
           }
         }
         this.loading = false
@@ -114,7 +114,7 @@ export default {
         if (res.result === 1) {
           this.$router.push('/quest/fill/tp1')
         } else {
-          Toast(res.message)
+          this.$toast(res.message)
         }
         this.loading = false
       })

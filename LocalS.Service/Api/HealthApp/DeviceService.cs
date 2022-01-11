@@ -1,4 +1,5 @@
 ﻿using LocalS.BLL;
+using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
@@ -16,6 +17,8 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult InitBind(string operater, string userId, string deviceId)
         {
             var result = new CustomJsonResult();
+
+            WxAppInfoConfig config = BizFactory.Senviv.GetWxAppInfoConfigByUserId(userId);
 
             int step = 1;
 
@@ -62,9 +65,7 @@ namespace LocalS.Service.Api.HealthApp
             if (d_Device == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备号未生效");
 
-            WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxc6e80f8c575cf3f5";
-            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+            WxAppInfoConfig config = BizFactory.Senviv.GetWxAppInfoConfigByUserId(userId);
 
             var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
 
@@ -91,6 +92,13 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SenvivUserDevice.Add(d_UserDevice);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                d_UserDevice.BindDeviceTime = DateTime.Now;
+                d_UserDevice.Mender = operater;
+                d_UserDevice.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
             }
 
