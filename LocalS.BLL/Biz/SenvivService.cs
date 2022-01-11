@@ -1429,5 +1429,9 @@ namespace LocalS.BLL
             return config;
         }
 
+        public object GetWxAppInfoByUserId(string userId)
+        {
+            return null;
+        }
     }
 }

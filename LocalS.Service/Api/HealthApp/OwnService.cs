@@ -95,7 +95,15 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId)
         {
-            return null;
+
+            var ret = new
+            {
+                AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+
         }
 
         public CustomJsonResult AuthTokenCheck(string token)

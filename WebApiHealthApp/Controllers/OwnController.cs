@@ -14,6 +14,13 @@ namespace WebApiHealthApp.Controllers
 {
     public class OwnController : OwnApiBaseController
     {
+        //初始页面-我的信息
+        [HttpGet]
+        public OwnApiHttpResponse InitInfo()
+        {
+            var result = HealthAppServiceFactory.Own.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
 
         [HttpPost]
         [AllowAnonymous]
@@ -28,13 +35,6 @@ namespace WebApiHealthApp.Controllers
         public OwnApiHttpResponse AuthInfo(RopOwnAuthInfo rop)
         {
             var result = HealthAppServiceFactory.Own.AuthInfo(rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpGet]
-        public OwnApiHttpResponse InitInfo()
-        {
-            var result = HealthAppServiceFactory.Own.InitInfo(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 

@@ -44,10 +44,7 @@ namespace LocalS.Service.Api.HealthApp
                 {
                     NickName = d_SenvivUser.NickName
                 },
-                PaInfo = new
-                {
-
-                },
+                AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
                 Step = step
             };
 
@@ -56,11 +53,21 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId)
         {
-            return null;
+            var ret = new
+            {
+                AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
         }
 
         public CustomJsonResult BindSerialNo(string operater, string userId, RopDeviceBindSerialNo rop)
         {
+
+            if (string.IsNullOrEmpty(rop.DeviceId))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备号不能为空");
+
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
             if (d_Device == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备号未生效");
@@ -107,6 +114,9 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult BindPhoneNumber(string operater, string userId, RopDeviceBindPhoneNumber rop)
         {
+            if (string.IsNullOrEmpty(rop.PhoneNumber))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
+
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
@@ -123,7 +133,7 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                if(d_UserDevice.BindDeviceTime==null)
+                if (d_UserDevice.BindDeviceTime == null)
                     d_UserDevice.BindDeviceTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
                 d_UserDevice.Mender = operater;

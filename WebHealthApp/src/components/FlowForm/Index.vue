@@ -9,21 +9,32 @@
 
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" />
 
-            <mt-button type="primary" class="btn-sure" @click="onSure(index)">确定</mt-button>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
 
           </div>
           <div v-if="item.type==='date'">
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" @click.native="openPickerByDate(index)" />
 
-            <mt-button type="primary" class="btn-sure" @click="onSure(index)">确定</mt-button>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='radio'">
             <div class="qt-radio">
-              <div v-for="(option,j) in item.options" :key="option.id" :class="isRadioVal(option.value,item.value)===false?'qt-radio-item ' :'qt-radio-item on'" @click="onRadio(index,option.value)">
+              <div v-for="(option,j) in item.options" :key="option.id" :class="isRadioVal(option.value,item.value)===false?'qt-radio-item ' :'qt-radio-item on'" @click="onRadioSure(index,option.value)">
                 <span class="label">{{ option.label }}</span>
               </div>
+
             </div>
           </div>
+          <div v-if="item.type==='checklist'">
+            <div class="qt-checklist">
+              <div v-for="(option,j) in item.options" :key="option.id" :class="isChecklistVal(item.value,option.value)===false?'qt-checklist-item ' :'qt-checklist-item on'" @click="onChecklist(index,option.value)">
+                <span class="label">{{ option.label }}</span>
+              </div>
+
+            </div>
+            <mt-button type="primary" class="btn-sure" @click="onChecklistSure(index)">确定</mt-button>
+          </div>
+
         </div>
       </div>
 
@@ -41,7 +52,7 @@
 </template>
 
 <script>
-
+import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'FlowForm',
   props: {
@@ -64,14 +75,26 @@ export default {
 
   },
   methods: {
-    onSure(q_idx) {
-      this.jump(q_idx)
-    },
     onPrevious() {
       var question = this.questions[this.active]
       console.log(question)
       this.active = question.previous
       this.previous = question.previous
+    },
+    onInputSure(q_idx) {
+      var val = this.questions[q_idx].value
+      if (isEmpty(val)) {
+        this.$toast('不能为空')
+        return
+      }
+      this.jump(q_idx)
+    },
+    onRadioSure(q_idx, val) {
+      // console.log(val)
+      this.questions[q_idx].value = val
+
+      // this.questions = this.questions
+      this.jump(q_idx, val)
     },
     onRadio(q_idx, val) {
       // console.log(val)
@@ -79,6 +102,67 @@ export default {
 
       // this.questions = this.questions
       this.jump(q_idx, val)
+    },
+    isRadioVal(item, val) {
+      // console.log('item:' + item)
+      // console.log('val:' + val)
+      if (typeof val === 'undefined') { return false }
+
+      if (item === val) { return true }
+
+      return false
+    },
+    onChecklistSure(q_idx) {
+      var val = this.questions[q_idx].value
+      if (val.length <= 0) {
+        this.$toast('至少选择一个')
+        return
+      }
+      this.jump(q_idx)
+    },
+    onChecklist(q_idx, val) {
+      var _val = this.questions[q_idx].value
+
+      if (_val.length === 0) {
+        _val.push(val)
+      } else {
+        var isDel = false
+        for (var i = 0; i < _val.length; i++) {
+          if (_val[i] === val) {
+            _val.splice(i, 1)
+            isDel = true
+            break
+          }
+        }
+
+        if (!isDel) {
+          _val.push(val)
+        }
+      }
+
+      console.log(_val)
+      this.questions[q_idx].value = _val
+    },
+    isChecklistVal(item, val) {
+      var isFlag = false
+      for (var i = 0; i < item.length; i++) {
+        if (item[i] === val) {
+          isFlag = true
+          break
+        }
+      }
+
+      console.log(isFlag)
+
+      return isFlag
+    },
+    openPickerByDate(index) {
+      this.idx_date = index
+      this.$refs.pickerByDate.open()
+    },
+    onConfirmByDate(val) {
+      this.questions[this.idx_date].value = this.formatDate(val)
+      console.log(val)
     },
     jump(q_idx, q_val) {
       var questions = this.questions
@@ -120,23 +204,6 @@ export default {
         _this.questions[jump_to].previous = q_idx
         _this.previous = q_idx
       }, 500)
-    },
-    isRadioVal(item, val) {
-      // console.log('item:' + item)
-      // console.log('val:' + val)
-      if (typeof val === 'undefined') { return false }
-
-      if (item === val) { return true }
-
-      return false
-    },
-    openPickerByDate(index) {
-      this.idx_date = index
-      this.$refs.pickerByDate.open()
-    },
-    onConfirmByDate(val) {
-      this.questions[this.idx_date].value = this.formatDate(val)
-      console.log(val)
     },
     formatDate(secs, type = 0) {
       var t = new Date(secs)
@@ -215,6 +282,28 @@ export default {
     border-radius: 10px;
     background-color: #fff;
     min-width: 200px;
+    text-align: center;
+    font-weight: 600;
+    margin: 10px;
+}
+
+.qt-checklist{
+
+}
+
+.qt-checklist .on{
+     background-color: #2a2a2a;
+     border: 1px solid #2a2a2a;
+     color: #fff;
+}
+
+.qt-checklist-item{
+    float: left;
+    padding: 10px 20px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background-color: #fff;
+    min-width: 80px;
     text-align: center;
     font-weight: 600;
     margin: 10px;

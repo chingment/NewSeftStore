@@ -59,12 +59,13 @@ export default {
       userInfo: {
         nickName: ''
       },
+      appInfo: {},
       formByBind: {
         deviceId: '',
         phoneNumber: '',
         validCode: ''
       },
-      step: 1,
+      step: 0,
       popupVisibleByPaQrCode: false
     }
   },
@@ -80,9 +81,13 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo
-          this.step = d.step
-          if (this.step === 3) {
+
+          if (d.step === 1 || d.step === 2) {
+            this.step = d.step
+          } else if (d.step === 3) {
             this.$router.push('/quest/fill/tp1')
+          } else if (d.step === 4) {
+            this.$router.push('/device/info')
           }
         }
         this.loading = false

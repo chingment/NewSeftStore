@@ -10,6 +10,7 @@ namespace WebApiHealthApp.Controllers
 {
     public class DeviceController : OwnApiBaseController
     {
+        //初始页面-设备绑定
         [HttpGet]
         public OwnApiHttpResponse InitBind(string deviceId = null)
         {
@@ -17,12 +18,14 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        //初始页面-设备信息
         [HttpGet]
         public OwnApiHttpResponse InitInfo()
         {
             var result = HealthAppServiceFactory.Device.InitInfo(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
+
 
         [HttpPost]
         public OwnApiHttpResponse BindSerialNo(RopDeviceBindSerialNo rop)
