@@ -12,9 +12,9 @@ namespace WebApiHealthApp.Controllers
     {
         //初始页面-设备绑定
         [HttpGet]
-        public OwnApiHttpResponse InitBind(string deviceId = null)
+        public OwnApiHttpResponse InitBind(string deviceId = null, string requestUrl = null)
         {
-            var result = HealthAppServiceFactory.Device.InitBind(this.CurrentUserId, this.CurrentUserId, deviceId);
+            var result = HealthAppServiceFactory.Device.InitBind(this.CurrentUserId, this.CurrentUserId, deviceId, requestUrl);
             return new OwnApiHttpResponse(result);
         }
 

@@ -185,11 +185,11 @@ namespace LocalS.BLL
                 return wxAccessToken;
             }
 
-            if(!string.IsNullOrEmpty(config.TrdAccessToken))
+            if (!string.IsNullOrEmpty(config.TrdAccessToken))
             {
                 return config.TrdAccessToken;
             }
-            
+
 
             string key = string.Format("Wx_AppId_{0}_AccessToken", config.AppId);
 
@@ -282,14 +282,25 @@ namespace LocalS.BLL
         {
             return OAuthApi.GetUserOpenIds(this.GetApiAccessToken(config));
         }
-        public CustomJsonResult<JsApiConfigParams> GetJsApiConfigParams(WxAppInfoConfig config, string url)
+        //public CustomJsonResult<JsApiConfigParams> GetJsApiConfigParams(WxAppInfoConfig config, string url)
+        //{
+        //    string jsApiTicket = GetJsApiTicket(config);
+
+        //    JsApiConfigParams parms = new JsApiConfigParams(config.AppId, url, jsApiTicket);
+
+        //    return new CustomJsonResult<JsApiConfigParams>(ResultType.Success, ResultCode.Success, "", parms);
+        //}
+
+        public JsApiConfigParams GetJsApiConfigParams(WxAppInfoConfig config, string url)
         {
             string jsApiTicket = GetJsApiTicket(config);
 
             JsApiConfigParams parms = new JsApiConfigParams(config.AppId, url, jsApiTicket);
 
-            return new CustomJsonResult<JsApiConfigParams>(ResultType.Success, ResultCode.Success, "", parms);
+            return parms;
         }
+
+
         public JsApiPayParams GetJsApiPayParams(WxAppInfoConfig config, string prepayId)
         {
             JsApiPayParams parms = new JsApiPayParams(config.AppId, config.PayKey, prepayId);

@@ -9,12 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace LocalS.Service.Api.HealthApp
 {
     public class DeviceService : BaseService
     {
-        public CustomJsonResult InitBind(string operater, string userId, string deviceId)
+        public CustomJsonResult InitBind(string operater, string userId, string deviceId,string requestUrl)
         {
             var result = new CustomJsonResult();
 
@@ -38,12 +39,14 @@ namespace LocalS.Service.Api.HealthApp
                     step = 4;
             }
 
+            LogUtil.Info("requestUrl：" + requestUrl);
             var ret = new
             {
                 UserInfo = new
                 {
                     NickName = d_SenvivUser.NickName
                 },
+                OpenJsSdk= SdkFactory.Wx.GetJsApiConfigParams(config, HttpUtility.UrlDecode(requestUrl)),
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
                 Step = step
             };

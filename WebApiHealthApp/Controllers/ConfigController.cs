@@ -25,7 +25,7 @@ namespace WebApiHealthApp.Controllers
 
             var configParams = SdkFactory.Wx.GetJsApiConfigParams(config, rop.RequestUrl);
 
-            return new OwnApiHttpResponse<JsApiConfigParams>(configParams);
+            return null;
         }
 
   
