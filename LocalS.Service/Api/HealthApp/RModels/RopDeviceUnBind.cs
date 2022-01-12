@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.HealthApp
 {
-    public class RopDeviceBindInfoFill
+    public class RopDeviceUnBind
     {
-
+        public string DeviceId { get; set; }
     }
 }

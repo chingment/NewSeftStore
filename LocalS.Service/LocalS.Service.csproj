@@ -158,9 +158,9 @@
     <Compile Include="Api\HealthApp\DeviceService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />
     <Compile Include="Api\HealthApp\QuestService.cs" />
-    <Compile Include="Api\HealthApp\RModels\RopDeviceBindInfoFill.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindSerialNo.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopDeviceUnBind.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthInfo.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthUrl.cs" />
     <Compile Include="Api\HealthApp\RModels\RopQuestFill.cs" />

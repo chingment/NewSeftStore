@@ -1,24 +1,38 @@
 <template>
-  <div id="pg_device_bind">
+  <div id="pg_device_info">
     <div class="step-1">
       <div class="lm-header-big">
         <div class="bg-title">设备解绑</div>
         <div class="sm-title">以下是您已绑定的设备</div>
       </div>
-      <div class="form">
-        <mt-cell title="使用者" />
-        <mt-field label="设备号" placeholder="请输入S/N号">
-          <img src="@/assets/images/icon_scan_code.png" height="32px" width="32px">
-        </mt-field>
+
+      <div v-for="(item, index) in devices" :key="index" class="device">
+        <div class="form">
+          <mt-cell title="设备号">
+            <span>{{ item.id }}</span>
+          </mt-cell>
+          <mt-cell title="使用者">
+            <span>{{ item.userSignName }}</span>
+          </mt-cell>
+          <mt-cell title="绑定状态">
+            <span>{{ item.bindStatus.text }}</span>
+          </mt-cell>
+          <mt-cell v-if="item.bindStatus.value==1" title="绑定时间">
+            <span>{{ item.bindTime }}</span>
+          </mt-cell>
+          <mt-cell v-if="item.bindStatus.value==2" title="解绑时间">
+            <span>{{ item.unBindTime }}</span>
+          </mt-cell>
+        </div>
+        <mt-button v-if="item.bindStatus.value==1" class="btn-unbind" type="primary" @click="onUnBind(item)">解绑</mt-button>
       </div>
-      <mt-button class="btn-scan" type="primary" @click="onSaveStep1">解绑</mt-button>
     </div>
 
   </div>
 
 </template>
 <script>
-import { initInfo } from '@/api/device'
+import { initInfo, unBind } from '@/api/device'
 export default {
   name: 'App',
   components: {
@@ -26,7 +40,8 @@ export default {
   data() {
     return {
       loading: false,
-      appInfo: {}
+      appInfo: {},
+      devices: []
     }
   },
   created() {
@@ -38,8 +53,23 @@ export default {
       initInfo({ }).then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.appInfo = d.appInfo
+          this.devices = d.devices
         }
         this.loading = false
+      })
+    },
+    onUnBind(item) {
+      this.$messagebox.confirm('确定要解绑设备?').then(action => {
+        this.loading = true
+        unBind({ deviceId: item.id }).then(res => {
+          if (res.result === 1) {
+            this.onInit()
+          } else {
+            this.$toast(res.message)
+          }
+          this.loading = false
+        })
       })
     }
   }
@@ -48,42 +78,16 @@ export default {
 
 <style lang="scss" scope>
 
-#pg_device_bind{
+#pg_device_info{
     padding: 20px;
 
 .form{
     padding: 50px 0px;
 }
 
-    .btn-scan{
+    .btn-unbind{
         width: 100%;
     }
 }
 
-.popup-toolbar{
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(234, 234, 234);
-    height: 40px;
-    .close{
-    width: 2em;
-    height: 2rem;
-    right: 0;
-    position: absolute;
-    top: 2px;
-    }
-}
-
-.pa-box{
-  text-align: center;
-
-  .img-pa{
-    height: 300px;
-    width: 300px;
-  }
-
-  .tip{
-    padding: 30px;
-  }
-}
 </style>

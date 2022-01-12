@@ -42,9 +42,9 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse BindInfoFill(RopDeviceBindInfoFill rop)
+        public OwnApiHttpResponse UnBind(RopDeviceUnBind rop)
         {
-            var result = HealthAppServiceFactory.Device.BindInfoFill(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = HealthAppServiceFactory.Device.UnBind(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
     }

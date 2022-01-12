@@ -175,7 +175,7 @@ export default {
           // console.log(skip_id)
           for (let i = 0; i < questions.length; i++) {
             if (questions[i].id === skip_id) {
-              // console.log('nextSkip:' + i)
+              // console.log('nextSkip:' + i + 'q_item.id:' + q_item.id + 'skip_id:' + skip_id)
               this.nextSkip = i
             }
           }
@@ -193,7 +193,16 @@ export default {
         if (this.nextSkip == null) {
           jump_to = q_idx + 1
         } else {
-          jump_to = this.nextSkip + 1
+          console.log('this.nextSkip:' + this.nextSkip + ',val:' + q_idx)
+          if (q_idx > this.nextSkip) {
+            console.log('a')
+            jump_to = q_idx + 1
+
+            // jump_to = this.nextSkip + 1
+          } else {
+            console.log('b')
+            jump_to = this.nextSkip + 1
+          }
           this.nextSkip = null
         }
       }

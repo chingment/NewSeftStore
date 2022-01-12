@@ -22,14 +22,16 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public CustomJsonResult Fill(string operater, string userId,RopQuestFill rop)
+        public CustomJsonResult Fill(string operater, string userId, RopQuestFill rop)
         {
 
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId).FirstOrDefault();
 
             if (d_UserDevice != null)
             {
-                d_UserDevice.BindInfoFillTime = DateTime.Now;
+                d_UserDevice.InfoFillTime = DateTime.Now;
+                d_UserDevice.BindTime = DateTime.Now;
+                d_UserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Bind;
                 d_UserDevice.Mender = operater;
                 d_UserDevice.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();

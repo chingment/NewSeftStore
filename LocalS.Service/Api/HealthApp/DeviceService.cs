@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.HealthApp
 {
     public class DeviceService : BaseService
     {
-        public CustomJsonResult InitBind(string operater, string userId, string deviceId,string requestUrl)
+        public CustomJsonResult InitBind(string operater, string userId, string deviceId, string requestUrl)
         {
             var result = new CustomJsonResult();
 
@@ -29,24 +29,30 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_UserDevice != null)
             {
-                if (d_UserDevice.BindDeviceTime == null)
-                    step = 1;
-                else if (d_UserDevice.BindPhoneTime == null)
-                    step = 2;
-                else if (d_UserDevice.BindInfoFillTime == null)
-                    step = 3;
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Bind)
+                {
+                    if (d_UserDevice.BindDeviceIdTime == null)
+                        step = 1;
+                    else if (d_UserDevice.BindPhoneTime == null)
+                        step = 2;
+                    else if (d_UserDevice.InfoFillTime == null)
+                        step = 3;
+                    else
+                        step = 4;
+                }
                 else
-                    step = 4;
+                {
+                    step =1;
+                }
             }
 
-            LogUtil.Info("requestUrl：" + requestUrl);
             var ret = new
             {
                 UserInfo = new
                 {
                     NickName = d_SenvivUser.NickName
                 },
-                OpenJsSdk= SdkFactory.Wx.GetJsApiConfigParams(config, HttpUtility.UrlDecode(requestUrl)),
+                OpenJsSdk = SdkFactory.Wx.GetJsApiConfigParams(config, HttpUtility.UrlDecode(requestUrl)),
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
                 Step = step
             };
@@ -56,9 +62,36 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId)
         {
+            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId).ToList();
+
+            List<object> devices = new List<object>();
+
+            foreach (var d_UserDevice in d_UserDevices)
+            {
+                var bindStatus = new FieldModel();
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Bind)
+                {
+                    bindStatus = new FieldModel(1, "已绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                {
+                    bindStatus = new FieldModel(2, "已解绑");
+                }
+
+                devices.Add(new
+                {
+                    Id = d_UserDevice.DeviceId,
+                    UserSignName = "ddd",
+                    BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
+                    UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
+                    BindStatus = bindStatus
+                });
+            }
+
             var ret = new
             {
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
+                Devices = devices,
             };
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -98,7 +131,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.SvUserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
-                d_UserDevice.BindDeviceTime = DateTime.Now;
+                d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SenvivUserDevice.Add(d_UserDevice);
@@ -106,7 +139,7 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                d_UserDevice.BindDeviceTime = DateTime.Now;
+                d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.Mender = operater;
                 d_UserDevice.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
@@ -127,7 +160,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.SvUserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
-                d_UserDevice.BindDeviceTime = DateTime.Now;
+                d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
@@ -136,8 +169,8 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                if (d_UserDevice.BindDeviceTime == null)
-                    d_UserDevice.BindDeviceTime = DateTime.Now;
+                if (d_UserDevice.BindDeviceIdTime == null)
+                    d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
                 d_UserDevice.Mender = operater;
                 d_UserDevice.MendTime = DateTime.Now;
@@ -154,9 +187,19 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
         }
 
-        public CustomJsonResult BindInfoFill(string operater, string userId, RopDeviceBindInfoFill rop)
+        public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
-            return null;
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            if (d_UserDevice != null)
+            {
+                d_UserDevice.UnBindTime = DateTime.Now;
+                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.UnBind;
+                d_UserDevice.Creator = operater;
+                d_UserDevice.CreateTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
         }
     }
 }

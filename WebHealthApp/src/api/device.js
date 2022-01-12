@@ -32,10 +32,19 @@ export function bindPhoneNumber(data) {
   })
 }
 
+export function unBind(data) {
+  return request({
+    url: '/device/unBind',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initBind: initBind,
   initInfo: initInfo,
   bindSerialNo: bindSerialNo,
-  bindPhoneNumber: bindPhoneNumber
+  bindPhoneNumber: bindPhoneNumber,
+  unBind: unBind
 }
 
