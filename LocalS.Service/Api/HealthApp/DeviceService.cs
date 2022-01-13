@@ -191,7 +191,7 @@ namespace LocalS.Service.Api.HealthApp
         {
             var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig(d_User.MerchId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_User.DeptId);
 
             var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv,d_User.TrdUserId, rop.DeviceId);
 

@@ -65,6 +65,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_SenvivUser = new Entity.SenvivUser();
                 d_SenvivUser.Id = IdWorker.Build(IdType.NewGuid);
                 d_SenvivUser.MerchId = merchId;
+                d_SenvivUser.DeptId = "46";
                 d_SenvivUser.WxOpenId = userInfo_Result.openid;
                 d_SenvivUser.NickName = userInfo_Result.nickname;
                 d_SenvivUser.Avatar = userInfo_Result.headimgurl;

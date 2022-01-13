@@ -145,7 +145,6 @@
     <Compile Include="Sdk\EasemobSdkProvider.cs" />
     <Compile Include="Sdk\PayRefundResult.cs" />
     <Compile Include="Sdk\Senviv4GProvider.cs" />
-    <Compile Include="Sdk\SenvivProvider.cs" />
     <Compile Include="Sdk\ZfbSdkProvider.cs" />
     <Compile Include="Sdk\IPaySdkProvider.cs" />
     <Compile Include="Sdk\PayBuildWxJsPayInfoResult.cs" />

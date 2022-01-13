@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.HealthApp
             using (TransactionScope ts = new TransactionScope())
             {
                 var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-                var config_Senviv = BizFactory.Senviv.GetConfig(d_User.MerchId);
+                var config_Senviv = BizFactory.Senviv.GetConfig(d_User.DeptId);
                 if (d_User.TrdUserId == null)
                 {
                     var post = new

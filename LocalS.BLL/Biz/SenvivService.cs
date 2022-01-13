@@ -37,6 +37,16 @@ namespace LocalS.BLL
         }
     }
 
+    public class WxTemplateModel
+    {
+        public string OpenId { get; set; }
+        public string AccessToken { get; set; }
+        public string TemplateId { get; set; }
+
+        public string SenvivDeptId { get; set; }
+
+    }
+
     public class SenvivService : BaseService
     {
         public readonly string TAG = "SenvivService";
@@ -887,7 +897,7 @@ namespace LocalS.BLL
         {
             try
             {
-                var config_Senviv = GetConfig("");
+                var config_Senviv = GetConfig(deptId);
 
                 LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
 
@@ -1412,7 +1422,6 @@ namespace LocalS.BLL
             }
         }
 
-
         public WxAppInfoConfig GetWxAppInfoConfigByUserId(string userId)
         {
             WxAppInfoConfig config = new WxAppInfoConfig();
@@ -1436,49 +1445,20 @@ namespace LocalS.BLL
             return null;
         }
 
-        public SenvivConfig GetConfig(string merchId)
+        public SenvivConfig GetConfig(string deptId)
         {
             var config = new SenvivConfig();
-            config.AccessToken = GetApiAccessToken();
-            config.SenvivDeptId = "64";
+            if (deptId == "32")
+            {
+                config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
+                config.SenvivDeptId = "32";
+            }
+            else if (deptId == "46")
+            {
+                config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
+                config.SenvivDeptId = "46";
+            }
             return config;
-        }
-
-        private string GetApiAccessToken()
-        {
-            string name = "全线通月子会所";
-
-            string key = string.Format("Senviv_{0}_AccessToken", name);
-
-            var redis = new RedisClient<string>();
-            var accessToken = redis.KGetString(key);
-
-            if (accessToken == null)
-            {
-
-                var loginRequest = new LoginRequest("", new { name = name, pwd = "qxt123456" });
-
-                SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-
-                var result = api.DoPost(loginRequest);
-
-                if (result.Result == ResultType.Success)
-                {
-
-                    accessToken = result.Data.Data.AuthorizationCode;
-
-                    redis.KSet(key, accessToken, new TimeSpan(0, 30, 0));
-
-                }
-
-                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，已过期，重新获取", key));
-            }
-            else
-            {
-                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，value：{1}", key, accessToken));
-            }
-
-            return accessToken;
         }
 
         public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
@@ -1573,8 +1553,8 @@ namespace LocalS.BLL
 
             if (d_User.DeptId == "32")
             {
-                var cofig = GetConfig("");
-                model.AccessToken =SdkFactory.Senviv.GetWxPaAccessToken(cofig);
+                var cofig = GetConfig("32");
+                model.AccessToken = SdkFactory.Senviv.GetWxPaAccessToken(cofig);
             }
             else
             {
