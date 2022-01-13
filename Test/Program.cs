@@ -16,6 +16,7 @@ using Lumos.Redis;
 using MyWeiXinSdk;
 using Newtonsoft.Json.Linq;
 using NPinyin;
+using SenvivSdk;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,366 +35,71 @@ using XrtPaySdk;
 namespace Test
 {
 
-    public class Merc
-    {
-        public string Id { get; set; }
-        public string PId { get; set; }
-
-        public string Name { get; set; }
-    }
-
     class Program
     {
-
-
-
-        public static sbyte[] a(byte[] myByte)
-        {
-            sbyte[] mySByte = new sbyte[myByte.Length];
-
-            for (int i = 0; i < myByte.Length; i++)
-            {
-                if (myByte[i] > 127)
-                    mySByte[i] = (sbyte)(myByte[i] - 256);
-                else
-                    mySByte[i] = (sbyte)myByte[i];
-            }
-
-            return mySByte;
-        }
-        public static string UrlEncode1(string str)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in str)
-            {
-                if (HttpUtility.UrlEncode(c.ToString()).Length > 1)
-                {
-                    sb.Append(HttpUtility.UrlEncode(c.ToString()).ToUpper());
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-            }
-            return sb.ToString();
-        }
-
-        public static string RemoveNotLetter(string title)
-        {
-            var listSign = new List<string> { "|", "'", ",", "&", ".", "!" };
-            var notLetter = Regex.Split(title, @"[a-zA-Z]/[0-9]", RegexOptions.IgnoreCase).Where(r => r.Trim() != string.Empty).ToList();
-            var newLetter = new List<string>();
-
-            for (int i = notLetter.Count - 1; i >= 0; i--)
-            {
-                if (notLetter[i].Trim().Length == 0)
-                {
-                    notLetter.RemoveAt(i);
-                    continue;
-                }
-
-                if (notLetter[i].Trim().Length > 1)
-                {
-                    for (int j = 0; j < notLetter[i].Trim().Length; j++)
-                    {
-                        newLetter.Add(notLetter[i].Trim().Substring(j, 1));
-                    }
-                    notLetter.RemoveAt(i);
-                }
-            }
-
-            notLetter.AddRange(newLetter);
-            foreach (string sign in notLetter)
-            {
-                if (sign.Trim().Length == 0) continue;
-
-                if (!listSign.Contains(sign.Trim()))
-                {
-                    title = title.Replace(sign.Trim(), "");
-                }
-            }
-            return title;
-        }
-
         public static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
-        public static DateTime TicksToDate(string time)
-        {
-            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
-        }
-
-        public static string GetHourText(double hour)
-        {
-            if (hour <= 0)
-                return "0";
-
-            return hour.ToString("0.00");
-        }
-
-        public static DateTime TicksToDate(long time)
-        {
-            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
-
-        }
-
-        public class DateValuePoint
-        {
-            public List<long> DataTime { get; set; }
-
-            public List<int> DataValue { get; set; }
-        }
-
-
-        public class Stock
-        {
-            public string StoreName
-            {
-                get; set;
-            }
-            public string ShopName
-            {
-                get; set;
-            }
-
-            public string DeviceCode
-            {
-                get; set;
-            }
-
-            public string SkuName
-            {
-                get; set;
-            }
-
-            public int Quantity
-            {
-                get; set;
-            }
-
-        }
-
-
-        public static string GetSign(string app_id, string app_key, string secret, long timespan, string data)
-        {
-            var sb = new StringBuilder();
-
-            sb.Append(app_id);
-            sb.Append(app_key);
-            sb.Append(secret);
-            sb.Append(timespan.ToString());
-            sb.Append(data);
-
-            var material = string.Concat(sb.ToString().OrderBy(c => c));
-
-            var input = Encoding.UTF8.GetBytes(material);
-
-            var hash = SHA256Managed.Create().ComputeHash(input);
-
-            StringBuilder sb2 = new StringBuilder();
-            foreach (byte b in hash)
-                sb2.Append(b.ToString("x2"));
-
-            string str = sb2.ToString();
-
-            return str;
-        }
-
-        public static string[] GetSons(string pId)
-        {
-            List<Merc> list = new List<Merc>();
-            list.Add(new Merc { Id = "1", Name = "1", PId = "0" });
-            list.Add(new Merc { Id = "2", Name = "2", PId = "1" });
-            list.Add(new Merc { Id = "3", Name = "3", PId = "2" });
-            list.Add(new Merc { Id = "4", Name = "4", PId = "0" });
-            list.Add(new Merc { Id = "5", Name = "5", PId = "0" });
-
-            var query = list.Where(m => m.Id == pId).ToList();
-
-            var list2 = query.Concat(GetSonList(list, pId));
-
-            var arr = list2.Select(m => m.Id).ToArray();
-
-            return arr;
-        }
-
-        public static IEnumerable<Merc> GetSonList(List<Merc> list, string id)
-        {
-            var query = list.Where(m => m.PId == id).ToList();
-
-            return query.ToList().Concat(query.ToList().SelectMany(t => GetSonList(list, t.Id)));
-        }
-
-        public static int GetWeeksCountBetweenTime(int gesWeek, int gesDay, DateTime dtBegin, DateTime dtEnd)
-        {
-            if (dtEnd <= dtBegin)
-            {
-                return 0;
-            }
-
-            double totalDays = (dtEnd - dtBegin).TotalDays;
-
-            totalDays = gesWeek * 7 + 2 + totalDays;
-
-            double week = totalDays / 7;
-
-            double t1 = Math.Floor(week);
-            double t2 = totalDays - t1 * 7;
-
-
-            //double weeks = 0;
-            //if (dtBegin.DayOfWeek == DayOfWeek.Monday)
-            //{
-            //    weeks = Math.Ceiling(totalDays / 7);
-            //}
-            //else
-            //{
-            //    if (dtBegin.DayOfWeek == DayOfWeek.Sunday)
-            //    {
-            //        totalDays -= 1;
-            //    }
-            //    else
-            //    {
-            //        totalDays -= 7 - ((int)dtBegin.DayOfWeek - 1);
-            //    }
-            //    weeks = Math.Ceiling(totalDays / 7) + 1;
-            //}
-            //如果算某天是某段时间内的第几周，实际上就是算以这个时间作为结束时间的周数,直接调用该函数，dtEnd传入某天的值即可。
-            return 0;
-        }
 
         static void Main(string[] args)
         {
 
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
-            DateTime dt1 = DateTime.Parse("2021-12-31");
-            DateTime dt2 = DateTime.Now;
-            int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
-            if (month >= 1)
+            var post = new
             {
-               DateTime? rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
-               DateTime? rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
+                userid = "",
+                code = "",
+                mobile = "13800138000",
+                wechatid = "",
+                nick = "test",
+                headimgurl = "test",
+                sex = "1",
+                birthday = DateTime.Now.ToUnifiedFormatDate(),
+                height = 100,
+                weight = 100,
+                createtime = "2020-06-22T10:23:58.784Z", //创建时间
+                updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
+                SAS = "1",
+                BreathingMachine = "1",
+                Perplex = "1", //目前困扰 （查看字典表）
+                OtherPerplex = "1", //目前困扰输入其它 ,
+                Medicalhistory = "1", //既往史 （查看字典表）
+                OtherFamilyhistory = "1", //既往史其它 ,
+                Medicine = "1", //用药情况 （查看字典表）
+                OtherMedicine = "1", //用药情况其它 ,
+                deptid = "46"
+            };
 
+            //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
+            //var restb = api.DoPost(b);
 
-            }
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXzK4ogIzu99ch2EaMLa6EKIKVXzvn6vi4wRi1No7AhC0=\"";
+            string sn = "1004E747A049";
+            //"1"  //461x847d0113A4
+            string deptid = "46";
+            //UserCreateRequest a = new UserCreateRequest(token, post);
+            //var rest = api.DoPost(a);
+            //if (rest.Data != null)
+            //{
+            //    if (rest.Data.Data != null)
+            //    {
+            //        if (!string.IsNullOrEmpty(rest.Data.Data.userid))
+            //        {
+            //            string userid = rest.Data.Data.userid;
+            //            BoxBindRequest b = new BoxBindRequest(token, new { sn = sn, userid = userid, deptid = deptid });
+            //            var restb = api.DoPost(b);
 
+            //            BoxUnBindRequest c = new BoxUnBindRequest(token, new { sn = sn, userid = userid, deptid = deptid });
+            //            var restc = api.DoPost(c);
+            //        }
 
+            //    }
+            //}
 
-            //DateTime dt1 = DateTime.Parse("2021-12-10 00:00:00");
-            //DateTime dt2 = DateTime.Parse("2021-12-17 00:00:00");
+            //BoxBindRequest b = new BoxBindRequest(token, new { sn = sn, userid = "461x847d0113A4", deptid = deptid });
+            //var restb = api.DoPost(b);
 
-            /// int ccc = GetWeeksCountBetweenTime(7, 2, dt1, dt2);
-
-            var cccc =Lumos.CommonUtil.GetPregnancyWeeks(dt1, dt2);
-
-            int Month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
-
-            var tt2 = SdkFactory.Senviv.GetBoxList();
-
-            string ssss = tt2.ToJsonString();
-
-
-            var odd = new { aa = "1", bb = "2" };
-
-            var jt = odd.ToJsonObject<Dictionary<string, string>>();
-
-
-            var d1 = SdkFactory.Senviv.GetBox("1004C7B08289");
-
-
-            var sss222 = GetSons("1");
-
-
-
-            double s = double.Parse("114.35808563232422");
-
-            var senvivUsersss = SdkFactory.Senviv.GetUserList();
-
-            var t1 = senvivUsersss.Select(m => m.userid).Distinct().ToArray();
-
-
-            var senvivUsers = SdkFactory.Senviv.GetBoxList();
-
-            var ss5 = senvivUsers.Where(m => m.sn == "1004BEBFB258").ToList();
-
-            ///  var s1 = senvivUsers.Select(m => m.sn).Distinct().ToArray();
-
-            Dictionary<string, string> ss = new Dictionary<string, string>();
-
-            foreach (var senvivUser in senvivUsers)
-            {
-                if (!ss.ContainsKey(senvivUser.sn))
-                {
-                    ss.Add(senvivUser.sn, senvivUser.sn);
-                }
-                else
-                {
-                    Console.WriteLine(senvivUser.sn);
-                }
-            }
-            //1004BEBFB258
-            //1004BEBFB402
-            //1004BEBFB34B
-            //1004BEBFB5DB
-            //1004BEBFB373
-            //1004BEBFB5ED
-            //1004BEBFAF3F
-            //1004C7B07BE8
-            //1004C7B07C88
-            //1004C7B07D61
-
-            //"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYTqsWr3w9CnC55XasyUWJC0="
-
-            string accessToken = SdkFactory.Senviv.GetApiAccessToken();
-            WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxf0d98b28bebd0c82";
-            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
-            string sss = SdkFactory.Senviv.GetWxPaAccessToken("32");
-            //config.AppId = "wxc6e80f8c575cf3f5";
-            //config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
-            config.TrdAccessToken = "w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg13C0pSC2kyEYsSAyVACHZYbodUOlsik14ZSQtyb3gJ6E=".Replace("\"", "");
-
-            var configParams = SdkFactory.Wx.GetJsApiConfigParams(config, "dasd");
-
-            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", configParams);
-
-            //OAuthApi.GetUserOpenIds(config.TrdAccessToken);
-
-            //string openId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
-            //string first = "您好，您的净水设备租约即使到期";
-            //string keyword1 = "123";
-            //string keyword2 = "智能净水器";
-            //string keyword3 = "2016年6月23日到期";
-            //string remark = "请尽快充值续费，以免影响您的设备使用！";
-            //on0dM51JLVry0lnKT4Q8nsJBRXNs
-
-
-            //string mp_AppId = "wx80caad9ea41a00fc";
-            //string mp_PagePath = "pages/orderconfirm/orderconfirm?skus=%5B%7B%22cartId%22%3A0%2C%22id%22%3A%22722b4d565604489fa1f40c548e0bc114%22%2C%22quantity%22%3A1%2C%22shopMode%22%3A1%2C%22shopMethod%22%3A5%2C%22shopId%22%3A%220%22%7D%5D&shopMethod=5&action=rentfee&pOrderId=610464520210226113146434";
-            //StringBuilder sb = new StringBuilder();
-            //sb.Append("{\"touser\":\"" + openId + "\",");
-            //sb.Append("\"template_id\":\"xCwBMd_h0ekopGsYIj7fpi7-qAY54qbuROTzmS7odhQ\",");
-            //sb.Append("\"url\":\"\", ");
-            //sb.Append("\"miniprogram\":{");
-            //sb.Append("\"appid\":\""+ mp_AppId + "\",");
-            //sb.Append("\"pagepath\":\""+ mp_PagePath + "\"");
-            //sb.Append("},");
-            //sb.Append("\"data\":{");
-            //sb.Append("\"first\":{ \"value\":\"" + first + "。\",\"color\":\"#173177\" },");
-            //sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
-            //sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
-            //sb.Append("\"keyword3\":{ \"value\":\"" + keyword3 + "\",\"color\":\"#FF3030\" },");
-            //sb.Append("\"remark\":{ \"value\":\""+ remark + "\",\"color\":\"#173177\"}");
-            //sb.Append("}}");
-
-
-            //WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(accessToken, WxPostDataType.Text, sb.ToString());
-            //WxApi c = new WxApi();
-
-            //c.DoPost(templateSend);
-
-
-
+            BoxUnBindRequest c = new BoxUnBindRequest(token, new { sn = sn, userid = "461x847d0113A4", deptid = deptid });
+            var restc = api.DoPost(c);
 
             Console.ReadLine();
         }

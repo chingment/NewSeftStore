@@ -51,8 +51,12 @@
   <ItemGroup>
     <Compile Include="ApiDoRequest.cs" />
     <Compile Include="IApiPostRequest.cs" />
+    <Compile Include="Post\BoxBindRequest.cs" />
+    <Compile Include="Post\BoxBindResult.cs" />
     <Compile Include="Post\BoxListRequest.cs" />
     <Compile Include="Post\BoxListResult.cs" />
+    <Compile Include="Post\BoxUnBindRequest.cs" />
+    <Compile Include="Post\BoxUnBindResult.cs" />
     <Compile Include="Post\DeptSubordinateListRequest.cs" />
     <Compile Include="Post\DeptSubordinateListResult.cs" />
     <Compile Include="Post\GetAccessTokenRequest.cs" />
@@ -62,6 +66,8 @@
     <Compile Include="Post\RequestResult.cs" />
     <Compile Include="Post\LoginRequest.cs" />
     <Compile Include="Post\LoginResult.cs" />
+    <Compile Include="Post\UserCreateRequest.cs" />
+    <Compile Include="Post\UserCreateResult.cs" />
     <Compile Include="Post\UserListRequest.cs" />
     <Compile Include="Post\UserListResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

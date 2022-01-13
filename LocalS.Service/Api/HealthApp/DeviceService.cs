@@ -42,7 +42,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else
                 {
-                    step =1;
+                    step = 1;
                 }
             }
 
@@ -189,6 +189,13 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            var r_Api_BindBox = SdkFactory.Senviv4G.UnBindBox(d_User.TrdUserId, rop.DeviceId);
+
+            if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");
+
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice != null)
             {

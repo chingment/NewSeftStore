@@ -56,5 +56,13 @@ namespace LocalS.BLL
             }
         }
 
+        public static Senviv4GProvider Senviv4G
+        {
+            get
+            {
+                return new Senviv4GProvider();
+            }
+        }
+
     }
 }

@@ -28,6 +28,7 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string DeptId { get; set; }
+        public string TrdUserId { get; set; }
         public string MerchId { get; set; }
         public string WxOpenId { get; set; }
         public string PhoneNumber { get; set; }
@@ -44,16 +45,23 @@ namespace LocalS.Entity
         public DateTime? LastReportTime { get; set; }
         public E_SenvivUserCareLevel CareLevel { get; set; }
         public E_SenvivUserCareMode CareMode { get; set; }
+        //呼吸暂停综合证
         public string Sas { get; set; }
+        //是否使用呼吸机
         public bool IsUseBreathMach { get; set; }
+        //目前困扰
         public string Perplex { get; set; }
         public string PerplexOt { get; set; }
+        //既往史
         public string MedicalHis { get; set; }
         public string MedicalHisOt { get; set; }
+        //用药情况
         public string Medicine { get; set; }
         public string MedicineOt { get; set; }
+        //传染病
         public string Infection { get; set; }
         public string InfectionOt { get; set; }
+        //过敏药
         public string Allergy { get; set; }
         public string AllergyOt { get; set; }
         public string Creator { get; set; }
