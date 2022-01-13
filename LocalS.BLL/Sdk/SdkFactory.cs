@@ -48,21 +48,21 @@ namespace LocalS.BLL
             }
         }
 
-        public static SenvivProvider Senviv
-        {
-            get
-            {
-                return new SenvivProvider();
-            }
-        }
-
-        public static Senviv4GProvider Senviv4G
+        public static Senviv4GProvider Senviv
         {
             get
             {
                 return new Senviv4GProvider();
             }
         }
+
+        //public static Senviv4GProvider Senviv4G
+        //{
+        //    get
+        //    {
+        //        return new Senviv4GProvider();
+        //    }
+        //}
 
     }
 }

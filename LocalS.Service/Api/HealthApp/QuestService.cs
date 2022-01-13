@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.HealthApp
             using (TransactionScope ts = new TransactionScope())
             {
                 var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-
+                var config_Senviv = BizFactory.Senviv.GetConfig(d_User.MerchId);
                 if (d_User.TrdUserId == null)
                 {
                     var post = new
@@ -57,7 +57,7 @@ namespace LocalS.Service.Api.HealthApp
                         deptid = "46"
                     };
 
-                    var r_Api_UserCreate = SdkFactory.Senviv4G.UserCreate(post);
+                    var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
                     if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.HealthApp
                 if (d_UserDevice == null)
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
-                var r_Api_BindBox = SdkFactory.Senviv4G.BindBox(d_User.TrdUserId, d_UserDevice.DeviceId);
+                var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv,d_User.TrdUserId, d_UserDevice.DeviceId);
 
                 if (r_Api_BindBox.Result != 1)
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");

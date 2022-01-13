@@ -37,7 +37,7 @@ namespace LocalS.BLL.Task
                         string keyword2 = d_Article.Title;
                         string remark = "感谢您的支持,祝您的宝宝健康成长";
 
-                        bool isFlag = SdkFactory.Senviv.SendArticle(d_Women.SvUserId, first, keyword1, keyword2, remark, url);
+                        bool isFlag = BizFactory.Senviv.SendArticle(d_Women.SvUserId, first, keyword1, keyword2, remark, url);
 
                         if (isFlag)
                         {

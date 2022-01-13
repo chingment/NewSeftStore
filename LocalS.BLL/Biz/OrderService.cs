@@ -2595,17 +2595,17 @@ namespace LocalS.BLL.Biz
         {
             var result = new CustomJsonResult();
 
-            string key = string.Format("RentOrder:{0}", pOrderId);
-            var redis = new RedisClient<string>();
-            var value = redis.KGetString(key);
-            if (value == null)
-            {
-                var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, pOrderId);
-                if (result2.Result == ResultType.Success)
-                {
-                    redis.KSet(key, "1", new TimeSpan(24, 0, 0));
-                }
-            }
+            //string key = string.Format("RentOrder:{0}", pOrderId);
+            //var redis = new RedisClient<string>();
+            //var value = redis.KGetString(key);
+            //if (value == null)
+            //{
+            //    var result2 = SdkFactory.Senviv.NotifyClientExpire(clientUserId, skuId, skuName, expireDate, pOrderId);
+            //    if (result2.Result == ResultType.Success)
+            //    {
+            //        redis.KSet(key, "1", new TimeSpan(24, 0, 0));
+            //    }
+            //}
 
             return result;
         }

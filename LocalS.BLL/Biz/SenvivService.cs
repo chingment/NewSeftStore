@@ -887,9 +887,11 @@ namespace LocalS.BLL
         {
             try
             {
+                var config_Senviv = GetConfig("");
+
                 LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
 
-                var d1 = SdkFactory.Senviv.GetUserHealthDayReport(deptId, userId);
+                var d1 = SdkFactory.Senviv.GetUserHealthDayReport(config_Senviv, userId);
 
                 if (d1 == null)
                 {
@@ -1420,7 +1422,7 @@ namespace LocalS.BLL
             return config;
         }
 
-        public WxAppInfoConfig GetWxAppInfoConfigByMerchIdAndDeviceId(string merchId,string deviceId)
+        public WxAppInfoConfig GetWxAppInfoConfigByMerchIdAndDeviceId(string merchId, string deviceId)
         {
             WxAppInfoConfig config = new WxAppInfoConfig();
             config.AppId = "wxc6e80f8c575cf3f5";
@@ -1432,6 +1434,170 @@ namespace LocalS.BLL
         public object GetWxAppInfoByUserId(string userId)
         {
             return null;
+        }
+
+        public SenvivConfig GetConfig(string merchId)
+        {
+            var config = new SenvivConfig();
+            config.AccessToken = GetApiAccessToken();
+            config.SenvivDeptId = "64";
+            return config;
+        }
+
+        private string GetApiAccessToken()
+        {
+            string name = "全线通月子会所";
+
+            string key = string.Format("Senviv_{0}_AccessToken", name);
+
+            var redis = new RedisClient<string>();
+            var accessToken = redis.KGetString(key);
+
+            if (accessToken == null)
+            {
+
+                var loginRequest = new LoginRequest("", new { name = name, pwd = "qxt123456" });
+
+                SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+                var result = api.DoPost(loginRequest);
+
+                if (result.Result == ResultType.Success)
+                {
+
+                    accessToken = result.Data.Data.AuthorizationCode;
+
+                    redis.KSet(key, accessToken, new TimeSpan(0, 30, 0));
+
+                }
+
+                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，已过期，重新获取", key));
+            }
+            else
+            {
+                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，value：{1}", key, accessToken));
+            }
+
+            return accessToken;
+        }
+
+        public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
+        {
+            var template = GetTemplate(userId, "month_report");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
+        public bool SendArticle(string userId, string first, string keyword1, string keyword2, string remark, string url)
+        {
+            var template = GetTemplate(userId, "pregnancy_remind");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
+        public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
+        {
+            var template = GetTemplate(userId, "health_monitor");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword3\":{ \"value\":\"" + keyword3 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
+        public WxTemplateModel GetTemplate(string userId, string template)
+        {
+            var model = new WxTemplateModel();
+
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_User.DeptId).FirstOrDefault();
+
+            model.OpenId = d_User.WxOpenId;
+            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            model.SenvivDeptId = d_User.DeptId;
+
+            if (d_User.DeptId == "32")
+            {
+                var cofig = GetConfig("");
+                model.AccessToken =SdkFactory.Senviv.GetWxPaAccessToken(cofig);
+            }
+            else
+            {
+                WxAppInfoConfig config = new WxAppInfoConfig();
+                config.AppId = "wxc6e80f8c575cf3f5";
+                config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+                model.AccessToken = SdkFactory.Wx.GetApiAccessToken(config);
+            }
+
+            switch (template)
+            {
+                case "month_report":
+                    model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    break;
+                case "health_monitor":
+                    model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
+                    break;
+                case "pregnancy_remind":
+                    model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
+                    break;
+            }
+
+            return model;
         }
     }
 }

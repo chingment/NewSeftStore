@@ -191,7 +191,9 @@ namespace LocalS.Service.Api.HealthApp
         {
             var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var r_Api_BindBox = SdkFactory.Senviv4G.UnBindBox(d_User.TrdUserId, rop.DeviceId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_User.MerchId);
+
+            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv,d_User.TrdUserId, rop.DeviceId);
 
             if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");

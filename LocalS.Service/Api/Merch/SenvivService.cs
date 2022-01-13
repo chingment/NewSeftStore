@@ -1200,7 +1200,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
                 string keyword2 = "总体评分" + rpt.TotalScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
-                var isSend = SdkFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
+                var isSend = BizFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
                 if (isSend)
                 {
                     rpt.IsSend = true;
@@ -1285,7 +1285,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
                 string keyword2 = "总体评分" + rpt.TotalScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
-                var isSend = SdkFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
+                var isSend = BizFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
                 if (isSend)
                 {
                     rpt.IsSend = true;
@@ -1571,7 +1571,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string keyword3 = dic["keyword3"];
                 string remark = dic["remark"];
                 string url = "";
-                SdkFactory.Senviv.SendHealthMonitor(rop.UserId, first, keyword1, keyword2, keyword3, remark);
+                BizFactory.Senviv.SendHealthMonitor(rop.UserId, first, keyword1, keyword2, keyword3, remark);
             }
 
             SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);

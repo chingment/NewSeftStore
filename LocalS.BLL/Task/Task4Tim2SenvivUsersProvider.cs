@@ -39,7 +39,9 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                var senvivUsers = SdkFactory.Senviv.GetUserList();
+                var config_Senviv = BizFactory.Senviv.GetConfig("88273829");
+
+                var senvivUsers = SdkFactory.Senviv.GetUserList(config_Senviv);
 
                 LogUtil.Info(TAG, "SenvivUsers.Count:" + senvivUsers.Count);
 
@@ -130,7 +132,7 @@ namespace LocalS.BLL.Task
                 }
 
 
-                var senvivBoxs = SdkFactory.Senviv.GetBoxList();
+                var senvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
                 LogUtil.Info(TAG, "senvivBoxs.Length:" + senvivBoxs.Count);
                 foreach (var senvivBox in senvivBoxs)
                 {
