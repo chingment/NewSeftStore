@@ -35,10 +35,10 @@ namespace LocalS.BLL.Biz
             return m_Store;
         }
 
-        public WxAppInfoConfig GetWxMpAppInfoConfig(string storeId)
+        public WxAppConfig GetWxMpAppInfoConfig(string storeId)
         {
 
-            var m_Config = new WxAppInfoConfig();
+            var m_Config = new WxAppConfig();
 
             var d_Store = CurrentDb.Store.Where(m => m.Id == storeId).FirstOrDefault();
             if (d_Store == null)
@@ -55,10 +55,10 @@ namespace LocalS.BLL.Biz
             return m_Config;
         }
 
-        public WxAppInfoConfig GetWxMpAppInfoConfigByAppId(string appId)
+        public WxAppConfig GetWxMpAppInfoConfigByAppId(string appId)
         {
 
-            var m_Config = new WxAppInfoConfig();
+            var m_Config = new WxAppConfig();
 
             var d_Store = CurrentDb.Store.Where(m => m.WxMpAppId == appId).FirstOrDefault();
             if (d_Store == null)

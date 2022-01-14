@@ -33,7 +33,7 @@ namespace MyWeiXinSdk.Tenpay
             return serverurl + "/" + apiname;
         }
 
-        public SortedDictionary<string, string> DoPost(WxAppInfoConfig config, ITenpayPostApi request,bool isUserCert=false)
+        public SortedDictionary<string, string> DoPost(WxAppConfig config, ITenpayPostApi request,bool isUserCert=false)
         {
             SortedDictionary<string, string> m_values = new SortedDictionary<string, string>();
 

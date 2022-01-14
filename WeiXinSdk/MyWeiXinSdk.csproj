@@ -108,7 +108,7 @@
     <Compile Include="Tenpay\ITenpayPostApi.cs" />
     <Compile Include="Tenpay\Model\UnifiedOrderAttach.cs" />
     <Compile Include="Tenpay\Post\TenpayContractOrderApi.cs" />
-    <Compile Include="WxAppInfoConfig.cs" />
+    <Compile Include="WxAppConfig.cs" />
     <Compile Include="Tenpay\ITenpayRequest.cs" />
     <Compile Include="Tenpay\Model\UnifiedOrderResult.cs" />
     <Compile Include="Tenpay\Post\TenpayCouponQueryInfoApi.cs" />

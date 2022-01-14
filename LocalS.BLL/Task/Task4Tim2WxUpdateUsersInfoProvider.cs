@@ -18,7 +18,7 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                var wxAppInfoConfig = new WxAppInfoConfig();
+                var wxAppInfoConfig = new WxAppConfig();
                 wxAppInfoConfig.AppId = "wxc6e80f8c575cf3f5";
                 wxAppInfoConfig.AppSecret = "fee895c9923da26a4d42d9c435202b37";
                 var openIds = SdkFactory.Wx.GetUserOpenIds(wxAppInfoConfig);

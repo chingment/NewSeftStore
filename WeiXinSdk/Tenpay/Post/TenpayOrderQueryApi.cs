@@ -35,7 +35,7 @@ namespace MyWeiXinSdk.Tenpay
         /// </summary>
         /// <param name="config"></param>
         /// <param name="out_trade_no">商户内部的订单号</param>
-        public TenpayOrderQueryApi(WxAppInfoConfig config, string out_trade_no)
+        public TenpayOrderQueryApi(WxAppConfig config, string out_trade_no)
         {
             SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();
 

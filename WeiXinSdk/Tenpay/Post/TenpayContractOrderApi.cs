@@ -30,7 +30,7 @@ namespace MyWeiXinSdk.Tenpay
             }
         }
 
-        public TenpayContractOrderApi(WxAppInfoConfig config, UnifiedOrder order)
+        public TenpayContractOrderApi(WxAppConfig config, UnifiedOrder order)
         {
             SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();
 

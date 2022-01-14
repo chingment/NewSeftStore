@@ -8,7 +8,7 @@ namespace MyWeiXinSdk.Tenpay
 {
     public interface ITenpayRequest
     {
-        SortedDictionary<string, string> DoPost(WxAppInfoConfig config, ITenpayPostApi obj, bool isUserCert = false);
+        SortedDictionary<string, string> DoPost(WxAppConfig config, ITenpayPostApi obj, bool isUserCert = false);
 
         string ReturnContent { get; }
 

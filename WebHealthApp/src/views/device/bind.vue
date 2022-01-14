@@ -71,7 +71,7 @@ export default {
         phoneNumber: '',
         validCode: ''
       },
-      step: 2,
+      step: 1,
       popupVisibleByPaQrCode: false
     }
   },
@@ -87,7 +87,8 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.userInfo = d.userInfo
-
+          this.appInfo = d.appInfo
+          document.title = d.appInfo.title
           if (d.step === 1 || d.step === 2) {
             this.step = d.step
           } else if (d.step === 3) {

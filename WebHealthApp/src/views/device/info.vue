@@ -63,10 +63,9 @@ export default {
       this.$messagebox.confirm('确定要解绑设备?').then(action => {
         this.loading = true
         unBind({ deviceId: item.id }).then(res => {
+          this.$toast(res.message)
           if (res.result === 1) {
             this.onInit()
-          } else {
-            this.$toast(res.message)
           }
           this.loading = false
         })

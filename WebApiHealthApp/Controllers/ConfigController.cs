@@ -18,7 +18,7 @@ namespace WebApiHealthApp.Controllers
         public OwnApiHttpResponse<JsApiConfigParams> JsSdk(RopConfigJsSdk rop)
         {
             //string accessToken = SdkFactory.Senviv.GetApiAccessToken();
-            WxAppInfoConfig config = new WxAppInfoConfig();
+            WxAppConfig config = new WxAppConfig();
             config.AppId = "wxc6e80f8c575cf3f5";
             config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
             //config.TrdAccessToken = accessToken;

@@ -19,13 +19,12 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            WxAppInfoConfig config = BizFactory.Senviv.GetWxAppInfoConfigByUserId(userId);
+            var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
 
             int step = 1;
 
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == deviceId).FirstOrDefault();
+            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
 
             if (d_UserDevice != null)
             {
@@ -50,9 +49,9 @@ namespace LocalS.Service.Api.HealthApp
             {
                 UserInfo = new
                 {
-                    NickName = d_SenvivUser.NickName
+                    NickName = d_User.NickName
                 },
-                OpenJsSdk = SdkFactory.Wx.GetJsApiConfigParams(config, HttpUtility.UrlDecode(requestUrl)),
+                OpenJsSdk = SdkFactory.Wx.GetJsApiConfigParams(app_Config, HttpUtility.UrlDecode(requestUrl)),
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
                 Step = step
             };
@@ -62,7 +61,8 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId)
         {
-            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId).ToList();
+            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
 
             List<object> devices = new List<object>();
 
@@ -81,7 +81,7 @@ namespace LocalS.Service.Api.HealthApp
                 devices.Add(new
                 {
                     Id = d_UserDevice.DeviceId,
-                    UserSignName = "ddd",
+                    UserSignName = d_User.NickName,
                     BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
                     UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
                     BindStatus = bindStatus
@@ -108,11 +108,11 @@ namespace LocalS.Service.Api.HealthApp
             if (d_Device == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备号未生效");
 
-            WxAppInfoConfig config = BizFactory.Senviv.GetWxAppInfoConfigByUserId(userId);
+            var config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
 
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(config, d_User.WxOpenId);
+            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(config, d_User.WxPaOpenId);
 
             if (wx_UserInfo == null)
             {
@@ -124,12 +124,12 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, "2801", "未关注公众号，请先关注.");
             }
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
                 d_UserDevice = new SenvivUserDevice();
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
-                d_UserDevice.SvUserId = userId;
+                d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.Creator = operater;
@@ -153,12 +153,12 @@ namespace LocalS.Service.Api.HealthApp
             if (string.IsNullOrEmpty(rop.PhoneNumber))
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
                 d_UserDevice = new SenvivUserDevice();
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
-                d_UserDevice.SvUserId = userId;
+                d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
@@ -176,7 +176,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.MendTime = DateTime.Now;
             }
 
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
             d_User.PhoneNumber = rop.PhoneNumber;
             d_User.Mender = operater;
@@ -189,16 +189,17 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig(d_User.DeptId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUser.DeptId);
 
-            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv,d_User.TrdUserId, rop.DeviceId);
+            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUser.Id, rop.DeviceId);
 
             if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.SvUserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice != null)
             {
                 d_UserDevice.UnBindTime = DateTime.Now;

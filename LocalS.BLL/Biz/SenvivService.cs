@@ -47,6 +47,12 @@ namespace LocalS.BLL
 
     }
 
+    public class WxAppInfo
+    {
+        public string AppName { get; set; }
+    }
+
+
     public class SenvivService : BaseService
     {
         public readonly string TAG = "SenvivService";
@@ -1422,28 +1428,81 @@ namespace LocalS.BLL
             }
         }
 
-        public WxAppInfoConfig GetWxAppInfoConfigByUserId(string userId)
+        //优先级别MerchId,若Merch为空再取deviceId
+        public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string deviceId)
         {
-            WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxc6e80f8c575cf3f5";
-            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+            if (string.IsNullOrEmpty(merchId) && string.IsNullOrEmpty(deviceId))
+                return null;
+
+            if (string.IsNullOrEmpty(merchId))
+            {
+                return GetWxAppConfigByDeviceId(deviceId);
+            }
+            else
+            {
+                return GetWxAppConfigByMerchId(merchId);
+            }
+        }
+        public WxAppInfo GetWxAppInfoByUserId(string userId)
+        {
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            if (d_ClientUser == null)
+                return null;
+
+            var d_SenvivMerchConfig = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
+
+            var appInfo = new WxAppInfo();
+            appInfo.AppName = d_SenvivMerchConfig.WxPaAppName;
+
+            return appInfo;
+        }
+        public WxAppConfig GetWxAppConfigByMerchId(string merchId)
+        {
+
+            var config_SenvivMerch = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == merchId).FirstOrDefault();
+            if (config_SenvivMerch == null)
+                return null;
+
+            var config = new WxAppConfig();
+            config.AppId = config_SenvivMerch.WxPaAppId;
+            config.AppSecret = config_SenvivMerch.WxPaAppSecret;
 
             return config;
         }
-
-        public WxAppInfoConfig GetWxAppInfoConfigByMerchIdAndDeviceId(string merchId, string deviceId)
+        public WxAppConfig GetWxAppConfigByDeviceId(string deviceId)
         {
-            WxAppInfoConfig config = new WxAppInfoConfig();
-            config.AppId = "wxc6e80f8c575cf3f5";
-            config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == deviceId && m.IsStopUse == false).FirstOrDefault();
 
-            return config;
+            if (d_MerchDevice == null)
+                return null;
+
+            return GetWxAppConfigByMerchId(d_MerchDevice.MerchId);
+        }
+        public WxAppConfig GetWxAppConfigByUserId(string userId)
+        {
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            if (d_ClientUser == null)
+                return null;
+
+            var d_SenvivMerchConfig = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
+
+            if (d_SenvivMerchConfig == null)
+                return null;
+
+            var appConfig = new WxAppConfig();
+            appConfig.AppId = d_SenvivMerchConfig.WxPaAppId;
+            appConfig.AppSecret = d_SenvivMerchConfig.WxPaAppSecret;
+            return appConfig;
+
+            //WxAppConfig config = new WxAppConfig();
+            //config.AppId = "wxc6e80f8c575cf3f5";
+            //config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+
+            //return config;
         }
 
-        public object GetWxAppInfoByUserId(string userId)
-        {
-            return null;
-        }
 
         public SenvivConfig GetConfig(string deptId)
         {
@@ -1544,21 +1603,22 @@ namespace LocalS.BLL
         {
             var model = new WxTemplateModel();
 
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_User.DeptId).FirstOrDefault();
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
+            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_SenvivUser.DeptId).FirstOrDefault();
 
-            model.OpenId = d_User.WxOpenId;
+            model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
-            model.SenvivDeptId = d_User.DeptId;
+            model.SenvivDeptId = d_SenvivUser.DeptId;
 
-            if (d_User.DeptId == "32")
+            if (d_SenvivUser.DeptId == "32")
             {
                 var cofig = GetConfig("32");
                 model.AccessToken = SdkFactory.Senviv.GetWxPaAccessToken(cofig);
             }
             else
             {
-                WxAppInfoConfig config = new WxAppInfoConfig();
+                WxAppConfig config = new WxAppConfig();
                 config.AppId = "wxc6e80f8c575cf3f5";
                 config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
                 model.AccessToken = SdkFactory.Wx.GetApiAccessToken(config);

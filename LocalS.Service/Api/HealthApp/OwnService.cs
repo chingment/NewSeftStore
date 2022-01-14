@@ -2,6 +2,7 @@
 using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
+using Lumos.DbRelay;
 using Lumos.Redis;
 using Lumos.Session;
 using System;
@@ -16,7 +17,7 @@ namespace LocalS.Service.Api.HealthApp
     {
         public CustomJsonResult AuthUrl(RopOwnAuthUrl rop)
         {
-            var app_Config = BizFactory.Senviv.GetWxAppInfoConfigByMerchIdAndDeviceId(rop.MerchId, rop.DeviceId);
+            var app_Config = BizFactory.Senviv.GetWxAppInfoConfigByMerchIdOrDeviceId(rop.MerchId, rop.DeviceId);
 
             if (app_Config == null)
             {
@@ -37,7 +38,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var app_Config = BizFactory.Senviv.GetWxAppInfoConfigByMerchIdAndDeviceId(rop.MerchId, rop.DeviceId);
+            var app_Config = BizFactory.Senviv.GetWxAppInfoConfigByMerchIdOrDeviceId(rop.MerchId, rop.DeviceId);
 
             if (app_Config == null)
             {
@@ -59,32 +60,38 @@ namespace LocalS.Service.Api.HealthApp
             }
 
             string merchId = "88273829";
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.WxOpenId == userInfo_Result.openid).FirstOrDefault();
-            if (d_SenvivUser == null)
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == userInfo_Result.openid).FirstOrDefault();
+            if (d_ClientUser == null)
             {
-                d_SenvivUser = new Entity.SenvivUser();
-                d_SenvivUser.Id = IdWorker.Build(IdType.NewGuid);
-                d_SenvivUser.MerchId = merchId;
-                d_SenvivUser.DeptId = "46";
-                d_SenvivUser.WxOpenId = userInfo_Result.openid;
-                d_SenvivUser.NickName = userInfo_Result.nickname;
-                d_SenvivUser.Avatar = userInfo_Result.headimgurl;
-                d_SenvivUser.CreateTime = DateTime.Now;
-                d_SenvivUser.Creator = d_SenvivUser.Id;
-                CurrentDb.SenvivUser.Add(d_SenvivUser);
+                d_ClientUser = new SysClientUser();
+                d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
+                d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
+                d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds");
+                d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
+                d_ClientUser.MerchId = merchId;
+                d_ClientUser.WxPaAppId = app_Config.AppId;
+                d_ClientUser.WxPaOpenId = userInfo_Result.openid;
+                d_ClientUser.NickName = userInfo_Result.nickname;
+                d_ClientUser.Avatar = userInfo_Result.headimgurl;
+                d_ClientUser.BelongType = Enumeration.BelongType.Client;
+                d_ClientUser.RegisterTime = DateTime.Now;
+                d_ClientUser.CreateTime = DateTime.Now;
+                d_ClientUser.Creator = d_ClientUser.Id;
+                CurrentDb.SysClientUser.Add(d_ClientUser);
                 CurrentDb.SaveChanges();
             }
             else
             {
-                d_SenvivUser.NickName = userInfo_Result.nickname;
-                d_SenvivUser.Avatar = userInfo_Result.headimgurl;
-                d_SenvivUser.MendTime = DateTime.Now;
-                d_SenvivUser.Mender = d_SenvivUser.Id;
+                d_ClientUser.NickName = userInfo_Result.nickname;
+                d_ClientUser.Avatar = userInfo_Result.headimgurl;
+                d_ClientUser.MendTime = DateTime.Now;
+                d_ClientUser.Mender = d_ClientUser.Id;
                 CurrentDb.SaveChanges();
             }
 
             string token_key = IdWorker.Build(IdType.NewGuid);
-            var token_val = new { userId = d_SenvivUser.Id };
+            var token_val = new { userId = d_ClientUser.Id, merchId = d_ClientUser.MerchId };
+
             var session = new Session();
             session.Set<Object>(string.Format("token:{0}", token_key), token_val, new TimeSpan(24, 0, 0));
 

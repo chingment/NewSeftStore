@@ -9,9 +9,9 @@ namespace MyWeiXinSdk.Tenpay
     public class TenpayUtil
     {
         private TenpayRequest _request = new TenpayRequest();
-        private WxAppInfoConfig _config = null;
+        private WxAppConfig _config = null;
 
-        public WxAppInfoConfig Config
+        public WxAppConfig Config
         {
             get
             {
@@ -19,7 +19,7 @@ namespace MyWeiXinSdk.Tenpay
             }
         }
 
-        public TenpayUtil(WxAppInfoConfig config)
+        public TenpayUtil(WxAppConfig config)
         {
             this._config = config;
         }

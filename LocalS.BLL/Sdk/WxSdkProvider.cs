@@ -16,7 +16,7 @@ using LocalS.Entity;
 
 namespace LocalS.BLL
 {
-    public class WxSdkProvider : BaseService, IPaySdkProvider<WxAppInfoConfig>
+    public class WxSdkProvider : BaseService, IPaySdkProvider<WxAppConfig>
     {
         private string AES_decrypt(string encryptedData, string iv, string sessionKey)
         {
@@ -49,7 +49,7 @@ namespace LocalS.BLL
             }
 
         }
-        public string GetJsApiTicket(WxAppInfoConfig config)
+        public string GetJsApiTicket(WxAppConfig config)
         {
 
             string key = string.Format("Wx_AppId_{0}_JsApiTicket", config.AppId);
@@ -88,7 +88,7 @@ namespace LocalS.BLL
 
         }
 
-        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(WxAppInfoConfig config, string merch_id, string store_id, string device_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
+        public PayBuildWxJsPayInfoResult PayBuildWxJsPayInfo(WxAppConfig config, string merch_id, string store_id, string device_id, string open_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire = null)
         {
             var result = new PayBuildWxJsPayInfoResult();
 
@@ -137,7 +137,7 @@ namespace LocalS.BLL
             return result;
 
         }
-        public PayBuildQrCodeResult PayBuildQrCode(WxAppInfoConfig config, E_PayCaller payCaller, string merch_id, string store_id, string device_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
+        public PayBuildQrCodeResult PayBuildQrCode(WxAppConfig config, E_PayCaller payCaller, string merch_id, string store_id, string device_id, string order_sn, decimal order_amount, string goods_tag, string create_ip, string body, DateTime? time_expire)
         {
 
             var result = new PayBuildQrCodeResult();
@@ -169,15 +169,15 @@ namespace LocalS.BLL
             return result;
 
         }
-        public string GetWebAuthorizeUrl(WxAppInfoConfig config, string returnUrl)
+        public string GetWebAuthorizeUrl(WxAppConfig config, string returnUrl)
         {
             return OAuthApi.GetAuthorizeUrl(config.AppId, config.Oauth2RedirectUrl + "?returnUrl=" + returnUrl);
         }
-        public WxApiSnsOauth2AccessTokenResult GetWebOauth2AccessToken(WxAppInfoConfig config, string code)
+        public WxApiSnsOauth2AccessTokenResult GetWebOauth2AccessToken(WxAppConfig config, string code)
         {
             return OAuthApi.GetWebOauth2AccessToken(config.AppId, config.AppSecret, code);
         }
-        public string GetApiAccessToken(WxAppInfoConfig config)
+        public string GetApiAccessToken(WxAppConfig config)
         {
             string wxAccessToken = System.Configuration.ConfigurationManager.AppSettings["custom:WxTestAccessToken"];
             if (wxAccessToken != null)
@@ -231,7 +231,7 @@ namespace LocalS.BLL
         {
             return OAuthApi.GetUserInfo(accessToken, openId);
         }
-        public UserInfoModelByMinProramJsCode GetUserInfoByMinProramJsCode(WxAppInfoConfig config, string encryptedData, string iv, string code)
+        public UserInfoModelByMinProramJsCode GetUserInfoByMinProramJsCode(WxAppConfig config, string encryptedData, string iv, string code)
         {
             try
             {
@@ -247,7 +247,7 @@ namespace LocalS.BLL
                 return null;
             }
         }
-        public WxApiJsCode2SessionResult GetJsCode2Session(WxAppInfoConfig config, string code)
+        public WxApiJsCode2SessionResult GetJsCode2Session(WxAppConfig config, string code)
         {
             return OAuthApi.GetWxApiJsCode2Session(config.AppId, config.AppSecret, code);
         }
@@ -266,19 +266,19 @@ namespace LocalS.BLL
                 return null;
             }
         }
-        public string CardCodeDecrypt(WxAppInfoConfig config, string encrypt_code)
+        public string CardCodeDecrypt(WxAppConfig config, string encrypt_code)
         {
             return OAuthApi.CardCodeDecrypt(this.GetApiAccessToken(config), encrypt_code);
         }
-        public WxApiUserInfoResult GetUserInfoByApiToken(WxAppInfoConfig config, string openId)
+        public WxApiUserInfoResult GetUserInfoByApiToken(WxAppConfig config, string openId)
         {
             return OAuthApi.GetUserInfoByApiToken(this.GetApiAccessToken(config), openId);
         }
-        public WxApiGetWxACodeUnlimitResult GetWxACodeUnlimit(WxAppInfoConfig config, string scene, string page)
+        public WxApiGetWxACodeUnlimitResult GetWxACodeUnlimit(WxAppConfig config, string scene, string page)
         {
             return OAuthApi.GetWxACodeUnlimit(this.GetApiAccessToken(config), scene, page);
         }
-        public List<string> GetUserOpenIds(WxAppInfoConfig config)
+        public List<string> GetUserOpenIds(WxAppConfig config)
         {
             return OAuthApi.GetUserOpenIds(this.GetApiAccessToken(config));
         }
@@ -291,7 +291,7 @@ namespace LocalS.BLL
         //    return new CustomJsonResult<JsApiConfigParams>(ResultType.Success, ResultCode.Success, "", parms);
         //}
 
-        public JsApiConfigParams GetJsApiConfigParams(WxAppInfoConfig config, string url)
+        public JsApiConfigParams GetJsApiConfigParams(WxAppConfig config, string url)
         {
             string jsApiTicket = GetJsApiTicket(config);
 
@@ -301,17 +301,17 @@ namespace LocalS.BLL
         }
 
 
-        public JsApiPayParams GetJsApiPayParams(WxAppInfoConfig config, string prepayId)
+        public JsApiPayParams GetJsApiPayParams(WxAppConfig config, string prepayId)
         {
             JsApiPayParams parms = new JsApiPayParams(config.AppId, config.PayKey, prepayId);
 
             return parms;
         }
-        public string GetNotifyEventUrlToken(WxAppInfoConfig config)
+        public string GetNotifyEventUrlToken(WxAppConfig config)
         {
             return config.NotifyEventUrlToken;
         }
-        public string GetCardApiTicket(WxAppInfoConfig config)
+        public string GetCardApiTicket(WxAppConfig config)
         {
 
             string key = string.Format("Wx_AppId_{0}_CardApiTicket", config.AppId);
@@ -349,11 +349,11 @@ namespace LocalS.BLL
             return jsApiTicket;
 
         }
-        public string UploadMultimediaImage(WxAppInfoConfig config, string imageUrl)
+        public string UploadMultimediaImage(WxAppConfig config, string imageUrl)
         {
             return OAuthApi.UploadMultimediaImage(this.GetApiAccessToken(config), imageUrl);
         }
-        public string PayTransQuery(WxAppInfoConfig config, string orderId)
+        public string PayTransQuery(WxAppConfig config, string orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);
@@ -361,7 +361,7 @@ namespace LocalS.BLL
 
             return xml;
         }
-        public bool CheckPayNotifySign(WxAppInfoConfig config, string xml)
+        public bool CheckPayNotifySign(WxAppConfig config, string xml)
         {
 
             var dic1 = MyWeiXinSdk.CommonUtil.XmlToDictionary(xml);
@@ -421,7 +421,7 @@ namespace LocalS.BLL
             }
 
         }
-        public PayTransResult Convert2PayTransResultByQuery(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByQuery(WxAppConfig config, string content)
         {
             var result = new PayTransResult();
 
@@ -453,7 +453,7 @@ namespace LocalS.BLL
 
             return result;
         }
-        public PayTransResult Convert2PayTransResultByNotifyUrl(WxAppInfoConfig config, string content)
+        public PayTransResult Convert2PayTransResultByNotifyUrl(WxAppConfig config, string content)
         {
             var result = new PayTransResult();
 
@@ -513,7 +513,7 @@ namespace LocalS.BLL
 
         //    c.DoPost(templateSend);
         //}
-        public PayRefundResult PayRefund(WxAppInfoConfig config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc)
+        public PayRefundResult PayRefund(WxAppConfig config, string payTranId, string payRefundId, decimal total_fee, decimal refund_fee, string refund_desc)
         {
             var result = new PayRefundResult();
             TenpayUtil tenpayUtil = new TenpayUtil(config);
@@ -526,7 +526,7 @@ namespace LocalS.BLL
         }
 
 
-        public string PayRefundQuery(WxAppInfoConfig config, string payTranId, string payRefundId)
+        public string PayRefundQuery(WxAppConfig config, string payTranId, string payRefundId)
         {
             LogUtil.Info("微信PayRefundQuery->payTranId" + payTranId + ",payRefundId:" + payRefundId);
             CustomJsonResult result = new CustomJsonResult();

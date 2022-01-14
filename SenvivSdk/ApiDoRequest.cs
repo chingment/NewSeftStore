@@ -78,7 +78,7 @@ namespace SenvivSdk
 
                 this.responseString = doPost.ResponseString;
 
-                //LogUtil.Info(TAG, responseString);
+                LogUtil.Info(TAG, responseString);
 
                 if (request.ApiUrl.IndexOf("BoxUnbind") > -1 || request.ApiUrl.IndexOf("Boxbind") > -1)
                 {

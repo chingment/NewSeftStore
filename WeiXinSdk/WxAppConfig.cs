@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyWeiXinSdk
 {
-    public class WxAppInfoConfig
+    public class WxAppConfig
     {
         //公众号，小程序 AppId
         public string AppId { get; set; }

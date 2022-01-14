@@ -17,10 +17,11 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+        public string UserId { get; set; }
         public string SvUserId { get; set; }
         public string DeviceId { get; set; }
         public DateTime? BindTime { get; set; }
-        public DateTime? BindDeviceIdTime{ get; set; }
+        public DateTime? BindDeviceIdTime { get; set; }
         public DateTime? BindPhoneTime { get; set; }
         public DateTime? InfoFillTime { get; set; }
         public DateTime? UnBindTime { get; set; }

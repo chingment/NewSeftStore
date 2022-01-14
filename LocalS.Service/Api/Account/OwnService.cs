@@ -329,7 +329,7 @@ namespace LocalS.Service.Api.Account
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "微信信息认证失败[01]");
             }
 
-            var wxAppInfoConfig = new WxAppInfoConfig();
+            var wxAppInfoConfig = new WxAppConfig();
 
             wxAppInfoConfig.AppId = d_Store.WxMpAppId;
             wxAppInfoConfig.AppSecret = d_Store.WxMpAppSecret;
@@ -904,7 +904,7 @@ namespace LocalS.Service.Api.Account
         {
             var result = new CustomJsonResult();
 
-            var m_Config = new WxAppInfoConfig();
+            var m_Config = new WxAppConfig();
 
             var d_Store = CurrentDb.Store.Where(m => m.WxMpAppId == rop.AppId).FirstOrDefault();
             if (d_Store == null)
@@ -1001,7 +1001,7 @@ namespace LocalS.Service.Api.Account
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成小程序码失败[01]");
                     }
 
-                    var wxAppInfoConfig = new WxAppInfoConfig();
+                    var wxAppInfoConfig = new WxAppConfig();
 
                     wxAppInfoConfig.AppId = d_Store.WxMpAppId;
                     wxAppInfoConfig.AppSecret = d_Store.WxMpAppSecret;
