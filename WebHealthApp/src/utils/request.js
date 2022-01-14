@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import { Indicator } from 'mint-ui'
+import { Indicator, Toast } from 'mint-ui'
 axios.defaults.retry = 4
 axios.defaults.retryDelay = 1000
 
@@ -50,6 +50,7 @@ service.interceptors.response.use(
     if (res.result === 1 || res.result === 2) {
       return res
     } else {
+      Toast('应用发送异常')
       return Promise.reject(new Error(res.message || 'Error'))
     }
   },
