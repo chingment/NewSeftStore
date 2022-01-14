@@ -58,17 +58,20 @@ namespace LocalS.BLL.Task
 
                             if (d_SenvivUser == null)
                             {
+                               
                                 SysClientUser d_ClientUser = new SysClientUser();
                                 d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
-                                d_ClientUser.UserName= IdWorker.Build(IdType.NewGuid);
+                                d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
                                 d_ClientUser.PasswordHash = PassWordHelper.HashPassword("fedgsgseee.3ff");
                                 d_ClientUser.Avatar = i_SenvivUser.headimgurl;
                                 d_ClientUser.NickName = i_SenvivUser.nick;
                                 d_ClientUser.PhoneNumber = i_SenvivUser.mobile;
                                 d_ClientUser.Sex = i_SenvivUser.sex;
+                                d_ClientUser.MerchId = config_Senviv.MerchId;
                                 d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
+                                d_ClientUser.RegisterTime = DateTime.Now;
                                 d_ClientUser.CreateTime = DateTime.Now;
-                                d_ClientUser.Creator= IdWorker.Build(IdType.EmptyGuid);
+                                d_ClientUser.Creator = IdWorker.Build(IdType.EmptyGuid);
                                 CurrentDb.SysClientUser.Add(d_ClientUser);
                                 CurrentDb.SaveChanges();
 
@@ -76,7 +79,6 @@ namespace LocalS.BLL.Task
                                 d_SenvivUser.Id = i_SenvivUser.userid;
                                 d_SenvivUser.DeptId = i_SenvivUser.deptid;
                                 d_SenvivUser.UserId = d_ClientUser.Id;
-                                //d_SenvivUser.WxOpenId = senvivUser.wechatid;
                                 d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
                                 d_SenvivUser.NickName = i_SenvivUser.nick;
                                 d_SenvivUser.FullName = i_SenvivUser.account;
@@ -138,7 +140,6 @@ namespace LocalS.BLL.Task
 
                     LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivBoxs.Count:{1}", deptId, i_SenvivBoxs.Count));
 
- 
                     foreach (var i_SenvivBox in i_SenvivBoxs)
                     {
                         var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
@@ -161,6 +162,7 @@ namespace LocalS.BLL.Task
                             d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
                             d_MerchDevice.MerchId = d_Device.CurUseMerchId;
                             d_MerchDevice.DeviceId = d_Device.Id;
+                            d_MerchDevice.IsStopUse = false;
                             d_MerchDevice.Creator = d_Device.Creator;
                             d_MerchDevice.CreateTime = d_Device.CreateTime;
                             CurrentDb.MerchDevice.Add(d_MerchDevice);

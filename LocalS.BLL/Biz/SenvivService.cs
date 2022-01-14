@@ -1523,11 +1523,13 @@ namespace LocalS.BLL
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
                 config.SenvivDeptId = "32";
+                config.MerchId = "88273829";
             }
             else if (deptId == "46")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
                 config.SenvivDeptId = "46";
+                config.MerchId = "88273829";
             }
             return config;
         }
