@@ -1468,6 +1468,10 @@ namespace LocalS.BLL
             config.AppId = config_SenvivMerch.WxPaAppId;
             config.AppSecret = config_SenvivMerch.WxPaAppSecret;
 
+            Dictionary<string, string> exts = new Dictionary<string, string>();
+            exts.Add("MerchId", merchId);
+            exts.Add("SvDeptId", config_SenvivMerch.SvDeptId);
+            config.Exts = exts;
             return config;
         }
         public WxAppConfig GetWxAppConfigByDeviceId(string deviceId)
@@ -1494,6 +1498,14 @@ namespace LocalS.BLL
             var appConfig = new WxAppConfig();
             appConfig.AppId = d_SenvivMerchConfig.WxPaAppId;
             appConfig.AppSecret = d_SenvivMerchConfig.WxPaAppSecret;
+
+
+            Dictionary<string, string> exts = new Dictionary<string, string>();
+            exts.Add("MerchId", d_SenvivMerchConfig.MerchId);
+            exts.Add("SvDeptId", d_SenvivMerchConfig.SvDeptId);
+            exts.Add("WxPaOpenId", d_ClientUser.WxPaOpenId);
+            appConfig.Exts = exts;
+
             return appConfig;
 
             //WxAppConfig config = new WxAppConfig();
@@ -1605,7 +1617,7 @@ namespace LocalS.BLL
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
-            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.DeptId == d_SenvivUser.DeptId).FirstOrDefault();
+            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
             model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";

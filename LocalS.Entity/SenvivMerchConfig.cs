@@ -10,7 +10,7 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
-        public string DeptId { get; set; }
+        public string SvDeptId { get; set; }
         public string WxPaAppName { get; set; }
         public string WxPaAppId { get; set; }
         public string WxPaAppSecret { get; set; }

@@ -45,22 +45,23 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, "2802", "配置未生效");
             }
 
-            var oauth2_Result = SdkFactory.Wx.GetWebOauth2AccessToken(app_Config, rop.Code);
+            var r_Api_Oauth2 = SdkFactory.Wx.GetWebOauth2AccessToken(app_Config, rop.Code);
 
-            if (oauth2_Result.errcode != null)
+            if (r_Api_Oauth2.errcode != null)
             {
                 return new CustomJsonResult(ResultType.Failure, "2803", "解释身份信息失败");
             }
 
-            var userInfo_Result = SdkFactory.Wx.GetUserInfo(oauth2_Result.access_token, oauth2_Result.openid);
+            var r_Api_UseInfo = SdkFactory.Wx.GetUserInfo(r_Api_Oauth2.access_token, r_Api_Oauth2.openid);
 
-            if (userInfo_Result == null)
+            if (r_Api_UseInfo == null)
             {
                 return new CustomJsonResult(ResultType.Failure, "2804", "解释身份信息失败");
             }
 
-            string merchId = "88273829";
-            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == userInfo_Result.openid).FirstOrDefault();
+            string merchId = app_Config.Exts["MerchId"];
+
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == r_Api_UseInfo.openid).FirstOrDefault();
             if (d_ClientUser == null)
             {
                 d_ClientUser = new SysClientUser();
@@ -68,11 +69,11 @@ namespace LocalS.Service.Api.HealthApp
                 d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
                 d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds");
                 d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
+                d_ClientUser.NickName = r_Api_UseInfo.nickname;
+                d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
                 d_ClientUser.MerchId = merchId;
                 d_ClientUser.WxPaAppId = app_Config.AppId;
-                d_ClientUser.WxPaOpenId = userInfo_Result.openid;
-                d_ClientUser.NickName = userInfo_Result.nickname;
-                d_ClientUser.Avatar = userInfo_Result.headimgurl;
+                d_ClientUser.WxPaOpenId = r_Api_UseInfo.openid;
                 d_ClientUser.BelongType = Enumeration.BelongType.Client;
                 d_ClientUser.RegisterTime = DateTime.Now;
                 d_ClientUser.CreateTime = DateTime.Now;
@@ -82,14 +83,15 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                d_ClientUser.NickName = userInfo_Result.nickname;
-                d_ClientUser.Avatar = userInfo_Result.headimgurl;
+                d_ClientUser.NickName = r_Api_UseInfo.nickname;
+                d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
                 d_ClientUser.MendTime = DateTime.Now;
                 d_ClientUser.Mender = d_ClientUser.Id;
                 CurrentDb.SaveChanges();
             }
 
             string token_key = IdWorker.Build(IdType.NewGuid);
+
             var token_val = new { userId = d_ClientUser.Id, merchId = d_ClientUser.MerchId };
 
             var session = new Session();

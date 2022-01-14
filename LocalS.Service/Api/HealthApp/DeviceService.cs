@@ -106,13 +106,13 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
             if (d_Device == null)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "设备号未生效");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备号不存在");
 
-            var config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
+            var cf_AppConfig = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
 
-            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+            string wxPaOpenId = cf_AppConfig.Exts["WxPaOpenId"];
 
-            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(config, d_User.WxPaOpenId);
+            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(cf_AppConfig, wxPaOpenId);
 
             if (wx_UserInfo == null)
             {

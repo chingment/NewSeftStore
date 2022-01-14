@@ -30,7 +30,8 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
-            var config_Senviv = BizFactory.Senviv.GetConfig("46");
+
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUser.DeptId);
 
             using (TransactionScope ts = new TransactionScope())
             {

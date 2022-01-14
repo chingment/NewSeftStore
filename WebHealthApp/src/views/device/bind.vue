@@ -88,7 +88,7 @@ export default {
           var d = res.data
           this.userInfo = d.userInfo
           this.appInfo = d.appInfo
-          document.title = d.appInfo.title
+          document.title = d.appInfo.appName
           if (d.step === 1 || d.step === 2) {
             this.step = d.step
           } else if (d.step === 3) {

@@ -32,5 +32,7 @@ namespace MyWeiXinSdk
         //第三方已对接AccessToken，首先引用
         public string TrdAccessToken { get; set; }
 
+        public Dictionary<string, string> Exts { get; set; }
+
     }
 }
