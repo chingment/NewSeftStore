@@ -44,7 +44,7 @@
       </div>
 
       <div class="pa-box">
-        <img class="img-pa" src="@/assets/test/tt.jpg" alt="" @click="onPaImg">
+        <img class="img-pa" :src="appInfo.paQrCode" alt="" @click="onPaImg">
         <div class="tip">请用手长按图片关注公众号</div>
       </div>
 
@@ -65,7 +65,10 @@ export default {
       userInfo: {
         nickName: ''
       },
-      appInfo: {},
+      appInfo: {
+        wxQrCode: '',
+        appName: ''
+      },
       formByBind: {
         deviceId: '',
         phoneNumber: '',

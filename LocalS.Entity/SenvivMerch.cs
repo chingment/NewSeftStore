@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
     [Table("SenvivMerchConfig")]
-    public class SenvivMerchConfig
+    public class SenvivMerch
     {
         [Key]
         public string Id { get; set; }

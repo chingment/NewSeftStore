@@ -50,6 +50,7 @@ namespace LocalS.BLL
     public class WxAppInfo
     {
         public string AppName { get; set; }
+        public string PaQrCode { get; set; }
     }
 
 
@@ -1450,27 +1451,27 @@ namespace LocalS.BLL
             if (d_ClientUser == null)
                 return null;
 
-            var d_SenvivMerchConfig = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
+            var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
 
             var appInfo = new WxAppInfo();
-            appInfo.AppName = d_SenvivMerchConfig.WxPaAppName;
-
+            appInfo.AppName = d_SenvivMerch.WxPaAppName;
+            appInfo.PaQrCode = d_SenvivMerch.WxPaQrCode;
             return appInfo;
         }
         public WxAppConfig GetWxAppConfigByMerchId(string merchId)
         {
 
-            var config_SenvivMerch = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == merchId).FirstOrDefault();
-            if (config_SenvivMerch == null)
+            var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == merchId).FirstOrDefault();
+            if (d_SenvivMerch == null)
                 return null;
 
             var config = new WxAppConfig();
-            config.AppId = config_SenvivMerch.WxPaAppId;
-            config.AppSecret = config_SenvivMerch.WxPaAppSecret;
+            config.AppId = d_SenvivMerch.WxPaAppId;
+            config.AppSecret = d_SenvivMerch.WxPaAppSecret;
 
             Dictionary<string, string> exts = new Dictionary<string, string>();
             exts.Add("MerchId", merchId);
-            exts.Add("SvDeptId", config_SenvivMerch.SvDeptId);
+            exts.Add("SvDeptId", d_SenvivMerch.SvDeptId);
             config.Exts = exts;
             return config;
         }
@@ -1490,19 +1491,19 @@ namespace LocalS.BLL
             if (d_ClientUser == null)
                 return null;
 
-            var d_SenvivMerchConfig = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
+            var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
 
-            if (d_SenvivMerchConfig == null)
+            if (d_SenvivMerch == null)
                 return null;
 
             var appConfig = new WxAppConfig();
-            appConfig.AppId = d_SenvivMerchConfig.WxPaAppId;
-            appConfig.AppSecret = d_SenvivMerchConfig.WxPaAppSecret;
+            appConfig.AppId = d_SenvivMerch.WxPaAppId;
+            appConfig.AppSecret = d_SenvivMerch.WxPaAppSecret;
 
 
             Dictionary<string, string> exts = new Dictionary<string, string>();
-            exts.Add("MerchId", d_SenvivMerchConfig.MerchId);
-            exts.Add("SvDeptId", d_SenvivMerchConfig.SvDeptId);
+            exts.Add("MerchId", d_SenvivMerch.MerchId);
+            exts.Add("SvDeptId", d_SenvivMerch.SvDeptId);
             exts.Add("WxPaOpenId", d_ClientUser.WxPaOpenId);
             appConfig.Exts = exts;
 
@@ -1619,7 +1620,7 @@ namespace LocalS.BLL
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
-            var d_Config = CurrentDb.SenvivMerchConfig.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
+            var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
             model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
