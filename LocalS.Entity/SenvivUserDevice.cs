@@ -8,8 +8,9 @@ namespace LocalS.Entity
     public enum SenvivUserDeviceBindStatus
     {
         None = 0,
-        Bind = 1,
-        UnBind = 2
+        NotBind = 1,
+        Binded = 2,
+        UnBind = 3
     }
 
     [Table("SenvivUserDevice")]

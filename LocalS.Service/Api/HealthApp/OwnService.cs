@@ -83,6 +83,9 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
+                d_ClientUser.MerchId = merchId;
+                d_ClientUser.WxPaAppId = app_Config.AppId;
+                d_ClientUser.WxPaOpenId = r_Api_UseInfo.openid;
                 d_ClientUser.NickName = r_Api_UseInfo.nickname;
                 d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
                 d_ClientUser.MendTime = DateTime.Now;

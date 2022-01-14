@@ -20,15 +20,13 @@ namespace LocalS.Service.Api.HealthApp
             var result = new CustomJsonResult();
 
             var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
-
             int step = 1;
-
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
 
             if (d_UserDevice != null)
             {
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Bind)
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind|| d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
                 {
                     if (d_UserDevice.BindDeviceIdTime == null)
                         step = 1;
@@ -41,7 +39,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else
                 {
-                    step = 1;
+                    step = 4;
                 }
             }
 
@@ -69,13 +67,17 @@ namespace LocalS.Service.Api.HealthApp
             foreach (var d_UserDevice in d_UserDevices)
             {
                 var bindStatus = new FieldModel();
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Bind)
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
                 {
-                    bindStatus = new FieldModel(1, "已绑定");
+                    bindStatus = new FieldModel(1, "未绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                {
+                    bindStatus = new FieldModel(2, "已绑定");
                 }
                 else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
                 {
-                    bindStatus = new FieldModel(2, "已解绑");
+                    bindStatus = new FieldModel(3, "已解绑");
                 }
 
                 devices.Add(new
@@ -108,11 +110,11 @@ namespace LocalS.Service.Api.HealthApp
             if (d_Device == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备号不存在");
 
-            var cf_AppConfig = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
+            var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
 
-            string wxPaOpenId = cf_AppConfig.Exts["WxPaOpenId"];
+            string wxPaOpenId = app_Config.Exts["WxPaOpenId"];
 
-            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(cf_AppConfig, wxPaOpenId);
+            var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(app_Config, wxPaOpenId);
 
             if (wx_UserInfo == null)
             {
@@ -132,6 +134,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
+                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.NotBind;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SenvivUserDevice.Add(d_UserDevice);
@@ -139,6 +142,7 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
+                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.NotBind;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.Mender = operater;
                 d_UserDevice.MendTime = DateTime.Now;
@@ -202,6 +206,9 @@ namespace LocalS.Service.Api.HealthApp
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice != null)
             {
+                d_UserDevice.BindDeviceIdTime = null;
+                d_UserDevice.BindPhoneTime = null;
+                d_UserDevice.InfoFillTime = null;
                 d_UserDevice.UnBindTime = DateTime.Now;
                 d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.UnBind;
                 d_UserDevice.Creator = operater;

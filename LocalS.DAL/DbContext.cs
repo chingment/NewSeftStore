@@ -78,7 +78,6 @@ namespace LocalS.DAL
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
         public IDbSet<WxACode> WxACode { get; set; }
         public IDbSet<SenvivUser> SenvivUser { get; set; }
-        public IDbSet<SenvivDept> SenvivDept { get; set; }
         public IDbSet<SenvivUserDevice> SenvivUserDevice { get; set; }
         public IDbSet<SenvivArticle> SenvivArticle { get; set; }
         public IDbSet<SenvivHealthDayReport> SenvivHealthDayReport { get; set; }

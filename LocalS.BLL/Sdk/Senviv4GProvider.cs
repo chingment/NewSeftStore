@@ -74,20 +74,6 @@ namespace LocalS.BLL
                 if (result.Result == ResultType.Success)
                 {
                     accessToken = result.Data.Data.access_token;
-
-                    string appId = result.Data.Data.appid;
-
-                    var d_SenvivDept = CurrentDb.SenvivDept.Where(m => m.Id == config.SenvivDeptId).FirstOrDefault();
-
-                    if (d_SenvivDept == null)
-                    {
-                        d_SenvivDept = new Entity.SenvivDept();
-                        d_SenvivDept.Id = config.SenvivDeptId;
-                        d_SenvivDept.AppId = appId;
-                        CurrentDb.SenvivDept.Add(d_SenvivDept);
-                        CurrentDb.SaveChanges();
-                    }
-
                     LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，value：{1}，已过期，重新获取成功", key, accessToken));
                     redis.KSet(key, accessToken, new TimeSpan(0, 30, 0));
                 }

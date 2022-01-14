@@ -83,7 +83,7 @@ namespace LocalS.Service.Api.HealthApp
             }
 
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.BindStatus == Entity.SenvivUserDeviceBindStatus.NotBind).FirstOrDefault();
 
             if (d_UserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
@@ -99,7 +99,7 @@ namespace LocalS.Service.Api.HealthApp
             d_UserDevice.SvUserId = d_SenvivUser.Id;
             d_UserDevice.InfoFillTime = DateTime.Now;
             d_UserDevice.BindTime = DateTime.Now;
-            d_UserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Bind;
+            d_UserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Binded;
             d_UserDevice.Mender = operater;
             d_UserDevice.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();

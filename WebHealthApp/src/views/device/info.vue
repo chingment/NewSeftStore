@@ -17,14 +17,14 @@
           <mt-cell title="绑定状态">
             <span>{{ item.bindStatus.text }}</span>
           </mt-cell>
-          <mt-cell v-if="item.bindStatus.value==1" title="绑定时间">
+          <mt-cell v-if="item.bindStatus.value==2" title="绑定时间">
             <span>{{ item.bindTime }}</span>
           </mt-cell>
-          <mt-cell v-if="item.bindStatus.value==2" title="解绑时间">
+          <mt-cell v-if="item.bindStatus.value==3" title="解绑时间">
             <span>{{ item.unBindTime }}</span>
           </mt-cell>
         </div>
-        <mt-button v-if="item.bindStatus.value==1" class="btn-unbind" type="primary" @click="onUnBind(item)">解绑</mt-button>
+        <mt-button v-if="item.bindStatus.value==2" class="btn-unbind" type="primary" @click="onUnBind(item)">解绑</mt-button>
       </div>
     </div>
 
