@@ -18,6 +18,8 @@ namespace LocalS.Entity
         public string WxPaTplIdMonthReport { get; set; }
         public string WxPaTplIdHealthMonitor { get; set; }
         public string WxPaTplIdPregnancyRemind { get; set; }
+        public string WxPaTplDevieBindNotify { get; set; }
+        public string WxPaTplDevieUnBindNotify { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

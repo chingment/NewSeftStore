@@ -83,7 +83,7 @@ namespace LocalS.Service.Api.HealthApp
                 devices.Add(new
                 {
                     Id = d_UserDevice.DeviceId,
-                    UserSignName = d_User.NickName,
+                    UserName = d_User.NickName,
                     BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
                     UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
                     BindStatus = bindStatus
@@ -148,6 +148,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.MendTime = DateTime.Now;
                 CurrentDb.SaveChanges();
             }
+
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
         }
@@ -215,6 +216,9 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SaveChanges();
             }
+
+            BizFactory.Senviv.SendDeviceUnBind(userId, "您已成功解绑设备，不再接收报告信息", rop.DeviceId, DateTime.Now.ToUnifiedFormatDateTime(), "感觉使用。");
+
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
         }

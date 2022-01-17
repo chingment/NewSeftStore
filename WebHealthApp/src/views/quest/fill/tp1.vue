@@ -4,9 +4,29 @@
       <div class="bg-title">资料完善</div>
       <div class="sm-title">完善资料更准更好的为你服务</div>
     </div>
-    <flow-form :questions="questions" />
 
-    <mt-button class="btn-scan" type="primary" @click="onSave">保存</mt-button>
+    <div v-show="devicesFormShow" class="form-devices">
+      <div v-for="(item, index) in devices" :key="index" class="device">
+        <div class="form">
+          <mt-cell title="设备号">
+            <span>{{ item.id }}</span>
+          </mt-cell>
+          <mt-cell title="使用者">
+            <span>{{ item.userName }}</span>
+          </mt-cell>
+          <mt-cell title="状态">
+            <span>{{ item.status.text }}</span>
+          </mt-cell>
+        </div>
+        <mt-button class="btn-go-fill" type="primary" @click="onGoFill(item)">进入</mt-button>
+      </div>
+    </div>
+
+    <div v-show="questionsFormShow">
+      <flow-form :questions="questions" />
+
+      <mt-button class="btn-scan" type="primary" @click="onSave">保存</mt-button>
+    </div>
   </div>
 </template>
 <script>
@@ -21,7 +41,11 @@ export default {
   },
   data() {
     return {
+      deviceId: null,
+      devices: null,
       appInfo: {},
+      devicesFormShow: false,
+      questionsFormShow: false,
       questions: [
         {
           id: 'fullName',
@@ -142,6 +166,8 @@ export default {
     }
   },
   created() {
+    this.deviceId = typeof this.$route.query.deviceId === 'undefined' ? null : this.$route.query.deviceId
+    console.log(this.deviceId)
     this.onInit()
   },
   methods: {
@@ -150,13 +176,33 @@ export default {
       initFill({}).then(res => {
         if (res.result === 1) {
           var d = res.data
+          this.devices = d.devices
+
+          if (this.deviceId == null) {
+            if (this.devices.length === 1) {
+              this.deviceId = this.devices[0].id
+              this.devicesFormShow = false
+              this.questionsFormShow = true
+            } else {
+              this.devicesFormShow = true
+              this.questionsFormShow = false
+            }
+          } else {
+            this.devicesFormShow = false
+            this.questionsFormShow = true
+          }
         }
         this.loading = false
       })
     },
+    onGoFill(item) {
+      this.deviceId = item.id
+      this.devicesFormShow = false
+      this.questionsFormShow = true
+    },
     onSave() {
       this.loading = true
-      fill({}).then(res => {
+      fill({ deviceId: this.deviceId }).then(res => {
         if (res.result === 1) {
 
         }
@@ -169,9 +215,14 @@ export default {
 <style lang="scss" scope>
 
 .quest-fill-tp1{
-  background-color: #f6f6f8;
   height: 100%;
    padding: 20px;
+
+   .btn-go-fill{
+        width: 100%;
+        margin: 30px 0px;
+    }
+
 }
 
 </style>

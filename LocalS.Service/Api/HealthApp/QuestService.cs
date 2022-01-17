@@ -1,5 +1,6 @@
 ﻿using LocalS.BLL;
 using LocalS.BLL.Biz;
+using LocalS.Entity;
 using Lumos;
 using Lumos.Redis;
 using System;
@@ -16,8 +17,38 @@ namespace LocalS.Service.Api.HealthApp
         //初始页面-资料填写
         public CustomJsonResult InitFill(string operater, string userId)
         {
+
+            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
+
+            List<object> devices = new List<object>();
+
+            foreach (var d_UserDevice in d_UserDevices)
+            {
+                var bindStatus = new FieldModel();
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
+                {
+                    bindStatus = new FieldModel(1, "未绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                {
+                    bindStatus = new FieldModel(2, "已绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                {
+                    bindStatus = new FieldModel(3, "已解绑");
+                }
+
+                devices.Add(new
+                {
+                    Id = d_UserDevice.DeviceId,
+                    UserName = "",
+                    Status = bindStatus
+                });
+            }
+
             var ret = new
             {
+                Devices = devices,
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
             };
 
@@ -83,7 +114,7 @@ namespace LocalS.Service.Api.HealthApp
             }
 
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.BindStatus == Entity.SenvivUserDeviceBindStatus.NotBind).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
 
             if (d_UserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
@@ -103,6 +134,10 @@ namespace LocalS.Service.Api.HealthApp
             d_UserDevice.Mender = operater;
             d_UserDevice.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
+
+
+            BizFactory.Senviv.SendDeviceBind(userId, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
+
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

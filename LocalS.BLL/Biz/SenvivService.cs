@@ -1614,6 +1614,58 @@ namespace LocalS.BLL
             return true;
         }
 
+        public bool SendDeviceBind(string userId, string first, string keyword1, string keyword2, string remark)
+        {
+            var template = GetTemplate(userId, "device_bind");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
+        public bool SendDeviceUnBind(string userId, string first, string keyword1, string keyword2, string remark)
+        {
+            var template = GetTemplate(userId, "device_unbind");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
         public WxTemplateModel GetTemplate(string userId, string template)
         {
             var model = new WxTemplateModel();
@@ -1649,6 +1701,12 @@ namespace LocalS.BLL
                     break;
                 case "pregnancy_remind":
                     model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
+                    break;
+                case "device_bind":
+                    model.TemplateId = "fKFTJV_022tp2bhKkjBSPSIr91soiiOH5wwnbG4ZbUE";
+                    break;
+                case "device_unbind":
+                    model.TemplateId = "czt-rzvyJnYpMK06Kv0hMcEtmJgD5vx5_mShiMGbkmo";
                     break;
             }
 

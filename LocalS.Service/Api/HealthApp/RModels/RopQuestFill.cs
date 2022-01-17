@@ -8,6 +8,6 @@ namespace LocalS.Service.Api.HealthApp
 {
     public class RopQuestFill
     {
-
+        public string DeviceId { get; set; }
     }
 }

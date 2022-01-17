@@ -12,7 +12,7 @@
             <span>{{ item.id }}</span>
           </mt-cell>
           <mt-cell title="使用者">
-            <span>{{ item.userSignName }}</span>
+            <span>{{ item.userName }}</span>
           </mt-cell>
           <mt-cell title="绑定状态">
             <span>{{ item.bindStatus.text }}</span>

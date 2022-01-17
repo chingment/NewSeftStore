@@ -294,6 +294,7 @@ export default {
     text-align: center;
     font-weight: 600;
     margin: 10px;
+    background-color: #f6f6f8;
 }
 
 .qt-checklist{
@@ -316,6 +317,7 @@ export default {
     text-align: center;
     font-weight: 600;
     margin: 10px;
+    background-color: #f6f6f8;
 }
 
 </style>
