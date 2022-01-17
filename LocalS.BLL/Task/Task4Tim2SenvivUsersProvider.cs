@@ -39,7 +39,7 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                string[] deptIds = new string[] { "32", "64" };
+                string[] deptIds = new string[] { "32", "46" };
 
                 foreach (var deptId in deptIds)
                 {

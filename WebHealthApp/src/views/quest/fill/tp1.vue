@@ -5,7 +5,7 @@
       <div class="sm-title">完善资料更准更好的为你服务</div>
     </div>
 
-    <div v-show="devicesFormShow" class="form-devices">
+    <div v-show="step===1" class="form-devices">
       <div v-for="(item, index) in devices" :key="index" class="device">
         <div class="form">
           <mt-cell title="设备号">
@@ -14,18 +14,21 @@
           <mt-cell title="使用者">
             <span>{{ item.userName }}</span>
           </mt-cell>
-          <mt-cell title="状态">
-            <span>{{ item.status.text }}</span>
+          <mt-cell title="绑定状态">
+            <span>{{ item.bindStatus.text }}</span>
           </mt-cell>
         </div>
         <mt-button class="btn-go-fill" type="primary" @click="onGoFill(item)">进入</mt-button>
       </div>
     </div>
 
-    <div v-show="questionsFormShow">
-      <flow-form :questions="questions" />
+    <div v-show="step===2">
+      <flow-form :questions="questions" @on-complete="onQuestionsComplete" />
+    </div>
 
-      <mt-button class="btn-scan" type="primary" @click="onSave">保存</mt-button>
+    <div v-show="step===3" class="form-welcomeout">
+      <div class="t1">绑定成功</div>
+      <div class="t2">您好，欢迎使用！</div>
     </div>
   </div>
 </template>
@@ -44,8 +47,7 @@ export default {
       deviceId: null,
       devices: null,
       appInfo: {},
-      devicesFormShow: false,
-      questionsFormShow: false,
+      step: 0,
       questions: [
         {
           id: 'fullName',
@@ -53,24 +55,24 @@ export default {
           type: 'input',
           value: ''
         },
-        // {
-        //   id: 'birthday',
-        //   title: '生日',
-        //   type: 'date',
-        //   value: ''
-        // },
-        // {
-        //   id: 'height',
-        //   title: '身高',
-        //   type: 'input',
-        //   value: ''
-        // },
-        // {
-        //   id: 'weight',
-        //   title: '体重',
-        //   type: 'input',
-        //   value: ''
-        // },
+        {
+          id: 'birthday',
+          title: '生日',
+          type: 'date',
+          value: ''
+        },
+        {
+          id: 'height',
+          title: '身高',
+          type: 'input',
+          value: ''
+        },
+        {
+          id: 'weight',
+          title: '体重',
+          type: 'input',
+          value: ''
+        },
         {
           id: 'sex',
           title: '性别',
@@ -132,9 +134,9 @@ export default {
           title: '慢性困扰',
           type: 'checklist',
           options: [
-            { label: '高血压', value: '1' },
-            { label: '糖尿病', value: '2' },
-            { label: '冠心病', value: '3' }
+            { label: '糖尿病', value: '4' },
+            { label: '高血压', value: '5' },
+            { label: '冠心病', value: '6' }
           ],
           value: []
         },
@@ -177,19 +179,29 @@ export default {
         if (res.result === 1) {
           var d = res.data
           this.devices = d.devices
-
-          if (this.deviceId == null) {
+          var _deviceId = this.deviceId
+          if (_deviceId == null) {
             if (this.devices.length === 1) {
-              this.deviceId = this.devices[0].id
-              this.devicesFormShow = false
-              this.questionsFormShow = true
+              var device = this.devices[0]
+              this.deviceId = device.id
+              if (device.bindStatus.value === 1) {
+                this.step = 2
+              } else {
+                this.step = 3
+              }
             } else {
-              this.devicesFormShow = true
-              this.questionsFormShow = false
+              this.step = 1
             }
           } else {
-            this.devicesFormShow = false
-            this.questionsFormShow = true
+            var device2 = this.devices.filter(function(item) {
+              return item.id === _deviceId
+            })[0]
+
+            if (device2.bindStatus.value === 1) {
+              this.step = 2
+            } else {
+              this.step = 3
+            }
           }
         }
         this.loading = false
@@ -197,14 +209,22 @@ export default {
     },
     onGoFill(item) {
       this.deviceId = item.id
-      this.devicesFormShow = false
-      this.questionsFormShow = true
+      this.step = 2
     },
-    onSave() {
+    onQuestionsComplete() {
+      console.log('onQuestionsComplete')
       this.loading = true
-      fill({ deviceId: this.deviceId }).then(res => {
-        if (res.result === 1) {
+      var answers = {}
 
+      this.questions.forEach(item => {
+        answers[item.id] = item.value
+      })
+
+      fill({ deviceId: this.deviceId, answers: answers }).then(res => {
+        if (res.result === 1) {
+          this.step = 3
+        } else {
+          this.$toast(res.message)
         }
         this.loading = false
       })
@@ -223,6 +243,19 @@ export default {
         margin: 30px 0px;
     }
 
+.form-welcomeout{
+text-align: center;
+margin-top: 60px;
+.t1{
+    color:#4caf50;
+  margin: 20px;
+}
+
+.t2{
+    color: #409eff;
+    font-size: 28px;
+}
+}
 }
 
 </style>

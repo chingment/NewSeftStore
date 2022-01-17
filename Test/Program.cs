@@ -46,7 +46,7 @@ namespace Test
 
             var post = new
             {
-                userid = "",
+                userid = "461x847d01142F",
                 code = "",
                 mobile = "13800138000",
                 wechatid = "",
@@ -76,8 +76,8 @@ namespace Test
             string sn = "1004E747A049";
             //"1"  //461x847d0113A4
             string deptid = "46";
-            //UserCreateRequest a = new UserCreateRequest(token, post);
-            //var rest = api.DoPost(a);
+            UserCreateRequest a = new UserCreateRequest(token, post);
+            var rest = api.DoPost(a);
             //if (rest.Data != null)
             //{
             //    if (rest.Data.Data != null)

@@ -207,12 +207,16 @@ export default {
         }
       }
 
-      var _this = this
-      setTimeout(function() {
-        _this.active = jump_to
-        _this.questions[jump_to].previous = q_idx
-        _this.previous = q_idx
-      }, 500)
+      if (jump_to <= this.questions.length - 1) {
+        var _this = this
+        setTimeout(function() {
+          _this.active = jump_to
+          _this.questions[jump_to].previous = q_idx
+          _this.previous = q_idx
+        }, 500)
+      } else {
+        this.$emit('on-complete')
+      }
     },
     formatDate(secs, type = 0) {
       var t = new Date(secs)
