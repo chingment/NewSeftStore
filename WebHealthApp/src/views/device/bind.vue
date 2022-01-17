@@ -28,7 +28,7 @@
         <mt-cell title="使用者" :value="userInfo.nickName" />
         <mt-field v-model="formByBind.phoneNumber" label="手机号" placeholder="请输入手机号码" />
         <mt-field v-model="formByBind.validCode" label="验证码" placeholder="请输入手机验证码">
-          <mt-button type="primary" size="small" plain>获取</mt-button>
+          <mt-button type="primary" size="small" plain :disabled="pvcDisabled" @click="onGetPhoneValidCode">{{ pvcText }}</mt-button>
         </mt-field>
       </div>
       <mt-button class="btn-bindphone" type="primary" @click="onSaveStep2">绑定</mt-button>
@@ -54,6 +54,7 @@
 </template>
 <script>
 import { initBind, bindSerialNo, bindPhoneNumber } from '@/api/device'
+import { getPhoneValidCode } from '@/api/own'
 import wx from 'weixin-js-sdk'
 export default {
   name: 'App',
@@ -75,6 +76,10 @@ export default {
         validCode: ''
       },
       step: 1,
+      pvcDisabled: false,
+      pvcCount: '',
+      pvcTimer: null,
+      pvcText: '获取',
       popupVisibleByPaQrCode: false
     }
   },
@@ -163,6 +168,48 @@ export default {
     },
     onChangeDeviceId() {
       this.step = 1
+    },
+    onGetPhoneValidCode() {
+      // const TIME_COUNT = 120
+      // if (!this.pvcTimer) {
+      //   this.pvcCount = TIME_COUNT
+      //   this.pvcDisabled = true
+      //   this.pvcTimer = setInterval(() => {
+      //     if (this.pvcCount > 0 && this.pvcCount <= TIME_COUNT) {
+      //       this.pvcCount--
+      //       this.pvcText = this.pvcCount + 'S'
+      //     } else {
+      //       this.pvcDisabled = false
+      //       this.pvcText = '获取'
+      //       clearInterval(this.pvcTimer)
+      //       this.pvcTimer = null
+      //     }
+      //   }, 1000)
+      // }
+      this.loading = true
+      getPhoneValidCode({ deviceId: this.formByBind.deviceId, phoneNumber: this.formByBind.phoneNumber }).then(res => {
+        if (res.result === 1) {
+          const TIME_COUNT = 120
+          if (!this.pvcTimer) {
+            this.pvcCount = TIME_COUNT
+            this.pvcDisabled = true
+            this.pvcTimer = setInterval(() => {
+              if (this.pvcCount > 0 && this.pvcCount <= TIME_COUNT) {
+                this.pvcCount--
+                this.pvcText = this.pvcCount + 'S'
+              } else {
+                this.pvcDisabled = false
+                this.pvcText = '获取'
+                clearInterval(this.pvcTimer)
+                this.pvcTimer = null
+              }
+            }, 1000)
+          }
+        } else {
+          this.$toast(res.message)
+        }
+        this.loading = false
+      })
     }
   }
 }

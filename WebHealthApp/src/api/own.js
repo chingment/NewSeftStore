@@ -24,8 +24,17 @@ export function authTokenCheck(params) {
   })
 }
 
+export function getPhoneValidCode(data) {
+  return request({
+    url: '/own/getPhoneValidCode',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
-  authTokenCheck: authTokenCheck
+  authTokenCheck: authTokenCheck,
+  getPhoneValidCode: getPhoneValidCode
 }

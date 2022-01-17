@@ -47,5 +47,7 @@ namespace WebApiHealthApp.Controllers
             var result = HealthAppServiceFactory.Device.UnBind(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
+
+
     }
 }
