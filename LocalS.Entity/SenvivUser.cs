@@ -48,6 +48,11 @@ namespace LocalS.Entity
         public string Sas { get; set; }
         //是否使用呼吸机
         public bool IsUseBreathMach { get; set; }
+
+        public string Chronicdisease { get; set; }
+
+        public string SubHealth { get; set; }
+        public string SubHealthOt { get; set; }
         //目前困扰
         public string Perplex { get; set; }
         public string PerplexOt { get; set; }

@@ -6,6 +6,7 @@ using LocalS.BLL.Push;
 using LocalS.BLL.Task;
 using LocalS.Entity;
 using LocalS.Service;
+using LocalS.Service.Api.HealthApp;
 using LocalS.Service.Api.Merch;
 using LocalS.Service.Api.StoreApp;
 using LocalS.Service.Api.StoreTerm;
@@ -41,6 +42,19 @@ namespace Test
 
         static void Main(string[] args)
         {
+
+            string aaaaaaa = "{\"answers\":{\"birthday\":\"1949-10-01\",\"chronicdisease\":[\"5\",\"6\"],\"fullName\":\"邱小文\",\"height\":\"165\",\"isPregnant\":\"\",\"medicalhis\":[\"3\",\"2\"],\"medicine\":[\"3\",\"2\"],\"perplexs\":[\"2\",\"5\",\"4\"],\"sex\":\"1\",\"subhealth\":[\"8\",\"4\"],\"weight\":\"65\"},\"deviceId\":\"1004E747A049\"}";
+
+            var rop = aaaaaaa.ToJsonObject<RopQuestFill>();
+
+            //   var acc = new string[] { "1", "3" };
+            var ss = rop.Answers["chronicdisease"];
+
+            string ccc = ss.ToJsonString();
+
+            string[] bbb = ccc.ToJsonObject<List<string>>().ToArray();
+           string cccc= string.Join(",", bbb);
+          //  string css = string.Join(",", acc);
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 

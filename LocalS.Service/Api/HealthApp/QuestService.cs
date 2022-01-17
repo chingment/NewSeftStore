@@ -55,6 +55,28 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
+        public string GetAnswerValue(object obj)
+        {
+            string str = null;
+            try
+            {
+
+
+                string t1 = obj.ToJsonString();
+
+                string[] a1 = t1.ToJsonObject<List<string>>().ToArray();
+                str = string.Join(",", a1);
+
+                return str;
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            return str;
+        }
+
         public CustomJsonResult Fill(string operater, string userId, RopQuestFill rop)
         {
             var result = new CustomJsonResult();
@@ -70,11 +92,20 @@ namespace LocalS.Service.Api.HealthApp
             var config_Senviv = BizFactory.Senviv.GetConfig("46");
             SenvivUser d_SenvivUser;
 
-            string fullName = rop.Answers["fullName"];
-            string sex = rop.Answers["sex"];
-            string birthday = rop.Answers["birthday"];
-            string height = rop.Answers["height"];
-            string weight = rop.Answers["weight"];
+            string fullName = rop.Answers["fullName"].ToString();
+            string sex = rop.Answers["sex"].ToString(); 
+            string birthday = rop.Answers["birthday"].ToString();
+            string height = rop.Answers["height"].ToString();
+            string weight = rop.Answers["weight"].ToString();
+
+            string perplexs = GetAnswerValue(rop.Answers["perplexs"]);
+            string subhealth = GetAnswerValue(rop.Answers["subhealth"]);
+            string chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
+            string medicalhis = GetAnswerValue(rop.Answers["medicalhis"]);
+            string medicine = GetAnswerValue(rop.Answers["medicine"]);
+
+            LogUtil.Info("perplexs:" + perplexs);
+
             if (string.IsNullOrEmpty(d_UserDevice.SvUserId))
             {
                 using (TransactionScope ts = new TransactionScope())
@@ -95,11 +126,11 @@ namespace LocalS.Service.Api.HealthApp
                         createtime = "2020-06-22T10:23:58.784Z", //创建时间
                         updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                         SAS = d_User.Sex,
-                        Perplex = "1", //目前困扰 （查看字典表）
+                        Perplex = perplexs, //目前困扰 （查看字典表）
                         OtherPerplex = "", //目前困扰输入其它 ,
-                        Medicalhistory = "1", //既往史 （查看字典表）
+                        Medicalhistory = medicalhis, //既往史 （查看字典表）
                         OtherFamilyhistory = "", //既往史其它 ,
-                        Medicine = "1", //用药情况 （查看字典表）
+                        Medicine = medicine, //用药情况 （查看字典表）
                         OtherMedicine = "", //用药情况其它 ,
                         deptid = config_Senviv.SenvivDeptId
                     };
@@ -116,6 +147,11 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.FullName = fullName;
                     d_SenvivUser.Height = height;
                     d_SenvivUser.Weight = weight;
+                    d_SenvivUser.Perplex = perplexs;
+                    d_SenvivUser.MedicalHis = medicalhis;
+                    d_SenvivUser.Medicine = medicine;
+                    d_SenvivUser.SubHealth = subhealth;
+                    d_SenvivUser.Chronicdisease = chronicdisease;
                     d_SenvivUser.Birthday = CommonUtil.ConverToDateTime(birthday);
                     d_SenvivUser.NickName = null;
                     d_SenvivUser.Avatar = d_User.Avatar;
@@ -154,11 +190,11 @@ namespace LocalS.Service.Api.HealthApp
                         createtime = "2020-06-22T10:23:58.784Z", //创建时间
                         updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                         SAS = sex,
-                        Perplex = "1", //目前困扰 （查看字典表）
+                        Perplex = perplexs, //目前困扰 （查看字典表）
                         OtherPerplex = "", //目前困扰输入其它 ,
-                        Medicalhistory = "1", //既往史 （查看字典表）
+                        Medicalhistory = medicalhis, //既往史 （查看字典表）
                         OtherFamilyhistory = "", //既往史其它 ,
-                        Medicine = "1", //用药情况 （查看字典表）
+                        Medicine = medicine, //用药情况 （查看字典表）
                         OtherMedicine = "", //用药情况其它 ,
                         deptid = config_Senviv.SenvivDeptId
                     };
@@ -174,6 +210,11 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.Birthday = CommonUtil.ConverToDateTime(birthday);
                     d_SenvivUser.Height = height;
                     d_SenvivUser.Weight = weight;
+                    d_SenvivUser.Perplex = perplexs;
+                    d_SenvivUser.MedicalHis = medicalhis;
+                    d_SenvivUser.Medicine = medicine;
+                    d_SenvivUser.SubHealth = subhealth;
+                    d_SenvivUser.Chronicdisease = chronicdisease;
                     d_SenvivUser.MendTime = DateTime.Now;
                     d_SenvivUser.Mender = d_User.Id;
 

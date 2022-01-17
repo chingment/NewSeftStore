@@ -10,6 +10,6 @@ namespace LocalS.Service.Api.HealthApp
     {
         public string DeviceId { get; set; }
 
-        public Dictionary<string,string> Answers { get; set; }
+        public Dictionary<string,object> Answers { get; set; }
     }
 }
