@@ -13,5 +13,7 @@ namespace LocalS.Service.Api.HealthApp
         public string PhoneNumber { get; set; }
 
         public string ValidCode { get; set; }
+
+        public string TokenCode { get; set; }
     }
 }

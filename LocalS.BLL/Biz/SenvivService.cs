@@ -37,14 +37,19 @@ namespace LocalS.BLL
         }
     }
 
-    public class WxTemplateModel
+    public class WxPaTplModel
     {
         public string OpenId { get; set; }
         public string AccessToken { get; set; }
         public string TemplateId { get; set; }
-
         public string SenvivDeptId { get; set; }
+    }
 
+    public class SmsTemplateModel
+    {
+        public string SignName { get; set; }
+
+        public string TemplateCode { get; set; }
     }
 
     public class WxAppInfo
@@ -1537,7 +1542,7 @@ namespace LocalS.BLL
 
         public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetTemplate(userId, "month_report");
+            var template = GetWxNotifyTemplate(userId, "month_report");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1563,7 +1568,7 @@ namespace LocalS.BLL
 
         public bool SendArticle(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetTemplate(userId, "pregnancy_remind");
+            var template = GetWxNotifyTemplate(userId, "pregnancy_remind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1589,7 +1594,7 @@ namespace LocalS.BLL
 
         public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
-            var template = GetTemplate(userId, "health_monitor");
+            var template = GetWxNotifyTemplate(userId, "health_monitor");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1616,7 +1621,7 @@ namespace LocalS.BLL
 
         public bool SendDeviceBind(string userId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetTemplate(userId, "device_bind");
+            var template = GetWxNotifyTemplate(userId, "device_bind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1642,7 +1647,7 @@ namespace LocalS.BLL
 
         public bool SendDeviceUnBind(string userId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetTemplate(userId, "device_unbind");
+            var template = GetWxNotifyTemplate(userId, "device_unbind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1666,9 +1671,9 @@ namespace LocalS.BLL
             return true;
         }
 
-        public WxTemplateModel GetTemplate(string userId, string template)
+        public WxPaTplModel GetWxNotifyTemplate(string userId, string template)
         {
-            var model = new WxTemplateModel();
+            var model = new WxPaTplModel();
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
@@ -1711,6 +1716,26 @@ namespace LocalS.BLL
             }
 
             return model;
+        }
+
+        public SmsTemplateModel GetSmsTemplateByBindPhone(string userId)
+        {
+            var tmp = new SmsTemplateModel();
+
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            if (d_ClientUser == null)
+                return null;
+
+            var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_ClientUser.MerchId).FirstOrDefault();
+
+            if (d_SenvivMerch == null)
+                return null;
+
+            tmp.SignName = d_SenvivMerch.SmsSignName;
+            tmp.TemplateCode = d_SenvivMerch.SmsTemplateCode;
+
+            return tmp;
         }
     }
 }

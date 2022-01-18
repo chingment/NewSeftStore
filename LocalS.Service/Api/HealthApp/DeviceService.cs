@@ -1,4 +1,7 @@
-﻿using LocalS.BLL;
+﻿using Aliyun.Acs.Core;
+using Aliyun.Acs.Core.Profile;
+using Aliyun.Acs.Dysmsapi.Model.V20170525;
+using LocalS.BLL;
 using LocalS.BLL.Biz;
 using LocalS.Entity;
 using Lumos;
@@ -13,6 +16,12 @@ using System.Web;
 
 namespace LocalS.Service.Api.HealthApp
 {
+    public class PhoneToken
+    {
+        public string PhoneNumber { get; set; }
+        public string ValidCode { get; set; }
+    }
+
     public class DeviceService : BaseService
     {
         public CustomJsonResult InitBind(string operater, string userId, string deviceId, string requestUrl)
@@ -26,7 +35,7 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_UserDevice != null)
             {
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind|| d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind || d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
                 {
                     if (d_UserDevice.BindDeviceIdTime == null)
                         step = 1;
@@ -155,8 +164,19 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult BindPhoneNumber(string operater, string userId, RopDeviceBindPhoneNumber rop)
         {
-            if (string.IsNullOrEmpty(rop.PhoneNumber))
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
+            if (string.IsNullOrEmpty(rop.TokenCode))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请先获取手机验证码");
+
+            var phoneToken = RedisClient.Get<PhoneToken>(string.Format("phone_valid_code:{0}", rop.TokenCode));
+
+            if (phoneToken == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "请先获取手机验证码");
+
+            if (phoneToken.ValidCode != rop.ValidCode)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机验证码错误");
+
+            // if (string.IsNullOrEmpty(rop.PhoneNumber))
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
 
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
@@ -183,7 +203,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            d_User.PhoneNumber = rop.PhoneNumber;
+            d_User.PhoneNumber = phoneToken.PhoneNumber;
             d_User.Mender = operater;
             d_User.MendTime = DateTime.Now;
 
@@ -222,5 +242,72 @@ namespace LocalS.Service.Api.HealthApp
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
         }
+
+
+        public string BuildValidCode()
+        {
+            VerifyCodeHelper v = new VerifyCodeHelper();
+            v.CodeSerial = "0,1,2,3,4,5,6,7,8,9";
+            v.Length = 4;
+            string code = v.CreateVerifyCode(); //取随机码 
+
+            return code;
+        }
+
+
+        public CustomJsonResult GetPhoneValidCode(string operater, string userId, RopOwnGetPhoneVaildCode rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            String product = "Dysmsapi";//短信API产品名称
+            String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
+
+            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAI4GHVbVRpJJ4h2kSAmVc6", "yipmZ8XZ0Bw4p2p2CvEZrirPre46b3");
+
+            DefaultProfile.AddEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+
+            IAcsClient acsClient = new DefaultAcsClient(profile);
+            SendSmsRequest request = new SendSmsRequest();
+
+            var smsTemplate = BizFactory.Senviv.GetSmsTemplateByBindPhone(userId);
+            try
+            {
+                string validcode = BuildValidCode();
+                string phoneNumber = rop.PhoneNumber;
+                string templateCode = smsTemplate.TemplateCode;// "SMS_88990017";
+                string templateParam = "{\"code\":\"" + validcode + "\"}";
+                request.SignName = smsTemplate.SignName;//贩聚社团,//"管理控制台中配置的短信签名（状态必须是验证通过）"
+                request.PhoneNumbers = phoneNumber;//"接收号码，多个号码可以逗号分隔"
+                request.TemplateCode = templateCode;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
+                request.TemplateParam = templateParam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
+
+                SendSmsResponse sendSmsResponse = acsClient.GetAcsResponse(request);
+                if (sendSmsResponse.Code == "OK")
+                {
+                    string key = IdWorker.Build(IdType.NewGuid);
+
+                    var key_val = new PhoneToken { PhoneNumber = phoneNumber, ValidCode = validcode };
+
+                    RedisClient.Set(string.Format("phone_valid_code:{0}", key), key_val, new TimeSpan(0, 2, 0));
+
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功", new { TokenCode = key });
+                }
+                else
+                {
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("发送短信", ex);
+
+                result = new CustomJsonResult(ResultType.Exception, ResultCode.Failure, "发送失败");
+            }
+
+            return result;
+        }
+
     }
 }

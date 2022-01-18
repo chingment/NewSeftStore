@@ -20,6 +20,8 @@ namespace LocalS.Entity
         public string WxPaTplIdPregnancyRemind { get; set; }
         public string WxPaTplDevieBindNotify { get; set; }
         public string WxPaTplDevieUnBindNotify { get; set; }
+        public string SmsSignName { get; set; }
+        public string SmsTemplateCode { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

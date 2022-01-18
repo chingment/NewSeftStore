@@ -48,6 +48,13 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpPost]
+        public OwnApiHttpResponse GetPhoneValidCode(RopOwnGetPhoneVaildCode rop)
+        {
+            var result = HealthAppServiceFactory.Device.GetPhoneValidCode(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
 
     }
 }

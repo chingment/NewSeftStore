@@ -40,11 +40,20 @@ export function unBind(data) {
   })
 }
 
+export function getPhoneValidCode(data) {
+  return request({
+    url: '/device/getPhoneValidCode',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initBind: initBind,
   initInfo: initInfo,
   bindSerialNo: bindSerialNo,
   bindPhoneNumber: bindPhoneNumber,
-  unBind: unBind
+  unBind: unBind,
+  getPhoneValidCode: getPhoneValidCode
 }
 

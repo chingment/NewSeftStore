@@ -26,8 +26,8 @@
           <span class="primary-color-font" @click="onChangeDeviceId">更改</span>
         </mt-cell>
         <mt-cell title="使用者" :value="userInfo.nickName" />
-        <mt-field v-model="formByBind.phoneNumber" label="手机号" placeholder="请输入手机号码" />
-        <mt-field v-model="formByBind.validCode" label="验证码" placeholder="请输入手机验证码">
+        <mt-field v-model.trim="formByBind.phoneNumber" type="tel" label="手机号" placeholder="请输入手机号码" />
+        <mt-field v-model.trim="formByBind.validCode" type="number" label="验证码" placeholder="请输入手机验证码">
           <mt-button type="primary" size="small" plain :disabled="pvcDisabled" @click="onGetPhoneValidCode">{{ pvcText }}</mt-button>
         </mt-field>
       </div>
@@ -53,9 +53,9 @@
 
 </template>
 <script>
-import { initBind, bindSerialNo, bindPhoneNumber } from '@/api/device'
-import { getPhoneValidCode } from '@/api/own'
+import { initBind, bindSerialNo, bindPhoneNumber, getPhoneValidCode } from '@/api/device'
 import wx from 'weixin-js-sdk'
+import { isEmpty } from '@/utils/commonUtil'
 export default {
   name: 'App',
   components: {
@@ -73,7 +73,8 @@ export default {
       formByBind: {
         deviceId: '',
         phoneNumber: '',
-        validCode: ''
+        validCode: '',
+        tokenCode: ''
       },
       step: 1,
       pvcDisabled: false,
@@ -122,6 +123,11 @@ export default {
     onSaveStep1() {
       this.loading = true
 
+      if (isEmpty(this.formByBind.deviceId)) {
+        this.$toast('请输入设备号')
+        return
+      }
+
       bindSerialNo({ deviceId: this.formByBind.deviceId }).then(res => {
         if (res.result === 1) {
           this.step = 2
@@ -141,6 +147,23 @@ export default {
     },
     onSaveStep2() {
       this.loading = true
+
+      var re1 = /^1\d{10}$/
+      if (isEmpty(this.formByBind.phoneNumber)) {
+        this.$toast('请输入手机号码')
+        return
+      } else {
+        if (!re1.test(this.formByBind.phoneNumber)) {
+          this.$toast('手机格式错误，请输入11位数字')
+          return
+        }
+      }
+
+      if (isEmpty(this.formByBind.validCode)) {
+        this.$toast('请输入验证码')
+        return
+      }
+
       bindPhoneNumber(this.formByBind).then(res => {
         if (res.result === 1) {
           this.$router.push({ path: '/quest/fill/tp1', query: {
@@ -186,9 +209,23 @@ export default {
       //     }
       //   }, 1000)
       // }
+
+      var re1 = /^1\d{10}$/
+      if (isEmpty(this.formByBind.phoneNumber)) {
+        this.$toast('请输入手机号码')
+        return
+      } else {
+        if (!re1.test(this.formByBind.phoneNumber)) {
+          this.$toast('手机格式错误，请输入11位数字')
+          return
+        }
+      }
+
       this.loading = true
       getPhoneValidCode({ deviceId: this.formByBind.deviceId, phoneNumber: this.formByBind.phoneNumber }).then(res => {
         if (res.result === 1) {
+          var d = res.data
+          this.formByBind.tokenCode = d.tokenCode
           const TIME_COUNT = 120
           if (!this.pvcTimer) {
             this.pvcCount = TIME_COUNT
