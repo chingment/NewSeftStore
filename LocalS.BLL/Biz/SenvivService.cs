@@ -1542,7 +1542,7 @@ namespace LocalS.BLL
 
         public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxNotifyTemplate(userId, "month_report");
+            var template = GetWxPaTpl(userId, "month_report");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1568,7 +1568,7 @@ namespace LocalS.BLL
 
         public bool SendArticle(string userId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxNotifyTemplate(userId, "pregnancy_remind");
+            var template = GetWxPaTpl(userId, "pregnancy_remind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1594,7 +1594,7 @@ namespace LocalS.BLL
 
         public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
-            var template = GetWxNotifyTemplate(userId, "health_monitor");
+            var template = GetWxPaTpl(userId, "health_monitor");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1621,7 +1621,7 @@ namespace LocalS.BLL
 
         public bool SendDeviceBind(string userId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetWxNotifyTemplate(userId, "device_bind");
+            var template = GetWxPaTpl(userId, "device_bind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1647,7 +1647,7 @@ namespace LocalS.BLL
 
         public bool SendDeviceUnBind(string userId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetWxNotifyTemplate(userId, "device_unbind");
+            var template = GetWxPaTpl(userId, "device_unbind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1671,7 +1671,7 @@ namespace LocalS.BLL
             return true;
         }
 
-        public WxPaTplModel GetWxNotifyTemplate(string userId, string template)
+        public WxPaTplModel GetWxPaTpl(string userId, string template)
         {
             var model = new WxPaTplModel();
 
