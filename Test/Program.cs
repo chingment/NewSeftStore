@@ -3,7 +3,10 @@ using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
 using Aliyun.Acs.Core.Profile;
 using Aliyun.Acs.Dysmsapi.Model.V20170525;
+using LocalS.BLL;
+using LocalS.BLL.Biz;
 using log4net;
+using SenvivSdk;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -55,27 +58,27 @@ namespace Test
         {
 
 
-            String product = "Dysmsapi";//短信API产品名称
-            String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
+            //String product = "Dysmsapi";//短信API产品名称
+            //String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
 
-            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAI4GHVbVRpJJ4h2kSAmVc6", "yipmZ8XZ0Bw4p2p2CvEZrirPre46b3");
+            //IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAI4GHVbVRpJJ4h2kSAmVc6", "yipmZ8XZ0Bw4p2p2CvEZrirPre46b3");
 
-            DefaultProfile.AddEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            //DefaultProfile.AddEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
 
-            IAcsClient acsClient = new DefaultAcsClient(profile);
-            SendSmsRequest request = new SendSmsRequest();
+            //IAcsClient acsClient = new DefaultAcsClient(profile);
+            //SendSmsRequest request = new SendSmsRequest();
 
 
-            string validcode = "524643";
-            string phoneNumber = "15989287032";
-            string templateCode = "SMS_88990017";
-            string templateParam = "{\"code\":\"" + validcode + "\"}";
-            request.SignName = "贩聚社团";//"管理控制台中配置的短信签名（状态必须是验证通过）"
-            request.PhoneNumbers = phoneNumber;//"接收号码，多个号码可以逗号分隔"
-            request.TemplateCode = templateCode;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
-            request.TemplateParam = templateParam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
+            //string validcode = "524643";
+            //string phoneNumber = "15989287032";
+            //string templateCode = "SMS_88990017";
+            //string templateParam = "{\"code\":\"" + validcode + "\"}";
+            //request.SignName = "贩聚社团";//"管理控制台中配置的短信签名（状态必须是验证通过）"
+            //request.PhoneNumbers = phoneNumber;//"接收号码，多个号码可以逗号分隔"
+            //request.TemplateCode = templateCode;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
+            //request.TemplateParam = templateParam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
 
-            SendSmsResponse sendSmsResponse = acsClient.GetAcsResponse(request);
+            //SendSmsResponse sendSmsResponse = acsClient.GetAcsResponse(request);
 
 
 
@@ -93,7 +96,7 @@ namespace Test
             // string cccc= string.Join(",", bbb);
             ////  string css = string.Join(",", acc);
 
-            //  SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
             //  var post = new
             //  {
@@ -123,7 +126,15 @@ namespace Test
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
 
-            //  string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXzK4ogIzu99ch2EaMLa6EKIKVXzvn6vi4wRi1No7AhC0=\"";
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXzK4ogIzu99ch2EaMLa6EKIKVXzvn6vi4wRi1No7AhC0=\"";
+
+            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A464", size = 1, page = 1 });
+            var restb = api.DoPost(c1);
+
+            //var config_Senviv = BizFactory.Senviv.GetConfig("46");
+
+            //var i_SenvivUsers = SdkFactory.Senviv.GetUserList(config_Senviv);
+
             //  string sn = "1004E747A049";
             //  //"1"  //461x847d0113A4
             //  string deptid = "46";

@@ -258,5 +258,52 @@ namespace LocalS.BLL
 
             return age;
         }
+
+        public static int D46Int(object obj)
+        {
+            if (obj == null)
+                return 0;
+            try
+            {
+                int c = int.Parse(obj.ToString());
+                return c;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        public static long D46Long(object obj)
+        {
+            if (obj == null)
+                return 0;
+
+            try
+            {
+                long c = long.Parse(obj.ToString());
+                return c;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        public static decimal D46Decimal(object obj)
+        {
+            if (obj == null)
+                return 0;
+
+            try
+            {
+                decimal c = decimal.Parse(obj.ToString());
+                return c;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
     }
 }

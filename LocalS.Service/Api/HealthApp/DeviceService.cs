@@ -215,9 +215,10 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUser.DeptId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUser.SvDeptId);
 
             var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUser.Id, rop.DeviceId);
 

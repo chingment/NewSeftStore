@@ -51,7 +51,7 @@ namespace SenvivSdk
             public string Medicine { get; set; }
             public string OtherMedicine { get; set; }
             public List<string> roles { get; set; }
-            public string dic { get; set; }
+            public Dictionary<string,object> dic { get; set; }
             public string _id { get; set; }
             public string deptid { get; set; }
         }

@@ -88,7 +88,6 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            ///var config_App= BizFactory.Senviv.GetWxAppConfigByDeviceId(rop.DeviceId);
             var config_Senviv = BizFactory.Senviv.GetConfig("46");
             SenvivUser d_SenvivUser;
 
@@ -132,7 +131,7 @@ namespace LocalS.Service.Api.HealthApp
                         OtherFamilyhistory = "", //既往史其它 ,
                         Medicine = medicine, //用药情况 （查看字典表）
                         OtherMedicine = "", //用药情况其它 ,
-                        deptid = config_Senviv.SenvivDeptId
+                        deptid = config_Senviv.SvDeptId
                     };
 
                     var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
@@ -143,7 +142,7 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.Id = r_Api_UserCreate.userid;
                     d_SenvivUser.MerchId = d_User.MerchId;
                     d_SenvivUser.UserId = d_User.Id;
-                    d_SenvivUser.DeptId = config_Senviv.SenvivDeptId;
+                    d_SenvivUser.SvDeptId = config_Senviv.SvDeptId;
                     d_SenvivUser.FullName = fullName;
                     d_SenvivUser.Height = height;
                     d_SenvivUser.Weight = weight;
@@ -196,7 +195,7 @@ namespace LocalS.Service.Api.HealthApp
                         OtherFamilyhistory = "", //既往史其它 ,
                         Medicine = medicine, //用药情况 （查看字典表）
                         OtherMedicine = "", //用药情况其它 ,
-                        deptid = config_Senviv.SenvivDeptId
+                        deptid = config_Senviv.SvDeptId
                     };
 
                     var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
@@ -238,7 +237,6 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
             BizFactory.Senviv.SendDeviceBind(userId, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
-
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

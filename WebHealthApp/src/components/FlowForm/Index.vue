@@ -5,16 +5,18 @@
       <div v-for="(item, index) in questions" v-show="active==index" :key="index" class="question">
         <div class="question-title">{{ item.title }}</div>
         <div class="question-content">
-          <div v-if="item.type==='input'">
+          <div v-if="item.type==='input'" class="">
 
-            <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" />
+            <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px">
+
+              <span>{{ item.append }}</span>
+            </mt-field>
 
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
 
           </div>
           <div v-if="item.type==='date'">
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" @click.native="openPickerByDate(index)" />
-
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='radio'">
@@ -22,7 +24,6 @@
               <div v-for="(option,j) in item.options" :key="option.id" :class="isRadioVal(option.value,item.value)===false?'qt-radio-item ' :'qt-radio-item on'" @click="onRadioSure(index,option.value)">
                 <span class="label">{{ option.label }}</span>
               </div>
-
             </div>
           </div>
           <div v-if="item.type==='checklist'">
@@ -30,7 +31,6 @@
               <div v-for="(option,j) in item.options" :key="option.id" :class="isChecklistVal(item.value,option.value)===false?'qt-checklist-item ' :'qt-checklist-item on'" @click="onChecklist(index,option.value)">
                 <span class="label">{{ option.label }}</span>
               </div>
-
             </div>
             <mt-button type="primary" class="btn-sure" @click="onChecklistSure(index)">确定</mt-button>
           </div>
@@ -113,10 +113,13 @@ export default {
       return false
     },
     onChecklistSure(q_idx) {
-      var val = this.questions[q_idx].value
-      if (val.length <= 0) {
-        this.$toast('至少选择一个')
-        return
+      var question = this.questions[q_idx]
+      if (question.required) {
+        var val = question.value
+        if (val.length <= 0) {
+          this.$toast('至少选择一个')
+          return
+        }
       }
       this.jump(q_idx)
     },

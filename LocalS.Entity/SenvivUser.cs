@@ -29,7 +29,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string MerchId { get; set; }
         public string UserId { get; set; }
-        public string DeptId { get; set; }
+        public string SvDeptId { get; set; }
         public string PhoneNumber { get; set; }
         public string NickName { get; set; }
         public string FullName { get; set; }
@@ -38,7 +38,7 @@ namespace LocalS.Entity
         public DateTime? Birthday { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
-        public string TargetValue { get; set; }
+        public string SmTargetVal { get; set; }
         public DateTime? FisrtReportTime { get; set; }
         public string LastReportId { get; set; }
         public DateTime? LastReportTime { get; set; }
@@ -48,9 +48,9 @@ namespace LocalS.Entity
         public string Sas { get; set; }
         //是否使用呼吸机
         public bool IsUseBreathMach { get; set; }
-
+        //慢性病
         public string Chronicdisease { get; set; }
-
+        //亚健康
         public string SubHealth { get; set; }
         public string SubHealthOt { get; set; }
         //目前困扰

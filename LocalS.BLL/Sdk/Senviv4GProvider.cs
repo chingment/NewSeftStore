@@ -13,7 +13,7 @@ namespace LocalS.BLL
     public class SenvivConfig
     {
         public string AccessToken { get; set; }
-        public string SenvivDeptId { get; set; }
+        public string SvDeptId { get; set; }
         public string MerchId { get; set; }
     }
 
@@ -56,7 +56,7 @@ namespace LocalS.BLL
 
         public string GetWxPaAccessToken(SenvivConfig config)
         {
-            string key = string.Format("Wx_AppId_{0}_AccessToken", config.SenvivDeptId);
+            string key = string.Format("Wx_AppId_{0}_AccessToken", config.SvDeptId);
 
             var redis = new RedisClient<string>();
             var accessToken = redis.KGetString(key);
@@ -67,7 +67,7 @@ namespace LocalS.BLL
 
                 SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
-                var getAccessTokenRequest = new SenvivSdk.GetAccessTokenRequest(config.AccessToken, new { deptid = config.SenvivDeptId });
+                var getAccessTokenRequest = new SenvivSdk.GetAccessTokenRequest(config.AccessToken, new { deptid = config.SvDeptId });
 
                 var result = api.DoPost(getAccessTokenRequest);
 
@@ -95,7 +95,7 @@ namespace LocalS.BLL
             int page = 1;
             int size = 1000;
 
-            var userListRequest = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid = config.SenvivDeptId, size = size, page = page });
+            var userListRequest = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page });
             var result = api.DoPost(userListRequest);
             if (result.Result == ResultType.Success)
             {
@@ -111,7 +111,7 @@ namespace LocalS.BLL
                     {
                         for (var i = 2; i <= pageCount; i++)
                         {
-                            var userListRequest2 = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid =config.SenvivDeptId, size = size, page = i });
+                            var userListRequest2 = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid =config.SvDeptId, size = size, page = i });
                             var result2 = api.DoPost(userListRequest2);
                             if (result2.Result == ResultType.Success)
                             {
@@ -138,7 +138,7 @@ namespace LocalS.BLL
             int page = 1;
             int size = 1000;
 
-            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SenvivDeptId, size = size, page = page });
+            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page });
             var result = api.DoPost(boxListRequest);
             if (result.Result == ResultType.Success)
             {
@@ -154,7 +154,7 @@ namespace LocalS.BLL
                     {
                         for (var i = 2; i <= pageCount; i++)
                         {
-                            var userListRequest2 = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SenvivDeptId, size = size, page = i });
+                            var userListRequest2 = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = i });
                             var result2 = api.DoPost(userListRequest2);
                             if (result2.Result == ResultType.Success)
                             {
@@ -181,7 +181,7 @@ namespace LocalS.BLL
             int page = 1;
             int size = 1;
 
-            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SenvivDeptId, size = size, page = page, keyword = keyword });
+            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page, keyword = keyword });
             var result = api.DoPost(boxListRequest);
             if (result.Result == ResultType.Success)
             {
@@ -196,12 +196,12 @@ namespace LocalS.BLL
             return model;
         }
 
-        public ReportDetailListResult.DataModel GetUserHealthDayReport(SenvivConfig config, string userid)
+        public ReportDetailListResult.DataModel GetUserHealthDayReport32(SenvivConfig config, string userid)
         {
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
-            var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(config.AccessToken, new { deptid = config.SenvivDeptId, userid = userid, size = 1, page = 1 });
+            var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(config.AccessToken, new { deptid = config.SvDeptId, userid = userid, size = 1, page = 1 });
             var resultReportDetailList = api.DoPost(requestReportDetailList);
             if (resultReportDetailList.Result == ResultType.Success)
             {
@@ -222,6 +222,27 @@ namespace LocalS.BLL
             return null;
         }
 
+
+        public ReportParDetailResult.DataModel GetUserHealthDayReport64(SenvivConfig config, string sn)
+        {
+
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+            ReportParDetailRequest requestReportParDetail = new SenvivSdk.ReportParDetailRequest(config.AccessToken, new { deptid = config.SvDeptId, sn = sn, size = 1, page = 1 });
+            var resultReportParDetail = api.DoPost(requestReportParDetail);
+
+
+            if (resultReportParDetail.Data!=null)
+            {
+                if (resultReportParDetail.Data.count > 0)
+                {
+                    return resultReportParDetail.Data.data[0];
+                }
+            }
+
+            return null;
+        }
+
         public UserCreateResult UserCreate(SenvivConfig config, object post)
         {
 
@@ -235,7 +256,7 @@ namespace LocalS.BLL
         public BoxBindResult BindBox(SenvivConfig config, string userid, string sn)
         {
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-            BoxBindRequest request = new BoxBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SenvivDeptId });
+            BoxBindRequest request = new BoxBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SvDeptId });
             var result = api.DoPost(request);
             return result.Data.Data;
         }
@@ -243,7 +264,7 @@ namespace LocalS.BLL
         public BoxUnBindResult UnBindBox(SenvivConfig config, string userid, string sn)
         {
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-            BoxUnBindRequest request = new BoxUnBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SenvivDeptId });
+            BoxUnBindRequest request = new BoxUnBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SvDeptId });
             var result = api.DoPost(request);
             return result.Data.Data;
         }

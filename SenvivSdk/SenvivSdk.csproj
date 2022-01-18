@@ -63,6 +63,8 @@
     <Compile Include="Post\GetAccessTokenResult.cs" />
     <Compile Include="Post\ReportDetailListRequest.cs" />
     <Compile Include="Post\ReportDetailListResult.cs" />
+    <Compile Include="Post\ReportParDetailRequest.cs" />
+    <Compile Include="Post\ReportParDetailResult.cs" />
     <Compile Include="Post\RequestResult.cs" />
     <Compile Include="Post\LoginRequest.cs" />
     <Compile Include="Post\LoginResult.cs" />

@@ -42,7 +42,7 @@ namespace LocalS.BLL
         public string OpenId { get; set; }
         public string AccessToken { get; set; }
         public string TemplateId { get; set; }
-        public string SenvivDeptId { get; set; }
+        public string SvDeptId { get; set; }
     }
 
     public class SmsTemplateModel
@@ -87,6 +87,8 @@ namespace LocalS.BLL
                 return DateTime.Now;
             }
         }
+
+
 
         private void BuildTask(string operater, string userId, E_SenvivTaskType taskType, Dictionary<string, object> taskParams)
         {
@@ -905,7 +907,7 @@ namespace LocalS.BLL
             }
         }
 
-        public void BuildDayReport(string userId, string deptId)
+        public void BuildDayReport32(string userId, string deptId)
         {
             try
             {
@@ -913,7 +915,7 @@ namespace LocalS.BLL
 
                 LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
 
-                var d1 = SdkFactory.Senviv.GetUserHealthDayReport(config_Senviv, userId);
+                var d1 = SdkFactory.Senviv.GetUserHealthDayReport32(config_Senviv, userId);
 
                 if (d1 == null)
                 {
@@ -1434,6 +1436,259 @@ namespace LocalS.BLL
             }
         }
 
+        public void BuildDayReport46(string userId, string sn, string deptId)
+        {
+            try
+            {
+                var config_Senviv = GetConfig(deptId);
+
+                LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
+
+                var d1 = SdkFactory.Senviv.GetUserHealthDayReport64(config_Senviv, userId);
+
+                if (d1 == null)
+                {
+                    LogUtil.Info(TAG, "DayReport Is Null");
+
+                    return;
+                }
+
+                var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+
+                if (d_User.FisrtReportTime == null)
+                {
+                    d_User.FisrtReportTime = DateTime.Now;
+                }
+
+                var reportpar = d1.reportpar;
+
+                DateTime? fisrtReportTime = d_User.FisrtReportTime;
+                DateTime? lastReportTime = d_User.LastReportTime;
+
+                d_User.LastReportTime = DateTime.Now;
+                d_User.LastReportId = reportpar.ReportId;
+
+                var d_DayReport = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == reportpar.ReportId).FirstOrDefault();
+
+                if (d_DayReport == null)
+                {
+                    #region DayReport
+                    d_DayReport = new SenvivHealthDayReport();
+                    d_DayReport.Id = reportpar.ReportId;
+                    d_DayReport.SvUserId = userId;
+                    d_DayReport.HealthDate = TicksToDate(reportpar.CreateTime);
+                    d_DayReport.TotalScore = SvUtil.D46Decimal(reportpar.hv);
+
+
+                    d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
+                    d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
+                    d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
+                    d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
+                    d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
+                    d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
+                    d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
+
+                    d_DayReport.QxxlJlqx = reportpar.qxxl;
+
+
+
+                    d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
+                    d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
+                    d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
+                    d_DayReport.XlZg = SvUtil.D46Int(reportpar.max);//最高心率
+                    d_DayReport.XlZd = SvUtil.D46Int(reportpar.min);//最低心率
+                    d_DayReport.XlXdgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
+                    d_DayReport.XlXdgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
+                    d_DayReport.Xlcg125 = 0;//todo 
+                    d_DayReport.Xlcg115 = 0;//todo 
+                    d_DayReport.Xlcg085 = 0;//todo 
+                    d_DayReport.Xlcg075 = 0;//todo
+
+
+                    d_DayReport.HxDcpjhx = SvUtil.D46Int(reportpar.bavg);//	平均呼吸
+                                                                              // d_DayReport.HxDcjzhx = SvUtil.Decimal2Int(reportpar.lbr);//基准呼吸值
+                    d_DayReport.HxZdhx = SvUtil.D46Int(reportpar.bmin);//当夜最低呼吸率
+                    d_DayReport.HxZghx = SvUtil.D46Int(reportpar.bmax);//当夜最高呼吸率
+                    d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
+                    d_DayReport.HxGksc = 0;//todo 
+                    d_DayReport.HxGmsc = 0;//todo 
+
+
+                    d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
+                    d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
+                                                                           //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
+                                                                           //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
+
+
+                    d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
+                    d_DayReport.HrvXzznljzz = SvUtil.D46Int(reportpar.BaseTP);//心脏总能量基准值
+                    d_DayReport.HrvJgsjzlzs = SvUtil.D46Int(reportpar.LF);//交感神经张力指数
+                    d_DayReport.HrvJgsjzlzsjzz = SvUtil.D46Int(reportpar.BaseLF);// 交感神经张力基准值
+                    d_DayReport.HrvMzsjzlzs = SvUtil.D46Int(reportpar.HF);//迷走神经张力指数
+                    d_DayReport.HrvMzsjzlzsjzz = SvUtil.D46Int(reportpar.BaseHF);//迷走神经张力基准值
+                    d_DayReport.HrvZzsjzlzs = SvUtil.D46Decimal(reportpar.LFHF);//自主神经平衡
+                    d_DayReport.HrvZzsjzlzsjzz = SvUtil.D46Decimal(reportpar.BaseLFHF);//自主神经平衡基准值
+                    d_DayReport.HrvHermzs = SvUtil.D46Decimal(reportpar.ulf);//荷尔蒙指数
+                    d_DayReport.HrvHermzsjzz = SvUtil.D46Decimal(reportpar.Baseulf); //荷尔蒙指数基准值
+                    d_DayReport.HrvTwjxgsszs = SvUtil.D46Decimal(reportpar.vlf);//体温及血管舒缩指数
+                    d_DayReport.HrvTwjxgsszhjzz = SvUtil.D46Decimal(reportpar.Basevlf);//体温及血管舒缩基准值
+
+                    d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
+
+                    // d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
+
+
+                    d_DayReport.SmScsj = TicksToDate(reportpar.StartTime);//上床时间
+                    d_DayReport.SmLcsj = TicksToDate(reportpar.FinishTime);//离床时间
+                    d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
+                    d_DayReport.SmRssj = TicksToDate(reportpar.OnbedTime);//入睡时间
+                    d_DayReport.SmQxsj = TicksToDate(reportpar.OffbedTime);//清醒时间
+                    d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
+                    d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
+                    d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
+                                                                                                      //d_DayReport.SmLzscbl = sm.OffbedRatio;
+                                                                                                      // d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
+
+                    d_DayReport.SmSdsmsc = SvUtil.D46Long(reportpar.dp);//深睡时长
+                    d_DayReport.SmSdsmbl = SvUtil.D46Decimal(reportpar.dpr);//深睡期比例
+
+                    d_DayReport.SmQdsmsc = SvUtil.D46Long(reportpar.sl);//浅睡期时长
+                    d_DayReport.SmQdsmbl = SvUtil.D46Decimal(reportpar.slr);//浅睡期比例
+
+                    d_DayReport.SmRemsmsc = SvUtil.D46Long(reportpar.rem);//REM期时长
+                    d_DayReport.SmRemsmbl = SvUtil.D46Decimal(reportpar.remr);//REM期比例
+
+                    d_DayReport.SmQxsksc = SvUtil.D46Long(reportpar.sr);//REM期时长
+                    d_DayReport.SmQxskbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
+
+                    d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
+
+                    d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
+                    //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
+                    d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
+
+
+                    var trendcharts = d1.trendchart;
+                    if (trendcharts != null)
+                    {
+
+                        foreach (var chart in trendcharts)
+                        {
+                            if (chart.type == 2107)
+                            {
+                                d_DayReport.HxPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
+                            }
+                            else if (chart.type == 2106)
+                            {
+                                d_DayReport.XlPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
+                            }
+                        }
+
+
+
+                        //foreach (var chart in barCharts)
+                        //{
+                        //    var items = chart.Items;
+                        //    if (items != null)
+                        //    {
+                        //        if (chart.ChartTypeId == 2110)
+                        //        {
+                        //            foreach (var item in items)
+                        //            {
+                        //                d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+                    }
+
+                    d_DayReport.IsSend = true;
+                    d_DayReport.Status = E_SenvivHealthReportStatus.SendSuccess;
+                    d_DayReport.CreateTime = DateTime.Now;
+                    d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
+
+                    if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                    {
+                        d_DayReport.IsValid = true;
+                    }
+
+                    CurrentDb.SenvivHealthDayReport.Add(d_DayReport);
+                    CurrentDb.SaveChanges();
+
+                    #endregion
+                }
+
+                if (fisrtReportTime != null)
+                {
+                    Dictionary<string, object> taskParams = new Dictionary<string, object>();
+                    DateTime? rptStartTime = null;
+                    DateTime? rptEndTime = null;
+                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 1)
+                    {
+                        LogUtil.Info(TAG, "Health_Monitor_FisrtDay");
+
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("rpt_id", d_DayReport.Id);
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FisrtDay, taskParams);
+                    }
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 7)
+                    {
+                        LogUtil.Info(TAG, "Health_Monitor_SeventhDay");
+
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_SeventhDay, taskParams);
+                    }
+
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 14)
+                    {
+                        LogUtil.Info(TAG, "Health_Monitor_FourteenthDay");
+
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
+                    }
+
+                    LogUtil.Info(TAG, "Health_Monitor_PerMonth:" + lastReportTime.Value.ToUnifiedFormatDateTime());
+
+                    DateTime dt1 = lastReportTime.Value;
+                    DateTime dt2 = DateTime.Now;
+                    int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
+                    if (month >= 1)
+                    {
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
+
+                        taskParams = new Dictionary<string, object>();
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_PerMonth, taskParams);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error(TAG, ex);
+            }
+        }
+
         //优先级别MerchId,若Merch为空再取deviceId
         public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string deviceId)
         {
@@ -1521,20 +1776,19 @@ namespace LocalS.BLL
             //return config;
         }
 
-
         public SenvivConfig GetConfig(string deptId)
         {
             var config = new SenvivConfig();
             if (deptId == "32")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
-                config.SenvivDeptId = "32";
+                config.SvDeptId = "32";
                 config.MerchId = "88273829";
             }
             else if (deptId == "46")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
-                config.SenvivDeptId = "46";
+                config.SvDeptId = "46";
                 config.MerchId = "88273829";
             }
             return config;
@@ -1681,9 +1935,9 @@ namespace LocalS.BLL
 
             model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
-            model.SenvivDeptId = d_SenvivUser.DeptId;
+            model.SvDeptId = d_SenvivUser.SvDeptId;
 
-            if (d_SenvivUser.DeptId == "32")
+            if (d_SenvivUser.SvDeptId == "32")
             {
                 var cofig = GetConfig("32");
                 model.AccessToken = SdkFactory.Senviv.GetWxPaAccessToken(cofig);

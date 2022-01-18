@@ -53,25 +53,30 @@ export default {
           id: 'fullName',
           title: '您好，请输入你的真实姓名',
           type: 'input',
-          value: ''
+          value: '',
+          append: ''
         },
         {
           id: 'birthday',
           title: '生日',
           type: 'date',
-          value: ''
+          value: '',
+          append: ''
+
         },
         {
           id: 'height',
           title: '身高',
           type: 'input',
-          value: ''
+          value: '',
+          append: 'cm'
         },
         {
           id: 'weight',
           title: '体重',
           type: 'input',
-          value: ''
+          value: '',
+          append: 'kg'
         },
         {
           id: 'sex',
@@ -110,6 +115,7 @@ export default {
             { label: '难以入睡', value: '4' },
             { label: '呼吸暂停综合症', value: '5' }
           ],
+          required: false,
           value: []
         },
         {
@@ -127,6 +133,7 @@ export default {
             { label: '胸闷', value: '8' },
             { label: '肠胃问题', value: '9' }
           ],
+          required: false,
           value: []
         },
         {
@@ -138,6 +145,7 @@ export default {
             { label: '高血压', value: '5' },
             { label: '冠心病', value: '6' }
           ],
+          required: false,
           value: []
         },
         {
@@ -149,6 +157,7 @@ export default {
             { label: '输血史（非献血）', value: '2' },
             { label: '传染病史', value: '3' }
           ],
+          required: false,
           value: []
         },
         {
@@ -162,6 +171,7 @@ export default {
             { label: '脑梗塞药物', value: '4' },
             { label: '治疗失眠药物', value: '5' }
           ],
+          required: false,
           value: []
         }
       ]
@@ -170,7 +180,8 @@ export default {
   created() {
     this.deviceId = typeof this.$route.query.deviceId === 'undefined' ? null : this.$route.query.deviceId
     console.log(this.deviceId)
-    this.onInit()
+    // this.onInit()
+    this.step = 2
   },
   methods: {
     onInit() {

@@ -70,7 +70,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_ClientUser = new SysClientUser();
                 d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
                 d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
-                d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds");
+                d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds.3pg");
                 d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                 d_ClientUser.NickName = r_Api_UseInfo.nickname;
                 d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
@@ -86,9 +86,6 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                d_ClientUser.MerchId = merchId;
-                d_ClientUser.WxPaAppId = app_Config.AppId;
-                d_ClientUser.WxPaOpenId = r_Api_UseInfo.openid;
                 d_ClientUser.NickName = r_Api_UseInfo.nickname;
                 d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
                 d_ClientUser.MendTime = DateTime.Now;

@@ -7,7 +7,7 @@ namespace LocalS.Entity
 {
     public enum SenvivUserDeviceBindStatus
     {
-        None = 0,
+        Unknow = 0,
         NotBind = 1,
         Binded = 2,
         UnBind = 3
