@@ -8,6 +8,7 @@ namespace LocalS.Service.Api.HealthApp
 {
     public class HealthAppServiceFactory
     {
+
         public static MonthReportService MonthReport
         {
             get

@@ -47,6 +47,11 @@ const router = new VueRouter({
       meta: { isAuth: false }
     },
     {
+      path: '/report/day',
+      component: () => import('@/views/report/day/Index'),
+      meta: { isAuth: false }
+    },
+    {
       path: '/report/month/monitor',
       component: () => import('@/views/report/month/Index'),
       redirec: '/report/month/monitor',
