@@ -24,7 +24,7 @@ namespace LocalS.Service.Api.HealthApp
 
             if (app_Config == null)
             {
-                return new CustomJsonResult(ResultType.Failure, "2802", "配置未生效");
+                return new CustomJsonResult(ResultType.Failure, "2801", "配置未生效");
             }
 
             var ret = new

@@ -1692,6 +1692,8 @@ namespace LocalS.BLL
         //优先级别MerchId,若Merch为空再取deviceId
         public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string deviceId)
         {
+            LogUtil.Info("merchId:" + merchId + ",deviceId:" + deviceId);
+
             if (string.IsNullOrEmpty(merchId) && string.IsNullOrEmpty(deviceId))
                 return null;
 
@@ -1720,10 +1722,20 @@ namespace LocalS.BLL
         }
         public WxAppConfig GetWxAppConfigByMerchId(string merchId)
         {
+            LogUtil.Info("GetWxAppConfigByMerchId:" + merchId);
 
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == merchId).FirstOrDefault();
             if (d_SenvivMerch == null)
+            {
+                LogUtil.Info("GetWxAppConfigByMerchId:is null");
+
                 return null;
+            }
+            else
+            {
+                LogUtil.Info("GetWxAppConfigByMerchId:is not null");
+            }
+    
 
             var config = new WxAppConfig();
             config.AppId = d_SenvivMerch.WxPaAppId;
@@ -1733,10 +1745,14 @@ namespace LocalS.BLL
             exts.Add("MerchId", merchId);
             exts.Add("SvDeptId", d_SenvivMerch.SvDeptId);
             config.Exts = exts;
+
+            LogUtil.Info("GetWxAppConfigByMerchId.WxPaAppId:" + d_SenvivMerch.WxPaAppId);
+
             return config;
         }
         public WxAppConfig GetWxAppConfigByDeviceId(string deviceId)
         {
+            LogUtil.Info("GetWxAppConfigByDeviceId:" + deviceId);
             var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == deviceId && m.IsStopUse == false).FirstOrDefault();
 
             if (d_MerchDevice == null)
