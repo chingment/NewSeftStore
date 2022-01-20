@@ -39,47 +39,48 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                string[] svDeptIds = new string[] { "32", "46" };
-
+                string[] svDeptIds = new string[] { "46" };
+               
                 foreach (var svDeptId in svDeptIds)
                 {
                     var config_Senviv = BizFactory.Senviv.GetConfig(svDeptId);
 
+                    
                     #region 获取所有设备
-                    var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
+                    //var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
 
-                    LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivBoxs.Count:{1}", svDeptId, i_SenvivBoxs.Count));
+                    //LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivBoxs.Count:{1}", svDeptId, i_SenvivBoxs.Count));
 
-                    foreach (var i_SenvivBox in i_SenvivBoxs)
-                    {
-                        var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
-                        if (d_Device == null)
-                        {
-                            d_Device = new Entity.Device();
-                            d_Device.Id = i_SenvivBox.sn;
-                            d_Device.Name = "非接触式生命体征检测仪";
-                            d_Device.Type = "senvivlite";
-                            d_Device.ImeiId = i_SenvivBox.imei;
-                            d_Device.CurUseMerchId = "88273829";
-                            d_Device.Model = i_SenvivBox.model;
-                            d_Device.AppVersionName = i_SenvivBox.version;
-                            d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
-                            d_Device.CreateTime = DateTime.Now;
-                            d_Device.SvDeptId = svDeptId;
-                            CurrentDb.Device.Add(d_Device);
-                            CurrentDb.SaveChanges();
+                    //foreach (var i_SenvivBox in i_SenvivBoxs)
+                    //{
+                    //    var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
+                    //    if (d_Device == null)
+                    //    {
+                    //        d_Device = new Entity.Device();
+                    //        d_Device.Id = i_SenvivBox.sn;
+                    //        d_Device.Name = "非接触式生命体征检测仪";
+                    //        d_Device.Type = "senvivlite";
+                    //        d_Device.ImeiId = i_SenvivBox.imei;
+                    //        d_Device.CurUseMerchId = "88273829";
+                    //        d_Device.Model = i_SenvivBox.model;
+                    //        d_Device.AppVersionName = i_SenvivBox.version;
+                    //        d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
+                    //        d_Device.CreateTime = DateTime.Now;
+                    //        d_Device.SvDeptId = svDeptId;
+                    //        CurrentDb.Device.Add(d_Device);
+                    //        CurrentDb.SaveChanges();
 
-                            var d_MerchDevice = new Entity.MerchDevice();
-                            d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
-                            d_MerchDevice.MerchId = d_Device.CurUseMerchId;
-                            d_MerchDevice.DeviceId = d_Device.Id;
-                            d_MerchDevice.IsStopUse = false;
-                            d_MerchDevice.Creator = d_Device.Creator;
-                            d_MerchDevice.CreateTime = d_Device.CreateTime;
-                            CurrentDb.MerchDevice.Add(d_MerchDevice);
-                            CurrentDb.SaveChanges();
-                        }
-                    }
+                    //        var d_MerchDevice = new Entity.MerchDevice();
+                    //        d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
+                    //        d_MerchDevice.MerchId = d_Device.CurUseMerchId;
+                    //        d_MerchDevice.DeviceId = d_Device.Id;
+                    //        d_MerchDevice.IsStopUse = false;
+                    //        d_MerchDevice.Creator = d_Device.Creator;
+                    //        d_MerchDevice.CreateTime = d_Device.CreateTime;
+                    //        CurrentDb.MerchDevice.Add(d_MerchDevice);
+                    //        CurrentDb.SaveChanges();
+                    //    }
+                    //}
 
                     #endregion
 

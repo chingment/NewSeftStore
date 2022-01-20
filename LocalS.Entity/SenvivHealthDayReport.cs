@@ -11,6 +11,7 @@ namespace LocalS.Entity
         public string SvUserId { get; set; }
         public DateTime HealthDate { get; set; }
         public decimal TotalScore { get; set; }
+        public decimal SmScore { get; set; }
         public string SmTags { get; set; }
         public DateTime SmScsj { get; set; }
         public DateTime SmLcsj { get; set; }

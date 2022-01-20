@@ -104,7 +104,7 @@ namespace SenvivSdk
             public string jbCount { get; set; }
             public string sleepValue { get; set; }
             public string mbs { get; set; }
-            public string AbnormalLabel { get; set; }
+            public List<string> AbnormalLabel { get; set; }
             public string hv { get; set; }
             public string avg { get; set; }
             public string max { get; set; }

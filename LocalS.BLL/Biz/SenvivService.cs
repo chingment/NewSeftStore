@@ -912,7 +912,7 @@ namespace LocalS.BLL
             {
                 var config_Senviv = GetConfig(deptId);
 
-                LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
+                LogUtil.Info(TAG, "BuildDayReport32.UserId:" + userId + ",DeptId:" + deptId);
 
                 var d1 = SdkFactory.Senviv.GetUserHealthDayReport32(config_Senviv, userId);
 
@@ -1441,9 +1441,9 @@ namespace LocalS.BLL
             {
                 var config_Senviv = GetConfig(deptId);
 
-                LogUtil.Info(TAG, "BuildDayReport.UserId:" + userId + ",DeptId:" + deptId);
+                LogUtil.Info(TAG, "BuildDayReport46.sn" + sn + ",UserId:" + userId + ",DeptId:" + deptId);
 
-                var d1 = SdkFactory.Senviv.GetUserHealthDayReport64(config_Senviv, userId);
+                var d1 = SdkFactory.Senviv.GetUserHealthDayReport64(config_Senviv, sn);
 
                 if (d1 == null)
                 {
@@ -1476,21 +1476,20 @@ namespace LocalS.BLL
                     d_DayReport.Id = reportpar.ReportId;
                     d_DayReport.SvUserId = userId;
                     d_DayReport.HealthDate = TicksToDate(reportpar.CreateTime);
-                    d_DayReport.TotalScore = SvUtil.D46Decimal(reportpar.hv);
+                    d_DayReport.TotalScore = SvUtil.D46Decimal(reportpar.hv);//健康值
 
-
+                    d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
                     d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
                     d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
                     d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
-                    d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
+                    d_DayReport.MylGrfx = 100 - SvUtil.D46Decimal(reportpar.gr);
                     d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
-                    d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
+                    d_DayReport.MbTlbgk = 100 - SvUtil.D46Decimal(reportpar.tc);
                     d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
 
                     d_DayReport.QxxlJlqx = reportpar.qxxl;
 
-
-
+                  
                     d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
                     d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
                     d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
@@ -1505,7 +1504,7 @@ namespace LocalS.BLL
 
 
                     d_DayReport.HxDcpjhx = SvUtil.D46Int(reportpar.bavg);//	平均呼吸
-                                                                              // d_DayReport.HxDcjzhx = SvUtil.Decimal2Int(reportpar.lbr);//基准呼吸值
+                    d_DayReport.HxDcjzhx = SvUtil.D46Int(reportpar.br);//基准呼吸值
                     d_DayReport.HxZdhx = SvUtil.D46Int(reportpar.bmin);//当夜最低呼吸率
                     d_DayReport.HxZghx = SvUtil.D46Int(reportpar.bmax);//当夜最高呼吸率
                     d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
@@ -1515,8 +1514,8 @@ namespace LocalS.BLL
 
                     d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
                     d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
-                                                                           //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
-                                                                           //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
+                                                                      //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
+                                                                      //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
 
 
                     d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
@@ -1534,9 +1533,9 @@ namespace LocalS.BLL
 
                     d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
 
-                    // d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
+                    d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
 
-
+                    d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
                     d_DayReport.SmScsj = TicksToDate(reportpar.StartTime);//上床时间
                     d_DayReport.SmLcsj = TicksToDate(reportpar.FinishTime);//离床时间
                     d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
@@ -1726,7 +1725,7 @@ namespace LocalS.BLL
             {
                 return null;
             }
-    
+
 
             var config = new WxAppConfig();
             config.AppId = d_SenvivMerch.WxPaAppId;
@@ -1937,7 +1936,7 @@ namespace LocalS.BLL
             model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
-        
+
             if (d_SenvivUser.SvDeptId == "32")
             {
                 var cofig = GetConfig("32");
