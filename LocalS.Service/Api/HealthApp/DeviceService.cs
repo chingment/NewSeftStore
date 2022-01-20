@@ -142,6 +142,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
+                d_UserDevice.SvDeptId = d_Device.SvDeptId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.NotBind;
                 d_UserDevice.Creator = operater;
@@ -178,6 +179,8 @@ namespace LocalS.Service.Api.HealthApp
             // if (string.IsNullOrEmpty(rop.PhoneNumber))
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
 
+            var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
+
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
@@ -185,6 +188,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
+                d_UserDevice.SvDeptId = d_Device.SvDeptId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
                 d_UserDevice.Creator = operater;

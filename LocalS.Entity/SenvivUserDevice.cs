@@ -20,6 +20,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string UserId { get; set; }
         public string SvUserId { get; set; }
+        public string SvDeptId { get; set; }
         public string DeviceId { get; set; }
         public DateTime? BindTime { get; set; }
         public DateTime? BindDeviceIdTime { get; set; }

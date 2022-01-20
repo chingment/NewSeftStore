@@ -42,7 +42,6 @@ namespace LocalS.BLL
         public string OpenId { get; set; }
         public string AccessToken { get; set; }
         public string TemplateId { get; set; }
-        public string SvDeptId { get; set; }
     }
 
     public class SmsTemplateModel
@@ -1722,18 +1721,10 @@ namespace LocalS.BLL
         }
         public WxAppConfig GetWxAppConfigByMerchId(string merchId)
         {
-            LogUtil.Info("GetWxAppConfigByMerchId:" + merchId);
-
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == merchId).FirstOrDefault();
             if (d_SenvivMerch == null)
             {
-                LogUtil.Info("GetWxAppConfigByMerchId:is null");
-
                 return null;
-            }
-            else
-            {
-                LogUtil.Info("GetWxAppConfigByMerchId:is not null");
             }
     
 
@@ -1743,10 +1734,7 @@ namespace LocalS.BLL
 
             Dictionary<string, string> exts = new Dictionary<string, string>();
             exts.Add("MerchId", merchId);
-            exts.Add("SvDeptId", d_SenvivMerch.SvDeptId);
             config.Exts = exts;
-
-            LogUtil.Info("GetWxAppConfigByMerchId.WxPaAppId:" + d_SenvivMerch.WxPaAppId);
 
             return config;
         }
@@ -1779,7 +1767,6 @@ namespace LocalS.BLL
 
             Dictionary<string, string> exts = new Dictionary<string, string>();
             exts.Add("MerchId", d_SenvivMerch.MerchId);
-            exts.Add("SvDeptId", d_SenvivMerch.SvDeptId);
             exts.Add("WxPaOpenId", d_ClientUser.WxPaOpenId);
             appConfig.Exts = exts;
 
@@ -1799,13 +1786,11 @@ namespace LocalS.BLL
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
                 config.SvDeptId = "32";
-                config.MerchId = "88273829";
             }
             else if (deptId == "46")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
                 config.SvDeptId = "46";
-                config.MerchId = "88273829";
             }
             return config;
         }
@@ -1951,8 +1936,8 @@ namespace LocalS.BLL
 
             model.OpenId = d_ClientUser.WxPaOpenId;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
-            model.SvDeptId = d_SenvivUser.SvDeptId;
 
+        
             if (d_SenvivUser.SvDeptId == "32")
             {
                 var cofig = GetConfig("32");

@@ -60,5 +60,7 @@ namespace LocalS.Entity
         public string ImUserName { get; set; }
         public string ImPassword { get; set; }
         public string CbLight { get; set; }
+
+        public string SvDeptId { get; set; }
     }
 }

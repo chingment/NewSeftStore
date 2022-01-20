@@ -14,7 +14,7 @@ namespace LocalS.BLL
     {
         public string AccessToken { get; set; }
         public string SvDeptId { get; set; }
-        public string MerchId { get; set; }
+        //public string MerchId { get; set; }
     }
 
     public class Senviv4GProvider : BaseService

@@ -88,7 +88,9 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig("46");
+
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_UserDevice.SvDeptId);
+
             SenvivUser d_SenvivUser;
 
             string fullName = rop.Answers["fullName"].ToString();

@@ -39,15 +39,55 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                string[] deptIds = new string[] { "46" };
+                string[] svDeptIds = new string[] { "32", "46" };
 
-                foreach (var deptId in deptIds)
+                foreach (var svDeptId in svDeptIds)
                 {
-                    var config_Senviv = BizFactory.Senviv.GetConfig(deptId);
+                    var config_Senviv = BizFactory.Senviv.GetConfig(svDeptId);
 
+                    #region 获取所有设备
+                    var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
+
+                    LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivBoxs.Count:{1}", svDeptId, i_SenvivBoxs.Count));
+
+                    foreach (var i_SenvivBox in i_SenvivBoxs)
+                    {
+                        var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
+                        if (d_Device == null)
+                        {
+                            d_Device = new Entity.Device();
+                            d_Device.Id = i_SenvivBox.sn;
+                            d_Device.Name = "非接触式生命体征检测仪";
+                            d_Device.Type = "senvivlite";
+                            d_Device.ImeiId = i_SenvivBox.imei;
+                            d_Device.CurUseMerchId = "88273829";
+                            d_Device.Model = i_SenvivBox.model;
+                            d_Device.AppVersionName = i_SenvivBox.version;
+                            d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
+                            d_Device.CreateTime = DateTime.Now;
+                            d_Device.SvDeptId = svDeptId;
+                            CurrentDb.Device.Add(d_Device);
+                            CurrentDb.SaveChanges();
+
+                            var d_MerchDevice = new Entity.MerchDevice();
+                            d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
+                            d_MerchDevice.MerchId = d_Device.CurUseMerchId;
+                            d_MerchDevice.DeviceId = d_Device.Id;
+                            d_MerchDevice.IsStopUse = false;
+                            d_MerchDevice.Creator = d_Device.Creator;
+                            d_MerchDevice.CreateTime = d_Device.CreateTime;
+                            CurrentDb.MerchDevice.Add(d_MerchDevice);
+                            CurrentDb.SaveChanges();
+                        }
+                    }
+
+                    #endregion
+
+
+                    #region 获取所有用户 
                     var i_SenvivUsers = SdkFactory.Senviv.GetUserList(config_Senviv);
 
-                    LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivUsers.Count:{1}", deptId, i_SenvivUsers.Count));
+                    LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivUsers.Count:{1}", svDeptId, i_SenvivUsers.Count));
 
                     foreach (var i_SenvivUser in i_SenvivUsers)
                     {
@@ -68,7 +108,7 @@ namespace LocalS.BLL.Task
                                     d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                                     d_ClientUser.NickName = i_SenvivUser.nick;
                                     d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    d_ClientUser.MerchId = config_Senviv.MerchId;
+                                    d_ClientUser.MerchId = "88273829";
                                     d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
                                     d_ClientUser.BelongType = Enumeration.BelongType.Client;
                                     d_ClientUser.RegisterTime = DateTime.Now;
@@ -82,6 +122,7 @@ namespace LocalS.BLL.Task
 
                                 d_SenvivUser = new Entity.SenvivUser();
                                 d_SenvivUser.Id = i_SenvivUser.userid;
+                                d_SenvivUser.MerchId = d_ClientUser.MerchId;
                                 d_SenvivUser.SvDeptId = i_SenvivUser.deptid;
                                 d_SenvivUser.UserId = d_ClientUser.Id;
                                 d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
@@ -118,7 +159,7 @@ namespace LocalS.BLL.Task
                                     d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                                     d_ClientUser.NickName = i_SenvivUser.nick;
                                     d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    d_ClientUser.MerchId = config_Senviv.MerchId;
+                                    d_ClientUser.MerchId = "88273829";
                                     d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
                                     d_ClientUser.BelongType = Enumeration.BelongType.Client;
                                     d_ClientUser.RegisterTime = DateTime.Now;
@@ -168,6 +209,7 @@ namespace LocalS.BLL.Task
                                         d_SenvivUserDevice.SvUserId = svUserId;
                                         d_SenvivUserDevice.UserId = useId;
                                         d_SenvivUserDevice.DeviceId = device.sn;
+                                        d_SenvivUserDevice.SvDeptId = svDeptId;
                                         d_SenvivUserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Unknow;
                                         d_SenvivUserDevice.CreateTime = DateTime.Now;
                                         d_SenvivUserDevice.Creator = IdWorker.Build(IdType.EmptyGuid);
@@ -175,16 +217,14 @@ namespace LocalS.BLL.Task
                                         CurrentDb.SaveChanges();
                                     }
 
-                                    if (deptId == "46")
+                                    if (svDeptId == "46")
                                     {
                                         BizFactory.Senviv.BuildDayReport46(svUserId, device.sn, d_SenvivUser.SvDeptId);
                                     }
                                 }
                             }
 
-
-
-                            if (deptId == "32")
+                            if (svDeptId == "32")
                             {
                                 BizFactory.Senviv.BuildDayReport32(d_SenvivUser.Id, d_SenvivUser.SvDeptId);
                             }
@@ -193,42 +233,7 @@ namespace LocalS.BLL.Task
 
                     }
 
-
-
-
-                    var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
-
-                    LogUtil.Info(TAG, string.Format("DeptId:{0},SenvivBoxs.Count:{1}", deptId, i_SenvivBoxs.Count));
-
-                    foreach (var i_SenvivBox in i_SenvivBoxs)
-                    {
-                        var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
-                        if (d_Device == null)
-                        {
-                            d_Device = new Entity.Device();
-                            d_Device.Id = i_SenvivBox.sn;
-                            d_Device.Name = "非接触式生命体征检测仪";
-                            d_Device.Type = "senvivlite";
-                            d_Device.ImeiId = i_SenvivBox.imei;
-                            d_Device.CurUseMerchId = "88273829";
-                            d_Device.Model = i_SenvivBox.model;
-                            d_Device.AppVersionName = i_SenvivBox.version;
-                            d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
-                            d_Device.CreateTime = DateTime.Now;
-                            CurrentDb.Device.Add(d_Device);
-                            CurrentDb.SaveChanges();
-
-                            var d_MerchDevice = new Entity.MerchDevice();
-                            d_MerchDevice.Id = IdWorker.Build(IdType.NewGuid);
-                            d_MerchDevice.MerchId = d_Device.CurUseMerchId;
-                            d_MerchDevice.DeviceId = d_Device.Id;
-                            d_MerchDevice.IsStopUse = false;
-                            d_MerchDevice.Creator = d_Device.Creator;
-                            d_MerchDevice.CreateTime = d_Device.CreateTime;
-                            CurrentDb.MerchDevice.Add(d_MerchDevice);
-                            CurrentDb.SaveChanges();
-                        }
-                    }
+                    #endregion
                 }
             }
             catch (Exception ex)
