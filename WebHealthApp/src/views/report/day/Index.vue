@@ -1,21 +1,16 @@
 <template>
   <div :class="'page-tabbar ' +theme">
     <div class="page-wrap">
+
       <mt-tab-container v-model="selected" class="page-tabbar-container">
         <mt-tab-container-item id="tab1">
           <div class="a-part-1">
-            <div class="part-wrap">
-              <div class="st-1">
-                1
-              </div>
-              <div class="st-2">
-                <div>65</div>
-                <div>健康值</div>
-              </div>
-              <div class="st-3">
-                3
-              </div>
-            </div>
+
+            <card-own-a
+              :user-info="userInfo"
+              :rd="rd"
+            />
+
           </div>
           <div class="a-part-2">
             <div style="padding:10px">
@@ -121,12 +116,14 @@ import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { getDetails } from '@/api/dayreport'
 import ProcessCircle from '@/components/ProcessCircle/Index.vue'
 import DvItem from '@/components/DvItem.vue'
+import CardOwnA from './components/CardOwnA.vue'
 export default {
   components: {
     Carousel3d,
     Slide,
     ProcessCircle,
-    DvItem
+    DvItem,
+    CardOwnA
   },
   data() {
     return {
@@ -159,7 +156,7 @@ export default {
         signName: ''
       },
       rd: {
-        healthScore: '',
+        healthScore: 60,
         healthDate: '',
         smScore: 40,
         smScoreTip: '您的睡眠值已经打败77%的人',
@@ -257,16 +254,6 @@ export default {
     height: 100%;
     padding-bottom: 100px;
   }
-
-.a-part-1{
-    background-repeat:no-repeat;
-    background-size: cover;
-    height: 240px;
-
-    .part-wrap{
-        display: flex;
-    }
-}
 
 .mint-tabbar{
     background-color: #fff;
@@ -393,6 +380,12 @@ padding: 8px 0px;
 }
 }
 
+.a-part-1{
+    background-repeat:no-repeat;
+    background-size: cover;
+    padding: 20px;
+}
+
 .b-part-1{
     background-repeat:no-repeat;
     background-size: cover;
@@ -512,7 +505,7 @@ flex-direction: column;
       display: flex;
       .mi-icon{
 width: 50px;
-  background: url('~@/assets/report/day/pink/b_part4_icon.jpg') no-repeat;
+
 background-size:100%;
       }
        .mi-suggest{
@@ -562,6 +555,13 @@ background-size:100%;
     .b-part-1{
    background: url('~@/assets/report/day/pink/b_part1_bg.png') no-repeat top center;
     }
+
+    .b-part-4{
+   .mi-icon{
+  background: url('~@/assets/report/day/pink/b_part4_icon.jpg') no-repeat;
+  background-size:100%;
+      }
+    }
 }
 
 .theme-green{
@@ -587,6 +587,13 @@ background-size:100%;
 
   .b-part-1{
    background: url('~@/assets/report/day/green/b_part1_bg.png') no-repeat top center;
+    }
+
+      .b-part-4{
+   .mi-icon{
+  background: url('~@/assets/report/day/green/b_part4_icon.jpg') no-repeat;
+  background-size:100%;
+      }
     }
 
 }

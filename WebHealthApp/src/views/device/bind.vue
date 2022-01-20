@@ -223,6 +223,7 @@ export default {
 
       this.loading = true
       getPhoneValidCode({ deviceId: this.formByBind.deviceId, phoneNumber: this.formByBind.phoneNumber }).then(res => {
+        this.$toast(res.message)
         if (res.result === 1) {
           var d = res.data
           this.formByBind.tokenCode = d.tokenCode
@@ -242,8 +243,6 @@ export default {
               }
             }, 1000)
           }
-        } else {
-          this.$toast(res.message)
         }
         this.loading = false
       })

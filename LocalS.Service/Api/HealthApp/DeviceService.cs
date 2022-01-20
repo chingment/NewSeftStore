@@ -135,6 +135,13 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, "2801", "未关注公众号，请先关注.");
             }
 
+            var d_Device_HasBind = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).FirstOrDefault();
+
+            if (d_Device_HasBind != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定");
+            }
+
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
@@ -179,6 +186,13 @@ namespace LocalS.Service.Api.HealthApp
             // if (string.IsNullOrEmpty(rop.PhoneNumber))
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
 
+            var d_Device_HasBind = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).FirstOrDefault();
+
+            if (d_Device_HasBind != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定");
+            }
+
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
 
             var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
@@ -198,6 +212,8 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
+
+
                 if (d_UserDevice.BindDeviceIdTime == null)
                     d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.BindPhoneTime = DateTime.Now;
@@ -218,13 +234,12 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
-            var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
+            var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUser.SvDeptId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUserDevice.SvDeptId);
 
-            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUser.Id, rop.DeviceId);
+            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUserDevice.SvUserId, rop.DeviceId);
 
             if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");
@@ -296,11 +311,11 @@ namespace LocalS.Service.Api.HealthApp
 
                     RedisClient.Set(string.Format("phone_valid_code:{0}", key), key_val, new TimeSpan(0, 2, 0));
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功", new { TokenCode = key });
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "验证码发送成功", new { TokenCode = key });
                 }
                 else
                 {
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "发送失败");
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "验证码发送失败");
                 }
 
             }
@@ -308,7 +323,7 @@ namespace LocalS.Service.Api.HealthApp
             {
                 LogUtil.Error("发送短信", ex);
 
-                result = new CustomJsonResult(ResultType.Exception, ResultCode.Failure, "发送失败");
+                result = new CustomJsonResult(ResultType.Exception, ResultCode.Failure, "验证码发送失败");
             }
 
             return result;

@@ -44,7 +44,8 @@ namespace LocalS.Service.Api.HealthApp
 
             var userInfo = new
             {
-                signName = "逍遥"
+                signName = "逍遥",
+                avatar = "https://thirdwx.qlogo.cn/mmopen/vi_32/6zcicmSoM5yjdWG9MoHydE6suFUGaHsKATFUPU7yU4d7PhLcsKWj51NhxA4PichkuYg5uJAWWhagnkyqHhAfDKGg/132"
             };
 
 
@@ -55,16 +56,19 @@ namespace LocalS.Service.Api.HealthApp
             smDvs.Add(SvDataJdUtil.GetHxZtcs(0));
             smDvs.Add(SvDataJdUtil.GetXlDcjzxl(0));
             smDvs.Add(SvDataJdUtil.GetHrvXzznl(0));
-   
+
             var ret = new
             {
                 rd = new
                 {
-                    smScore = 40,
-                    smScoreTip = "您的睡眠值已经打败77%的人",
-                    gzTags = gzTags,//关注标签
-                    smTags = smTags,//睡眠标签
-                    smDvs = smDvs,//睡觉检测项
+                    HealthDate="2012-12-12",
+                    HealthScore = 60,
+                    HealthScoreTip="您今天的健康值超过88%的人",
+                    SmScore = 40,
+                    SmScoreTip = "您的睡眠值已经打败77%的人",
+                    GzTags = gzTags,//关注标签
+                    SmTags = smTags,//睡眠标签
+                    SmDvs = smDvs,//睡觉检测项
                 },
                 userInfo = userInfo
             };
