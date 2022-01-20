@@ -44,17 +44,27 @@ namespace LocalS.Service.Api.HealthApp
 
             var userInfo = new
             {
-                signName="逍遥"
+                signName = "逍遥"
             };
 
+
+            var smDvs = new List<object>();
+            smDvs.Add(SvDataJdUtil.GetSmSmsc(0));
+            smDvs.Add(SvDataJdUtil.GetSmRsxs(0));
+            smDvs.Add(SvDataJdUtil.GetSmSdsmsc(0));
+            smDvs.Add(SvDataJdUtil.GetHxZtcs(0));
+            smDvs.Add(SvDataJdUtil.GetXlDcjzxl(0));
+            smDvs.Add(SvDataJdUtil.GetHrvXzznl(0));
+   
             var ret = new
             {
                 rd = new
                 {
                     smScore = 40,
                     smScoreTip = "您的睡眠值已经打败77%的人",
-                    gzTags = gzTags,
-                    smTags = smTags
+                    gzTags = gzTags,//关注标签
+                    smTags = smTags,//睡眠标签
+                    smDvs = smDvs,//睡觉检测项
                 },
                 userInfo = userInfo
             };

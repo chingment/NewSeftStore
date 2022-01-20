@@ -8,6 +8,7 @@ namespace LocalS.BLL
 {
     public class SvDataJd
     {
+        public string Name { get; set; }
         //具体值
         public string Value { get; set; }
         //提示颜色

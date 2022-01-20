@@ -66,6 +66,7 @@ namespace LocalS.BLL
         public static SvDataJd GetMylGrfx(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "免疫力感染风险";
             jd.Value = val.ToString();
 
             if (val <= 19)
@@ -267,7 +268,30 @@ namespace LocalS.BLL
         public static SvDataJd GetSmSmsc(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "睡眠总时长";
+            var hour = Covevt2Hour(val);
+            jd.Value = GetHourText(hour);
+            jd.RefRange = "6~9h";
+            if (hour < 6)
+            {
+                jd.Set("低", "↓", CA_1);
+            }
+            else if (hour >= 6 && hour <= 9)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 9)
+            {
+                jd.Set("高", "↑", CA_1);
+            }
 
+            return jd;
+        }
+
+        public static SvDataJd GetSmRsxs(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "入睡需时";
             var hour = Covevt2Hour(val);
             jd.Value = GetHourText(hour);
             jd.RefRange = "6~9h";
@@ -314,7 +338,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmSdsmsc(decimal val)
         {
             var jd = new SvDataJd();
-
+            jd.Name = "深度睡眠时长";
             var hour = Covevt2Hour(val);
             jd.Value = GetHourText(hour);
             jd.RefRange = "1.05~2.25h";
@@ -399,6 +423,7 @@ namespace LocalS.BLL
         public static SvDataJd GetXlDcjzxl(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "基准心率";
             jd.Value = val.ToString();
             jd.RefRange = "50~83次/min";
             if (val < 50)
@@ -526,6 +551,7 @@ namespace LocalS.BLL
         public static SvDataJd GetHxZtcs(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "呼吸暂停次数";
             jd.Value = val.ToString();
             jd.RefRange = "0~30次";
             if (val <= 30)
@@ -544,6 +570,7 @@ namespace LocalS.BLL
         public static SvDataJd GetHrvXzznl(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "心脏总能量";
             jd.Value = val.ToString();
             jd.RefRange = "2300~5000";
             if (val < 2300)

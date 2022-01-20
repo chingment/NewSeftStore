@@ -76,10 +76,35 @@
             </div>
             <div>2</div>
           </div>
+          <div class="b-part-3">
+            <div class="mi-title">检测结果</div>
+            <div class="mi-content">
+              <div v-for="(item, index) in rd.smDvs" :key="index" :class="'mi-item mi-item_'+(index%2==0?'0':'1')">
+                <div class="wrap">
+                  <div class="item-n">{{ item.name }}</div>
+                  <div class="item-v"><dv-item :value="item" sign /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b-part-4">
+            <div class="mi-title">今日建议</div>
+            <div class="mi-content">
+              <div class="mi-icon" />
+              <div class="mi-suggest">
+                <pre data-v-616ccf7e="" style="white-space: pre-line;">1.睡前要保持平和心态，不能太过兴奋，否则容易导致浅睡和噩梦连连。
+2.晚上不要吃太饱，睡前避免食用咖啡、巧克力、可乐、茶等食品或饮料。</pre>
+              </div>
+            </div>
+          </div>
 
         </mt-tab-container-item>
         <mt-tab-container-item id="tab3">
-          tab3
+          <div class="c-part-1">
+            <div class="t1"> 敬请期待</div>
+            <div class="t2"> 谢谢关注，即将开启</div>
+          </div>
         </mt-tab-container-item>
       </mt-tab-container>
 
@@ -96,11 +121,13 @@
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { getDetails } from '@/api/dayreport'
 import ProcessCircle from '@/components/ProcessCircle/Index.vue'
+import DvItem from '@/components/DvItem.vue'
 export default {
   components: {
     Carousel3d,
     Slide,
-    ProcessCircle
+    ProcessCircle,
+    DvItem
   },
   data() {
     return {
@@ -181,7 +208,8 @@ export default {
             yanse: '#fff',
             name: 'sfsff'
           }
-        ]
+        ],
+        smDvs: []
       },
       carousel: {
         space: 80,
@@ -297,7 +325,7 @@ export default {
 }
 
 .lm-tabs{
-    padding: 0px 20px;
+    padding: 0px 20px 20px 20px;
 }
 .lm-tabs-title{
  display: flex;
@@ -320,6 +348,7 @@ export default {
 
 .lm-tabs-content{
     margin-top: -1px;
+
 }
 .lm-tabs-content-item{
     background-size: cover;
@@ -419,6 +448,101 @@ padding: 5px 0px;
 
     }
   }
+}
+
+.b-part-3{
+    padding: 0px 20px;
+display: flex;
+flex-direction: column;
+.mi-title{
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 38px;
+    height: 38px;
+}
+
+  .mi-item{
+    width: 50%;
+    float: left;
+    margin-bottom: 8px;
+
+    .wrap{
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 12px;
+
+      .item-n{
+ padding: 6px 0px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3142;
+      }
+
+      .item-v{
+ padding: 4px 0px;
+ font-size: 14px;
+ font-weight: 600;
+      }
+    }
+  }
+
+    .mi-item_0{
+    padding-right: 4px;
+  }
+
+   .mi-item_1{
+    padding-left: 4px;
+  }
+
+}
+
+.b-part-4{
+    padding: 0px 20px 20px 20px;
+display: flex;
+flex-direction: column;
+.mi-title{
+    font-weight: bold;
+    font-size: 24px;
+    padding: 12px 0px;
+}
+.mi-content{
+      padding: 10px 6px;
+      background-color: #fff;
+      border-radius: 5px;
+      min-height: 200px;
+      display: flex;
+      .mi-icon{
+width: 50px;
+  background: url('~@/assets/report/day/pink/b_part4_icon.jpg') no-repeat;
+background-size:100%;
+      }
+       .mi-suggest{
+    flex: 1;
+    color: #53535b;
+    font-size: 12px;
+    padding: 0px 6px;
+    line-height: 21px;
+    letter-spacing: 3px;
+      }
+}
+}
+
+.c-part-1{
+      display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .t1{
+      padding: 10px;
+      font-size: 24px;
+    }
+    .t2{
+      padding: 20px;
+      font-size: 32px;
+    }
 }
 
 .theme-pink{
