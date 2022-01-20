@@ -74,7 +74,6 @@
                 </div>
               </div>
             </div>
-            <div>2</div>
           </div>
           <div class="b-part-3">
             <div class="mi-title">检测结果</div>
