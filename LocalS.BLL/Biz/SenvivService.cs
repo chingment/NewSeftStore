@@ -1489,7 +1489,7 @@ namespace LocalS.BLL
 
                     d_DayReport.QxxlJlqx = reportpar.qxxl;
 
-                  
+
                     d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
                     d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
                     d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
@@ -1545,7 +1545,7 @@ namespace LocalS.BLL
                     d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
                     d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
                                                                                                       //d_DayReport.SmLzscbl = sm.OffbedRatio;
-                                                                                                      // d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
+                    d_DayReport.SmSmzq = SvUtil.D46Int(reportpar.sct);//睡眠周期
 
                     d_DayReport.SmSdsmsc = SvUtil.D46Long(reportpar.dp);//深睡时长
                     d_DayReport.SmSdsmbl = SvUtil.D46Decimal(reportpar.dpr);//深睡期比例
@@ -1581,24 +1581,26 @@ namespace LocalS.BLL
                                 d_DayReport.XlPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
                             }
                         }
+                    }
 
-
-
-                        //foreach (var chart in barCharts)
-                        //{
-                        //    var items = chart.Items;
-                        //    if (items != null)
-                        //    {
-                        //        if (chart.ChartTypeId == 2110)
-                        //        {
-                        //            foreach (var item in items)
-                        //            {
-                        //                d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
+                    var barchart = d1.barchart;
+                    if (barchart != null)
+                    {
+                        if (barchart.type == 2110)
+                        {
+                            var items = barchart.items;
+                            if (items != null && items.Count > 0)
+                            {
+                                var sub = items[0];
+                                var item2s = sub.sub;
+                                var dataValues = new List<object>();
+                                foreach (var item in item2s)
+                                {
+                                    dataValues.Add(new { endtime = SvUtil.D46Long(item.et), starttime = SvUtil.D46Long(item.st), type = SvUtil.D46Int(item.type) });
+                                }
+                                d_DayReport.SmPoint = (new { StartTime = SvUtil.D46Long(sub.st), EndTime = SvUtil.D46Long(sub.et), DataValue = dataValues }).ToJsonString();
+                            }
+                        }
                     }
 
                     d_DayReport.IsSend = true;
