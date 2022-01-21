@@ -100,6 +100,16 @@
                 </div>
               </div>
             </div>
+
+            <div class="sm-score-chart" style="width:100%">
+              <div class="i-score">
+                <div class="t1">睡眠值</div>
+                <div class="t2">89</div>
+                <div class="t3">较好</div>
+              </div>
+
+              <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-30)+'px;height:300px;margin:auto;'" />
+            </div>
           </div>
           <div class="b-part-3">
             <div class="mi-title">监测结果</div>
@@ -148,6 +158,8 @@ import DvItem from '@/components/DvItem.vue'
 import CardOwnA from './components/CardOwnA.vue'
 import CardOwnB from './components/CardOwnB.vue'
 import VueCircle from 'vue2-circle-progress'
+import echarts from 'echarts'
+var chartBySmScore
 export default {
   components: {
     Carousel3d,
@@ -235,6 +247,9 @@ export default {
       theme: 'pink'
     }
   },
+  mounted() {
+
+  },
   created() {
     this.rptId = this.$route.query.rptId
     this.onGetDetails()
@@ -254,9 +269,56 @@ export default {
           this.rd = d.rd
           this.userInfo = d.userInfo
           this.activeTabBySmTag = d.rd.smTags[0].id
+
+          this.$nextTick(function() {
+            this.getChartBySmScore()
+          }, 2000)
         }
         this.loading = false
       })
+    },
+    getChartBySmScore() {
+      chartBySmScore = echarts.init(this.$refs.chart_BySmScore, null, { renderer: 'svg' })
+      var datePt = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
+      var valuePt = [1, 2, 3, 4, 5, 6]
+      var option = {
+        grid: [{
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 0
+        }],
+        title: {
+          text: '最近7天', // 主标题
+          x: 'center',
+          y: 'top'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: [{
+          data: datePt,
+          show: true,
+          axisLabel:
+          {
+            interval: 0
+          }
+        }],
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          type: 'line',
+          name: '分数',
+          showSymbol: false,
+          data: valuePt
+        }]
+      }
+
+      chartBySmScore.setOption(option, null)
+    },
+    clearChart() {
+      this.$destroy()
     }
   }
 }
@@ -444,6 +506,12 @@ export default {
         padding: 5px 0;
       }
     }
+  }
+
+  .sm-score-chart{
+    background: #fff;
+    margin-top: 10px;
+    border-radius: 5px;
   }
 }
 
