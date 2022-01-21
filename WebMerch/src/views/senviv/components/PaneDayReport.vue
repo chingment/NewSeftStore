@@ -516,7 +516,7 @@ export default {
     },
     onFilter() {
       this.listQuery.page = 1
-      this.getListData()
+      this.onGetList()
     },
     onOpenDialogByDetial(row) {
       this.selectReportId = row.id

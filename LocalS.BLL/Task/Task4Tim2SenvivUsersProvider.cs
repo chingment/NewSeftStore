@@ -39,13 +39,13 @@ namespace LocalS.BLL.Task
         {
             try
             {
-                string[] svDeptIds = new string[] { "46" };
-               
+                string[] svDeptIds = new string[] { "32", "46" };
+
                 foreach (var svDeptId in svDeptIds)
                 {
                     var config_Senviv = BizFactory.Senviv.GetConfig(svDeptId);
 
-                    
+
                     #region 获取所有设备
                     //var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
 
