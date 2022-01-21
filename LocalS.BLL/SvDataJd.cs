@@ -8,6 +8,7 @@ namespace LocalS.BLL
 {
     public class SvDataJd
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         //具体值
         public string Value { get; set; }

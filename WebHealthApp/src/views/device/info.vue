@@ -77,16 +77,16 @@ export default {
 
 <style lang="scss" scope>
 
-#pg_device_info{
-    padding: 20px;
+#pg_device_info {
+  padding: 20px;
 
-.form{
-    padding: 50px 0px;
-}
+  .form {
+    padding: 50px 0;
+  }
 
-    .btn-unbind{
-        width: 100%;
-    }
+  .btn-unbind {
+    width: 100%;
+  }
 }
 
 </style>

@@ -246,85 +246,88 @@ export default {
 
 <style scoped>
 
-.btn-sure{
-  width:100%;
+.btn-sure {
+  width: 100%;
   margin-top: 25px;
 }
 
-.btn-previous{
-  border: 0px;
+.btn-previous {
   margin-top: 20px;
+
+  border: 0;
 }
 
-.qt-input{
+.qt-input {
   border-radius: 5px;
 }
 
-.mint-cell:last-child{
-  background-size: 100% 0px;
+.mint-cell:last-child {
+  background-size: 100% 0;
 }
 
-.question{
+.question-title {
+  font-size: 28px;
 
+  display: flex;
+  justify-content: center;
+
+  padding: 30px 0;
+
+  color: #474749;
 }
 
-.question-title{
-    color:#474749;
-    font-size: 28px;
-    display: flex;
-    justify-content: center;
-    padding: 30px 0px;
+.question-content {
+  display: flex;
+  justify-content: center;
 }
 
-.question-content{
-    display: flex;
-    justify-content: center;
-}
-
-.qt-radio{
+.qt-radio {
   display: flex;
   flex-direction: column;
 }
 
-.qt-radio .on{
-     background-color: #2a2a2a;
-     border: 1px solid #2a2a2a;
-     color: #fff;
+.qt-radio .on {
+  color: #fff;
+  border: 1px solid #2a2a2a;
+  background-color: #2a2a2a;
 }
 
-.qt-radio-item{
-    padding: 10px 20px;
-    border: 1px solid #fff;
-    border-radius: 10px;
-    background-color: #fff;
-    min-width: 200px;
-    text-align: center;
-    font-weight: 600;
-    margin: 10px;
-    background-color: #f6f6f8;
+.qt-radio-item {
+  font-weight: 600;
+
+  min-width: 200px;
+  margin: 10px;
+  padding: 10px 20px;
+
+  text-align: center;
+
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background-color: #fff;
+  background-color: #f6f6f8;
 }
 
-.qt-checklist{
-
+.qt-checklist .on {
+  color: #fff;
+  border: 1px solid #2a2a2a;
+  background-color: #2a2a2a;
 }
 
-.qt-checklist .on{
-     background-color: #2a2a2a;
-     border: 1px solid #2a2a2a;
-     color: #fff;
-}
+.qt-checklist-item {
+  font-weight: 600;
 
-.qt-checklist-item{
-    float: left;
-    padding: 10px 20px;
-    border: 1px solid #fff;
-    border-radius: 10px;
-    background-color: #fff;
-    min-width: 80px;
-    text-align: center;
-    font-weight: 600;
-    margin: 10px;
-    background-color: #f6f6f8;
+  float: left;
+
+  min-width: 80px;
+  margin: 10px;
+  padding: 10px 20px;
+
+  text-align: center;
+
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background-color: #fff;
+  background-color: #f6f6f8;
 }
 
 </style>

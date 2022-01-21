@@ -1,5 +1,5 @@
 <template>
-  <div :class="'page-tabbar ' +theme">
+  <div :class="'page-tabbar theme-' +theme">
     <div class="page-wrap">
 
       <mt-tab-container v-model="selected" class="page-tabbar-container">
@@ -7,6 +7,13 @@
           <div class="a-part-1">
 
             <card-own-a
+              v-if="theme==='pink'"
+              :user-info="userInfo"
+              :rd="rd"
+            />
+
+            <card-own-b
+              v-if="theme==='green'"
               :user-info="userInfo"
               :rd="rd"
             />
@@ -14,16 +21,23 @@
           </div>
           <div class="a-part-2">
             <div style="padding:10px">
-              <carousel-3d :space="carousel.space" :display="carousel.display">
+              <carousel-3d :space="carousel.space" :display="carousel.display" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
-                  <div
-                    class="poster-item"
-                    :data-index="index"
-                  >
-                    <img class="image_item" :src="require('@/assets/report/day/pink/icm.png')">
-                    <span class="name">{{ item.name }}</span>
-                    <span class="value">{{ item.value }}</span>
+                  <div class="gz-tag" :data-index="index">
+                    <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_bg.png')">
+
+                    <div v-if="theme=='green'" class="t1">
+                      <div class="name">{{ item.name }}</div>
+                      <div class="icon">
+                        <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_'+item.id+'.png')">
+                      </div>
+                    </div>
+                    <div v-if="theme=='green'" class="t2">
+                      <div class="value">{{ item.value }}</div>
+                      <div class="tips">{{ item.tips }}</div>
+                    </div>
+
                   </div>
 
                 </slide>
@@ -71,7 +85,7 @@
             </div>
           </div>
           <div class="b-part-3">
-            <div class="mi-title">检测结果</div>
+            <div class="mi-title">监测结果</div>
             <div class="mi-content">
               <div v-for="(item, index) in rd.smDvs" :key="index" :class="'mi-item mi-item_'+(index%2==0?'0':'1')">
                 <div class="wrap">
@@ -87,8 +101,7 @@
             <div class="mi-content">
               <div class="mi-icon" />
               <div class="mi-suggest">
-                <pre data-v-616ccf7e="" style="white-space: pre-line;">1.睡前要保持平和心态，不能太过兴奋，否则容易导致浅睡和噩梦连连。
-2.晚上不要吃太饱，睡前避免食用咖啡、巧克力、可乐、茶等食品或饮料。</pre>
+                <pre style="white-space: pre-line;">{{ rd.rptSuggest }}</pre>
               </div>
             </div>
           </div>
@@ -117,13 +130,15 @@ import { getDetails } from '@/api/dayreport'
 import ProcessCircle from '@/components/ProcessCircle/Index.vue'
 import DvItem from '@/components/DvItem.vue'
 import CardOwnA from './components/CardOwnA.vue'
+import CardOwnB from './components/CardOwnB.vue'
 export default {
   components: {
     Carousel3d,
     Slide,
     ProcessCircle,
     DvItem,
-    CardOwnA
+    CardOwnA,
+    CardOwnB
   },
   data() {
     return {
@@ -164,58 +179,46 @@ export default {
         gzTags: [
           {
             id: '1',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '2',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '3',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '4',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '5',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '6',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           },
           {
             id: '7',
-            image: require('@/assets/report/day/pink/icm.png'),
-            yanse: '#fff',
-            name: 'sfsff'
+            name: ''
           }
         ],
-        smDvs: []
+        smDvs: [],
+        rptSuggest: ''
       },
       carousel: {
         space: 80,
         display: 7
       },
       activeTabBySmTag: 0,
-      theme: 'theme-pink'
+      theme: 'green'
     }
   },
   created() {
+    this.rptId = this.$route.query.rptId
     this.onGetDetails()
   },
   methods: {
@@ -243,359 +246,508 @@ export default {
 
 <style lang="scss" scoped>
 
- .page-tabbar {
-    overflow: hidden;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
+.page-tabbar {
+  overflow: hidden;
 
-  .page-wrap {
-    overflow: auto;
-    height: 100%;
-    padding-bottom: 100px;
-  }
+  height: 100vh;
 
-.mint-tabbar{
-    background-color: #fff;
-    background-size: 100% 0px;
+  background-color: #f5f5f5;
+}
+
+.page-wrap {
+  overflow: auto;
+
+  height: 100%;
+  padding-bottom: 100px;
+}
+
+.mint-tabbar {
+  background-color: #fff;
+  background-size: 100% 0;
 }
 
 .mint-tabbar > .mint-tab-item.is-selected {
-    background-color: #fff;
-    color: #5478ff;
+  color: #5478ff;
+  background-color: #fff;
 }
 
-/deep/ .carousel-3d-container {
-  height: 160px !important;
-  // background-color: #fff;
-}
-/deep/ .carousel-3d-slider {
-  width: 168px !important;
-  height: 168px !important;
-  background: unset;
-}
-/deep/ .carousel-3d-slide {
-  width: 168px !important;
-  height: 168px !important;
-  background: unset;
-  border: none;
-}
-.poster-item {
-  // background: #fff;
- width: 168px;
-  height: 168px;
-  border-radius: 10px;
-  transition: all 0.5s;
-  cursor: default;
-  -moz-transition: all 0.5s;
-  cursor: default;
-  -webkit-transition: all 0.5s;
-  cursor: default;
-  -o-transition: all 0.5s;
-  cursor: default;
-  position: absolute;
-
-  .name{
-    position: absolute;
-    top: 30px;
-    left: 35px;
-    font-size: 12px;
-  }
-  .value{
-    position: absolute;
-    top: 26px;
-    right: 35px;
-    font-size: 14px;
-    font-weight: bold;
-  }
+.lm-tabs {
+  padding: 0 20px 20px 20px;
 }
 
-.lm-tabs{
-    padding: 0px 20px 20px 20px;
+.lm-tabs-title {
+  display: flex;
 }
-.lm-tabs-title{
- display: flex;
+
+.lm-tabs-title-item {
+  font-size: 12px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+
+  height: 42px;
+  padding: 0 5px;
 }
-.lm-tabs-title-item{
-    flex: 1;
-    height: 42px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0px 5px;
-}
+
 .lm-tabs-title .active {
-   border-top-right-radius: 10px;
-   border-top-left-radius: 10px;
-   background-size: 100% 100%;
- }
-
-.lm-tabs-content{
-    margin-top: -1px;
-
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-size: 100% 100%;
 }
-.lm-tabs-content-item{
-    background-size: cover;
-    min-height: 300px;
-    border-radius: 10px;
-    padding: 18px;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
- }
-.lm-tabs-content-item:first-child{
-   border-top-left-radius: 0px;
- }
- .lm-tabs-content-item:last-child{
-   border-top-right-radius: 0px;
- }
 
-.smTags{
-.tag-name{
+.lm-tabs-content {
+  margin-top: -1px;
+}
+
+.lm-tabs-content-item {
+  min-height: 300px;
+  padding: 18px;
+
+  border-radius: 10px;
+  background-size: cover;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
+.lm-tabs-content-item:first-child {
+  border-top-left-radius: 0;
+}
+
+.lm-tabs-content-item:last-child {
+  border-top-right-radius: 0;
+}
+
+.smTags {
+  .tag-name {
     font-weight: bold;
-}
+  }
 
-.tag-proexplain{
-    color:#53535b;
+  .tag-proexplain {
+    color: #53535b;
 
-    .t{
-padding: 8px 0px;
-    }
-
-    .c{
-        font-size: 14px;
-         line-height: 21px;
-    }
-}
-.tag-suggest{
-    color:#53535b;
-
-    .t{
-padding: 8px 0px;
-    }
-    .c{
-        font-size: 14px;
-        line-height: 21px;
-    }
-}
-}
-
-.a-part-1{
-    background-repeat:no-repeat;
-    background-size: cover;
-    padding: 20px;
-}
-
-.b-part-1{
-    background-repeat:no-repeat;
-    background-size: cover;
-    padding: 20px;
-    .sm-score-box{
-      position: relative;
-    .process-bg{
-    display: flex;
-    background: #fff;
-    opacity: 0.2;
-    height: 120px;
-    border-radius: 10px;
-
-    }
-    .process-ct{
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    height: 100%;
-    width: 100%;
+    .t {
+      padding: 8px 0;
     }
 
-    .process-score{
-     display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    width: 120px;
-    color:#fff;
-        .t1{
-    font-size: 32px;
-    font-weight: bold;
+    .c {
+      font-size: 14px;
+      line-height: 21px;
     }
- .t2{
-    font-size: 12px;
-    padding: 8px 0px;
-    }
+  }
+
+  .tag-suggest {
+    color: #53535b;
+
+    .t {
+      padding: 8px 0;
     }
 
-    .process-text{
-      display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color:#fff;
-    .t1{
-font-size: 24px;
-    }
- .t2{
-padding: 5px 0px;
-    }
-
+    .c {
+      font-size: 14px;
+      line-height: 21px;
     }
   }
 }
 
-.b-part-3{
-    padding: 0px 20px;
-display: flex;
-flex-direction: column;
-.mi-title{
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 38px;
-    height: 38px;
+.a-part-1 {
+  padding: 20px;
+
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-  .mi-item{
-    width: 50%;
+.b-part-1 {
+  padding: 20px;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .sm-score-box {
+    position: relative;
+
+    .process-bg {
+      display: flex;
+
+      height: 120px;
+
+      opacity: .2;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .process-ct {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      display: flex;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    .process-score {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+
+      width: 120px;
+
+      color: #fff;
+
+      .t1 {
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .t2 {
+        font-size: 12px;
+
+        padding: 8px 0;
+      }
+    }
+
+    .process-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      color: #fff;
+
+      .t1 {
+        font-size: 24px;
+      }
+
+      .t2 {
+        padding: 5px 0;
+      }
+    }
+  }
+}
+
+.b-part-3 {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0 20px;
+
+  .mi-title {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 38px;
+
+    height: 38px;
+  }
+
+  .mi-item {
     float: left;
+
+    width: 50%;
     margin-bottom: 8px;
 
-    .wrap{
+    .wrap {
       padding: 10px;
-      background-color: #fff;
-      border-radius: 12px;
 
-      .item-n{
- padding: 6px 0px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #2d3142;
+      border-radius: 12px;
+      background-color: #fff;
+
+      .item-n {
+        font-size: 16px;
+        font-weight: 600;
+
+        padding: 6px 0;
+
+        color: #2d3142;
       }
 
-      .item-v{
- padding: 4px 0px;
- font-size: 14px;
- font-weight: 600;
+      .item-v {
+        font-size: 14px;
+        font-weight: 600;
+
+        padding: 4px 0;
       }
     }
   }
 
-    .mi-item_0{
+  .mi-item_0 {
     padding-right: 4px;
   }
 
-   .mi-item_1{
+  .mi-item_1 {
     padding-left: 4px;
   }
-
 }
 
-.b-part-4{
-    padding: 0px 20px 20px 20px;
-display: flex;
-flex-direction: column;
-.mi-title{
-    font-weight: bold;
+.b-part-4 {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0 20px 20px 20px;
+
+  .mi-title {
     font-size: 24px;
-    padding: 12px 0px;
-}
-.mi-content{
-      padding: 10px 6px;
-      background-color: #fff;
-      border-radius: 5px;
-      min-height: 200px;
-      display: flex;
-      .mi-icon{
-width: 50px;
+    font-weight: bold;
 
-background-size:100%;
-      }
-       .mi-suggest{
-    flex: 1;
-    color: #53535b;
-    font-size: 12px;
-    padding: 0px 6px;
-    line-height: 21px;
-    letter-spacing: 3px;
-      }
-}
-}
+    padding: 12px 0;
+  }
 
-.c-part-1{
-      display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  .mi-content {
+    display: flex;
 
-    .t1{
-      padding: 10px;
-      font-size: 24px;
+    min-height: 100px;
+    padding: 10px 6px;
+
+    border-radius: 5px;
+    background-color: #fff;
+
+    .mi-icon {
+      width: 50px;
+
+      background-size: 100%;
     }
-    .t2{
-      padding: 20px;
-      font-size: 32px;
+
+    .mi-suggest {
+      font-size: 12px;
+      line-height: 21px;
+
+      flex: 1;
+
+      padding: 0 6px;
+
+      letter-spacing: 3px;
+
+      color: #53535b;
     }
+  }
 }
 
-.theme-pink{
-    .a-part-1{
+.c-part-1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: center;
+
+  height: 100vh;
+
+  .t1 {
+    font-size: 24px;
+
+    padding: 10px;
+  }
+
+  .t2 {
+    font-size: 32px;
+
+    padding: 20px;
+  }
+}
+
+.theme-pink {
+  .a-part-1 {
     background: url('~@/assets/report/day/pink/a_part1_bg.png');
-    }
+  }
 
-   .a-part-3{
-    .lm-tabs-content-item{
-    background: url('~@/assets/report/day/pink/sm_tag_content.png') no-repeat top center;
+  .a-part-2 {
+    .carousel-gz-tags {
+      height: 160px !important;
+
+      /deep/ .carousel-3d-slider {
+        width: 168px !important;
+        height: 168px !important;
+
+        background: unset;
+      }
+
+      /deep/ .carousel-3d-slide {
+        width: 168px !important;
+        height: 168px !important;
+
+        border: none;
+        background: unset;
+      }
+
+      .gz-tag {
+        position: absolute;
+
+        width: 168px;
+        height: 168px;
+
+        cursor: default;
+        cursor: default;
+        cursor: default;
+        cursor: default;
+        -webkit-transition: all .5s;
+           -moz-transition: all .5s;
+             -o-transition: all .5s;
+                transition: all .5s;
+
+        border-radius: 10px;
+
+        .name {
+          font-size: 12px;
+
+          position: absolute;
+          top: 30px;
+          left: 35px;
+        }
+
+        .value {
+          font-size: 14px;
+          font-weight: bold;
+
+          position: absolute;
+          top: 26px;
+          right: 35px;
+        }
+      }
+    }
+  }
+
+  .a-part-3 {
+    .lm-tabs-content-item {
+      background: url('~@/assets/report/day/pink/sm_tag_content.png') no-repeat top center;
     }
 
     .lm-tabs-title .active {
-   background: #c3c1fb;
+      background: #c3c1fb;
     }
-   }
+  }
 
-    .b-part-1{
-   background: url('~@/assets/report/day/pink/b_part1_bg.png') no-repeat top center;
-    }
+  .b-part-1 {
+    background: url('~@/assets/report/day/pink/b_part1_bg.png') no-repeat top center;
+  }
 
-    .b-part-4{
-   .mi-icon{
-  background: url('~@/assets/report/day/pink/b_part4_icon.jpg') no-repeat;
-  background-size:100%;
-      }
+  .b-part-4 {
+    .mi-icon {
+      background: url('~@/assets/report/day/pink/b_part4_icon.jpg') no-repeat;
+      background-size: 100%;
     }
+  }
 }
 
-.theme-green{
-    .a-part-1{
- background: url('~@/assets/report/day/green/a_part1_bg.png');
-    }
+.theme-green {
+  .a-part-1 {
+    background: url('~@/assets/report/day/green/a_part1_bg.png');
+  }
 
-.a-part-3{
-      .lm-tabs-content-item{
-    background: url('~@/assets/report/day/green/sm_tag_content.png') no-repeat top center;
-    color: #fff;
-    }
+  .a-part-2 {
+    .carousel-gz-tags {
+      height: 180px !important;
 
-     .lm-tabs-title .active {
-   background: #09747d;
-    color: #fff;
-    }
+      /deep/ .carousel-3d-slider {
+        width: 135px !important;
+        height: 180px !important;
 
-    .tag-name,.tag-proexplain,.tag-suggest{
-          color: #fff;
-    }
-}
+        background: unset;
+      }
 
-  .b-part-1{
-   background: url('~@/assets/report/day/green/b_part1_bg.png') no-repeat top center;
-    }
+      /deep/ .carousel-3d-slide {
+        width: 135px !important;
+        height: 180px !important;
 
-      .b-part-4{
-   .mi-icon{
-  background: url('~@/assets/report/day/green/b_part4_icon.jpg') no-repeat;
-  background-size:100%;
+        border: none;
+        background: unset;
+      }
+
+      .gz-tag {
+        position: absolute;
+
+        width: 135px;
+        height: 180px;
+
+        cursor: default;
+        cursor: default;
+        cursor: default;
+        cursor: default;
+        -webkit-transition: all .5s;
+           -moz-transition: all .5s;
+             -o-transition: all .5s;
+                transition: all .5s;
+
+        color: #fff;
+        border-radius: 10px;
+
+        .t1 {
+          position: absolute;
+          top: 10px;
+             left: 0;
+
+          display: flex;
+
+          width: 100%;
+          padding: 10px 20px;
+        }
+
+        .t2 {
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+
+          display: flex;
+
+          width: 100%;
+        padding: 10px 14px;
+        }
+
+        .name {
+          font-size: 12px;
+          flex:1;
+          font-size: 22px;
+        }
+
+        .icon{
+               flex:1;
+        }
+
+        .value {
+          font-size: 28px;
+          font-weight: bold;
+          font-style: italic;
+        }
+
+        .tips {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          justify-content: center;
+          ;
+        }
       }
     }
+  }
 
+  .a-part-3 {
+    .lm-tabs-content-item {
+      color: #fff;
+      background: url('~@/assets/report/day/green/sm_tag_content.png') no-repeat top center;
+    }
+
+    .lm-tabs-title .active {
+      color: #fff;
+      background: #09747d;
+    }
+
+    .tag-name,
+    .tag-proexplain,
+    .tag-suggest {
+      color: #fff;
+    }
+  }
+
+  .b-part-1 {
+    background: url('~@/assets/report/day/green/b_part1_bg.png') no-repeat top center;
+  }
+
+  .b-part-4 {
+    .mi-icon {
+      background: url('~@/assets/report/day/green/b_part4_icon.jpg') no-repeat;
+      background-size: 100%;
+    }
+  }
 }
 
 </style>

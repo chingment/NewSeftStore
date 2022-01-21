@@ -38,6 +38,8 @@ namespace LocalS.BLL
         public static SvDataJd GetMylzs(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Id = "1";
+            jd.Name = "免疫力指数";
             jd.Value = val.ToString();
 
             if (val <= 29)
@@ -66,6 +68,7 @@ namespace LocalS.BLL
         public static SvDataJd GetMylGrfx(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Id = "2";
             jd.Name = "免疫力感染风险";
             jd.Value = val.ToString();
 
@@ -96,6 +99,8 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             val = 100 - val;
+            jd.Id = "3";
+            jd.Name = "高血压管控";
             jd.Value = val.ToString();
 
             if (val <= 39)
@@ -116,7 +121,8 @@ namespace LocalS.BLL
         public static SvDataJd GetMbGxbgk(decimal val)
         {
             var jd = new SvDataJd();
-
+            jd.Id = "4";
+            jd.Name = "冠心病管控";
             if (val == 0)
             {
                 jd.Value = "";
@@ -142,10 +148,12 @@ namespace LocalS.BLL
             return jd;
         }
 
+
         public static SvDataJd GetMbTlbgk(decimal val)
         {
             var jd = new SvDataJd();
-
+            jd.Id = "5";
+            jd.Name = "冠心病管控";
 
             val = 100 - val;
             jd.Value = val.ToString();
@@ -168,6 +176,8 @@ namespace LocalS.BLL
         public static SvDataJd GetQxxlKynl(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Id = "7";
+            jd.Name = "抗压能力";
             jd.Value = val.ToString();
 
             if (val <= 29)
@@ -184,6 +194,30 @@ namespace LocalS.BLL
             }
             return jd;
         }
+
+        public static SvDataJd GetQxxlJlqx(string val)
+        {
+            var jd = new SvDataJd();
+            jd.Id = "6";
+            jd.Name = "焦虑情绪";
+            jd.Value = val.ToString();
+
+     
+            return jd;
+        }
+        public static SvDataJd GetQxxlQxyj(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Id = "8";
+            jd.Name = "情绪应激";
+            jd.Value = val.ToString();
+
+
+            return jd;
+        }
+
+
+        
 
         public static SvDataJd GetJbfxXlscfx(decimal val)
         {

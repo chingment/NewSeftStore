@@ -223,49 +223,60 @@ export default {
 
 <style lang="scss" scope>
 
-.page-header{
-   // color: $pr;
-    height: 50px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px;
-    font-size: 24px;
+.page-header {
+  font-size: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  // color: $pr;
+
+  height: 50px;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 
-.mint-cell-title{
+.mint-cell-title {
   width: 105px;
 }
-  .c_radio  .mint-cell-title {
-    width: auto;
-    -webkit-box-flex: 0;
-    -ms-flex: none;
-    flex: none;
+
+.c_radio  .mint-cell-title {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+      flex: none;
+
+  width: auto;
 }
 
-  .c_radio  .mint-cell{
-      float: left;
-      padding-right: 0px;
-    }
-    .c_radio  .mint-cell:last-child{
-background-size: 120% 0px;
-    }
- .c_radio     .mint-radio-core{
-        width: 20px;
-        height: 20px;
-      }
-  .c_radio  .mint-radio-core:after{
-        width: 8px;
-        height: 8px;
-      }
+.c_radio  .mint-cell {
+  float: left;
 
-  .c_radio .mint-cell-wrapper{
-background-size: 120% 0px;
+  padding-right: 0;
 }
 
-.c_radio .mint-radiolist-label, .c_radio .mint-checklist-label{
-     font-weight: normal;
-     padding: 0;
+.c_radio  .mint-cell:last-child {
+  background-size: 120% 0;
 }
+
+.c_radio     .mint-radio-core {
+  width: 20px;
+  height: 20px;
+}
+
+.c_radio  .mint-radio-core:after {
+  width: 8px;
+  height: 8px;
+}
+
+.c_radio .mint-cell-wrapper {
+  background-size: 120% 0;
+}
+
+.c_radio .mint-radiolist-label,
+.c_radio .mint-checklist-label {
+  font-weight: normal;
+
+  padding: 0;
+}
+
 </style>

@@ -41,7 +41,7 @@
 <script>
 import VueCircle from 'vue2-circle-progress'
 export default {
-  name: 'DvItem',
+  name: 'CardOwnA',
   components: {
     VueCircle
   },

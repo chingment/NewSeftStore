@@ -245,28 +245,32 @@ export default {
 </script>
 <style lang="scss" scope>
 
-.quest-fill-tp1{
+.quest-fill-tp1 {
   height: 100%;
-   padding: 20px;
+  padding: 20px;
 
-   .btn-go-fill{
-        width: 100%;
-        margin: 30px 0px;
+  .btn-go-fill {
+    width: 100%;
+    margin: 30px 0;
+  }
+
+  .form-welcomeout {
+    margin-top: 60px;
+
+    text-align: center;
+
+    .t1 {
+      margin: 20px;
+
+      color: #4caf50;
     }
 
-.form-welcomeout{
-text-align: center;
-margin-top: 60px;
-.t1{
-    color:#4caf50;
-  margin: 20px;
-}
+    .t2 {
+      font-size: 28px;
 
-.t2{
-    color: #409eff;
-    font-size: 28px;
-}
-}
+      color: #409eff;
+    }
+  }
 }
 
 </style>

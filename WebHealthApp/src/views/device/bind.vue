@@ -253,48 +253,54 @@ export default {
 
 <style lang="scss" scope>
 
-#pg_device_bind{
-    padding: 20px;
-
-.form{
-    padding: 50px 0px 10px 0px;
-}
-
-.btn-scan{
+#pg_device_bind {
   padding: 20px;
-  text-align: center;
-}
 
-    .btn-binddevice,.btn-bindphone{
-       margin-top: 50px;
-        width: 100%;
-    }
-}
-
-.popup-toolbar{
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(234, 234, 234);
-    height: 40px;
-    .close{
-    width: 2em;
-    height: 2rem;
-    right: 0;
-    position: absolute;
-    top: 2px;
-    }
-}
-
-.pa-box{
-  text-align: center;
-
-  .img-pa{
-    height: 300px;
-    width: 300px;
+  .form {
+    padding: 50px 0 10px 0;
   }
 
-  .tip{
+  .btn-scan {
+    padding: 20px;
+
+    text-align: center;
+  }
+
+  .btn-binddevice,
+  .btn-bindphone {
+    width: 100%;
+    margin-top: 50px;
+  }
+}
+
+.popup-toolbar {
+  height: 40px;
+
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgb(234, 234, 234);
+
+  .close {
+    position: absolute;
+    top: 2px;
+    right: 0;
+
+    width: 2em;
+    height: 2rem;
+  }
+}
+
+.pa-box {
+  text-align: center;
+
+  .img-pa {
+    width: 300px;
+    height: 300px;
+  }
+
+  .tip {
     padding: 30px;
   }
 }
+
 </style>
