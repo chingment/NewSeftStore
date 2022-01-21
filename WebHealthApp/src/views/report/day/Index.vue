@@ -26,14 +26,13 @@
 
                   <div class="gz-tag" :data-index="index">
                     <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_bg.png')">
-
-                    <div v-if="theme=='green'" class="t1">
+                    <div class="t1">
                       <div class="name">{{ item.name }}</div>
                       <div class="icon">
                         <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_'+item.id+'.png')">
                       </div>
                     </div>
-                    <div v-if="theme=='green'" class="t2">
+                    <div class="t2">
                       <div class="value">{{ item.value }}</div>
                       <div class="tips">{{ item.tips }}</div>
                     </div>
@@ -72,10 +71,28 @@
               <div class="process-bg" />
               <div class="process-ct">
                 <div class="process-score">
-                  <process-circle :stroke-width="8" stroke-color="#b71e9d" :trail-width="6" trail-color="#fff" :percent="rd.smScore">
-                    <div class="t1">{{ rd.smScore }}</div>
-                    <div class="t2">睡眠值</div>
-                  </process-circle>
+
+                  <vue-circle
+                    ref="myprogress"
+                    :progress="rd.smScore"
+                    :size="100"
+                    :reverse="false"
+                    line-cap="round"
+                    :fill="smCircleFill"
+                    empty-fill="#fff"
+                    :animation-start-value="0.0"
+                    :start-angle="30"
+                    insert-mode="append"
+                    :animation="{ duration: 1200, easing: 'easeOutBounce' }"
+                    :thickness="8"
+                    :show-percent="false"
+                  >
+                    <div class="c-health-score">
+                      <div class="t1">{{ rd.smScore }}</div>
+                      <div class="t2">健康值</div>
+                    </div>
+                  </vue-circle>
+
                 </div>
                 <div class="process-text">
                   <div class="t1">{{ userInfo.signName }}</div>
@@ -127,18 +144,18 @@
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { getDetails } from '@/api/dayreport'
-import ProcessCircle from '@/components/ProcessCircle/Index.vue'
 import DvItem from '@/components/DvItem.vue'
 import CardOwnA from './components/CardOwnA.vue'
 import CardOwnB from './components/CardOwnB.vue'
+import VueCircle from 'vue2-circle-progress'
 export default {
   components: {
     Carousel3d,
     Slide,
-    ProcessCircle,
     DvItem,
     CardOwnA,
-    CardOwnB
+    CardOwnB,
+    VueCircle
   },
   data() {
     return {
@@ -213,8 +230,9 @@ export default {
         space: 80,
         display: 7
       },
+      smCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
       activeTabBySmTag: 0,
-      theme: 'green'
+      theme: 'pink'
     }
   },
   created() {
@@ -355,6 +373,7 @@ export default {
   padding: 20px;
 
   background-repeat: no-repeat;
+  background-size: 100% 100%;
   background-size: cover;
 }
 
@@ -553,7 +572,7 @@ export default {
 
   .a-part-2 {
     .carousel-gz-tags {
-      height: 160px !important;
+      height: 168px !important;
 
       /deep/ .carousel-3d-slider {
         width: 168px !important;
@@ -585,23 +604,54 @@ export default {
              -o-transition: all .5s;
                 transition: all .5s;
 
+        color: #fff;
         border-radius: 10px;
+
+        .t1 {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          display: flex;
+
+          width: 100%;
+          padding: 14px 30px 0 30px;
+        }
+
+        .t2 {
+          position: absolute;
+          bottom: 34px;
+          left: 0;
+
+          display: flex;
+
+          width: 100%;
+          padding: 0 30px 0 30px;
+        }
 
         .name {
           font-size: 12px;
+          font-size: 22px;
 
-          position: absolute;
-          top: 30px;
-          left: 35px;
+          flex: 1;
+        }
+
+        .icon {
+          flex: 1;
         }
 
         .value {
-          font-size: 14px;
+          font-size: 28px;
           font-weight: bold;
+          font-style: italic;
+        }
 
-          position: absolute;
-          top: 26px;
-          right: 35px;
+        .tips {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          justify-content: center;
+          ;
         }
       }
     }
@@ -674,7 +724,7 @@ export default {
         .t1 {
           position: absolute;
           top: 10px;
-             left: 0;
+          left: 0;
 
           display: flex;
 
@@ -690,17 +740,18 @@ export default {
           display: flex;
 
           width: 100%;
-        padding: 10px 14px;
+          padding: 10px 14px;
         }
 
         .name {
           font-size: 12px;
-          flex:1;
           font-size: 22px;
+
+          flex: 1;
         }
 
-        .icon{
-               flex:1;
+        .icon {
+          flex: 1;
         }
 
         .value {

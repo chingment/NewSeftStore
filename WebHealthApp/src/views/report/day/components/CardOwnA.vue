@@ -3,7 +3,7 @@
     <div class="own-info">
       <div class="wrap">
         <div class="st-1">
-          <img class="avatar" :src="userInfo.avatar" style="width:100px;height:100px">
+          <img class="avatar" :src="userInfo.avatar">
           <div class="sign-name">{{ userInfo.signName }}</div>
           <div class="health-date">{{ rd.healthDate }}</div>
         </div>
@@ -11,13 +11,13 @@
           <vue-circle
             ref="myprogress"
             :progress="rd.healthScore"
-            :size="100"
+            :size="90"
             :reverse="false"
             line-cap="round"
             :fill="fill"
             empty-fill="#fff"
             :animation-start-value="0.0"
-            :start-angle="0"
+            :start-angle="30"
             insert-mode="append"
             :animation="{ duration: 1200, easing: 'easeOutBounce' }"
             :thickness="5"
@@ -69,52 +69,71 @@ export default {
 
 <style lang="scss" scoped>
 
-.card-own-a{
-
-  .own-info{
+.card-own-a {
+  .own-info {
     display: flex;
-    .wrap{
+
+    .wrap {
       width: 100%;
     }
-.st-1{
-    width: 100px;
-    float: left;
-    text-align: center;
-.avatar{
+
+    .st-1 {
+      float: left;
+
       width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 5px solid #fff;
-}
-}
 
-.st-2{
-    width: 100px;
-    float: right;
-    text-align: center;
-   .c-health-score{
+      text-align: center;
+
+      .avatar {
+        width: 90px;
+        height: 90px;
+
+        border: 3px solid #fff;
+        border-radius: 50%;
+      }
+
+      .sign-name {
+        padding: 5px;
+      }
+    }
+
+    .st-2 {
+      float: right;
+
+      width: 100px;
+
+      text-align: center;
+
+      .c-health-score {
+        font-weight: bold;
+
+        margin-top: -10px;
+
         text-align: center;
-    color: #572b9e;
-    margin-top: -10px;
-    font-weight: bold;
-    .t1{
-    font-size: 38px;
-    padding: 5px
-    }
 
-     .t2{
-    font-size: 12px;
+        color: #572b9e;
+
+        .t1 {
+          font-size: 38px;
+
+          padding: 5px;
+        }
+
+        .t2 {
+          font-size: 12px;
+        }
+      }
+
+      .c-health-score-tip {
+        color: #fff;
+      }
     }
-   }
-.c-health-score-tip{
-    color: #fff;
-}
-}
   }
 
-  .own-remark{
-   color: #572b9e;
-     font-size: 12px;
+  .own-remark {
+    font-size: 12px;
+
+    color: #572b9e;
   }
 }
 

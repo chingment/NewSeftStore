@@ -18,10 +18,12 @@ namespace LocalS.Service.Api.HealthApp
             if (d_Rpt == null)
                 new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "报告找不到");
 
+            var d_SvUser = CurrentDb.SenvivUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
+
             var userInfo = new
             {
-                signName = "逍遥",
-                avatar = "https://thirdwx.qlogo.cn/mmopen/vi_32/6zcicmSoM5yjdWG9MoHydE6suFUGaHsKATFUPU7yU4d7PhLcsKWj51NhxA4PichkuYg5uJAWWhagnkyqHhAfDKGg/132"
+                signName = d_SvUser.NickName,
+                avatar = d_SvUser.Avatar
             };
 
 
