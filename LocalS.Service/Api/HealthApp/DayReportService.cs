@@ -27,6 +27,7 @@ namespace LocalS.Service.Api.HealthApp
             };
 
 
+
             #region 
             var gzTags = new List<object>();
 
@@ -71,6 +72,21 @@ namespace LocalS.Service.Api.HealthApp
             smDvs.Add(SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl));
             #endregion
 
+            #region smScoreByLast
+
+
+            List<object> smScoreByLast = new List<object>();
+            var d_hDayReportSmScores = (from u in CurrentDb.SenvivHealthDayReport
+                                        where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
+                                        select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderBy(m => m.CreateTime).Take(7);
+
+            foreach (var d_hDayReportSmScore in d_hDayReportSmScores)
+            {
+                smScoreByLast.Add(new { Date = d_hDayReportSmScore.HealthDate.ToString("MM-dd"), score = d_hDayReportSmScore.SmScore });
+            }
+
+            #endregion
+
             var ret = new
             {
                 rd = new
@@ -83,7 +99,8 @@ namespace LocalS.Service.Api.HealthApp
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
-                    rptSuggest = d_Rpt.RptSuggest
+                    rptSuggest = d_Rpt.RptSuggest,
+                    smScoreByLast = smScoreByLast
                 },
                 userInfo = userInfo
             };

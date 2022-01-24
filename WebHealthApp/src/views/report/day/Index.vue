@@ -375,8 +375,17 @@ export default {
     },
     getChartBySmScore() {
       chartBySmScore = echarts.init(this.$refs.chart_BySmScore, null, { renderer: 'svg' })
-      var datePt = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
-      var valuePt = [68, 70, 65, 71, 82, 93]
+
+      var datePt = [] // = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
+      var valuePt = []// = [68, 32, 65, 71, 82, 93]
+
+      this.rd.smScoreByLast.forEach(item => {
+        datePt.push(item.date)
+        valuePt.push(item.score)
+      })
+
+      console.log(datePt)
+
       var option = {
         grid: [{
           x: 30,
@@ -407,6 +416,7 @@ export default {
             }
           },
           axisTick: {
+            show: true,
             alignWithLabel: true
           },
           boundaryGap: false,
@@ -421,16 +431,46 @@ export default {
           min: 0,
           max: 100,
           type: 'value',
+          splitNumber: 10,
           splitLine: {
             show: false
           },
           axisTick: {
             show: false
           },
+
           axisLabel: {
+            interval: 0,
             show: true,
             textStyle: {
               color: '#000'
+            },
+            formatter: function(value) {
+              var texts = []
+              if (value === 0) {
+                texts.push('0')
+              } else if (value === 10) {
+                texts.push('')
+              } else if (value === 20) {
+                texts.push('')
+              } else if (value === 30) {
+                texts.push('30')
+              } else if (value === 40) {
+                texts.push('')
+              } else if (value === 50) {
+                texts.push('50')
+              } else if (value === 60) {
+                texts.push('')
+              } else if (value === 70) {
+                texts.push('70')
+              } else if (value === 80) {
+                texts.push('')
+              } else if (value === 90) {
+                texts.push('90')
+              } else if (value === 100) {
+                texts.push('100')
+              }
+              return texts
             }
           },
           axisLine: {
