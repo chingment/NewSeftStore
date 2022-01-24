@@ -102,6 +102,7 @@
             </div>
 
             <div class="sm-score-chart" style="width:100%">
+              <score-level />
               <div class="i-score">
                 <div class="t1">睡眠值</div>
                 <div class="t2" :style="{'color': rd.smScore.color}">{{ rd.smScore.value }}</div>
@@ -243,6 +244,7 @@ import CardOwnA from './components/CardOwnA.vue'
 import CardOwnB from './components/CardOwnB.vue'
 import VueCircle from 'vue2-circle-progress'
 import echarts from 'echarts'
+import ScoreLevel from '@/components/ScoreLevel.vue'
 var chartBySmScore
 export default {
   components: {
@@ -251,7 +253,8 @@ export default {
     DvItem,
     CardOwnA,
     CardOwnB,
-    VueCircle
+    VueCircle,
+    ScoreLevel
   },
   data() {
     return {
