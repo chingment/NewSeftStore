@@ -164,6 +164,7 @@
     <Compile Include="Api\HealthApp\DeviceService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />
     <Compile Include="Api\HealthApp\QuestService.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopDayReportGetDetails.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindSerialNo.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnGetPhoneVaildCode.cs" />

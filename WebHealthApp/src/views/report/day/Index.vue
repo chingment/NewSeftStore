@@ -108,6 +108,80 @@
                 <div class="t3" :style="{'color': rd.smScore.color}">{{ rd.smScore.tips }}</div>
               </div>
 
+              <div class="i-sign">
+                <div class="col">
+                  <div class="topnum" style="text-align: left;">0</div>
+                  <div :class="'mt-range jd1 '+((rd.smScore.value>=0&&rd.smScore.value<30)?'':'no-ative') ">
+                    <div class="mt-range-content">
+                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #e68a8b;" />
+                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#e68a8b;'" />
+                    </div>
+                  </div>
+                  <div class="bottomtips">差</div>
+                </div>
+                <div class="col-split">
+                  <div class="topnum">30</div>
+                  <div class="border-split" />
+                </div>
+                <div class="col">
+                  <div class="topnum" style="visibility: hidden;">0</div>
+                  <div :class="'mt-range jd2 '+((rd.smScore.value>=30&&rd.smScore.value<50)?'':'no-ative') ">
+                    <div class="mt-range-content">
+                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #f1b46d;" />
+                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#f1b46d;'" />
+                    </div>
+                  </div>
+                  <div class="bottomtips">较差</div>
+                </div>
+                <div class="col-split">
+                  <div class="topnum">50</div>
+                  <div class="border-split" />
+                </div>
+                <div class="col">
+                  <div class="topnum" style="visibility: hidden;">0</div>
+                  <div :class="'mt-range jd3 '+((rd.smScore.value>=50&&rd.smScore.value<70)?'':'no-ative') ">
+                    <div class="mt-range-content">
+                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #e16d6d;" />
+                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#e16d6d;'" />
+                    </div>
+                  </div>
+                  <div class="bottomtips">中等</div>
+                </div>
+                <div class="col-split">
+                  <div class="topnum">70</div>
+                  <div class="border-split" />
+                </div>
+                <div class="col">
+                  <div class="topnum" style="visibility: hidden;">0</div>
+                  <div :class="'mt-range jd4 '+((rd.smScore.value>=70&&rd.smScore.value<90)?'':'no-ative') ">
+                    <div class="mt-range-content">
+                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #96a2dc;" />
+                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#96a2dc;'" />
+                    </div>
+                  </div>
+                  <div class="bottomtips">较好</div>
+                </div>
+                <div class="col-split">
+                  <div class="topnum">90</div>
+                  <div class="border-split" />
+                </div>
+                <div class="col">
+                  <div class="topnum" style="text-align: right;">100</div>
+                  <div :class="'mt-range jd5 '+((rd.smScore.value>=90&&rd.smScore.value<=100)?'':'no-ative') ">
+                    <div class="mt-range-content">
+                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #628DF2;" />
+                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#628DF2;'" />
+                    </div>
+                  </div>
+                  <div class="bottomtips">好</div>
+                </div>
+              </div>
+
               <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-50)+'px;height:300px;margin:auto;'" />
             </div>
           </div>
@@ -254,7 +328,7 @@ export default {
       },
       smScoreCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
       activeTabBySmTag: 0,
-      theme: 'pink'
+      theme: 'green'
     }
   },
   watch: {
@@ -271,6 +345,7 @@ export default {
   },
   created() {
     this.rptId = this.$route.query.rptId
+    this.theme = typeof this.$route.query.theme === 'undefined' ? 'green' : this.$route.query.theme
     this.onGetDetails()
   },
   methods: {
@@ -622,6 +697,75 @@ export default {
         justify-content: flex-end;
       }
     }
+
+    .i-sign {
+      display: flex;
+
+      padding: 10px 0;
+
+      .col {
+        flex: 1;
+
+        .topnum {
+          font-size: 12px;
+
+          padding: 5px 0;
+
+          text-align: left;
+
+          color: gray;
+        }
+
+        .bottomtips {
+          font-size: 12px;
+
+          text-align: center;
+
+          color: gray;
+        }
+
+        /deep/ .mt-range-runway {
+          border-radius: 20px;
+        }
+
+        /deep/ .mt-range-thumb {
+          top: 4px;
+
+          width: 20px;
+          height: 20px;
+        }
+
+        /deep/ .no-ative {
+          .mt-range-thumb {
+            display: none  !important;
+          }
+        }
+      }
+
+      .col-split {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        .topnum {
+          font-size: 12px;
+
+          padding: 5px 0;
+
+          color: gray;
+        }
+
+        .border-split {
+          display: inline-block;
+
+          width: 1px;
+          height: 44px;
+
+          border-left: 1px dashed #c5c5c5;
+        }
+      }
+    }
   }
 }
 
@@ -639,14 +783,16 @@ export default {
     height: 38px;
   }
 
-  .mi-content{
-    padding: 10px;
-    border-radius: 12px;
-    background-color: #fff;
+  .mi-content {
     font-size: 12px;
     line-height: 21px;
-  }
 
+    padding: 10px;
+
+    color: #4c4b5e;
+    border-radius: 12px;
+    background-color: #fff;
+  }
 }
 
 .b-part-3 {
@@ -876,7 +1022,7 @@ export default {
 
   .b-part-1 {
     background: url('~@/assets/report/day/pink/b_part1_bg.png') no-repeat top center;
-        background-size: cover;
+    background-size: cover;
   }
 
   .b-part-4 {

@@ -12,7 +12,7 @@ namespace WebApiHealthApp.Controllers
     {
         [HttpGet]
         [AllowAnonymous]
-        public OwnApiHttpResponse GetDetails([FromUri]string rptId = "")
+        public OwnApiHttpResponse GetDetails([FromUri]string rptId)
         {
             var result = HealthAppServiceFactory.DayReport.GetDetails(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);

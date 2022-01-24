@@ -752,7 +752,7 @@ namespace LocalS.BLL
             }
             else 
             {
-                jd.Set("好", "", "#6a8de8");
+                jd.Set("好", "", "#628DF2");
             }
 
             return jd;

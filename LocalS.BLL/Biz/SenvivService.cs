@@ -1265,7 +1265,7 @@ namespace LocalS.BLL
                         d_DayReport.HrvHermzsjzz = 0;//荷尔蒙指数基准值
                         d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
                         d_DayReport.HrvTwjxgsszhjzz = 0;//体温及血管舒缩基准值
-
+                        d_DayReport.SmScore = hrv.SleepValue;
                         d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
 
                         var d2 = d1.UserBaseInfo;
