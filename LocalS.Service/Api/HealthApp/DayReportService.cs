@@ -78,7 +78,7 @@ namespace LocalS.Service.Api.HealthApp
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
                     HealthScore = 60,
                     HealthScoreTip = "您今天的健康值超过88%的人",
-                    SmScore = 40,
+                    SmScore = SvDataJdUtil.GetSmScore(d_Rpt.SmScore),
                     SmScoreTip = "您的睡眠值已经打败77%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签

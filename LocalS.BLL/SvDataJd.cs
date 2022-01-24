@@ -11,7 +11,7 @@ namespace LocalS.BLL
         public string Id { get; set; }
         public string Name { get; set; }
         //具体值
-        public string Value { get; set; }
+        public object Value { get; set; }
         //提示颜色
         public string Color { get; set; }
         //提示文字

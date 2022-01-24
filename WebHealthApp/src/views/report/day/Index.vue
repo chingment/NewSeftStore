@@ -3,7 +3,7 @@
     <div class="page-wrap">
 
       <mt-tab-container v-model="selected" class="page-tabbar-container">
-        <mt-tab-container-item id="tab1">
+        <mt-tab-container-item v-if="selected==='tab1'" id="tab1">
           <div class="a-part-1">
 
             <card-own-a
@@ -65,7 +65,7 @@
             </div>
           </div>
         </mt-tab-container-item>
-        <mt-tab-container-item id="tab2">
+        <mt-tab-container-item v-if="selected==='tab2'" id="tab2">
           <div class="b-part-1">
             <div class="sm-score-box">
               <div class="process-bg" />
@@ -74,11 +74,11 @@
 
                   <vue-circle
                     ref="myprogress"
-                    :progress="rd.smScore"
+                    :progress="rd.smScore.value"
                     :size="100"
                     :reverse="false"
                     line-cap="round"
-                    :fill="smCircleFill"
+                    :fill="smScoreCircleFill"
                     empty-fill="#fff"
                     :animation-start-value="0.0"
                     :start-angle="30"
@@ -88,8 +88,8 @@
                     :show-percent="false"
                   >
                     <div class="c-health-score">
-                      <div class="t1">{{ rd.smScore }}</div>
-                      <div class="t2">健康值</div>
+                      <div class="t1">{{ parseInt(rd.smScore.value) }}</div>
+                      <div class="t2">睡眠值</div>
                     </div>
                   </vue-circle>
 
@@ -104,13 +104,23 @@
             <div class="sm-score-chart" style="width:100%">
               <div class="i-score">
                 <div class="t1">睡眠值</div>
-                <div class="t2">89</div>
-                <div class="t3">较好</div>
+                <div class="t2" :style="{'color': rd.smScore.color}">{{ rd.smScore.value }}</div>
+                <div class="t3" :style="{'color': rd.smScore.color}">{{ rd.smScore.tips }}</div>
               </div>
 
-              <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-30)+'px;height:300px;margin:auto;'" />
+              <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-50)+'px;height:300px;margin:auto;'" />
             </div>
           </div>
+
+          <div class="b-part-2">
+            <div class="mi-title">睡眠评价</div>
+            <div class="mi-content">
+              您本次睡眠的在床时间为 00:40-07:19，共 6小时38分钟，睡眠总时长为6小时16分钟。
+              本次睡眠效率77%(偏低),睡眠连续性81%(偏低)，深睡眠比例23%(正常)。
+              呼吸紊乱指数2.5(正常)；基准心率58次/分钟(正常) 基准呼吸 16次/分钟(正常) 。
+            </div>
+          </div>
+
           <div class="b-part-3">
             <div class="mi-title">监测结果</div>
             <div class="mi-content">
@@ -134,7 +144,7 @@
           </div>
 
         </mt-tab-container-item>
-        <mt-tab-container-item id="tab3">
+        <mt-tab-container-item v-if="selected==='tab3'" id="tab3">
           <div class="c-part-1">
             <div class="t1"> 敬请期待</div>
             <div class="t2"> 谢谢关注，即将开启</div>
@@ -242,9 +252,18 @@ export default {
         space: 80,
         display: 7
       },
-      smCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
+      smScoreCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
       activeTabBySmTag: 0,
       theme: 'pink'
+    }
+  },
+  watch: {
+    selected: function(val) {
+      if (val === 'tab2') {
+        this.$nextTick(function() {
+          this.getChartBySmScore()
+        }, 2000)
+      }
     }
   },
   mounted() {
@@ -257,7 +276,6 @@ export default {
   methods: {
     onGetDetails() {
       this.loading = true
-
       if (this.screenWidth > 300 && this.screenWidth < 400) {
         this.carousel.space = 60
       } else {
@@ -266,13 +284,16 @@ export default {
       getDetails({ rptId: this.rptId }).then(res => {
         if (res.result === 1) {
           var d = res.data
+
+          if (this.theme === 'pink') {
+            this.smScoreCircleFill.gradient = ['#8316bd', '#fff', '#ad1da3']
+          } else if (this.theme === 'green') {
+            this.smScoreCircleFill.gradient = ['#0ca7d4', '#fff', '#076e8b']
+          }
+
           this.rd = d.rd
           this.userInfo = d.userInfo
           this.activeTabBySmTag = d.rd.smTags[0].id
-
-          this.$nextTick(function() {
-            this.getChartBySmScore()
-          }, 2000)
         }
         this.loading = false
       })
@@ -280,39 +301,105 @@ export default {
     getChartBySmScore() {
       chartBySmScore = echarts.init(this.$refs.chart_BySmScore, null, { renderer: 'svg' })
       var datePt = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
-      var valuePt = [1, 2, 3, 4, 5, 6]
+      var valuePt = [68, 70, 65, 71, 82, 93]
       var option = {
         grid: [{
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 0
+          x: 30,
+          y: 30,
+          x2: 30,
+          y2: 30
         }],
+        legend: {
+          padding: 10
+        },
         title: {
-          text: '最近7天', // 主标题
+          text: '', // 主标题
           x: 'center',
           y: 'top'
         },
         tooltip: {
           trigger: 'axis'
         },
-        xAxis: [{
+        xAxis: {
           data: datePt,
           show: true,
           axisLabel:
           {
-            interval: 0
+            interval: 0,
+            show: true,
+            textStyle: {
+              color: '#000'
+            }
+          },
+          axisTick: {
+            alignWithLabel: true
+          },
+          boundaryGap: false,
+          axisLine: {
+            lineStyle: {
+              color: '#c7c7c7',
+              width: 1
+            }
           }
-        }],
-        yAxis: {
-          type: 'value'
         },
-        series: [{
+        yAxis: {
+          min: 0,
+          max: 100,
+          type: 'value',
+          splitLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#000'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#c7c7c7',
+              width: 1
+            }
+          }
+        },
+        series: {
           type: 'line',
           name: '分数',
-          showSymbol: false,
-          data: valuePt
-        }]
+          symbol: 'circle',
+          symbolSize: 8,
+          showSymbol: true,
+          itemStyle: {
+            normal: {
+              color: '#989ef6',
+              lineStyle: {
+                color: '#bbbdb7'
+              }
+            }
+          },
+          data: valuePt,
+          markLine: {
+            symbol: 'none',
+            silent: false,
+            lineStyle: {
+              normal: {
+                color: '#bac1c6' // 这儿设置安全基线颜色
+              }
+            },
+            data: [{
+              yAxis: [70]
+            }],
+            label: {
+              normal: {
+                color: '#000',
+                formatter: '70' // 这儿设置安全基线
+              }
+            }
+          }
+
+        }
       }
 
       chartBySmScore.setOption(option, null)
@@ -433,10 +520,6 @@ export default {
 
 .a-part-1 {
   padding: 20px;
-
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-size: cover;
 }
 
 .b-part-1 {
@@ -508,11 +591,62 @@ export default {
     }
   }
 
-  .sm-score-chart{
-    background: #fff;
+  .sm-score-chart {
     margin-top: 10px;
+    padding: 10px;
+
     border-radius: 5px;
+    background: #fff;
+
+    .i-score {
+      font-size: 18px;
+      font-weight: bold;
+
+      display: flex;
+
+      .t1 {
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+      }
+
+      .t2 {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .t3 {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+      }
+    }
   }
+}
+
+.b-part-2 {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0 20px;
+
+  .mi-title {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 38px;
+
+    height: 38px;
+  }
+
+  .mi-content{
+    padding: 10px;
+    border-radius: 12px;
+    background-color: #fff;
+    font-size: 12px;
+    line-height: 21px;
+  }
+
 }
 
 .b-part-3 {
@@ -636,6 +770,9 @@ export default {
 .theme-pink {
   .a-part-1 {
     background: url('~@/assets/report/day/pink/a_part1_bg.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-size: cover;
   }
 
   .a-part-2 {
@@ -728,6 +865,8 @@ export default {
   .a-part-3 {
     .lm-tabs-content-item {
       background: url('~@/assets/report/day/pink/sm_tag_content.png') no-repeat top center;
+      background-color: #fff;
+      background-size: contain;
     }
 
     .lm-tabs-title .active {
@@ -737,6 +876,7 @@ export default {
 
   .b-part-1 {
     background: url('~@/assets/report/day/pink/b_part1_bg.png') no-repeat top center;
+        background-size: cover;
   }
 
   .b-part-4 {
@@ -750,6 +890,8 @@ export default {
 .theme-green {
   .a-part-1 {
     background: url('~@/assets/report/day/green/a_part1_bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   .a-part-2 {
@@ -843,6 +985,8 @@ export default {
     .lm-tabs-content-item {
       color: #fff;
       background: url('~@/assets/report/day/green/sm_tag_content.png') no-repeat top center;
+      background-color: #06bdc1;
+      background-size: contain;
     }
 
     .lm-tabs-title .active {

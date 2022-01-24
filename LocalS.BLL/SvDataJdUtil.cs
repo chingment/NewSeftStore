@@ -728,5 +728,34 @@ namespace LocalS.BLL
 
             return jd;
         }
+
+        public static SvDataJd GetSmScore(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val;
+            jd.RefRange = "0~100";
+            if (val < 29)
+            {
+                jd.Set("差", "", "#e16d6d");
+            }
+            else if (val >= 30 && val <= 49)
+            {
+                jd.Set("较差", "", "#e68a8b");
+            }
+            else if (val >= 50 && val <= 69)
+            {
+                jd.Set("中等", "", "#f1b46d");
+            }
+            else if (val >= 70 && val <= 89)
+            {
+                jd.Set("较好", "", "#96a2dc");
+            }
+            else 
+            {
+                jd.Set("好", "", "#6a8de8");
+            }
+
+            return jd;
+        }
     }
 }
