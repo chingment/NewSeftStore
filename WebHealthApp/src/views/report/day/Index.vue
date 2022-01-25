@@ -102,7 +102,7 @@
             </div>
 
             <div class="sm-score-chart" style="width:100%">
-              <score-level />
+
               <div class="i-score">
                 <div class="t1">睡眠值</div>
                 <div class="t2" :style="{'color': rd.smScore.color}">{{ rd.smScore.value }}</div>
@@ -247,6 +247,7 @@ import echarts from 'echarts'
 import ScoreLevel from '@/components/ScoreLevel.vue'
 var chartBySmScore
 export default {
+  name: 'ReportDayIndex',
   components: {
     Carousel3d,
     Slide,

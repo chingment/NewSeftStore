@@ -8,7 +8,7 @@
 import { updateVisitCount } from '@/api/monthreport'
 
 export default {
-  name: 'MonthIndex',
+  name: 'ReportMonthIndex',
   data() {
     return {
     }

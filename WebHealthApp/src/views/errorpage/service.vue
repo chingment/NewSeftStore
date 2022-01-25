@@ -13,7 +13,7 @@
 <script>
 import { removeToken } from '@/utils/auth'
 export default {
-  name: 'Index',
+  name: 'ErrorPageService',
   components: {
   },
   data() {

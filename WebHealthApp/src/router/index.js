@@ -12,11 +12,6 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/index',
-      component: () => import('@/views/index/index'),
-      meta: { title: '', isAuth: true }
-    },
-    {
       path: '/own/info',
       component: () => import('@/views/own/info'),
       meta: { isAuth: true }

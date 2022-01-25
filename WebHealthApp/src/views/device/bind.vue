@@ -57,7 +57,7 @@ import { initBind, bindSerialNo, bindPhoneNumber, getPhoneValidCode } from '@/ap
 import wx from 'weixin-js-sdk'
 import { isEmpty } from '@/utils/commonUtil'
 export default {
-  name: 'App',
+  name: 'DeviceBind',
   components: {
   },
   data() {

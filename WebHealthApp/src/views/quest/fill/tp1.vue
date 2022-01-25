@@ -35,10 +35,10 @@
 <script>
 
 import { initFill, fill } from '@/api/quest'
-
+import fromReg from '@/utils/formReg'
 import FlowForm from '@/components/FlowForm/Index.vue'
 export default {
-  name: 'Example',
+  name: 'QuestFillTp1',
   components: {
     FlowForm
   },
@@ -54,29 +54,40 @@ export default {
           title: '您好，请输入你的真实姓名',
           type: 'input',
           value: '',
-          append: ''
+          append: '',
+          rule: {
+            required: true, min: 1, max: 20, message: '必填,且不能超过20个字符'
+          }
         },
         {
           id: 'birthday',
           title: '生日',
           type: 'date',
-          value: '',
-          append: ''
-
+          value: '2012-12-12',
+          append: '',
+          rule: {
+            required: true, min: 1, max: 20, message: '必选,且必须是日期格式', pattern: fromReg.date
+          }
         },
         {
           id: 'height',
           title: '身高',
           type: 'input',
           value: '',
-          append: 'cm'
+          append: 'cm',
+          rule: {
+            required: true, min: 1, max: 20, message: '必填，必须是数字格式', pattern: fromReg.decimal
+          }
         },
         {
           id: 'weight',
           title: '体重',
           type: 'input',
           value: '',
-          append: 'kg'
+          append: 'kg',
+          rule: {
+            required: true, min: 1, max: 20, message: '必填，必须是数字格式', pattern: fromReg.decimal
+          }
         },
         {
           id: 'sex',
@@ -88,12 +99,12 @@ export default {
           ],
           jump: {
             '1': 'perplexs',
-            '2': 'isPregnant'
+            '2': 'ladyidentity'
           },
           value: ''
         },
         {
-          id: 'isPregnant',
+          id: 'ladyidentity',
           title: '是否已怀孕',
           type: 'radio',
           options: [
@@ -102,7 +113,30 @@ export default {
             { label: '孕妈', value: '3' },
             { label: '宝妈', value: '4' }
           ],
+          jump: {
+            '1': 'perplexs',
+            '2': 'perplexs',
+            '3': 'geyweek',
+            '4': 'perplexs'
+          },
           value: ''
+        },
+        {
+          id: 'geyweek',
+          title: '孕周',
+          type: 'gesweek',
+          value: [7, 3],
+          append: ''
+        },
+        {
+          id: 'deliveryTime',
+          title: '预产期',
+          type: 'date',
+          value: '',
+          append: '',
+          rule: {
+            required: true, min: 1, max: 20, message: '必选,且必须是日期格式', pattern: fromReg.date
+          }
         },
         {
           id: 'perplexs',

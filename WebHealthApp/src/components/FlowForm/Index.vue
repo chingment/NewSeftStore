@@ -19,6 +19,13 @@
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" @click.native="openPickerByDate(index)" />
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
+          <div v-if="item.type==='gesweek'">
+            <mt-cell title="" class="mint-field" style="width:300px" @click.native="openPickerByGesWeek(index)">
+              <span>{{ item.value[0] }}周+{{ item.value[1] }}</span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
+          </div>
           <div v-if="item.type==='radio'">
             <div class="qt-radio">
               <div v-for="(option,j) in item.options" :key="option.id" :class="isRadioVal(option.value,item.value)===false?'qt-radio-item ' :'qt-radio-item on'" @click="onRadioSure(index,option.value)">
@@ -48,6 +55,18 @@
       @confirm="onConfirmByDate"
     />
 
+    <mt-popup
+      v-model="popupVisibleByGesWeek"
+      position="bottom"
+      style="width:100%"
+    >
+      <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
+        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByGesWeek=false">取消</span>
+        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByGesWeek">确定</span>
+      </div>
+      <mt-picker :slots="gesWeekSlots" @change="onValuesChangeByGesWeek" />
+    </mt-popup>
+
   </div>
 </template>
 
@@ -68,25 +87,70 @@ export default {
       active: 0,
       nextSkip: null,
       previous: null,
-      idx_date: 0
+      idx_date: 0,
+      idx_gesweek: 0,
+      popupVisibleByGesWeek: false,
+      gesWeekSlots: [
+        {
+          flex: 1,
+          values: [],
+          className: 'slot1',
+          textAlign: 'right',
+          defaultIndex: 3
+        }, {
+          divider: true,
+          content: '周 +',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: [1, 2, 3, 4, 5, 6],
+          className: 'slot3',
+          textAlign: 'left',
+          defaultIndex: 3
+        }
+      ]
     }
   },
   computed: {
 
   },
+  created() {
+    for (let index = 1; index < 46; index++) {
+      this.gesWeekSlots[0].values.push(index)
+    }
+  },
   methods: {
     onPrevious() {
       var question = this.questions[this.active]
-      console.log(question)
+      // console.log(question)
       this.active = question.previous
       this.previous = question.previous
     },
     onInputSure(q_idx) {
-      var val = this.questions[q_idx].value
-      if (isEmpty(val)) {
-        this.$toast('不能为空')
-        return
+      var question = this.questions[q_idx]
+      var val = question.value
+      if (typeof question.value === 'string') {
+        if (typeof question.rule !== 'undefined') {
+          var rule = question.rule
+          if (rule.required) {
+            if (isEmpty(val)) {
+              this.$toast(rule.message)
+              return
+            } else if (val.length > rule.max) {
+              this.$toast(rule.message)
+              return
+            }
+          }
+
+          if (typeof rule.pattern !== 'undefined') {
+            if (!rule.pattern.test(val)) {
+              this.$toast(rule.message)
+              return
+            }
+          }
+        }
       }
+
       this.jump(q_idx)
     },
     onRadioSure(q_idx, val) {
@@ -165,7 +229,20 @@ export default {
     },
     onConfirmByDate(val) {
       this.questions[this.idx_date].value = this.formatDate(val)
-      console.log(val)
+      // console.log(val)
+    },
+    openPickerByGesWeek(index) {
+      this.idx_gesweek = index
+      this.popupVisibleByGesWeek = true
+      this.gesWeekSlots[0].defaultIndex = this.questions[index].value[0] - 1
+      this.gesWeekSlots[2].defaultIndex = this.questions[index].value[1] - 1
+    },
+    onConfirmByGesWeek() {
+      this.popupVisibleByGesWeek = false
+    },
+    onValuesChangeByGesWeek(picker, values) {
+      this.questions[this.idx_gesweek].value[0] = values[0]
+      this.questions[this.idx_gesweek].value[1] = values[1]
     },
     jump(q_idx, q_val) {
       var questions = this.questions
@@ -173,17 +250,30 @@ export default {
 
       var jump_to = -1
       if (typeof q_item.jump !== 'undefined') {
+        var skip_ids = []
         for (var ob in q_item.jump) {
           var skip_id = q_item.jump[ob]
-          // console.log(skip_id)
+
+          var k1 = skip_ids.filter(function(item) {
+            return item === skip_id
+          })
+
+          if (k1 == null) {
+            skip_ids.push(skip_id)
+          }
+        }
+
+        for (let x = 0; x < skip_ids.length; x++) {
           for (let i = 0; i < questions.length; i++) {
-            if (questions[i].id === skip_id) {
-              // console.log('nextSkip:' + i + 'q_item.id:' + q_item.id + 'skip_id:' + skip_id)
+            console.log(skip_ids[x])
+            if (questions[i].id === skip_ids[x]) {
+            // console.log('nextSkip:' + i + 'q_item.id:' + q_item.id + 'skip_id:' + skip_id)
               this.nextSkip = i
             }
           }
         }
 
+        console.log('this.nextSkip:' + this.nextSkip)
         var jump_id = q_item.jump[q_val]
         for (let i = 0; i < questions.length; i++) {
           if (questions[i].id === jump_id) {
@@ -192,18 +282,18 @@ export default {
           }
         }
       } else {
-        console.log(this.nextSkip)
+        console.log('q_idx:' + q_idx + ',nextSkip:' + this.nextSkip)
         if (this.nextSkip == null) {
           jump_to = q_idx + 1
         } else {
-          console.log('this.nextSkip:' + this.nextSkip + ',val:' + q_idx)
+          // console.log('this.nextSkip:' + this.nextSkip + ',val:' + q_idx)
           if (q_idx > this.nextSkip) {
-            console.log('a')
+            // console.log('a')
             jump_to = q_idx + 1
 
             // jump_to = this.nextSkip + 1
           } else {
-            console.log('b')
+            // console.log('b')
             jump_to = this.nextSkip + 1
           }
           this.nextSkip = null

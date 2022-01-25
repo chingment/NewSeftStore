@@ -34,7 +34,7 @@
 <script>
 import { initInfo, unBind } from '@/api/device'
 export default {
-  name: 'App',
+  name: 'DeviceInfo',
   components: {
   },
   data() {
