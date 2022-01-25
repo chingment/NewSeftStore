@@ -1082,6 +1082,7 @@ export default {
     background: url('~@/assets/report/day/green/a_part1_bg.png');
     background-repeat: no-repeat;
     background-size: cover;
+      padding: 20px 10px;
   }
 
   .a-part-2 {

@@ -28,7 +28,7 @@ namespace LocalS.Service.Api.HealthApp
 
 
 
-            #region 
+            #region  gzTags
             var gzTags = new List<object>();
 
             gzTags.Add(SvDataJdUtil.GetMylzs(d_Rpt.MylMylzs));
@@ -40,7 +40,6 @@ namespace LocalS.Service.Api.HealthApp
             gzTags.Add(SvDataJdUtil.GetQxxlKynl(d_Rpt.QxxlKynl));
             gzTags.Add(SvDataJdUtil.GetQxxlQxyj(d_Rpt.QxxlQxyj));
             #endregion
-
 
             #region smTags
             var smTags = new List<object>();
@@ -99,8 +98,11 @@ namespace LocalS.Service.Api.HealthApp
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
-                    rptSuggest = d_Rpt.RptSuggest,
-                    smScoreByLast = smScoreByLast
+                    RptSuggest = d_Rpt.RptSuggest,
+                    SmScoreByLast = smScoreByLast,
+                    HrvXzznl = SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
+                    XlDcjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlDcjzxl),
+                    XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl)
                 },
                 userInfo = userInfo
             };

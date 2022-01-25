@@ -13,10 +13,22 @@
           <div class="t4">第<span class="t5">99</span>天</div>
         </div>
         <div class="st st-3">
-          <div class="dv-hrvxzznl">  心脏总能量</div>
-          <div class="dv-hrvxzznl-ref">（参考范围1230-2460）</div>
-          <div class="dv-xldcjzxl">当次基准心率</div>
-          <div class="dv_xlcqjzxl">（长期基准心率）</div>
+          <div class="dv-hrvxzznl">
+            <div class="t1">
+              <img class="t1_bg" :src="require('@/assets/report/day/green/ic_hrvXzznl.png')">
+              <span class="t1_txt"> {{ rd.hrvXzznl.value }}</span>
+            </div>
+            <div class="t2"> 心脏总能量</div>
+          </div>
+          <div class="dv-hrvxzznl-ref">（参考值{{ rd.hrvXzznl.refRange }}）</div>
+          <div class="dv-xldcjzxl">
+            <div class="t1">
+              <img class="t1_bg" :src="require('@/assets/report/day/green/ic_xlDcjzxl.png')">
+              <span class="t1_txt"> {{ rd.xlDcjzxl.value }}</span>
+            </div>
+            <div class="t2"> 当次基准心率</div>
+          </div>
+          <div class="dv_xlcqjzxl">（长期基准心率{{ rd.xlCqjzxl.value }}）</div>
         </div>
       </div>
     </div>
@@ -54,13 +66,15 @@ export default {
   .wrap {
     display: flex;
 
+    color: #fff;
+
     .st-1 {
       .avatar {
         position: absolute;
-        top: 100px;
+        top: 120px;
 
-        width: 120px;
-        height: 120px;
+        width: 90px;
+        height: 90px;
 
         border-radius: 50%;
       }
@@ -68,8 +82,6 @@ export default {
 
     .st-2 {
       text-align: center;
-
-      color: #fff;
 
       .t1 {
         font-size: 68px;
@@ -105,11 +117,78 @@ export default {
     flex: 1;
   }
 
-  .st-1,
+  .st-1 {
+    flex: none;
+
+    width: 90px;
+  }
+
   .st-3 {
     flex: none;
 
-    width: 100px;
+    width: 150px;
+
+    .dv-hrvxzznl {
+      display: flex;
+
+      padding: 12px 0 5px 0;
+
+      .t1 {
+        position: relative;
+
+        .t1_bg {
+          width: 60px;
+        }
+
+        .t1_txt {
+          font-size: 13px;
+
+          position: absolute;
+          top: 12px;
+          left: 14px;
+
+          color: blue;
+        }
+      }
+
+      .t2 {
+        padding-top: 10px;
+      }
+    }
+
+    .dv-hrvxzznl-ref {
+      font-size: 14px;
+    }
+
+    .dv-xldcjzxl {
+      display: flex;
+
+          padding: 5px 0 5px 0;
+
+      .t1 {
+        position: relative;
+
+        .t1_bg {
+          width: 50px;
+        }
+
+        .t1_txt {
+        font-size: 13px;
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    color: blue;
+        }
+      }
+
+      .t2 {
+        padding-top: 10px;
+      }
+    }
+
+    .dv_xlcqjzxl {
+      font-size: 14px;
+    }
   }
 }
 

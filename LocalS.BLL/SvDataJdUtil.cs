@@ -39,8 +39,8 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Id = "1";
-            jd.Name = "免疫力指数";
-            jd.Value = val.ToString();
+            jd.Name = "免疫力";
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 29)
             {
@@ -69,8 +69,8 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Id = "2";
-            jd.Name = "免疫力感染风险";
-            jd.Value = val.ToString();
+            jd.Name = "感染风险";
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 19)
             {
@@ -101,7 +101,7 @@ namespace LocalS.BLL
             val = 100 - val;
             jd.Id = "3";
             jd.Name = "高血压管控";
-            jd.Value = val.ToString();
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 39)
             {
@@ -131,7 +131,7 @@ namespace LocalS.BLL
                 return jd;
             }
 
-            jd.Value = val.ToString();
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 39)
             {
@@ -156,7 +156,7 @@ namespace LocalS.BLL
             jd.Name = "冠心病管控";
 
             val = 100 - val;
-            jd.Value = val.ToString();
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 39)
             {
@@ -178,7 +178,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Id = "7";
             jd.Name = "抗压能力";
-            jd.Value = val.ToString();
+            jd.Value = val.ToString("0.#####");
 
             if (val <= 29)
             {
@@ -210,7 +210,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Id = "8";
             jd.Name = "情绪应激";
-            jd.Value = val.ToString();
+            jd.Value = val.ToString("0.#####");
 
 
             return jd;

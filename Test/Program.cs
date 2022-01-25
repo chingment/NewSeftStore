@@ -57,6 +57,8 @@ namespace Test
         static void Main(string[] args)
         {
 
+            decimal num1 = (decimal)1.0;
+            string strNum = num1.ToString("0.#####");//0.5
 
             //String product = "Dysmsapi";//短信API产品名称
             //String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
