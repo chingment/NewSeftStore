@@ -81,7 +81,7 @@ namespace LocalS.Service.Api.HealthApp
 
             foreach (var d_hDayReportSmScore in d_hDayReportSmScores)
             {
-                smScoreByLast.Add(new { Date = d_hDayReportSmScore.HealthDate.ToString("MM-dd"), score = d_hDayReportSmScore.SmScore });
+                smScoreByLast.Add(new { xData = d_hDayReportSmScore.HealthDate.ToString("MM-dd"), yData = d_hDayReportSmScore.SmScore });
             }
 
             #endregion

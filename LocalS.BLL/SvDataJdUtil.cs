@@ -9,11 +9,11 @@ namespace LocalS.BLL
     public class SvDataJdUtil
     {
         public readonly static string CA_0 = "#666666";
-        public readonly static string CA_1 = "#e80113";
-        public readonly static string CA_2 = "#f86872";
-        public readonly static string CA_3 = "#5fa5dc";
-        public readonly static string CA_4 = "#0368b8";
-        public readonly static string CA_5 = "#59c307";
+        public readonly static string CA_1 = "#e68a8b";
+        public readonly static string CA_2 = "#f1b46d";
+        public readonly static string CA_3 = "#e16d6d";
+        public readonly static string CA_4 = "#96a2dc";
+        public readonly static string CA_5 = "#628DF2";
 
         public static decimal Covevt2Hour(decimal seconds)
         {
@@ -732,6 +732,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmScore(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "睡眠值";
             jd.Value = val;
             jd.RefRange = "0~100";
             if (val < 29)

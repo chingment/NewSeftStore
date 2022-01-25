@@ -1,6 +1,6 @@
 <template>
   <div class="card-own-b">
-    <div class="own-info">
+    <div v-if="rd!=null" class="own-info">
       <div class="wrap">
         <div class="st st-1">
           <div class="health-date">{{ rd.healthDate }}</div>
@@ -16,7 +16,7 @@
           <div class="dv-hrvxzznl">
             <div class="t1">
               <img class="t1_bg" :src="require('@/assets/report/day/green/ic_hrvXzznl.png')">
-              <span class="t1_txt"> {{ rd.hrvXzznl.value }}</span>
+              <span class="t1_txt" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.value }}</span>
             </div>
             <div class="t2"> 心脏总能量</div>
           </div>
@@ -24,7 +24,7 @@
           <div class="dv-xldcjzxl">
             <div class="t1">
               <img class="t1_bg" :src="require('@/assets/report/day/green/ic_xlDcjzxl.png')">
-              <span class="t1_txt"> {{ rd.xlDcjzxl.value }}</span>
+              <span class="t1_txt" :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.value }}</span>
             </div>
             <div class="t2"> 当次基准心率</div>
           </div>
@@ -142,10 +142,10 @@ export default {
 
         .t1_txt {
           font-size: 13px;
-
+font-weight: bold;
           position: absolute;
           top: 12px;
-          left: 14px;
+          left: 13px;
 
           color: blue;
         }
@@ -178,6 +178,7 @@ export default {
     top: 16px;
     left: 18px;
     color: blue;
+    font-weight: bold;
         }
       }
 

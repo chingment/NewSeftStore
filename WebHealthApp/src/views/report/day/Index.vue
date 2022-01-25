@@ -103,7 +103,9 @@
 
             <div class="sm-score-chart" style="width:100%">
 
-              <div class="i-score">
+              <score-level :tag-dv="rd.smScore" :ref-range-dv="smScoreRefRange" :chart-dv="rd.smScoreByLast" />
+
+              <!-- <div class="i-score">
                 <div class="t1">睡眠值</div>
                 <div class="t2" :style="{'color': rd.smScore.color}">{{ rd.smScore.value }}</div>
                 <div class="t3" :style="{'color': rd.smScore.color}">{{ rd.smScore.tips }}</div>
@@ -184,6 +186,7 @@
               </div>
 
               <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-50)+'px;height:300px;margin:auto;'" />
+               -->
             </div>
           </div>
 
@@ -324,6 +327,18 @@ export default {
           }
         ],
         smDvs: [],
+        hrvXzznl: {
+          value: '',
+          refRange: ''
+        },
+        xlDcjzxl: {
+          value: '',
+          refRange: ''
+        },
+        xlCqjzxl: {
+          value: '',
+          refRange: ''
+        },
         rptSuggest: ''
       },
       carousel: {
@@ -331,6 +346,35 @@ export default {
         display: 7
       },
       smScoreCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
+      smScoreRefRange: [
+        {
+          min: 0,
+          max: 30,
+          color: '#e68a8b',
+          tips: '差'
+        },
+        {
+          min: 30,
+          max: 50,
+          color: '#f1b46d',
+          tips: '较差'
+        }, {
+          min: 50,
+          max: 70,
+          color: '#e16d6d',
+          tips: '中等'
+        }, {
+          min: 70,
+          max: 90,
+          color: '#96a2dc',
+          tips: '较好'
+        }, {
+          min: 90,
+          max: 100,
+          color: '#628DF2',
+          tips: '好'
+        }
+      ],
       activeTabBySmTag: 0,
       theme: 'green'
     }
@@ -339,7 +383,7 @@ export default {
     selected: function(val) {
       if (val === 'tab2') {
         this.$nextTick(function() {
-          this.getChartBySmScore()
+          // this.getChartBySmScore()
         }, 2000)
       }
     }
@@ -717,99 +761,6 @@ export default {
     border-radius: 5px;
     background: #fff;
 
-    .i-score {
-      font-size: 18px;
-      font-weight: bold;
-
-      display: flex;
-
-      .t1 {
-        display: flex;
-        flex: 1;
-        justify-content: flex-start;
-      }
-
-      .t2 {
-        display: flex;
-        flex: 1;
-        justify-content: center;
-      }
-
-      .t3 {
-        display: flex;
-        flex: 1;
-        justify-content: flex-end;
-      }
-    }
-
-    .i-sign {
-      display: flex;
-
-      padding: 10px 0;
-
-      .col {
-        flex: 1;
-
-        .topnum {
-          font-size: 12px;
-
-          padding: 5px 0;
-
-          text-align: left;
-
-          color: gray;
-        }
-
-        .bottomtips {
-          font-size: 12px;
-
-          text-align: center;
-
-          color: gray;
-        }
-
-        /deep/ .mt-range-runway {
-          border-radius: 20px;
-        }
-
-        /deep/ .mt-range-thumb {
-          top: 4px;
-
-          width: 20px;
-          height: 20px;
-        }
-
-        /deep/ .no-ative {
-          .mt-range-thumb {
-            display: none  !important;
-          }
-        }
-      }
-
-      .col-split {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: flex-start;
-
-        .topnum {
-          font-size: 12px;
-
-          padding: 5px 0;
-
-          color: gray;
-        }
-
-        .border-split {
-          display: inline-block;
-
-          width: 1px;
-          height: 44px;
-
-          border-left: 1px dashed #c5c5c5;
-        }
-      }
-    }
   }
 }
 
