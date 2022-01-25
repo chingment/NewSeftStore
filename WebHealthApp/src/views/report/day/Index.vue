@@ -21,7 +21,7 @@
           </div>
           <div class="a-part-2">
             <div style="padding:10px">
-              <carousel-3d :space="carousel.space" :display="carousel.display" class="carousel-gz-tags">
+              <carousel-3d :space="carousel.space" :width="640" :height="640" :display="carousel.display" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
                   <div class="gz-tag" :data-index="index">

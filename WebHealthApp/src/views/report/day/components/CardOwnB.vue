@@ -183,7 +183,7 @@ font-weight: bold;
       }
 
       .t2 {
-        padding-top: 10px;
+        padding-top: 15px;
       }
     }
 
