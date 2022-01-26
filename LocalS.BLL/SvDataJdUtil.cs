@@ -279,6 +279,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
+            jd.Name = "呼吸紊乱指数";
             jd.RefRange = "0~5次/h";
             if (val < 5)
             {
@@ -768,5 +769,33 @@ namespace LocalS.BLL
             jd.RefRange = "0~100";
             return jd;
         }
+
+        public static SvDataJd GetSmSmxl(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "睡眠效率";
+            jd.Value = val;
+            jd.RefRange = "0~100";
+            return jd;
+        }
+
+        public static SvDataJd GetSmSmlxx(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "睡眠连续性";
+            jd.Value = val;
+            jd.RefRange = "0~100";
+            return jd;
+        }
+
+        public static SvDataJd GetSmSdsmbl(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "深度睡眠比例";
+            jd.Value = val;
+            jd.RefRange = "0~100";
+            return jd;
+        }
+        
     }
 }

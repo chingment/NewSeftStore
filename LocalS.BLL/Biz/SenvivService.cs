@@ -1564,7 +1564,8 @@ namespace LocalS.BLL
                     d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
                     //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
                     d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
-
+                    d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
+                    d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
 
                     var trendcharts = d1.trendchart;
                     if (trendcharts != null)

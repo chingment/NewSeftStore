@@ -58,6 +58,12 @@ namespace LocalS.Entity
         //平均体动时长
         public int SmPjtdsc { get; set; }
 
+        //睡眠效率
+        public decimal SmSmxl { get; set; }
+
+        //睡眠连续性
+        public decimal SmSmlxx { get; set; }
+
         //当次基准心率
         public int XlDcjzxl { get; set; }
         //长期基准心率
