@@ -737,25 +737,35 @@ namespace LocalS.BLL
             jd.RefRange = "0~100";
             if (val < 29)
             {
-                jd.Set("差", "", "#e16d6d");
+                jd.Set("差", "", CA_1);
             }
             else if (val >= 30 && val <= 49)
             {
-                jd.Set("较差", "", "#e68a8b");
+                jd.Set("较差", "", CA_2);
             }
             else if (val >= 50 && val <= 69)
             {
-                jd.Set("中等", "", "#f1b46d");
+                jd.Set("中等", "", CA_3);
             }
             else if (val >= 70 && val <= 89)
             {
-                jd.Set("较好", "", "#96a2dc");
+                jd.Set("较好", "", CA_4);
             }
             else 
             {
-                jd.Set("好", "", "#628DF2");
+                jd.Set("好", "", CA_5);
             }
 
+            return jd;
+        }
+
+
+        public static SvDataJd GetHealthScore(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "健康值";
+            jd.Value = val;
+            jd.RefRange = "0~100";
             return jd;
         }
     }

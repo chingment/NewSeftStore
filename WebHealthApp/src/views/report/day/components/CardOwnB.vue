@@ -1,16 +1,19 @@
 <template>
   <div class="card-own-b">
     <div v-if="rd!=null" class="own-info">
+      <div class="tip-remark">
+        本次检测结果不作为疾病的专业临床诊断依据
+      </div>
       <div class="wrap">
         <div class="st st-1">
           <div class="health-date">{{ rd.healthDate }}</div>
           <img class="avatar" :src="userInfo.avatar" style="width:100px;height:100px">
         </div>
         <div class="st st-2">
-          <div class="t1">56</div>
+          <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
           <div class="t2">健康值</div>
           <div class="t3">今天是全心监测与您相伴的</div>
-          <div class="t4">第<span class="t5">99</span>天</div>
+          <div class="t4">第<span class="t5">{{ userInfo.togetherDays }}</span>天</div>
         </div>
         <div class="st st-3">
           <div class="dv-hrvxzznl">
@@ -63,12 +66,19 @@ export default {
 <style lang="scss" scoped>
 
 .card-own-b {
+  .tip-remark{
+    color: #fff;
+    font-size: 12px;
+  }
   .wrap {
     display: flex;
 
     color: #fff;
 
     .st-1 {
+      .health-date{
+        padding-top: 10px;
+      }
       .avatar {
         position: absolute;
         top: 120px;

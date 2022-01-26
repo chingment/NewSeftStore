@@ -73,7 +73,7 @@
                 <div class="process-score">
 
                   <vue-circle
-                    ref="myprogress"
+                    ref="sm_score"
                     :progress="rd.smScore.value"
                     :size="100"
                     :reverse="false"
@@ -291,7 +291,7 @@ export default {
         signName: ''
       },
       rd: {
-        healthScore: 60,
+        healthScore: { value: 0 },
         healthDate: '',
         smScore: 40,
         smScoreTip: '您的睡眠值已经打败77%的人',

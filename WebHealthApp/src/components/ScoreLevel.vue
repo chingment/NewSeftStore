@@ -69,6 +69,7 @@ export default {
   },
   methods: {
     getChart(data) {
+      var _this = this
       if (data === null || data.length === 0) { return }
 
       var xData = [] // = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
@@ -182,7 +183,18 @@ export default {
           showSymbol: true,
           itemStyle: {
             normal: {
-              color: '#989ef6',
+              color: function(params) {
+                var color = '#989ef6'
+                for (let index = 0; index < _this.refRangeDv.length; index++) {
+                  var refRangeDv = _this.refRangeDv[index]
+                  if (params.data >= refRangeDv.min && params.data <= refRangeDv.max) {
+                    color = refRangeDv.color
+                    break
+                  }
+                }
+
+                return color
+              },
               lineStyle: {
                 color: '#bbbdb7'
               }

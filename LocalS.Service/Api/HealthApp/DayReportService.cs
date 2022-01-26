@@ -20,10 +20,14 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_SvUser = CurrentDb.SenvivUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
 
+
+            var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays;
+
             var userInfo = new
             {
-                signName = d_SvUser.NickName,
-                avatar = d_SvUser.Avatar
+                SignName = d_SvUser.NickName,
+                Avatar = d_SvUser.Avatar,
+                TogetherDays = togetherDays
             };
 
 
@@ -45,19 +49,21 @@ namespace LocalS.Service.Api.HealthApp
             var smTags = new List<object>();
 
             var arr_SmTags = d_Rpt.SmTags.ToJsonObject<string[]>();
-
-            var d_TagExplains = CurrentDb.SenvivHealthTagExplain.Where(m => arr_SmTags.Contains(m.TagName)).Take(4).ToList();
-
-            foreach (var d_TagExplain in d_TagExplains)
+            if (arr_SmTags != null && arr_SmTags.Length > 0)
             {
-                smTags.Add(new
+                var d_TagExplains = CurrentDb.SenvivHealthTagExplain.Where(m => arr_SmTags.Contains(m.TagName)).Take(4).ToList();
+
+                foreach (var d_TagExplain in d_TagExplains)
                 {
-                    Id = d_TagExplain.TagId,
-                    Name = d_TagExplain.TagName,
-                    ProExplain = d_TagExplain.ProExplain,
-                    TcmExplain = d_TagExplain.TcmExplain,
-                    Suggest = d_TagExplain.Suggest
-                });
+                    smTags.Add(new
+                    {
+                        Id = d_TagExplain.TagId,
+                        Name = d_TagExplain.TagName,
+                        ProExplain = d_TagExplain.ProExplain,
+                        TcmExplain = d_TagExplain.TcmExplain,
+                        Suggest = d_TagExplain.Suggest
+                    });
+                }
             }
             #endregion
 
@@ -75,11 +81,14 @@ namespace LocalS.Service.Api.HealthApp
 
 
             List<object> smScoreByLast = new List<object>();
-            var d_hDayReportSmScores = (from u in CurrentDb.SenvivHealthDayReport
-                                        where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
-                                        select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderBy(m => m.CreateTime).Take(7);
+            var d_DayReportSmScores = (from u in CurrentDb.SenvivHealthDayReport
+                                       where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
+                                       && u.HealthDate <= d_Rpt.HealthDate
+                                       select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
 
-            foreach (var d_hDayReportSmScore in d_hDayReportSmScores)
+            d_DayReportSmScores.Reverse();
+
+            foreach (var d_hDayReportSmScore in d_DayReportSmScores)
             {
                 smScoreByLast.Add(new { xData = d_hDayReportSmScore.HealthDate.ToString("MM-dd"), yData = d_hDayReportSmScore.SmScore });
             }
@@ -91,7 +100,7 @@ namespace LocalS.Service.Api.HealthApp
                 rd = new
                 {
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
-                    HealthScore = 60,
+                    HealthScore = SvDataJdUtil.GetHealthScore(d_Rpt.TotalScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
                     SmScore = SvDataJdUtil.GetSmScore(d_Rpt.SmScore),
                     SmScoreTip = "您的睡眠值已经打败77%的人",

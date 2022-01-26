@@ -9,8 +9,9 @@
         </div>
         <div class="st-2">
           <vue-circle
-            ref="myprogress"
-            :progress="rd.healthScore"
+            v-if="rd.healthScore.value>0"
+            ref="health_score"
+            :progress="rd.healthScore.value"
             :size="90"
             :reverse="false"
             line-cap="round"
@@ -24,7 +25,7 @@
             :show-percent="false"
           >
             <div class="c-health-score">
-              <div class="t1">{{ rd.healthScore }}</div>
+              <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
               <div class="t2">健康值</div>
             </div>
           </vue-circle>
