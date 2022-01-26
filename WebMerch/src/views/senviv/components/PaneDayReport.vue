@@ -84,7 +84,7 @@
       />
 
       <el-table-column
-        prop="totalScore"
+        prop="healthScore"
         align="center"
         label="总分"
         width="60"

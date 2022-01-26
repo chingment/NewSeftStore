@@ -332,7 +332,7 @@ namespace LocalS.Service.Api.Merch
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
-                             u.TotalScore,
+                             u.HealthScore,
                              u.HealthDate,
                              u.SmTags,
                              u.SmRssj,
@@ -413,7 +413,7 @@ namespace LocalS.Service.Api.Merch
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
-                    TotalScore = rpt.TotalScore,
+                    HealthScore = rpt.HealthScore,
                     SmRssj = rpt.SmRssj.ToUnifiedFormatDateTime(),
                     SmQxsj = rpt.SmQxsj.ToUnifiedFormatDateTime(),
                     DsTags = rpt.SmTags.ToJsonObject<List<string>>(),
@@ -510,7 +510,7 @@ namespace LocalS.Service.Api.Merch
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
-                             u.TotalScore,
+                             u.HealthScore,
                              u.HealthDate,
                              u.SmTags,
                              u.SmRssj,
@@ -637,7 +637,7 @@ namespace LocalS.Service.Api.Merch
                 ReportData = new
                 {
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
-                    TotalScore = d_Rpt.TotalScore,
+                    HealthScore = d_Rpt.HealthScore,
                     SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
                     SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),
                     SmQxsj = d_Rpt.SmQxsj.ToString("yyyy/MM/dd HH:mm"),
@@ -784,7 +784,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
-                             u.TotalScore,
+                             u.HealthScore,
                              u.HealthDate,
                              u.MylGrfx,
                              u.MylMylzs,
@@ -874,7 +874,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
-                    rpt.TotalScore,
+                    rpt.HealthScore,
                     rpt.HealthDate,
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
                     MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylzs),
@@ -960,7 +960,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            tt.Birthday,
                            tt.Avatar,
                            u.SmTags,
-                           u.TotalScore,
+                           u.HealthScore,
                            u.HealthDate,
                            u.MylGrfx,
                            u.MylMylzs,
@@ -1033,7 +1033,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 },
                 ReportData = new
                 {
-                    rpt.TotalScore,
+                    rpt.HealthScore,
                     rpt.HealthDate,
                     SmTags = rpt.SmTags.ToJsonObject<List<object>>(),
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
@@ -1198,7 +1198,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
                 string url = "http://health.17fanju.com/report/month/monitor?rptId=" + rpt.Id;
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
-                string keyword2 = "总体评分" + rpt.TotalScore + "分";
+                string keyword2 = "总体评分" + rpt.HealthScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
                 var isSend = BizFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
                 if (isSend)
@@ -1283,7 +1283,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string first = "您好，" + rpt.HealthDate + "月健康报告已生成，详情如下";
                 string url = "http://health.17fanju.com/report/month/monitor?rptId=" + rpt.Id;
                 string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
-                string keyword2 = "总体评分" + rpt.TotalScore + "分";
+                string keyword2 = "总体评分" + rpt.HealthScore + "分";
                 string remark = "感谢您的支持，如需查看详情报告信息请点击";
                 var isSend = BizFactory.Senviv.SendMonthReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
                 if (isSend)

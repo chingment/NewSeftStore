@@ -756,7 +756,7 @@ namespace LocalS.BLL
 
                     d_StageReport.SvUserId = userId;
                     d_StageReport.DayCount = d_DayReports.Count;
-                    d_StageReport.TotalScore = d_DayReports.Select(m => m.TotalScore).Average();
+                    d_StageReport.HealthScore = d_DayReports.Select(m => m.HealthScore).Average();
 
                     d_StageReport.MylGrfx = Decimal.Parse(d_DayReports.Select(m => m.MylGrfx).Average().ToString());//
                     d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
@@ -801,7 +801,7 @@ namespace LocalS.BLL
                     d_StageReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
 
 
-                    d_StageReport.TotalScorePt = d_DayReports.Select(m => m.TotalScore).ToJsonString();
+                    d_StageReport.HealthScorePt = d_DayReports.Select(m => m.HealthScore).ToJsonString();
 
                     d_StageReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
 
@@ -945,7 +945,7 @@ namespace LocalS.BLL
                     d_DayReport.Id = d1.reportId;
                     d_DayReport.SvUserId = userId;
                     d_DayReport.HealthDate = Convert2DateTime(d1.createtime);
-                    d_DayReport.TotalScore = d1.Report.TotalScore;
+                    d_DayReport.HealthScore = d1.Report.TotalScore;
 
                     var x2 = d1.Report;
 
@@ -1476,19 +1476,19 @@ namespace LocalS.BLL
                     d_DayReport.Id = reportpar.ReportId;
                     d_DayReport.SvUserId = userId;
                     d_DayReport.HealthDate = TicksToDate(reportpar.CreateTime);
-                    d_DayReport.TotalScore = SvUtil.D46Decimal(reportpar.hv);//健康值
+                    d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
 
                     d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
-                    d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
-                    d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
+
                     d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
                     d_DayReport.MylGrfx = 100 - SvUtil.D46Decimal(reportpar.gr);
                     d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
                     d_DayReport.MbTlbgk = 100 - SvUtil.D46Decimal(reportpar.tc);
                     d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
-
-                    d_DayReport.QxxlJlqx = reportpar.qxxl;
-
+                    d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
+                    d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
+                    d_DayReport.QxxlJlqx = reportpar.Sc_an;
+                    d_DayReport.QxxlQxxl = SvUtil.D46Decimal(reportpar.qxxl);
 
                     d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
                     d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
@@ -1796,9 +1796,9 @@ namespace LocalS.BLL
             return config;
         }
 
-        public bool SendMonthReport(string userId, string first, string keyword1, string keyword2, string remark, string url)
+        public bool SendMonthReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxPaTpl(userId, "month_report");
+            var template = GetWxPaTpl(svUserId, "month_report");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1822,9 +1822,9 @@ namespace LocalS.BLL
             return true;
         }
 
-        public bool SendArticle(string userId, string first, string keyword1, string keyword2, string remark, string url)
+        public bool SendArticle(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxPaTpl(userId, "pregnancy_remind");
+            var template = GetWxPaTpl(svUserId, "pregnancy_remind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1848,9 +1848,9 @@ namespace LocalS.BLL
             return true;
         }
 
-        public bool SendHealthMonitor(string userId, string first, string keyword1, string keyword2, string keyword3, string remark)
+        public bool SendHealthMonitor(string svUserId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
-            var template = GetWxPaTpl(userId, "health_monitor");
+            var template = GetWxPaTpl(svUserId, "health_monitor");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1875,9 +1875,9 @@ namespace LocalS.BLL
             return true;
         }
 
-        public bool SendDeviceBind(string userId, string first, string keyword1, string keyword2, string remark)
+        public bool SendDeviceBind(string svUserId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetWxPaTpl(userId, "device_bind");
+            var template = GetWxPaTpl(svUserId, "device_bind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1901,9 +1901,9 @@ namespace LocalS.BLL
             return true;
         }
 
-        public bool SendDeviceUnBind(string userId, string first, string keyword1, string keyword2, string remark)
+        public bool SendDeviceUnBind(string svUserId, string first, string keyword1, string keyword2, string remark)
         {
-            var template = GetWxPaTpl(userId, "device_unbind");
+            var template = GetWxPaTpl(svUserId, "device_unbind");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -1927,12 +1927,12 @@ namespace LocalS.BLL
             return true;
         }
 
-        public WxPaTplModel GetWxPaTpl(string userId, string template)
+        public WxPaTplModel GetWxPaTpl(string svUserId, string template)
         {
             var model = new WxPaTplModel();
 
-            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.UserId == userId).FirstOrDefault();
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == svUserId).FirstOrDefault();
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
             model.OpenId = d_ClientUser.WxPaOpenId;

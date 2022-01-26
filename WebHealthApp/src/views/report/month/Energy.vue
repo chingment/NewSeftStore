@@ -6,11 +6,11 @@
       <img class="pt1_t2" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <img class="pt1_t3" src="@/assets/images/ts/bg_energy_pt1_t2.png" alt="">
       <div class="at1">
-        <div class="at_a1"><span class="at_title"> 本月综合得分</span><span class="at_score">{{ rd.totalScore }}</span></div>
+        <div class="at_a1"><span class="at_title"> 本月综合得分</span><span class="at_score">{{ rd.healthScore }}</span></div>
       </div>
       <div class="at2">
         <div class="dv-section">
-          <div ref="chart_ByTotalScore" style="width:100%;height:300px;margin:auto;padding: 10px 5px;" />
+          <div ref="chart_ByHealthScore" style="width:100%;height:300px;margin:auto;padding: 10px 5px;" />
         </div>
         <div class="dv-section">
           <div ref="chart_BySm" style="width:100%;height:320px;margin:auto;padding: 10px 5px;" />
@@ -88,7 +88,7 @@ import { getEnergy } from '@/api/monthreport'
 import DvItem from '@/components/DvItem.vue'
 import echarts from 'echarts'
 
-var chartByTotalScore
+var chartByHealthScore
 var chartBySm
 
 export default {
@@ -99,7 +99,7 @@ export default {
       loading: false,
       rd: {
         scoreRatio: '',
-        totalScore: '',
+        healthScore: '',
         smSmsc: { color: '', value: '', refRange: '' },
         smQdsmsc: { color: '', value: '', refRange: '' },
         smSdsmsc: { color: '', value: '', refRange: '' },
@@ -111,15 +111,15 @@ export default {
         smTdcs: { color: '', value: '', refRange: '' },
         hxZtahizs: { color: '', value: '', refRange: '' },
         datePt: [0],
-        totalScorePt: [0],
+        healthScorePt: [0],
         hrvXzznlPt: [0],
         JbfxXlscfxPt: [0]
       }
     }
   },
   mounted() {
-    if (!chartByTotalScore) {
-      chartByTotalScore = echarts.init(this.$refs.chart_ByTotalScore, null, { renderer: 'svg' })
+    if (!chartByHealthScore) {
+      chartByHealthScore = echarts.init(this.$refs.chart_ByHealthScore, null, { renderer: 'svg' })
     }
     if (!chartBySm) {
       chartBySm = echarts.init(this.$refs.chart_BySm, null, { renderer: 'svg' })
@@ -130,10 +130,10 @@ export default {
     this._getEnergy()
   },
   beforeDestroy() {
-    if (chartByTotalScore) {
-      chartByTotalScore.clear()
-      chartByTotalScore.dispose()
-      chartByTotalScore = null
+    if (chartByHealthScore) {
+      chartByHealthScore.clear()
+      chartByHealthScore.dispose()
+      chartByHealthScore = null
     }
 
     if (chartBySm) {
@@ -157,7 +157,7 @@ export default {
           this.rd = d
 
           this.$nextTick(function() {
-            this.getChartByTotalScore()
+            this.getChartByHealthScore()
             this.getChartBySm()
           }, 2000)
         }
@@ -167,9 +167,9 @@ export default {
     clearChart() {
       this.$destroy()
     },
-    getChartByTotalScore() {
+    getChartByHealthScore() {
       var datePt = this.rd.datePt
-      var valuePt = this.rd.totalScorePt
+      var valuePt = this.rd.healthScorePt
       var option = {
         grid: [{
           x: 45,
@@ -201,7 +201,7 @@ export default {
         ]
       }
 
-      chartByTotalScore.setOption(option, null)
+      chartByHealthScore.setOption(option, null)
     },
     getChartBySm() {
       var datePt = this.rd.datePt

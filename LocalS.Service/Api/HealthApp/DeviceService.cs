@@ -257,7 +257,7 @@ namespace LocalS.Service.Api.HealthApp
                 CurrentDb.SaveChanges();
             }
 
-            BizFactory.Senviv.SendDeviceUnBind(userId, "您已成功解绑设备，不再接收报告信息", rop.DeviceId, DateTime.Now.ToUnifiedFormatDateTime(), "感觉使用。");
+            BizFactory.Senviv.SendDeviceUnBind(d_UserDevice.SvUserId, "您已成功解绑设备，不再接收报告信息", rop.DeviceId, DateTime.Now.ToUnifiedFormatDateTime(), "感觉使用。");
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");

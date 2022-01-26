@@ -29,7 +29,7 @@ namespace LocalS.Service.Api.HealthApp
                            tt.Birthday,
                            tt.Avatar,
                            u.SmTags,
-                           u.TotalScore,
+                           u.HealthScore,
                            u.HealthDate,
                            u.MylGrfx,
                            u.MylMylzs,
@@ -74,12 +74,12 @@ namespace LocalS.Service.Api.HealthApp
 
 
 
-            var sum_TotalScores = CurrentDb.SenvivHealthStageReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.TotalScore).ToList();
+            var sum_HealthScores = CurrentDb.SenvivHealthStageReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.HealthScore).ToList();
             int scoreRatio = 80;
-            if (sum_TotalScores.Count > 0)
+            if (sum_HealthScores.Count > 0)
             {
-                int a = sum_TotalScores.Where(m => m < rpt.TotalScore).Count();
-                int b = sum_TotalScores.Count();
+                int a = sum_HealthScores.Where(m => m < rpt.HealthScore).Count();
+                int b = sum_HealthScores.Count();
                 double r = Math.Round((Convert.ToDouble(a) / Convert.ToDouble(b)), 2) * 100;
                 scoreRatio = Convert.ToInt32(r);
             }
@@ -106,7 +106,7 @@ namespace LocalS.Service.Api.HealthApp
                 ReportData = new
                 {
                     scoreRatio,
-                    rpt.TotalScore,
+                    rpt.HealthScore,
                     rpt.HealthDate,
                     SmTags = smTags,
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
@@ -179,7 +179,7 @@ namespace LocalS.Service.Api.HealthApp
                        select new
                        {
                            u.Id,
-                           u.TotalScore,
+                           u.HealthScore,
                            u.HealthDate,
                            u.SmTags,
                            u.SmSmsc,
@@ -193,7 +193,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.HxZtahizs,
                            u.SmTdcs,
                            u.DatePt,
-                           u.TotalScorePt,
+                           u.HealthScorePt,
                            u.SmSmscPt,
                            u.JbfxXlscfxPt,
                            u.HrvXzznlPt,
@@ -214,7 +214,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var ret = new
             {
-                rpt.TotalScore,
+                rpt.HealthScore,
                 rpt.HealthDate,
                 SmTags = smTags,
                 SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
@@ -228,7 +228,7 @@ namespace LocalS.Service.Api.HealthApp
                 SmTdcs = SvDataJdUtil.GetSmTdcs(rpt.SmTdcs),
                 HxZtahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtahizs),
                 DatePt = rpt.DatePt.ToJsonObject<List<object>>(),
-                TotalScorePt = rpt.TotalScorePt.ToJsonObject<List<object>>(),
+                HealthScorePt = rpt.HealthScorePt.ToJsonObject<List<object>>(),
                 SmSmscPt = rpt.SmSmscPt.ToJsonObject<List<object>>(),
                 JbfxXlscfxPt = rpt.JbfxXlscfxPt.ToJsonObject<List<object>>(),
                 HrvXzznlPt = rpt.HrvXzznlPt.ToJsonObject<List<object>>(),

@@ -268,7 +268,7 @@ namespace LocalS.Service.Api.HealthApp
             d_UserDevice.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            BizFactory.Senviv.SendDeviceBind(userId, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
+            BizFactory.Senviv.SendDeviceBind(d_SenvivUser.Id, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 

@@ -25,7 +25,7 @@ namespace LocalS.Entity
         public string SvUserId { get; set; }
         public string HealthDate { get; set; }
         public int DayCount { get; set; }
-        public decimal TotalScore { get; set; }
+        public decimal HealthScore { get; set; }
 
         public string SmTags { get; set; }
         //在床时长
@@ -151,7 +151,7 @@ namespace LocalS.Entity
         public decimal QxxlQxyj { get; set; }
 
         public string DatePt { get; set; }
-        public string TotalScorePt { get; set; }
+        public string HealthScorePt { get; set; }
         public string SmSmscPt { get; set; }
         public string XlDcjzxlPt { get; set; }
         public string XlCqjzxlPt { get; set; }

@@ -100,7 +100,7 @@ namespace LocalS.Service.Api.HealthApp
                 rd = new
                 {
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
-                    HealthScore = SvDataJdUtil.GetHealthScore(d_Rpt.TotalScore),
+                    HealthScore = SvDataJdUtil.GetHealthScore(d_Rpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
                     SmScore = SvDataJdUtil.GetSmScore(d_Rpt.SmScore),
                     SmScoreTip = "您的睡眠值已经打败77%的人",

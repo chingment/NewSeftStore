@@ -10,7 +10,7 @@
           <span class="signName">{{ userInfo.signName }}</span>
         </div>
         <div class="rf">
-          <div class="t1"><img class="avatar" :src="userInfo.headImgurl" alt=""></div>
+          <div class="t1"><img class="avatar" :src="userInfo.avatar" alt=""></div>
           <div class="t2"><span class="month">{{ rd.healthDate }}</span> <img class="more" src="@/assets/images/ts/arrow_right.png" alt="">  </div>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <div class="lf">
           <div class="rd">
             <div class="st">
-              <div class="score">{{ rd.totalScore }}</div>
+              <div class="score">{{ rd.healthScore }}</div>
               <div class="title">本月得分</div>
             </div>
           </div>
@@ -113,21 +113,21 @@ export default {
   },
   created() {
     this.rptId = this.$route.query.rptId
-    jsSdk({ requestUrl: location.href.split('#')[0], rptId: this.rptId }).then(res => {
-      console.log(res)
+    // jsSdk({ requestUrl: location.href.split('#')[0], rptId: this.rptId }).then(res => {
+    //   console.log(res)
 
-      var d = res.data
+    //   var d = res.data
 
-      wx.config({
-        debug: false, // 开启调试模式,
-        appId: d.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
-        timestamp: d.timestamp, // 必填，生成签名的时间戳
-        nonceStr: d.nonceStr, // 必填，生成签名的随机串
-        signature: d.signature, // 必填，签名，见附录1
-        jsApiList: ['onMenuShareTimeline'],
-        openTagList: ['wx-open-launch-weapp']
-      })
-    })
+    //   wx.config({
+    //     debug: false, // 开启调试模式,
+    //     appId: d.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+    //     timestamp: d.timestamp, // 必填，生成签名的时间戳
+    //     nonceStr: d.nonceStr, // 必填，生成签名的随机串
+    //     signature: d.signature, // 必填，签名，见附录1
+    //     jsApiList: ['onMenuShareTimeline'],
+    //     openTagList: ['wx-open-launch-weapp']
+    //   })
+    // })
 
     // axios({
     //   method: 'post',

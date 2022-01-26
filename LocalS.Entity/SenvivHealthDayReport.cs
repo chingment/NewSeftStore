@@ -10,7 +10,7 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string SvUserId { get; set; }
         public DateTime HealthDate { get; set; }
-        public decimal TotalScore { get; set; }
+        public decimal HealthScore { get; set; }
         public decimal SmScore { get; set; }
         public string SmTags { get; set; }
         public DateTime SmScsj { get; set; }
@@ -149,6 +149,9 @@ namespace LocalS.Entity
         public decimal QxxlKynl { get; set; }
         //情绪应激
         public decimal QxxlQxyj { get; set; }
+        //情绪心理
+        public decimal QxxlQxxl { get; set; }
+
         public string XlPoint { get; set; }
         public string HxPoint { get; set; }
         public string SmPoint { get; set; }

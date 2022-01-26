@@ -6,7 +6,7 @@
       <div class="t3"><span>{{ rd.healthDate }}</span></div>
       <div class="t4">
         <div class="lf">
-          <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">{{ rd.totalScore }}</span></span>
+          <span class="tt1"> <span class="tt2">本月得分</span><span class="tt3">{{ rd.healthScore }}</span></span>
         </div>
         <div class="rf">
           <span class="tt1"><span class="tt2">得分超过人数</span><span class="tt3">{{ rd.scoreRatio }}%</span></span>
