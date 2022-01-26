@@ -79,7 +79,7 @@ export default {
         xData.push(item.xData)
         yData.push(item.yData)
       })
-
+      var yAxisLabel = [0, 30, 50, 70, 90, 100]
       var option = {
         grid: [{
           x: 30,
@@ -140,31 +140,41 @@ export default {
               color: '#000'
             },
             formatter: function(value) {
-              console.log(value)
+              var _val = yAxisLabel.filter(function(item) {
+                return item === value
+              })
               var texts = []
-              if (value === 0) {
-                texts.push('0')
-              } else if (value === 10) {
+              if (_val == null) {
                 texts.push('')
-              } else if (value === 20) {
-                texts.push('')
-              } else if (value === 30) {
-                texts.push('30')
-              } else if (value === 40) {
-                texts.push('')
-              } else if (value === 50) {
-                texts.push('50')
-              } else if (value === 60) {
-                texts.push('')
-              } else if (value === 70) {
-                texts.push('70')
-              } else if (value === 80) {
-                texts.push('')
-              } else if (value === 90) {
-                texts.push('90')
-              } else if (value === 100) {
-                texts.push('100')
+              } else {
+                texts.push(_val)
               }
+
+              // console.log(value)
+              // var texts = []
+              // if (value === 0) {
+              //   texts.push('0')
+              // } else if (value === 10) {
+              //   texts.push('')
+              // } else if (value === 20) {
+              //   texts.push('')
+              // } else if (value === 30) {
+              //   texts.push('30')
+              // } else if (value === 40) {
+              //   texts.push('')
+              // } else if (value === 50) {
+              //   texts.push('50')
+              // } else if (value === 60) {
+              //   texts.push('')
+              // } else if (value === 70) {
+              //   texts.push('70')
+              // } else if (value === 80) {
+              //   texts.push('')
+              // } else if (value === 90) {
+              //   texts.push('90')
+              // } else if (value === 100) {
+              //   texts.push('100')
+              // }
               return texts
             }
           },

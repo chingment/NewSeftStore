@@ -375,6 +375,20 @@ export default {
           tips: '好'
         }
       ],
+      smScoreChart: {
+        data: [],
+        yAxis: {
+          min: 0,
+          max: 100,
+          splitNumber: 10,
+          label: [0, 30, 50, 70, 90, 100]
+        },
+        markLine: {
+          data: [{
+            yAxis: [70]
+          }]
+        }
+      },
       activeTabBySmTag: 0,
       theme: 'green'
     }
