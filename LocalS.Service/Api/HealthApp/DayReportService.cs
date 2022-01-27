@@ -69,9 +69,9 @@ namespace LocalS.Service.Api.HealthApp
 
             #region smDvs
             var smDvs = new List<object>();
-            smDvs.Add(SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc));
-            smDvs.Add(SvDataJdUtil.GetSmRsxs(d_Rpt.SmRsxs));
-            smDvs.Add(SvDataJdUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc));
+            smDvs.Add(SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"));
+            smDvs.Add(SvDataJdUtil.GetSmRsxs(d_Rpt.SmRsxs, "2"));
+            smDvs.Add(SvDataJdUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "2"));
             smDvs.Add(SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs));
             smDvs.Add(SvDataJdUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl));
             smDvs.Add(SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl));
@@ -109,7 +109,7 @@ namespace LocalS.Service.Api.HealthApp
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_Rpt.RptSuggest,
                     SmScoreByLast = smScoreByLast,
-                    HxZtahizs= SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
+                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
                     HrvXzznl = SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
                     SmSmxl = SvDataJdUtil.GetSmSmxl(d_Rpt.SmSmxl),
                     SmSmlxx = SvDataJdUtil.GetSmSmlxx(d_Rpt.SmSmlxx),
@@ -117,7 +117,9 @@ namespace LocalS.Service.Api.HealthApp
                     XlDcjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlDcjzxl),
                     XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl),
                     HxDcjzhx = SvDataJdUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
-                    SmSmsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc)
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"),
+                    SmZcsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmZcsc, "2"),
+                    SmZcsjfw = SvDataJdUtil.GetSmZcsjfw(d_Rpt.SmScsj, d_Rpt.SmLcsj),
                 },
                 userInfo = userInfo
             };

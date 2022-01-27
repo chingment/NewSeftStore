@@ -22,12 +22,38 @@ namespace LocalS.BLL
             return hour;
         }
 
-        public static string GetHourText(decimal hour)
+        public static string GetTimeText(decimal scends,string valformat)
         {
-            if (hour <= 0)
-                return "0";
+            TimeSpan t = TimeSpan.FromSeconds(double.Parse(scends.ToString()));
 
-            return hour.ToString("0.00");
+            if (valformat == "1")
+            {
+                if (t.Hours > 0)
+                {
+                    return t.Hours + "h" + t.Minutes + "m";
+                }
+                else
+                {
+                    return t.Minutes + "m";
+                }
+            }
+            else
+            {
+                if (t.Hours > 0)
+                {
+                    return t.Hours + "小时" + t.Minutes + "分钟";
+                }
+                else
+                {
+                    return t.Minutes + "分钟";
+                }
+            }
+           
+
+            //if (hour <= 0)
+            //    return "0";
+
+            //return hour.ToString("0.00");
         }
 
         /// <summary>
@@ -300,12 +326,12 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSmsc(decimal val)
+        public static SvDataJd GetSmSmsc(decimal val,string valFormat)
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠总时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetHourText(hour);
+            jd.Value = GetTimeText(val,valFormat);
             jd.RefRange = "6~9h";
             if (hour < 6)
             {
@@ -323,12 +349,22 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmRsxs(decimal val)
+        public static SvDataJd GetSmZcsjfw(DateTime d1,DateTime d2)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "在床时间段";
+            jd.Value = d1.ToString("HH:mm") + "-" + d2.ToString("HH:mm");
+
+            return jd;
+      
+        }
+
+        public static SvDataJd GetSmRsxs(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
             jd.Name = "入睡需时";
             var hour = Covevt2Hour(val);
-            jd.Value = GetHourText(hour);
+            jd.Value = GetTimeText(val, valFormat);
             jd.RefRange = "6~9h";
             if (hour < 6)
             {
@@ -346,12 +382,12 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmQdsmsc(decimal val)
+        public static SvDataJd GetSmQdsmsc(decimal val,string valFormat)
         {
             var jd = new SvDataJd();
 
             var hour = Covevt2Hour(val);
-            jd.Value = GetHourText(hour);
+            jd.Value = GetTimeText(val, valFormat);
 
             jd.RefRange = "3.5~5.4h";
             if (hour < 3.5m)
@@ -370,12 +406,12 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSdsmsc(decimal val)
+        public static SvDataJd GetSmSdsmsc(decimal val,string valFormat)
         {
             var jd = new SvDataJd();
             jd.Name = "深度睡眠时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetHourText(hour);
+            jd.Value = GetTimeText(val, valFormat);
             jd.RefRange = "1.05~2.25h";
             if (hour < 1.05m)
             {
@@ -393,13 +429,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmRemsmsc(decimal val)
+        public static SvDataJd GetSmRemsmsc(decimal val,string valFormat)
         {
             var jd = new SvDataJd();
 
             var hour = Covevt2Hour(val);
 
-            jd.Value = GetHourText(hour);
+            jd.Value = GetTimeText(val, valFormat);
             jd.RefRange = "1.05~2.25h";
             if (hour < 1.05m)
             {

@@ -148,13 +148,13 @@ namespace LocalS.Service.Api.HealthApp
                     //呼吸暂停AHI指数
                     HxZtahizs = SvDataJdUtil.GetHxZtahizs(rpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
+                    SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc, "1"),
                     //深度睡眠时长
-                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
+                    SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc,"1"),
                     //浅度睡眠时长
-                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
+                    SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
                     //REM睡眠时长
-                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
+                    SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
                     //睡眠周期=
                     SmSmzq = SvDataJdUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
@@ -217,10 +217,10 @@ namespace LocalS.Service.Api.HealthApp
                 rpt.HealthScore,
                 rpt.HealthDate,
                 SmTags = smTags,
-                SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc),
-                SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc),
-                SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc),
-                SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc),
+                SmSmsc = SvDataJdUtil.GetSmSmsc(rpt.SmSmsc, "1"),
+                SmSdsmsc = SvDataJdUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
+                SmQdsmsc = SvDataJdUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
+                SmRemsmsc = SvDataJdUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
                 HrvXzznl = SvDataJdUtil.GetHrvXzznl(rpt.HrvXzznl),
                 HxDcpjhx = SvDataJdUtil.GetHxDcpjhx(rpt.HxDcpjhx),
                 XlDcpjxl = SvDataJdUtil.GetXlDcpjxl(rpt.XlDcpjxl),
