@@ -1491,7 +1491,7 @@ namespace LocalS.BLL
                     d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
 
                     d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
-                    d_DayReport.MylGrfx = 100 - SvUtil.D46Decimal(reportpar.gr);
+                    d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
                     d_DayReport.MbGxygk = 100 - SvUtil.D46Decimal(reportpar.hc);
                     d_DayReport.MbTlbgk = 100 - SvUtil.D46Decimal(reportpar.tc);
                     d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
@@ -1977,8 +1977,8 @@ namespace LocalS.BLL
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
-            model.OpenId = d_ClientUser.WxPaOpenId;
-            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            //model.OpenId = d_ClientUser.WxPaOpenId;
+            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
             if (d_SenvivUser.SvDeptId == "32")

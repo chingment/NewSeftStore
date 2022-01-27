@@ -2,7 +2,7 @@
   <el-dialog v-if="visible" title="健康报告（日）" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
     <el-container class="brech-work">
       <el-aside class="brech-work-aside">
-        <div id="day_report_detail" v-loading="loading">
+        <div id="day_report_detail" v-loading="loading" style="padding-bottom:50px">
           <div class="row-title clearfix">
             <div class="pull-left"> <h5>客户信息</h5>
             </div>
@@ -410,7 +410,7 @@ export default {
         smPoint: []
       },
       brechWorkTabs: {
-        isShowByHealthSug: false,
+        isShowByHealthSug: true,
         isShowByVisitTelephone: true,
         isShowByVisitWaPush: true,
         isShowHandleRecord: true
@@ -495,6 +495,11 @@ export default {
       this.brechWorkTabs.isShowByVisitTelephone = true
       this.brechWorkTabs.isShowByVisitWaPush = true
       this.brechWorkTabs.isShowHandleRecord = true
+    } else if (this.workType === 'health_sug') {
+      this.brechWorkTabs.isShowByHealthSug = true
+      this.brechWorkTabs.isShowByVisitTelephone = false
+      this.brechWorkTabs.isShowByVisitWaPush = false
+      this.brechWorkTabs.isShowHandleRecord = true
     } else if (this.workType === 'day_saw') {
       this.brechWorkTabs.isShowByHealthSug = false
       this.brechWorkTabs.isShowByVisitTelephone = false
@@ -538,6 +543,8 @@ export default {
             this.onGetPieBySmjg()
             this.onGetChartByJcsj()
           }, 2000)
+
+          this.onGetReportSug()
         }
 
         this.loading = false

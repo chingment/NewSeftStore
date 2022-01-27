@@ -874,7 +874,23 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "深度睡眠比例";
             jd.Value = val;
-            jd.RefRange = "0~100";
+            jd.RefRange = "15~25";
+
+            if (val <= 15m)
+            {
+                jd.Set("少", "↓", CA_2);
+            }
+            else if (val > 15m && val <= 25m)
+            {
+                jd.Set("正常", "-", CA_5);
+            }
+            else if (val > 25m)
+            {
+                jd.Set("多", "-", CA_2);
+            }
+
+            return jd;
+
             return jd;
         }
 
