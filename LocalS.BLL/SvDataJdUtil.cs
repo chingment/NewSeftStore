@@ -22,7 +22,7 @@ namespace LocalS.BLL
             return hour;
         }
 
-        public static string GetTimeText(decimal scends,string valformat)
+        public static string GetTimeText(decimal scends, string valformat)
         {
             TimeSpan t = TimeSpan.FromSeconds(double.Parse(scends.ToString()));
 
@@ -62,7 +62,7 @@ namespace LocalS.BLL
                     return t.Minutes + "分钟";
                 }
             }
-           
+
 
             //if (hour <= 0)
             //    return "0";
@@ -242,7 +242,7 @@ namespace LocalS.BLL
             jd.Name = "焦虑情绪";
             jd.Value = val.ToString();
 
-     
+
             return jd;
         }
         public static SvDataJd GetQxxlQxyj(decimal val)
@@ -257,7 +257,7 @@ namespace LocalS.BLL
         }
 
 
-        
+
 
         public static SvDataJd GetJbfxXlscfx(decimal val)
         {
@@ -340,12 +340,12 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSmsc(decimal val,string valFormat)
+        public static SvDataJd GetSmSmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠总时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val,valFormat);
+            jd.Value = GetTimeText(val, valFormat);
             jd.RefRange = "6~9h";
             if (hour < 6)
             {
@@ -363,14 +363,14 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmZcsjfw(DateTime d1,DateTime d2)
+        public static SvDataJd GetSmZcsjfw(DateTime d1, DateTime d2)
         {
             var jd = new SvDataJd();
             jd.Name = "在床时间段";
             jd.Value = d1.ToString("HH:mm") + "-" + d2.ToString("HH:mm");
 
             return jd;
-      
+
         }
 
         public static SvDataJd GetSmRsxs(decimal val, string valFormat)
@@ -398,7 +398,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmQdsmsc(decimal val,string valFormat)
+        public static SvDataJd GetSmQdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
 
@@ -422,7 +422,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSdsmsc(decimal val,string valFormat)
+        public static SvDataJd GetSmSdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
             jd.Name = "深度睡眠时长";
@@ -445,7 +445,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmRemsmsc(decimal val,string valFormat)
+        public static SvDataJd GetSmRemsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
 
@@ -804,7 +804,7 @@ namespace LocalS.BLL
             {
                 jd.Set("较好", "", CA_4);
             }
-            else 
+            else
             {
                 jd.Set("好", "", CA_1);
             }
@@ -826,7 +826,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠效率";
-            jd.Value = val;
+            jd.Value = Convert.ToInt32(val * 100).ToString();
             jd.RefRange = "85~100";
 
             if (val <= 0.5m)
@@ -850,7 +850,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠连续性";
-            jd.Value = val;
+            jd.Value = Convert.ToInt32(val * 100).ToString();
             jd.RefRange = "0~100";
 
             if (val <= 0.75m)
@@ -877,6 +877,6 @@ namespace LocalS.BLL
             jd.RefRange = "0~100";
             return jd;
         }
-        
+
     }
 }
