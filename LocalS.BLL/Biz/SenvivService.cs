@@ -68,6 +68,16 @@ namespace LocalS.BLL
 
         }
 
+        public static long ConvertDateTimeToLong(DateTime dt)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            TimeSpan toNow = dt.Subtract(dtStart);
+            long timeStamp = toNow.Ticks;
+            timeStamp = long.Parse(timeStamp.ToString().Substring(0, timeStamp.ToString().Length - 4));
+            return timeStamp;
+        }
+
+
         public DateTime Convert2DateTime(string str)
         {
             try
@@ -1482,7 +1492,7 @@ namespace LocalS.BLL
 
                     d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
                     d_DayReport.MylGrfx = 100 - SvUtil.D46Decimal(reportpar.gr);
-                    d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
+                    d_DayReport.MbGxygk = 100 - SvUtil.D46Decimal(reportpar.hc);
                     d_DayReport.MbTlbgk = 100 - SvUtil.D46Decimal(reportpar.tc);
                     d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
                     d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
@@ -1589,6 +1599,10 @@ namespace LocalS.BLL
                     {
                         if (barchart.type == 2110)
                         {
+                            var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj)/1000;
+                            var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+
+
                             var items = barchart.items;
                             if (items != null && items.Count > 0)
                             {
@@ -1597,9 +1611,9 @@ namespace LocalS.BLL
                                 var dataValues = new List<object>();
                                 foreach (var item in item2s)
                                 {
-                                    dataValues.Add(new { endtime = SvUtil.D46Long(item.et), starttime = SvUtil.D46Long(item.st), type = SvUtil.D46Int(item.type) });
+                                    dataValues.Add(new { starttime = smScsj + SvUtil.D46Long(item.st), endtime = smScsj + SvUtil.D46Long(item.et), type = SvUtil.D46Int(item.type) });
                                 }
-                                d_DayReport.SmPoint = (new { StartTime = SvUtil.D46Long(sub.st), EndTime = SvUtil.D46Long(sub.et), DataValue = dataValues }).ToJsonString();
+                                d_DayReport.SmPoint = (new { StartTime = smScsj, EndTime = smLcjs, DataValue = dataValues }).ToJsonString();
                             }
                         }
                     }
@@ -1798,6 +1812,33 @@ namespace LocalS.BLL
         }
 
         public bool SendMonthReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
+        {
+            var template = GetWxPaTpl(svUserId, "month_report");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
+
+        public bool SendDayReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "month_report");
 

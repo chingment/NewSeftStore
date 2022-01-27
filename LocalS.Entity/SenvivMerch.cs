@@ -15,6 +15,7 @@ namespace LocalS.Entity
         public string WxPaAppSecret { get; set; }
         public string WxPaQrCode { get; set; }
         public string WxPaTplIdMonthReport { get; set; }
+        public string WxPaTplIdDayReport { get; set; }
         public string WxPaTplIdHealthMonitor { get; set; }
         public string WxPaTplIdPregnancyRemind { get; set; }
         public string WxPaTplDevieBindNotify { get; set; }

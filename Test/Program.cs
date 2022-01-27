@@ -57,6 +57,9 @@ namespace Test
         static void Main(string[] args)
         {
 
+            int cdddd = SvUtil.D46Int(5.0m);
+
+
             decimal num1 = (decimal)1.0;
             string strNum = num1.ToString("0.#####");//0.5
 

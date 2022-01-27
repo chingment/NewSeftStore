@@ -30,7 +30,14 @@ namespace LocalS.BLL
             {
                 if (t.Hours > 0)
                 {
-                    return t.Hours + "h" + t.Minutes + "m";
+                    if (t.Minutes > 0)
+                    {
+                        return t.Hours + "h" + t.Minutes + "m";
+                    }
+                    else
+                    {
+                        return t.Hours + "h";
+                    }
                 }
                 else
                 {
@@ -41,7 +48,14 @@ namespace LocalS.BLL
             {
                 if (t.Hours > 0)
                 {
-                    return t.Hours + "小时" + t.Minutes + "分钟";
+                    if (t.Minutes > 0)
+                    {
+                        return t.Hours + "小时" + t.Minutes + "分钟";
+                    }
+                    else
+                    {
+                        return t.Hours + "小时";
+                    }
                 }
                 else
                 {
@@ -363,20 +377,22 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Name = "入睡需时";
-            var hour = Covevt2Hour(val);
+
+            TimeSpan ts = TimeSpan.FromSeconds(double.Parse(val.ToString()));
+
             jd.Value = GetTimeText(val, valFormat);
-            jd.RefRange = "6~9h";
-            if (hour < 6)
+            jd.RefRange = "0~30min";
+            if (ts.TotalMinutes <= 30)
             {
-                jd.Set("低", "↓", CA_1);
+                jd.Set("正常", "-", CA_5);
             }
-            else if (hour >= 6 && hour <= 9)
+            else if (ts.TotalMinutes > 30 && ts.TotalMinutes <= 60)
             {
-                jd.Set("正常", "-", CA_0);
+                jd.Set("偏多", "↑", CA_2);
             }
-            else if (hour > 9)
+            else if (ts.TotalMinutes > 60)
             {
-                jd.Set("高", "↑", CA_1);
+                jd.Set("过多", "↑", CA_1);
             }
 
             return jd;
@@ -811,8 +827,23 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "睡眠效率";
             jd.Value = val;
-            jd.RefRange = "0~100";
+            jd.RefRange = "85~100";
+
+            if (val <= 0.5m)
+            {
+                jd.Set("低", "↓↓", CA_1);
+            }
+            else if (val > 0.5m && val <= 0.85m)
+            {
+                jd.Set("偏低", "↓", CA_2);
+            }
+            else if (val > 0.85m)
+            {
+                jd.Set("正常", "-", CA_5);
+            }
+
             return jd;
+
         }
 
         public static SvDataJd GetSmSmlxx(decimal val)
@@ -821,6 +852,20 @@ namespace LocalS.BLL
             jd.Name = "睡眠连续性";
             jd.Value = val;
             jd.RefRange = "0~100";
+
+            if (val <= 0.75m)
+            {
+                jd.Set("低", "↓↓", CA_1);
+            }
+            else if (val > 0.75m && val <= 0.9m)
+            {
+                jd.Set("偏低", "↓", CA_2);
+            }
+            else if (val > 0.9m)
+            {
+                jd.Set("正常", "-", CA_5);
+            }
+
             return jd;
         }
 

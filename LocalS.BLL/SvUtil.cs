@@ -265,7 +265,7 @@ namespace LocalS.BLL
                 return 0;
             try
             {
-                int c = int.Parse(obj.ToString());
+                int c = Convert.ToInt32(obj);
                 return c;
             }
             catch (Exception ex)
@@ -281,7 +281,7 @@ namespace LocalS.BLL
 
             try
             {
-                long c = long.Parse(obj.ToString());
+                long c = Convert.ToInt64(obj);
                 return c;
             }
             catch (Exception ex)

@@ -38,6 +38,15 @@
               <div v-for="(option,j) in item.options" :key="option.id" :class="isChecklistVal(item.value,option.value)===false?'qt-checklist-item ' :'qt-checklist-item on'" @click="onChecklist(index,option.value)">
                 <span class="label">{{ option.label }}</span>
               </div>
+              <!-- // {{ item.otherIsVisiable }} -->
+              <div class="qt-checklist-item on">
+                <input placeholder="dd" type="text" class="mint-field-core">
+              </div>
+              <!--
+              <div v-else class="qt-checklist-item" @click="onChecklistAddOther(index)">
+                <span class="label">其他</span>
+              </div> -->
+
             </div>
             <mt-button type="primary" class="btn-sure" @click="onChecklistSure(index)">确定</mt-button>
           </div>
@@ -88,7 +97,7 @@ export default {
       nextSkip: null,
       previous: null,
       idx_date: 0,
-      idx_gesweek: 0,
+      idx_gesweek: -1,
       popupVisibleByGesWeek: false,
       gesWeekSlots: [
         {
@@ -210,6 +219,12 @@ export default {
       console.log(_val)
       this.questions[q_idx].value = _val
     },
+    onChecklistAddOther(q_idx) {
+      var questions = this.questions[q_idx]
+      questions.otherIsVisiable = true
+      this.questions[q_idx] = questions
+      console.log(this.questions[q_idx].otherIsVisiable)
+    },
     isChecklistVal(item, val) {
       var isFlag = false
       for (var i = 0; i < item.length; i++) {
@@ -241,8 +256,11 @@ export default {
       this.popupVisibleByGesWeek = false
     },
     onValuesChangeByGesWeek(picker, values) {
-      this.questions[this.idx_gesweek].value[0] = values[0]
-      this.questions[this.idx_gesweek].value[1] = values[1]
+      console.log(values)
+      if (this.idx_gesweek > -1) {
+        this.questions[this.idx_gesweek].value[0] = values[0]
+        this.questions[this.idx_gesweek].value[1] = values[1]
+      }
     },
     jump(q_idx, q_val) {
       var questions = this.questions
