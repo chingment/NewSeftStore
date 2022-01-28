@@ -88,3 +88,6 @@ div:focus {
     }
 }
 
+img[src=""]{
+  opacity: 0;
+}

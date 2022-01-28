@@ -80,10 +80,15 @@ namespace SenvivSdk
 
                 LogUtil.Info(TAG, responseString);
 
-                if (request.ApiUrl.IndexOf("BoxUnbind") > -1 || request.ApiUrl.IndexOf("Boxbind") > -1)
+                if ( request.ApiUrl.IndexOf("Boxbind") > -1)
                 {
                     responseString = "{code:0,data:{\"result\":" + this.responseString + "}}";
                 }
+                else if(request.ApiUrl.IndexOf("BoxUnbind") > -1)
+                {
+                    responseString = "{code:0,data:{\"result\":1}}";
+                }
+
 
                 T data = JsonConvert.DeserializeObject<T>(responseString);
 

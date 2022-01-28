@@ -117,11 +117,22 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
             if (d_Device == null)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备号不存在");
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备号不存在[1]");
+
 
             var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
 
+            string merchId = app_Config.Exts["MerchId"];
+
             string wxPaOpenId = app_Config.Exts["WxPaOpenId"];
+
+
+            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.MerchId == merchId && m.DeviceId == rop.DeviceId && m.IsStopUse == false).FirstOrDefault();
+
+            if (d_MerchDevice == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备号不存在.");
+            }
 
             var wx_UserInfo = SdkFactory.Wx.GetUserInfoByApiToken(app_Config, wxPaOpenId);
 

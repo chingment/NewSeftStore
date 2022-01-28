@@ -1590,15 +1590,29 @@ namespace LocalS.BLL
                     var trendcharts = d1.trendchart;
                     if (trendcharts != null)
                     {
+                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
+
 
                         foreach (var chart in trendcharts)
                         {
                             if (chart.type == 2107)
                             {
+                                var xdatatimes = new List<long>();
+                                foreach(var i in chart.xdatatime)
+                                {
+                                    xdatatimes.Add(SvUtil.D46Long(smScsj +i));
+                                }
+
                                 d_DayReport.HxPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
                             }
                             else if (chart.type == 2106)
                             {
+                                var xdatatimes = new List<long>();
+                                foreach (var i in chart.xdatatime)
+                                {
+                                    xdatatimes.Add(SvUtil.D46Long(smScsj + i));
+                                }
+
                                 d_DayReport.XlPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
                             }
                         }

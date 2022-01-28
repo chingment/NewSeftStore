@@ -85,7 +85,7 @@ export default {
 
       .avatar {
         position: absolute;
-        top: 120px;
+        top: 130px;
 
         width: 90px;
         height: 90px;
@@ -130,7 +130,7 @@ export default {
       .dv-hrvxzznl {
         display: flex;
 
-        padding: 12px 0 5px 0;
+        padding: 10px 0 5px 0;
 
         .t1 {
           position: relative;

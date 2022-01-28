@@ -105,12 +105,13 @@ namespace LocalS.Service.Api.HealthApp
             string birthday = rop.Answers["birthday"].ToString();
             string height = rop.Answers["height"].ToString();
             string weight = rop.Answers["weight"].ToString();
-
             string perplexs = GetAnswerValue(rop.Answers["perplexs"]);
             string subhealth = GetAnswerValue(rop.Answers["subhealth"]);
             string chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
             string medicalhis = GetAnswerValue(rop.Answers["medicalhis"]);
             string medicine = GetAnswerValue(rop.Answers["medicine"]);
+            string ladyidentity = rop.Answers["ladyidentity"].ToString();
+
 
             LogUtil.Info("perplexs:" + perplexs);
 
@@ -243,6 +244,37 @@ namespace LocalS.Service.Api.HealthApp
                     ts.Complete();
                 }
             }
+
+            if (sex == "2")
+            {
+                if (ladyidentity == "3")
+                {
+                    #region  孕妈
+                    string[] geyweek = GetAnswerValue(rop.Answers["geyweek"]).Split(',');
+                    string deliveryTime = rop.Answers["deliveryTime"].ToString();
+
+                    var d_SenvivUserWomen = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SenvivUser.Id).FirstOrDefault();
+                    if (d_SenvivUserWomen == null)
+                    {
+                        d_SenvivUserWomen = new SenvivUserWomen();
+                        d_SenvivUserWomen.Id = IdWorker.Build(IdType.NewGuid);
+                        d_SenvivUserWomen.SvUserId = d_SenvivUser.Id;
+                        d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        CurrentDb.SenvivUserWomen.Add(d_SenvivUserWomen);
+                        CurrentDb.SaveChanges();
+                    }
+                    else
+                    {
+                        d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        CurrentDb.SaveChanges();
+                    }
+
+                    #endregion
+                }
+            }
+
 
 
             var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SenvivUser.Id, d_UserDevice.DeviceId);
