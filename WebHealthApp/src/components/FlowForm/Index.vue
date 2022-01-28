@@ -39,9 +39,9 @@
                 <span class="label">{{ option.label }}</span>
               </div>
               <!-- // {{ item.otherIsVisiable }} -->
-              <div class="qt-checklist-item on">
+              <!-- <div class="qt-checklist-item on">
                 <input placeholder="dd" type="text" class="mint-field-core">
-              </div>
+              </div> -->
               <!--
               <div v-else class="qt-checklist-item" @click="onChecklistAddOther(index)">
                 <span class="label">其他</span>

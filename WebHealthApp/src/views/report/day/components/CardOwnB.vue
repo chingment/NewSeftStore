@@ -66,19 +66,23 @@ export default {
 <style lang="scss" scoped>
 
 .card-own-b {
-  .tip-remark{
-    color: #fff;
+  .tip-remark {
     font-size: 12px;
+
+    color: #fff;
   }
+
   .wrap {
     display: flex;
 
     color: #fff;
 
     .st-1 {
-      .health-date{
+
+      .health-date {
         padding-top: 10px;
       }
+
       .avatar {
         position: absolute;
         top: 120px;
@@ -91,6 +95,7 @@ export default {
     }
 
     .st-2 {
+
       text-align: center;
 
       .t1 {
@@ -119,87 +124,111 @@ export default {
         padding: 0 5px;
       }
     }
+
+    .st-3 {
+
+      .dv-hrvxzznl {
+        display: flex;
+
+        padding: 12px 0 5px 0;
+
+        .t1 {
+          position: relative;
+
+          .t1_bg {
+            width: 60px;
+          }
+
+          .t1_txt {
+            font-size: 13px;
+            font-weight: bold;
+
+            position: absolute;
+            top: 12px;
+            left: 13px;
+
+            color: blue;
+          }
+        }
+
+        .t2 {
+          padding-top: 10px;
+        }
+      }
+
+      .dv-hrvxzznl-ref {
+        font-size: 12px;
+      }
+
+      .dv-xldcjzxl {
+        display: flex;
+
+        padding: 5px 0 5px 0;
+
+        .t1 {
+          position: relative;
+
+          .t1_bg {
+            width: 50px;
+          }
+
+          .t1_txt {
+            font-size: 13px;
+            font-weight: bold;
+
+            position: absolute;
+            top: 16px;
+            left: 18px;
+
+            color: blue;
+          }
+        }
+
+        .t2 {
+          padding-top: 15px;
+        }
+      }
+
+      .dv-xldcjzxl-ref {
+        font-size: 12px;
+      }
+    }
   }
 }
 
-@media screen and (min-width: 300px) and (max-width: 800px) {
-  .st-2 {
-    flex: 1;
-  }
-
+@media screen and (min-width: 300px) and (max-width: 420px) {
   .st-1 {
     flex: none;
 
     width: 90px;
   }
 
+  .st-2 {
+    flex: 1;
+  }
+
   .st-3 {
     flex: none;
 
     width: 150px;
+  }
+}
 
-    .dv-hrvxzznl {
-      display: flex;
+@media screen and (min-width: 420px) {
+  .st-1 {
+    flex: none;
 
-      padding: 12px 0 5px 0;
+    width: 150px;
+  }
 
-      .t1 {
-        position: relative;
+  .st-2 {
+    flex: 1;
+  }
 
-        .t1_bg {
-          width: 60px;
-        }
+  .st-3 {
+    flex: none;
 
-        .t1_txt {
-          font-size: 13px;
-font-weight: bold;
-          position: absolute;
-          top: 12px;
-          left: 13px;
-
-          color: blue;
-        }
-      }
-
-      .t2 {
-        padding-top: 10px;
-      }
-    }
-
-    .dv-hrvxzznl-ref {
-      font-size: 12px;
-    }
-
-    .dv-xldcjzxl {
-      display: flex;
-
-          padding: 5px 0 5px 0;
-
-      .t1 {
-        position: relative;
-
-        .t1_bg {
-          width: 50px;
-        }
-
-        .t1_txt {
-        font-size: 13px;
-    position: absolute;
-    top: 16px;
-    left: 18px;
-    color: blue;
-    font-weight: bold;
-        }
-      }
-
-      .t2 {
-        padding-top: 15px;
-      }
-    }
-
-    .dv-xldcjzxl-ref {
-      font-size: 12px;
-    }
+    width: 150px;
   }
 }
 
