@@ -59,6 +59,10 @@ namespace Test
 
             int cdddd = SvUtil.D46Int(5.0m);
 
+            long a = 18112;
+            long b = 29401;
+           // decimal c = (decimal)a / b;
+            decimal c = Math.Round((decimal)a /b, 2);
 
             decimal num1 = (decimal)1.0;
             string strNum = num1.ToString("0.#####");//0.5

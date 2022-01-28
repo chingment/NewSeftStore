@@ -1369,6 +1369,16 @@ namespace LocalS.BLL
                         d_DayReport.IsValid = true;
                     }
 
+                    if (d_DayReport.SmZcsc > 0)
+                    {
+                        d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc+ d_DayReport.SmQdsmsc+ d_DayReport.SmRemsmsc)/ d_DayReport.SmZcsc),2);
+                    }
+
+                    if (d_DayReport.SmSmsc > 0)
+                    {
+                        d_DayReport.SmSmlxx = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmSmsc), 2);
+                    }
+
                     CurrentDb.SenvivHealthDayReport.Add(d_DayReport);
                     CurrentDb.SaveChanges();
 
@@ -1977,8 +1987,8 @@ namespace LocalS.BLL
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
-            //model.OpenId = d_ClientUser.WxPaOpenId;
-            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            model.OpenId = d_ClientUser.WxPaOpenId;
+            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
             if (d_SenvivUser.SvDeptId == "32")
