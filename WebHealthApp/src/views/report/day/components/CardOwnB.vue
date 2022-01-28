@@ -31,7 +31,7 @@
             </div>
             <div class="t2"> 当次基准心率</div>
           </div>
-          <div class="dv_xlcqjzxl">（长期基准心率{{ rd.xlCqjzxl.value }}）</div>
+          <div class="dv-xldcjzxl-ref">（参考值{{ rd.xlDcjzxl.refRange }}）</div>
         </div>
       </div>
     </div>
@@ -167,7 +167,7 @@ font-weight: bold;
     }
 
     .dv-hrvxzznl-ref {
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .dv-xldcjzxl {
@@ -197,8 +197,8 @@ font-weight: bold;
       }
     }
 
-    .dv_xlcqjzxl {
-      font-size: 14px;
+    .dv-xldcjzxl-ref {
+      font-size: 12px;
     }
   }
 }
