@@ -1710,8 +1710,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 case E_SenvivTaskType.Health_Monitor_FourteenthDay:
                     statusModel = new FieldModel(3, "两周回访");
                     break;
+                case E_SenvivTaskType.Health_Monitor_PerDay:
+                    statusModel = new FieldModel(4, "日报回访");
+                    break;
                 case E_SenvivTaskType.Health_Monitor_PerMonth:
-                    statusModel = new FieldModel(4, "每月回访");
+                    statusModel = new FieldModel(5, "每月回访");
                     break;
             }
 

@@ -401,10 +401,10 @@ export default {
     onHandleTask(item, workType) {
       this.selectTaskId = item.id
       this.selectTaskWorkType = workType
-      if (item.taskType.value === 1) {
+      if (item.taskType.value === 1 || item.taskType.value === 4) {
         this.dialogIsShowByDayReport = true
         this.selectDayReportId = item.reportId
-      } else if (item.taskType.value === 2 || item.taskType.value === 3 || item.taskType.value === 4) {
+      } else if (item.taskType.value === 2 || item.taskType.value === 3 || item.taskType.value === 5) {
         this.dialogIsShowByStageReport = true
         this.selectStageReportId = item.reportId
       }

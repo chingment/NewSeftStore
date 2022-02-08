@@ -10,7 +10,8 @@ namespace LocalS.Entity
         Health_Monitor_FisrtDay = 1,
         Health_Monitor_SeventhDay = 2,
         Health_Monitor_FourteenthDay = 3,
-        Health_Monitor_PerMonth = 4
+        Health_Monitor_PerDay = 4,
+        Health_Monitor_PerMonth = 5
     }
 
     public enum E_SenvivTaskStatus

@@ -98,12 +98,30 @@ namespace LocalS.BLL
         }
 
 
-
         private void BuildTask(string operater, string userId, E_SenvivTaskType taskType, Dictionary<string, object> taskParams)
         {
             string rptId = "";
+            string rptType = "";
+            switch (taskType)
+            {
+                case E_SenvivTaskType.Health_Monitor_PerDay:
+                    rptType = "per_day";
+                    break;
+                case E_SenvivTaskType.Health_Monitor_PerMonth:
+                    rptType = "per_month";
+                    break;
+                case E_SenvivTaskType.Health_Monitor_FisrtDay:
+                    rptType = "firtst_day";
+                    break;
+                case E_SenvivTaskType.Health_Monitor_SeventhDay:
+                    rptType = "seventh_day";
+                    break;
+                case E_SenvivTaskType.Health_Monitor_FourteenthDay:
+                    rptType = "fourteenth_day:";
+                    break;
+            }
 
-            if (taskType == E_SenvivTaskType.Health_Monitor_FisrtDay)
+            if (taskType == E_SenvivTaskType.Health_Monitor_FisrtDay || taskType == E_SenvivTaskType.Health_Monitor_PerDay)
             {
                 rptId = taskParams["rpt_id"].ToString();
             }
@@ -112,19 +130,6 @@ namespace LocalS.BLL
                 #region build
                 DateTime rptStartTime = (DateTime)taskParams["start_time"];
                 DateTime rptEndTime = (DateTime)taskParams["end_time"];
-                string rptType = "";
-                switch (taskType)
-                {
-                    case E_SenvivTaskType.Health_Monitor_SeventhDay:
-                        rptType = "seventh_day";
-                        break;
-                    case E_SenvivTaskType.Health_Monitor_FourteenthDay:
-                        rptType = "fourteenth_day:";
-                        break;
-                    case E_SenvivTaskType.Health_Monitor_PerMonth:
-                        rptType = "per_month";
-                        break;
-                }
 
                 var d_StageReport = CurrentDb.SenvivHealthStageReport.Where(m => m.SvUserId == userId && m.RptType == rptType && m.RptStartTime == rptStartTime && m.RptEndTime == rptEndTime).FirstOrDefault();
 
@@ -877,13 +882,27 @@ namespace LocalS.BLL
                     if (d_Task != null)
                         return;
                 }
+                else if(taskType== E_SenvivTaskType.Health_Monitor_PerDay)
+                {
+                    var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.ReportId == rptId).FirstOrDefault();
+                    if (d_Task != null)
+                        return;
+                }
+                else if(taskType== E_SenvivTaskType.Health_Monitor_PerMonth)
+                {
+                    var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.ReportId == rptId).FirstOrDefault();
+                    if (d_Task != null)
+                        return;
+                }
 
 
                 SenvivTask d_SenvivTask = new SenvivTask();
                 d_SenvivTask.Id = IdWorker.Build(IdType.NewGuid);
                 d_SenvivTask.SvUserId = userId;
                 d_SenvivTask.TaskType = taskType;
+
                 var d_User = CurrentDb.SenvivUser.Where(m => m.Id == userId).FirstOrDefault();
+
                 var signName = SvUtil.GetSignName(d_User.FullName, d_User.NickName);
 
                 DateTime rptStartTime = (DateTime)taskParams["start_time"];
@@ -892,6 +911,12 @@ namespace LocalS.BLL
                 string title = "";
                 switch (taskType)
                 {
+                    case E_SenvivTaskType.Health_Monitor_PerDay:
+                        title = string.Format("客户[{0}]的{1}日报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM-dd"));
+                        break;
+                    case E_SenvivTaskType.Health_Monitor_PerMonth:
+                        title = string.Format("客户[{0}]的{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
+                        break;
                     case E_SenvivTaskType.Health_Monitor_FisrtDay:
                         title = string.Format("客户[{0}]的首份报告已生成，需进行回访", signName);
                         break;
@@ -900,9 +925,6 @@ namespace LocalS.BLL
                         break;
                     case E_SenvivTaskType.Health_Monitor_FourteenthDay:
                         title = string.Format("客户[{0}]的首次14天报告({1}~{2})已生成，需进行回访", signName, rptStartTime.ToUnifiedFormatDate(), rptEndTime.ToUnifiedFormatDate());
-                        break;
-                    case E_SenvivTaskType.Health_Monitor_PerMonth:
-                        title = string.Format("客户[{0}]的{1}月报告已生成，需进行回访", signName, rptStartTime.ToString("yyyy-MM"));
                         break;
                 }
                 d_SenvivTask.Title = title;
@@ -1392,6 +1414,7 @@ namespace LocalS.BLL
 
                     d_DayReport.IsSend = true;
                     d_DayReport.Status = E_SenvivHealthReportStatus.SendSuccess;
+
                     d_DayReport.CreateTime = DateTime.Now;
                     d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
 
@@ -1700,8 +1723,9 @@ namespace LocalS.BLL
                         d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
                     }
 
-                    d_DayReport.IsSend = true;
-                    d_DayReport.Status = E_SenvivHealthReportStatus.SendSuccess;
+                    d_DayReport.IsSend = false;
+                    d_DayReport.Status = E_SenvivHealthReportStatus.WaitSend;
+
                     d_DayReport.CreateTime = DateTime.Now;
                     d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
 
@@ -1721,10 +1745,8 @@ namespace LocalS.BLL
                     Dictionary<string, object> taskParams = new Dictionary<string, object>();
                     DateTime? rptStartTime = null;
                     DateTime? rptEndTime = null;
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 1)
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_FisrtDay");
-
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1733,11 +1755,19 @@ namespace LocalS.BLL
                         taskParams.Add("end_time", rptEndTime);
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FisrtDay, taskParams);
                     }
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 7)
+                    else
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_SeventhDay");
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
+                        taskParams.Add("rpt_id", d_DayReport.Id);
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_PerDay, taskParams);
+                    }
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
+                    {
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1748,10 +1778,8 @@ namespace LocalS.BLL
                     }
 
 
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 14)
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_FourteenthDay");
-
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1760,8 +1788,6 @@ namespace LocalS.BLL
 
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
                     }
-
-                    LogUtil.Info(TAG, "Health_Monitor_PerMonth:" + lastReportTime.Value.ToUnifiedFormatDateTime());
 
                     DateTime dt1 = lastReportTime.Value;
                     DateTime dt2 = DateTime.Now;
@@ -2053,8 +2079,8 @@ namespace LocalS.BLL
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
 
-            model.OpenId = d_ClientUser.WxPaOpenId;
-            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            //model.OpenId = d_ClientUser.WxPaOpenId;
+            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
             if (d_SenvivUser.SvDeptId == "32")
