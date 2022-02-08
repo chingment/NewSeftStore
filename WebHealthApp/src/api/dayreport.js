@@ -8,6 +8,15 @@ export function getDetails(params) {
   })
 }
 
+export function updateVisitCount(params) {
+  return request({
+    url: '/dayreport/updateVisitCount',
+    method: 'get',
+    params
+  })
+}
+
 export default {
-  getDetails: getDetails
+  getDetails: getDetails,
+  updateVisitCount: updateVisitCount
 }

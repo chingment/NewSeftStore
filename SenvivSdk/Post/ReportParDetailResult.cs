@@ -18,7 +18,7 @@ namespace SenvivSdk
             public List<TrendChartModel> trendchart { get; set; }
             public List<MvModel> mv { get; set; }
             public BarchartModel barchart { get; set; }
-            //public string p { get; set; }
+            public List<PModel> p { get; set; }
         }
 
         public class ReportParModel
@@ -176,6 +176,13 @@ namespace SenvivSdk
             public string st { get; set; }
             public string et { get; set; }
             public decimal type { get; set; }
+        }
+
+        public class PModel
+        {
+            public string e { get; set; }
+            public string s { get; set; }
+            public string i { get; set; }
         }
     }
 }

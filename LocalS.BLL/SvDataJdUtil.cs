@@ -8,7 +8,7 @@ namespace LocalS.BLL
 {
     public class SvDataJdUtil
     {
-        public readonly static string CA_0 = "#666666";
+        public readonly static string CA_0 = "#628DF2";//666666
         public readonly static string CA_1 = "#e68a8b";
         public readonly static string CA_2 = "#f1b46d";
         public readonly static string CA_3 = "#e16d6d";

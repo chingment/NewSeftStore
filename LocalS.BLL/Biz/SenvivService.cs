@@ -1315,7 +1315,23 @@ namespace LocalS.BLL
                         d_DayReport.SmLzcs = 0;
 
                         d_DayReport.SmTdcs = sm.MoveCounts;//体动次数
-                        d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
+
+                        List<object> moves = new List<object>();
+                        if (sm.Moves != null)
+                        {
+                            foreach (var move in sm.Moves)
+                            {
+                                if (move.starttime != 0 && move.endtime != 0)
+                                {
+                                    moves.Add(new { starttime = move.starttime / 1000, endtime = move.endtime });
+                                }
+                            }
+
+                            d_DayReport.SmTdcsPoint = moves.ToJsonString();
+
+                        }
+
+
                         d_DayReport.SmPjtdsc = sm.MovingAverageLength;//平均体动时长
 
                     }
@@ -1371,7 +1387,7 @@ namespace LocalS.BLL
 
                     if (d_DayReport.SmZcsc > 0)
                     {
-                        d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc+ d_DayReport.SmQdsmsc+ d_DayReport.SmRemsmsc)/ d_DayReport.SmZcsc),2);
+                        d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmZcsc), 2);
                     }
 
                     if (d_DayReport.SmSmsc > 0)
@@ -1598,12 +1614,12 @@ namespace LocalS.BLL
                             if (chart.type == 2107)
                             {
                                 var xdatatimes = new List<long>();
-                                foreach(var i in chart.xdatatime)
+                                foreach (var i in chart.xdatatime)
                                 {
-                                    xdatatimes.Add(SvUtil.D46Long(smScsj +i));
+                                    xdatatimes.Add(SvUtil.D46Long(smScsj + i));
                                 }
 
-                                d_DayReport.HxPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
+                                d_DayReport.HxPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
                             }
                             else if (chart.type == 2106)
                             {
@@ -1613,7 +1629,7 @@ namespace LocalS.BLL
                                     xdatatimes.Add(SvUtil.D46Long(smScsj + i));
                                 }
 
-                                d_DayReport.XlPoint = (new { DataTime = chart.xdatatime, DataValue = chart.xdatavalue }).ToJsonString();
+                                d_DayReport.XlPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
                             }
                         }
                     }
@@ -1623,9 +1639,8 @@ namespace LocalS.BLL
                     {
                         if (barchart.type == 2110)
                         {
-                            var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj)/1000;
+                            var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
                             var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
-
 
                             var items = barchart.items;
                             if (items != null && items.Count > 0)
@@ -1640,6 +1655,34 @@ namespace LocalS.BLL
                                 d_DayReport.SmPoint = (new { StartTime = smScsj, EndTime = smLcjs, DataValue = dataValues }).ToJsonString();
                             }
                         }
+                    }
+
+                    var mvs = d1.mv;
+                    if (mvs != null)
+                    {
+                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
+                        var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+                        var tdcsPoints = new List<object>();
+                        foreach (var mv in mvs)
+                        {
+                            tdcsPoints.Add(new { starttime = smScsj + SvUtil.D46Long(mv.s), endtime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
+                        }
+
+                        d_DayReport.SmTdcsPoint = tdcsPoints.ToJsonString();
+
+                    }
+                    var ps = d1.p;
+                    if (ps != null)
+                    {
+                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
+                        var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+                        var hxztPoints = new List<object>();
+                        foreach (var p in ps)
+                        {
+                            hxztPoints.Add(new { starttime = smScsj + SvUtil.D46Long(p.s), endtime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
+                        }
+
+                        d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
                     }
 
                     d_DayReport.IsSend = true;
