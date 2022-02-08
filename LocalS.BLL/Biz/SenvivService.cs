@@ -954,7 +954,6 @@ namespace LocalS.BLL
                     d_DayReport = new SenvivHealthDayReport();
                     d_DayReport.Id = d1.reportId;
                     d_DayReport.SvUserId = userId;
-                    d_DayReport.HealthDate = Convert2DateTime(d1.createtime);
                     d_DayReport.HealthScore = d1.Report.TotalScore;
 
                     var x2 = d1.Report;
@@ -1253,7 +1252,21 @@ namespace LocalS.BLL
 
                         d_DayReport.HxZtahizs = hx.AHI;//AHI指数
                         d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
-                        d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
+
+                        var bps = hx.ReportOfBreathPause;
+                        if (bps != null)
+                        {
+                            var l_bps = new List<object>();
+
+                            foreach (var bp in bps)
+                            {
+                                l_bps.Add(new { startTime = bp.StartTime / 1000, endTime = bp.EndTime / 1000, longerval = bp.longerval });
+                            }
+
+                            d_DayReport.HxZtcsPoint = l_bps.ToJsonString();
+                        }
+
+
                         d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
                     }
                     #endregion
@@ -1289,6 +1302,8 @@ namespace LocalS.BLL
                     var sm = d1.ReportOfSleep;
                     if (sm != null)
                     {
+                        d_DayReport.HealthDate = TicksToDate(x2.FinishTime);
+
                         d_DayReport.SmScsj = TicksToDate(x2.StartTime);//上床时间
                         d_DayReport.SmLcsj = TicksToDate(x2.FinishTime);//离床时间
                         d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
@@ -1323,7 +1338,7 @@ namespace LocalS.BLL
                             {
                                 if (move.starttime != 0 && move.endtime != 0)
                                 {
-                                    moves.Add(new { starttime = move.starttime / 1000, endtime = move.endtime });
+                                    moves.Add(new { starttime = move.starttime / 1000, endtime = move.endtime / 1000, score = move.score });
                                 }
                             }
 
