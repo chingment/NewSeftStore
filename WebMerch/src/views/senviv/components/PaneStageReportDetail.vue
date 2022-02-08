@@ -3,7 +3,7 @@
   <el-dialog v-if="visible" :title="dialog.title" :visible.sync="visible" width="1600px" custom-class="senviv-stage-detail" append-to-body :before-close="onBeforeClose">
     <el-container class="brech-work">
       <el-aside class="brech-work-aside">
-        <div>
+        <div v-loading="loading" style="padding-bottom:50px">
           <div class="row-title clearfix">
             <div class="pull-left"> <h5>客户信息</h5>
             </div>
@@ -159,7 +159,7 @@
             </div>
             <div class="pull-right" />
           </div>
-          <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%;margin-bottom:80px;">
+          <table v-if="rd!=null&&rd.smSmsc!=null" class="clz" cellspacing="0" cellpadding="0" style="width:100%;">
             <thead>
               <tr>
                 <th>类别</th>

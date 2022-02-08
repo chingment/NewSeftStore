@@ -241,7 +241,7 @@
 
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d'
-import { getDetails } from '@/api/dayreport'
+import { getDetails, updateVisitCount } from '@/api/dayreport'
 import DvItem from '@/components/DvItem.vue'
 import CardOwnA from './components/CardOwnA.vue'
 import CardOwnB from './components/CardOwnB.vue'
@@ -403,7 +403,11 @@ export default {
     }
   },
   mounted() {
-
+    if (window.performance.navigation.type === 1) {
+      console.log('页面被刷新！')
+    } else {
+      updateVisitCount({ rptId: this.$route.query.rptId }).then(res => {})
+    }
   },
   created() {
     this.rptId = this.$route.query.rptId

@@ -1811,12 +1811,6 @@ namespace LocalS.BLL
             appConfig.Exts = exts;
 
             return appConfig;
-
-            //WxAppConfig config = new WxAppConfig();
-            //config.AppId = "wxc6e80f8c575cf3f5";
-            //config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
-
-            //return config;
         }
 
         public SenvivConfig GetConfig(string deptId)
@@ -1864,7 +1858,7 @@ namespace LocalS.BLL
 
         public bool SendDayReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxPaTpl(svUserId, "month_report");
+            var template = GetWxPaTpl(svUserId, "day_report");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -2020,6 +2014,9 @@ namespace LocalS.BLL
 
             switch (template)
             {
+                case "day_report":
+                    model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    break;
                 case "month_report":
                     model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
                     break;

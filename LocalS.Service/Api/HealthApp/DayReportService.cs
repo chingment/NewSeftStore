@@ -127,5 +127,22 @@ namespace LocalS.Service.Api.HealthApp
 
             return result;
         }
+
+        public CustomJsonResult UpdateVisitCount(string operater, string rptId)
+        {
+
+            var result = new CustomJsonResult();
+
+            var rpt = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            if (rpt != null)
+            {
+                rpt.VisitCount += 1;
+                CurrentDb.SaveChanges();
+            }
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+
+            return result;
+        }
     }
 }

@@ -17,5 +17,13 @@ namespace WebApiHealthApp.Controllers
             var result = HealthAppServiceFactory.DayReport.GetDetails(this.CurrentUserId, rptId);
             return new OwnApiHttpResponse(result);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public OwnApiHttpResponse UpdateVisitCount([FromUri]string rptId)
+        {
+            var result = HealthAppServiceFactory.DayReport.UpdateVisitCount(this.CurrentUserId, rptId);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
