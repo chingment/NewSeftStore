@@ -1338,7 +1338,7 @@ namespace LocalS.BLL
                             {
                                 if (move.starttime != 0 && move.endtime != 0)
                                 {
-                                    moves.Add(new { starttime = move.starttime / 1000, endtime = move.endtime / 1000, score = move.score });
+                                    moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = move.score });
                                 }
                             }
 
@@ -1680,7 +1680,7 @@ namespace LocalS.BLL
                         var tdcsPoints = new List<object>();
                         foreach (var mv in mvs)
                         {
-                            tdcsPoints.Add(new { starttime = smScsj + SvUtil.D46Long(mv.s), endtime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
+                            tdcsPoints.Add(new { startTime = smScsj + SvUtil.D46Long(mv.s), endTime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
                         }
 
                         d_DayReport.SmTdcsPoint = tdcsPoints.ToJsonString();
