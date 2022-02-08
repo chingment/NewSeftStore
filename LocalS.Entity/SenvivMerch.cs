@@ -18,8 +18,8 @@ namespace LocalS.Entity
         public string WxPaTplIdDayReport { get; set; }
         public string WxPaTplIdHealthMonitor { get; set; }
         public string WxPaTplIdPregnancyRemind { get; set; }
-        public string WxPaTplIdDeviceBindNotify { get; set; }
-        public string WxPaTplIdDeviceUnBindNotify { get; set; }
+        public string WxPaTplIdDeviceBind{ get; set; }
+        public string WxPaTplIdDeviceUnBind { get; set; }
         public string SmsSignName { get; set; }
         public string SmsTemplateCode { get; set; }
         public string Creator { get; set; }
