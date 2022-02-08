@@ -1694,7 +1694,7 @@ namespace LocalS.BLL
                         var hxztPoints = new List<object>();
                         foreach (var p in ps)
                         {
-                            hxztPoints.Add(new { starttime = smScsj + SvUtil.D46Long(p.s), endtime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
+                            hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
                         }
 
                         d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
