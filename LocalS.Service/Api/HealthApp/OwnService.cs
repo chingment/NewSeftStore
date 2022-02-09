@@ -41,6 +41,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
+            LogUtil.Info("rop.MerchId:1" + rop.MerchId);
             var app_Config = BizFactory.Senviv.GetWxAppInfoConfigByMerchIdOrDeviceId(rop.MerchId, rop.DeviceId);
 
             if (app_Config == null)
@@ -64,6 +65,8 @@ namespace LocalS.Service.Api.HealthApp
 
             string merchId = app_Config.Exts["MerchId"];
 
+            LogUtil.Info("merchId=>:" + merchId);
+
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == r_Api_UseInfo.openid).FirstOrDefault();
             if (d_ClientUser == null)
             {
@@ -86,6 +89,7 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
+                d_ClientUser.MerchId = merchId;
                 d_ClientUser.NickName = r_Api_UseInfo.nickname;
                 d_ClientUser.Avatar = r_Api_UseInfo.headimgurl;
                 d_ClientUser.MendTime = DateTime.Now;

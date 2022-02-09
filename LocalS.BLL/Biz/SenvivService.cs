@@ -1825,6 +1825,7 @@ namespace LocalS.BLL
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == merchId).FirstOrDefault();
             if (d_SenvivMerch == null)
             {
+                LogUtil.Info("SenvivMerch：" + merchId + ",is NULL");
                 return null;
             }
 
@@ -2044,11 +2045,11 @@ namespace LocalS.BLL
             var model = new WxPaTplModel();
 
             var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == svUserId).FirstOrDefault();
-            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
             var d_SenvivMerch = CurrentDb.SenvivMerch.Where(m => m.MerchId == d_SenvivUser.MerchId).FirstOrDefault();
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
 
-            //model.OpenId = d_ClientUser.WxPaOpenId;
-            model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
+            model.OpenId = d_ClientUser.WxPaOpenId;
+            //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
             if (d_SenvivUser.SvDeptId == "32")
@@ -2059,30 +2060,36 @@ namespace LocalS.BLL
             else
             {
                 WxAppConfig config = new WxAppConfig();
-                config.AppId = "wxc6e80f8c575cf3f5";
-                config.AppSecret = "fee895c9923da26a4d42d9c435202b37";
+                config.AppId = d_SenvivMerch.WxPaAppId;
+                config.AppSecret = d_SenvivMerch.WxPaAppSecret;
                 model.AccessToken = SdkFactory.Wx.GetApiAccessToken(config);
             }
 
             switch (template)
             {
                 case "day_report":
-                    model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    //model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdDayReport;
                     break;
                 case "month_report":
-                    model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    //model.TemplateId = "GpJesR4yR2vO_V9NPgAZ9S2cOR5e3UT3sR58hMa6wKY";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdMonthReport;
                     break;
                 case "health_monitor":
-                    model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
+                    //model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdHealthMonitor;
                     break;
                 case "pregnancy_remind":
-                    model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
+                    //model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdPregnancyRemind;
                     break;
                 case "device_bind":
-                    model.TemplateId = "fKFTJV_022tp2bhKkjBSPSIr91soiiOH5wwnbG4ZbUE";
+                    //model.TemplateId = "fKFTJV_022tp2bhKkjBSPSIr91soiiOH5wwnbG4ZbUE";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdDeviceBind;
                     break;
                 case "device_unbind":
-                    model.TemplateId = "czt-rzvyJnYpMK06Kv0hMcEtmJgD5vx5_mShiMGbkmo";
+                    // model.TemplateId = "czt-rzvyJnYpMK06Kv0hMcEtmJgD5vx5_mShiMGbkmo";
+                    model.TemplateId = d_SenvivMerch.WxPaTplIdDeviceUnBind;
                     break;
             }
 

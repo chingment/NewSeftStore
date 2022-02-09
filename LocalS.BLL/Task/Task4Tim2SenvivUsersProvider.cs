@@ -109,7 +109,7 @@ namespace LocalS.BLL.Task
                                     d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                                     d_ClientUser.NickName = i_SenvivUser.nick;
                                     d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    d_ClientUser.MerchId = "88273829";
+                                    //d_ClientUser.MerchId = "88273829";
                                     d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
                                     d_ClientUser.BelongType = Enumeration.BelongType.Client;
                                     d_ClientUser.RegisterTime = DateTime.Now;
@@ -160,7 +160,7 @@ namespace LocalS.BLL.Task
                                     d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
                                     d_ClientUser.NickName = i_SenvivUser.nick;
                                     d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    d_ClientUser.MerchId = "88273829";
+                                    //d_ClientUser.MerchId = "88273829";
                                     d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
                                     d_ClientUser.BelongType = Enumeration.BelongType.Client;
                                     d_ClientUser.RegisterTime = DateTime.Now;

@@ -198,15 +198,15 @@ namespace LocalS.Service.Api.Merch
 
 
 
-                var box = SdkFactory.Senviv.GetBox(null, d_Device.Id);
-                if (box != null)
-                {
-                    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == box.userid).FirstOrDefault();
-                    if (d_SenvivUser != null)
-                    {
-                        d_SenvivUser.MerchId = rop.MerchId;
-                    }
-                }
+                //var box = SdkFactory.Senviv.GetBox(null, d_Device.Id);
+                //if (box != null)
+                //{
+                //    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == box.userid).FirstOrDefault();
+                //    if (d_SenvivUser != null)
+                //    {
+                //        d_SenvivUser.MerchId = rop.MerchId;
+                //    }
+                //}
 
                 CurrentDb.SaveChanges();
 

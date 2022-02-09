@@ -31,24 +31,37 @@ namespace LocalS.Service.Api.HealthApp
             var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
             int step = 1;
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
 
-            if (d_UserDevice != null)
+            if (string.IsNullOrEmpty(deviceId))
             {
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind || d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
-                {
-                    if (d_UserDevice.BindDeviceIdTime == null)
-                        step = 1;
-                    else if (d_UserDevice.BindPhoneTime == null)
-                        step = 2;
-                    else if (d_UserDevice.InfoFillTime == null)
-                        step = 3;
-                    else
-                        step = 4;
-                }
-                else
+                var d_UserBindDeviceCount = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).Count();
+
+                if (d_UserBindDeviceCount > 0)
                 {
                     step = 4;
+                }
+            }
+            else
+            {
+                var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
+
+                if (d_UserDevice != null)
+                {
+                    if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind || d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                    {
+                        if (d_UserDevice.BindDeviceIdTime == null)
+                            step = 1;
+                        else if (d_UserDevice.BindPhoneTime == null)
+                            step = 2;
+                        else if (d_UserDevice.InfoFillTime == null)
+                            step = 3;
+                        else
+                            step = 4;
+                    }
+                    else
+                    {
+                        step = 4;
+                    }
                 }
             }
 
