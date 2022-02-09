@@ -308,7 +308,6 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-
         public CustomJsonResult GetDayReports(string operater, string merchId, RupSenvivGetDayReports rup)
         {
             var result = new CustomJsonResult();

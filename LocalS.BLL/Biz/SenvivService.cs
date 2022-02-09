@@ -62,42 +62,6 @@ namespace LocalS.BLL
     {
         public readonly string TAG = "SenvivService";
 
-        public DateTime TicksToDate(long time)
-        {
-            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
-
-        }
-
-        public static long ConvertDateTimeToLong(DateTime dt)
-        {
-            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
-            TimeSpan toNow = dt.Subtract(dtStart);
-            long timeStamp = toNow.Ticks;
-            timeStamp = long.Parse(timeStamp.ToString().Substring(0, timeStamp.ToString().Length - 4));
-            return timeStamp;
-        }
-
-
-        public DateTime Convert2DateTime(string str)
-        {
-            try
-            {
-                var dt1 = DateTime.Parse("1970-01-01T00:00:00+08:00");
-
-                var dt = DateTime.Parse(str);
-
-                if (dt < dt1)
-                    return dt1;
-
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                return DateTime.Now;
-            }
-        }
-
-
         private void BuildTask(string operater, string userId, E_SenvivTaskType taskType, Dictionary<string, object> taskParams)
         {
             string rptId = "";
@@ -366,7 +330,7 @@ namespace LocalS.BLL
                         {
                             foreach (var item in hxZtcsPoint)
                             {
-                                var t1 = TicksToDate(item.StartTime);
+                                var t1 =SvUtil.D32LongToDateTime(item.StartTime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
@@ -407,7 +371,7 @@ namespace LocalS.BLL
                         {
                             foreach (var item in smTdcsPoint)
                             {
-                                var t1 = TicksToDate(item.starttime);
+                                var t1 =SvUtil.D32LongToDateTime(item.starttime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
@@ -452,7 +416,7 @@ namespace LocalS.BLL
                             {
                                 for (int i = 0; i < xlPoint.DataTime.Count; i++)
                                 {
-                                    DateTime t1 = TicksToDate(xlPoint.DataTime[i] * 1000);
+                                    DateTime t1 = SvUtil.D32LongToDateTime(xlPoint.DataTime[i] * 1000);
 
                                     if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                     {
@@ -497,7 +461,7 @@ namespace LocalS.BLL
                             {
                                 for (int i = 0; i < hxPoint.DataTime.Count; i++)
                                 {
-                                    DateTime t1 = TicksToDate(hxPoint.DataTime[i] * 1000);
+                                    DateTime t1 = SvUtil.D32LongToDateTime(hxPoint.DataTime[i] * 1000);
 
                                     if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                     {
@@ -544,7 +508,7 @@ namespace LocalS.BLL
                                 {
                                     foreach (var item in smPoint.DataValue)
                                     {
-                                        var t1 = TicksToDate(item.starttime * 1000);
+                                        var t1 = SvUtil.D32LongToDateTime(item.starttime * 1000);
 
                                         //LogUtil.Info("datatime=>:" + t1.ToUnifiedFormatDateTime() + "type=>:" + item.type);
 
@@ -891,9 +855,11 @@ namespace LocalS.BLL
                 }
                 else if(taskType== E_SenvivTaskType.Health_Monitor_PerMonth)
                 {
+                    LogUtil.Info("月报生成1");
                     var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.ReportId == rptId).FirstOrDefault();
                     if (d_Task != null)
                         return;
+                    LogUtil.Info("月报生成2");
                 }
 
 
@@ -1325,13 +1291,13 @@ namespace LocalS.BLL
                     var sm = d1.ReportOfSleep;
                     if (sm != null)
                     {
-                        d_DayReport.HealthDate = TicksToDate(x2.FinishTime);
+                        d_DayReport.HealthDate = SvUtil.D32LongToDateTime(x2.FinishTime);
 
-                        d_DayReport.SmScsj = TicksToDate(x2.StartTime);//上床时间
-                        d_DayReport.SmLcsj = TicksToDate(x2.FinishTime);//离床时间
+                        d_DayReport.SmScsj = SvUtil.D32LongToDateTime(x2.StartTime);//上床时间
+                        d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(x2.FinishTime);//离床时间
                         d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
-                        d_DayReport.SmRssj = TicksToDate(x2.OnbedTime);//入睡时间
-                        d_DayReport.SmQxsj = TicksToDate(x2.OffbedTime);//清醒时间
+                        d_DayReport.SmRssj = SvUtil.D32LongToDateTime(x2.OnbedTime);//入睡时间
+                        d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(x2.OffbedTime);//清醒时间
                         d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
                         d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
                         d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
@@ -1495,6 +1461,7 @@ namespace LocalS.BLL
                     int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
                     if (month >= 1)
                     {
+                        LogUtil.Info("月报生成");
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
 
@@ -1554,7 +1521,7 @@ namespace LocalS.BLL
                     d_DayReport = new SenvivHealthDayReport();
                     d_DayReport.Id = reportpar.ReportId;
                     d_DayReport.SvUserId = userId;
-                    d_DayReport.HealthDate = TicksToDate(reportpar.CreateTime);
+                    d_DayReport.HealthDate = SvUtil.D32LongToDateTime(reportpar.CreateTime);
                     d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
 
                     d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
@@ -1615,11 +1582,11 @@ namespace LocalS.BLL
                     d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
 
                     d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
-                    d_DayReport.SmScsj = TicksToDate(reportpar.StartTime);//上床时间
-                    d_DayReport.SmLcsj = TicksToDate(reportpar.FinishTime);//离床时间
+                    d_DayReport.SmScsj = SvUtil.D32LongToDateTime(reportpar.StartTime);//上床时间
+                    d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(reportpar.FinishTime);//离床时间
                     d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
-                    d_DayReport.SmRssj = TicksToDate(reportpar.OnbedTime);//入睡时间
-                    d_DayReport.SmQxsj = TicksToDate(reportpar.OffbedTime);//清醒时间
+                    d_DayReport.SmRssj = SvUtil.D32LongToDateTime(reportpar.OnbedTime);//入睡时间
+                    d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(reportpar.OffbedTime);//清醒时间
                     d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
                     d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
                     d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
@@ -1649,7 +1616,7 @@ namespace LocalS.BLL
                     var trendcharts = d1.trendchart;
                     if (trendcharts != null)
                     {
-                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
+                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
 
 
                         foreach (var chart in trendcharts)
@@ -1682,8 +1649,8 @@ namespace LocalS.BLL
                     {
                         if (barchart.type == 2110)
                         {
-                            var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
-                            var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+                            var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                            var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
 
                             var items = barchart.items;
                             if (items != null && items.Count > 0)
@@ -1703,8 +1670,8 @@ namespace LocalS.BLL
                     var mvs = d1.mv;
                     if (mvs != null)
                     {
-                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
-                        var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+                        var smScsj =SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                        var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
                         var tdcsPoints = new List<object>();
                         foreach (var mv in mvs)
                         {
@@ -1717,8 +1684,8 @@ namespace LocalS.BLL
                     var ps = d1.p;
                     if (ps != null)
                     {
-                        var smScsj = ConvertDateTimeToLong(d_DayReport.SmScsj) / 1000;
-                        var smLcjs = ConvertDateTimeToLong(d_DayReport.SmLcsj) / 1000;
+                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                        var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
                         var hxztPoints = new List<object>();
                         foreach (var p in ps)
                         {

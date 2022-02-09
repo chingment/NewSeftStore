@@ -305,5 +305,21 @@ namespace LocalS.BLL
                 return 0;
             }
         }
+
+
+        public static DateTime D32LongToDateTime(long time)
+        {
+            return new DateTime((Convert.ToInt64(time) * 10000) + 621355968000000000).AddHours(8);
+
+        }
+
+        public static long D32DateTimeToLong(DateTime dt)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            TimeSpan toNow = dt.Subtract(dtStart);
+            long timeStamp = toNow.Ticks;
+            timeStamp = long.Parse(timeStamp.ToString().Substring(0, timeStamp.ToString().Length - 4));
+            return timeStamp / 1000;
+        }
     }
 }
