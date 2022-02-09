@@ -329,7 +329,7 @@ namespace LocalS.BLL
                         {
                             foreach (var item in hxZtcsPoint)
                             {
-                                var t1 =SvUtil.D32LongToDateTime(item.StartTime);
+                                var t1 = SvUtil.D32LongToDateTime(item.StartTime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
@@ -370,7 +370,7 @@ namespace LocalS.BLL
                         {
                             foreach (var item in smTdcsPoint)
                             {
-                                var t1 =SvUtil.D32LongToDateTime(item.starttime);
+                                var t1 = SvUtil.D32LongToDateTime(item.starttime);
 
                                 if (Lumos.CommonUtil.GetTimeSpan(t1, "21:00", "23:00"))
                                 {
@@ -822,6 +822,15 @@ namespace LocalS.BLL
                         CurrentDb.SenvivHealthStageReportTag.Add(d_smTag);
                     }
 
+                    if (rptType == "per_month")
+                    {
+                        d_StageReport.HealthDate = rptStartTime.ToString("yyyy-MM");
+                    }
+                    else
+                    {
+                        d_StageReport.HealthDate = rptStartTime.ToString("yyyy-MM-dd") + "~" + rptEndTime.ToString("yyyy-MM-dd");
+                    }
+
                     d_StageReport.SmTags = smTags_Count.OrderByDescending(m => m.Count).ToJsonString();
 
                     d_StageReport.IsSend = false;
@@ -846,13 +855,13 @@ namespace LocalS.BLL
                     if (d_Task != null)
                         return;
                 }
-                else if(taskType== E_SenvivTaskType.Health_Monitor_PerDay)
+                else if (taskType == E_SenvivTaskType.Health_Monitor_PerDay)
                 {
                     var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.ReportId == rptId).FirstOrDefault();
                     if (d_Task != null)
                         return;
                 }
-                else if(taskType== E_SenvivTaskType.Health_Monitor_PerMonth)
+                else if (taskType == E_SenvivTaskType.Health_Monitor_PerMonth)
                 {
                     LogUtil.Info("月报生成1");
                     var d_Task = CurrentDb.SenvivTask.Where(m => m.SvUserId == userId && m.ReportId == rptId).FirstOrDefault();
@@ -1667,7 +1676,7 @@ namespace LocalS.BLL
                     var mvs = d1.mv;
                     if (mvs != null)
                     {
-                        var smScsj =SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
                         var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
                         var tdcsPoints = new List<object>();
                         foreach (var mv in mvs)
