@@ -772,7 +772,7 @@ namespace LocalS.BLL
                     d_StageReport.SvUserId = userId;
                     d_StageReport.DayCount = d_DayReports.Count;
                     d_StageReport.HealthScore = d_DayReports.Select(m => m.HealthScore).Average();
-
+                    d_StageReport.SmScore = d_DayReports.Select(m => m.SmScore).Average();
                     d_StageReport.MylGrfx = Decimal.Parse(d_DayReports.Select(m => m.MylGrfx).Average().ToString());//
                     d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
                     d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
@@ -817,6 +817,7 @@ namespace LocalS.BLL
 
 
                     d_StageReport.HealthScorePt = d_DayReports.Select(m => m.HealthScore).ToJsonString();
+                    d_StageReport.SmScorePt = d_DayReports.Select(m => m.SmScore).ToJsonString();
 
                     d_StageReport.SmSmscPt = d_DayReports.Select(m => Math.Round(m.SmSmsc / 3600m, 2)).ToJsonString();
 
@@ -1439,15 +1440,14 @@ namespace LocalS.BLL
                     #endregion
                 }
 
+
                 if (fisrtReportTime != null)
                 {
                     Dictionary<string, object> taskParams = new Dictionary<string, object>();
                     DateTime? rptStartTime = null;
                     DateTime? rptEndTime = null;
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 1)
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_FisrtDay");
-
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1456,11 +1456,19 @@ namespace LocalS.BLL
                         taskParams.Add("end_time", rptEndTime);
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FisrtDay, taskParams);
                     }
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 7)
+                    else
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_SeventhDay");
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
+                        taskParams.Add("rpt_id", d_DayReport.Id);
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_PerDay, taskParams);
+                    }
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
+                    {
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1471,10 +1479,8 @@ namespace LocalS.BLL
                     }
 
 
-                    if ((DateTime.Now - fisrtReportTime).Value.Days >= 14)
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
                     {
-                        LogUtil.Info(TAG, "Health_Monitor_FourteenthDay");
-
                         rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
                         rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
 
@@ -1483,8 +1489,6 @@ namespace LocalS.BLL
 
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), userId, E_SenvivTaskType.Health_Monitor_FourteenthDay, taskParams);
                     }
-
-                    LogUtil.Info(TAG, "Health_Monitor_PerMonth:" + lastReportTime.Value.ToUnifiedFormatDateTime());
 
                     DateTime dt1 = lastReportTime.Value;
                     DateTime dt2 = DateTime.Now;
@@ -1502,6 +1506,7 @@ namespace LocalS.BLL
                     }
 
                 }
+
             }
             catch (Exception ex)
             {

@@ -21,7 +21,6 @@ namespace LocalS.BLL
 
             return hour;
         }
-
         public static string GetTimeText(decimal scends, string valformat)
         {
             TimeSpan t = TimeSpan.FromSeconds(double.Parse(scends.ToString()));
@@ -69,12 +68,7 @@ namespace LocalS.BLL
 
             //return hour.ToString("0.00");
         }
-
-        /// <summary>
-        /// 免疫力指数
-        /// </summary>
-        /// <param name="val"></param>
-        /// <returns></returns>
+        // 免疫力指数
         public static SvDataJd GetMylzs(decimal val)
         {
             var jd = new SvDataJd();
@@ -104,7 +98,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetMylGrfx(decimal val)
         {
             var jd = new SvDataJd();
@@ -134,7 +127,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetMbGxygk(decimal val)
         {
             var jd = new SvDataJd();
@@ -157,7 +149,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetMbGxbgk(decimal val)
         {
             var jd = new SvDataJd();
@@ -187,8 +178,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
-
         public static SvDataJd GetMbTlbgk(decimal val)
         {
             var jd = new SvDataJd();
@@ -212,7 +201,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetQxxlKynl(decimal val)
         {
             var jd = new SvDataJd();
@@ -234,7 +222,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetQxxlJlqx(string val)
         {
             var jd = new SvDataJd();
@@ -255,10 +242,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
-
-
-
         public static SvDataJd GetJbfxXlscfx(decimal val)
         {
             var jd = new SvDataJd();
@@ -286,7 +269,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetJbfxXljsl(decimal val)
         {
             var jd = new SvDataJd();
@@ -314,7 +296,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetHxZtahizs(decimal val)
         {
             var jd = new SvDataJd();
@@ -339,7 +320,6 @@ namespace LocalS.BLL
             }
             return jd;
         }
-
         public static SvDataJd GetSmSmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -362,7 +342,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmZcsjfw(DateTime d1, DateTime d2)
         {
             var jd = new SvDataJd();
@@ -372,7 +351,6 @@ namespace LocalS.BLL
             return jd;
 
         }
-
         public static SvDataJd GetSmRsxs(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -397,7 +375,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmQdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -421,7 +398,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmSdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -444,7 +420,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmRemsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -468,7 +443,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmSmzq(decimal val)
         {
             var jd = new SvDataJd();
@@ -489,7 +463,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmTdcs(decimal val)
         {
             var jd = new SvDataJd();
@@ -506,7 +479,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetXlDcjzxl(decimal val)
         {
             var jd = new SvDataJd();
@@ -528,7 +500,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetXlCqjzxl(decimal val)
         {
             var jd = new SvDataJd();
@@ -549,7 +520,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetXlDcpjxl(decimal val)
         {
             var jd = new SvDataJd();
@@ -570,8 +540,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
-
         public static SvDataJd GetHxDcjzhx(decimal val)
         {
             var jd = new SvDataJd();
@@ -592,7 +560,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHxCqjzhx(decimal val)
         {
             var jd = new SvDataJd();
@@ -613,7 +580,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHxDcpjhx(decimal val)
         {
             var jd = new SvDataJd();
@@ -634,7 +600,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHxZtcs(decimal val)
         {
             var jd = new SvDataJd();
@@ -652,8 +617,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
-
         public static SvDataJd GetHrvXzznl(decimal val)
         {
             var jd = new SvDataJd();
@@ -675,7 +638,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHrvJgsjzlzs(decimal val)
         {
             var jd = new SvDataJd();
@@ -696,7 +658,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHrvMzsjzlzs(decimal val)
         {
             var jd = new SvDataJd();
@@ -717,7 +678,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHrvZzsjzlzs(decimal val)
         {
             var jd = new SvDataJd();
@@ -739,7 +699,6 @@ namespace LocalS.BLL
             return jd;
 
         }
-
         public static SvDataJd GetHrvHermzs(decimal val)
         {
             var jd = new SvDataJd();
@@ -760,7 +719,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetHrvTwjxgsszh(decimal val)
         {
             var jd = new SvDataJd();
@@ -781,7 +739,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmScore(decimal val)
         {
             var jd = new SvDataJd();
@@ -811,8 +768,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
-
         public static SvDataJd GetHealthScore(decimal val)
         {
             var jd = new SvDataJd();
@@ -821,7 +776,6 @@ namespace LocalS.BLL
             jd.RefRange = "0~100";
             return jd;
         }
-
         public static SvDataJd GetSmSmxl(decimal val)
         {
             var jd = new SvDataJd();
@@ -845,7 +799,6 @@ namespace LocalS.BLL
             return jd;
 
         }
-
         public static SvDataJd GetSmSmlxx(decimal val)
         {
             var jd = new SvDataJd();
@@ -868,7 +821,6 @@ namespace LocalS.BLL
 
             return jd;
         }
-
         public static SvDataJd GetSmSdsmbl(decimal val)
         {
             var jd = new SvDataJd();

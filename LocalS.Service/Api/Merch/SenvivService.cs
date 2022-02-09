@@ -823,6 +823,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              u.Status,
                              u.SvUserId,
                              u.RptType,
+                             u.RptStartTime,
                              u.CreateTime
                          });
 
@@ -858,7 +859,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
-            query = query.OrderByDescending(r => r.HealthDate).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.RptStartTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -866,6 +867,15 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             foreach (var rpt in list)
             {
+                string healthDate = "";
+                if (rpt.RptType == "per_month")
+                {
+                    if (rpt.RptStartTime.Value != null)
+                    {
+                        healthDate = rpt.RptStartTime.Value.ToString("yyyy-MM");
+                    }
+                }
+
                 olist.Add(new
                 {
                     Id = rpt.Id,
@@ -875,7 +885,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
                     rpt.HealthScore,
-                    rpt.HealthDate,
+                    HealthDate = healthDate,
                     MylGrfx = SvDataJdUtil.GetMylGrfx(rpt.MylGrfx),
                     MylMylzs = SvDataJdUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvDataJdUtil.GetMbGxbgk(rpt.MbGxbgk),
