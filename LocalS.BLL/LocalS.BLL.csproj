@@ -156,7 +156,6 @@
     <Compile Include="Sdk\XtyPaySdkProvider.cs" />
     <Compile Include="SpecDes.cs" />
     <Compile Include="SvDataJd.cs" />
-    <Compile Include="SvDataJdUtil.cs" />
     <Compile Include="SvUtil.cs" />
     <Compile Include="Task\BaseProgram.cs" />
     <Compile Include="Task\ITask.cs" />

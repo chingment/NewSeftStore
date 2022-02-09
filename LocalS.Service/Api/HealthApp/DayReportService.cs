@@ -35,14 +35,14 @@ namespace LocalS.Service.Api.HealthApp
             #region  gzTags
             var gzTags = new List<object>();
 
-            gzTags.Add(SvDataJdUtil.GetMylzs(d_Rpt.MylMylzs));
-            gzTags.Add(SvDataJdUtil.GetMylGrfx(d_Rpt.MylGrfx));
-            gzTags.Add(SvDataJdUtil.GetMbGxygk(d_Rpt.MbGxygk));
-            gzTags.Add(SvDataJdUtil.GetMbGxbgk(d_Rpt.MbGxbgk));
-            gzTags.Add(SvDataJdUtil.GetMbTlbgk(d_Rpt.MbTlbgk));
-            gzTags.Add(SvDataJdUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-            gzTags.Add(SvDataJdUtil.GetQxxlKynl(d_Rpt.QxxlKynl));
-            gzTags.Add(SvDataJdUtil.GetQxxlQxyj(d_Rpt.QxxlQxyj));
+            gzTags.Add(SvUtil.GetMylzs(d_Rpt.MylMylzs));
+            gzTags.Add(SvUtil.GetMylGrfx(d_Rpt.MylGrfx));
+            gzTags.Add(SvUtil.GetMbGxygk(d_Rpt.MbGxygk));
+            gzTags.Add(SvUtil.GetMbGxbgk(d_Rpt.MbGxbgk));
+            gzTags.Add(SvUtil.GetMbTlbgk(d_Rpt.MbTlbgk));
+            gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
+            gzTags.Add(SvUtil.GetQxxlKynl(d_Rpt.QxxlKynl));
+            gzTags.Add(SvUtil.GetQxxlQxyj(d_Rpt.QxxlQxyj));
             #endregion
 
             #region smTags
@@ -69,12 +69,12 @@ namespace LocalS.Service.Api.HealthApp
 
             #region smDvs
             var smDvs = new List<object>();
-            smDvs.Add(SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"));
-            smDvs.Add(SvDataJdUtil.GetSmRsxs(d_Rpt.SmRsxs, "2"));
-            smDvs.Add(SvDataJdUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "2"));
-            smDvs.Add(SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs));
-            smDvs.Add(SvDataJdUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl));
-            smDvs.Add(SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl));
+            smDvs.Add(SvUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"));
+            smDvs.Add(SvUtil.GetSmRsxs(d_Rpt.SmRsxs, "2"));
+            smDvs.Add(SvUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "2"));
+            smDvs.Add(SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs));
+            smDvs.Add(SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl));
+            smDvs.Add(SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl));
             #endregion
 
             #region smScoreByLast
@@ -100,26 +100,26 @@ namespace LocalS.Service.Api.HealthApp
                 rd = new
                 {
                     HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
-                    HealthScore = SvDataJdUtil.GetHealthScore(d_Rpt.HealthScore),
+                    HealthScore = SvUtil.GetHealthScore(d_Rpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
-                    SmScore = SvDataJdUtil.GetSmScore(d_Rpt.SmScore),
+                    SmScore = SvUtil.GetSmScore(d_Rpt.SmScore),
                     SmScoreTip = "您的睡眠值已经打败77%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_Rpt.RptSuggest,
                     SmScoreByLast = smScoreByLast,
-                    HxZtahizs = SvDataJdUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
-                    HrvXzznl = SvDataJdUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
-                    SmSmxl = SvDataJdUtil.GetSmSmxl(d_Rpt.SmSmxl),
-                    SmSmlxx = SvDataJdUtil.GetSmSmlxx(d_Rpt.SmSmlxx),
-                    SmSdsmbl = SvDataJdUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl),
-                    XlDcjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlDcjzxl),
-                    XlCqjzxl = SvDataJdUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl),
-                    HxDcjzhx = SvDataJdUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
-                    SmSmsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"),
-                    SmZcsc = SvDataJdUtil.GetSmSmsc(d_Rpt.SmZcsc, "2"),
-                    SmZcsjfw = SvDataJdUtil.GetSmZcsjfw(d_Rpt.SmScsj, d_Rpt.SmLcsj),
+                    HxZtahizs = SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
+                    SmSmxl = SvUtil.GetSmSmxl(d_Rpt.SmSmxl),
+                    SmSmlxx = SvUtil.GetSmSmlxx(d_Rpt.SmSmlxx),
+                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl),
+                    XlDcjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlDcjzxl),
+                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl),
+                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
+                    SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"),
+                    SmZcsc = SvUtil.GetSmSmsc(d_Rpt.SmZcsc, "2"),
+                    SmZcsjfw = SvUtil.GetSmZcsjfw(d_Rpt.SmScsj, d_Rpt.SmLcsj),
                 },
                 userInfo = userInfo
             };

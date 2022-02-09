@@ -61,7 +61,6 @@ namespace LocalS.BLL
     public class SenvivService : BaseService
     {
         public readonly string TAG = "SenvivService";
-
         private void BuildTask(string operater, string userId, E_SenvivTaskType taskType, Dictionary<string, object> taskParams)
         {
             string rptId = "";
@@ -904,7 +903,6 @@ namespace LocalS.BLL
 
             }
         }
-
         public void BuildDayReport32(string userId, string deptId)
         {
             try
@@ -1480,7 +1478,6 @@ namespace LocalS.BLL
                 LogUtil.Error(TAG, ex);
             }
         }
-
         public void BuildDayReport46(string userId, string sn, string deptId)
         {
             try
@@ -1783,7 +1780,6 @@ namespace LocalS.BLL
                 LogUtil.Error(TAG, ex);
             }
         }
-
         //优先级别MerchId,若Merch为空再取deviceId
         public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string deviceId)
         {
@@ -1868,7 +1864,6 @@ namespace LocalS.BLL
 
             return appConfig;
         }
-
         public SenvivConfig GetConfig(string deptId)
         {
             var config = new SenvivConfig();
@@ -1884,7 +1879,6 @@ namespace LocalS.BLL
             }
             return config;
         }
-
         public bool SendMonthReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "month_report");
@@ -1910,8 +1904,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
-
         public bool SendDayReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "day_report");
@@ -1937,7 +1929,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendArticle(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "pregnancy_remind");
@@ -1963,7 +1954,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendHealthMonitor(string svUserId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
             var template = GetWxPaTpl(svUserId, "health_monitor");
@@ -1990,7 +1980,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendDeviceBind(string svUserId, string first, string keyword1, string keyword2, string remark)
         {
             var template = GetWxPaTpl(svUserId, "device_bind");
@@ -2016,7 +2005,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendDeviceUnBind(string svUserId, string first, string keyword1, string keyword2, string remark)
         {
             var template = GetWxPaTpl(svUserId, "device_unbind");
@@ -2042,7 +2030,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public WxPaTplModel GetWxPaTpl(string svUserId, string template)
         {
             var model = new WxPaTplModel();
@@ -2092,7 +2079,6 @@ namespace LocalS.BLL
 
             return model;
         }
-
         public SmsTemplateModel GetSmsTemplateByBindPhone(string userId)
         {
             var tmp = new SmsTemplateModel();
