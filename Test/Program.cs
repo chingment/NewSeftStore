@@ -56,6 +56,8 @@ namespace Test
 
         static void Main(string[] args)
         {
+            int days = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(2022, 2);
+
 
             int cdddd = SvUtil.D46Int(5.0m);
 

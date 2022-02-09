@@ -468,7 +468,23 @@ namespace Lumos
             //weekModel.Week = (int)Math.Floor(week);
             //weekModel.Day = (int)(totalDays - weekModel.Week * 7);
 
-          return t;
+            return t;
+        }
+
+        public static DateTime MonthMinDateTime(string month)
+        {
+            return DateTime.Parse(month + "-01");
+        }
+
+        public static DateTime MonthMaxDateTime(string month)
+        {
+            DateTime t1 = DateTime.Parse(month + "-01");
+            int days = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(t1.Year, t1.Month);
+
+            DateTime t2 = DateTime.Parse(month + "-" + days+ " 23:59:59");
+
+
+            return t2;
         }
     }
 }

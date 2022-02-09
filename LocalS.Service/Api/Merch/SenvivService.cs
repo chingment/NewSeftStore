@@ -413,8 +413,8 @@ namespace LocalS.Service.Api.Merch
                     Age = SvUtil.GetAge(rpt.Birthday),
                     HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
                     HealthScore = rpt.HealthScore,
-                    SmRssj = rpt.SmRssj.ToUnifiedFormatDateTime(),
-                    SmQxsj = rpt.SmQxsj.ToUnifiedFormatDateTime(),
+                    SmRssj = rpt.SmRssj.ToString("HH:mm:ss"),
+                    SmQxsj = rpt.SmQxsj.ToString("HH:mm:ss"),
                     DsTags = rpt.SmTags.ToJsonObject<List<string>>(),
                     MylGrfx = SvUtil.GetMylGrfx(rpt.MylGrfx),
                     MylMylzs = SvUtil.GetMylzs(rpt.MylMylzs),
@@ -823,6 +823,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              u.SvUserId,
                              u.RptType,
                              u.RptStartTime,
+                             u.RptEndTime,
                              u.CreateTime
                          });
 
@@ -844,12 +845,13 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
             {
-                var d1 = rup.HealthDate[0];
-                var d2 = rup.HealthDate[1];
-                if (d1 == d2)
-                {
-                    query = query.Where(m => m.HealthDate == d1);
-                }
+                var d1 = CommonUtil.MonthMinDateTime(rup.HealthDate[0]);
+                var d2 = CommonUtil.MonthMaxDateTime(rup.HealthDate[1]);
+
+                LogUtil.Info("d1：" + d1.ToUnifiedFormatDateTime());
+                LogUtil.Info("d2：" + d2.ToUnifiedFormatDateTime());
+                query = query.Where(m => m.RptStartTime >= d1 && m.RptEndTime <= d2);
+
             }
 
 
