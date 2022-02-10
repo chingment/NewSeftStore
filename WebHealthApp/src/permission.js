@@ -9,7 +9,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 router.beforeEach(async(to, from, next) => {
   NProgress.start()
-
+  document.title = to.meta.title
   // 判断是否需要微信授权
   if (to.meta.isAuth) {
     var token = getToken()

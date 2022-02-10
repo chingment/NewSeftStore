@@ -14,54 +14,57 @@ const router = new VueRouter({
     {
       path: '/own/info',
       component: () => import('@/views/own/info'),
-      meta: { isAuth: true }
+      meta: { title: '我的信息', isAuth: true }
     },
     {
       path: '/device/bind',
       component: () => import('@/views/device/bind'),
-      meta: { title: '', isAuth: true }
+      meta: { title: '设备绑定', isAuth: true }
     },
     {
       path: '/device/info',
       component: () => import('@/views/device/info'),
-      meta: { title: '', isAuth: true }
+      meta: { title: '设备信息', isAuth: true }
     },
     {
       path: '/quest/fill/tp1',
       component: () => import('@/views/quest/fill/tp1'),
-      meta: { isAuth: true }
+      meta: { title: '设备绑定', isAuth: true }
     },
     {
       path: '/errorpage/invalid',
       component: () => import('@/views/errorpage/invalid'),
-      meta: { isAuth: false }
+      meta: { title: '错误提示', isAuth: false }
     },
     {
       path: '/errorpage/service',
       component: () => import('@/views/errorpage/service'),
-      meta: { isAuth: false }
+      meta: { title: '错误提示', isAuth: false }
     },
     {
       path: '/report/day',
       component: () => import('@/views/report/day/Index'),
-      meta: { isAuth: false }
+      meta: { title: '健康报告', isAuth: false }
     },
     {
       path: '/report/month/monitor',
       component: () => import('@/views/report/month/Index'),
       redirec: '/report/month/monitor',
+      meta: { title: '健康报告', isAuth: false },
       children: [
         {
           path: '/report/month/monitor',
+          meta: { title: '健康报告', isAuth: false },
           component: () => import('@/views/report/month/Monitor')
         },
         {
           path: '/report/month/energy',
+          meta: { title: '健康报告', isAuth: false },
           component: () => import('@/views/report/month/Energy')
         },
         {
           path: '/report/month/tagadvise',
-          name: 'MainTagAdvise',
+          meta: { title: '健康报告', isAuth: false },
           component: () => import('@/views/report/month/TagAdvise')
         }
       ]

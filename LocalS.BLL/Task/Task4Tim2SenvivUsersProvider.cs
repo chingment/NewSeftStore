@@ -92,116 +92,122 @@ namespace LocalS.BLL.Task
 
                     foreach (var i_SenvivUser in i_SenvivUsers)
                     {
-                        if (!string.IsNullOrEmpty(i_SenvivUser.wechatid))
+
+                        var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == i_SenvivUser.userid).FirstOrDefault();
+                        string svUserId = i_SenvivUser.userid;
+                        string useId = null;
+
+                        if (d_SenvivUser != null)
                         {
-                            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == i_SenvivUser.userid).FirstOrDefault();
-                            string svUserId = i_SenvivUser.userid;
-                            string useId = null;
-                            if (d_SenvivUser == null)
+                            useId = d_SenvivUser.UserId;
+                        }
+
+                        //if (d_SenvivUser == null)
+                        //{
+                        //    var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == i_SenvivUser.wechatid).FirstOrDefault();
+                        //    if (d_ClientUser == null)
+                        //    {
+                        //        d_ClientUser = new SysClientUser();
+                        //        d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds.3pg");
+                        //        d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.NickName = i_SenvivUser.nick;
+                        //        d_ClientUser.Avatar = i_SenvivUser.headimgurl;
+                        //        //d_ClientUser.MerchId = "88273829";
+                        //        d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
+                        //        d_ClientUser.BelongType = Enumeration.BelongType.Client;
+                        //        d_ClientUser.RegisterTime = DateTime.Now;
+                        //        d_ClientUser.CreateTime = DateTime.Now;
+                        //        d_ClientUser.Creator = d_ClientUser.Id;
+                        //        CurrentDb.SysClientUser.Add(d_ClientUser);
+                        //        CurrentDb.SaveChanges();
+                        //    }
+
+                        //    useId = d_ClientUser.Id;
+
+                        //    d_SenvivUser = new Entity.SenvivUser();
+                        //    d_SenvivUser.Id = i_SenvivUser.userid;
+                        //    d_SenvivUser.MerchId = d_ClientUser.MerchId;
+                        //    d_SenvivUser.SvDeptId = i_SenvivUser.deptid;
+                        //    d_SenvivUser.UserId = d_ClientUser.Id;
+                        //    d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
+                        //    d_SenvivUser.NickName = i_SenvivUser.nick;
+                        //    d_SenvivUser.FullName = i_SenvivUser.account;
+                        //    d_SenvivUser.Avatar = i_SenvivUser.headimgurl;
+                        //    d_SenvivUser.Sex = i_SenvivUser.sex;
+                        //    d_SenvivUser.Birthday = Convert2DateTime(i_SenvivUser.birthday);
+                        //    d_SenvivUser.Height = i_SenvivUser.height;
+                        //    d_SenvivUser.Weight = i_SenvivUser.weight;
+                        //    d_SenvivUser.SmTargetVal = i_SenvivUser.TargetValue;
+                        //    d_SenvivUser.Sas = i_SenvivUser.SAS;
+                        //    d_SenvivUser.IsUseBreathMach = i_SenvivUser.BreathingMachine == "1" ? true : false;
+                        //    d_SenvivUser.Perplex = i_SenvivUser.Perplex;
+                        //    d_SenvivUser.PerplexOt = i_SenvivUser.OtherPerplex;
+                        //    d_SenvivUser.MedicalHis = i_SenvivUser.Medicalhistory;
+                        //    d_SenvivUser.MedicalHisOt = i_SenvivUser.OtherFamilyhistory;
+                        //    d_SenvivUser.Medicine = i_SenvivUser.Medicine;
+                        //    d_SenvivUser.MedicineOt = i_SenvivUser.OtherMedicine;
+                        //    d_SenvivUser.Creator = IdWorker.Build(IdType.EmptyGuid);
+                        //    d_SenvivUser.CreateTime = Convert2DateTime(i_SenvivUser.createtime);
+                        //    CurrentDb.SenvivUser.Add(d_SenvivUser);
+                        //    CurrentDb.SaveChanges();
+                        //}
+                        //else
+                        //{
+                        //    var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == i_SenvivUser.wechatid).FirstOrDefault();
+                        //    if (d_ClientUser == null)
+                        //    {
+                        //        d_ClientUser = new SysClientUser();
+                        //        d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds.3pg");
+                        //        d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
+                        //        d_ClientUser.NickName = i_SenvivUser.nick;
+                        //        d_ClientUser.Avatar = i_SenvivUser.headimgurl;
+                        //        //d_ClientUser.MerchId = "88273829";
+                        //        d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
+                        //        d_ClientUser.BelongType = Enumeration.BelongType.Client;
+                        //        d_ClientUser.RegisterTime = DateTime.Now;
+                        //        d_ClientUser.CreateTime = DateTime.Now;
+                        //        d_ClientUser.Creator = d_ClientUser.Id;
+                        //        CurrentDb.SysClientUser.Add(d_ClientUser);
+                        //        CurrentDb.SaveChanges();
+                        //    }
+
+                        //    useId = d_ClientUser.Id;
+
+                        //    d_SenvivUser.SvDeptId = i_SenvivUser.deptid;
+                        //    d_SenvivUser.UserId = d_ClientUser.Id;
+                        //    d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
+                        //    d_SenvivUser.NickName = i_SenvivUser.nick;
+                        //    d_SenvivUser.FullName = i_SenvivUser.account;
+                        //    d_SenvivUser.Avatar = i_SenvivUser.headimgurl;
+                        //    d_SenvivUser.Sex = i_SenvivUser.sex;
+                        //    d_SenvivUser.Birthday = Convert2DateTime(i_SenvivUser.birthday);
+                        //    d_SenvivUser.Height = i_SenvivUser.height;
+                        //    d_SenvivUser.Weight = i_SenvivUser.weight;
+                        //    d_SenvivUser.SmTargetVal = i_SenvivUser.TargetValue;
+                        //    d_SenvivUser.Sas = i_SenvivUser.SAS;
+                        //    d_SenvivUser.IsUseBreathMach = i_SenvivUser.BreathingMachine == "1" ? true : false;
+                        //    d_SenvivUser.Perplex = i_SenvivUser.Perplex;
+                        //    d_SenvivUser.PerplexOt = i_SenvivUser.OtherPerplex;
+                        //    d_SenvivUser.MedicalHis = i_SenvivUser.Medicalhistory;
+                        //    d_SenvivUser.MedicalHisOt = i_SenvivUser.OtherFamilyhistory;
+                        //    d_SenvivUser.Medicine = i_SenvivUser.Medicine;
+                        //    d_SenvivUser.MedicineOt = i_SenvivUser.OtherMedicine;
+                        //    d_SenvivUser.MendTime = DateTime.Now;
+                        //    d_SenvivUser.Mender = IdWorker.Build(IdType.EmptyGuid);
+                        //    CurrentDb.SaveChanges();
+                        //}
+
+                        if (i_SenvivUser.products != null)
+                        {
+                            var products = i_SenvivUser.products;
+                            foreach (var device in products)
                             {
-                                var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == i_SenvivUser.wechatid).FirstOrDefault();
-                                if (d_ClientUser == null)
+                                if (string.IsNullOrEmpty(useId))
                                 {
-                                    d_ClientUser = new SysClientUser();
-                                    d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds.3pg");
-                                    d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.NickName = i_SenvivUser.nick;
-                                    d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    //d_ClientUser.MerchId = "88273829";
-                                    d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
-                                    d_ClientUser.BelongType = Enumeration.BelongType.Client;
-                                    d_ClientUser.RegisterTime = DateTime.Now;
-                                    d_ClientUser.CreateTime = DateTime.Now;
-                                    d_ClientUser.Creator = d_ClientUser.Id;
-                                    CurrentDb.SysClientUser.Add(d_ClientUser);
-                                    CurrentDb.SaveChanges();
-                                }
-
-                                useId = d_ClientUser.Id;
-
-                                d_SenvivUser = new Entity.SenvivUser();
-                                d_SenvivUser.Id = i_SenvivUser.userid;
-                                d_SenvivUser.MerchId = d_ClientUser.MerchId;
-                                d_SenvivUser.SvDeptId = i_SenvivUser.deptid;
-                                d_SenvivUser.UserId = d_ClientUser.Id;
-                                d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
-                                d_SenvivUser.NickName = i_SenvivUser.nick;
-                                d_SenvivUser.FullName = i_SenvivUser.account;
-                                d_SenvivUser.Avatar = i_SenvivUser.headimgurl;
-                                d_SenvivUser.Sex = i_SenvivUser.sex;
-                                d_SenvivUser.Birthday = Convert2DateTime(i_SenvivUser.birthday);
-                                d_SenvivUser.Height = i_SenvivUser.height;
-                                d_SenvivUser.Weight = i_SenvivUser.weight;
-                                d_SenvivUser.SmTargetVal = i_SenvivUser.TargetValue;
-                                d_SenvivUser.Sas = i_SenvivUser.SAS;
-                                d_SenvivUser.IsUseBreathMach = i_SenvivUser.BreathingMachine == "1" ? true : false;
-                                d_SenvivUser.Perplex = i_SenvivUser.Perplex;
-                                d_SenvivUser.PerplexOt = i_SenvivUser.OtherPerplex;
-                                d_SenvivUser.MedicalHis = i_SenvivUser.Medicalhistory;
-                                d_SenvivUser.MedicalHisOt = i_SenvivUser.OtherFamilyhistory;
-                                d_SenvivUser.Medicine = i_SenvivUser.Medicine;
-                                d_SenvivUser.MedicineOt = i_SenvivUser.OtherMedicine;
-                                d_SenvivUser.Creator = IdWorker.Build(IdType.EmptyGuid);
-                                d_SenvivUser.CreateTime = Convert2DateTime(i_SenvivUser.createtime);
-                                CurrentDb.SenvivUser.Add(d_SenvivUser);
-                                CurrentDb.SaveChanges();
-                            }
-                            else
-                            {
-                                var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == i_SenvivUser.wechatid).FirstOrDefault();
-                                if (d_ClientUser == null)
-                                {
-                                    d_ClientUser = new SysClientUser();
-                                    d_ClientUser.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.UserName = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.PasswordHash = PassWordHelper.HashPassword("sfsfsffds.3pg");
-                                    d_ClientUser.SecurityStamp = IdWorker.Build(IdType.NewGuid);
-                                    d_ClientUser.NickName = i_SenvivUser.nick;
-                                    d_ClientUser.Avatar = i_SenvivUser.headimgurl;
-                                    //d_ClientUser.MerchId = "88273829";
-                                    d_ClientUser.WxPaOpenId = i_SenvivUser.wechatid;
-                                    d_ClientUser.BelongType = Enumeration.BelongType.Client;
-                                    d_ClientUser.RegisterTime = DateTime.Now;
-                                    d_ClientUser.CreateTime = DateTime.Now;
-                                    d_ClientUser.Creator = d_ClientUser.Id;
-                                    CurrentDb.SysClientUser.Add(d_ClientUser);
-                                    CurrentDb.SaveChanges();
-                                }
-
-                                useId = d_ClientUser.Id;
-
-                                d_SenvivUser.SvDeptId = i_SenvivUser.deptid;
-                                d_SenvivUser.UserId = d_ClientUser.Id;
-                                d_SenvivUser.PhoneNumber = i_SenvivUser.mobile;
-                                d_SenvivUser.NickName = i_SenvivUser.nick;
-                                d_SenvivUser.FullName = i_SenvivUser.account;
-                                d_SenvivUser.Avatar = i_SenvivUser.headimgurl;
-                                d_SenvivUser.Sex = i_SenvivUser.sex;
-                                d_SenvivUser.Birthday = Convert2DateTime(i_SenvivUser.birthday);
-                                d_SenvivUser.Height = i_SenvivUser.height;
-                                d_SenvivUser.Weight = i_SenvivUser.weight;
-                                d_SenvivUser.SmTargetVal = i_SenvivUser.TargetValue;
-                                d_SenvivUser.Sas = i_SenvivUser.SAS;
-                                d_SenvivUser.IsUseBreathMach = i_SenvivUser.BreathingMachine == "1" ? true : false;
-                                d_SenvivUser.Perplex = i_SenvivUser.Perplex;
-                                d_SenvivUser.PerplexOt = i_SenvivUser.OtherPerplex;
-                                d_SenvivUser.MedicalHis = i_SenvivUser.Medicalhistory;
-                                d_SenvivUser.MedicalHisOt = i_SenvivUser.OtherFamilyhistory;
-                                d_SenvivUser.Medicine = i_SenvivUser.Medicine;
-                                d_SenvivUser.MedicineOt = i_SenvivUser.OtherMedicine;
-                                d_SenvivUser.MendTime = DateTime.Now;
-                                d_SenvivUser.Mender = IdWorker.Build(IdType.EmptyGuid);
-                                CurrentDb.SaveChanges();
-                            }
-
-                            if (i_SenvivUser.products != null)
-                            {
-                                var products = i_SenvivUser.products;
-                                foreach (var device in products)
-                                {
-
                                     var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == useId && m.DeviceId == device.sn).FirstOrDefault();
                                     if (d_SenvivUserDevice == null)
                                     {
@@ -217,21 +223,19 @@ namespace LocalS.BLL.Task
                                         CurrentDb.SenvivUserDevice.Add(d_SenvivUserDevice);
                                         CurrentDb.SaveChanges();
                                     }
+                                }
 
-                                    if (svDeptId == "46")
-                                    {
-                                        BizFactory.Senviv.BuildDayReport46(svUserId, device.sn, d_SenvivUser.SvDeptId);
-                                    }
+                                if (svDeptId == "46")
+                                {
+                                    BizFactory.Senviv.BuildDayReport46(svUserId, device.sn, svDeptId);
                                 }
                             }
-
-                            if (svDeptId == "32")
-                            {
-                                BizFactory.Senviv.BuildDayReport32(d_SenvivUser.Id, d_SenvivUser.SvDeptId);
-                            }
-
                         }
 
+                        if (svDeptId == "32")
+                        {
+                            BizFactory.Senviv.BuildDayReport32(svUserId, svDeptId);
+                        }
                     }
 
                     #endregion

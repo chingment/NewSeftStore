@@ -237,7 +237,14 @@ namespace LocalS.BLL
 
             if (!string.IsNullOrEmpty(account) && nick != account)
             {
-                signName += "(" + account + ")";
+                if (string.IsNullOrEmpty(nick))
+                {
+                    signName = account;
+                }
+                else
+                {
+                    signName += "(" + account + ")";
+                }
             }
 
 

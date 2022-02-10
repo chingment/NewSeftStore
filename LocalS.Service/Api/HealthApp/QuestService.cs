@@ -168,6 +168,7 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUser.NickName = null;
                         d_SenvivUser.Avatar = d_User.Avatar;
                         d_SenvivUser.PhoneNumber = d_User.PhoneNumber;
+                        d_SenvivUser.Sex = sex;
                         d_SenvivUser.CreateTime = DateTime.Now;
                         d_SenvivUser.Creator = d_User.Id;
                         CurrentDb.SenvivUser.Add(d_SenvivUser);
