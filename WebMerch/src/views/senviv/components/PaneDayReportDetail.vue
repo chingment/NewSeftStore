@@ -497,8 +497,8 @@ export default {
       this.brechWorkTabs.isShowHandleRecord = true
     } else if (this.workType === 'health_sug') {
       this.brechWorkTabs.isShowByHealthSug = true
-      this.brechWorkTabs.isShowByVisitTelephone = false
-      this.brechWorkTabs.isShowByVisitWaPush = false
+      this.brechWorkTabs.isShowByVisitTelephone = true
+      this.brechWorkTabs.isShowByVisitWaPush = true
       this.brechWorkTabs.isShowHandleRecord = true
     } else if (this.workType === 'day_saw') {
       this.brechWorkTabs.isShowByHealthSug = false
@@ -1121,7 +1121,7 @@ export default {
             .then(() => {
               var _from = {
                 taskId: this.taskId,
-                userId: this.userInfo.userId,
+                svUserId: this.userInfo.svUserId,
                 reportId: this.reportId,
                 visitTemplate: this.formByVisitPapush.visitTemplate,
                 visitContent: {
@@ -1151,6 +1151,7 @@ export default {
       })
     },
     onBrechWorkTabs(tab, event) {
+      console.log(tab)
       var tabInnerText = event.target.innerText
 
       if (tabInnerText === '电话回访') {

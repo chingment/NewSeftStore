@@ -628,6 +628,7 @@ namespace LocalS.Service.Api.Merch
                 Task = task,
                 UserInfo = new
                 {
+                    SvUserId = d_Rpt.SvUserId,
                     SignName = SvUtil.GetSignName(d_Rpt.NickName, d_Rpt.FullName),
                     Avatar = d_Rpt.Avatar,
                     Sex = new FieldModel(d_Rpt.Sex, SvUtil.GetSexName(d_Rpt.Sex)),
@@ -1281,38 +1282,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
         public CustomJsonResult SaveDayReportSug(string operater, string merchId, SenvivSaveMonthReportSug rop)
         {
-
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
-
-            rpt.RptSummary = rop.RptSummary;
-            rpt.RptSuggest = rop.RptSuggest;
-
-            if (rop.IsSend)
+            if (!rop.IsSend)
             {
-                string first = "您好，" + rpt.HealthDate + "日健康报告已生成，详情如下";
-                string url = "http://health.17fanju.com/report/day?rptId=" + rpt.Id + "&theme=green";
-                string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
-                string keyword2 = "总体评分" + rpt.HealthScore + "分";
-                string remark = "感谢您的支持，如需查看详情报告信息请点击";
-                var isSend = BizFactory.Senviv.SendDayReport(rpt.SvUserId, first, keyword1, keyword2, remark, url);
-                if (isSend)
-                {
-                    rpt.IsSend = true;
-                    rpt.Status = E_SenvivHealthReportStatus.SendSuccess;
-                }
-                else
-                {
-                    rpt.Status = E_SenvivHealthReportStatus.SendFailure;
-                }
-
+                var d_DayReport = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+                d_DayReport.RptSummary = rop.RptSummary;
+                d_DayReport.RptSuggest = rop.RptSuggest;
                 CurrentDb.SaveChanges();
 
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+            }
+            else
+            {
+                var isSend = BizFactory.Senviv.SendDayReport(rop.ReportId, rop.RptSummary, rop.RptSuggest);
                 if (isSend)
                 {
-                    SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
-
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
                 }
                 else
@@ -1320,14 +1305,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送失败");
                 }
             }
-            else
-            {
-                CurrentDb.SaveChanges();
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
-
-            }
-
 
             return result;
 
@@ -1548,7 +1525,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var d_SenvivVisitRecord = new SenvivVisitRecord();
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.SvUserId = rop.SvUserId;
             d_SenvivVisitRecord.ReportId = rop.ReportId;
             d_SenvivVisitRecord.TaskId = rop.TaskId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.WxPa;
@@ -1582,7 +1559,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 string keyword3 = dic["keyword3"];
                 string remark = dic["remark"];
                 string url = "";
-                BizFactory.Senviv.SendHealthMonitor(rop.UserId, first, keyword1, keyword2, keyword3, remark);
+                BizFactory.Senviv.SendHealthMonitor(rop.SvUserId, first, keyword1, keyword2, keyword3, remark);
             }
 
             SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
@@ -1720,9 +1697,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     break;
                 case E_SenvivTaskType.Health_Monitor_FourteenthDay:
                     statusModel = new FieldModel(3, "两周回访");
-                    break;
-                case E_SenvivTaskType.Health_Monitor_PerDay:
-                    statusModel = new FieldModel(4, "日报回访");
                     break;
                 case E_SenvivTaskType.Health_Monitor_PerMonth:
                     statusModel = new FieldModel(5, "每月回访");

@@ -225,17 +225,18 @@ namespace LocalS.BLL.Task
                                     }
                                 }
 
-                                if (svDeptId == "46")
+                                if (svDeptId == "32")
+                                {
+                                    BizFactory.Senviv.BuildDayReport32(svUserId, device.sn, svDeptId);
+                                }
+                                else if (svDeptId == "46")
                                 {
                                     BizFactory.Senviv.BuildDayReport46(svUserId, device.sn, svDeptId);
                                 }
                             }
                         }
 
-                        if (svDeptId == "32")
-                        {
-                            BizFactory.Senviv.BuildDayReport32(svUserId, svDeptId);
-                        }
+
                     }
 
                     #endregion

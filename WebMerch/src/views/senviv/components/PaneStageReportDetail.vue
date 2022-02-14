@@ -683,8 +683,8 @@ export default {
       this.brechWorkTabs.isShowHandleRecord = true
     } else if (this.workType === 'health_sug') {
       this.brechWorkTabs.isShowByHealthSug = true
-      this.brechWorkTabs.isShowByVisitTelephone = false
-      this.brechWorkTabs.isShowByVisitWaPush = false
+      this.brechWorkTabs.isShowByVisitTelephone = true
+      this.brechWorkTabs.isShowByVisitWaPush = true
       this.brechWorkTabs.isShowHandleRecord = true
     }
 

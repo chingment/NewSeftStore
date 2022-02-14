@@ -162,7 +162,7 @@ export default {
             { label: '精力不足', value: '3' },
             { label: '怕冷怕冷', value: '4' },
             { label: '头昏头痛', value: '5' },
-            { label: '易于干嘛', value: '6' },
+            { label: '易于感冒', value: '6' },
             { label: '记忆力下降', value: '7' },
             { label: '胸闷', value: '8' },
             { label: '肠胃问题', value: '9' }
