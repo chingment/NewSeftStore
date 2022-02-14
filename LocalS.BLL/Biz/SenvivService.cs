@@ -1936,7 +1936,7 @@ namespace LocalS.BLL
             else
             {
                 d_DayReport.IsSend = true;
-                d_DayReport.Status = E_SenvivHealthReportStatus.SendFailure;
+                d_DayReport.Status = E_SenvivHealthReportStatus.SendSuccess;
                 CurrentDb.SaveChanges();
                 return true;
             }
