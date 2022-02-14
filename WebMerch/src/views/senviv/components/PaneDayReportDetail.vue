@@ -1133,6 +1133,11 @@ export default {
               }
               saveVisitRecordByPapush(_from).then(res => {
                 if (res.result === 1) {
+                  this.formByVisitPapush.visitTemplate = ''
+                  this.formByVisitPapush.keyword1 = ''
+                  this.formByVisitPapush.keyword2 = ''
+                  this.formByVisitPapush.keyword3 = ''
+                  this.formByVisitPapush.remark = ''
                   this.$message({
                     message: res.message,
                     type: 'success'
