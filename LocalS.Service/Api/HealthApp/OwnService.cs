@@ -112,9 +112,45 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId)
         {
+            var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
+
+            List<object> devices = new List<object>();
+
+            foreach (var d_UserDevice in d_UserDevices)
+            {
+                var bindStatus = new FieldModel();
+                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
+                {
+                    bindStatus = new FieldModel(1, "未绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                {
+                    bindStatus = new FieldModel(2, "已绑定");
+                }
+                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                {
+                    bindStatus = new FieldModel(3, "已解绑");
+                }
+
+                devices.Add(new
+                {
+                    Id = d_UserDevice.DeviceId,
+                    BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
+                    UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
+                    BindStatus = bindStatus
+                });
+            }
 
             var ret = new
             {
+                UserInfo = new
+                {
+                    Avatar = d_ClientUser.Avatar,
+                    SignName = d_ClientUser.NickName
+                },
+                Devices = devices,
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
             };
 
