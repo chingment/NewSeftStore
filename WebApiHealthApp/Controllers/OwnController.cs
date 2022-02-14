@@ -17,11 +17,11 @@ namespace WebApiHealthApp.Controllers
 {
     public class OwnController : OwnApiBaseController
     {
-        //初始页面-我的信息
+        //我的信息
         [HttpGet]
-        public OwnApiHttpResponse InitInfo()
+        public OwnApiHttpResponse Info()
         {
-            var result = HealthAppServiceFactory.Own.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            var result = HealthAppServiceFactory.Own.Info(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 

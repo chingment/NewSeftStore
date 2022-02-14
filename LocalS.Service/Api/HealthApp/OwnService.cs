@@ -110,7 +110,7 @@ namespace LocalS.Service.Api.HealthApp
 
         }
 
-        public CustomJsonResult InitInfo(string operater, string userId)
+        public CustomJsonResult Info(string operater, string userId)
         {
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
