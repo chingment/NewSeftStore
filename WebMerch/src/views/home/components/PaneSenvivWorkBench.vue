@@ -200,10 +200,10 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                  <el-button v-if="scope.row.status.value===1||scope.row.status.value===2" type="text" size="mini" @click="onHandleTask(scope.row,'task_handle')">
+                  <el-button v-if="scope.row.status.value===1||scope.row.status.value===2" type="text" size="mini" @click="onHandleTask(scope.row,'health_sug')">
                     处理
                   </el-button>
-                  <el-button v-else-if="scope.row.status.value===3" type="text" size="mini" @click="onHandleTask(scope.row,'task_saw')">
+                  <el-button v-else-if="scope.row.status.value===3" type="text" size="mini" @click="onHandleTask(scope.row,'health_sug')">
                     查看
                   </el-button>
                 </template>

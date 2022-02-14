@@ -17,6 +17,7 @@ namespace LocalS.Entity
     {
         None = 0,
         Normal = 1,
+        Lady = 2,
         PrePregnancy = 24,
         Pregnancy = 25,
         Postpartum = 26

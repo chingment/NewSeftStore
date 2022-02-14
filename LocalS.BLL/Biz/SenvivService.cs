@@ -1399,7 +1399,7 @@ namespace LocalS.BLL
                     CurrentDb.SenvivHealthDayReport.Add(d_DayReport);
                     CurrentDb.SaveChanges();
 
-                    SendDayReport(d_DayReport.Id,d_DayReport.RptSummary,d_DayReport.RptSuggest);
+                    //SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
 
                     #endregion
                 }
@@ -1890,13 +1890,22 @@ namespace LocalS.BLL
         public bool SendDayReport(string rptId, string rptSummary, string rptSuggest)
         {
             var d_DayReport = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_DayReport.SvUserId).FirstOrDefault();
+
+            string theme = "green";
+
+            if (d_SenvivUser.Sex == "2")
+            {
+                theme = "pink";
+            }
+
             d_DayReport.RptSummary = rptSummary;
             d_DayReport.RptSuggest = rptSuggest;
 
             var template = GetWxPaTpl(d_DayReport.SvUserId, "day_report");
 
             string first = "您好，" + d_DayReport.HealthDate.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
-            string url = "http://health.17fanju.com/report/day?rptId=" + rptId + "&theme=green";
+            string url = "http://health.17fanju.com/report/day?rptId=" + rptId + "&theme=" + theme;
             string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
             string keyword2 = "总体评分" + d_DayReport.HealthScore + "分";
             string remark = "感谢您的支持，如需查看详情报告信息请点击";

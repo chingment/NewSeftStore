@@ -112,6 +112,19 @@ namespace LocalS.Service.Api.HealthApp
             string medicine = GetAnswerValue(rop.Answers["medicine"]);
             string ladyidentity = rop.Answers["ladyidentity"].ToString();
 
+            E_SenvivUserCareMode careMode = E_SenvivUserCareMode.Normal;
+
+            if (sex == "2")
+            {
+                if (ladyidentity == "3")
+                {
+                    careMode = E_SenvivUserCareMode.Pregnancy;
+                }
+                else
+                {
+                    careMode = E_SenvivUserCareMode.Lady;
+                }
+            }
 
             LogUtil.Info("perplexs:" + perplexs);
 
@@ -169,6 +182,7 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUser.Avatar = d_User.Avatar;
                         d_SenvivUser.PhoneNumber = d_User.PhoneNumber;
                         d_SenvivUser.Sex = sex;
+                        d_SenvivUser.CareMode = careMode;
                         d_SenvivUser.CreateTime = DateTime.Now;
                         d_SenvivUser.Creator = d_User.Id;
                         CurrentDb.SenvivUser.Add(d_SenvivUser);
@@ -187,6 +201,7 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUser.Medicine = medicine;
                         d_SenvivUser.SubHealth = subhealth;
                         d_SenvivUser.Chronicdisease = chronicdisease;
+                        d_SenvivUser.CareMode = careMode;
                         d_SenvivUser.MendTime = DateTime.Now;
                         d_SenvivUser.Mender = d_User.Id;
                     }
@@ -239,6 +254,7 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.Medicine = medicine;
                     d_SenvivUser.SubHealth = subhealth;
                     d_SenvivUser.Chronicdisease = chronicdisease;
+                    d_SenvivUser.CareMode = careMode;
                     d_SenvivUser.MendTime = DateTime.Now;
                     d_SenvivUser.Mender = d_User.Id;
                     CurrentDb.SaveChanges();
