@@ -29,7 +29,7 @@ const router = new VueRouter({
     {
       path: '/device/info',
       component: () => import('@/views/device/info'),
-      meta: { title: '设备信息', isAuth: true }
+      meta: { title: '设备管理', isAuth: true }
     },
     {
       path: '/quest/fill/tp1',

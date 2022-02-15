@@ -2,7 +2,7 @@
   <div id="pg_device_info">
     <div class="step-1">
       <div class="lm-header-big">
-        <div class="bg-title">设备解绑</div>
+        <div class="bg-title">设备管理</div>
         <div class="sm-title">以下是您已绑定的设备</div>
       </div>
 
