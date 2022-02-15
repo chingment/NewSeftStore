@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.Merch
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var users = CurrentDb.SenvivUser.Where(m => merchIds.Contains(m.MerchId)).ToList();
+            var users = CurrentDb.SenvivUser.Where(m => merchIds.Contains(m.MerchId) && m.DeviceCount > 0).ToList();
 
             var userCount = users.Count();
             var careLevel0 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.None).Count();

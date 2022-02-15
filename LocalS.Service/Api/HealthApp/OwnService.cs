@@ -120,6 +120,14 @@ namespace LocalS.Service.Api.HealthApp
 
             foreach (var d_UserDevice in d_UserDevices)
             {
+                var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
+                var signName = "";
+
+                if (d_SenvivUser != null)
+                {
+                    signName = d_SenvivUser.FullName;
+                }
+
                 var bindStatus = new FieldModel();
                 if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
                 {
@@ -137,6 +145,7 @@ namespace LocalS.Service.Api.HealthApp
                 devices.Add(new
                 {
                     Id = d_UserDevice.DeviceId,
+                    SignName = signName,
                     BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
                     UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
                     BindStatus = bindStatus
@@ -151,6 +160,41 @@ namespace LocalS.Service.Api.HealthApp
                     SignName = d_ClientUser.NickName
                 },
                 Devices = devices,
+                AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+
+        }
+
+        public CustomJsonResult DeviceInfo(string operater, string userId, string deviceId)
+        {
+            var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
+
+            if (d_SenvivUserDevice == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+
+            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_SenvivUserDevice.SvUserId).FirstOrDefault();
+            if (d_SenvivUser == null)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
+
+            var ret = new
+            {
+                DeviceInfo = new
+                {
+                    DeviceId = deviceId,
+                    FullName = d_SenvivUser.FullName,
+                    Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
+                    Birthday = d_SenvivUser.Birthday.ToUnifiedFormatDate(),
+                    Height = d_SenvivUser.Height,
+                    Weight = d_SenvivUser.Weight,
+                    Perplex = new FieldModel(d_SenvivUser.Perplex, SvUtil.GetPerplexNames(d_SenvivUser.Perplex, d_SenvivUser.PerplexOt)),
+                    Chronicdisease = new FieldModel(d_SenvivUser.Perplex, SvUtil.GetChronicdiseaseNames(d_SenvivUser.Chronicdisease, "")),
+                    Medicalhis = new FieldModel(d_SenvivUser.Perplex, SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis, d_SenvivUser.MedicalHisOt)),
+                    Medicine = new FieldModel(d_SenvivUser.Perplex, SvUtil.GetMedicineNames(d_SenvivUser.Medicine, d_SenvivUser.MedicineOt)),
+                    SubHealth = new FieldModel(d_SenvivUser.SubHealth, SvUtil.GetSubHealthNames(d_SenvivUser.SubHealth, d_SenvivUser.SubHealthOt)),
+                },
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
             };
 

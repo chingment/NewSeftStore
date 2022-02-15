@@ -145,7 +145,8 @@ namespace LocalS.Service.Api.Merch
 
             var query = (from u in CurrentDb.SenvivUser
                          where
-                         merchIds.Contains(u.MerchId)
+                         merchIds.Contains(u.MerchId) &&
+                         u.DeviceCount > 0
                          && ((rup.Name == null || u.NickName.Contains(rup.Name)) ||
                          (rup.Name == null || u.FullName.Contains(rup.Name)))
                          select u);
@@ -255,8 +256,8 @@ namespace LocalS.Service.Api.Merch
                 Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
                 Sas = new FieldModel(d_SenvivUser.Sas, SvUtil.GetSasName(d_SenvivUser.Sas)),
                 IsUseBreathMach = new FieldModel(d_SenvivUser.IsUseBreathMach, SvUtil.GetIsUseBreathMachName(d_SenvivUser.IsUseBreathMach)),
-                MedicalHis = new FieldModel(d_SenvivUser.MedicalHis, SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis)),
-                Medicine = new FieldModel(d_SenvivUser.Medicine, SvUtil.GetMedicineNames(d_SenvivUser.Medicine)),
+                MedicalHis = new FieldModel(d_SenvivUser.MedicalHis, SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis, d_SenvivUser.MedicalHisOt)),
+                Medicine = new FieldModel(d_SenvivUser.Medicine, SvUtil.GetMedicineNames(d_SenvivUser.Medicine, d_SenvivUser.MedicineOt)),
                 PhoneNumber = d_SenvivUser.PhoneNumber,
                 LastReportId = d_SenvivUser.LastReportId,
                 LastReportTime = d_SenvivUser.LastReportTime,

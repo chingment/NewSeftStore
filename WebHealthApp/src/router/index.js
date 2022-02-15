@@ -17,6 +17,11 @@ const router = new VueRouter({
       meta: { title: '我的信息', isAuth: true }
     },
     {
+      path: '/own/deviceinfo',
+      component: () => import('@/views/own/deviceinfo'),
+      meta: { title: '设备信息', isAuth: true }
+    },
+    {
       path: '/device/bind',
       component: () => import('@/views/device/bind'),
       meta: { title: '设备绑定', isAuth: true }

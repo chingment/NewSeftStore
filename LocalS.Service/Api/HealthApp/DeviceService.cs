@@ -88,6 +88,20 @@ namespace LocalS.Service.Api.HealthApp
 
             foreach (var d_UserDevice in d_UserDevices)
             {
+                var signName = d_User.NickName;
+
+                if (!string.IsNullOrEmpty(d_UserDevice.SvUserId))
+                {
+                    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
+                    if (d_SenvivUser != null)
+                    {
+                        if (!string.IsNullOrEmpty(d_SenvivUser.FullName))
+                        {
+                            signName = d_SenvivUser.FullName;
+                        }
+                    }
+                }
+
                 var bindStatus = new FieldModel();
                 if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
                 {
@@ -105,7 +119,7 @@ namespace LocalS.Service.Api.HealthApp
                 devices.Add(new
                 {
                     Id = d_UserDevice.DeviceId,
-                    UserName = d_User.NickName,
+                    SignName = signName,
                     BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
                     UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
                     BindStatus = bindStatus

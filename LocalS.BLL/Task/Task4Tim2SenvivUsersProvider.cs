@@ -100,6 +100,7 @@ namespace LocalS.BLL.Task
                         if (d_SenvivUser != null)
                         {
                             useId = d_SenvivUser.UserId;
+
                         }
 
                         //if (d_SenvivUser == null)
@@ -201,11 +202,26 @@ namespace LocalS.BLL.Task
                         //    CurrentDb.SaveChanges();
                         //}
 
-                        if (i_SenvivUser.products != null)
+                        if (i_SenvivUser.products == null)
                         {
+                            if (d_SenvivUser != null)
+                            {
+                                d_SenvivUser.DeviceCount = 0;
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            if (d_SenvivUser != null)
+                            {
+                                d_SenvivUser.DeviceCount = i_SenvivUser.products.Count;
+                                CurrentDb.SaveChanges();
+                            }
+
                             var products = i_SenvivUser.products;
                             foreach (var device in products)
                             {
+
                                 if (string.IsNullOrEmpty(useId))
                                 {
                                     var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == useId && m.DeviceId == device.sn).FirstOrDefault();
@@ -235,6 +251,7 @@ namespace LocalS.BLL.Task
                                 }
                             }
                         }
+
 
 
                     }

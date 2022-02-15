@@ -95,6 +95,100 @@ namespace LocalS.BLL
                     return "";
             }
         }
+
+        public static string GetPerplexNames(string value,string ot)
+        {
+            List<string> names = new List<string>();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] arrs = value.Split(',');
+
+                if (arrs != null)
+                {
+                    foreach (var val in arrs)
+                    {
+                        var name = GetPerplexName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            names.Add(name);
+                        }
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(ot))
+            {
+                names.Add(ot);
+            }
+            return string.Join(",", names);
+        }
+
+        public static string GetSubHealthName(string value)
+        {
+            return "";
+        }
+
+        public static string GetSubHealthNames(string value, string ot)
+        {
+            List<string> names = new List<string>();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] arrs = value.Split(',');
+
+                if (arrs != null)
+                {
+                    foreach (var val in arrs)
+                    {
+                        var name = GetSubHealthName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            names.Add(name);
+                        }
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(ot))
+            {
+                names.Add(ot);
+            }
+            return string.Join(",", names);
+
+        }
+
+        public static string GetChronicdiseaseName(string value)
+        {
+            return "";
+        }
+
+        public static string GetChronicdiseaseNames(string value, string ot)
+        {
+            List<string> names = new List<string>();
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] arrs = value.Split(',');
+
+                if (arrs != null)
+                {
+                    foreach (var val in arrs)
+                    {
+                        var name = GetChronicdiseaseName(val);
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            names.Add(name);
+                        }
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(ot))
+            {
+                names.Add(ot);
+            }
+            return string.Join(",", names);
+
+        }
+
         public static List<EleTag> GetSignTags(string perplex, string otherPerplex)
         {
             var tags = new List<EleTag>();
@@ -137,7 +231,7 @@ namespace LocalS.BLL
                     return "";
             }
         }
-        public static string GetMedicalHisNames(string value)
+        public static string GetMedicalHisNames(string value,string ot)
         {
             List<string> names = new List<string>();
 
@@ -157,7 +251,10 @@ namespace LocalS.BLL
                     }
                 }
             }
-
+            if (!string.IsNullOrEmpty(ot))
+            {
+                names.Add(ot);
+            }
             return string.Join(",", names);
 
         }
@@ -184,7 +281,7 @@ namespace LocalS.BLL
                     return "";
             }
         }
-        public static string GetMedicineNames(string value)
+        public static string GetMedicineNames(string value, string ot)
         {
             List<string> names = new List<string>();
 
@@ -205,7 +302,10 @@ namespace LocalS.BLL
                     }
                 }
             }
-
+            if (!string.IsNullOrEmpty(ot))
+            {
+                names.Add(ot);
+            }
             return string.Join(",", names);
         }
         //肺炎情况
@@ -267,7 +367,7 @@ namespace LocalS.BLL
                 return 0;
             try
             {
-                int c = Convert.ToInt32(obj);
+                int c = Convert.ToInt32(Convert.ToDecimal(obj));
                 return c;
             }
             catch (Exception ex)

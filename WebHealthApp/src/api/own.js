@@ -32,9 +32,18 @@ export function info(params) {
   })
 }
 
+export function deviceInfo(params) {
+  return request({
+    url: '/own/deviceInfo',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
   authTokenCheck: authTokenCheck,
-  info: info
+  info: info,
+  deviceInfo: deviceInfo
 }

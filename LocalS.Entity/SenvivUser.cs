@@ -69,6 +69,8 @@ namespace LocalS.Entity
         //过敏药
         public string Allergy { get; set; }
         public string AllergyOt { get; set; }
+
+        public int DeviceCount { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

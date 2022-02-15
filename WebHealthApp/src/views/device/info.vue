@@ -8,11 +8,11 @@
 
       <div v-for="(item, index) in devices" :key="index" class="device">
         <div class="form">
-          <mt-cell title="设备号">
+          <mt-cell title="设备号" is-link @click.native="onDeviceInfo(item)">
             <span>{{ item.id }}</span>
           </mt-cell>
           <mt-cell title="使用者">
-            <span>{{ item.userName }}</span>
+            <span>{{ item.signName }}</span>
           </mt-cell>
           <mt-cell title="绑定状态">
             <span>{{ item.bindStatus.text }}</span>
@@ -70,6 +70,11 @@ export default {
           this.loading = false
         })
       })
+    },
+    onDeviceInfo(item) {
+      this.$router.push({ path: '/own/deviceinfo', query: {
+        deviceId: item.id
+      }})
     }
   }
 }
