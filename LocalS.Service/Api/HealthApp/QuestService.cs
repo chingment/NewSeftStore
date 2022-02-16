@@ -55,28 +55,6 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-        public string GetAnswerValue(object obj)
-        {
-            string str = null;
-            try
-            {
-
-
-                string t1 = obj.ToJsonString();
-
-                string[] a1 = t1.ToJsonObject<List<string>>().ToArray();
-                str = string.Join(",", a1);
-
-                return str;
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return str;
-        }
-
         public CustomJsonResult Fill(string operater, string userId, RopQuestFill rop)
         {
             var result = new CustomJsonResult();
@@ -105,7 +83,7 @@ namespace LocalS.Service.Api.HealthApp
             string birthday = rop.Answers["birthday"].ToString();
             string height = rop.Answers["height"].ToString();
             string weight = rop.Answers["weight"].ToString();
-            string perplexs = GetAnswerValue(rop.Answers["perplexs"]);
+            string perplex = GetAnswerValue(rop.Answers["perplex"]);
             string subhealth = GetAnswerValue(rop.Answers["subhealth"]);
             string chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
             string medicalhis = GetAnswerValue(rop.Answers["medicalhis"]);
@@ -126,7 +104,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
             }
 
-            LogUtil.Info("perplexs:" + perplexs);
+            LogUtil.Info("perplex:" + perplex);
 
             if (string.IsNullOrEmpty(d_UserDevice.SvUserId))
             {
@@ -148,7 +126,7 @@ namespace LocalS.Service.Api.HealthApp
                         createtime = "2020-06-22T10:23:58.784Z", //创建时间
                         updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                         SAS = d_User.Sex,
-                        Perplex = perplexs, //目前困扰 （查看字典表）
+                        Perplex = perplex, //目前困扰 （查看字典表）
                         OtherPerplex = "", //目前困扰输入其它 ,
                         Medicalhistory = medicalhis, //既往史 （查看字典表）
                         OtherFamilyhistory = "", //既往史其它 ,
@@ -172,7 +150,7 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUser.FullName = fullName;
                         d_SenvivUser.Height = height;
                         d_SenvivUser.Weight = weight;
-                        d_SenvivUser.Perplex = perplexs;
+                        d_SenvivUser.Perplex = perplex;
                         d_SenvivUser.MedicalHis = medicalhis;
                         d_SenvivUser.Medicine = medicine;
                         d_SenvivUser.SubHealth = subhealth;
@@ -196,7 +174,7 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUser.Birthday = CommonUtil.ConverToDateTime(birthday);
                         d_SenvivUser.Height = height;
                         d_SenvivUser.Weight = weight;
-                        d_SenvivUser.Perplex = perplexs;
+                        d_SenvivUser.Perplex = perplex;
                         d_SenvivUser.MedicalHis = medicalhis;
                         d_SenvivUser.Medicine = medicine;
                         d_SenvivUser.SubHealth = subhealth;
@@ -229,7 +207,7 @@ namespace LocalS.Service.Api.HealthApp
                         createtime = "2020-06-22T10:23:58.784Z", //创建时间
                         updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                         SAS = sex,
-                        Perplex = perplexs, //目前困扰 （查看字典表）
+                        Perplex = perplex, //目前困扰 （查看字典表）
                         OtherPerplex = "", //目前困扰输入其它 ,
                         Medicalhistory = medicalhis, //既往史 （查看字典表）
                         OtherFamilyhistory = "", //既往史其它 ,
@@ -249,7 +227,7 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.Birthday = CommonUtil.ConverToDateTime(birthday);
                     d_SenvivUser.Height = height;
                     d_SenvivUser.Weight = weight;
-                    d_SenvivUser.Perplex = perplexs;
+                    d_SenvivUser.Perplex = perplex;
                     d_SenvivUser.MedicalHis = medicalhis;
                     d_SenvivUser.Medicine = medicine;
                     d_SenvivUser.SubHealth = subhealth;

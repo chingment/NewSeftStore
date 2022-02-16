@@ -167,6 +167,7 @@
     <Compile Include="Api\HealthApp\RModels\RopDayReportGetDetails.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindSerialNo.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopOwnDeviceInfoEdit.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnGetPhoneVaildCode.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceUnBind.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthInfo.cs" />

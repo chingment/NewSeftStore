@@ -194,7 +194,7 @@ export default {
       var question = this.questions[q_idx]
       if (question.required) {
         var val = question.value
-        if (val.length <= 0) {
+        if (val == null || val.length <= 0) {
           this.$toast('至少选择一个')
           return
         }
@@ -245,10 +245,12 @@ export default {
     },
     isChecklistVal(item, val) {
       var isFlag = false
-      for (var i = 0; i < item.length; i++) {
-        if (item[i] === val) {
-          isFlag = true
-          break
+      if (item != null) {
+        for (var i = 0; i < item.length; i++) {
+          if (item[i] === val) {
+            isFlag = true
+            break
+          }
         }
       }
 
@@ -258,7 +260,9 @@ export default {
     },
     onGetCheckNullStyle(q_idx) {
       var val = this.questions[q_idx].value
-      if (val.length === 0) {
+      if (val == null) {
+        return 'qt-checklist-item'
+      } else if (val.length === 0) {
         return 'qt-checklist-item'
       } else if (val.length === 1 && val[0] === '0') {
         return 'qt-checklist-item on'

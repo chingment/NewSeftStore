@@ -40,10 +40,19 @@ export function deviceInfo(params) {
   })
 }
 
+export function deviceInfoEdit(data) {
+  return request({
+    url: '/own/deviceInfoEdit',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
   authTokenCheck: authTokenCheck,
   info: info,
-  deviceInfo: deviceInfo
+  deviceInfo: deviceInfo,
+  deviceInfoEdit: deviceInfoEdit
 }

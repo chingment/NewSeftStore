@@ -139,7 +139,7 @@ export default {
           }
         },
         {
-          id: 'perplexs',
+          id: 'perplex',
           title: '睡眠困扰',
           type: 'checklist',
           options: [

@@ -63,8 +63,9 @@ namespace LocalS.BLL
         {
             switch (value)
             {
+                case "0":
                 case "1":
-                    return "没有困扰";
+                    return "无";
                 case "2":
                     return "睡眠呼吸暂停综合症";
                 case "3":
@@ -96,7 +97,7 @@ namespace LocalS.BLL
             }
         }
 
-        public static string GetPerplexNames(string value,string ot)
+        public static string GetPerplexNames(string value, string ot)
         {
             List<string> names = new List<string>();
 
@@ -125,7 +126,31 @@ namespace LocalS.BLL
 
         public static string GetSubHealthName(string value)
         {
-            return "";
+            switch (value)
+            {
+                case "0":
+                    return "无";
+                case "1":
+                    return "疲乏无力";
+                case "2":
+                    return "情绪波动";
+                case "3":
+                    return "精力不足";
+                case "4":
+                    return "怕冷怕冷";
+                case "5":
+                    return "头昏头痛";
+                case "6":
+                    return "易于感冒";
+                case "7":
+                    return "记忆力下降";
+                case "8":
+                    return "胸闷";
+                case "9":
+                    return "肠胃问题";
+                default:
+                    return "";
+            }
         }
 
         public static string GetSubHealthNames(string value, string ot)
@@ -158,7 +183,19 @@ namespace LocalS.BLL
 
         public static string GetChronicdiseaseName(string value)
         {
-            return "";
+            switch (value)
+            {
+                case "0":
+                    return "无";
+                case "4":
+                    return "糖尿病";
+                case "5":
+                    return "高血压";
+                case "6":
+                    return "冠心病";
+                default:
+                    return "";
+            }
         }
 
         public static string GetChronicdiseaseNames(string value, string ot)
@@ -219,6 +256,8 @@ namespace LocalS.BLL
         {
             switch (value)
             {
+                case "0":
+                    return "无";
                 case "1":
                     return "重大手术史";
                 case "2":
@@ -231,7 +270,7 @@ namespace LocalS.BLL
                     return "";
             }
         }
-        public static string GetMedicalHisNames(string value,string ot)
+        public static string GetMedicalHisNames(string value, string ot)
         {
             List<string> names = new List<string>();
 
@@ -264,7 +303,7 @@ namespace LocalS.BLL
             switch (value)
             {
                 case "0":
-                    return "未服用药物";
+                    return "无";
                 case "1":
                     return "高血压药物";
                 case "2":

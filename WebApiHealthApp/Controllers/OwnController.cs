@@ -33,6 +33,13 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse DeviceInfoEdit(RopOwnDeviceInfoEdit rop)
+        {
+            var result = HealthAppServiceFactory.Own.DeviceInfoEdit(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public OwnApiHttpResponse AuthUrl(RopOwnAuthUrl rop)
         {
