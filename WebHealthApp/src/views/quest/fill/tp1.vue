@@ -149,7 +149,7 @@ export default {
             { label: '难以入睡', value: '4' },
             { label: '呼吸暂停综合症', value: '5' }
           ],
-          required: false,
+          required: true,
           value: []
         },
         {
@@ -167,7 +167,7 @@ export default {
             { label: '胸闷', value: '8' },
             { label: '肠胃问题', value: '9' }
           ],
-          required: false,
+          required: true,
           value: []
         },
         {
@@ -179,7 +179,7 @@ export default {
             { label: '高血压', value: '5' },
             { label: '冠心病', value: '6' }
           ],
-          required: false,
+          required: true,
           value: []
         },
         {
@@ -191,12 +191,12 @@ export default {
             { label: '输血史（非献血）', value: '2' },
             { label: '传染病史', value: '3' }
           ],
-          required: false,
+          required: true,
           value: []
         },
         {
           id: 'medicine',
-          title: '服用何种药物',
+          title: '服用药物状况',
           type: 'checklist',
           options: [
             { label: '高血压药物', value: '1' },
@@ -205,7 +205,7 @@ export default {
             { label: '脑梗塞药物', value: '4' },
             { label: '治疗失眠药物', value: '5' }
           ],
-          required: false,
+          required: true,
           value: []
         }
       ]

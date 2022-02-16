@@ -21,7 +21,7 @@ namespace LocalS.Service.Api.HealthApp
             var d_SvUser = CurrentDb.SenvivUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
 
 
-            var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays;
+            var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
 
             var userInfo = new
             {

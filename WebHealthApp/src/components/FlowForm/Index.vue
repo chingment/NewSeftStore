@@ -35,6 +35,11 @@
           </div>
           <div v-if="item.type==='checklist'">
             <div class="qt-checklist">
+
+              <div :class="onGetCheckNullStyle(index)" @click="onCheckSetNull(index)">
+                <span class="label">均无</span>
+              </div>
+
               <div v-for="(option,j) in item.options" :key="option.id" :class="isChecklistVal(item.value,option.value)===false?'qt-checklist-item ' :'qt-checklist-item on'" @click="onChecklist(index,option.value)">
                 <span class="label">{{ option.label }}</span>
               </div>
@@ -216,8 +221,21 @@ export default {
         }
       }
 
-      console.log(_val)
+      if (_val <= 0) {
+        this.questions[q_idx].value = ['0']
+      } else {
+        _val.some((item, i) => {
+          if (item === '0') {
+            _val.splice(i, 1)
+            return true
+          }
+        })
+      }
+
       this.questions[q_idx].value = _val
+    },
+    onCheckSetNull(q_idx) {
+      this.questions[q_idx].value = ['0']
     },
     onChecklistAddOther(q_idx) {
       var questions = this.questions[q_idx]
@@ -237,6 +255,16 @@ export default {
       // console.log(isFlag)
 
       return isFlag
+    },
+    onGetCheckNullStyle(q_idx) {
+      var val = this.questions[q_idx].value
+      if (val.length === 0) {
+        return 'qt-checklist-item'
+      } else if (val.length === 1 && val[0] === '0') {
+        return 'qt-checklist-item on'
+      } else {
+        return 'qt-checklist-item'
+      }
     },
     openPickerByDate(index) {
       this.idx_date = index
