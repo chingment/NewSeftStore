@@ -6,14 +6,10 @@
         <div class="question-title">{{ item.title }}</div>
         <div class="question-content">
           <div v-if="item.type==='input'" class="">
-
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px">
-
               <span>{{ item.append }}</span>
             </mt-field>
-
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
-
           </div>
           <div v-if="item.type==='date'">
             <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" @click.native="openPickerByDate(index)" />
