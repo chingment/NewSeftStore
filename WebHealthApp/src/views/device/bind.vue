@@ -14,6 +14,8 @@
       </div>
       <div class="btn-scan primary-color-font" @click="onScanQrCode">点击扫一扫</div>
       <mt-button class="btn-binddevice" type="primary" @click="onSaveStep1">绑定</mt-button>
+
+      {{ tips }}
     </div>
     <div v-show="step===2" class="step-2">
       <div class="lm-header-big">
@@ -81,7 +83,8 @@ export default {
       pvcCount: '',
       pvcTimer: null,
       pvcText: '获取',
-      popupVisibleByPaQrCode: false
+      popupVisibleByPaQrCode: false,
+      tips: ''
     }
   },
   created() {
@@ -176,14 +179,20 @@ export default {
       })
     },
     onScanQrCode() {
+      var _this = this
       wx.scanQRCode({
         needResult: 1,
+        scanType: ['qrCode', 'barCode'],
         desc: 'scanQRCode desc',
         success: function(res) {
           if (res.errMsg === 'scanQRCode:ok') {
             var result = res.resultStr
             if (result.indexOf('http://') > -1 || result.indexOf('https://') > -1) {
               window.location.href = result
+            } else {
+              var code = result.split(',')
+              // _this.tips = JSON.stringify(code)
+              _this.formByBind.deviceId = code[1]
             }
           }
         }
