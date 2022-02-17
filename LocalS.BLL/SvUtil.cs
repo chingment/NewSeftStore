@@ -626,7 +626,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Id = "5";
-            jd.Name = "冠心病管控";
+            jd.Name = "糖尿病管控";
 
             val = 100 - val;
             jd.Value = val.ToString("0.#####");
