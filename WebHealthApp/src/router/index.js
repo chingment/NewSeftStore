@@ -27,6 +27,11 @@ const router = new VueRouter({
       meta: { title: '设备信息', isAuth: true }
     },
     {
+      path: '/device/infofieldedit',
+      component: () => import('@/views/device/infofieldedit'),
+      meta: { title: '设备信息', isAuth: true }
+    },
+    {
       path: '/device/manage',
       component: () => import('@/views/device/manage'),
       meta: { title: '设备管理', isAuth: true }

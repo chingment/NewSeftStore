@@ -204,6 +204,10 @@ export default {
     onChecklist(q_idx, val) {
       var _val = this.questions[q_idx].value
 
+      console.log(q_idx)
+      console.log(val)
+      console.log(_val)
+
       if (_val.length === 0) {
         _val.push(val)
       } else {
