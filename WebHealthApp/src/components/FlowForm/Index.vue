@@ -67,6 +67,7 @@
       type="date"
       :start-date="new Date('1949-10-01')"
       @confirm="onConfirmByDate"
+      @touchmove.native.stop.prevent
     />
 
     <mt-popup
@@ -78,7 +79,7 @@
         <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByGesWeek=false">取消</span>
         <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByGesWeek">确定</span>
       </div>
-      <mt-picker :slots="gesWeekSlots" @change="onValuesChangeByGesWeek" />
+      <mt-picker :slots="gesWeekSlots" @change="onValuesChangeByGesWeek" @touchmove.native.stop.prevent />
     </mt-popup>
 
   </div>
