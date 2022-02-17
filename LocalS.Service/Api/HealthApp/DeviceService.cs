@@ -332,6 +332,7 @@ namespace LocalS.Service.Api.HealthApp
             string medicine = GetAnswerValue(rop.Answers["medicine"]);
             string ladyidentity = rop.Answers["ladyidentity"].ToString();
 
+
             E_SenvivUserCareMode careMode = E_SenvivUserCareMode.Normal;
 
             if (sex == "2")

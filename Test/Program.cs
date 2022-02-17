@@ -56,6 +56,7 @@ namespace Test
 
         static void Main(string[] args)
         {
+            var c3 = Lumos.CommonUtil.GetPregnancyTime(20, 6);
             int days = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(2022, 2);
 
 
@@ -63,8 +64,8 @@ namespace Test
 
             long a = 18112;
             long b = 29401;
-           // decimal c = (decimal)a / b;
-            decimal c = Math.Round((decimal)a /b, 2);
+            // decimal c = (decimal)a / b;
+            decimal c = Math.Round((decimal)a / b, 2);
 
             decimal num1 = (decimal)1.0;
             string strNum = num1.ToString("0.#####");//0.5

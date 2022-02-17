@@ -460,9 +460,9 @@ namespace Lumos
         {
 
 
-            int toal = week * 7 + 2;
+            int toal = week * 7 + day;
 
-            DateTime t = DateTime.Now.AddDays(toal);
+            DateTime t = DateTime.Now.AddDays(-toal);
             //double week = totalDays / 7;
 
             //weekModel.Week = (int)Math.Floor(week);
@@ -481,7 +481,7 @@ namespace Lumos
             DateTime t1 = DateTime.Parse(month + "-01");
             int days = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.GetDaysInMonth(t1.Year, t1.Month);
 
-            DateTime t2 = DateTime.Parse(month + "-" + days+ " 23:59:59");
+            DateTime t2 = DateTime.Parse(month + "-" + days + " 23:59:59");
 
 
             return t2;
