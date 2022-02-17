@@ -34,7 +34,7 @@
 </template>
 <script>
 
-import { initFill, fill } from '@/api/quest'
+import { initFill, fill } from '@/api/device'
 import fromReg from '@/utils/formReg'
 import FlowForm from '@/components/FlowForm/Index.vue'
 export default {
@@ -98,7 +98,7 @@ export default {
             { label: '女', value: '2' }
           ],
           jump: {
-            '1': 'perplexs',
+            '1': 'perplex',
             '2': 'ladyidentity'
           },
           value: ''
@@ -114,10 +114,10 @@ export default {
             { label: '宝妈', value: '4' }
           ],
           jump: {
-            '1': 'perplexs',
-            '2': 'perplexs',
+            '1': 'perplex',
+            '2': 'perplex',
             '3': 'geyweek',
-            '4': 'perplexs'
+            '4': 'perplex'
           },
           value: ''
         },

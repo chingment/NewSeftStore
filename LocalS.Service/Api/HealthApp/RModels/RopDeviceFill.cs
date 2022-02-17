@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.HealthApp
 {
-    public class RopQuestFill
+    public class RopDeviceFill
     {
         public string DeviceId { get; set; }
 

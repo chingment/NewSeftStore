@@ -64,6 +64,22 @@ export function infoEdit(data) {
   })
 }
 
+export function initFill(params) {
+  return request({
+    url: '/device/initFill',
+    method: 'get',
+    params
+  })
+}
+
+export function fill(data) {
+  return request({
+    url: '/device/fill',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initBind: initBind,
   initManage: initManage,
@@ -72,6 +88,8 @@ export default {
   bindPhoneNumber: bindPhoneNumber,
   unBind: unBind,
   getPhoneValidCode: getPhoneValidCode,
-  infoEdit: infoEdit
+  infoEdit: infoEdit,
+  initFill: initFill,
+  fill: fill
 }
 

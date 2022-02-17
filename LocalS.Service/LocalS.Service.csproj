@@ -163,7 +163,6 @@
     <Compile Include="Api\HealthApp\DayReportService.cs" />
     <Compile Include="Api\HealthApp\DeviceService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />
-    <Compile Include="Api\HealthApp\QuestService.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDayReportGetDetails.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindSerialNo.cs" />
@@ -172,7 +171,7 @@
     <Compile Include="Api\HealthApp\RModels\RopDeviceUnBind.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthInfo.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthUrl.cs" />
-    <Compile Include="Api\HealthApp\RModels\RopQuestFill.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopDeviceFill.cs" />
     <Compile Include="Api\Merch\DeviceService.cs" />
     <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
     <Compile Include="Api\HealthApp\MonthReportService.cs" />

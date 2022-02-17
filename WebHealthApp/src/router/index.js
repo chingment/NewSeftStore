@@ -32,9 +32,9 @@ const router = new VueRouter({
       meta: { title: '设备管理', isAuth: true }
     },
     {
-      path: '/quest/fill/tp1',
-      component: () => import('@/views/quest/fill/tp1'),
-      meta: { title: '设备绑定', isAuth: true }
+      path: '/device/fill',
+      component: () => import('@/views/device/fill'),
+      meta: { title: '设备信息', isAuth: true }
     },
     {
       path: '/errorpage/invalid',

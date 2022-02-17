@@ -69,5 +69,20 @@ namespace WebApiHealthApp.Controllers
         }
 
 
+        [HttpGet]
+        public OwnApiHttpResponse InitFill()
+        {
+            var result = HealthAppServiceFactory.Device.InitFill(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse Fill(RopDeviceFill rop)
+        {
+            var result = HealthAppServiceFactory.Device.Fill(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+
     }
 }

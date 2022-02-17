@@ -101,7 +101,7 @@ export default {
           if (d.step === 1 || d.step === 2) {
             this.step = d.step
           } else if (d.step === 3) {
-            this.$router.push({ path: '/quest/fill/tp1', query: {
+            this.$router.push({ path: '/device/fill', query: {
               deviceId: this.formByBind.deviceId
             }})
           } else if (d.step === 4) {
@@ -166,7 +166,7 @@ export default {
 
       bindPhoneNumber(this.formByBind).then(res => {
         if (res.result === 1) {
-          this.$router.push({ path: '/quest/fill/tp1', query: {
+          this.$router.push({ path: '/device/fill', query: {
             deviceId: this.formByBind.deviceId
           }})
         } else {
