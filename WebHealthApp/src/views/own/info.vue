@@ -13,7 +13,7 @@
     </div>
 
     <div class="info-nav">
-      <mt-cell v-for="(item, index) in devices" :key="index" :title="'设备（'+item.id+'）'" is-link @click.native="onDevice(item)">
+      <mt-cell v-for="(item, index) in devices" :key="index" :title="'设备（'+item.id+'）'" is-link @click.native="onDeviceInfo(item)">
         <span style="color: green">{{ item.signName }}</span>
       </mt-cell>
     </div>
@@ -53,8 +53,8 @@ export default {
         this.loading = false
       })
     },
-    onDevice(item) {
-      this.$router.push({ path: '/own/deviceinfo', query: {
+    onDeviceInfo(item) {
+      this.$router.push({ path: '/device/info', query: {
         deviceId: item.id
       }})
     }

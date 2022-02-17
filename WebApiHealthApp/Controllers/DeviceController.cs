@@ -20,12 +20,25 @@ namespace WebApiHealthApp.Controllers
 
         //初始页面-设备信息
         [HttpGet]
-        public OwnApiHttpResponse InitInfo()
+        public OwnApiHttpResponse InitManage()
         {
-            var result = HealthAppServiceFactory.Device.InitInfo(this.CurrentUserId, this.CurrentUserId);
+            var result = HealthAppServiceFactory.Device.InitManage(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse InitInfo(string deviceId)
+        {
+            var result = HealthAppServiceFactory.Device.InitInfo(this.CurrentUserId, this.CurrentUserId, deviceId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse InfoEdit(RopDeviceInfoEdit rop)
+        {
+            var result = HealthAppServiceFactory.Device.InfoEdit(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
 
         [HttpPost]
         public OwnApiHttpResponse BindSerialNo(RopDeviceBindSerialNo rop)

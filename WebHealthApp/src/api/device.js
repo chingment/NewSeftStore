@@ -8,6 +8,14 @@ export function initBind(params) {
   })
 }
 
+export function initManage(params) {
+  return request({
+    url: '/device/initManage',
+    method: 'get',
+    params
+  })
+}
+
 export function initInfo(params) {
   return request({
     url: '/device/initInfo',
@@ -48,12 +56,22 @@ export function getPhoneValidCode(data) {
   })
 }
 
+export function infoEdit(data) {
+  return request({
+    url: '/device/infoEdit',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initBind: initBind,
+  initManage: initManage,
   initInfo: initInfo,
   bindSerialNo: bindSerialNo,
   bindPhoneNumber: bindPhoneNumber,
   unBind: unBind,
-  getPhoneValidCode: getPhoneValidCode
+  getPhoneValidCode: getPhoneValidCode,
+  infoEdit: infoEdit
 }
 

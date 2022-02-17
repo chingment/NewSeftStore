@@ -25,19 +25,6 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpGet]
-        public OwnApiHttpResponse DeviceInfo(string deviceId)
-        {
-            var result = HealthAppServiceFactory.Own.DeviceInfo(this.CurrentUserId, this.CurrentUserId, deviceId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse DeviceInfoEdit(RopOwnDeviceInfoEdit rop)
-        {
-            var result = HealthAppServiceFactory.Own.DeviceInfoEdit(this.CurrentUserId, this.CurrentUserId, rop);
-            return new OwnApiHttpResponse(result);
-        }
 
         [HttpPost]
         [AllowAnonymous]

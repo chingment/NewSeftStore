@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocalS.Service.Api.HealthApp
 {
-    public class RopOwnDeviceInfoEdit
+    public class RopDeviceInfoEdit
     {
         public string SvUserId { get; set; }
         public Dictionary<string, object> Answers { get; set; }

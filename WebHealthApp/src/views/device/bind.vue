@@ -105,7 +105,7 @@ export default {
               deviceId: this.formByBind.deviceId
             }})
           } else if (d.step === 4) {
-            this.$router.push('/device/info')
+            this.$router.push('/device/manage')
           }
           var openJsSdk = d.openJsSdk
           wx.config({
