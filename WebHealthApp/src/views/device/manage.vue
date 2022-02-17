@@ -1,5 +1,5 @@
 <template>
-  <div id="pg_device_info">
+  <div id="pg_device_manage">
     <div class="step-1">
       <div class="lm-header-big">
         <div class="bg-title">设备管理</div>
@@ -82,7 +82,7 @@ export default {
 
 <style lang="scss" scope>
 
-#pg_device_info {
+#pg_device_manage {
   padding: 20px;
 
   .form {

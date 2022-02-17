@@ -148,3 +148,13 @@ export function delUrlParams(url, names) {
   }
   return url
 }
+
+export function getNowDate() {
+  const date = new Date()
+  const y = date.getFullYear()
+  let m = date.getMonth() + 1
+  let d = date.getDate()
+  m = m < 10 ? '0' + m : m
+  d = d < 10 ? '0' + d : d
+  return y + '-' + m + '-' + d
+}

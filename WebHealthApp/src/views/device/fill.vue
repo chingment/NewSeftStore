@@ -1,5 +1,5 @@
 <template>
-  <div class="quest-fill-tp1">
+  <div id="pg_device_fill">
     <div class="lm-header-big">
       <div class="bg-title">资料完善</div>
       <div class="sm-title">完善资料更准更好的为你服务</div>
@@ -37,8 +37,9 @@
 import { initFill, fill } from '@/api/device'
 import fromReg from '@/utils/formReg'
 import FlowForm from '@/components/FlowForm/Index.vue'
+import { getNowDate } from '@/utils/commonUtil'
 export default {
-  name: 'QuestFillTp1',
+  name: 'DeviceFill',
   components: {
     FlowForm
   },
@@ -279,7 +280,7 @@ export default {
 </script>
 <style lang="scss" scope>
 
-.quest-fill-tp1 {
+#pg_device_fill {
   height: 100%;
   padding: 20px;
 

@@ -1,7 +1,6 @@
 <template>
   <div
-    id="device_info"
-    class="own-info"
+    id="pg_device_info"
     style="display: flex;
     flex-direction: column;
     height: 100%;"
@@ -14,34 +13,34 @@
       <mt-cell title="设备号">
         <span>{{ deviceInfo.deviceId }}</span>
       </mt-cell>
-      <mt-cell title="姓名" is-link @click.native="onEditField('fullName',deviceInfo.fullName)">
+      <mt-cell title="姓名" is-link @click.native="onFieldEdit('fullName',deviceInfo.fullName)">
         <span>{{ deviceInfo.fullName }}</span>
       </mt-cell>
-      <mt-cell title="性别" is-link @click.native="onEditField('sex',deviceInfo.sex.value)">
+      <mt-cell title="性别" is-link @click.native="onFieldEdit('sex',deviceInfo.sex.value)">
         <span>{{ deviceInfo.sex.text }}</span>
       </mt-cell>
-      <mt-cell title="生日" is-link @click.native="onEditField('birthday',deviceInfo.birthday)">
+      <mt-cell title="生日" is-link @click.native="onFieldEdit('birthday',deviceInfo.birthday)">
         <span>{{ deviceInfo.birthday }}</span>
       </mt-cell>
-      <mt-cell title="身高" is-link @click.native="onEditField('height',deviceInfo.height)">
-        <span>{{ deviceInfo.height }}</span>
+      <mt-cell title="身高" is-link @click.native="onFieldEdit('height',deviceInfo.height)">
+        <span>{{ deviceInfo.height }}cm</span>
       </mt-cell>
-      <mt-cell title="体重" is-link @click.native="onEditField('weight',deviceInfo.weight)">
-        <span>{{ deviceInfo.weight }}</span>
+      <mt-cell title="体重" is-link @click.native="onFieldEdit('weight',deviceInfo.weight)">
+        <span>{{ deviceInfo.weight }}kg</span>
       </mt-cell>
-      <mt-cell title="睡眠困扰" is-link @click.native="onEditField('perplex',deviceInfo.perplex.value)">
+      <mt-cell title="睡眠困扰" is-link @click.native="onFieldEdit('perplex',deviceInfo.perplex.value)">
         <span>{{ deviceInfo.perplex.text }}</span>
       </mt-cell>
-      <mt-cell title="亚健康困扰" is-link @click.native="onEditField('subhealth',deviceInfo.subHealth.value)">
+      <mt-cell title="亚健康困扰" is-link @click.native="onFieldEdit('subhealth',deviceInfo.subHealth.value)">
         <span>{{ deviceInfo.subHealth.text }}</span>
       </mt-cell>
-      <mt-cell title="慢性困扰" is-link @click.native="onEditField('chronicdisease',deviceInfo.chronicdisease.value)">
+      <mt-cell title="慢性困扰" is-link @click.native="onFieldEdit('chronicdisease',deviceInfo.chronicdisease.value)">
         <span>{{ deviceInfo.chronicdisease.text }}</span>
       </mt-cell>
-      <mt-cell title="既往病史" is-link @click.native="onEditField('medicalhis',deviceInfo.medicalhis.value)">
+      <mt-cell title="既往病史" is-link @click.native="onFieldEdit('medicalhis',deviceInfo.medicalhis.value)">
         <span>{{ deviceInfo.medicalhis.text }}</span>
       </mt-cell>
-      <mt-cell title="服用何种药物" is-link @click.native="onEditField('medicine',deviceInfo.medicine.value)">
+      <mt-cell title="服用何种药物" is-link @click.native="onFieldEdit('medicine',deviceInfo.medicine.value)">
         <span>{{ deviceInfo.medicine.text }}</span>
       </mt-cell>
     </div>
@@ -51,7 +50,7 @@
 <script>
 import { initInfo } from '@/api/device'
 export default {
-  name: 'OwnDeviceInfo',
+  name: 'DeviceInfo',
   data() {
     return {
       loading: false,
@@ -89,10 +88,16 @@ export default {
         this.loading = false
       })
     },
-    onEditField(field, value) {
+    onFieldEdit(field, value) {
       sessionStorage.setItem('question_field', field)
+      var question_value_type = typeof value
+      if (question_value_type === 'object') {
+        value = JSON.stringify(value)
+      }
+      sessionStorage.setItem('question_value_type', question_value_type)
       sessionStorage.setItem('question_value', value)
-      this.$router.push({ path: '/device/infofieldedit', query: {
+
+      this.$router.push({ path: '/device/infofield', query: {
         deviceId: this.deviceId,
         svUserId: this.deviceInfo.svUserId
       }})
@@ -103,7 +108,7 @@ export default {
 
 <style lang="scss" scope>
 
-#device_info {
+#pg_device_info {
   padding: 20px;
 
   .mint-cell-title{

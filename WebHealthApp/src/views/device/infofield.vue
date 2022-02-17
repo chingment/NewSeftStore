@@ -1,7 +1,6 @@
 <template>
   <div
-    id="device_info"
-    class="own-info"
+    id="pg_device_info_field"
     style="display: flex;
     flex-direction: column;
     height: 100%;"
@@ -22,7 +21,7 @@ import { infoEdit } from '@/api/device'
 import FlowForm from '@/components/FlowForm/Index.vue'
 import fromReg from '@/utils/formReg'
 export default {
-  name: 'OwnDeviceInfo',
+  name: 'DeviceInfoField',
   components: {
     FlowForm
   },
@@ -190,9 +189,9 @@ export default {
     this.svUserId = this.$route.query.svUserId
     var field = sessionStorage.getItem('question_field')
     var value = sessionStorage.getItem('question_value')
-
-    if (field === 'perplex' || field === 'subhealth' || field === 'chronicdisease' || field === 'medicalhis' || field === 'medicine') {
-      value = value.split(',')
+    var value_type = sessionStorage.getItem('question_value_type')
+    if (value_type === 'object') {
+      value = JSON.parse(value)
     }
 
     var questions = this.questions
@@ -222,12 +221,13 @@ export default {
 
 <style lang="scss" scope>
 
-#device_info {
+#pg_device_info_field {
   padding: 20px;
 
-  .mint-cell-title{
+  .mint-cell-title {
     display: flex;
-    .mint-cell-text{
+
+    .mint-cell-text {
       width: 100px;
     }
   }
