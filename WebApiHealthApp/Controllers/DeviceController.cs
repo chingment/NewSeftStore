@@ -18,7 +18,7 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        //初始页面-设备信息
+        //初始页面-设备管理
         [HttpGet]
         public OwnApiHttpResponse InitManage()
         {
@@ -26,6 +26,7 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        //初始页面-设备信息
         [HttpGet]
         public OwnApiHttpResponse InitInfo(string deviceId)
         {
@@ -33,17 +34,26 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-        [HttpPost]
-        public OwnApiHttpResponse InfoEdit(RopDeviceInfoEdit rop)
+        //初始页面-设备信息完善
+        [HttpGet]
+        public OwnApiHttpResponse InitFill()
         {
-            var result = HealthAppServiceFactory.Device.InfoEdit(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = HealthAppServiceFactory.Device.InitFill(this.CurrentUserId, this.CurrentUserId);
             return new OwnApiHttpResponse(result);
         }
+
 
         [HttpPost]
         public OwnApiHttpResponse BindSerialNo(RopDeviceBindSerialNo rop)
         {
             var result = HealthAppServiceFactory.Device.BindSerialNo(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse GetPhoneValidCode(RopOwnGetPhoneVaildCode rop)
+        {
+            var result = HealthAppServiceFactory.Device.GetPhoneValidCode(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
 
@@ -55,6 +65,13 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse Fill(RopDeviceFill rop)
+        {
+            var result = HealthAppServiceFactory.Device.Fill(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
         public OwnApiHttpResponse UnBind(RopDeviceUnBind rop)
         {
             var result = HealthAppServiceFactory.Device.UnBind(this.CurrentUserId, this.CurrentUserId, rop);
@@ -62,27 +79,10 @@ namespace WebApiHealthApp.Controllers
         }
 
         [HttpPost]
-        public OwnApiHttpResponse GetPhoneValidCode(RopOwnGetPhoneVaildCode rop)
+        public OwnApiHttpResponse InfoEdit(RopDeviceInfoEdit rop)
         {
-            var result = HealthAppServiceFactory.Device.GetPhoneValidCode(this.CurrentUserId, this.CurrentUserId, rop);
+            var result = HealthAppServiceFactory.Device.InfoEdit(this.CurrentUserId, this.CurrentUserId, rop);
             return new OwnApiHttpResponse(result);
         }
-
-
-        [HttpGet]
-        public OwnApiHttpResponse InitFill()
-        {
-            var result = HealthAppServiceFactory.Device.InitFill(this.CurrentUserId, this.CurrentUserId);
-            return new OwnApiHttpResponse(result);
-        }
-
-        [HttpPost]
-        public OwnApiHttpResponse Fill(RopDeviceFill rop)
-        {
-            var result = HealthAppServiceFactory.Device.Fill(this.CurrentUserId, this.CurrentUserId, rop);
-            return new OwnApiHttpResponse(result);
-        }
-
-
     }
 }
