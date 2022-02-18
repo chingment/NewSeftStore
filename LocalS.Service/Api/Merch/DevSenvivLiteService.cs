@@ -138,8 +138,29 @@ namespace LocalS.Service.Api.Merch
                         d_MerchDevice.IsStopUse = true;
                     }
 
+
                     d_MerchDevice.Mender = operater;
                     d_MerchDevice.MendTime = DateTime.Now;
+                }
+
+                var d_SenvivUserDevices = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).ToList();
+
+                foreach (var d_SenvivUserDevice in d_SenvivUserDevices)
+                {
+
+                    var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUserDevice.SvDeptId);
+
+                    var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUserDevice.SvUserId, rop.DeviceId);
+
+                    d_SenvivUserDevice.BindDeviceIdTime = null;
+                    d_SenvivUserDevice.BindPhoneTime = null;
+                    d_SenvivUserDevice.InfoFillTime = null;
+                    d_SenvivUserDevice.UnBindTime = DateTime.Now;
+                    d_SenvivUserDevice.BindStatus = SenvivUserDeviceBindStatus.UnBind;
+                    d_SenvivUserDevice.Creator = operater;
+                    d_SenvivUserDevice.CreateTime = DateTime.Now;
+                    CurrentDb.SaveChanges();
+
                 }
 
 
@@ -187,6 +208,13 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.MerchDevice.Add(d_CMerchDevice);
                     CurrentDb.SaveChanges();
                 }
+                else
+                {
+                    d_CMerchDevice.IsStopUse = false;
+                    d_CMerchDevice.Mender = operater;
+                    d_CMerchDevice.MendTime = DateTime.Now;
+                    CurrentDb.SaveChanges();
+                }
 
                 var d_PMerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == old_CurUseMerchId).FirstOrDefault();
                 if (d_PMerchDevice != null)
@@ -195,18 +223,6 @@ namespace LocalS.Service.Api.Merch
                     d_PMerchDevice.Creator = operater;
                     d_PMerchDevice.CreateTime = DateTime.Now;
                 }
-
-
-
-                //var box = SdkFactory.Senviv.GetBox(null, d_Device.Id);
-                //if (box != null)
-                //{
-                //    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == box.userid).FirstOrDefault();
-                //    if (d_SenvivUser != null)
-                //    {
-                //        d_SenvivUser.MerchId = rop.MerchId;
-                //    }
-                //}
 
                 CurrentDb.SaveChanges();
 
