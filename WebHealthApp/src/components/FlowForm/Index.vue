@@ -11,8 +11,27 @@
             </mt-field>
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
+          <div v-if="item.type==='height'" class="">
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByHeight(index)">
+              <span style="margin-right:10px">  {{ item.value }} </span> <span>{{ item.append }}</span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
+          </div>
+          <div v-if="item.type==='weight'" class="">
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByWeight(index)">
+              <span style="margin-right:10px">  {{ item.value }} </span> <span>{{ item.append }}</span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
+          </div>
           <div v-if="item.type==='date'">
-            <mt-field v-model="item.value" class="qt-input" label="" placeholder="" style="width:300px" @click.native="openPickerByDate(index)" />
+
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByDate(index)">
+              <span>  {{ item.value }} </span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='gesweek'">
@@ -75,7 +94,35 @@
         <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByGesWeek=false">取消</span>
         <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByGesWeek">确定</span>
       </div>
-      <mt-picker :slots="gesWeekSlots" @change="onValuesChangeByGesWeek" @touchmove.native.stop.prevent />
+      <mt-picker :slots="slotsByGesWeek" @change="onValuesChangeByGesWeek" @touchmove.native.stop.prevent />
+    </mt-popup>
+
+    <mt-popup
+      v-model="popupVisibleByHeight"
+      position="bottom"
+      style="width:100%"
+    >
+      <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
+        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByHeight=false">取消</span>
+        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByHeight">确定</span>
+      </div>
+
+      <mt-picker :slots="slotsByHeight" @change="onValuesChangeByHeight" @touchmove.native.stop.prevent />
+
+    </mt-popup>
+
+    <mt-popup
+      v-model="popupVisibleByWeight"
+      position="bottom"
+      style="width:100%"
+    >
+      <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
+        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByWeight=false">取消</span>
+        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByWeight">确定</span>
+      </div>
+
+      <mt-picker :slots="slotsByWeight" @change="onValuesChangeByWeight" @touchmove.native.stop.prevent />
+
     </mt-popup>
 
   </div>
@@ -101,7 +148,7 @@ export default {
       idx_date: 0,
       idx_gesweek: -1,
       popupVisibleByGesWeek: false,
-      gesWeekSlots: [
+      slotsByGesWeek: [
         {
           flex: 1,
           values: [],
@@ -119,7 +166,25 @@ export default {
           textAlign: 'left',
           defaultIndex: 3
         }
-      ]
+      ],
+      idx_height: -1,
+      popupVisibleByHeight: false,
+      slotsByHeight: [{
+        flex: 1,
+        values: [],
+        className: 'slot1',
+        textAlign: 'center',
+        defaultIndex: 0
+      }],
+      idx_weight: -1,
+      popupVisibleByWeight: false,
+      slotsByWeight: [{
+        flex: 1,
+        values: [],
+        className: 'slot1',
+        textAlign: 'center',
+        defaultIndex: 0
+      }]
     }
   },
   computed: {
@@ -127,7 +192,14 @@ export default {
   },
   created() {
     for (let index = 1; index < 46; index++) {
-      this.gesWeekSlots[0].values.push(index)
+      this.slotsByGesWeek[0].values.push(index)
+    }
+    for (let index = 50; index < 200; index++) {
+      this.slotsByHeight[0].values.push(index)
+    }
+
+    for (let index = 10; index < 200; index++) {
+      this.slotsByWeight[0].values.push(index)
     }
   },
   methods: {
@@ -201,9 +273,9 @@ export default {
     onChecklist(q_idx, val) {
       var _val = this.questions[q_idx].value
 
-      console.log(q_idx)
-      console.log(val)
-      console.log(_val)
+      // console.log(q_idx)
+      // console.log(val)
+      // console.log(_val)
 
       if (_val.length === 0) {
         _val.push(val)
@@ -282,8 +354,8 @@ export default {
     openPickerByGesWeek(index) {
       this.idx_gesweek = index
       this.popupVisibleByGesWeek = true
-      this.gesWeekSlots[0].defaultIndex = this.questions[index].value[0] - 1
-      this.gesWeekSlots[2].defaultIndex = this.questions[index].value[1] - 1
+      this.slotsByGesWeek[0].defaultIndex = this.questions[index].value[0] - 1
+      this.slotsByGesWeek[2].defaultIndex = this.questions[index].value[1] - 1
     },
     onConfirmByGesWeek() {
       this.popupVisibleByGesWeek = false
@@ -293,6 +365,62 @@ export default {
       if (this.idx_gesweek > -1) {
         this.questions[this.idx_gesweek].value[0] = values[0]
         this.questions[this.idx_gesweek].value[1] = values[1]
+      }
+    },
+    openPickerByHeight(index) {
+      this.idx_height = index
+
+      var question = this.questions[this.idx_height]
+      if (question.value !== '') {
+        var defaultIndex = 0
+        var j = 0
+        for (let i = 50; i < 200; i++) {
+          j++
+          if (i.toString() === question.value.toString()) {
+            defaultIndex = j - 1
+            break
+          }
+        }
+
+        this.slotsByHeight[0].defaultIndex = defaultIndex
+      }
+
+      this.popupVisibleByHeight = true
+    },
+    onConfirmByHeight() {
+      this.popupVisibleByHeight = false
+    },
+    onValuesChangeByHeight(picker, values) {
+      if (this.idx_height > -1) {
+        this.questions[this.idx_height].value = values[0]
+      }
+    },
+    openPickerByWeight(index) {
+      this.idx_weight = index
+
+      var question = this.questions[this.idx_weight]
+      if (question.value !== '') {
+        var defaultIndex = 0
+        var j = 0
+        for (let i = 10; i < 200; i++) {
+          j++
+          if (i.toString() === question.value.toString()) {
+            defaultIndex = j - 1
+            break
+          }
+        }
+
+        this.slotsByWeight[0].defaultIndex = defaultIndex
+      }
+
+      this.popupVisibleByWeight = true
+    },
+    onConfirmByWeight() {
+      this.popupVisibleByWeight = false
+    },
+    onValuesChangeByWeight(picker, values) {
+      if (this.idx_weight > -1) {
+        this.questions[this.idx_weight].value = values[0]
       }
     },
     jump(q_idx, q_val) {

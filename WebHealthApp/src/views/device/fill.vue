@@ -67,27 +67,27 @@ export default {
           value: '2012-12-12',
           append: '',
           rule: {
-            required: true, min: 1, max: 20, message: '必选,且必须是日期格式', pattern: fromReg.date
+            required: true, min: 1, max: 20, message: '必选，请点击选择', pattern: fromReg.date
           }
         },
         {
           id: 'height',
           title: '身高',
-          type: 'input',
+          type: 'height',
           value: '',
           append: 'cm',
           rule: {
-            required: true, min: 1, max: 20, message: '必填，必须是数字格式', pattern: fromReg.decimal
+            required: true, min: 1, max: 20, message: '必选，请点击选择', pattern: fromReg.decimal
           }
         },
         {
           id: 'weight',
           title: '体重',
-          type: 'input',
+          type: 'weight',
           value: '',
           append: 'kg',
           rule: {
-            required: true, min: 1, max: 20, message: '必填，必须是数字格式', pattern: fromReg.decimal
+            required: true, min: 1, max: 20, message: '必选，请点击选择', pattern: fromReg.decimal
           }
         },
         {
