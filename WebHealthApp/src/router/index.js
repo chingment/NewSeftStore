@@ -52,6 +52,11 @@ const router = new VueRouter({
       meta: { title: '错误提示', isAuth: false }
     },
     {
+      path: '/ws/test',
+      component: () => import('@/views/ws/test'),
+      meta: { title: 'ws测送', isAuth: false }
+    },
+    {
       path: '/report/day',
       component: () => import('@/views/report/day/Index'),
       meta: { title: '健康报告', isAuth: false }

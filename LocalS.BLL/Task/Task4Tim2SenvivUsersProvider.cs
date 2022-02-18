@@ -233,10 +233,32 @@ namespace LocalS.BLL.Task
                                         d_SenvivUserDevice.UserId = useId;
                                         d_SenvivUserDevice.DeviceId = device.sn;
                                         d_SenvivUserDevice.SvDeptId = svDeptId;
+                                        d_SenvivUserDevice.WebUrl = device.webUrl;
+                                        d_SenvivUserDevice.TcpAddress = device.tcpAddress;
                                         d_SenvivUserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Unknow;
                                         d_SenvivUserDevice.CreateTime = DateTime.Now;
                                         d_SenvivUserDevice.Creator = IdWorker.Build(IdType.EmptyGuid);
                                         CurrentDb.SenvivUserDevice.Add(d_SenvivUserDevice);
+                                        CurrentDb.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        d_SenvivUserDevice.WebUrl = device.webUrl;
+                                        d_SenvivUserDevice.TcpAddress = device.tcpAddress;
+                                        d_SenvivUserDevice.MendTime = DateTime.Now;
+                                        d_SenvivUserDevice.Mender = IdWorker.Build(IdType.EmptyGuid);
+                                        CurrentDb.SaveChanges();
+                                    }
+                                }
+                                else
+                                {
+                                    var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == useId && m.DeviceId == device.sn).FirstOrDefault();
+                                    if (d_SenvivUserDevice != null)
+                                    {
+                                        d_SenvivUserDevice.WebUrl = device.webUrl;
+                                        d_SenvivUserDevice.TcpAddress = device.tcpAddress;
+                                        d_SenvivUserDevice.MendTime = DateTime.Now;
+                                        d_SenvivUserDevice.Mender = IdWorker.Build(IdType.EmptyGuid);
                                         CurrentDb.SaveChanges();
                                     }
                                 }

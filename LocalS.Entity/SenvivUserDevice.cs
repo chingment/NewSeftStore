@@ -28,6 +28,10 @@ namespace LocalS.Entity
         public DateTime? InfoFillTime { get; set; }
         public DateTime? UnBindTime { get; set; }
         public SenvivUserDeviceBindStatus BindStatus { get; set; }
+
+        public string TcpAddress { get; set; }
+
+        public string WebUrl { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }
