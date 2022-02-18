@@ -144,11 +144,11 @@ export default {
           title: '睡眠困扰',
           type: 'checklist',
           options: [
-            { label: '打鼾', value: '1' },
-            { label: '失眠', value: '2' },
+            { label: '打鼾', value: '3' },
+            { label: '长期失眠', value: '11' },
             { label: '易醒', value: '3' },
             { label: '难以入睡', value: '4' },
-            { label: '呼吸暂停综合症', value: '5' }
+            { label: '呼吸暂停综合症', value: '2' }
           ],
           required: true,
           value: []
