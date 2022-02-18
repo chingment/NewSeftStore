@@ -23,10 +23,10 @@
         <span>{{ deviceInfo.birthday }}</span>
       </mt-cell>
       <mt-cell title="身高" is-link @click.native="onFieldEdit('height',deviceInfo.height)">
-        <span>{{ deviceInfo.height }}cm</span>
+        <span style="margin-right:5px">{{ deviceInfo.height }}</span><span>cm</span>
       </mt-cell>
       <mt-cell title="体重" is-link @click.native="onFieldEdit('weight',deviceInfo.weight)">
-        <span>{{ deviceInfo.weight }}kg</span>
+        <span style="margin-right:5px">{{ deviceInfo.weight }}</span><span>kg</span>
       </mt-cell>
       <mt-cell title="睡眠困扰" is-link @click.native="onFieldEdit('perplex',deviceInfo.perplex.value)">
         <span>{{ deviceInfo.perplex.text }}</span>
