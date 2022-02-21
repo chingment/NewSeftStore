@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     initWebSocket() { // 初始化weosocket
-      const wsuri = process.env.WS_API + '/websocket/threadsocket'// ws地址
+      const wsuri = 'ws://47.106.255.69:7232/bar'// ws地址
       this.websock = new WebSocket(wsuri)
       this.websocket.onopen = this.websocketonopen
 

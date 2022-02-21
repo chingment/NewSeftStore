@@ -870,7 +870,7 @@ namespace LocalS.BLL
 
                 var d_User = CurrentDb.SenvivUser.Where(m => m.Id == svUserId).FirstOrDefault();
 
-                var signName = SvUtil.GetSignName(d_User.FullName, d_User.NickName);
+                var signName = SvUtil.GetSignName("", d_User.FullName);
 
                 DateTime rptStartTime = (DateTime)taskParams["start_time"];
                 DateTime rptEndTime = (DateTime)taskParams["end_time"];
@@ -1245,7 +1245,10 @@ namespace LocalS.BLL
 
                             foreach (var bp in bps)
                             {
-                                l_bps.Add(new { startTime = bp.StartTime / 1000, endTime = bp.EndTime / 1000, longerval = bp.longerval });
+                                var startTime = bp.StartTime / 1000;
+                                var endTime = bp.EndTime / 1000;
+                                var longerval = endTime - startTime;
+                                l_bps.Add(new { startTime = startTime, endTime = endTime, longerval = longerval });
                             }
 
                             d_DayReport.HxZtcsPoint = l_bps.ToJsonString();

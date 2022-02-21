@@ -25,7 +25,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var userInfo = new
             {
-                SignName = d_SvUser.NickName,
+                SignName = d_SvUser.FullName,
                 Avatar = d_SvUser.Avatar,
                 TogetherDays = togetherDays
             };

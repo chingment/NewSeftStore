@@ -402,7 +402,6 @@ namespace LocalS.Service.Api.HealthApp
                     d_SenvivUser.SubHealth = subhealth;
                     d_SenvivUser.Chronicdisease = chronicdisease;
                     d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                    d_SenvivUser.NickName = null;
                     d_SenvivUser.Avatar = d_User.Avatar;
                     d_SenvivUser.PhoneNumber = d_User.PhoneNumber;
                     d_SenvivUser.Sex = sex;
@@ -414,7 +413,6 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else
                 {
-                    d_SenvivUser.NickName = null;
                     d_SenvivUser.FullName = fullName;
                     d_SenvivUser.Sex = sex;
                     d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
@@ -464,7 +462,6 @@ namespace LocalS.Service.Api.HealthApp
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
                 d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
-                d_SenvivUser.NickName = null;
                 d_SenvivUser.FullName = fullName;
                 d_SenvivUser.Sex = sex;
                 d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);

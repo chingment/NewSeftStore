@@ -154,6 +154,7 @@ export default {
       },
       form: {
         id: '',
+        title: '',
         tags: [],
         content: ''
       },

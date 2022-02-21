@@ -147,8 +147,7 @@ namespace LocalS.Service.Api.Merch
                          where
                          merchIds.Contains(u.MerchId) &&
                          u.DeviceCount > 0
-                         && ((rup.Name == null || u.NickName.Contains(rup.Name)) ||
-                         (rup.Name == null || u.FullName.Contains(rup.Name)))
+                         && (rup.Name == null || u.FullName.Contains(rup.Name))
                          select u);
 
             if (rup.Sas != "0")
@@ -191,7 +190,7 @@ namespace LocalS.Service.Api.Merch
                 olist.Add(new
                 {
                     Id = item.Id,
-                    SignName = SvUtil.GetSignName(item.FullName, item.NickName),
+                    SignName = SvUtil.GetSignName("", item.FullName),
                     Avatar = item.Avatar,
                     SignTags = GetSignTags(item),
                     Sex = new FieldModel(item.Sex, SvUtil.GetSexName(item.Sex)),
@@ -243,7 +242,7 @@ namespace LocalS.Service.Api.Merch
             var ret = new
             {
                 UserId = d_SenvivUser.Id,
-                SignName = SvUtil.GetSignName(d_SenvivUser.NickName, d_SenvivUser.FullName),
+                SignName = SvUtil.GetSignName("", d_SenvivUser.FullName),
                 SignTags = GetSignTags(d_SenvivUser),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
                 Birthday = d_SenvivUser.Birthday.ToUnifiedFormatDate(),
@@ -251,7 +250,6 @@ namespace LocalS.Service.Api.Merch
                 Weight = d_SenvivUser.Weight,
                 Avatar = d_SenvivUser.Avatar,
                 FullName = d_SenvivUser.FullName,
-                NickName = d_SenvivUser.NickName,
                 CareMode = GetCareMode(d_SenvivUser.CareMode),
                 Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
                 Sas = new FieldModel(d_SenvivUser.Sas, SvUtil.GetSasName(d_SenvivUser.Sas)),
@@ -326,7 +324,6 @@ namespace LocalS.Service.Api.Merch
                          select new
                          {
                              u.Id,
-                             tt.NickName,
                              tt.Sex,
                              u.SvUserId,
                              tt.FullName,
@@ -375,7 +372,7 @@ namespace LocalS.Service.Api.Merch
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m => ((rup.Name == null || m.NickName.Contains(rup.Name)) || (rup.Name == null || m.FullName.Contains(rup.Name))));
+                query = query.Where(m => (rup.Name == null || m.FullName.Contains(rup.Name)));
             }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
@@ -408,7 +405,7 @@ namespace LocalS.Service.Api.Merch
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    SignName = SvUtil.GetSignName("", rpt.FullName),
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
@@ -505,7 +502,6 @@ namespace LocalS.Service.Api.Merch
                          select new
                          {
                              u.Id,
-                             tt.NickName,
                              tt.Sex,
                              tt.FullName,
                              tt.Birthday,
@@ -630,7 +626,7 @@ namespace LocalS.Service.Api.Merch
                 UserInfo = new
                 {
                     SvUserId = d_Rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(d_Rpt.NickName, d_Rpt.FullName),
+                    SignName = SvUtil.GetSignName("", d_Rpt.FullName),
                     Avatar = d_Rpt.Avatar,
                     Sex = new FieldModel(d_Rpt.Sex, SvUtil.GetSexName(d_Rpt.Sex)),
                     Age = SvUtil.GetAge(d_Rpt.Birthday)
@@ -780,7 +776,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                          select new
                          {
                              u.Id,
-                             tt.NickName,
                              tt.Sex,
                              tt.FullName,
                              tt.Birthday,
@@ -836,7 +831,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m => ((rup.Name == null || m.NickName.Contains(rup.Name)) || (rup.Name == null || m.FullName.Contains(rup.Name))));
+                query = query.Where(m =>  (rup.Name == null || m.FullName.Contains(rup.Name)));
             }
 
 
@@ -883,7 +878,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 {
                     Id = rpt.Id,
                     SvUserId = rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    SignName = SvUtil.GetSignName("", rpt.FullName),
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
@@ -967,7 +962,6 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                        select new
                        {
                            u.Id,
-                           tt.NickName,
                            tt.Sex,
                            tt.FullName,
                            tt.Birthday,
@@ -1039,7 +1033,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 UserInfo = new
                 {
                     UserId = rpt.SvUserId,
-                    SignName = SvUtil.GetSignName(rpt.NickName, rpt.FullName),
+                    SignName = SvUtil.GetSignName("", rpt.FullName),
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday)
