@@ -1699,10 +1699,14 @@ namespace LocalS.BLL
                     CurrentDb.SenvivHealthDayReport.Add(d_DayReport);
                     CurrentDb.SaveChanges();
 
-                    SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
+                    if (d_DayReport.IsValid)
+                    {
+                        SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
+                    }
 
                     #endregion
                 }
+
 
                 if (fisrtReportTime != null)
                 {
@@ -1757,8 +1761,8 @@ namespace LocalS.BLL
 
                         BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SenvivTaskType.Health_Monitor_PerMonth, taskParams);
                     }
-
                 }
+
             }
             catch (Exception ex)
             {
