@@ -23,13 +23,8 @@ namespace LocalS.BLL
                 {
                     foreach (var specIdxSku in specIdxSkus)
                     {
-                        var r_sku = GetSkuInfo(merchId, specIdxSku.SkuId);
-
-                        if (r_sku != null)
-                        {
-                            RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("*:{0}", r_sku.Id.ToLower()));
-                            RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), r_sku.Id.ToLower());
-                        }
+                        RedisManager.Db.HashDelete(string.Format(RedisKeyS.PRD_SKU_SKEY, merchId.ToLower()), string.Format("*:{0}", specIdxSku.SkuId.ToLower()));
+                        RedisHashUtil.Remove(string.Format(RedisKeyS.PRD_SKU_INF, merchId.ToLower()), specIdxSku.SkuId);
                     }
                 }
             }
@@ -162,7 +157,7 @@ namespace LocalS.BLL
         {
             var m_Skus = new List<SkuInfoModel>();
 
-            foreach(var skuId in skuIds)
+            foreach (var skuId in skuIds)
             {
                 var m_Sku = GetSkuInfo(merchId, skuId);
                 if (m_Sku != null)
@@ -240,7 +235,7 @@ namespace LocalS.BLL
             return r_Sku;
         }
 
-        public List<SkuInfoBySearchModel> SearchSku(string merchId, string type, string key,bool isGetDelete)
+        public List<SkuInfoBySearchModel> SearchSku(string merchId, string type, string key, bool isGetDelete)
         {
             List<SkuInfoBySearchModel> m_searchs = new List<SkuInfoBySearchModel>();
 
@@ -272,7 +267,7 @@ namespace LocalS.BLL
                     try
                     {
                         var l_sku = Newtonsoft.Json.JsonConvert.DeserializeObject<SkuInfoModel>(r_sku);
-                        
+
                         var m_search = new SkuInfoBySearchModel();
                         m_search.SkuId = l_sku.Id;
                         m_search.SpuId = l_sku.SpuId;
@@ -289,7 +284,7 @@ namespace LocalS.BLL
                         }
                         else
                         {
-                            if(!l_sku.IsDelete)
+                            if (!l_sku.IsDelete)
                             {
                                 m_searchs.Add(m_search);
                             }
