@@ -52,15 +52,27 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_SvUser.Sex == "2")
             {
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
-               // gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
-                gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
-                gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_Rpt.ZsYp)));
-                gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_Rpt.ZsSr)));
-
-                gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                if (d_Rpt.ZsYp > 0)
+                {
+                    gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
+                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_Rpt.ZsYp)));
+                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_Rpt.ZsSr)));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                }
+                else
+                {
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
+                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
+                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_Rpt.MbGxygk)));
+                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_Rpt.MbGxbgk)));
+                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_Rpt.MbTlbgk)));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                }
             }
             else
             {
