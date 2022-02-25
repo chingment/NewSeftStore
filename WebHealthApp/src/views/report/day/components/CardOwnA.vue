@@ -111,36 +111,39 @@ export default {
     display: flex;
 
     .wrap {
-      width: 100%;
       display: flex;
+
+      width: 100%;
+      min-height: 147px;
     }
 
     .st-1 {
+      flex: 1;
 
-flex: 1;
+      .field {
+        width: 100px;
 
-.field{
-  width: 100px;
-     text-align: center;
-      .avatar {
-        width: 90px;
-        height: 90px;
+        text-align: center;
 
-        border: 3px solid #fff;
-        border-radius: 50%;
+        .avatar {
+          width: 90px;
+          height: 90px;
+
+          border: 3px solid #fff;
+          border-radius: 50%;
+        }
+
+        .sign-name {
+          padding: 5px;
+        }
       }
-
-      .sign-name {
-        padding: 5px;
-      }
-
-}
     }
 
     .st-2 {
+      flex: none;
 
       width: 100px;
-flex: none;
+
       text-align: center;
 
       .c-health-score {

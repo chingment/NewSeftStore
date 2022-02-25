@@ -266,9 +266,14 @@ export default {
         answers[item.id] = item.value
       })
 
+      var sex = answers.sex
       fill({ deviceId: this.deviceId, answers: answers }).then(res => {
         if (res.result === 1) {
-          this.step = 3
+          if (sex === '2') {
+            window.location.href = 'https://g.h5gdvip.com/p/87syo0cn'
+          } else {
+            this.step = 3
+          }
         } else {
           this.$toast(res.message)
         }

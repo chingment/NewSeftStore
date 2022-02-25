@@ -31,8 +31,8 @@ namespace LocalS.Service.Api.HealthApp
                 if (d_Women != null)
                 {
                     var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
-
-                    pregnancy = new { birthLastDays = 10, gesWeek = week.Week, gesDay = week.Day };
+                    var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime - DateTime.Now).TotalDays);
+                    pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
                 }
             }
 
