@@ -216,13 +216,15 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SaveChanges();
                 }
 
-                var d_PMerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId == old_CurUseMerchId).FirstOrDefault();
-                if (d_PMerchDevice != null)
+                var d_PMerchDevices = CurrentDb.MerchDevice.Where(m => m.DeviceId == rop.DeviceId && m.MerchId != rop.MerchId).ToList();
+
+                foreach (var d_PMerchDevice in d_PMerchDevices)
                 {
                     d_PMerchDevice.IsStopUse = true;
-                    d_PMerchDevice.Creator = operater;
-                    d_PMerchDevice.CreateTime = DateTime.Now;
+                    d_PMerchDevice.Mender = operater;
+                    d_PMerchDevice.MendTime = DateTime.Now;
                 }
+
 
                 CurrentDb.SaveChanges();
 
