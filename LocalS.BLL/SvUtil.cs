@@ -1295,7 +1295,7 @@ namespace LocalS.BLL
             jd.Name = "孕气指数";
 
             val = 100 - val;
-            jd.Value = val.ToString("0.#####");
+            jd.Value = val.ToString("0.#####") + "%";
 
             if (val <= 39)
             {
@@ -1319,7 +1319,7 @@ namespace LocalS.BLL
             jd.Name = "易胖指数";
 
             val = 100 - val;
-            jd.Value = val.ToString("0.#####");
+            jd.Value = val.ToString("0.#####") + "%";
 
             if (val <= 39)
             {
@@ -1343,7 +1343,7 @@ namespace LocalS.BLL
             jd.Name = "水润指数";
 
             val = 100 - val;
-            jd.Value = val.ToString("0.#####");
+            jd.Value = val.ToString("0.#####")+"%";
 
             if (val <= 39)
             {
@@ -1359,7 +1359,7 @@ namespace LocalS.BLL
             }
             return jd;
         }
-        
+
 
     }
 }
