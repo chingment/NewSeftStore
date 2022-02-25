@@ -288,7 +288,13 @@ export default {
       ],
       userInfo: {
         avatar: '',
-        signName: ''
+        signName: '',
+        careMode: 0,
+        pregnancy: {
+          birthLastDays: 0,
+          gesWeek: 0,
+          gesDay: 0
+        }
       },
       rd: {
         healthScore: { value: 0 },

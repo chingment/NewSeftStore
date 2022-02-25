@@ -20,14 +20,29 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_SvUser = CurrentDb.SenvivUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
 
-
             var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
+
+
+            var pregnancy = new { birthLastDays = 0, gesWeek = 0, gesDay = 0 };
+
+            if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Pregnancy)
+            {
+                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
+                if (d_Women != null)
+                {
+                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
+
+                    pregnancy = new { birthLastDays = 10, gesWeek = week.Week, gesDay = week.Day };
+                }
+            }
 
             var userInfo = new
             {
                 SignName = d_SvUser.FullName,
                 Avatar = d_SvUser.Avatar,
-                TogetherDays = togetherDays
+                TogetherDays = togetherDays,
+                CareMode = d_SvUser.CareMode,
+                Pregnancy = pregnancy
             };
 
 
@@ -35,14 +50,14 @@ namespace LocalS.Service.Api.HealthApp
             #region  gzTags
             var gzTags = new List<object>();
 
-            gzTags.Add(SvUtil.GetMylzs(d_Rpt.MylMylzs));
-            gzTags.Add(SvUtil.GetMylGrfx(d_Rpt.MylGrfx));
-            gzTags.Add(SvUtil.GetMbGxygk(d_Rpt.MbGxygk));
-            gzTags.Add(SvUtil.GetMbGxbgk(d_Rpt.MbGxbgk));
-            gzTags.Add(SvUtil.GetMbTlbgk(d_Rpt.MbTlbgk));
+            gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
+            gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
+            gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_Rpt.MbGxygk)));
+            gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_Rpt.MbGxbgk)));
+            gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_Rpt.MbTlbgk)));
             gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-            gzTags.Add(SvUtil.GetQxxlKynl(d_Rpt.QxxlKynl));
-            gzTags.Add(SvUtil.GetQxxlQxyj(d_Rpt.QxxlQxyj));
+            gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
+            gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
             #endregion
 
             #region smTags

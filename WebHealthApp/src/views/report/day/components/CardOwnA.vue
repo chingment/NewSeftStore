@@ -1,11 +1,47 @@
 <template>
   <div class="card-own-a">
-    <div class="own-info">
+
+    <div v-if="userInfo.careMode==25" class="own-info">
       <div class="wrap">
         <div class="st-1">
-          <img class="avatar" :src="userInfo.avatar">
-          <div class="sign-name">{{ userInfo.signName }}</div>
-          <div class="health-date">{{ rd.healthDate }}</div>
+          <div class="field" style="width: 100%;text-align: left">
+            <div class="gesweek" style="padding: 15px 0px;">孕{{ userInfo.pregnancy.gesWeek }} 周+{{ userInfo.pregnancy.gesDay }}天</div>
+            <div class="birthlastdays">距离宝宝出生还有<span>{{ userInfo.pregnancy.birthLastDays }}</span>天</div>
+          </div>
+        </div>
+        <div class="st-2">
+          <vue-circle
+            v-if="rd.healthScore.value>0"
+            ref="health_score"
+            :progress="rd.healthScore.value"
+            :size="90"
+            :reverse="false"
+            line-cap="round"
+            :fill="fill"
+            empty-fill="#fff"
+            :animation-start-value="0.0"
+            :start-angle="30"
+            insert-mode="append"
+            :animation="{ duration: 1200, easing: 'easeOutBounce' }"
+            :thickness="5"
+            :show-percent="false"
+          >
+            <div class="c-health-score">
+              <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
+              <div class="t2">健康值</div>
+            </div>
+          </vue-circle>
+        </div>
+      </div>
+    </div>
+    <div v-else class="own-info">
+      <div class="wrap">
+        <div class="st-1">
+          <div class="field">
+            <img class="avatar" :src="userInfo.avatar">
+            <div class="sign-name">{{ userInfo.signName }}</div>
+            <div class="health-date">{{ rd.healthDate }}</div>
+          </div>
         </div>
         <div class="st-2">
           <vue-circle
@@ -76,15 +112,16 @@ export default {
 
     .wrap {
       width: 100%;
+      display: flex;
     }
 
     .st-1 {
-      float: left;
 
-      width: 100px;
+flex: 1;
 
-      text-align: center;
-
+.field{
+  width: 100px;
+     text-align: center;
       .avatar {
         width: 90px;
         height: 90px;
@@ -96,13 +133,14 @@ export default {
       .sign-name {
         padding: 5px;
       }
+
+}
     }
 
     .st-2 {
-      float: right;
 
       width: 100px;
-
+flex: none;
       text-align: center;
 
       .c-health-score {
