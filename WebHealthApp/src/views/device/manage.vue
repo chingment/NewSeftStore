@@ -20,6 +20,9 @@
           <mt-cell v-if="item.bindStatus.value==2" title="绑定时间">
             <span>{{ item.bindTime }}</span>
           </mt-cell>
+          <mt-cell v-if="item.bindStatus.value==2" title="在线状态">
+            <span>{{ item.onLineStatus.text }}</span>
+          </mt-cell>
           <mt-cell v-if="item.bindStatus.value==3" title="解绑时间">
             <span>{{ item.unBindTime }}</span>
           </mt-cell>
@@ -33,6 +36,8 @@
 </template>
 <script>
 import { initManage, unBind } from '@/api/device'
+import { isEmpty } from '@/utils/commonUtil'
+var socket = []
 export default {
   name: 'DeviceManage',
   components: {
@@ -41,7 +46,8 @@ export default {
     return {
       loading: false,
       appInfo: {},
-      devices: []
+      devices: [],
+      socket: ''
     }
   },
   created() {
@@ -55,6 +61,13 @@ export default {
           var d = res.data
           this.appInfo = d.appInfo
           this.devices = d.devices
+          if (d.devices != null && d.devices.length > 0) {
+            for (var i = 0; i < d.devices.length; i++) {
+              if (!isEmpty(d.devices[i].webUrl)) {
+                this.connectDevice(d.devices[i].webUrl, d.devices[i].id)
+              }
+            }
+          }
         }
         this.loading = false
       })
@@ -75,6 +88,46 @@ export default {
       this.$router.push({ path: '/device/info', query: {
         deviceId: item.id
       }})
+    },
+    connectDevice: function(host, wsobj) {
+      var _this = this
+      // 浏览器支持？
+      if ('WebSocket' in window) {
+        socket[wsobj] = new WebSocket(host)
+        try {
+          // 连接事件
+          socket[wsobj].onopen = function(msg) {
+            console.log('socket连接成功')
+            socket[wsobj].send(JSON.stringify({ 'online': wsobj }))
+            // alert(wsobj+":连接已建立！");
+          }
+          // 错误事件
+          socket[wsobj].onerror = function(msg) {
+            console.log('连接错误')
+          }
+
+          // 消息事件
+          socket[wsobj].onmessage = function(msg) {
+            var data = JSON.parse(msg.data)
+            var devices = _this.devices
+            for (var i = 0; i < devices.length; i++) {
+              if (devices[i].id === wsobj) {
+                if (data.online === '1') {
+                  _this.devices[i].onLineStatus = { text: '在线', value: 1 }
+                } else {
+                  _this.devices[i].onLineStatus = { text: '离线', value: 2 }
+                }
+              }
+            }
+          }
+          // 关闭事件
+          socket[wsobj].onclose = function(msg) {
+            console.log('socket已经关闭')
+          }
+        } catch (ex) {
+          console.log(ex)
+        }
+      }
     }
   }
 }

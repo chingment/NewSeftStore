@@ -123,7 +123,9 @@ namespace LocalS.Service.Api.HealthApp
                     SignName = signName,
                     BindTime = d_UserDevice.BindTime.ToUnifiedFormatDateTime(),
                     UnBindTime = d_UserDevice.UnBindTime.ToUnifiedFormatDateTime(),
-                    BindStatus = bindStatus
+                    BindStatus = bindStatus,
+                    WebUrl = d_UserDevice.WebUrl,
+                    OnLineStatus = new FieldModel(0, "连接中")
                 });
             }
 

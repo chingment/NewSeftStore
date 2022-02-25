@@ -64,6 +64,15 @@ namespace LocalS.Entity
         //睡眠连续性
         public decimal SmSmlxx { get; set; }
 
+        //孕气指数
+        public decimal ZsYq { get; set; }
+
+        //易胖指数
+        public decimal ZsYp { get; set; }
+
+        //水润指数
+        public decimal ZsSr { get; set; }
+
         //当次基准心率
         public int XlDcjzxl { get; set; }
         //长期基准心率

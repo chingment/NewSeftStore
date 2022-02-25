@@ -1286,9 +1286,80 @@ namespace LocalS.BLL
             }
 
             return jd;
+        }
 
+        public static SvDataJd GetZsYq(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Id = "9";
+            jd.Name = "孕气指数";
+
+            val = 100 - val;
+            jd.Value = val.ToString("0.#####");
+
+            if (val <= 39)
+            {
+                jd.Set("差", "↓↓", CA_1);
+            }
+            else if (val >= 40 && val <= 69)
+            {
+                jd.Set("一般", "↓", CA_2);
+            }
+            else if (val >= 70 && val <= 100)
+            {
+                jd.Set("好", "-", CA_0);
+            }
             return jd;
         }
+
+        public static SvDataJd GetZsYp(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Id = "10";
+            jd.Name = "易胖指数";
+
+            val = 100 - val;
+            jd.Value = val.ToString("0.#####");
+
+            if (val <= 39)
+            {
+                jd.Set("差", "↓↓", CA_1);
+            }
+            else if (val >= 40 && val <= 69)
+            {
+                jd.Set("一般", "↓", CA_2);
+            }
+            else if (val >= 70 && val <= 100)
+            {
+                jd.Set("好", "-", CA_0);
+            }
+            return jd;
+        }
+
+        public static SvDataJd GetZsSr(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Id = "11";
+            jd.Name = "水润指数";
+
+            val = 100 - val;
+            jd.Value = val.ToString("0.#####");
+
+            if (val <= 39)
+            {
+                jd.Set("差", "↓↓", CA_1);
+            }
+            else if (val >= 40 && val <= 69)
+            {
+                jd.Set("一般", "↓", CA_2);
+            }
+            else if (val >= 70 && val <= 100)
+            {
+                jd.Set("好", "-", CA_0);
+            }
+            return jd;
+        }
+        
 
     }
 }
