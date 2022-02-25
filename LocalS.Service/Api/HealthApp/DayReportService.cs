@@ -31,7 +31,7 @@ namespace LocalS.Service.Api.HealthApp
                 if (d_Women != null)
                 {
                     var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
-                    var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime - DateTime.Now).TotalDays);
+                    var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime - DateTime.Now).TotalDays + 1);
                     pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
                 }
             }
@@ -54,13 +54,13 @@ namespace LocalS.Service.Api.HealthApp
             {
                 if (d_Rpt.ZsYp > 0)
                 {
-                    if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Postpartum)
+                    if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Pregnancy)
                     {
-                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
+                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
                     }
                     else
                     {
-                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
+                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
                     }
 
                     gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
