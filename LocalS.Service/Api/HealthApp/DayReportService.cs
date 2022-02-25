@@ -54,7 +54,15 @@ namespace LocalS.Service.Api.HealthApp
             {
                 if (d_Rpt.ZsYp > 0)
                 {
-                    gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
+                    if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Postpartum)
+                    {
+                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
+                    }
+                    else
+                    {
+                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
+                    }
+
                     gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
                     gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
                     gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
