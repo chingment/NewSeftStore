@@ -54,9 +54,9 @@
 
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" size="tiny">
-      <img v-if="isImage(dialogFileName)" width="100%" :src="dialogFileUrl" alt="">
+      <img v-if="isImage(dialogFileUrl)" width="100%" :src="dialogFileUrl" alt="">
       <video
-        v-else-if="isVideo(dialogFileName)"
+        v-else-if="isVideo(dialogFileUrl)"
         :src="dialogFileUrl"
         controls="controls"
       />
