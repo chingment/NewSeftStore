@@ -28,31 +28,20 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="图片" prop="displayImgUrls">
+      <el-form-item label="图片" prop="displayImgUrls" class="el-form-item-upload">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
-        <el-upload
-          ref="uploadImgByDisplayImgUrls"
+        <lm-upload
           v-model="form.displayImgUrls"
-          :action="uploadImgServiceUrl"
-          :data="uploadImgPmsByByDisplayImgUrls"
           list-type="picture-card"
-          :on-success="handleSuccessByDisplayImgUrls"
-          :on-remove="handleRemoveByDisplayImgUrls"
-          :on-error="handleErrorByDisplayImgUrls"
-          :on-preview="handlePreviewByDisplayImgUrls"
-          :before-upload="handleBeforeUploadByDisplayImgUrls"
-          :file-list="uploadImglistByDisplayImgUrls"
+          :file-list="form.displayImgUrls"
+          :action="uploadFileServiceUrl"
+          :headers="uploadFileHeaders"
+          :data="{folder:'product'}"
+          ext=".jpg,.png,.jpeg"
+          tip="图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
+          :max-size="1024"
+          :sortable="true"
           :limit="4"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDisplayImgUrls">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDisplayImgUrls" alt>
-        </el-dialog>
-        <el-alert
-          title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
-          type="remark-gray"
-          :closable="false"
         />
       </el-form-item>
       <el-form-item label="所属分类" prop="kindIds">
@@ -147,31 +136,24 @@
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" maxlength="200" clearable />
       </el-form-item>
-      <el-form-item label="详情图片" prop="detailsDes">
+      <el-form-item label="详情图片" prop="detailsDes" class="el-form-item-upload">
         <el-input
           :value="form.detailsDes==null?'':form.detailsDes.toString()"
           style="display:none"
         />
-        <el-upload
-          ref="uploadImgByDetailsDes"
+        <lm-upload
           v-model="form.detailsDes"
-          :action="uploadImgServiceUrl"
           list-type="picture-card"
-          :on-success="handleSuccessByDetailsDes"
-          :on-remove="handleRemoveByDetailsDes"
-          :on-error="handleErrorByDetailsDes"
-          :on-preview="handlePreviewByDetailsDes"
-          :before-upload="handleBeforeUploadByDetailsDes"
-          :file-list="uploadImglistByDetailsDes"
-          :data="uploadImgPmsByByDetailsDes"
+          :file-list="form.detailsDes"
+          :action="uploadFileServiceUrl"
+          :headers="uploadFileHeaders"
+          :data="{folder:'product'}"
+          ext=".jpg,.png,.jpeg"
+          tip="图片500*500，格式（jpg,png）不超过4M；可拖动改变图片顺序"
+          :max-size="1024"
+          :sortable="true"
           :limit="4"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByDetailsDes">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByDetailsDes" alt>
-        </el-dialog>
-        <el-alert title="提示：图片不超过4M；可拖动改变图片顺序" type="remark-gray" :closable="false" />
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -190,10 +172,11 @@ import { getUrlParam, strLen, isMoney } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-import Sortable from 'sortablejs'
+import LmUpload from '@/components/Upload/index.vue'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'ProductEdit',
-  components: { PageHeader },
+  components: { PageHeader, LmUpload },
   data() {
     return {
       loading: false,
@@ -228,24 +211,14 @@ export default {
       kind_options: [],
       supplier_options: [],
       supplier_option_loading: false,
-      uploadImglistByDisplayImgUrls: [],
-      uploadImgPreImgDialogUrlByDisplayImgUrls: '',
-      uploadImgPreImgDialogVisibleByDisplayImgUrls: false,
-      uploadImgPmsByByDisplayImgUrls: { folder: 'product', isBuildms: 'true' },
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
-      uploadImglistByDetailsDes: [],
-      uploadImgPreImgDialogUrlByDetailsDes: '',
-      uploadImgPreImgDialogVisibleByDetailsDes: false,
-      uploadImgPmsByByDetailsDes: { folder: 'product', isBuildms: 'false' },
       charTagsInputVisible: false,
-      charTagsInputValue: ''
+      charTagsInputValue: '',
+      uploadFileHeaders: {},
+      uploadFileServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL
     }
   },
-  mounted() {
-    this.setUploadImgSortByDisplayImgUrls()
-    this.setUploadImgSortByDetailsDes()
-  },
   created() {
+    this.uploadFileHeaders = { 'X-Token': getToken() }
     this.init()
   },
   methods: {
@@ -271,17 +244,12 @@ export default {
           this.form.isSupRentService = d.isSupRentService
           this.form.supReceiveMode = d.supReceiveMode + ''
           this.form.charTags = d.charTags === null ? [] : d.charTags
-          this.uploadImglistByDisplayImgUrls = this.getUploadImglist(d.displayImgUrls)
-          this.uploadImglistByDetailsDes = this.getUploadImglist(d.detailsDes)
           this.kind_options = d.kinds
           this.supplier_options = [{ id: d.supplierId, name: d.supplierName }]
           this.form.supplierId = d.supplierId
         }
         this.loading = false
       })
-    },
-    resetForm() {
-
     },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
@@ -347,153 +315,6 @@ export default {
             })
           })
         }
-      })
-    },
-    getUploadImglist(imgUrls) {
-      var _uploadImglist = []
-      if (imgUrls != null) {
-        for (var i = 0; i < imgUrls.length; i++) {
-          _uploadImglist.push({ status: 'success', url: imgUrls[i].url, name: imgUrls[i].name, response: { data: { name: imgUrls[i].name, url: imgUrls[i].url }}})
-        }
-      }
-      return _uploadImglist
-    },
-    handleGetDisplayImgUrls(fileList) {
-      var _displayImgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
-      }
-      return _displayImgUrls
-    },
-    handleRemoveByDisplayImgUrls(file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
-    },
-    handleSuccessByDisplayImgUrls(response, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
-    },
-    handleErrorByDisplayImgUrls(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.handleGetDisplayImgUrls(fileList)
-    },
-    handlePreviewByDisplayImgUrls(file) {
-      this.uploadImgPreImgDialogUrlByDisplayImgUrls = file.url
-      this.uploadImgPreImgDialogVisibleByDisplayImgUrls = true
-    },
-    handleBeforeUploadByDisplayImgUrls(file) {
-      const imgType = file.type
-      const isLt4M = file.size / 1024 / 1024 < 4
-      //  var a = isLt4M === true ? 'true' : 'false'
-      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
-        this.$message('图片格式仅支持(jpg,png)')
-        return false
-      }
-
-      if (!isLt4M) {
-        this.$message('图片大小不能超过4M')
-        return false
-      }
-
-      return true
-    },
-    setUploadImgSortByDisplayImgUrls() {
-      var _this = this
-      const $ul = _this.$refs.uploadImgByDisplayImgUrls.$el.querySelectorAll('.el-upload-list')[0]
-      new Sortable($ul, {
-        onUpdate: function(event) {
-        // 修改items数据顺序
-          var newIndex = event.newIndex
-          var oldIndex = event.oldIndex
-          var $li = $ul.children[newIndex]
-          var $oldLi = $ul.children[oldIndex]
-          // 先删除移动的节点
-          $ul.removeChild($li)
-          // 再插入移动的节点到原有节点，还原了移动的操作
-          if (newIndex > oldIndex) {
-            $ul.insertBefore($li, $oldLi)
-          } else {
-            $ul.insertBefore($li, $oldLi.nextSibling)
-          }
-          // 更新items数组
-          var item = _this.uploadImglistByDisplayImgUrls.splice(oldIndex, 1)
-          _this.uploadImglistByDisplayImgUrls.splice(newIndex, 0, item[0])
-
-          _this.form.displayImgUrls = _this.handleGetDisplayImgUrls(_this.uploadImglistByDisplayImgUrls)
-        // 下一个tick就会走patch更新
-        },
-        animation: 150
-      })
-    },
-    handleGetDetailsDes(fileList) {
-      var _imgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _imgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
-      }
-      return _imgUrls
-    },
-    handleRemoveByDetailsDes(file, fileList) {
-      this.uploadImglistByDetailsDes = fileList
-      this.form.detailsDes = this.handleGetDetailsDes(fileList)
-    },
-    handleSuccessByDetailsDes(response, file, fileList) {
-      this.uploadImglistByDetailsDes = fileList
-      this.form.detailsDes = this.handleGetDetailsDes(fileList)
-    },
-    handleErrorByDetailsDes(errs, file, fileList) {
-      this.uploadImglistByDetailsDes = fileList
-      this.form.detailsDes = this.handleGetDetailsDes(fileList)
-    },
-    handlePreviewByDetailsDes(file) {
-      this.uploadImgPreImgDialogUrlByDetailsDes = file.url
-      this.uploadImgPreImgDialogVisibleByDetailsDes = true
-    },
-    handleBeforeUploadByDetailsDes(file) {
-      const imgType = file.type
-      const isLt4M = file.size / 1024 / 1024 < 4
-      //  var a = isLt4M === true ? 'true' : 'false'
-      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
-        this.$message('图片格式仅支持(jpg,png)')
-        return false
-      }
-
-      if (!isLt4M) {
-        this.$message('图片大小不能超过4M')
-        return false
-      }
-
-      return true
-    },
-    setUploadImgSortByDetailsDes() {
-      var _this = this
-      const $ul = _this.$refs.uploadImgByDetailsDes.$el.querySelectorAll('.el-upload-list')[0]
-      new Sortable($ul, {
-        onUpdate: function(event) {
-        // 修改items数据顺序
-          var newIndex = event.newIndex
-          var oldIndex = event.oldIndex
-          var $li = $ul.children[newIndex]
-          var $oldLi = $ul.children[oldIndex]
-          // 先删除移动的节点
-          $ul.removeChild($li)
-          // 再插入移动的节点到原有节点，还原了移动的操作
-          if (newIndex > oldIndex) {
-            $ul.insertBefore($li, $oldLi)
-          } else {
-            $ul.insertBefore($li, $oldLi.nextSibling)
-          }
-          // 更新items数组
-          var item = _this.uploadImglistByDetailsDes.splice(oldIndex, 1)
-          _this.uploadImglistByDetailsDes.splice(newIndex, 0, item[0])
-
-          _this.form.detailsDes = _this.handleGetDisplayImgUrls(_this.uploadImglistByDetailsDes)
-        // 下一个tick就会走patch更新
-        },
-        animation: 150
       })
     },
     charTagsHandleClose(tag) {

@@ -19,25 +19,21 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
-        <el-input :value="form.avatar" style="display:none" />
-        <el-upload
-          ref="uploadImg"
-          :action="uploadImgServiceUrl"
+      <el-form-item label="头像" prop="avatar" class="el-form-item-upload">
+        <el-input :value="form.avatar.toString()" style="display:none" />
+        <lm-upload
+          v-model="form.avatar"
           list-type="picture-card"
-          :on-success="handleSuccessByAvatar"
-          :on-remove="handleRemoveByAvatar"
-          :on-error="handleErrorByAvatar"
-          :on-preview="handlePreviewByAvatar"
-          :file-list="uploadImglistByAvatar"
+          :file-list="form.avatar"
+          :action="uploadFileServiceUrl"
+          :headers="uploadFileHeaders"
+          :data="{folder:'avatar'}"
+          ext=".jpg,.png,.jpeg"
+          tip="格式为500*500"
+          :max-size="1024"
+          :sortable="true"
           :limit="1"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByAvatar">
-          <img width="100%" :src="uploadImgPreImgDialogUrlByAvatar" alt="">
-        </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：格式为500*500</div>
+        />
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
         <el-input v-model="form.nickName" clearable />
@@ -84,10 +80,13 @@ import { edit, initEdit } from '@/api/adminuser'
 import fromReg from '@/utils/formReg'
 import { getUrlParam, goBack } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
+import LmUpload from '@/components/Upload/index.vue'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'SettingAdminUserEdit',
   components: {
-    PageHeader
+    PageHeader,
+    LmUpload
   },
   data() {
     return {
@@ -101,7 +100,7 @@ export default {
         nickName: '',
         phoneNumber: '',
         email: '',
-        avatar: '',
+        avatar: [],
         orgIds: [],
         roleIds: [],
         imIsUse: false,
@@ -110,7 +109,7 @@ export default {
       },
       rules: {
         password: [{ required: false, message: '必填,且由6到20个数字、英文字母或下划线组成', trigger: 'change', pattern: fromReg.password }],
-        avatar: [{ required: true, message: '必须上传' }],
+        avatar: [{ type: 'array', required: true, message: '必须上传', max: 1 }],
         nickName: [{ required: true, message: '必填', trigger: 'change' }],
         orgIds: [{ required: true, message: '必选' }],
         phoneNumber: [{ required: false, message: '格式错误,eg:13800138000', trigger: 'change', pattern: fromReg.phoneNumber }],
@@ -119,13 +118,12 @@ export default {
       cascader_org_props: { multiple: true, checkStrictly: true, emitPath: false },
       cascader_org_options: [],
       checkbox_group_role_options: [],
-      uploadImglistByAvatar: [],
-      uploadImgPreImgDialogUrlByAvatar: '',
-      uploadImgPreImgDialogVisibleByAvatar: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
+      uploadFileHeaders: {},
+      uploadFileServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL
     }
   },
   created() {
+    this.uploadFileHeaders = { 'X-Token': getToken() }
     this.init()
   },
   methods: {
@@ -149,12 +147,6 @@ export default {
           this.form.workBench = d.workBench
           this.cascader_org_options = d.orgs
           this.checkbox_group_role_options = d.roles
-
-          if (d.avatar != null && d.avatar.length > 0) {
-            this.uploadImglistByAvatar.push({ name: 'xx', url: d.avatar })
-            var var1 = document.querySelector('.el-upload')
-            var1.style.display = 'none'
-          }
         }
         this.loading = false
       })
@@ -198,25 +190,6 @@ export default {
     },
     cascader_org_change() {
 
-    },
-    handleRemoveByAvatar(file, fileList) {
-      this.uploadImglistByAvatar = fileList
-      this.form.avatar = ''
-      var var1 = document.querySelector('.el-upload')
-      var1.style.display = 'block'
-    },
-    handleSuccessByAvatar(response, file, fileList) {
-      this.uploadImglistByAvatar = fileList
-      this.form.avatar = file.response.data.url
-      var var1 = document.querySelector('.el-upload')
-      var1.style.display = 'none'
-    },
-    handleErrorByAvatar(errs, file, fileList) {
-      this.uploadImglistByAvatar = fileList
-    },
-    handlePreviewByAvatar(file) {
-      this.uploadImgPreImgDialogUrlByAvatar = file.url
-      this.uploadImgPreImgDialogVisibleByAvatar = true
     }
   }
 }

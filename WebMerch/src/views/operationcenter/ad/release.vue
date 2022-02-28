@@ -125,7 +125,7 @@ export default {
       uploadPreDialogFileName: '',
       uploadPreDialogFileUrl: '',
       uploadPreDialogVisible: false,
-      uploadServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL
+      uploadServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL
     }
   },
   created() {

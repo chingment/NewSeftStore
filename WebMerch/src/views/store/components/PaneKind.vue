@@ -99,29 +99,23 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="kindForm.name" clearable style="width:300px" />
         </el-form-item>
-        <el-form-item label="图片" prop="displayImgUrls">
+
+        <el-form-item label="图片" prop="displayImgUrls" class="el-form-item-upload">
           <el-input :value="kindForm.displayImgUrls.toString()" style="display:none" />
-          <el-upload
-            ref="uploadImg"
-            :action="uploadImgServiceUrl"
+          <lm-upload
+            v-model="kindForm.displayImgUrls"
             list-type="picture-card"
-            :on-success="handleSuccessByKindDisplayImgUrls"
-            :on-remove="handleRemoveByKindDisplayImgUrls"
-            :on-error="handleErrorByKindDisplayImgUrls"
-            :on-preview="handlePreviewByKindDisplayImgUrls"
-            :file-list="uploadImglistByKindDisplayImgUrls"
+            :file-list="kindForm.displayImgUrls"
+            :action="uploadFileServiceUrl"
+            :headers="uploadFileHeaders"
+            :data="{folder:'shop'}"
+            ext=".jpg,.png,.jpeg"
+            tip="图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
+            :max-size="1024"
+            :sortable="true"
             :limit="4"
-          >
-            <i class="el-icon-plus" />
-          </el-upload>
-          <el-dialog :visible.sync="uploadImgPreImgDialogVisibleByKindDisplayImgUrls" append-to-body>
-            <img width="100%" :src="uploadImgPreImgDialogUrlByKindDisplayImgUrls" alt>
-          </el-dialog>
-          <el-alert
-            title="提示：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
-            type="remark-gray"
-            :closable="false"
           />
+
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="kindForm.description" type="textarea" />
@@ -333,9 +327,11 @@ import {
 import { searchSpu, getSpecs } from '@/api/product'
 import { isEmpty } from '@/utils/commonUtil'
 import Pagination from '@/components/Pagination'
+import LmUpload from '@/components/Upload/index.vue'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'StorePaneShop',
-  components: { Pagination },
+  components: { Pagination, LmUpload },
   props: {
     storeId: {
       type: String,
@@ -435,10 +431,8 @@ export default {
       },
       listDataByKindSpus: [],
       listTotalByKindSpus: 0,
-      uploadImglistByKindDisplayImgUrls: [],
-      uploadImgPreImgDialogUrlByKindDisplayImgUrls: '',
-      uploadImgPreImgDialogVisibleByKindDisplayImgUrls: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+      uploadFileHeaders: {},
+      uploadFileServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL,
       spuSearchName: '',
       spuSearchMainImgUrl: '',
       emptyImgUrl: 'http://file.17fanju.com/upload/default1.jpg',
@@ -451,6 +445,7 @@ export default {
     }
   },
   created() {
+    this.uploadFileHeaders = { 'X-Token': getToken() }
     this.init()
   },
   methods: {
@@ -635,16 +630,12 @@ export default {
         this.kindForm.name = kind.name
         this.kindForm.description = kind.description
         this.kindForm.displayImgUrls = kind.displayImgUrls
-        this.uploadImglistByKindDisplayImgUrls = this.getUploadImglist(
-          kind.displayImgUrls
-        )
       } else {
         this.kindRemoveBtnShow = false
         this.kindForm.kindId = ''
         this.kindForm.name = ''
         this.kindForm.description = ''
         this.kindForm.displayImgUrls = []
-        this.uploadImglistByKindDisplayImgUrls = []
       }
     },
     dialogKindSpuOpen(isEdit, item) {
@@ -711,48 +702,6 @@ export default {
           this.kindSpuForm.stock = []
         }
       })
-    },
-    getUploadImglist(displayImgUrls) {
-      var _uploadImglist = []
-      for (var i = 0; i < displayImgUrls.length; i++) {
-        _uploadImglist.push({
-          status: 'success',
-          url: displayImgUrls[i].url,
-          response: {
-            data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }
-          }
-        })
-      }
-
-      return _uploadImglist
-    },
-    getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _displayImgUrls.push({
-            name: fileList[i].response.data.name,
-            url: fileList[i].response.data.url
-          })
-        }
-      }
-      return _displayImgUrls
-    },
-    handleRemoveByKindDisplayImgUrls(file, fileList) {
-      this.uploadImglistByKindDisplayImgUrls = fileList
-      this.kindForm.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handleSuccessByKindDisplayImgUrls(response, file, fileList) {
-      this.uploadImglistByKindDisplayImgUrls = fileList
-      this.kindForm.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handleErrorByKindDisplayImgUrls(errs, file, fileList) {
-      this.uploadImglistByKindDisplayImgUrls = fileList
-      this.kindForm.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    handlePreviewByKindDisplayImgUrls(file) {
-      this.uploadImgPreImgDialogUrlByKindDisplayImgUrls = file.url
-      this.uploadImgPreImgDialogVisibleByKindDisplayImgUrls = true
     }
   }
 }

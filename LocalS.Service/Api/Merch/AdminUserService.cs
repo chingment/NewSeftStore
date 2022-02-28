@@ -163,7 +163,7 @@ namespace LocalS.Service.Api.Merch
                 merchUser.UserName = rop.UserName;
                 merchUser.FullName = rop.FullName;
                 merchUser.NickName = rop.NickName;
-                merchUser.Avatar = rop.Avatar;
+                merchUser.Avatar = rop.Avatar[0].Url;
                 merchUser.PasswordHash = PassWordHelper.HashPassword(rop.Password);
                 merchUser.Email = rop.Email;
                 merchUser.PhoneNumber = rop.PhoneNumber;
@@ -241,7 +241,9 @@ namespace LocalS.Service.Api.Merch
             ret.Id = merchUser.Id;
             ret.UserName = merchUser.UserName;
             ret.PhoneNumber = merchUser.PhoneNumber;
-            ret.Avatar = merchUser.Avatar;
+            var avatar = new List<ImgSet>();
+            avatar.Add(new ImgSet { Url = merchUser.Avatar });
+            ret.Avatar = avatar;
             ret.Email = merchUser.Email;
             ret.FullName = merchUser.FullName;
             ret.NickName = merchUser.NickName;
@@ -273,7 +275,7 @@ namespace LocalS.Service.Api.Merch
 
                 merchUser.FullName = rop.FullName;
                 merchUser.NickName = rop.NickName;
-                merchUser.Avatar = rop.Avatar;
+                merchUser.Avatar = rop.Avatar[0].Url;
                 merchUser.Email = rop.Email;
                 merchUser.PhoneNumber = rop.PhoneNumber;
                 merchUser.IsDisable = rop.IsDisable;

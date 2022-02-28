@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace LocalS.Service.Api.Merch
         public string PhoneNumber { get; set; }
         public string FullName { get; set; }
         public string NickName { get; set; }
-        public string Avatar { get; set; }
+        public List<ImgSet> Avatar { get; set; }
         public string Email { get; set; }
         public List<string> RoleIds { get; set; }
         public bool ImIsUse { get; set; }

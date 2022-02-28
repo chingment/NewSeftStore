@@ -167,7 +167,7 @@ export default {
         language: 'zh_CN', // 语言
         height: 430,
         skin_url: '/static/tinymce/skins/ui/oxide',
-        // images_upload_url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+        // images_upload_url: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL,
         menubar: false, // 隐藏最上方menu菜单
         browser_spellcheck: true, // 拼写检查
         branding: false, // 去水印
@@ -197,7 +197,7 @@ export default {
             axios({
               method: 'POST',
               // 这里是你的上传地址
-              url: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+              url: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL,
               data: formData
             })
               .then((res) => {

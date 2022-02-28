@@ -18,26 +18,22 @@
       <el-form-item label="联系地址" prop="contactAddress">
         <el-input v-model="form.contactAddress" clearable style="max-width:500px" />
       </el-form-item>
-      <el-form-item label="门店图片" prop="displayImgUrls">
+      <el-form-item label="门店图片" prop="displayImgUrls" class="el-form-item-upload">
         <el-input :value="form.displayImgUrls.toString()" style="display:none" />
-        <el-upload
-          ref="uploadImg"
+        <lm-upload
           v-model="form.displayImgUrls"
-          :action="uploadImgServiceUrl"
           list-type="picture-card"
-          :before-upload="uploadBeforeHandle"
-          :on-success="uploadSuccessHandle"
-          :on-remove="uploadRemoveHandle"
-          :on-error="uploadErrorHandle"
-          :on-preview="uploadPreviewHandle"
-          :file-list="uploadImglist"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-        <el-dialog :visible.sync="uploadImgPreImgDialogVisible">
-          <img width="100%" :src="uploadImgPreImgDialogUrl" alt="">
-        </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序</div>
+          :file-list="form.displayImgUrls"
+          :action="uploadFileServiceUrl"
+          :headers="uploadFileHeaders"
+          :data="{folder:'shop'}"
+          ext=".jpg,.png,.jpeg"
+          tip="图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
+          :max-size="1024"
+          :sortable="true"
+          :limit="4"
+        />
+
       </el-form-item>
       <el-form-item label="简短描述" style="max-width:1000px">
         <el-input v-model="form.briefDes" type="text" maxlength="200" clearable show-word-limit />
@@ -59,9 +55,11 @@ import { MessageBox } from 'element-ui'
 import { save } from '@/api/shop'
 import PageHeader from '@/components/PageHeader/index.vue'
 import SelectAddressPoint from '@/components/SelectAddressPoint/index.vue'
+import LmUpload from '@/components/Upload/index.vue'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'ShopAdd',
-  components: { PageHeader, SelectAddressPoint },
+  components: { PageHeader, SelectAddressPoint, LmUpload },
   data() {
     return {
       loading: false,
@@ -84,11 +82,8 @@ export default {
         displayImgUrls: [{ type: 'array', required: true, message: '至少上传一张,且必须少于5张', max: 4 }],
         briefDes: [{ required: false, min: 0, max: 200, message: '不能超过200个字符', trigger: 'change' }]
       },
-      uploadImglist: [],
-      uploadImgMaxSize: 4,
-      uploadImgPreImgDialogUrl: '',
-      uploadImgPreImgDialogVisible: false,
-      uploadImgServiceUrl: process.env.VUE_APP_UPLOADIMGSERVICE_URL,
+      uploadFileHeaders: {},
+      uploadFileServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL,
       dialogIsShowBySelectAddressPoint: false,
       isDesktop: this.$store.getters.isDesktop
     }
@@ -97,7 +92,7 @@ export default {
 
   },
   created() {
-
+    this.uploadFileHeaders = { 'X-Token': getToken() }
   },
   methods: {
     onSave() {
@@ -134,72 +129,6 @@ export default {
       this.form.addressDetails = rs
       this.form.address = rs.address
       this.dialogIsShowBySelectAddressPoint = false
-    },
-    getUploadImglist(displayImgUrls) {
-      var _uploadImglist = []
-      if (displayImgUrls !== null) {
-        for (var i = 0; i < displayImgUrls.length; i++) {
-          _uploadImglist.push({ status: 'success', url: displayImgUrls[i].url, response: { data: { name: displayImgUrls[i].name, url: displayImgUrls[i].url }}})
-        }
-      }
-
-      return _uploadImglist
-    },
-    getdisplayImgUrls(fileList) {
-      var _displayImgUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _displayImgUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
-      }
-      return _displayImgUrls
-    },
-    uploadBeforeHandle(file) {
-      if (this.form.displayImgUrls.length >= this.uploadImgMaxSize) {
-        this.$message.error('上传图片不能超过4张!')
-        return false
-      }
-
-      const imgType = file.type
-      const isLt4M = file.size / 1024 / 1024 < 4
-      //  var a = isLt4M === true ? 'true' : 'false'
-      if (imgType !== 'image/jpeg' && imgType !== 'image/png' && imgType !== 'image/jpg') {
-        this.$message('图片格式仅支持(jpg,png)')
-        return false
-      }
-
-      if (!isLt4M) {
-        this.$message('图片大小不能超过4M')
-        return false
-      }
-
-      return true
-    },
-    uploadCardCheckShow() {
-      var uploadcard = this.$refs.uploadImg.$el.querySelectorAll('.el-upload--picture-card')
-      if (this.form.displayImgUrls.length === this.uploadImgMaxSize) {
-        uploadcard[0].style.display = 'none'
-      } else {
-        uploadcard[0].style.display = 'inline-block'
-      }
-    },
-    uploadRemoveHandle(file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-      this.uploadCardCheckShow()
-    },
-    uploadSuccessHandle(response, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-      this.uploadCardCheckShow()
-    },
-    uploadErrorHandle(errs, file, fileList) {
-      this.uploadImglist = fileList
-      this.form.displayImgUrls = this.getdisplayImgUrls(fileList)
-    },
-    uploadPreviewHandle(file) {
-      this.uploadImgPreImgDialogUrl = file.url
-      this.uploadImgPreImgDialogVisible = true
     }
   }
 }
