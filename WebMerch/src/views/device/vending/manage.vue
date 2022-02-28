@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       loading: false,
+      activeId: '',
       activeTab: 'tabBaseInfo',
       activeDropdown: {
         id: '',
@@ -41,29 +42,43 @@ export default {
       dropdownOptions: []
     }
   },
+  watch: {
+    '$route'(to, from) {
+      this.activeId = to.query.id
+      this.init()
+    }
+  },
   created() {
-    this.activeDropdown.id = this.$route.params.id
+    this.activeId = this.$route.query.id
     this.activeTab =
-      typeof this.$route.params.tab === 'undefined'
+      typeof this.$route.query.tab === 'undefined'
         ? 'tabBaseInfo'
-        : this.$route.params.tab
+        : this.$route.query.tab
     this.init()
   },
   methods: {
     init() {
       this.loading = true
-      initManage({ id: this.activeDropdown.id }).then(res => {
+      initManage({ id: this.activeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.activeDropdown = d.curDevice
           this.dropdownOptions = d.devices
+          this.activeDropdown = this.getActiveDropdown(this.activeId)
         }
         this.loading = false
       })
     },
     onChangeDropdown(id) {
-      this.activeDropdown.id = id
-      this.init()
+      this.$router.replace({
+        query: {
+          id: id,
+          tab: this.activeTab
+        }
+      })
+    },
+    getActiveDropdown(id) {
+      const result = this.dropdownOptions.filter((item) => { return item.id === id })[0]
+      return result
     }
   }
 }

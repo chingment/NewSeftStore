@@ -201,9 +201,8 @@ export default {
     },
     onSawDetail(row) {
       this.$router.push({
-        name: 'MerchReplenishPlanDetail',
         path: '/stock/replenishplan/detail',
-        params: {
+        query: {
           id: row.id
         }
       })

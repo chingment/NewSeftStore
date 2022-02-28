@@ -68,7 +68,6 @@
 import { getList, initGetList } from '@/api/devvending'
 
 export default {
-  name: 'DeviceVending',
   data() {
     return {
       loading: true,
@@ -124,9 +123,8 @@ export default {
     },
     onManage(item) {
       this.$router.push({
-        name: 'MerchDeviceManage',
         path: '/device/vending/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabBaseInfo'
         }
@@ -134,9 +132,8 @@ export default {
     },
     onStock(item) {
       this.$router.push({
-        name: 'MerchDeviceManage',
         path: '/device/vending/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabStock'
         }
@@ -144,9 +141,8 @@ export default {
     },
     onControlCenter(item) {
       this.$router.push({
-        name: 'MerchDeviceManage',
         path: '/device/vending/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabControlCenter'
         }

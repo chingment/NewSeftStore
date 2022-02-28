@@ -95,7 +95,6 @@ import { MessageBox } from 'element-ui'
 import { getList, initGetList, bindMerch, unBindMerch } from '@/api/devsenvivlite'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'DeviceSenvivLite',
   components: { Pagination },
   data() {
     return {

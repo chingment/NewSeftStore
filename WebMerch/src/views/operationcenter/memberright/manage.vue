@@ -5,7 +5,7 @@
       <div class="it-name">
         <span class="title">当前会员:</span><span class="name">{{ activeDropdown.name }}</span>
       </div>
-      <el-dropdown class="it-switch" trigger="click" @command="handleChangeDropdown">
+      <el-dropdown class="it-switch" trigger="click" @command="onChangeDropdown">
         <span class="el-dropdown-link">
           切换<i class="el-icon-arrow-down el-icon--right" />
         </span>
@@ -43,6 +43,8 @@ export default {
   components: { PaneBaseInfo, PaneFee, PaneSku, PaneCoupon, PageHeader },
   data() {
     return {
+      loading: false,
+      activeId: '',
       activeTab: 'tabBaseInfo',
       activeDropdown: {
         id: '',
@@ -51,29 +53,44 @@ export default {
       dropdownOptions: []
     }
   },
+  watch: {
+    '$route'(to, from) {
+      this.activeId = to.query.id
+      this.init()
+    }
+  },
   created() {
-    this.activeDropdown.id = this.$route.params.id
+    this.activeId = this.$route.query.id
     this.activeTab =
-      typeof this.$route.params.tab === 'undefined'
+      typeof this.$route.query.tab === 'undefined'
         ? 'tabBaseInfo'
-        : this.$route.params.tab
+        : this.$route.query.tab
     this.init()
   },
   methods: {
     init() {
       this.loading = true
-      initManage({ id: this.activeDropdown.id }).then(res => {
+      initManage({ id: this.activeId }).then(res => {
         if (res.result === 1) {
           var d = res.data
-          this.activeDropdown = d.curLevelSt
+
           this.dropdownOptions = d.levelSts
+          this.activeDropdown = this.getActiveDropdown(this.activeId)
         }
         this.loading = false
       })
     },
-    handleChangeDropdown(id) {
-      this.activeDropdown.id = id
-      this.init()
+    onChangeDropdown(id) {
+      this.$router.replace({
+        query: {
+          id: id,
+          tab: this.activeTab
+        }
+      })
+    },
+    getActiveDropdown(id) {
+      const result = this.dropdownOptions.filter((item) => { return item.id === id })[0]
+      return result
     }
   }
 }

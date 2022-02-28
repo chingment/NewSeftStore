@@ -81,9 +81,8 @@ export default {
     },
     onManage(item) {
       this.$router.push({
-        name: 'MerchStoreEdit',
         path: '/store/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabBaseInfo'
         }
@@ -91,9 +90,8 @@ export default {
     },
     onKind(item) {
       this.$router.push({
-        name: 'MerchStoreEdit',
         path: '/store/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabKind'
         }
@@ -101,9 +99,8 @@ export default {
     },
     onShop(item) {
       this.$router.push({
-        name: 'MerchStoreEdit',
         path: '/store/manage',
-        params: {
+        query: {
           id: item.id,
           tab: 'tabShop'
         }

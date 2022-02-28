@@ -272,7 +272,8 @@ export default {
           if (sex === '2') {
             window.location.href = 'https://g.h5gdvip.com/p/87syo0cn'
           } else {
-            this.step = 3
+            window.location.href = 'https://g.h5gdvip.com/p/xyn3puca'
+            // this.step = 3
           }
         } else {
           this.$toast(res.message)

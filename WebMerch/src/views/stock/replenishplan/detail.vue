@@ -16,7 +16,7 @@ export default {
     }
   },
   created() {
-    this.planId = this.$route.params.id
+    this.planId = this.$route.query.id
     console.log('this.planId:' + this.planId)
   },
   methods: {

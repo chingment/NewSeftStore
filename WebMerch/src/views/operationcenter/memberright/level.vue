@@ -102,9 +102,8 @@ export default {
     },
     handleManageBaseInfo(row) {
       this.$router.push({
-        name: 'MarketMemberSet',
         path: '/operationcenter/memberright/manage',
-        params: {
+        query: {
           id: row.id,
           tab: 'tabBaseInfo'
         }
@@ -112,9 +111,8 @@ export default {
     },
     handleManageFee(row) {
       this.$router.push({
-        name: 'MarketMemberSet',
         path: '/operationcenter/memberright/manage',
-        params: {
+        query: {
           id: row.id,
           tab: 'tabFee'
         }
@@ -122,9 +120,8 @@ export default {
     },
     handleManageCoupon(row) {
       this.$router.push({
-        name: 'MarketMemberSet',
         path: '/operationcenter/memberright/manage',
-        params: {
+        query: {
           id: row.id,
           tab: 'tabCoupon'
         }
@@ -132,9 +129,8 @@ export default {
     },
     handleManageSku(row) {
       this.$router.push({
-        name: 'MarketMemberSet',
         path: '/operationcenter/memberright/manage',
-        params: {
+        query: {
           id: row.id,
           tab: 'tabSku'
         }
