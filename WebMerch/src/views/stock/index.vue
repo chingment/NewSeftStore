@@ -23,7 +23,7 @@ export default {
   name: 'StockIndex',
   data() {
     return {
-      navActive: '/order/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

@@ -23,7 +23,7 @@ export default {
   name: 'ClientIndex',
   data() {
     return {
-      navActive: '/clientuser/shop/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

@@ -25,7 +25,7 @@ export default {
   name: 'OperationCenterIndex',
   data() {
     return {
-      navActive: '/order/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

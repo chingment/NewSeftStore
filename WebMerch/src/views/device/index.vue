@@ -23,7 +23,7 @@ export default {
   name: 'DeviceIndex',
   data() {
     return {
-      navActive: '/device/vending',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

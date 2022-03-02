@@ -28,7 +28,7 @@ export default {
   name: 'ProductIndex',
   data() {
     return {
-      navActive: '/product/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

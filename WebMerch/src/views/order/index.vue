@@ -26,7 +26,7 @@ export default {
   name: 'OrderIndex',
   data() {
     return {
-      navActive: '/order/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

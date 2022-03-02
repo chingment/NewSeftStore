@@ -32,7 +32,7 @@ export default {
   name: 'PayTransIndex',
   data() {
     return {
-      navActive: '/order/list',
+      navActive: '',
       listQuery: null,
       loading: false,
       isDesktop: this.$store.getters.isDesktop,

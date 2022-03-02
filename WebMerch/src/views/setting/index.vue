@@ -28,7 +28,7 @@ export default {
   name: 'SettingIndex',
   data() {
     return {
-      navActive: '/order/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

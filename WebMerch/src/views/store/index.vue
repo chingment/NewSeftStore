@@ -27,7 +27,7 @@ export default {
   name: 'StoreIndex',
   data() {
     return {
-      navActive: '/store/list',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },

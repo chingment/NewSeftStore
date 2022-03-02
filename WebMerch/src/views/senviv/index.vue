@@ -31,7 +31,7 @@ export default {
   directives: { permission },
   data() {
     return {
-      navActive: '/senviv/users',
+      navActive: '',
       isDesktop: this.$store.getters.isDesktop
     }
   },
