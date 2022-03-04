@@ -80,7 +80,7 @@
     <mt-datetime-picker
       ref="pickerByDate"
       type="date"
-      :start-date="new Date('1949-10-01')"
+      :start-date="new Date('1900-01-01')"
       @confirm="onConfirmByDate"
       @touchmove.native.stop.prevent
     />

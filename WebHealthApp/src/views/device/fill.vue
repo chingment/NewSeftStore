@@ -74,7 +74,7 @@ export default {
           id: 'height',
           title: '身高',
           type: 'height',
-          value: '',
+          value: 160,
           append: 'cm',
           rule: {
             required: true, min: 1, max: 20, message: '必选，请点击选择', pattern: fromReg.decimal
@@ -84,7 +84,7 @@ export default {
           id: 'weight',
           title: '体重',
           type: 'weight',
-          value: '',
+          value: 50,
           append: 'kg',
           rule: {
             required: true, min: 1, max: 20, message: '必选，请点击选择', pattern: fromReg.decimal
