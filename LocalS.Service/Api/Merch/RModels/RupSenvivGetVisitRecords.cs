@@ -8,7 +8,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RupSenvivGetVisitRecords : RupBaseGetList
     {
-        public string UserId { get; set; }
+        public string SvUserId { get; set; }
 
         public string TaskId { get; set; }
 

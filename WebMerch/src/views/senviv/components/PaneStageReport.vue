@@ -17,7 +17,7 @@
           />
 
         </el-form-item>
-        <el-form-item v-if="userId===''" label="搜索">
+        <el-form-item v-if="svUserId===''" label="搜索">
           <el-input v-model="listQuery.name" clearable style="max-width: 300px;" placeholder="昵称/姓名" />
         </el-form-item>
         <el-form-item>
@@ -54,7 +54,7 @@
         fixed
       />
       <el-table-column
-        v-if="userId===''"
+        v-if="svUserId===''"
         prop="signName"
         label="对象"
         width="120"
@@ -63,7 +63,7 @@
       />
 
       <el-table-column
-        v-if="userId===''"
+        v-if="svUserId===''"
         prop="sex"
         label="性别"
         width="60"
@@ -76,7 +76,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="userId===''"
+        v-if="svUserId===''"
         prop="age"
         label="年龄"
         width="60"
@@ -449,7 +449,7 @@ export default {
   name: 'ClientUserList',
   components: { Pagination, PaneStageReportDetail, DvItem },
   props: {
-    userId: {
+    svUserId: {
       type: String,
       default: ''
     },
@@ -473,7 +473,7 @@ export default {
         limit: 10,
         healthDate: undefined,
         name: undefined,
-        userId: undefined
+        svUserId: undefined
       },
       datePickerHealthDate: {
         disabledDate(time) {
@@ -492,7 +492,7 @@ export default {
         this.listQuery = this.$store.getters.listPageQuery.get(this.$route.path)
       }
     }
-    this.listQuery.userId = this.userId
+    this.listQuery.svUserId = this.svUserId
     this.listQuery.rptType = this.rptType
     this.onGetList()
   },

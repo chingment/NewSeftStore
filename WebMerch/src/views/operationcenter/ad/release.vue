@@ -9,57 +9,21 @@
         <el-input v-model="form.title" clearable />
       </el-form-item>
       <el-form-item label="文件" prop="fileUrls">
-        <el-input :value="form.fileUrls.toString()" style="display:none" />
-        <el-upload
-          ref="uploadImg"
-          :action="uploadServiceUrl"
-          list-type="picture-card"
-          :before-upload="onFileUploadBefore"
-          :on-success="onFileUploadSuccess"
-          :on-remove="onFileUploadRemove"
-          :on-error="onFileUploadError"
-          :limit="1"
-        >
-          <i class="el-icon-plus" />
-          <div slot="file" slot-scope="{file}">
-            <img
-              v-if="file.name.indexOf('png')>-1||file.name.indexOf('jpg')>-1"
-              class="el-upload-list__item-thumbnail"
-              :src="file.url"
-              alt=""
-            >
-            <video
-              v-else-if="file.name.indexOf('mp4')>-1"
-              :src="file.url"
-              class="el-upload-list__item-thumbnail"
-              controls="controls"
-            />
-            <span class="el-upload-list__item-actions">
-              <span
-                class="el-upload-list__item-preview"
-                @click="onFileUploadPreview(file)"
-              >
-                <i class="el-icon-zoom-in" />
-              </span>
-              <span
-                class="el-upload-list__item-delete"
-                @click="onFileUploadRemove(file)"
-              >
-                <i class="el-icon-delete" />
-              </span>
-            </span>
-          </div>
 
-        </el-upload>
-        <el-dialog :visible.sync="uploadPreDialogVisible">
-          <img v-if="uploadPreDialogFileName.indexOf('png')>-1||uploadPreDialogFileName.indexOf('jpg')>-1" width="100%" :src="uploadPreDialogFileUrl" alt="">
-          <video
-            v-else-if="uploadPreDialogFileName.indexOf('mp4')>-1"
-            :src="uploadPreDialogFileUrl"
-            controls="controls"
-          />
-        </el-dialog>
-        <div class="remark-tip"><span class="sign">*注</span>：{{ temp.adSpaceDescription }}</div>
+        <el-input :value="form.fileUrls.toString()" style="display:none" />
+        <lm-upload
+          v-model="form.fileUrls"
+          list-type="picture-card"
+          :file-list="form.fileUrls"
+          :action="uploadFileServiceUrl"
+          :headers="uploadFileHeaders"
+          :data="{folder:'ad'}"
+          :ext="temp.adSpaceSupportFormat"
+          :tip="temp.adSpaceDescription"
+          :max-size="1048576000"
+          :sortable="true"
+          :limit="1"
+        />
       </el-form-item>
       <el-form-item label="有效期" prop="validDate">
         <el-date-picker
@@ -91,10 +55,13 @@ import { MessageBox } from 'element-ui'
 import { release, initRelease } from '@/api/ad'
 import { getUrlParam } from '@/utils/commonUtil'
 import PageHeader from '@/components/PageHeader/index.vue'
+import LmUpload from '@/components/Upload/index.vue'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'OperationCenterAdspaceRelease',
   components: {
-    PageHeader
+    PageHeader,
+    LmUpload
   },
   data() {
     return {
@@ -121,14 +88,11 @@ export default {
       },
       belongsCheckAll: false,
       belongsIsIndeterminate: true,
-      uploadFilelist: [],
-      uploadPreDialogFileName: '',
-      uploadPreDialogFileUrl: '',
-      uploadPreDialogVisible: false,
-      uploadServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL
+      uploadFileServiceUrl: process.env.VUE_APP_UPLOAD_FILE_SERVICE_URL
     }
   },
   created() {
+    this.uploadFileHeaders = { 'X-Token': getToken() }
     this.init()
   },
   methods: {
@@ -188,63 +152,6 @@ export default {
       const checkedCount = value.length
       this.belongsCheckAll = checkedCount === this.temp.belongs.length
       this.belongsIsIndeterminate = checkedCount > 0 && checkedCount < this.temp.belongs.length
-    },
-    getdisplayImgUrls(fileList) {
-      var _fileUrls = []
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].status === 'success') {
-          _fileUrls.push({ name: fileList[i].response.data.name, url: fileList[i].response.data.url })
-        }
-      }
-      return _fileUrls
-    },
-    onFileUploadBefore(file) {
-      if (this.temp.adSpaceSupportFormat === null || this.temp.adSpaceSupportFormat === '') {
-        this.$message({
-          message: '未设置文件格式',
-          type: 'error'
-        })
-        return false
-      }
-
-      if (this.temp.adSpaceSupportFormat.indexOf(file.type) === -1) {
-        this.$message({
-          message: '不支持该文件格式',
-          type: 'error'
-        })
-        return false
-      }
-    },
-    onFileUploadRemove(file) {
-      if (this.uploadFilelist != null) {
-        for (var i = 0; i < this.uploadFilelist.length; i++) {
-          if (this.uploadFilelist[i].uid === file.uid) {
-            this.uploadFilelist.splice(i, 1)
-          }
-        }
-      }
-      this.form.fileUrls = this.getdisplayImgUrls(this.uploadFilelist)
-      if (this.form.fileUrls == null || this.form.fileUrls.length === 0) {
-        var var1 = document.querySelector('.el-upload')
-        var1.style.display = 'block'
-      }
-    },
-    onFileUploadSuccess(response, file, fileList) {
-      this.uploadFilelist = fileList
-      this.form.fileUrls = this.getdisplayImgUrls(fileList)
-      if (this.form.fileUrls.length === 1) {
-        var var1 = document.querySelector('.el-upload')
-        var1.style.display = 'none'
-      }
-    },
-    onFileUploadError(errs, file, fileList) {
-      this.uploadFilelist = fileList
-      this.form.fileUrls = this.getdisplayImgUrls(fileList)
-    },
-    onFileUploadPreview(file) {
-      this.uploadPreDialogFileName = file.name
-      this.uploadPreDialogFileUrl = file.url
-      this.uploadPreDialogVisible = true
     }
   }
 }

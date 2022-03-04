@@ -191,7 +191,7 @@ export default {
     return {
       loading: false,
       fromByTemp: {
-        userId: '',
+        svUserId: '',
         docNum: '',
         fullName: '',
         nickName: '',
@@ -254,7 +254,7 @@ export default {
       })
         .then(() => {
           var _from = {
-            userId: this.fromByTemp.userId,
+            svUserId: this.fromByTemp.svUserId,
             fullName: this.fromByTemp.fullName,
             sex: this.fromByTemp.sex.value,
             birthday: this.fromByTemp.birthday,

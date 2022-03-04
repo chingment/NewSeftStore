@@ -38,8 +38,8 @@
 
     </el-timeline>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="onGetList" />
-    <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :user-id="userId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
-    <dialog-visit-by-papush v-if="isVisibleDialogVisitByPapush" :user-id="userId" :visible.sync="isVisibleDialogVisitByPapush" @aftersave="onAfterSaveDialogVisitByPapush" />
+    <dialog-visit-by-telephone v-if="isVisibleDialogVisitByTelephone" :sv-user-id="svUserId" :visible.sync="isVisibleDialogVisitByTelephone" @aftersave="onAfterSaveDialogVisitByTelephone" />
+    <dialog-visit-by-papush v-if="isVisibleDialogVisitByPapush" :sv-user-id="svUserId" :visible.sync="isVisibleDialogVisitByPapush" @aftersave="onAfterSaveDialogVisitByPapush" />
 
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
   name: 'PaneVisitRecord',
   components: { Pagination, DialogVisitByTelephone, DialogVisitByPapush },
   props: {
-    userId: {
+    svUserId: {
       type: String,
       default: ''
     }
@@ -69,7 +69,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        userId: undefined
+        svUserId: undefined
       },
       isDesktop: this.$store.getters.isDesktop
     }
@@ -83,7 +83,7 @@ export default {
   methods: {
     onGetList() {
       this.loading = true
-      this.listQuery.userId = this.userId
+      this.listQuery.svUserId = this.svUserId
       getVisitRecords(this.listQuery).then(res => {
         if (res.result === 1) {
           var d = res.data

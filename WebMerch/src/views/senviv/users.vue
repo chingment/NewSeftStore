@@ -82,7 +82,7 @@
     </el-row>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
 
-    <pane-user-detail v-if="dialogIsShowByDetail" :visible.sync="dialogIsShowByDetail" :user-id="selectUserId" />
+    <pane-user-detail v-if="dialogIsShowByDetail" :visible.sync="dialogIsShowByDetail" :sv-user-id="selectUserId" />
 
   </div>
 </template>

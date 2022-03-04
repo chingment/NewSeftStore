@@ -80,7 +80,7 @@ import { saveVisitRecordByTelePhone, getVisitRecords } from '@/api/senviv'
 export default {
   name: 'PaneVisitRecord',
   props: {
-    userId: {
+    svUserId: {
       type: String,
       default: ''
     },
@@ -96,7 +96,7 @@ export default {
         visitTime: '',
         nextTime: '',
         remark: '',
-        userId: ''
+        svUserId: ''
       },
       rules: {
         visitTime: [{ required: true, message: '必选', trigger: 'change' }],
@@ -108,7 +108,7 @@ export default {
       recordsQuery: {
         page: 1,
         limit: 10,
-        userId: undefined
+        svUserId: undefined
       },
       pickerOptions: {
         shortcuts: [{
@@ -136,13 +136,13 @@ export default {
     }
   },
   created() {
-    this.form.userId = this.userId
+    this.form.svUserId = this.svUserId
     this.onGetVisitRecords()
   },
   methods: {
     onGetVisitRecords() {
       this.loading = true
-      this.recordsQuery.userId = this.userId
+      this.recordsQuery.svUserId = this.svUserId
       getVisitRecords(this.recordsQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
@@ -165,7 +165,7 @@ export default {
           })
             .then(() => {
               var _from = {
-                userId: this.form.userId,
+                svUserId: this.form.svUserId,
                 visitTime: this.form.visitTime,
                 nextTime: this.form.nextTime,
                 visitContent: { remark: this.form.remark }

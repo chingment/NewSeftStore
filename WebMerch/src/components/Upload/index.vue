@@ -107,6 +107,7 @@ export default {
   },
   data: function() {
     return {
+      loading: false,
       dialogFileUrl: '',
       dialogFileName: '',
       dialogVisible: false,
@@ -192,9 +193,11 @@ export default {
         this.$message.error('上传文件大小不能超过' + maxSize + 'KB!')
         return false
       }
+
       return this.beforeUpload(file)
     },
     onElSuccess: function(response, file, fileList) {
+      this.loading = false
       if (response.data) {
         var d = response.data
         console.log(fileList)

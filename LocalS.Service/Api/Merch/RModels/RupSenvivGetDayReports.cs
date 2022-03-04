@@ -12,7 +12,7 @@ namespace LocalS.Service.Api.Merch
 
         public string Name { get; set; }
 
-        public string UserId { get; set; }
+        public string SvUserId { get; set; }
         public string RptType { get; set; }
     }
 }

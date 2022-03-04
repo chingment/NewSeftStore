@@ -9,7 +9,7 @@ namespace LocalS.Service.Api.Merch
 {
     public class RopSenvivSaveUserDetail
     {
-        public string UserId { get; set; }
+        public string SvUserId { get; set; }
         public string FullName { get; set; }
         public string Sex { get; set; }
         public DateTime? Birthday { get; set; }

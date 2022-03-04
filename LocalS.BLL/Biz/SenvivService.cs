@@ -1974,6 +1974,7 @@ namespace LocalS.BLL
 
             return true;
         }
+
         public bool SendHealthMonitor(string svUserId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
             var template = GetWxPaTpl(svUserId, "health_monitor");
@@ -2050,6 +2051,7 @@ namespace LocalS.BLL
 
             return true;
         }
+
         public WxPaTplModel GetWxPaTpl(string svUserId, string template)
         {
             var model = new WxPaTplModel();

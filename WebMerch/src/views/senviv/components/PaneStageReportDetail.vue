@@ -580,7 +580,7 @@ export default {
       loadingBySug: false,
       loadingByHandleRecord: false,
       userInfo: {
-        userId: '',
+        svUserId: '',
         avatar: '',
         signName: '',
         sex: '',
@@ -617,7 +617,7 @@ export default {
         visitTemplate: '',
         nextTime: '',
         content: '',
-        userId: ''
+        svUserId: ''
       },
       rulesByVisitPapush: {
         visitTemplate: [{ required: true, message: '请选择模板', trigger: 'change' }],
@@ -631,7 +631,7 @@ export default {
       recordsQuery: {
         page: 1,
         limit: 10,
-        userId: undefined,
+        svUserId: undefined,
         reportId: undefined
       },
       visitTemplateOptions: [{
@@ -907,7 +907,7 @@ export default {
     },
     onGetHandleRecords() {
       this.loadingByHandleRecord = true
-      this.recordsQuery.userId = this.userInfo.userId
+      this.recordsQuery.svUserId = this.userInfo.svUserId
       this.recordsQuery.reportId = this.reportId
       this.recordsQuery.taskId = this.taskId
       getHandleRecords(this.recordsQuery).then(res => {
@@ -970,7 +970,7 @@ export default {
             .then(() => {
               var _from = {
                 taskId: this.taskId,
-                userId: this.userInfo.userId,
+                svUserId: this.userInfo.svUserId,
                 reportId: this.reportId,
                 visitTime: this.formByVisitTelephone.visitTime,
                 nextTime: this.formByVisitTelephone.nextTime,
@@ -1006,7 +1006,7 @@ export default {
             .then(() => {
               var _from = {
                 taskId: this.taskId,
-                userId: this.userInfo.userId,
+                svUserId: this.userInfo.svUserId,
                 reportId: this.reportId,
                 visitTemplate: this.formByVisitPapush.visitTemplate,
                 visitContent: {

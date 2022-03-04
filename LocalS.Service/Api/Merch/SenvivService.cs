@@ -211,13 +211,13 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
-        public CustomJsonResult GetUserDetail(string operater, string merchId, string userId)
+        public CustomJsonResult GetUserDetail(string operater, string merchId, string svUserId)
         {
             var result = new CustomJsonResult();
 
 
             var d_SenvivUser = (from u in CurrentDb.SenvivUser
-                                where u.Id == userId
+                                where u.Id == svUserId
                                 select u).FirstOrDefault();
 
 
@@ -241,7 +241,7 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new
             {
-                UserId = d_SenvivUser.Id,
+                SvUserId = d_SenvivUser.Id,
                 SignName = SvUtil.GetSignName("", d_SenvivUser.FullName),
                 SignTags = GetSignTags(d_SenvivUser),
                 Age = SvUtil.GetAge(d_SenvivUser.Birthday),
@@ -271,7 +271,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == rop.UserId).FirstOrDefault();
+            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == rop.SvUserId).FirstOrDefault();
 
             if (d_User != null)
             {
@@ -384,9 +384,9 @@ namespace LocalS.Service.Api.Merch
                 query = query.Where(m => m.HealthDate >= startTime && m.HealthDate <= endTime);
             }
 
-            if (!string.IsNullOrEmpty(rup.UserId))
+            if (!string.IsNullOrEmpty(rup.SvUserId))
             {
-                query = query.Where(m => m.SvUserId == rup.UserId);
+                query = query.Where(m => m.SvUserId == rup.SvUserId);
             }
 
             int total = query.Count();
@@ -835,9 +835,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             }
 
 
-            if (!string.IsNullOrEmpty(rup.UserId))
+            if (!string.IsNullOrEmpty(rup.SvUserId))
             {
-                query = query.Where(m => m.SvUserId == rup.UserId);
+                query = query.Where(m => m.SvUserId == rup.SvUserId);
             }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
@@ -1032,7 +1032,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 Id = rpt.Id,
                 UserInfo = new
                 {
-                    UserId = rpt.SvUserId,
+                    SvUserId = rpt.SvUserId,
                     SignName = SvUtil.GetSignName("", rpt.FullName),
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
@@ -1375,9 +1375,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var query = (from u in CurrentDb.SenvivVisitRecord
                          select new { u.Id, u.SvUserId, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
-            if (!string.IsNullOrEmpty(rup.UserId))
+            if (!string.IsNullOrEmpty(rup.SvUserId))
             {
-                query = query.Where(m => m.SvUserId == rup.UserId);
+                query = query.Where(m => m.SvUserId == rup.SvUserId);
             }
 
             if (!string.IsNullOrEmpty(rup.TaskId))
@@ -1494,7 +1494,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var d_SenvivVisitRecord = new SenvivVisitRecord();
             d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.SvUserId = rop.UserId;
+            d_SenvivVisitRecord.SvUserId = rop.SvUserId;
             d_SenvivVisitRecord.ReportId = rop.ReportId;
             d_SenvivVisitRecord.TaskId = rop.TaskId;
             d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;

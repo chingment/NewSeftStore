@@ -20,9 +20,9 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpGet]
-        public OwnApiHttpResponse GetUserDetail([FromUri]string userId)
+        public OwnApiHttpResponse GetUserDetail([FromUri]string svUserId)
         {
-            var result = MerchServiceFactory.Senviv.GetUserDetail(this.CurrentUserId, this.CurrentMerchId, userId);
+            var result = MerchServiceFactory.Senviv.GetUserDetail(this.CurrentUserId, this.CurrentMerchId, svUserId);
             return new OwnApiHttpResponse(result);
         }
 

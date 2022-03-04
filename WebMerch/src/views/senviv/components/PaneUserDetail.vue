@@ -46,10 +46,10 @@
         </el-aside>
         <el-container>
           <el-main class="">
-            <pane-user-info v-if="activeMenu==='UserInfo'" :user-id="userId" :init-data="userDetail" />
-            <pane-visit-record v-if="activeMenu==='VisitRecord'" :user-id="userId" />
-            <pane-day-report v-if="activeMenu==='DayReport'" :user-id="userId" />
-            <pane-stage-report v-if="activeMenu==='MonthReport'" :user-id="userId" rpt-type="per_month" />
+            <pane-user-info v-if="activeMenu==='UserInfo'" :sv-user-id="svUserId" :init-data="userDetail" />
+            <pane-visit-record v-if="activeMenu==='VisitRecord'" :sv-user-id="svUserId" />
+            <pane-day-report v-if="activeMenu==='DayReport'" :sv-user-id="svUserId" />
+            <pane-stage-report v-if="activeMenu==='MonthReport'" :sv-user-id="svUserId" rpt-type="per_month" />
           </el-main>
         </el-container>
       </el-container>
@@ -72,7 +72,7 @@ export default {
   // name: 'SenvivPaneUserDetail',
   components: { PaneDayReport, PaneStageReport, PaneUserInfo, PaneVisitRecord },
   props: {
-    userId: {
+    svUserId: {
       type: String,
       default: ''
     },
@@ -106,7 +106,7 @@ export default {
   methods: {
     onGetUserDetail() {
       this.loading = true
-      getUserDetail({ userId: this.userId }).then(res => {
+      getUserDetail({ svUserId: this.svUserId }).then(res => {
         if (res.result === 1) {
           this.userDetail = res.data
         }
