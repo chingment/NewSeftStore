@@ -42,6 +42,8 @@ namespace LocalS.BLL
         public string OpenId { get; set; }
         public string AccessToken { get; set; }
         public string TemplateId { get; set; }
+        public string MerchName { get; set; }
+        public string FullName { get; set; }
     }
 
     public class SmsTemplateModel
@@ -1975,6 +1977,33 @@ namespace LocalS.BLL
             return true;
         }
 
+        public bool SendArticleByPostpartum(string svUserId, string title, string remark, string url)
+        {
+            var template = GetWxPaTpl(svUserId, "article_postpartum");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"touser\":\"" + template.OpenId + "\",");
+            sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+            sb.Append("\"url\":\"" + url + "\", ");
+            sb.Append("\"data\":{");
+            sb.Append("\"first\":{ \"value\":\"" + title + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword1\":{ \"value\":\"" + template.FullName + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword2\":{ \"value\":\"" + template.MerchName + "\",\"color\":\"#173177\" },");
+            sb.Append("\"keyword3\":{ \"value\":\"" + DateTime.Now.ToUnifiedFormatDateTime() + "\",\"color\":\"#173177\" },");
+            sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+            sb.Append("}}");
+
+            WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+            WxApi c = new WxApi();
+
+            var ret = c.DoPost(templateSend);
+
+            if (ret.errcode != "0")
+                return false;
+
+            return true;
+        }
+
         public bool SendHealthMonitor(string svUserId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
             var template = GetWxPaTpl(svUserId, "health_monitor");
@@ -2051,7 +2080,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public WxPaTplModel GetWxPaTpl(string svUserId, string template)
         {
             var model = new WxPaTplModel();
@@ -2061,6 +2089,8 @@ namespace LocalS.BLL
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == d_SenvivUser.UserId).FirstOrDefault();
 
             model.OpenId = d_ClientUser.WxPaOpenId;
+            model.FullName = d_SenvivUser.FullName;
+            model.MerchName = d_SenvivMerch.MerchName;
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
@@ -2102,6 +2132,9 @@ namespace LocalS.BLL
                 case "device_unbind":
                     // model.TemplateId = "czt-rzvyJnYpMK06Kv0hMcEtmJgD5vx5_mShiMGbkmo";
                     model.TemplateId = d_SenvivMerch.WxPaTplIdDeviceUnBind;
+                    break;
+                case "article_postpartum":
+                    model.TemplateId = d_SenvivMerch.WxpaTplIdPostpartumArticle;
                     break;
             }
 

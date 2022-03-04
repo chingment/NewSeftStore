@@ -10,6 +10,7 @@ namespace LocalS.Entity
         [Key]
         public string Id { get; set; }
         public string MerchId { get; set; }
+        public string MerchName { get; set; }
         public string WxPaAppName { get; set; }
         public string WxPaAppId { get; set; }
         public string WxPaAppSecret { get; set; }
@@ -20,6 +21,7 @@ namespace LocalS.Entity
         public string WxPaTplIdPregnancyRemind { get; set; }
         public string WxPaTplIdDeviceBind{ get; set; }
         public string WxPaTplIdDeviceUnBind { get; set; }
+        public string WxpaTplIdPostpartumArticle { get; set; }
         public string SmsSignName { get; set; }
         public string SmsTemplateCode { get; set; }
         public string Creator { get; set; }

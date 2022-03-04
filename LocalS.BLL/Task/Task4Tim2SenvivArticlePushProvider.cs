@@ -78,7 +78,8 @@ namespace LocalS.BLL.Task
 
                     foreach (var search_tag in search_tags)
                     {
-                        var d_SendLog = CurrentDb.PushMessageLog.Where(m => m.UserId == d_User.SvUserId && m.CdType == "AR" && m.CdValue == search_tag).FirstOrDefault();
+                        string cdType = "article_postpartum";
+                        var d_SendLog = CurrentDb.PushMessageLog.Where(m => m.UserId == d_User.SvUserId && m.CdType == cdType && m.CdValue == search_tag).FirstOrDefault();
                         if (d_SendLog != null)
                             return;
 
@@ -86,20 +87,18 @@ namespace LocalS.BLL.Task
                         if (d_Article == null)
                             return;
 
-                        string first = "您好";
+                        string title = string.Format("您好,{0}", search_tags);
                         string url = string.Format("http://health.17fanju.com/article/bw/details?id={0}&uid={1}", d_Article.Id, d_User.SvUserId);
-                        string keyword1 = "162天";
-                        string keyword2 = d_Article.Title;
                         string remark = "感谢您的支持";
 
-                        bool isSend = BizFactory.Senviv.SendArticle(d_User.SvUserId, first, keyword1, keyword2, remark, url);
+                        bool isSend = BizFactory.Senviv.SendArticleByPostpartum(d_User.SvUserId, title, remark, url);
 
                         if (isSend)
                         {
                             d_SendLog = new Entity.PushMessageLog();
                             d_SendLog.Id = IdWorker.Build(IdType.NewGuid);
                             d_SendLog.UserId = d_User.SvUserId;
-                            d_SendLog.CdType = "wx_tpl_pregnancy_remind";
+                            d_SendLog.CdType = cdType;
                             d_SendLog.CdValue = search_tag;
                             d_SendLog.Creator = IdWorker.Build(IdType.EmptyGuid);
                             d_SendLog.CreateTime = DateTime.Now;
