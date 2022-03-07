@@ -223,7 +223,7 @@ namespace LocalS.BLL
         }
 
 
-        public ReportParDetailResult.DataModel GetUserHealthDayReport64(SenvivConfig config, string sn)
+        public ReportParDetailResult.DataModel GetUserHealthDayReport46(SenvivConfig config, string sn)
         {
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();

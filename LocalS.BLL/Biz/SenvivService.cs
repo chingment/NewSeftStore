@@ -1481,7 +1481,7 @@ namespace LocalS.BLL
 
                 LogUtil.Info(TAG, "BuildDayReport46.svDeviceId" + svDeviceId + ",UserId:" + svUserId + ",DeptId:" + svDeptId);
 
-                var d1 = SdkFactory.Senviv.GetUserHealthDayReport64(config_Senviv, svDeviceId);
+                var d1 = SdkFactory.Senviv.GetUserHealthDayReport46(config_Senviv, svDeviceId);
 
                 if (d1 == null)
                 {
@@ -1490,6 +1490,23 @@ namespace LocalS.BLL
                     return;
                 }
 
+                var reportpar = d1.reportpar;
+
+                if (reportpar.userid != svUserId)
+                {
+                    LogUtil.Info(TAG, "reportpar.ReportId ：" + reportpar.ReportId + ",reportpar.userid:" + reportpar.userid + ",svUserId:" + svUserId + ",is not");
+                    return;
+                }
+
+                if (reportpar.sn != svDeviceId)
+                {
+                    LogUtil.Info(TAG, "reportpar.ReportId ：" + reportpar.ReportId + ",reportpar.sn:" + reportpar.userid + ",svDeviceId:" + svDeviceId + ",is not");
+                    return;
+                }
+
+
+
+
                 var d_User = CurrentDb.SenvivUser.Where(m => m.Id == svUserId).FirstOrDefault();
 
                 if (d_User.FisrtReportTime == null)
@@ -1497,7 +1514,7 @@ namespace LocalS.BLL
                     d_User.FisrtReportTime = DateTime.Now;
                 }
 
-                var reportpar = d1.reportpar;
+
 
                 DateTime? fisrtReportTime = d_User.FisrtReportTime;
                 DateTime? lastReportTime = d_User.LastReportTime;
