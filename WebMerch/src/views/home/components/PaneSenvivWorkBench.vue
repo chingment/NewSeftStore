@@ -50,7 +50,8 @@
               <el-col :span="24"> <div class="num_box gz_0" @click="onCareLevelClick(0)">
                 <div class="tl">我的服务对象</div>
                 <div class="num">{{ consoleInfo.userCount }}</div>
-              </div></el-col>
+              </div>
+              </el-col>
             </el-row>
             <el-row :gutter="20" style="margin-bottom:20px">
               <el-col :span="12"> <div class="num_box gz_4" @click="onCareLevelClick(4)">
@@ -96,9 +97,14 @@
       </el-aside>
       <el-main style="padding:0px 0px 0px 20px">
 
-        <el-card v-show="isShowByUsers" class="box-card box-card-1">
-          <div slot="header" class="clearfix">
-            <span>我的服务对象 {{ careLevelName }}</span>
+        <el-card v-show="isShowByUsers" class="box-card box-card-1 box-card-2">
+          <div slot="header" style="display: flex;align-items: center;">
+            <span style="flex:1">我的服务对象 {{ careLevelName }}</span>
+            <div style="">
+              <el-input v-model="users.listQuery.name" placeholder="姓名" clearable type="text">
+                <el-button slot="append" icon="el-icon-search" size="small" @click="onGetUsersFilter" />
+              </el-input>
+            </div>
           </div>
           <div class="body" style="min-height:340px">
             <div id="senviv_user_list">
@@ -247,6 +253,7 @@ export default {
           page: 1,
           limit: 20,
           name: undefined,
+          key: '',
           sas: '0',
           chronic: '0',
           perplex: '0',
@@ -414,6 +421,10 @@ export default {
     },
     onAfterSaveDayReport() {
       this.onGetTasks()
+    },
+    onGetUsersFilter() {
+      this.listQuery.page = 1
+      this.onGetUsers()
     }
   }
 }
@@ -421,8 +432,16 @@ export default {
 
 <style lang="scss" scoped>
 
-.box-card-1{
+ .box-card-1{
     margin-bottom: 15px;
+
+}
+
+/deep/ .box-card-2{
+
+      .el-card__header{
+      padding: 7px 20px !important;
+    }
 }
 
 .num_box{

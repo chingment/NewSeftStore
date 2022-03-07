@@ -908,8 +908,8 @@ export default {
     onGetHandleRecords() {
       this.loadingByHandleRecord = true
       this.recordsQuery.svUserId = this.userInfo.svUserId
-      this.recordsQuery.reportId = this.reportId
-      this.recordsQuery.taskId = this.taskId
+      // this.recordsQuery.reportId = this.reportId
+      // this.recordsQuery.taskId = this.taskId
       getHandleRecords(this.recordsQuery).then(res => {
         if (res.result === 1) {
           var d = res.data
