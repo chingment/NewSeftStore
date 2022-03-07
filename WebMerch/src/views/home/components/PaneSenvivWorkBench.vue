@@ -423,7 +423,7 @@ export default {
       this.onGetTasks()
     },
     onGetUsersFilter() {
-      this.listQuery.page = 1
+      this.users.listQuery.page = 1
       this.onGetUsers()
     }
   }

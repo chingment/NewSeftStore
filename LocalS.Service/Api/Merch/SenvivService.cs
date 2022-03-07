@@ -831,7 +831,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (!string.IsNullOrEmpty(rup.Name))
             {
-                query = query.Where(m =>  (rup.Name == null || m.FullName.Contains(rup.Name)));
+                query = query.Where(m => (rup.Name == null || m.FullName.Contains(rup.Name)));
             }
 
 
@@ -1311,7 +1311,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var result = new CustomJsonResult();
 
             var query = (from u in CurrentDb.SenvivHealthTagExplain
-
+                         where u.MerchId == merchId
                          select new { u.Id, u.TagId, u.TagName, u.ProExplain, u.TcmExplain, u.Suggest });
 
 
