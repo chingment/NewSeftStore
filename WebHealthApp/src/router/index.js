@@ -42,6 +42,11 @@ const router = new VueRouter({
       meta: { title: '设备信息', isAuth: true }
     },
     {
+      path: '/article/details',
+      component: () => import('@/views/article/details'),
+      meta: { title: '文章知识', isAuth: false }
+    },
+    {
       path: '/errorpage/invalid',
       component: () => import('@/views/errorpage/invalid'),
       meta: { title: '错误提示', isAuth: false }

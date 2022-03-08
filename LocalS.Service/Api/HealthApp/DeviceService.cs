@@ -496,14 +496,14 @@ namespace LocalS.Service.Api.HealthApp
                         d_SenvivUserWomen.Id = IdWorker.Build(IdType.NewGuid);
                         d_SenvivUserWomen.SvUserId = d_SenvivUser.Id;
                         d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
                         CurrentDb.SenvivUserWomen.Add(d_SenvivUserWomen);
                         CurrentDb.SaveChanges();
                     }
                     else
                     {
                         d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
                         CurrentDb.SaveChanges();
                     }
 

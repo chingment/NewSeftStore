@@ -118,7 +118,7 @@ namespace LocalS.Service.Api.Merch
                 var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
+                    var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
 
                     signTags.Add(new EleTag(string.Format("{0}周+{1}", week.Week, week.Day), ""));
                 }
@@ -228,7 +228,7 @@ namespace LocalS.Service.Api.Merch
                 var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SenvivUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var ges = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
+                    var ges = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
 
                     pregnancy = new
                     {
@@ -293,7 +293,7 @@ namespace LocalS.Service.Api.Merch
                     }
                     else
                     {
-                        d_Women.PregnancyTime = Lumos.CommonUtil.GetPregnancyTime(int.Parse(pregnancy["gesWeek"].ToString()), int.Parse(pregnancy["gesDay"].ToString()));
+                        d_Women.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(pregnancy["gesWeek"].ToString()), int.Parse(pregnancy["gesDay"].ToString()));
                         d_Women.DeliveryTime = DateTime.Parse(pregnancy["deliveryTime"]);
                     }
                 }

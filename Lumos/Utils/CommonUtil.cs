@@ -9,12 +9,13 @@ using System.Web;
 
 namespace Lumos
 {
-    public class PregnancyWeekModel
+    public class DiffWeekDayModel
     {
         public int Week { get; set; }
 
         public int Day { get; set; }
     }
+
 
     public static class CommonUtil
     {
@@ -437,14 +438,9 @@ namespace Lumos
         }
 
 
-        public static PregnancyWeekModel GetPregnancyWeeks(DateTime dtBegin, DateTime dtEnd)
+        public static DiffWeekDayModel GetDiffWeekDay(DateTime dtBegin, DateTime dtEnd)
         {
-            var weekModel = new PregnancyWeekModel();
-
-            if (dtEnd <= dtBegin)
-            {
-                return weekModel;
-            }
+            var weekModel = new DiffWeekDayModel();
 
             double totalDays = (dtEnd - dtBegin).TotalDays;
 
@@ -456,7 +452,8 @@ namespace Lumos
             return weekModel;
         }
 
-        public static DateTime GetPregnancyTime(int week, int day)
+
+        public static DateTime GetWeekDay2Time(int week, int day)
         {
 
 

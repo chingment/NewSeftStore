@@ -30,7 +30,7 @@ namespace LocalS.Service.Api.HealthApp
                 var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var week = Lumos.CommonUtil.GetPregnancyWeeks(d_Women.PregnancyTime, DateTime.Now);
+                    var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
                     var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime - DateTime.Now).TotalDays + 1);
                     pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
                 }

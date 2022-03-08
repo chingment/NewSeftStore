@@ -10,7 +10,9 @@ namespace LocalS.Entity
     {
         [Key]
         public string Id { get; set; }
+        public string MerchId { get; set; }
         public string UserId { get; set; }
+        public string SvUserId { get; set; }
         public string CdType { get; set; }
         public string CdValue { get; set; }
         public string Creator { get; set; }

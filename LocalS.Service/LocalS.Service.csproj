@@ -160,6 +160,7 @@
     <Compile Include="Api\Admin\RModels\RupAdminUserGetList.cs" />
     <Compile Include="Api\Admin\RModels\RupMerchMasterGetList.cs" />
     <Compile Include="Api\Agent\RModels\RetUserInitAdd.cs" />
+    <Compile Include="Api\HealthApp\ArticleService.cs" />
     <Compile Include="Api\HealthApp\DayReportService.cs" />
     <Compile Include="Api\HealthApp\DeviceService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />

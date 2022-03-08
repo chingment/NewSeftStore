@@ -41,5 +41,13 @@ namespace LocalS.Service.Api.HealthApp
             }
         }
 
+        public static ArticleService Article
+        {
+            get
+            {
+                return new ArticleService();
+            }
+        }
+        
     }
 }
