@@ -1968,9 +1968,9 @@ namespace LocalS.BLL
             }
 
         }
-        public bool SendArticle(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
+        public bool SendArticleByPregnancy(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
-            var template = GetWxPaTpl(svUserId, "pregnancy_remind");
+            var template = GetWxPaTpl(svUserId, "article_pregnancy");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"touser\":\"" + template.OpenId + "\",");
@@ -2138,7 +2138,7 @@ namespace LocalS.BLL
                     //model.TemplateId = "4rfsYerDDF7aVGuETQ3n-Kn84mjIHLBn0H6H8giz7Ac";
                     model.TemplateId = d_SenvivMerch.WxPaTplIdHealthMonitor;
                     break;
-                case "pregnancy_remind":
+                case "article_pregnancy":
                     //model.TemplateId = "gB4vyZuiziivwyYm3b1qyooZI2g2okxm4b92tEej7B4";
                     model.TemplateId = d_SenvivMerch.WxPaTplIdPregnancyRemind;
                     break;
