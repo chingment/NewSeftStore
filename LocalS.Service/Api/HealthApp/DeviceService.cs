@@ -35,7 +35,7 @@ namespace LocalS.Service.Api.HealthApp
 
             if (string.IsNullOrEmpty(deviceId))
             {
-                var d_UserBindDeviceCount = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).Count();
+                var d_UserBindDeviceCount = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).Count();
 
                 if (d_UserBindDeviceCount > 0)
                 {
@@ -44,11 +44,11 @@ namespace LocalS.Service.Api.HealthApp
             }
             else
             {
-                var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
+                var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
 
                 if (d_UserDevice != null)
                 {
-                    if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind || d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                    if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.NotBind || d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.UnBind)
                     {
                         if (d_UserDevice.BindDeviceIdTime == null)
                             step = 1;
@@ -83,7 +83,7 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult InitManage(string operater, string userId)
         {
             var d_User = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
+            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId).ToList();
 
             List<object> devices = new List<object>();
 
@@ -93,26 +93,26 @@ namespace LocalS.Service.Api.HealthApp
 
                 if (!string.IsNullOrEmpty(d_UserDevice.SvUserId))
                 {
-                    var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
-                    if (d_SenvivUser != null)
+                    var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
+                    if (d_SvUser != null)
                     {
-                        if (!string.IsNullOrEmpty(d_SenvivUser.FullName))
+                        if (!string.IsNullOrEmpty(d_SvUser.FullName))
                         {
-                            signName = d_SenvivUser.FullName;
+                            signName = d_SvUser.FullName;
                         }
                     }
                 }
 
                 var bindStatus = new FieldModel();
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
+                if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.NotBind)
                 {
                     bindStatus = new FieldModel(1, "未绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.Binded)
                 {
                     bindStatus = new FieldModel(2, "已绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.UnBind)
                 {
                     bindStatus = new FieldModel(3, "已解绑");
                 }
@@ -141,31 +141,31 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InitInfo(string operater, string userId, string deviceId)
         {
-            var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
+            var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == deviceId).FirstOrDefault();
 
-            if (d_SenvivUserDevice == null)
+            if (d_SvUserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_SenvivUserDevice.SvUserId).FirstOrDefault();
-            if (d_SenvivUser == null)
+            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_SvUserDevice.SvUserId).FirstOrDefault();
+            if (d_SvUser == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
             var ret = new
             {
                 DeviceInfo = new
                 {
-                    SvUserId = d_SenvivUser.Id,
+                    SvUserId = d_SvUser.Id,
                     DeviceId = deviceId,
-                    FullName = d_SenvivUser.FullName,
-                    Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
-                    Birthday = d_SenvivUser.Birthday.ToUnifiedFormatDate(),
-                    Height = d_SenvivUser.Height,
-                    Weight = d_SenvivUser.Weight,
-                    Perplex = new FieldModel(GetValue(d_SenvivUser.Perplex), SvUtil.GetPerplexNames(d_SenvivUser.Perplex, d_SenvivUser.PerplexOt)),
-                    Chronicdisease = new FieldModel(GetValue(d_SenvivUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SenvivUser.Chronicdisease, "")),
-                    Medicalhis = new FieldModel(GetValue(d_SenvivUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis, d_SenvivUser.MedicalHisOt)),
-                    Medicine = new FieldModel(GetValue(d_SenvivUser.Medicine), SvUtil.GetMedicineNames(d_SenvivUser.Medicine, d_SenvivUser.MedicineOt)),
-                    SubHealth = new FieldModel(GetValue(d_SenvivUser.SubHealth), SvUtil.GetSubHealthNames(d_SenvivUser.SubHealth, d_SenvivUser.SubHealthOt)),
+                    FullName = d_SvUser.FullName,
+                    Sex = new FieldModel(d_SvUser.Sex, SvUtil.GetSexName(d_SvUser.Sex)),
+                    Birthday = d_SvUser.Birthday.ToUnifiedFormatDate(),
+                    Height = d_SvUser.Height,
+                    Weight = d_SvUser.Weight,
+                    Perplex = new FieldModel(GetValue(d_SvUser.Perplex), SvUtil.GetPerplexNames(d_SvUser.Perplex, d_SvUser.PerplexOt)),
+                    Chronicdisease = new FieldModel(GetValue(d_SvUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SvUser.Chronicdisease, "")),
+                    Medicalhis = new FieldModel(GetValue(d_SvUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
+                    Medicine = new FieldModel(GetValue(d_SvUser.Medicine), SvUtil.GetMedicineNames(d_SvUser.Medicine, d_SvUser.MedicineOt)),
+                    SubHealth = new FieldModel(GetValue(d_SvUser.SubHealth), SvUtil.GetSubHealthNames(d_SvUser.SubHealth, d_SvUser.SubHealthOt)),
                 },
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
             };
@@ -188,70 +188,70 @@ namespace LocalS.Service.Api.HealthApp
 
         public CustomJsonResult InfoEdit(string operater, string userId, RopDeviceInfoEdit rop)
         {
-            var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == rop.SvUserId).FirstOrDefault();
+            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == rop.SvUserId).FirstOrDefault();
 
-            if (d_SenvivUser == null)
+            if (d_SvUser == null)
                 new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败");
 
             if (rop.Answers.ContainsKey("fullName"))
             {
-                d_SenvivUser.FullName = rop.Answers["fullName"].ToString();
+                d_SvUser.FullName = rop.Answers["fullName"].ToString();
             }
 
             if (rop.Answers.ContainsKey("sex"))
             {
-                d_SenvivUser.Sex = rop.Answers["sex"].ToString();
+                d_SvUser.Sex = rop.Answers["sex"].ToString();
             }
 
             if (rop.Answers.ContainsKey("birthday"))
             {
-                d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(rop.Answers["birthday"].ToString());
+                d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(rop.Answers["birthday"].ToString());
             }
 
             if (rop.Answers.ContainsKey("sex"))
             {
-                d_SenvivUser.Sex = rop.Answers["sex"].ToString();
+                d_SvUser.Sex = rop.Answers["sex"].ToString();
             }
 
             if (rop.Answers.ContainsKey("height"))
             {
-                d_SenvivUser.Height = rop.Answers["height"].ToString();
+                d_SvUser.Height = rop.Answers["height"].ToString();
             }
 
             if (rop.Answers.ContainsKey("weight"))
             {
-                d_SenvivUser.Weight = rop.Answers["weight"].ToString();
+                d_SvUser.Weight = rop.Answers["weight"].ToString();
             }
 
             if (rop.Answers.ContainsKey("perplex"))
             {
-                d_SenvivUser.Perplex = GetAnswerValue(rop.Answers["perplex"]);
+                d_SvUser.Perplex = GetAnswerValue(rop.Answers["perplex"]);
             }
 
             if (rop.Answers.ContainsKey("subhealth"))
             {
-                d_SenvivUser.SubHealth = GetAnswerValue(rop.Answers["subhealth"]);
+                d_SvUser.SubHealth = GetAnswerValue(rop.Answers["subhealth"]);
             }
 
 
             if (rop.Answers.ContainsKey("chronicdisease"))
             {
-                d_SenvivUser.Chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
+                d_SvUser.Chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
             }
 
             if (rop.Answers.ContainsKey("medicalhis"))
             {
-                d_SenvivUser.MedicalHis = GetAnswerValue(rop.Answers["medicalhis"]);
+                d_SvUser.MedicalHis = GetAnswerValue(rop.Answers["medicalhis"]);
             }
 
             if (rop.Answers.ContainsKey("medicine"))
             {
-                d_SenvivUser.Medicine = GetAnswerValue(rop.Answers["medicine"]);
+                d_SvUser.Medicine = GetAnswerValue(rop.Answers["medicine"]);
             }
 
-            var result_SaveSvUserInfo = SaveSvUserInfo(d_SenvivUser.Id, d_SenvivUser.SvDeptId, d_SenvivUser.FullName,
-                  d_SenvivUser.Avatar, d_SenvivUser.Sex, d_SenvivUser.Birthday.ToUnifiedFormatDate(), d_SenvivUser.Height, d_SenvivUser.Weight,
-                  d_SenvivUser.Perplex, d_SenvivUser.MedicalHis, d_SenvivUser.Medicine);
+            var result_SaveSvUserInfo = SaveSvUserInfo(d_SvUser.Id, d_SvUser.SvDeptId, d_SvUser.FullName,
+                  d_SvUser.Avatar, d_SvUser.Sex, d_SvUser.Birthday.ToUnifiedFormatDate(), d_SvUser.Height, d_SvUser.Weight,
+                  d_SvUser.Perplex, d_SvUser.MedicalHis, d_SvUser.Medicine);
 
             if (result_SaveSvUserInfo.Result != ResultType.Success)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "保存失败");
@@ -268,22 +268,22 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult InitFill(string operater, string userId)
         {
 
-            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
+            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId).ToList();
 
             List<object> devices = new List<object>();
 
             foreach (var d_UserDevice in d_UserDevices)
             {
                 var bindStatus = new FieldModel();
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
+                if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.NotBind)
                 {
                     bindStatus = new FieldModel(1, "未绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.Binded)
                 {
                     bindStatus = new FieldModel(2, "已绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.UnBind)
                 {
                     bindStatus = new FieldModel(3, "已解绑");
                 }
@@ -309,14 +309,14 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            var d_Device_HasBind = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).FirstOrDefault();
+            var d_Device_HasBind = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).FirstOrDefault();
 
             if (d_Device_HasBind != null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定");
             }
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
 
             if (d_UserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "信息为空");
@@ -326,7 +326,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var config_Senviv = BizFactory.Senviv.GetConfig(d_UserDevice.SvDeptId);
 
-            SenvivUser d_SenvivUser;
+            SvUser d_SvUser;
 
             string fullName = rop.Answers["fullName"].ToString();
             string sex = rop.Answers["sex"].ToString();
@@ -341,17 +341,17 @@ namespace LocalS.Service.Api.HealthApp
             string ladyidentity = rop.Answers["ladyidentity"].ToString();
 
 
-            E_SenvivUserCareMode careMode = E_SenvivUserCareMode.Normal;
+            E_SvUserCareMode careMode = E_SvUserCareMode.Normal;
 
             if (sex == "2")
             {
                 if (ladyidentity == "3")
                 {
-                    careMode = E_SenvivUserCareMode.Pregnancy;
+                    careMode = E_SvUserCareMode.Pregnancy;
                 }
                 else
                 {
-                    careMode = E_SenvivUserCareMode.Lady;
+                    careMode = E_SvUserCareMode.Lady;
                 }
             }
 
@@ -387,47 +387,47 @@ namespace LocalS.Service.Api.HealthApp
                 if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
-                d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == r_Api_UserCreate.userid).FirstOrDefault();
-                if (d_SenvivUser == null)
+                d_SvUser = CurrentDb.SvUser.Where(m => m.Id == r_Api_UserCreate.userid).FirstOrDefault();
+                if (d_SvUser == null)
                 {
-                    d_SenvivUser = new Entity.SenvivUser();
-                    d_SenvivUser.Id = r_Api_UserCreate.userid;
-                    d_SenvivUser.MerchId = d_User.MerchId;
-                    d_SenvivUser.UserId = d_User.Id;
-                    d_SenvivUser.SvDeptId = config_Senviv.SvDeptId;
-                    d_SenvivUser.FullName = fullName;
-                    d_SenvivUser.Height = height;
-                    d_SenvivUser.Weight = weight;
-                    d_SenvivUser.Perplex = perplex;
-                    d_SenvivUser.MedicalHis = medicalhis;
-                    d_SenvivUser.Medicine = medicine;
-                    d_SenvivUser.SubHealth = subhealth;
-                    d_SenvivUser.Chronicdisease = chronicdisease;
-                    d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                    d_SenvivUser.Avatar = d_User.Avatar;
-                    d_SenvivUser.PhoneNumber = d_User.PhoneNumber;
-                    d_SenvivUser.Sex = sex;
-                    d_SenvivUser.CareMode = careMode;
-                    d_SenvivUser.CreateTime = DateTime.Now;
-                    d_SenvivUser.Creator = d_User.Id;
-                    CurrentDb.SenvivUser.Add(d_SenvivUser);
+                    d_SvUser = new Entity.SvUser();
+                    d_SvUser.Id = r_Api_UserCreate.userid;
+                    d_SvUser.MerchId = d_User.MerchId;
+                    d_SvUser.UserId = d_User.Id;
+                    d_SvUser.SvDeptId = config_Senviv.SvDeptId;
+                    d_SvUser.FullName = fullName;
+                    d_SvUser.Height = height;
+                    d_SvUser.Weight = weight;
+                    d_SvUser.Perplex = perplex;
+                    d_SvUser.MedicalHis = medicalhis;
+                    d_SvUser.Medicine = medicine;
+                    d_SvUser.SubHealth = subhealth;
+                    d_SvUser.Chronicdisease = chronicdisease;
+                    d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
+                    d_SvUser.Avatar = d_User.Avatar;
+                    d_SvUser.PhoneNumber = d_User.PhoneNumber;
+                    d_SvUser.Sex = sex;
+                    d_SvUser.CareMode = careMode;
+                    d_SvUser.CreateTime = DateTime.Now;
+                    d_SvUser.Creator = d_User.Id;
+                    CurrentDb.SvUser.Add(d_SvUser);
                     CurrentDb.SaveChanges();
                 }
                 else
                 {
-                    d_SenvivUser.FullName = fullName;
-                    d_SenvivUser.Sex = sex;
-                    d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                    d_SenvivUser.Height = height;
-                    d_SenvivUser.Weight = weight;
-                    d_SenvivUser.Perplex = perplex;
-                    d_SenvivUser.MedicalHis = medicalhis;
-                    d_SenvivUser.Medicine = medicine;
-                    d_SenvivUser.SubHealth = subhealth;
-                    d_SenvivUser.Chronicdisease = chronicdisease;
-                    d_SenvivUser.CareMode = careMode;
-                    d_SenvivUser.MendTime = DateTime.Now;
-                    d_SenvivUser.Mender = d_User.Id;
+                    d_SvUser.FullName = fullName;
+                    d_SvUser.Sex = sex;
+                    d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
+                    d_SvUser.Height = height;
+                    d_SvUser.Weight = weight;
+                    d_SvUser.Perplex = perplex;
+                    d_SvUser.MedicalHis = medicalhis;
+                    d_SvUser.Medicine = medicine;
+                    d_SvUser.SubHealth = subhealth;
+                    d_SvUser.Chronicdisease = chronicdisease;
+                    d_SvUser.CareMode = careMode;
+                    d_SvUser.MendTime = DateTime.Now;
+                    d_SvUser.Mender = d_User.Id;
                 }
 
                 CurrentDb.SaveChanges();
@@ -463,20 +463,20 @@ namespace LocalS.Service.Api.HealthApp
                 if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
-                d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
-                d_SenvivUser.FullName = fullName;
-                d_SenvivUser.Sex = sex;
-                d_SenvivUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                d_SenvivUser.Height = height;
-                d_SenvivUser.Weight = weight;
-                d_SenvivUser.Perplex = perplex;
-                d_SenvivUser.MedicalHis = medicalhis;
-                d_SenvivUser.Medicine = medicine;
-                d_SenvivUser.SubHealth = subhealth;
-                d_SenvivUser.Chronicdisease = chronicdisease;
-                d_SenvivUser.CareMode = careMode;
-                d_SenvivUser.MendTime = DateTime.Now;
-                d_SenvivUser.Mender = d_User.Id;
+                d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
+                d_SvUser.FullName = fullName;
+                d_SvUser.Sex = sex;
+                d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
+                d_SvUser.Height = height;
+                d_SvUser.Weight = weight;
+                d_SvUser.Perplex = perplex;
+                d_SvUser.MedicalHis = medicalhis;
+                d_SvUser.Medicine = medicine;
+                d_SvUser.SubHealth = subhealth;
+                d_SvUser.Chronicdisease = chronicdisease;
+                d_SvUser.CareMode = careMode;
+                d_SvUser.MendTime = DateTime.Now;
+                d_SvUser.Mender = d_User.Id;
                 CurrentDb.SaveChanges();
 
             }
@@ -489,21 +489,21 @@ namespace LocalS.Service.Api.HealthApp
                     string[] geyweek = GetAnswerValue(rop.Answers["geyweek"]).Split(',');
                     string deliveryTime = rop.Answers["deliveryTime"].ToString();
 
-                    var d_SenvivUserWomen = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SenvivUser.Id).FirstOrDefault();
-                    if (d_SenvivUserWomen == null)
+                    var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
+                    if (d_SvUserWomen == null)
                     {
-                        d_SenvivUserWomen = new SenvivUserWomen();
-                        d_SenvivUserWomen.Id = IdWorker.Build(IdType.NewGuid);
-                        d_SenvivUserWomen.SvUserId = d_SenvivUser.Id;
-                        d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
-                        CurrentDb.SenvivUserWomen.Add(d_SenvivUserWomen);
+                        d_SvUserWomen = new SvUserWomen();
+                        d_SvUserWomen.Id = IdWorker.Build(IdType.NewGuid);
+                        d_SvUserWomen.SvUserId = d_SvUser.Id;
+                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                        d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        CurrentDb.SvUserWomen.Add(d_SvUserWomen);
                         CurrentDb.SaveChanges();
                     }
                     else
                     {
-                        d_SenvivUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SenvivUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
+                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                        d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
                         CurrentDb.SaveChanges();
                     }
 
@@ -513,7 +513,7 @@ namespace LocalS.Service.Api.HealthApp
 
 
 
-            var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SenvivUser.Id, d_UserDevice.DeviceId);
+            var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SvUser.Id, d_UserDevice.DeviceId);
 
             if (r_Api_BindBox.Result == 3)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备不存在");
@@ -528,15 +528,15 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("绑定失败[{0}]", r_Api_BindBox.Result));
 
 
-            d_UserDevice.SvUserId = d_SenvivUser.Id;
+            d_UserDevice.SvUserId = d_SvUser.Id;
             d_UserDevice.InfoFillTime = DateTime.Now;
             d_UserDevice.BindTime = DateTime.Now;
-            d_UserDevice.BindStatus = Entity.SenvivUserDeviceBindStatus.Binded;
+            d_UserDevice.BindStatus = Entity.E_SvUserDeviceBindStatus.Binded;
             d_UserDevice.Mender = operater;
             d_UserDevice.MendTime = DateTime.Now;
             CurrentDb.SaveChanges();
 
-            BizFactory.Senviv.SendDeviceBind(d_SenvivUser.Id, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
+            BizFactory.Senviv.SendDeviceBind(d_SvUser.Id, "您已成功绑定设备", "已绑定", DateTime.Now.ToUnifiedFormatDateTime(), "您好，您已成功绑定。");
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -580,31 +580,31 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, "2801", "未关注公众号，请先关注.");
             }
 
-            var d_Device_HasBind = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).FirstOrDefault();
+            var d_Device_HasBind = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).FirstOrDefault();
 
             if (d_Device_HasBind != null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定");
             }
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
-                d_UserDevice = new SenvivUserDevice();
+                d_UserDevice = new SvUserDevice();
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
                 d_UserDevice.SvDeptId = d_Device.SvDeptId;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
-                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.NotBind;
+                d_UserDevice.BindStatus = E_SvUserDeviceBindStatus.NotBind;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
-                CurrentDb.SenvivUserDevice.Add(d_UserDevice);
+                CurrentDb.SvUserDevice.Add(d_UserDevice);
                 CurrentDb.SaveChanges();
             }
             else
             {
-                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.NotBind;
+                d_UserDevice.BindStatus = E_SvUserDeviceBindStatus.NotBind;
                 d_UserDevice.BindDeviceIdTime = DateTime.Now;
                 d_UserDevice.Mender = operater;
                 d_UserDevice.MendTime = DateTime.Now;
@@ -631,7 +631,7 @@ namespace LocalS.Service.Api.HealthApp
             // if (string.IsNullOrEmpty(rop.PhoneNumber))
             //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "手机号不能为空");
 
-            var d_Device_HasBind = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).FirstOrDefault();
+            var d_Device_HasBind = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).FirstOrDefault();
 
             if (d_Device_HasBind != null)
             {
@@ -640,10 +640,10 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_Device = CurrentDb.Device.Where(m => m.Id == rop.DeviceId).FirstOrDefault();
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice == null)
             {
-                d_UserDevice = new SenvivUserDevice();
+                d_UserDevice = new SvUserDevice();
                 d_UserDevice.Id = IdWorker.Build(IdType.NewGuid);
                 d_UserDevice.UserId = userId;
                 d_UserDevice.DeviceId = rop.DeviceId;
@@ -652,7 +652,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_UserDevice.BindPhoneTime = DateTime.Now;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
-                CurrentDb.SenvivUserDevice.Add(d_UserDevice);
+                CurrentDb.SvUserDevice.Add(d_UserDevice);
                 CurrentDb.SaveChanges();
             }
             else
@@ -680,23 +680,23 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult UnBind(string operater, string userId, RopDeviceUnBind rop)
         {
 
-            var d_SenvivUserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
 
-            var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUserDevice.SvDeptId);
+            var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
 
-            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUserDevice.SvUserId, rop.DeviceId);
+            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
 
             if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");
 
-            var d_UserDevice = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
+            var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice != null)
             {
                 d_UserDevice.BindDeviceIdTime = null;
                 d_UserDevice.BindPhoneTime = null;
                 d_UserDevice.InfoFillTime = null;
                 d_UserDevice.UnBindTime = DateTime.Now;
-                d_UserDevice.BindStatus = SenvivUserDeviceBindStatus.UnBind;
+                d_UserDevice.BindStatus = E_SvUserDeviceBindStatus.UnBind;
                 d_UserDevice.Creator = operater;
                 d_UserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SaveChanges();

@@ -143,22 +143,22 @@ namespace LocalS.Service.Api.Merch
                     d_MerchDevice.MendTime = DateTime.Now;
                 }
 
-                var d_SenvivUserDevices = CurrentDb.SenvivUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == SenvivUserDeviceBindStatus.Binded).ToList();
+                var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).ToList();
 
-                foreach (var d_SenvivUserDevice in d_SenvivUserDevices)
+                foreach (var d_SvUserDevice in d_SvUserDevices)
                 {
 
-                    var config_Senviv = BizFactory.Senviv.GetConfig(d_SenvivUserDevice.SvDeptId);
+                    var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
 
-                    var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SenvivUserDevice.SvUserId, rop.DeviceId);
+                    var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
 
-                    d_SenvivUserDevice.BindDeviceIdTime = null;
-                    d_SenvivUserDevice.BindPhoneTime = null;
-                    d_SenvivUserDevice.InfoFillTime = null;
-                    d_SenvivUserDevice.UnBindTime = DateTime.Now;
-                    d_SenvivUserDevice.BindStatus = SenvivUserDeviceBindStatus.UnBind;
-                    d_SenvivUserDevice.Creator = operater;
-                    d_SenvivUserDevice.CreateTime = DateTime.Now;
+                    d_SvUserDevice.BindDeviceIdTime = null;
+                    d_SvUserDevice.BindPhoneTime = null;
+                    d_SvUserDevice.InfoFillTime = null;
+                    d_SvUserDevice.UnBindTime = DateTime.Now;
+                    d_SvUserDevice.BindStatus = E_SvUserDeviceBindStatus.UnBind;
+                    d_SvUserDevice.Creator = operater;
+                    d_SvUserDevice.CreateTime = DateTime.Now;
                     CurrentDb.SaveChanges();
 
                 }

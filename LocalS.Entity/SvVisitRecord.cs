@@ -4,28 +4,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum E_SenvivVisitRecordVisitType
+    public enum E_SvVisitRecordVisitType
     {
         None = 0,
         Callout = 1,
         WxPa = 2
     }
 
-    public enum E_SenvivVisitRecordVisitTemplate
+    public enum E_SvVisitRecordVisitTemplate
     {
         None = 0,
         CalloutRecord = 1,
         WxPaByHealthMonitor = 2
     }
 
-    [Table("SenvivVisitRecord")]
-    public class SenvivVisitRecord
+    [Table("SvVisitRecord")]
+    public class SvVisitRecord
     {
         [Key]
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        public E_SenvivVisitRecordVisitType VisitType { get; set; }
-        public E_SenvivVisitRecordVisitTemplate VisitTemplate { get; set; }
+        public E_SvVisitRecordVisitType VisitType { get; set; }
+        public E_SvVisitRecordVisitTemplate VisitTemplate { get; set; }
         public string VisitContent { get; set; }
         //public string RiskResult { get; set; }
         //public string RiskFactor { get; set; }

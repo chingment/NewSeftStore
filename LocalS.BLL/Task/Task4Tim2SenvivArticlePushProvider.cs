@@ -23,8 +23,8 @@ namespace LocalS.BLL.Task
 
             try
             {
-                var d_Users = (from u in CurrentDb.SenvivUser
-                               join m in CurrentDb.SenvivUserWomen on u.Id equals m.SvUserId
+                var d_Users = (from u in CurrentDb.SvUser
+                               join m in CurrentDb.SvUserWomen on u.Id equals m.SvUserId
                                where u.Sex == "2"
                                select new { m.PregnancyTime, u.UserId, u.MerchId, m.SvUserId, m.DeliveryTime, u.CareMode, u.FullName }).ToList();
 
@@ -35,7 +35,7 @@ namespace LocalS.BLL.Task
                 {
                     LogUtil.Info(TAG, "d_User.FullName:" + d_User.FullName + ",CareMode:" + d_User.CareMode + ",DeliveryTime:" + d_User.FullName);
 
-                    if (d_User.CareMode == Entity.E_SenvivUserCareMode.Pregnancy)
+                    if (d_User.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
                         #region    //怀孕中
                         var term = Lumos.CommonUtil.GetDiffWeekDay(d_User.PregnancyTime, DateTime.Now);
@@ -49,7 +49,7 @@ namespace LocalS.BLL.Task
                         if (d_SendLog != null)
                             return;
 
-                        var d_Article = CurrentDb.SenvivArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                        var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
                         if (d_Article == null)
                             return;
 
@@ -77,7 +77,7 @@ namespace LocalS.BLL.Task
                         #endregion
 
                     }
-                    else if (d_User.CareMode == Entity.E_SenvivUserCareMode.Postpartum)
+                    else if (d_User.CareMode == Entity.E_SvUserCareMode.Postpartum)
                     {
                         #region 分娩后
 
@@ -103,7 +103,7 @@ namespace LocalS.BLL.Task
                         if (d_SendLog != null)
                             return;
 
-                        var d_Article = CurrentDb.SenvivArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                        var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
                         if (d_Article == null)
                             return;
 

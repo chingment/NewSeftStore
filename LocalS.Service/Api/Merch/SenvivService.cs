@@ -70,34 +70,34 @@ namespace LocalS.Service.Api.Merch
 
     public class SenvivService : BaseService
     {
-        public FieldModel GetReportStatus(E_SenvivHealthReportStatus status)
+        public FieldModel GetReportStatus(E_SvHealthReportStatus status)
         {
             var statusModel = new FieldModel();
 
             switch (status)
             {
-                case E_SenvivHealthReportStatus.WaitBuild:
+                case E_SvHealthReportStatus.WaitBuild:
                     statusModel = new FieldModel(1, "待生成");
                     break;
-                case E_SenvivHealthReportStatus.Building:
+                case E_SvHealthReportStatus.Building:
                     statusModel = new FieldModel(2, "生成中");
                     break;
-                case E_SenvivHealthReportStatus.BuildSuccess:
+                case E_SvHealthReportStatus.BuildSuccess:
                     statusModel = new FieldModel(3, "已生成");
                     break;
-                case E_SenvivHealthReportStatus.BuildFailure:
+                case E_SvHealthReportStatus.BuildFailure:
                     statusModel = new FieldModel(4, "生成失败");
                     break;
-                case E_SenvivHealthReportStatus.WaitSend:
+                case E_SvHealthReportStatus.WaitSend:
                     statusModel = new FieldModel(5, "待评价");
                     break;
-                case E_SenvivHealthReportStatus.Sending:
+                case E_SvHealthReportStatus.Sending:
                     statusModel = new FieldModel(6, "发送中");
                     break;
-                case E_SenvivHealthReportStatus.SendSuccess:
+                case E_SvHealthReportStatus.SendSuccess:
                     statusModel = new FieldModel(7, "已发送");
                     break;
-                case E_SenvivHealthReportStatus.SendFailure:
+                case E_SvHealthReportStatus.SendFailure:
                     statusModel = new FieldModel(8, "发送失败");
                     break;
             }
@@ -105,17 +105,17 @@ namespace LocalS.Service.Api.Merch
             return statusModel;
         }
 
-        public List<EleTag> GetSignTags(SenvivUser user)
+        public List<EleTag> GetSignTags(SvUser user)
         {
             List<EleTag> signTags = new List<EleTag>();
 
-            if (user.CareMode == E_SenvivUserCareMode.Normal)
+            if (user.CareMode == E_SvUserCareMode.Normal)
             {
                 signTags = SvUtil.GetSignTags(user.Perplex, user.PerplexOt);
             }
-            else if (user.CareMode == E_SenvivUserCareMode.Pregnancy)
+            else if (user.CareMode == E_SvUserCareMode.Pregnancy)
             {
-                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
+                var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
                     var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
@@ -143,7 +143,7 @@ namespace LocalS.Service.Api.Merch
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var query = (from u in CurrentDb.SenvivUser
+            var query = (from u in CurrentDb.SvUser
                          where
                          merchIds.Contains(u.MerchId) &&
                          u.DeviceCount > 0
@@ -157,7 +157,7 @@ namespace LocalS.Service.Api.Merch
 
             if (rup.Chronic != "0")
             {
-                var pred = PredicateExtensionses.False<SenvivUser>();
+                var pred = PredicateExtensionses.False<SvUser>();
                 pred = pred.Or(m => m.Perplex.Contains(rup.Chronic));
                 query = query.Where(pred);
             }
@@ -165,12 +165,12 @@ namespace LocalS.Service.Api.Merch
 
             if (rup.Perplex != "0")
             {
-                var pred = PredicateExtensionses.False<SenvivUser>();
+                var pred = PredicateExtensionses.False<SvUser>();
                 pred = pred.Or(m => m.Perplex.Contains(rup.Perplex));
                 query = query.Where(pred);
             }
 
-            if (rup.CareLevel != E_SenvivUserCareLevel.None)
+            if (rup.CareLevel != E_SvUserCareLevel.None)
             {
                 query = query.Where(m => m.CareLevel == rup.CareLevel);
             }
@@ -216,16 +216,16 @@ namespace LocalS.Service.Api.Merch
             var result = new CustomJsonResult();
 
 
-            var d_SenvivUser = (from u in CurrentDb.SenvivUser
+            var d_SvUser = (from u in CurrentDb.SvUser
                                 where u.Id == svUserId
                                 select u).FirstOrDefault();
 
 
             object pregnancy = null;
 
-            if (d_SenvivUser.CareMode == E_SenvivUserCareMode.Pregnancy)
+            if (d_SvUser.CareMode == E_SvUserCareMode.Pregnancy)
             {
-                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SenvivUser.Id).FirstOrDefault();
+                var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
                     var ges = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
@@ -241,24 +241,24 @@ namespace LocalS.Service.Api.Merch
 
             var ret = new
             {
-                SvUserId = d_SenvivUser.Id,
-                SignName = SvUtil.GetSignName("", d_SenvivUser.FullName),
-                SignTags = GetSignTags(d_SenvivUser),
-                Age = SvUtil.GetAge(d_SenvivUser.Birthday),
-                Birthday = d_SenvivUser.Birthday.ToUnifiedFormatDate(),
-                Height = d_SenvivUser.Height,
-                Weight = d_SenvivUser.Weight,
-                Avatar = d_SenvivUser.Avatar,
-                FullName = d_SenvivUser.FullName,
-                CareMode = GetCareMode(d_SenvivUser.CareMode),
-                Sex = new FieldModel(d_SenvivUser.Sex, SvUtil.GetSexName(d_SenvivUser.Sex)),
-                Sas = new FieldModel(d_SenvivUser.Sas, SvUtil.GetSasName(d_SenvivUser.Sas)),
-                IsUseBreathMach = new FieldModel(d_SenvivUser.IsUseBreathMach, SvUtil.GetIsUseBreathMachName(d_SenvivUser.IsUseBreathMach)),
-                MedicalHis = new FieldModel(d_SenvivUser.MedicalHis, SvUtil.GetMedicalHisNames(d_SenvivUser.MedicalHis, d_SenvivUser.MedicalHisOt)),
-                Medicine = new FieldModel(d_SenvivUser.Medicine, SvUtil.GetMedicineNames(d_SenvivUser.Medicine, d_SenvivUser.MedicineOt)),
-                PhoneNumber = d_SenvivUser.PhoneNumber,
-                LastReportId = d_SenvivUser.LastReportId,
-                LastReportTime = d_SenvivUser.LastReportTime,
+                SvUserId = d_SvUser.Id,
+                SignName = SvUtil.GetSignName("", d_SvUser.FullName),
+                SignTags = GetSignTags(d_SvUser),
+                Age = SvUtil.GetAge(d_SvUser.Birthday),
+                Birthday = d_SvUser.Birthday.ToUnifiedFormatDate(),
+                Height = d_SvUser.Height,
+                Weight = d_SvUser.Weight,
+                Avatar = d_SvUser.Avatar,
+                FullName = d_SvUser.FullName,
+                CareMode = GetCareMode(d_SvUser.CareMode),
+                Sex = new FieldModel(d_SvUser.Sex, SvUtil.GetSexName(d_SvUser.Sex)),
+                Sas = new FieldModel(d_SvUser.Sas, SvUtil.GetSasName(d_SvUser.Sas)),
+                IsUseBreathMach = new FieldModel(d_SvUser.IsUseBreathMach, SvUtil.GetIsUseBreathMachName(d_SvUser.IsUseBreathMach)),
+                MedicalHis = new FieldModel(d_SvUser.MedicalHis, SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
+                Medicine = new FieldModel(d_SvUser.Medicine, SvUtil.GetMedicineNames(d_SvUser.Medicine, d_SvUser.MedicineOt)),
+                PhoneNumber = d_SvUser.PhoneNumber,
+                LastReportId = d_SvUser.LastReportId,
+                LastReportTime = d_SvUser.LastReportTime,
                 Pregnancy = pregnancy
             };
 
@@ -271,7 +271,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_User = CurrentDb.SenvivUser.Where(m => m.Id == rop.SvUserId).FirstOrDefault();
+            var d_User = CurrentDb.SvUser.Where(m => m.Id == rop.SvUserId).FirstOrDefault();
 
             if (d_User != null)
             {
@@ -286,7 +286,7 @@ namespace LocalS.Service.Api.Merch
                     Dictionary<string, string> pregnancy = new Dictionary<string, string>();
 
 
-                    var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_User.Id).FirstOrDefault();
+                    var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_User.Id).FirstOrDefault();
                     if (d_Women == null)
                     {
 
@@ -314,9 +314,9 @@ namespace LocalS.Service.Api.Merch
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
 
-            var query = (from u in CurrentDb.SenvivHealthDayReport
+            var query = (from u in CurrentDb.SvHealthDayReport
 
-                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                         join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where u.IsValid == true
                          &&
@@ -481,7 +481,7 @@ namespace LocalS.Service.Api.Merch
         {
             var result = new CustomJsonResult();
 
-            var d_Task = CurrentDb.SenvivTask.Where(m => m.Id == taskId).FirstOrDefault();
+            var d_Task = CurrentDb.SvTask.Where(m => m.Id == taskId).FirstOrDefault();
 
             object task = null;
 
@@ -495,8 +495,8 @@ namespace LocalS.Service.Api.Merch
                 };
             }
 
-            var d_Rpt = (from u in CurrentDb.SenvivHealthDayReport
-                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+            var d_Rpt = (from u in CurrentDb.SvHealthDayReport
+                         join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where u.Id == reportId
                          select new
@@ -768,8 +768,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var query = (from u in CurrentDb.SenvivHealthStageReport
-                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+            var query = (from u in CurrentDb.SvHealthStageReport
+                         join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where
                          merchIds.Contains(tt.MerchId)
@@ -954,9 +954,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthStageReport
+            var rpt = (from u in CurrentDb.SvHealthStageReport
 
-                       join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+                       join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                        from tt in temp.DefaultIfEmpty()
                        where u.Id == reportId
                        select new
@@ -1125,7 +1125,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthStageReport
+            var rpt = (from u in CurrentDb.SvHealthStageReport
                        where u.Id == reportId
                        select new
                        {
@@ -1137,7 +1137,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.CreateTime
                        }).FirstOrDefault();
 
-            var d_SugSkus = CurrentDb.SenvivHealthStageReportSugSku.Where(m => m.ReportId == reportId).ToList();
+            var d_SugSkus = CurrentDb.SvHealthStageReportSugSku.Where(m => m.ReportId == reportId).ToList();
 
             var sugSkus = new List<object>();
 
@@ -1173,30 +1173,30 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SenvivHealthStageReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+            var rpt = CurrentDb.SvHealthStageReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
 
             rpt.RptSummary = rop.RptSummary;
             rpt.RptSuggest = rop.RptSuggest;
 
-            var d_SugSkus = CurrentDb.SenvivHealthStageReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
+            var d_SugSkus = CurrentDb.SvHealthStageReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
 
             foreach (var d_SugSku in d_SugSkus)
             {
-                CurrentDb.SenvivHealthStageReportSugSku.Remove(d_SugSku);
+                CurrentDb.SvHealthStageReportSugSku.Remove(d_SugSku);
             }
 
             if (rop.SugSkus != null)
             {
                 foreach (var sugSku in rop.SugSkus)
                 {
-                    var d_SugSku = new SenvivHealthStageReportSugSku();
+                    var d_SugSku = new SvHealthStageReportSugSku();
                     d_SugSku.Id = IdWorker.Build(IdType.NewGuid);
                     d_SugSku.ReportId = rop.ReportId;
                     d_SugSku.MerchId = merchId;
                     d_SugSku.SkuId = sugSku.Id;
                     d_SugSku.CreateTime = DateTime.Now;
                     d_SugSku.Creator = operater;
-                    CurrentDb.SenvivHealthStageReportSugSku.Add(d_SugSku);
+                    CurrentDb.SvHealthStageReportSugSku.Add(d_SugSku);
                 }
             }
 
@@ -1211,18 +1211,18 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 if (isSend)
                 {
                     rpt.IsSend = true;
-                    rpt.Status = E_SenvivHealthReportStatus.SendSuccess;
+                    rpt.Status = E_SvHealthReportStatus.SendSuccess;
                 }
                 else
                 {
-                    rpt.Status = E_SenvivHealthReportStatus.SendFailure;
+                    rpt.Status = E_SvHealthReportStatus.SendFailure;
                 }
 
                 CurrentDb.SaveChanges();
 
                 if (isSend)
                 {
-                    SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+                    SignTaskStatus(operater, rop.TaskId, E_SvTaskStatus.Handled);
 
                     result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "发送成功");
                 }
@@ -1249,7 +1249,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SenvivHealthDayReport
+            var rpt = (from u in CurrentDb.SvHealthDayReport
                        where u.Id == reportId
                        select new
                        {
@@ -1281,7 +1281,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (!rop.IsSend)
             {
-                var d_DayReport = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
+                var d_DayReport = CurrentDb.SvHealthDayReport.Where(m => m.Id == rop.ReportId).FirstOrDefault();
                 d_DayReport.RptSummary = rop.RptSummary;
                 d_DayReport.RptSuggest = rop.RptSuggest;
                 CurrentDb.SaveChanges();
@@ -1372,7 +1372,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SenvivVisitRecord
+            var query = (from u in CurrentDb.SvVisitRecord
                          select new { u.Id, u.SvUserId, u.VisitType, u.TaskId, u.ReportId, u.VisitTemplate, u.VisitContent, u.VisitTime, u.NextTime, u.CreateTime });
 
             if (!string.IsNullOrEmpty(rup.SvUserId))
@@ -1403,18 +1403,18 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             foreach (var item in list)
             {
                 string visitType = "";
-                if (item.VisitType == E_SenvivVisitRecordVisitType.Callout)
+                if (item.VisitType == E_SvVisitRecordVisitType.Callout)
                 {
                     visitType = "电话回访";
                 }
-                else if (item.VisitType == E_SenvivVisitRecordVisitType.WxPa)
+                else if (item.VisitType == E_SvVisitRecordVisitType.WxPa)
                 {
                     visitType = "公众号告知";
                 }
 
                 List<object> arr_VisitContent = new List<object>();
 
-                if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.CalloutRecord)
+                if (item.VisitTemplate == E_SvVisitRecordVisitTemplate.CalloutRecord)
                 {
                     Dictionary<string, string> dic_Content = item.VisitContent.ToJsonObject<Dictionary<string, string>>();
 
@@ -1426,7 +1426,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
                     arr_VisitContent.Add(new { key = "回访记录", value = remark });
                 }
-                else if (item.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthMonitor)
+                else if (item.VisitTemplate == E_SvVisitRecordVisitTemplate.WxPaByHealthMonitor)
                 {
                     Dictionary<string, string> dic_Content = item.VisitContent.ToJsonObject<Dictionary<string, string>>();
 
@@ -1492,22 +1492,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             var result = new CustomJsonResult();
 
 
-            var d_SenvivVisitRecord = new SenvivVisitRecord();
-            d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.SvUserId = rop.SvUserId;
-            d_SenvivVisitRecord.ReportId = rop.ReportId;
-            d_SenvivVisitRecord.TaskId = rop.TaskId;
-            d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.Callout;
-            d_SenvivVisitRecord.VisitTemplate = E_SenvivVisitRecordVisitTemplate.CalloutRecord;
-            d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
-            d_SenvivVisitRecord.VisitTime = CommonUtil.ConverToDateTime(rop.VisitTime).Value;
-            d_SenvivVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime);
-            d_SenvivVisitRecord.Creator = operater;
-            d_SenvivVisitRecord.CreateTime = DateTime.Now;
-            CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
+            var d_SvVisitRecord = new SvVisitRecord();
+            d_SvVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
+            d_SvVisitRecord.SvUserId = rop.SvUserId;
+            d_SvVisitRecord.ReportId = rop.ReportId;
+            d_SvVisitRecord.TaskId = rop.TaskId;
+            d_SvVisitRecord.VisitType = E_SvVisitRecordVisitType.Callout;
+            d_SvVisitRecord.VisitTemplate = E_SvVisitRecordVisitTemplate.CalloutRecord;
+            d_SvVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
+            d_SvVisitRecord.VisitTime = CommonUtil.ConverToDateTime(rop.VisitTime).Value;
+            d_SvVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime);
+            d_SvVisitRecord.Creator = operater;
+            d_SvVisitRecord.CreateTime = DateTime.Now;
+            CurrentDb.SvVisitRecord.Add(d_SvVisitRecord);
             CurrentDb.SaveChanges();
 
-            SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+            SignTaskStatus(operater, rop.TaskId, E_SvTaskStatus.Handled);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -1518,13 +1518,13 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         {
             var result = new CustomJsonResult();
 
-            var d_SenvivVisitRecord = new SenvivVisitRecord();
-            d_SenvivVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
-            d_SenvivVisitRecord.SvUserId = rop.SvUserId;
-            d_SenvivVisitRecord.ReportId = rop.ReportId;
-            d_SenvivVisitRecord.TaskId = rop.TaskId;
-            d_SenvivVisitRecord.VisitType = E_SenvivVisitRecordVisitType.WxPa;
-            d_SenvivVisitRecord.VisitTemplate = rop.VisitTemplate;
+            var d_SvVisitRecord = new SvVisitRecord();
+            d_SvVisitRecord.Id = IdWorker.Build(IdType.NewGuid);
+            d_SvVisitRecord.SvUserId = rop.SvUserId;
+            d_SvVisitRecord.ReportId = rop.ReportId;
+            d_SvVisitRecord.TaskId = rop.TaskId;
+            d_SvVisitRecord.VisitType = E_SvVisitRecordVisitType.WxPa;
+            d_SvVisitRecord.VisitTemplate = rop.VisitTemplate;
 
             //string str_Content = "";
             //if(rop.VisitTemplate== E_SenvivVisitRecordVisitTemplate.WxPaByHealthException)
@@ -1538,14 +1538,14 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             //    str_Content += "备注：" + dic_Content[""] + "\n";
             //}
 
-            d_SenvivVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
-            d_SenvivVisitRecord.VisitTime = DateTime.Now;
-            d_SenvivVisitRecord.Creator = operater;
-            d_SenvivVisitRecord.CreateTime = DateTime.Now;
-            CurrentDb.SenvivVisitRecord.Add(d_SenvivVisitRecord);
+            d_SvVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
+            d_SvVisitRecord.VisitTime = DateTime.Now;
+            d_SvVisitRecord.Creator = operater;
+            d_SvVisitRecord.CreateTime = DateTime.Now;
+            CurrentDb.SvVisitRecord.Add(d_SvVisitRecord);
             CurrentDb.SaveChanges();
 
-            if (rop.VisitTemplate == E_SenvivVisitRecordVisitTemplate.WxPaByHealthMonitor)
+            if (rop.VisitTemplate == E_SvVisitRecordVisitTemplate.WxPaByHealthMonitor)
             {
                 var dic = rop.VisitContent.ToJsonObject<Dictionary<string, string>>();
                 string first = "亲，您近期的监测结果显示异常";
@@ -1557,7 +1557,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 BizFactory.Senviv.SendHealthMonitor(rop.SvUserId, first, keyword1, keyword2, keyword3, remark);
             }
 
-            SignTaskStatus(operater, rop.TaskId, E_SenvivTaskStatus.Handled);
+            SignTaskStatus(operater, rop.TaskId, E_SvTaskStatus.Handled);
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -1571,24 +1571,24 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var query = (from u in CurrentDb.SenvivTask
-                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+            var query = (from u in CurrentDb.SvTask
+                         join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where
                          merchIds.Contains(tt.MerchId)
                          select new { u.Id, u.ReportId, u.TaskType, u.Params, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime });
 
-            var waitHandle = query.Where(m => m.Status == E_SenvivTaskStatus.WaitHandle || m.Status == E_SenvivTaskStatus.Handling).Count();
-            var handled = query.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
+            var waitHandle = query.Where(m => m.Status == E_SvTaskStatus.WaitHandle || m.Status == E_SvTaskStatus.Handling).Count();
+            var handled = query.Where(m => m.Status == E_SvTaskStatus.Handled).Count();
 
 
             if (rup.Status == 0)
             {
-                query = query.Where(m => m.Status == E_SenvivTaskStatus.Handling || m.Status == E_SenvivTaskStatus.WaitHandle);
+                query = query.Where(m => m.Status == E_SvTaskStatus.Handling || m.Status == E_SvTaskStatus.WaitHandle);
             }
             else if (rup.Status == 1)
             {
-                query = query.Where(m => m.Status == E_SenvivTaskStatus.Handled);
+                query = query.Where(m => m.Status == E_SvTaskStatus.Handled);
             }
 
 
@@ -1640,11 +1640,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
         }
 
-        public CustomJsonResult SignTaskStatus(string operater, string taskId, E_SenvivTaskStatus status)
+        public CustomJsonResult SignTaskStatus(string operater, string taskId, E_SvTaskStatus status)
         {
             var result = new CustomJsonResult();
 
-            var d_Task = CurrentDb.SenvivTask.Where(m => m.Id == taskId).FirstOrDefault();
+            var d_Task = CurrentDb.SvTask.Where(m => m.Id == taskId).FirstOrDefault();
             if (d_Task != null)
             {
                 d_Task.Status = status;
@@ -1658,19 +1658,19 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return result;
         }
 
-        public FieldModel GetTaskStatus(E_SenvivTaskStatus status)
+        public FieldModel GetTaskStatus(E_SvTaskStatus status)
         {
             var statusModel = new FieldModel();
 
             switch (status)
             {
-                case E_SenvivTaskStatus.WaitHandle:
+                case E_SvTaskStatus.WaitHandle:
                     statusModel = new FieldModel(1, "待处理");
                     break;
-                case E_SenvivTaskStatus.Handling:
+                case E_SvTaskStatus.Handling:
                     statusModel = new FieldModel(2, "处理中");
                     break;
-                case E_SenvivTaskStatus.Handled:
+                case E_SvTaskStatus.Handled:
                     statusModel = new FieldModel(3, "已处理");
                     break;
             }
@@ -1678,22 +1678,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return statusModel;
         }
 
-        public FieldModel GetTaskType(E_SenvivTaskType type)
+        public FieldModel GetTaskType(E_SvTaskType type)
         {
             var statusModel = new FieldModel();
 
             switch (type)
             {
-                case E_SenvivTaskType.Health_Monitor_FisrtDay:
+                case E_SvTaskType.Health_Monitor_FisrtDay:
                     statusModel = new FieldModel(1, "首次回访");
                     break;
-                case E_SenvivTaskType.Health_Monitor_SeventhDay:
+                case E_SvTaskType.Health_Monitor_SeventhDay:
                     statusModel = new FieldModel(2, "一周回访");
                     break;
-                case E_SenvivTaskType.Health_Monitor_FourteenthDay:
+                case E_SvTaskType.Health_Monitor_FourteenthDay:
                     statusModel = new FieldModel(3, "两周回访");
                     break;
-                case E_SenvivTaskType.Health_Monitor_PerMonth:
+                case E_SvTaskType.Health_Monitor_PerMonth:
                     statusModel = new FieldModel(5, "每月回访");
                     break;
             }
@@ -1701,22 +1701,22 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             return statusModel;
         }
 
-        public FieldModel GetCareMode(E_SenvivUserCareMode mode)
+        public FieldModel GetCareMode(E_SvUserCareMode mode)
         {
             var statusModel = new FieldModel();
 
             switch (mode)
             {
-                case E_SenvivUserCareMode.Normal:
+                case E_SvUserCareMode.Normal:
                     statusModel = new FieldModel(1, "正常模式");
                     break;
-                case E_SenvivUserCareMode.PrePregnancy:
+                case E_SvUserCareMode.PrePregnancy:
                     statusModel = new FieldModel(24, "备孕中");
                     break;
-                case E_SenvivUserCareMode.Pregnancy:
+                case E_SvUserCareMode.Pregnancy:
                     statusModel = new FieldModel(25, "怀孕中");
                     break;
-                case E_SenvivUserCareMode.Postpartum:
+                case E_SvUserCareMode.Postpartum:
                     statusModel = new FieldModel(26, "产后");
                     break;
             }
@@ -1728,7 +1728,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         {
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SenvivArticle
+            var query = (from u in CurrentDb.SvArticle
                          where u.MerchId == merchId
                          select new { u.Id, u.Title, u.Tags, u.CreateTime, u.Creator });
 
@@ -1772,15 +1772,15 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
         {
             var result = new CustomJsonResult();
 
-            var d_SenvivArticle = CurrentDb.SenvivArticle.Where(m => m.Id == articleId).FirstOrDefault();
+            var d_SvArticle = CurrentDb.SvArticle.Where(m => m.Id == articleId).FirstOrDefault();
 
             var ret = new
             {
 
-                Id = d_SenvivArticle.Id,
-                Title = d_SenvivArticle.Title,
-                Tags = string.IsNullOrEmpty(d_SenvivArticle.Tags) == true ? null : d_SenvivArticle.Tags.Split(new char[] { ',' }),
-                Content = d_SenvivArticle.Content
+                Id = d_SvArticle.Id,
+                Title = d_SvArticle.Title,
+                Tags = string.IsNullOrEmpty(d_SvArticle.Tags) == true ? null : d_SvArticle.Tags.Split(new char[] { ',' }),
+                Content = d_SvArticle.Content
             };
 
 
@@ -1802,25 +1802,25 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (string.IsNullOrEmpty(rop.Id))
             {
-                var d_SenvivArticle = new SenvivArticle();
-                d_SenvivArticle.Id = IdWorker.Build(IdType.NewGuid);
-                d_SenvivArticle.MerchId = merchId;
-                d_SenvivArticle.Title = rop.Title;
-                d_SenvivArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
-                d_SenvivArticle.Content = rop.Content;
-                d_SenvivArticle.CreateTime = DateTime.Now;
-                d_SenvivArticle.Creator = operater;
-                CurrentDb.SenvivArticle.Add(d_SenvivArticle);
+                var d_SvArticle = new SvArticle();
+                d_SvArticle.Id = IdWorker.Build(IdType.NewGuid);
+                d_SvArticle.MerchId = merchId;
+                d_SvArticle.Title = rop.Title;
+                d_SvArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
+                d_SvArticle.Content = rop.Content;
+                d_SvArticle.CreateTime = DateTime.Now;
+                d_SvArticle.Creator = operater;
+                CurrentDb.SvArticle.Add(d_SvArticle);
                 CurrentDb.SaveChanges();
             }
             else
             {
-                var d_SenvivArticle = CurrentDb.SenvivArticle.Where(m => m.Id == rop.Id).FirstOrDefault();
-                d_SenvivArticle.Title = rop.Title;
-                d_SenvivArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
-                d_SenvivArticle.Content = rop.Content;
-                d_SenvivArticle.MendTime = DateTime.Now;
-                d_SenvivArticle.Mender = operater;
+                var d_SvArticle = CurrentDb.SvArticle.Where(m => m.Id == rop.Id).FirstOrDefault();
+                d_SvArticle.Title = rop.Title;
+                d_SvArticle.Tags = rop.Tags == null ? null : string.Join(",", rop.Tags.ToArray());
+                d_SvArticle.Content = rop.Content;
+                d_SvArticle.MendTime = DateTime.Now;
+                d_SvArticle.Mender = operater;
                 CurrentDb.SaveChanges();
             }
 

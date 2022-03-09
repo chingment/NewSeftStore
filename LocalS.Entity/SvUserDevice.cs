@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum SenvivUserDeviceBindStatus
+    public enum E_SvUserDeviceBindStatus
     {
         Unknow = 0,
         NotBind = 1,
@@ -13,8 +13,8 @@ namespace LocalS.Entity
         UnBind = 3
     }
 
-    [Table("SenvivUserDevice")]
-    public class SenvivUserDevice
+    [Table("SvUserDevice")]
+    public class SvUserDevice
     {
         [Key]
         public string Id { get; set; }
@@ -27,7 +27,7 @@ namespace LocalS.Entity
         public DateTime? BindPhoneTime { get; set; }
         public DateTime? InfoFillTime { get; set; }
         public DateTime? UnBindTime { get; set; }
-        public SenvivUserDeviceBindStatus BindStatus { get; set; }
+        public E_SvUserDeviceBindStatus BindStatus { get; set; }
 
         public string TcpAddress { get; set; }
 

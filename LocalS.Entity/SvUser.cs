@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum E_SenvivUserCareLevel
+    public enum E_SvUserCareLevel
     {
         None = 0,
         One = 1,
@@ -13,7 +13,7 @@ namespace LocalS.Entity
         Four = 4
     }
 
-    public enum E_SenvivUserCareMode
+    public enum E_SvUserCareMode
     {
         None = 0,
         Normal = 1,
@@ -24,7 +24,7 @@ namespace LocalS.Entity
     }
 
     [Table("SenvivUser")]
-    public class SenvivUser
+    public class SvUser
     {
         [Key]
         public string Id { get; set; }
@@ -43,8 +43,8 @@ namespace LocalS.Entity
         public DateTime? FisrtReportTime { get; set; }
         public string LastReportId { get; set; }
         public DateTime? LastReportTime { get; set; }
-        public E_SenvivUserCareLevel CareLevel { get; set; }
-        public E_SenvivUserCareMode CareMode { get; set; }
+        public E_SvUserCareLevel CareLevel { get; set; }
+        public E_SvUserCareMode CareMode { get; set; }
         //呼吸暂停综合证
         public string Sas { get; set; }
         //是否使用呼吸机

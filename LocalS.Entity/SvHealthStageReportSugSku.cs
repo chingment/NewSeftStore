@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("SenvivHealthStageReportSugSku")]
-    public class SenvivHealthStageReportSugSku
+    [Table("SvHealthStageReportSugSku")]
+    public class SvHealthStageReportSugSku
     {
         [Key]
         public string Id { get; set; }

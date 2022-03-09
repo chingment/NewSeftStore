@@ -14,20 +14,20 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            var d_Rpt = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            var d_Rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
             if (d_Rpt == null)
                 new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "报告找不到");
 
-            var d_SvUser = CurrentDb.SenvivUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
+            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
 
             var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
 
 
             var pregnancy = new { birthLastDays = 0, gesWeek = 0, gesDay = 0 };
 
-            if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Pregnancy)
+            if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
             {
-                var d_Women = CurrentDb.SenvivUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
+                var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
                     var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
@@ -54,7 +54,7 @@ namespace LocalS.Service.Api.HealthApp
             {
                 if (d_Rpt.ZsYp > 0)
                 {
-                    if (d_SvUser.CareMode == Entity.E_SenvivUserCareMode.Pregnancy)
+                    if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
                         gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
                     }
@@ -131,7 +131,7 @@ namespace LocalS.Service.Api.HealthApp
 
 
             List<object> smScoreByLast = new List<object>();
-            var d_DayReportSmScores = (from u in CurrentDb.SenvivHealthDayReport
+            var d_DayReportSmScores = (from u in CurrentDb.SvHealthDayReport
                                        where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
                                        && u.HealthDate <= d_Rpt.HealthDate
                                        select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
@@ -183,7 +183,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SenvivHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            var rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
             if (rpt != null)
             {
                 rpt.VisitCount += 1;

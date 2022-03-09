@@ -114,30 +114,30 @@ namespace LocalS.Service.Api.HealthApp
         {
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var d_UserDevices = CurrentDb.SenvivUserDevice.Where(m => m.UserId == userId).ToList();
+            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId).ToList();
 
             List<object> devices = new List<object>();
 
             foreach (var d_UserDevice in d_UserDevices)
             {
-                var d_SenvivUser = CurrentDb.SenvivUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
+                var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_UserDevice.SvUserId).FirstOrDefault();
                 var signName = "";
 
-                if (d_SenvivUser != null)
+                if (d_SvUser != null)
                 {
-                    signName = d_SenvivUser.FullName;
+                    signName = d_SvUser.FullName;
                 }
 
                 var bindStatus = new FieldModel();
-                if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.NotBind)
+                if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.NotBind)
                 {
                     bindStatus = new FieldModel(1, "未绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.Binded)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.Binded)
                 {
                     bindStatus = new FieldModel(2, "已绑定");
                 }
-                else if (d_UserDevice.BindStatus == SenvivUserDeviceBindStatus.UnBind)
+                else if (d_UserDevice.BindStatus == E_SvUserDeviceBindStatus.UnBind)
                 {
                     bindStatus = new FieldModel(3, "已解绑");
                 }

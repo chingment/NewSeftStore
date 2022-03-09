@@ -77,25 +77,25 @@ namespace LocalS.DAL
         //public IDbSet<StoreSelfPickAddress> StoreSelfPickAddress { get; set; }
         public IDbSet<BI_AppTraceLog> BI_AppTraceLog { get; set; }
         public IDbSet<WxACode> WxACode { get; set; }
-        public IDbSet<SenvivUser> SenvivUser { get; set; }
-        public IDbSet<SenvivUserDevice> SenvivUserDevice { get; set; }
-        public IDbSet<SenvivArticle> SenvivArticle { get; set; }
-        public IDbSet<SenvivHealthDayReport> SenvivHealthDayReport { get; set; }
-        public IDbSet<SenvivHealthStageReport> SenvivHealthStageReport { get; set; }
-        public IDbSet<SenvivHealthDayReportLabel> SenvivHealthDayReportLabel { get; set; }
-        public IDbSet<SenvivHealthDayReportAdvice> SenvivHealthDayReportAdvice { get; set; }
-        public IDbSet<SenvivHealthStageReportSugSku> SenvivHealthStageReportSugSku { get; set; }
-        public IDbSet<SenvivHealthStageReportTag> SenvivHealthStageReportTag { get; set; }
-        public IDbSet<SenvivVisitRecord> SenvivVisitRecord { get; set; }
-        public IDbSet<SenvivMerch> SenvivMerch { get; set; }
+        public IDbSet<SvUser> SvUser { get; set; }
+        public IDbSet<SvUserDevice> SvUserDevice { get; set; }
+        public IDbSet<SvArticle> SvArticle { get; set; }
+        public IDbSet<SvHealthDayReport> SvHealthDayReport { get; set; }
+        public IDbSet<SvHealthStageReport> SvHealthStageReport { get; set; }
+        public IDbSet<SvHealthDayReportLabel> SvHealthDayReportLabel { get; set; }
+        public IDbSet<SvHealthDayReportAdvice> SvHealthDayReportAdvice { get; set; }
+        public IDbSet<SvHealthStageReportSugSku> SvHealthStageReportSugSku { get; set; }
+        public IDbSet<SvHealthStageReportTag> SvHealthStageReportTag { get; set; }
+        public IDbSet<SvVisitRecord> SvVisitRecord { get; set; }
+        public IDbSet<SvMerch> SvMerch { get; set; }
         // public IDbSet<SenvivHealthTag> SenvivHealthTag { get; set; }
         public IDbSet<DeviceMqttMessage> DeviceMqttMessage { get; set; }
-        public IDbSet<SenvivHealthTagExplain> SenvivHealthTagExplain { get; set; }
+        public IDbSet<SvHealthTagExplain> SenvivHealthTagExplain { get; set; }
         public IDbSet<ErpReplenishPlan> ErpReplenishPlan { get; set; }
         public IDbSet<ErpReplenishPlanDevice> ErpReplenishPlanDevice { get; set; }
         public IDbSet<ErpReplenishPlanDeviceDetail> ErpReplenishPlanDeviceDetail { get; set; }
-        public IDbSet<SenvivTask> SenvivTask { get; set; }
-        public IDbSet<SenvivUserWomen> SenvivUserWomen { get; set; }
+        public IDbSet<SvTask> SvTask { get; set; }
+        public IDbSet<SvUserWomen> SvUserWomen { get; set; }
         public IDbSet<PushMessageLog> PushMessageLog { get; set; }
         
 

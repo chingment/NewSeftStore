@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LocalS.Entity
 {
     [Table("SenvivArticle")]
-    public class SenvivArticle
+    public class SvArticle
     {
         [Key]
         public string Id { get; set; }

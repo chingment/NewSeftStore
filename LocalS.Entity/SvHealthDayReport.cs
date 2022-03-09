@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    [Table("SenvivHealthDayReport")]
-    public class SenvivHealthDayReport
+    [Table("SvHealthDayReport")]
+    public class SvHealthDayReport
     {
         public string Id { get; set; }
         public string SvUserId { get; set; }
@@ -175,7 +175,7 @@ namespace LocalS.Entity
         public bool IsSend { get; set; }
         public string RptSummary { get; set; }
         public string RptSuggest { get; set; }
-        public E_SenvivHealthReportStatus Status { get; set; }
+        public E_SvHealthReportStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

@@ -12,8 +12,8 @@ namespace LocalS.Service.Api.HealthApp
     {
         public CustomJsonResult Details(string operater, string articleId, string svuid)
         {
-            var d_SenvivArticle = CurrentDb.SenvivArticle.Where(m => m.Id == articleId).FirstOrDefault();
-            if (d_SenvivArticle == null)
+            var d_SvArticle = CurrentDb.SvArticle.Where(m => m.Id == articleId).FirstOrDefault();
+            if (d_SvArticle == null)
                 new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到");
 
 
@@ -21,8 +21,8 @@ namespace LocalS.Service.Api.HealthApp
             {
                 Article = new
                 {
-                    Title = d_SenvivArticle.Title,
-                    Content = d_SenvivArticle.Content
+                    Title = d_SvArticle.Title,
+                    Content = d_SvArticle.Content
                 }
 
             };

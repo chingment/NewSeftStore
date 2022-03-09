@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.Merch
         public DateTime? Birthday { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
-        public E_SenvivUserCareMode CareMode { get; set; }
+        public E_SvUserCareMode CareMode { get; set; }
         public Dictionary<string, string> Pregnancy { get; set; }
     }
 }

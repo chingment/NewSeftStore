@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum E_SenvivTaskType
+    public enum E_SvTaskType
     {
         Unknow = 0,
         Health_Monitor_FisrtDay = 1,
@@ -14,7 +14,7 @@ namespace LocalS.Entity
         Health_Monitor_PerMonth = 5
     }
 
-    public enum E_SenvivTaskStatus
+    public enum E_SvTaskStatus
     {
         Unknow = 0,
         WaitHandle = 1,
@@ -23,11 +23,11 @@ namespace LocalS.Entity
     }
 
     [Table("SenvivTask")]
-    public class SenvivTask
+    public class SvTask
     {
         [Key]
         public string Id { get; set; }
-        public E_SenvivTaskType TaskType { get; set; }
+        public E_SvTaskType TaskType { get; set; }
         public string SvUserId { get; set; }
         public string Title { get; set; }
         public string HandleTime { get; set; }
@@ -35,7 +35,7 @@ namespace LocalS.Entity
         public string HandleContent { get; set; }
         public string ReportId { get; set; }
         public string Params { get; set; }
-        public E_SenvivTaskStatus Status { get; set; }
+        public E_SvTaskStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

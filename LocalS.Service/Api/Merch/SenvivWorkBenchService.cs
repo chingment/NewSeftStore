@@ -21,25 +21,25 @@ namespace LocalS.Service.Api.Merch
 
             var merchIds = BizFactory.Merch.GetRelIds(merchId);
 
-            var users = CurrentDb.SenvivUser.Where(m => merchIds.Contains(m.MerchId) && m.DeviceCount > 0).ToList();
+            var users = CurrentDb.SvUser.Where(m => merchIds.Contains(m.MerchId) && m.DeviceCount > 0).ToList();
 
             var userCount = users.Count();
-            var careLevel0 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.None).Count();
-            var careLevel1 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.One).Count();
-            var careLevel2 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Two).Count();
-            var careLevel3 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Three).Count();
-            var careLevel4 = users.Where(m => m.CareLevel == E_SenvivUserCareLevel.Four).Count();
+            var careLevel0 = users.Where(m => m.CareLevel == E_SvUserCareLevel.None).Count();
+            var careLevel1 = users.Where(m => m.CareLevel == E_SvUserCareLevel.One).Count();
+            var careLevel2 = users.Where(m => m.CareLevel == E_SvUserCareLevel.Two).Count();
+            var careLevel3 = users.Where(m => m.CareLevel == E_SvUserCareLevel.Three).Count();
+            var careLevel4 = users.Where(m => m.CareLevel == E_SvUserCareLevel.Four).Count();
 
 
-            var tasks = (from u in CurrentDb.SenvivTask
-                         join s in CurrentDb.SenvivUser on u.SvUserId equals s.Id into temp
+            var tasks = (from u in CurrentDb.SvTask
+                         join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                          from tt in temp.DefaultIfEmpty()
                          where
                          merchIds.Contains(tt.MerchId)
                          select new { u.Id, u.TaskType, u.Title, u.Status, u.CreateTime, u.Handler, u.HandleTime }).ToList();
 
-            var waitHandle = tasks.Where(m => m.Status == E_SenvivTaskStatus.WaitHandle || m.Status == E_SenvivTaskStatus.Handling).Count();
-            var handled = tasks.Where(m => m.Status == E_SenvivTaskStatus.Handled).Count();
+            var waitHandle = tasks.Where(m => m.Status == E_SvTaskStatus.WaitHandle || m.Status == E_SvTaskStatus.Handling).Count();
+            var handled = tasks.Where(m => m.Status == E_SvTaskStatus.Handled).Count();
             var ret = new
             {
                 userCount = userCount,

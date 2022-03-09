@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalS.Entity
 {
-    public enum SenvivUserWomenDeliveryWay
+    public enum SvUserWomenDeliveryWay
     {
         None = 0,
         NaturalLabour = 1,
@@ -12,7 +12,7 @@ namespace LocalS.Entity
     }
 
     [Table("SenvivUserWomen")]
-    public class SenvivUserWomen
+    public class SvUserWomen
     {
         [Key]
         public string Id { get; set; }
@@ -28,7 +28,7 @@ namespace LocalS.Entity
         //孕期合并症
         public string Complication { get; set; }
         //分娩方式
-        public SenvivUserWomenDeliveryWay DeliveryWay { get; set; }
+        public SvUserWomenDeliveryWay DeliveryWay { get; set; }
         public string CesareanReason { get; set; }
         public string CesareanIncision { get; set; }
         //产钳

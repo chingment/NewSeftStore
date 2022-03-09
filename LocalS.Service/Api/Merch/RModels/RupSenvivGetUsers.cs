@@ -17,6 +17,6 @@ namespace LocalS.Service.Api.Merch
 
         public string Perplex { get; set; }
 
-        public E_SenvivUserCareLevel CareLevel { get; set; }
+        public E_SvUserCareLevel CareLevel { get; set; }
     }
 }
