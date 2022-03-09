@@ -22,9 +22,7 @@ namespace LocalS.Entity
         public int ImAccountLimit { get; set; }
         public bool IsOpenMemberRight { get; set; }
         public bool IsOpenCouponRight { get; set; }
-        //public string SenvivDepts { get; set; }
         public string IotApiSecret { get; set; }
-        //public bool IsSenvivAlone { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

@@ -55,14 +55,5 @@ namespace LocalS.BLL
                 return new Senviv4GProvider();
             }
         }
-
-        //public static Senviv4GProvider Senviv4G
-        //{
-        //    get
-        //    {
-        //        return new Senviv4GProvider();
-        //    }
-        //}
-
     }
 }

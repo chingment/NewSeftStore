@@ -35,7 +35,6 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
-
         public CustomJsonResult AuthInfo(RopOwnAuthInfo rop)
         {
 

@@ -15,7 +15,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SvHealthStageReport
+            var d_StageRpt = (from u in CurrentDb.SvHealthStageReport
 
                        join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
                        from tt in temp.DefaultIfEmpty()
@@ -73,17 +73,17 @@ namespace LocalS.Service.Api.HealthApp
 
 
 
-            var sum_HealthScores = CurrentDb.SvHealthStageReport.Where(m => m.HealthDate == rpt.HealthDate).Select(m => m.HealthScore).ToList();
+            var sum_HealthScores = CurrentDb.SvHealthStageReport.Where(m => m.HealthDate == d_StageRpt.HealthDate).Select(m => m.HealthScore).ToList();
             int scoreRatio = 80;
             if (sum_HealthScores.Count > 0)
             {
-                int a = sum_HealthScores.Where(m => m < rpt.HealthScore).Count();
+                int a = sum_HealthScores.Where(m => m < d_StageRpt.HealthScore).Count();
                 int b = sum_HealthScores.Count();
                 double r = Math.Round((Convert.ToDouble(a) / Convert.ToDouble(b)), 2) * 100;
                 scoreRatio = Convert.ToInt32(r);
             }
 
-            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -94,72 +94,72 @@ namespace LocalS.Service.Api.HealthApp
 
             var ret = new
             {
-                Id = rpt.Id,
+                Id = d_StageRpt.Id,
                 UserInfo = new
                 {
-                    SignName = SvUtil.GetSignName("", rpt.FullName),
-                    Avatar = rpt.Avatar,
-                    Sex = SvUtil.GetSexName(rpt.Sex),
-                    Age = SvUtil.GetAge(rpt.Birthday)
+                    SignName = SvUtil.GetSignName("", d_StageRpt.FullName),
+                    Avatar = d_StageRpt.Avatar,
+                    Sex = SvUtil.GetSexName(d_StageRpt.Sex),
+                    Age = SvUtil.GetAge(d_StageRpt.Birthday)
                 },
                 ReportData = new
                 {
                     scoreRatio,
-                    rpt.HealthScore,
-                    rpt.HealthDate,
+                    d_StageRpt.HealthScore,
+                    d_StageRpt.HealthDate,
                     SmTags = smTags,
-                    MylGrfx = SvUtil.GetMylGrfx(rpt.MylGrfx),
-                    MylMylzs = SvUtil.GetMylzs(rpt.MylMylzs),
-                    MbGxbgk = SvUtil.GetMbGxbgk(rpt.MbGxbgk),
-                    MbGxygk = SvUtil.GetMbGxygk(rpt.MbGxygk),
-                    MbTlbgk = SvUtil.GetMbTlbgk(rpt.MbTlbgk),
-                    rpt.QxxlJlqx,
-                    QxxlKynl = SvUtil.GetQxxlKynl(rpt.QxxlKynl),
-                    rpt.QxxlQxyj,
-                    JbfxXlscfx = SvUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
-                    JbfxXljsl = SvUtil.GetJbfxXljsl(rpt.JbfxXljsl),
+                    MylGrfx = SvUtil.GetMylGrfx(d_StageRpt.MylGrfx),
+                    MylMylzs = SvUtil.GetMylzs(d_StageRpt.MylMylzs),
+                    MbGxbgk = SvUtil.GetMbGxbgk(d_StageRpt.MbGxbgk),
+                    MbGxygk = SvUtil.GetMbGxygk(d_StageRpt.MbGxygk),
+                    MbTlbgk = SvUtil.GetMbTlbgk(d_StageRpt.MbTlbgk),
+                    d_StageRpt.QxxlJlqx,
+                    QxxlKynl = SvUtil.GetQxxlKynl(d_StageRpt.QxxlKynl),
+                    d_StageRpt.QxxlQxyj,
+                    JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_StageRpt.JbfxXlscfx),
+                    JbfxXljsl = SvUtil.GetJbfxXljsl(d_StageRpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl),
                     //交感神经张力指数
-                    HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
+                    HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(d_StageRpt.HrvJgsjzlzs),
                     //迷走神经张力指数
-                    HrvMzsjzlzs = SvUtil.GetHrvMzsjzlzs(rpt.HrvMzsjzlzs),
+                    HrvMzsjzlzs = SvUtil.GetHrvMzsjzlzs(d_StageRpt.HrvMzsjzlzs),
                     //自主神经平衡指数
-                    HrvZzsjzlzs = SvUtil.GetHrvZzsjzlzs(rpt.HrvZzsjzlzs),
+                    HrvZzsjzlzs = SvUtil.GetHrvZzsjzlzs(d_StageRpt.HrvZzsjzlzs),
                     //荷尔蒙指数
-                    HrvHermzs = SvUtil.GetHrvHermzs(rpt.HrvHermzs),
+                    HrvHermzs = SvUtil.GetHrvHermzs(d_StageRpt.HrvHermzs),
                     //体温及血管舒缩指数
-                    HrvTwjxgsszs = SvUtil.GetHrvTwjxgsszh(rpt.HrvTwjxgsszs),
+                    HrvTwjxgsszs = SvUtil.GetHrvTwjxgsszh(d_StageRpt.HrvTwjxgsszs),
                     //当次基准心率
-                    XlDcjzxl = SvUtil.GetXlDcjzxl(rpt.XlDcjzxl),
+                    XlDcjzxl = SvUtil.GetXlDcjzxl(d_StageRpt.XlDcjzxl),
                     //长期基准心率
-                    XlCqjzxl = SvUtil.GetXlCqjzxl(rpt.XlCqjzxl),
+                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_StageRpt.XlCqjzxl),
                     //当次平均心率
-                    XlDcpjxl = SvUtil.GetXlDcpjxl(rpt.XlDcpjxl),
+                    XlDcpjxl = SvUtil.GetXlDcpjxl(d_StageRpt.XlDcpjxl),
                     //呼吸当次基准呼吸
-                    HxDcjzhx = SvUtil.GetHxDcjzhx(rpt.HxDcjzhx),
+                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_StageRpt.HxDcjzhx),
                     //呼吸长期基准呼吸
-                    HxCqjzhx = SvUtil.GetHxCqjzhx(rpt.HxCqjzhx),
+                    HxCqjzhx = SvUtil.GetHxCqjzhx(d_StageRpt.HxCqjzhx),
                     //呼吸平均呼吸
-                    HxDcpjhx = SvUtil.GetHxDcpjhx(rpt.HxDcpjhx),
+                    HxDcpjhx = SvUtil.GetHxDcpjhx(d_StageRpt.HxDcpjhx),
                     //呼吸暂停次数
-                    HxZtcs = SvUtil.GetHxZtcs(rpt.HxZtcs),
+                    HxZtcs = SvUtil.GetHxZtcs(d_StageRpt.HxZtcs),
                     //呼吸暂停AHI指数
-                    HxZtahizs = SvUtil.GetHxZtahizs(rpt.HxZtahizs),
+                    HxZtahizs = SvUtil.GetHxZtahizs(d_StageRpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc, "1"),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc,"1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc,"1"),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
                     //睡眠周期=
-                    SmSmzq = SvUtil.GetSmSmzq(rpt.SmSmzq),
+                    SmSmzq = SvUtil.GetSmSmzq(d_StageRpt.SmSmzq),
                     //体动次数
-                    SmTdcs = SvUtil.GetSmTdcs(rpt.SmTdcs),
-                    RptSummary = rpt.RptSummary,
-                    RptSuggest = rpt.RptSuggest
+                    SmTdcs = SvUtil.GetSmTdcs(d_StageRpt.SmTdcs),
+                    RptSummary = d_StageRpt.RptSummary,
+                    RptSuggest = d_StageRpt.RptSuggest
                 }
             };
 
@@ -173,7 +173,7 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SvHealthStageReport
+            var d_StageRpt = (from u in CurrentDb.SvHealthStageReport
                        where u.Id == rptId
                        select new
                        {
@@ -202,7 +202,7 @@ namespace LocalS.Service.Api.HealthApp
                        }).FirstOrDefault();
 
 
-            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == rpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -213,26 +213,26 @@ namespace LocalS.Service.Api.HealthApp
 
             var ret = new
             {
-                rpt.HealthScore,
-                rpt.HealthDate,
+                d_StageRpt.HealthScore,
+                d_StageRpt.HealthDate,
                 SmTags = smTags,
-                SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc, "1"),
-                SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
-                SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
-                SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
-                HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl),
-                HxDcpjhx = SvUtil.GetHxDcpjhx(rpt.HxDcpjhx),
-                XlDcpjxl = SvUtil.GetXlDcpjxl(rpt.XlDcpjxl),
-                HxZtcs = SvUtil.GetHxZtcs(rpt.HxZtcs),
-                SmTdcs = SvUtil.GetSmTdcs(rpt.SmTdcs),
-                HxZtahizs = SvUtil.GetHxZtahizs(rpt.HxZtahizs),
-                DatePt = rpt.DatePt.ToJsonObject<List<object>>(),
-                HealthScorePt = rpt.HealthScorePt.ToJsonObject<List<object>>(),
-                SmSmscPt = rpt.SmSmscPt.ToJsonObject<List<object>>(),
-                JbfxXlscfxPt = rpt.JbfxXlscfxPt.ToJsonObject<List<object>>(),
-                HrvXzznlPt = rpt.HrvXzznlPt.ToJsonObject<List<object>>(),
-                HxZtcsPt = rpt.HxZtcsPt.ToJsonObject<List<object>>(),
-                HxZtahizsPt = rpt.HxZtahizsPt.ToJsonObject<List<object>>(),
+                SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc, "1"),
+                SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc, "1"),
+                SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
+                SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
+                HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl),
+                HxDcpjhx = SvUtil.GetHxDcpjhx(d_StageRpt.HxDcpjhx),
+                XlDcpjxl = SvUtil.GetXlDcpjxl(d_StageRpt.XlDcpjxl),
+                HxZtcs = SvUtil.GetHxZtcs(d_StageRpt.HxZtcs),
+                SmTdcs = SvUtil.GetSmTdcs(d_StageRpt.SmTdcs),
+                HxZtahizs = SvUtil.GetHxZtahizs(d_StageRpt.HxZtahizs),
+                DatePt = d_StageRpt.DatePt.ToJsonObject<List<object>>(),
+                HealthScorePt = d_StageRpt.HealthScorePt.ToJsonObject<List<object>>(),
+                SmSmscPt = d_StageRpt.SmSmscPt.ToJsonObject<List<object>>(),
+                JbfxXlscfxPt = d_StageRpt.JbfxXlscfxPt.ToJsonObject<List<object>>(),
+                HrvXzznlPt = d_StageRpt.HrvXzznlPt.ToJsonObject<List<object>>(),
+                HxZtcsPt = d_StageRpt.HxZtcsPt.ToJsonObject<List<object>>(),
+                HxZtahizsPt = d_StageRpt.HxZtahizsPt.ToJsonObject<List<object>>(),
             };
 
 
@@ -246,7 +246,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = (from u in CurrentDb.SvHealthStageReport
+            var d_StageRpt = (from u in CurrentDb.SvHealthStageReport
                        where u.Id == rptId
                        select new
                        {
@@ -262,11 +262,11 @@ namespace LocalS.Service.Api.HealthApp
 
             var ret = new
             {
-                SugByYy = rpt.SugByYy.NullToEmpty(),
-                SugByYd = rpt.SugByYd.NullToEmpty(),
-                SugBySm = rpt.SugBySm.NullToEmpty(),
-                SugByQxyl = rpt.SugByQxyl.NullToEmpty(),
-                rpt.IsSend
+                SugByYy = d_StageRpt.SugByYy.NullToEmpty(),
+                SugByYd = d_StageRpt.SugByYd.NullToEmpty(),
+                SugBySm = d_StageRpt.SugBySm.NullToEmpty(),
+                SugByQxyl = d_StageRpt.SugByQxyl.NullToEmpty(),
+                d_StageRpt.IsSend
             };
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
@@ -365,10 +365,10 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SvHealthStageReport.Where(m => m.Id == rptId).FirstOrDefault();
-            if (rpt != null)
+            var d_StageRpt = CurrentDb.SvHealthStageReport.Where(m => m.Id == rptId).FirstOrDefault();
+            if (d_StageRpt != null)
             {
-                rpt.VisitCount += 1;
+                d_StageRpt.VisitCount += 1;
                 CurrentDb.SaveChanges();
             }
 

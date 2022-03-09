@@ -14,13 +14,13 @@ namespace LocalS.Service.Api.HealthApp
         {
             var result = new CustomJsonResult();
 
-            var d_Rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
-            if (d_Rpt == null)
+            var d_DayRpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            if (d_DayRpt == null)
                 new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "报告找不到");
 
-            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_Rpt.SvUserId).FirstOrDefault();
+            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_DayRpt.SvUserId).FirstOrDefault();
 
-            var togetherDays = (int)(d_Rpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
+            var togetherDays = (int)(d_DayRpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
 
 
             var pregnancy = new { birthLastDays = 0, gesWeek = 0, gesDay = 0 };
@@ -52,53 +52,53 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_SvUser.Sex == "2")
             {
-                if (d_Rpt.ZsYp > 0)
+                if (d_DayRpt.ZsYp > 0)
                 {
                     if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
-                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
+                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
                     }
                     else
                     {
-                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_Rpt.ZsYq)));
+                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_DayRpt.ZsYq)));
                     }
 
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
-                    gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
-                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_Rpt.ZsYp)));
-                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_Rpt.ZsSr)));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
+                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_DayRpt.ZsYp)));
+                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_DayRpt.ZsSr)));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
                 }
                 else
                 {
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
-                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
-                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_Rpt.MbGxygk)));
-                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_Rpt.MbGxbgk)));
-                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_Rpt.MbTlbgk)));
-                    gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
+                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
+                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk)));
+                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk)));
+                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk)));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
                 }
             }
             else
             {
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_Rpt.MylMylzs)));
-                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_Rpt.MylGrfx)));
-                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_Rpt.MbGxygk)));
-                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_Rpt.MbGxbgk)));
-                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_Rpt.MbTlbgk)));
-                gzTags.Add(SvUtil.GetQxxlJlqx(d_Rpt.QxxlJlqx));
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_Rpt.QxxlKynl)));
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_Rpt.QxxlQxyj)));
+                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
+                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
+                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk)));
+                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk)));
+                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk)));
+                gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
+                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
+                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
             }
             #endregion
 
             #region smTags
             var smTags = new List<object>();
 
-            var arr_SmTags = d_Rpt.SmTags.ToJsonObject<string[]>();
+            var arr_SmTags = d_DayRpt.SmTags.ToJsonObject<string[]>();
             if (arr_SmTags != null && arr_SmTags.Length > 0)
             {
                 var d_TagExplains = CurrentDb.SenvivHealthTagExplain.Where(m => arr_SmTags.Contains(m.TagName)).Take(4).ToList();
@@ -119,12 +119,12 @@ namespace LocalS.Service.Api.HealthApp
 
             #region smDvs
             var smDvs = new List<object>();
-            smDvs.Add(SvUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"));
-            smDvs.Add(SvUtil.GetSmRsxs(d_Rpt.SmRsxs, "2"));
-            smDvs.Add(SvUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "2"));
-            smDvs.Add(SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs));
-            smDvs.Add(SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl));
-            smDvs.Add(SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl));
+            smDvs.Add(SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"));
+            smDvs.Add(SvUtil.GetSmRsxs(d_DayRpt.SmRsxs, "2"));
+            smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc, "2"));
+            smDvs.Add(SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs));
+            smDvs.Add(SvUtil.GetXlDcjzxl(d_DayRpt.XlDcjzxl));
+            smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl));
             #endregion
 
             #region smScoreByLast
@@ -132,8 +132,8 @@ namespace LocalS.Service.Api.HealthApp
 
             List<object> smScoreByLast = new List<object>();
             var d_DayReportSmScores = (from u in CurrentDb.SvHealthDayReport
-                                       where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
-                                       && u.HealthDate <= d_Rpt.HealthDate
+                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
+                                       && u.HealthDate <= d_DayRpt.HealthDate
                                        select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
 
             d_DayReportSmScores.Reverse();
@@ -149,27 +149,27 @@ namespace LocalS.Service.Api.HealthApp
             {
                 rd = new
                 {
-                    HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
-                    HealthScore = SvUtil.GetHealthScore(d_Rpt.HealthScore),
+                    HealthDate = d_DayRpt.HealthDate.ToUnifiedFormatDate(),
+                    HealthScore = SvUtil.GetHealthScore(d_DayRpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
-                    SmScore = SvUtil.GetSmScore(d_Rpt.SmScore),
+                    SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore),
                     SmScoreTip = "您的睡眠值已经打败77%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
-                    RptSuggest = d_Rpt.RptSuggest,
+                    RptSuggest = d_DayRpt.RptSuggest,
                     SmScoreByLast = smScoreByLast,
-                    HxZtahizs = SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs),
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
-                    SmSmxl = SvUtil.GetSmSmxl(d_Rpt.SmSmxl),
-                    SmSmlxx = SvUtil.GetSmSmlxx(d_Rpt.SmSmlxx),
-                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl),
-                    XlDcjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlDcjzxl),
-                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl),
-                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
-                    SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc, "2"),
-                    SmZcsc = SvUtil.GetSmSmsc(d_Rpt.SmZcsc, "2"),
-                    SmZcsjfw = SvUtil.GetSmZcsjfw(d_Rpt.SmScsj, d_Rpt.SmLcsj),
+                    HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl),
+                    SmSmxl = SvUtil.GetSmSmxl(d_DayRpt.SmSmxl),
+                    SmSmlxx = SvUtil.GetSmSmlxx(d_DayRpt.SmSmlxx),
+                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_DayRpt.SmSdsmbl),
+                    XlDcjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlDcjzxl),
+                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlCqjzxl),
+                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_DayRpt.HxDcjzhx),
+                    SmSmsc = SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"),
+                    SmZcsc = SvUtil.GetSmSmsc(d_DayRpt.SmZcsc, "2"),
+                    SmZcsjfw = SvUtil.GetSmZcsjfw(d_DayRpt.SmScsj, d_DayRpt.SmLcsj),
                 },
                 userInfo = userInfo
             };
@@ -183,10 +183,10 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
-            if (rpt != null)
+            var d_DayRpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+            if (d_DayRpt != null)
             {
-                rpt.VisitCount += 1;
+                d_DayRpt.VisitCount += 1;
                 CurrentDb.SaveChanges();
             }
 
