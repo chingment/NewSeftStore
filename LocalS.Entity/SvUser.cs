@@ -23,7 +23,7 @@ namespace LocalS.Entity
         Postpartum = 26
     }
 
-    [Table("SenvivUser")]
+    [Table("SvUser")]
     public class SvUser
     {
         [Key]

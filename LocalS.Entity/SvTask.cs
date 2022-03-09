@@ -22,7 +22,7 @@ namespace LocalS.Entity
         Handled = 3
     }
 
-    [Table("SenvivTask")]
+    [Table("SvTask")]
     public class SvTask
     {
         [Key]
