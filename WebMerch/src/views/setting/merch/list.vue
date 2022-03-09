@@ -39,6 +39,11 @@
           <span>{{ scope.row.fullName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="商户号" prop="fullName" align="left" min-width="20%">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="手机号码" prop="phoneNumber" align="left" min-width="10%">
         <template slot-scope="scope">
           <span>{{ scope.row.phoneNumber }}</span>

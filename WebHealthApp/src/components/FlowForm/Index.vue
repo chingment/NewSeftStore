@@ -513,7 +513,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .btn-sure {
   width: 100%;
@@ -597,6 +597,16 @@ export default {
   border-radius: 10px;
   background-color: #fff;
   background-color: #f6f6f8;
+}
+
+/deep/  .picker{
+  width: 100%;
+  height: 100%;
+}
+
+/deep/  .picker-items{
+width: 100%;
+height: 100%;
 }
 
 </style>
