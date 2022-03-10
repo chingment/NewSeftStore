@@ -68,6 +68,8 @@
     <Compile Include="Post\RequestResult.cs" />
     <Compile Include="Post\LoginRequest.cs" />
     <Compile Include="Post\LoginResult.cs" />
+    <Compile Include="Post\SetGmPeriodRequest.cs" />
+    <Compile Include="Post\SetGmPeriodResult.cs" />
     <Compile Include="Post\UserCreateRequest.cs" />
     <Compile Include="Post\UserCreateResult.cs" />
     <Compile Include="Post\UserListRequest.cs" />

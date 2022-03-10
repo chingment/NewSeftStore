@@ -279,17 +279,17 @@ namespace LocalS.Service.Api.HealthApp
 
             if (rop.Answers.ContainsKey("geyweek"))
             {
-                SaveSvUserWomenInfo(d_SvUser.Id, "geyweek", rop.Answers["geyweek"]);
+                SaveSvUserWomenInfo(d_SvUser.Id, d_SvUser.SvDeptId, d_SvUser.CareMode, "geyweek", rop.Answers["geyweek"]);
             }
 
             if (rop.Answers.ContainsKey("deliveryTime"))
             {
-                SaveSvUserWomenInfo(d_SvUser.Id, "deliveryTime", rop.Answers["deliveryTime"]);
+                SaveSvUserWomenInfo(d_SvUser.Id, d_SvUser.SvDeptId, d_SvUser.CareMode, "deliveryTime", rop.Answers["deliveryTime"]);
             }
 
             if (rop.Answers.ContainsKey("gmPeriod"))
             {
-                SaveSvUserWomenInfo(d_SvUser.Id, "gmPeriod", rop.Answers["gmPeriod"]);
+                SaveSvUserWomenInfo(d_SvUser.Id, d_SvUser.SvDeptId, d_SvUser.CareMode, "gmPeriod", rop.Answers["gmPeriod"]);
             }
 
 
@@ -363,7 +363,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else if (identity == "2")
                 {
-                    careMode = E_SvUserCareMode.Pregnancy;
+                    careMode = E_SvUserCareMode.PrePregnancy;
                 }
                 else if (identity == "3")
                 {
@@ -394,7 +394,7 @@ namespace LocalS.Service.Api.HealthApp
             }
 
             var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
-        
+
             if (d_SvUserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "信息为空");
 
@@ -490,6 +490,8 @@ namespace LocalS.Service.Api.HealthApp
                 d_SvUser.Mender = d_ClientUser.Id;
             }
 
+            d_SvUserDevice.SvUserId = d_SvUser.Id;
+
             CurrentDb.SaveChanges();
 
             #region 女性
@@ -572,25 +574,25 @@ namespace LocalS.Service.Api.HealthApp
 
                     CurrentDb.SaveChanges();
                 }
+
+
+                if (gmPeriod != null && gmPeriod.Length == 3)
+                {
+                    SdkFactory.Senviv.SetGmPeriod(config_Senviv, d_SvUser.Id, careMode, d_SvUserWomen.YjLastDay, d_SvUserWomen.YjDuration, d_SvUserWomen.YjCycle);
+                }
             }
 
             #endregion
 
-            var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SvUser.Id, d_SvUserDevice.DeviceId);
+            var result_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SvUser.Id, d_SvUserDevice.DeviceId);
 
-            if (r_Api_BindBox.Result == 3)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备不存在");
+            if (result_BindBox.Result != ResultType.Success)
+            {
+                return result_BindBox;
+            }
 
-            if (r_Api_BindBox.Result == 5)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定");
 
-            if (r_Api_BindBox.Result == 6)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被冻结");
 
-            if (r_Api_BindBox.Result != 1)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("绑定失败[{0}]", r_Api_BindBox.Result));
-
-            d_SvUserDevice.SvUserId = d_SvUser.Id;
             d_SvUserDevice.InfoFillTime = DateTime.Now;
             d_SvUserDevice.BindTime = DateTime.Now;
             d_SvUserDevice.BindStatus = Entity.E_SvUserDeviceBindStatus.Binded;
@@ -748,8 +750,8 @@ namespace LocalS.Service.Api.HealthApp
 
             var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
 
-            if (r_Api_BindBox.Result != 1 && r_Api_BindBox.Result != 5)
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败");
+            if (r_Api_BindBox.Result != ResultType.Success)
+                return r_Api_BindBox;
 
             var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
             if (d_UserDevice != null)
@@ -875,8 +877,12 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存信息成功");
         }
 
-        public void SaveSvUserWomenInfo(string svUserId, string field, object value)
+        public void SaveSvUserWomenInfo(string svUserId, string svDeptId, E_SvUserCareMode careMode, string field, object value)
         {
+            string gmPeriod1 = "";
+            string gmPeriod2 = "";
+            string gmPeriod3 = "";
+
             var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == svUserId).FirstOrDefault();
 
             if (d_SvUserWomen == null)
@@ -977,6 +983,10 @@ namespace LocalS.Service.Api.HealthApp
 
                 }
             }
+
+            var config_Senviv = BizFactory.Senviv.GetConfig(svDeptId);
+
+            SdkFactory.Senviv.SetGmPeriod(config_Senviv, svUserId, careMode, d_SvUserWomen.YjLastDay, d_SvUserWomen.YjDuration, d_SvUserWomen.YjCycle);
 
             CurrentDb.SaveChanges();
         }

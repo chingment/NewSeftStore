@@ -1,4 +1,5 @@
-﻿using Lumos;
+﻿using LocalS.Entity;
+using Lumos;
 using Lumos.Redis;
 using MyWeiXinSdk;
 using SenvivSdk;
@@ -111,7 +112,7 @@ namespace LocalS.BLL
                     {
                         for (var i = 2; i <= pageCount; i++)
                         {
-                            var userListRequest2 = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid =config.SvDeptId, size = size, page = i });
+                            var userListRequest2 = new SenvivSdk.UserListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = i });
                             var result2 = api.DoPost(userListRequest2);
                             if (result2.Result == ResultType.Success)
                             {
@@ -172,7 +173,7 @@ namespace LocalS.BLL
             return list;
         }
 
-        public SenvivSdk.BoxListResult.DataModel GetBox(SenvivConfig config,string keyword)
+        public SenvivSdk.BoxListResult.DataModel GetBox(SenvivConfig config, string keyword)
         {
             SenvivSdk.BoxListResult.DataModel model = null;
 
@@ -222,7 +223,6 @@ namespace LocalS.BLL
             return null;
         }
 
-
         public ReportParDetailResult.DataModel GetUserHealthDayReport46(SenvivConfig config, string sn)
         {
 
@@ -232,7 +232,7 @@ namespace LocalS.BLL
             var resultReportParDetail = api.DoPost(requestReportParDetail);
 
 
-            if (resultReportParDetail.Data!=null)
+            if (resultReportParDetail.Data != null)
             {
                 if (resultReportParDetail.Data.count > 0)
                 {
@@ -253,20 +253,87 @@ namespace LocalS.BLL
             return result.Data.Data;
         }
 
-        public BoxBindResult BindBox(SenvivConfig config, string userid, string sn)
+        public CustomJsonResult BindBox(SenvivConfig config, string userid, string sn)
         {
+            var restult = new CustomJsonResult();
+
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
             BoxBindRequest request = new BoxBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SvDeptId });
-            var result = api.DoPost(request);
-            return result.Data.Data;
+            var r_api = api.DoPost(request);
+
+            if (r_api.Data == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备不存在[1]");
+            }
+            var d = r_api.Data.Data;
+
+            if (d == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备不存在[2]");
+            }
+
+            if (d.Result == 3)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备不存在[3]");
+
+            if (d.Result == 5)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被绑定[4]");
+
+            if (d.Result == 6)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "此设备已经被冻结[5]");
+
+            if (d.Result != 1)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("绑定失败[{0}]", d.Result));
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
+
         }
 
-        public BoxUnBindResult UnBindBox(SenvivConfig config, string userid, string sn)
+        public CustomJsonResult UnBindBox(SenvivConfig config, string userid, string sn)
         {
+            var restult = new CustomJsonResult();
+
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
             BoxUnBindRequest request = new BoxUnBindRequest(config.AccessToken, new { sn = sn, userid = userid, deptid = config.SvDeptId });
-            var result = api.DoPost(request);
-            return result.Data.Data;
+            var r_api = api.DoPost(request);
+
+            if (r_api.Data == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败[1]");
+            }
+            var d = r_api.Data.Data;
+
+            if (d == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败[2]");
+            }
+
+            if (d.Result != 1 && d.Result != 5)
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "解绑失败[3]");
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
+        }
+
+        public CustomJsonResult SetGmPeriod(SenvivConfig config, string userid, E_SvUserCareMode careMode, DateTime? lastTime, int duration, int cycle)
+        {
+            string currentState = "1";
+            if (careMode == E_SvUserCareMode.PrePregnancy)
+            {
+                currentState = "2";
+            }
+
+            string theLastTime = "";
+            if (lastTime != null)
+            {
+                theLastTime = lastTime.Value.ToUnifiedFormatDate();
+            }
+            var result = new CustomJsonResult();
+            SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+            SetGmPeriodRequest request = new SetGmPeriodRequest(config.AccessToken, new { userid = userid, deptid = config.SvDeptId, currentState = currentState, theLastTime = theLastTime, duration = duration, cycle = cycle });
+            var r_api = api.DoPost(request);
+
+
+            return result;
         }
 
     }
