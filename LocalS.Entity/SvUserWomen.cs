@@ -18,9 +18,9 @@ namespace LocalS.Entity
         public string Id { get; set; }
         public string SvUserId { get; set; }
         //怀孕时间
-        public DateTime PregnancyTime { get; set; }
+        public DateTime? PregnancyTime { get; set; }
         //分娩时间
-        public DateTime DeliveryTime { get; set; }
+        public DateTime? DeliveryTime { get; set; }
         //分娩后异常
         public string DeliveryExState { get; set; }
         //主诉症状
@@ -58,5 +58,8 @@ namespace LocalS.Entity
         public string RyRBreastState { get; set; }
         public string UresisState { get; set; }
         public string DiachoresisState { get; set; }
+        public DateTime? YjLastDay { get; set; }
+        public int YjDuration { get; set; }
+        public int YjCycle { get; set; }
     }
 }

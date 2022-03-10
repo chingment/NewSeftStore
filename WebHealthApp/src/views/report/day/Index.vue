@@ -224,8 +224,13 @@
         </mt-tab-container-item>
         <mt-tab-container-item v-if="selected==='tab3'" id="tab3">
           <div class="c-part-1">
-            <div class="t1"> 敬请期待</div>
-            <div class="t2"> 谢谢关注，即将开启</div>
+            <div v-if="!consult.isOpen" class="open-off">
+              <div class="t1"> 敬请期待</div>
+              <div class="t2"> 谢谢关注，即将开启</div>
+            </div>
+            <div v-else class="open-on">
+              <img :src="consult.tmpImg" alt="" style="width:100%">
+            </div>
           </div>
         </mt-tab-container-item>
       </mt-tab-container>
@@ -396,6 +401,10 @@ export default {
         }
       },
       activeTabBySmTag: 0,
+      consult: {
+        isOpen: false,
+        tmpImg: ''
+      },
       theme: 'green'
     }
   },
@@ -440,6 +449,7 @@ export default {
 
           this.rd = d.rd
           this.userInfo = d.userInfo
+          this.consult = d.consult
           this.activeTabBySmTag = d.rd.smTags[0].id
         }
         this.loading = false
@@ -916,20 +926,21 @@ export default {
   flex-direction: column;
   justify-content: center;
   justify-content: center;
-
+  background: #fff;
   height: 100vh;
-
+  padding: 10px;
+.open-off{
+  text-align: center;
   .t1 {
     font-size: 24px;
-
     padding: 10px;
   }
 
   .t2 {
     font-size: 32px;
-
     padding: 20px;
   }
+}
 }
 
 .theme-pink {

@@ -12,8 +12,8 @@ import 'mint-ui/lib/style.css'
 import Mint from 'mint-ui'
 import '@/icons' // icon
 import '@/permission' // permission control
-import vueHashCalendar from 'vue-hash-calendar'
 import 'vue-hash-calendar/lib/vue-hash-calendar.css'
+import Calendar from 'vue2-datepick'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -28,7 +28,7 @@ import 'vue-hash-calendar/lib/vue-hash-calendar.css'
 // }
 Vue.use(Mint)
 Vue.use(VueCookies)
-Vue.use(vueHashCalendar)
+Vue.use(Calendar)
 Vue.config.productionTip = false
 
 new Vue({

@@ -150,6 +150,27 @@ namespace LocalS.Service.Api.HealthApp
             if (d_SvUser == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
+            var deliveryTime = "";
+            FieldModel geyweek = new FieldModel();
+            FieldModel gmPeriod = new FieldModel();
+            if (d_SvUser.Sex == "2")
+            {
+                var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
+                if (d_SvUserWomen != null)
+                {
+                    deliveryTime = d_SvUserWomen.DeliveryTime.ToUnifiedFormatDate();
+
+                    if (d_SvUserWomen.PregnancyTime != null)
+                    {
+                        var week = Lumos.CommonUtil.GetDiffWeekDay(d_SvUserWomen.PregnancyTime.Value, DateTime.Now);
+                        geyweek = new FieldModel(new int[] { week.Week, week.Day }, string.Format("{0}周+{1}", week.Week, week.Day));
+                    }
+
+                    gmPeriod = new FieldModel(new string[] { d_SvUserWomen.YjLastDay.ToUnifiedFormatDate(), d_SvUserWomen.YjDuration.ToString(), d_SvUserWomen.YjCycle.ToString() },
+                        string.Format("月经周期:{0}天，经期:{1},末次时间:{2}", d_SvUserWomen.YjCycle.ToString(), d_SvUserWomen.YjDuration.ToString(), d_SvUserWomen.YjLastDay.ToUnifiedFormatDate()));
+                }
+            }
+
             var ret = new
             {
                 DeviceInfo = new
@@ -161,6 +182,11 @@ namespace LocalS.Service.Api.HealthApp
                     Birthday = d_SvUser.Birthday.ToUnifiedFormatDate(),
                     Height = d_SvUser.Height,
                     Weight = d_SvUser.Weight,
+                    CareMode = d_SvUser.CareMode,
+                    Geyweek = geyweek,
+                    DeliveryTime = deliveryTime,
+                    GmPeriod = gmPeriod,
+                    Ladyidentity = SvUtil.GetLadyIdentity(d_SvUser.CareMode),
                     Perplex = new FieldModel(GetValue(d_SvUser.Perplex), SvUtil.GetPerplexNames(d_SvUser.Perplex, d_SvUser.PerplexOt)),
                     Chronicdisease = new FieldModel(GetValue(d_SvUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SvUser.Chronicdisease, "")),
                     Medicalhis = new FieldModel(GetValue(d_SvUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
@@ -208,11 +234,6 @@ namespace LocalS.Service.Api.HealthApp
                 d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(rop.Answers["birthday"].ToString());
             }
 
-            if (rop.Answers.ContainsKey("sex"))
-            {
-                d_SvUser.Sex = rop.Answers["sex"].ToString();
-            }
-
             if (rop.Answers.ContainsKey("height"))
             {
                 d_SvUser.Height = rop.Answers["height"].ToString();
@@ -233,7 +254,6 @@ namespace LocalS.Service.Api.HealthApp
                 d_SvUser.SubHealth = GetAnswerValue(rop.Answers["subhealth"]);
             }
 
-
             if (rop.Answers.ContainsKey("chronicdisease"))
             {
                 d_SvUser.Chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
@@ -248,6 +268,31 @@ namespace LocalS.Service.Api.HealthApp
             {
                 d_SvUser.Medicine = GetAnswerValue(rop.Answers["medicine"]);
             }
+
+            if (rop.Answers.ContainsKey("ladyidentity"))
+            {
+                string ladyidentity = rop.Answers["ladyidentity"].ToString();
+
+                d_SvUser.CareMode = GetCareMode(d_SvUser.Sex, ladyidentity);
+            }
+
+
+            if (rop.Answers.ContainsKey("geyweek"))
+            {
+                SaveSvUserWomenInfo(d_SvUser.Id, "geyweek", rop.Answers["geyweek"]);
+            }
+
+            if (rop.Answers.ContainsKey("deliveryTime"))
+            {
+                SaveSvUserWomenInfo(d_SvUser.Id, "deliveryTime", rop.Answers["deliveryTime"]);
+            }
+
+            if (rop.Answers.ContainsKey("gmPeriod"))
+            {
+                SaveSvUserWomenInfo(d_SvUser.Id, "gmPeriod", rop.Answers["gmPeriod"]);
+            }
+
+
 
             var result_SaveSvUserInfo = SaveSvUserInfo(d_SvUser.Id, d_SvUser.SvDeptId, d_SvUser.FullName,
                   d_SvUser.Avatar, d_SvUser.Sex, d_SvUser.Birthday.ToUnifiedFormatDate(), d_SvUser.Height, d_SvUser.Weight,
@@ -305,6 +350,38 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
         }
 
+
+        private E_SvUserCareMode GetCareMode(string sex, string identity)
+        {
+            E_SvUserCareMode careMode = E_SvUserCareMode.Normal;
+
+            if (sex == "2")
+            {
+                if (identity == "1")
+                {
+                    careMode = E_SvUserCareMode.Lady;
+                }
+                else if (identity == "2")
+                {
+                    careMode = E_SvUserCareMode.Pregnancy;
+                }
+                else if (identity == "3")
+                {
+                    careMode = E_SvUserCareMode.Pregnancy;
+                }
+                else if (identity == "4")
+                {
+                    careMode = E_SvUserCareMode.Postpartum;
+                }
+                else
+                {
+                    careMode = E_SvUserCareMode.Lady;
+                }
+            }
+
+            return careMode;
+        }
+
         public CustomJsonResult Fill(string operater, string userId, RopDeviceFill rop)
         {
             var result = new CustomJsonResult();
@@ -317,16 +394,13 @@ namespace LocalS.Service.Api.HealthApp
             }
 
             var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
-
+        
             if (d_SvUserDevice == null)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "信息为空");
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-
             var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
-
-            SvUser d_SvUser;
 
             string fullName = rop.Answers["fullName"].ToString();
             string sex = rop.Answers["sex"].ToString();
@@ -339,131 +413,68 @@ namespace LocalS.Service.Api.HealthApp
             string medicalhis = GetAnswerValue(rop.Answers["medicalhis"]);
             string medicine = GetAnswerValue(rop.Answers["medicine"]);
             string ladyidentity = rop.Answers["ladyidentity"].ToString();
+            string deliveryTime = rop.Answers["deliveryTime"].ToString();
+            string[] geyweek = GetAnswerValueArr(rop.Answers["geyweek"]);
+            string[] gmPeriod = GetAnswerValueArr(rop.Answers["gmPeriod"]);
+            var careMode = GetCareMode(sex, ladyidentity);
 
 
-            E_SvUserCareMode careMode = E_SvUserCareMode.Normal;
-
-            if (sex == "2")
+            var post = new
             {
-                if (ladyidentity == "3")
-                {
-                    careMode = E_SvUserCareMode.Pregnancy;
-                }
-                else
-                {
-                    careMode = E_SvUserCareMode.Lady;
-                }
-            }
+                userid = d_SvUserDevice.SvUserId == null ? "" : d_SvUserDevice.SvUserId,
+                code = "",
+                mobile = "13800138000",
+                wechatid = "",
+                nick = fullName,
+                headimgurl = d_ClientUser.Avatar,
+                sex = sex,
+                birthday = birthday,
+                height = height,
+                weight = weight,
+                createtime = "2020-06-22T10:23:58.784Z", //创建时间
+                updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
+                SAS = d_ClientUser.Sex,
+                Perplex = perplex, //目前困扰 （查看字典表）
+                OtherPerplex = "", //目前困扰输入其它 ,
+                Medicalhistory = medicalhis, //既往史 （查看字典表）
+                OtherFamilyhistory = "", //既往史其它 ,
+                Medicine = medicine, //用药情况 （查看字典表）
+                OtherMedicine = "", //用药情况其它 ,
+                deptid = config_Senviv.SvDeptId
+            };
 
-            LogUtil.Info("perplex:" + perplex);
+            var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
+            if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
 
-            if (string.IsNullOrEmpty(d_SvUserDevice.SvUserId))
+            var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == r_Api_UserCreate.userid).FirstOrDefault();
+            if (d_SvUser == null)
             {
-                var post = new
-                {
-                    userid = "",
-                    code = "",
-                    mobile = "13800138000",
-                    wechatid = "",
-                    nick = fullName,
-                    headimgurl = d_ClientUser.Avatar,
-                    sex = sex,
-                    birthday = birthday,
-                    height = height,
-                    weight = weight,
-                    createtime = "2020-06-22T10:23:58.784Z", //创建时间
-                    updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
-                    SAS = d_ClientUser.Sex,
-                    Perplex = perplex, //目前困扰 （查看字典表）
-                    OtherPerplex = "", //目前困扰输入其它 ,
-                    Medicalhistory = medicalhis, //既往史 （查看字典表）
-                    OtherFamilyhistory = "", //既往史其它 ,
-                    Medicine = medicine, //用药情况 （查看字典表）
-                    OtherMedicine = "", //用药情况其它 ,
-                    deptid = config_Senviv.SvDeptId
-                };
-
-                var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
-                if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
-
-                d_SvUser = CurrentDb.SvUser.Where(m => m.Id == r_Api_UserCreate.userid).FirstOrDefault();
-                if (d_SvUser == null)
-                {
-                    d_SvUser = new Entity.SvUser();
-                    d_SvUser.Id = r_Api_UserCreate.userid;
-                    d_SvUser.MerchId = d_ClientUser.MerchId;
-                    d_SvUser.UserId = d_ClientUser.Id;
-                    d_SvUser.SvDeptId = config_Senviv.SvDeptId;
-                    d_SvUser.FullName = fullName;
-                    d_SvUser.Height = height;
-                    d_SvUser.Weight = weight;
-                    d_SvUser.Perplex = perplex;
-                    d_SvUser.MedicalHis = medicalhis;
-                    d_SvUser.Medicine = medicine;
-                    d_SvUser.SubHealth = subhealth;
-                    d_SvUser.Chronicdisease = chronicdisease;
-                    d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                    d_SvUser.Avatar = d_ClientUser.Avatar;
-                    d_SvUser.PhoneNumber = d_ClientUser.PhoneNumber;
-                    d_SvUser.Sex = sex;
-                    d_SvUser.CareMode = careMode;
-                    d_SvUser.CreateTime = DateTime.Now;
-                    d_SvUser.Creator = d_ClientUser.Id;
-                    CurrentDb.SvUser.Add(d_SvUser);
-                    CurrentDb.SaveChanges();
-                }
-                else
-                {
-                    d_SvUser.FullName = fullName;
-                    d_SvUser.Sex = sex;
-                    d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
-                    d_SvUser.Height = height;
-                    d_SvUser.Weight = weight;
-                    d_SvUser.Perplex = perplex;
-                    d_SvUser.MedicalHis = medicalhis;
-                    d_SvUser.Medicine = medicine;
-                    d_SvUser.SubHealth = subhealth;
-                    d_SvUser.Chronicdisease = chronicdisease;
-                    d_SvUser.CareMode = careMode;
-                    d_SvUser.MendTime = DateTime.Now;
-                    d_SvUser.Mender = d_ClientUser.Id;
-                }
-
+                d_SvUser = new Entity.SvUser();
+                d_SvUser.Id = r_Api_UserCreate.userid;
+                d_SvUser.MerchId = d_ClientUser.MerchId;
+                d_SvUser.UserId = d_ClientUser.Id;
+                d_SvUser.SvDeptId = config_Senviv.SvDeptId;
+                d_SvUser.FullName = fullName;
+                d_SvUser.Height = height;
+                d_SvUser.Weight = weight;
+                d_SvUser.Perplex = perplex;
+                d_SvUser.MedicalHis = medicalhis;
+                d_SvUser.Medicine = medicine;
+                d_SvUser.SubHealth = subhealth;
+                d_SvUser.Chronicdisease = chronicdisease;
+                d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
+                d_SvUser.Avatar = d_ClientUser.Avatar;
+                d_SvUser.PhoneNumber = d_ClientUser.PhoneNumber;
+                d_SvUser.Sex = sex;
+                d_SvUser.CareMode = careMode;
+                d_SvUser.CreateTime = DateTime.Now;
+                d_SvUser.Creator = d_ClientUser.Id;
+                CurrentDb.SvUser.Add(d_SvUser);
                 CurrentDb.SaveChanges();
-
             }
             else
             {
-                var post = new
-                {
-                    userid = d_SvUserDevice.SvUserId,
-                    code = "",
-                    mobile = "13800138000",
-                    wechatid = "",
-                    nick = fullName,
-                    headimgurl = d_ClientUser.Avatar,
-                    sex = sex,
-                    birthday = birthday,
-                    height = height,
-                    weight = weight,
-                    createtime = "2020-06-22T10:23:58.784Z", //创建时间
-                    updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
-                    SAS = sex,
-                    Perplex = perplex, //目前困扰 （查看字典表）
-                    OtherPerplex = "", //目前困扰输入其它 ,
-                    Medicalhistory = medicalhis, //既往史 （查看字典表）
-                    OtherFamilyhistory = "", //既往史其它 ,
-                    Medicine = medicine, //用药情况 （查看字典表）
-                    OtherMedicine = "", //用药情况其它 ,
-                    deptid = config_Senviv.SvDeptId
-                };
-
-                var r_Api_UserCreate = SdkFactory.Senviv.UserCreate(config_Senviv, post);
-                if (string.IsNullOrEmpty(r_Api_UserCreate.userid))
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "绑定失败");
-
-                d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_SvUserDevice.SvUserId).FirstOrDefault();
                 d_SvUser.FullName = fullName;
                 d_SvUser.Sex = sex;
                 d_SvUser.Birthday = Lumos.CommonUtil.ConverToDateTime(birthday);
@@ -477,41 +488,93 @@ namespace LocalS.Service.Api.HealthApp
                 d_SvUser.CareMode = careMode;
                 d_SvUser.MendTime = DateTime.Now;
                 d_SvUser.Mender = d_ClientUser.Id;
-                CurrentDb.SaveChanges();
-
             }
+
+            CurrentDb.SaveChanges();
+
+            #region 女性
 
             if (sex == "2")
             {
-                if (ladyidentity == "3")
+                var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
+                if (d_SvUserWomen == null)
                 {
-                    #region  孕妈
-                    string[] geyweek = GetAnswerValue(rop.Answers["geyweek"]).Split(',');
-                    string deliveryTime = rop.Answers["deliveryTime"].ToString();
+                    d_SvUserWomen = new SvUserWomen();
+                    d_SvUserWomen.Id = IdWorker.Build(IdType.NewGuid);
+                    d_SvUserWomen.SvUserId = d_SvUser.Id;
 
-                    var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
-                    if (d_SvUserWomen == null)
-                    {
-                        d_SvUserWomen = new SvUserWomen();
-                        d_SvUserWomen.Id = IdWorker.Build(IdType.NewGuid);
-                        d_SvUserWomen.SvUserId = d_SvUser.Id;
-                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
-                        CurrentDb.SvUserWomen.Add(d_SvUserWomen);
-                        CurrentDb.SaveChanges();
-                    }
-                    else
+                    if (Lumos.CommonUtil.IsDateTime(deliveryTime))
                     {
                         d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
-                        d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0].ToString()), int.Parse(geyweek[1].ToString()));
-                        CurrentDb.SaveChanges();
                     }
 
-                    #endregion
+                    if (geyweek != null && geyweek.Length == 2)
+                    {
+                        if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
+                        {
+                            d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0]), int.Parse(geyweek[1]));
+                        }
+                    }
+
+                    if (gmPeriod != null && gmPeriod.Length == 3)
+                    {
+                        if (Lumos.CommonUtil.IsDateTime(gmPeriod[0]))
+                        {
+                            d_SvUserWomen.YjLastDay = DateTime.Parse(gmPeriod[0]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[1]))
+                        {
+                            d_SvUserWomen.YjDuration = int.Parse(gmPeriod[1]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[2]))
+                        {
+                            d_SvUserWomen.YjCycle = int.Parse(gmPeriod[2]);
+                        }
+                    }
+
+                    CurrentDb.SvUserWomen.Add(d_SvUserWomen);
+                    CurrentDb.SaveChanges();
+                }
+                else
+                {
+                    if (Lumos.CommonUtil.IsDateTime(deliveryTime))
+                    {
+                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                    }
+
+                    if (geyweek != null && geyweek.Length == 2)
+                    {
+                        if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
+                        {
+                            d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0]), int.Parse(geyweek[1]));
+                        }
+                    }
+
+                    if (gmPeriod != null && gmPeriod.Length == 3)
+                    {
+                        if (Lumos.CommonUtil.IsDateTime(gmPeriod[0]))
+                        {
+                            d_SvUserWomen.YjLastDay = DateTime.Parse(gmPeriod[0]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[1]))
+                        {
+                            d_SvUserWomen.YjDuration = int.Parse(gmPeriod[1]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[2]))
+                        {
+                            d_SvUserWomen.YjCycle = int.Parse(gmPeriod[2]);
+                        }
+                    }
+
+                    CurrentDb.SaveChanges();
                 }
             }
 
-
+            #endregion
 
             var r_Api_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SvUser.Id, d_SvUserDevice.DeviceId);
 
@@ -526,7 +589,6 @@ namespace LocalS.Service.Api.HealthApp
 
             if (r_Api_BindBox.Result != 1)
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("绑定失败[{0}]", r_Api_BindBox.Result));
-
 
             d_SvUserDevice.SvUserId = d_SvUser.Id;
             d_SvUserDevice.InfoFillTime = DateTime.Now;
@@ -708,7 +770,6 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
         }
 
-
         public string BuildValidCode()
         {
             VerifyCodeHelper v = new VerifyCodeHelper();
@@ -718,7 +779,6 @@ namespace LocalS.Service.Api.HealthApp
 
             return code;
         }
-
 
         public CustomJsonResult GetPhoneValidCode(string operater, string userId, RopOwnGetPhoneVaildCode rop)
         {
@@ -774,7 +834,6 @@ namespace LocalS.Service.Api.HealthApp
             return result;
         }
 
-
         public CustomJsonResult SaveSvUserInfo(string svUserId, string svDeptId, string fullName,
             string avatar, string sex, string birthday, string height, string weight, string perplex, string medicalhis, string medicine)
         {
@@ -816,6 +875,111 @@ namespace LocalS.Service.Api.HealthApp
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存信息成功");
         }
 
+        public void SaveSvUserWomenInfo(string svUserId, string field, object value)
+        {
+            var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == svUserId).FirstOrDefault();
+
+            if (d_SvUserWomen == null)
+            {
+                d_SvUserWomen = new SvUserWomen();
+                d_SvUserWomen.Id = IdWorker.Build(IdType.NewGuid);
+                d_SvUserWomen.SvUserId = svUserId;
+
+                if (field == "geyweek")
+                {
+                    string[] geyweek = GetAnswerValueArr(value);
+                    if (geyweek != null && geyweek.Length == 2)
+                    {
+                        if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
+                        {
+                            d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0]), int.Parse(geyweek[1]));
+                        }
+                    }
+                }
+                else if (field == "deliveryTime")
+                {
+                    string deliveryTime = value.ToString();
+                    if (Lumos.CommonUtil.IsDateTime(deliveryTime))
+                    {
+                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                    }
+
+                }
+                else if (field == "gmPeriod")
+                {
+                    string[] gmPeriod = GetAnswerValueArr(value);
+
+                    if (gmPeriod != null && gmPeriod.Length == 3)
+                    {
+                        if (Lumos.CommonUtil.IsDateTime(gmPeriod[0]))
+                        {
+                            d_SvUserWomen.YjLastDay = DateTime.Parse(gmPeriod[0]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[1]))
+                        {
+                            d_SvUserWomen.YjDuration = int.Parse(gmPeriod[1]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[2]))
+                        {
+                            d_SvUserWomen.YjCycle = int.Parse(gmPeriod[2]);
+                        }
+                    }
+
+                }
+
+                CurrentDb.SvUserWomen.Add(d_SvUserWomen);
+            }
+            else
+            {
+                if (field == "geyweek")
+                {
+                    string[] geyweek = GetAnswerValueArr(value);
+                    if (geyweek != null && geyweek.Length == 2)
+                    {
+                        if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
+                        {
+                            d_SvUserWomen.PregnancyTime = Lumos.CommonUtil.GetWeekDay2Time(int.Parse(geyweek[0]), int.Parse(geyweek[1]));
+                        }
+                    }
+                }
+                else if (field == "deliveryTime")
+                {
+                    string deliveryTime = value.ToString();
+                    if (Lumos.CommonUtil.IsDateTime(deliveryTime))
+                    {
+                        d_SvUserWomen.DeliveryTime = DateTime.Parse(deliveryTime);
+                    }
+
+                }
+                else if (field == "gmPeriod")
+                {
+                    string[] gmPeriod = GetAnswerValueArr(value);
+
+                    if (gmPeriod != null && gmPeriod.Length == 3)
+                    {
+                        if (Lumos.CommonUtil.IsDateTime(gmPeriod[0]))
+                        {
+                            d_SvUserWomen.YjLastDay = DateTime.Parse(gmPeriod[0]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[1]))
+                        {
+                            d_SvUserWomen.YjDuration = int.Parse(gmPeriod[1]);
+                        }
+
+                        if (Lumos.CommonUtil.IsInt(gmPeriod[2]))
+                        {
+                            d_SvUserWomen.YjCycle = int.Parse(gmPeriod[2]);
+                        }
+                    }
+
+                }
+            }
+
+            CurrentDb.SaveChanges();
+        }
     }
 
 }

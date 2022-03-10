@@ -38,8 +38,11 @@ namespace LocalS.BLL.Task
                     if (d_User.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
                         #region    //怀孕中
-                        var term = Lumos.CommonUtil.GetDiffWeekDay(d_User.PregnancyTime, DateTime.Now);
-                        string search_tag = string.Format("孕期{0}周", term.Week);
+                        if (d_User.PregnancyTime == null)
+                            return;
+
+                        var term = Lumos.CommonUtil.GetDiffWeekDay(d_User.PregnancyTime.Value, DateTime.Now);
+                        string search_tag = string.Format("怀孕第{0}周", term.Week);
 
                         LogUtil.Info(TAG, "search_tag:" + search_tag);
 
@@ -80,10 +83,12 @@ namespace LocalS.BLL.Task
                     else if (d_User.CareMode == Entity.E_SvUserCareMode.Postpartum)
                     {
                         #region 分娩后
+                        if (d_User.DeliveryTime == null)
+                            return;
 
                         string search_tag = "";
 
-                        double totalDays = (DateTime.Now - d_User.DeliveryTime).TotalDays;
+                        double totalDays = (DateTime.Now - d_User.DeliveryTime.Value).TotalDays;
 
                         if (totalDays <= 30)
                         {

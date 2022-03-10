@@ -12,30 +12,43 @@
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='height'" class="">
-            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByHeight(index)">
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerNumber(index,'height')">
               <span style="margin-right:10px">  {{ item.value }} </span> <span>{{ item.append }}</span>
               <i class="mint-cell-allow-right" />
             </mt-cell>
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='weight'" class="">
-            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByWeight(index)">
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerNumber(index,'weight')">
               <span style="margin-right:10px">  {{ item.value }} </span> <span>{{ item.append }}</span>
               <i class="mint-cell-allow-right" />
             </mt-cell>
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
+          <div v-if="item.type==='gmperiod'" class="">
+            <mt-cell title="末次月经时间" class="mint-field" style="width:300px" @click.native="openPickerDate(index)">
+              <span style="margin-right:10px">  {{ item.value[0] }} </span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-cell title="经期天数" class="mint-field" style="width:300px" @click.native="openPickerNumber(index,'gm_day')">
+              <span style="margin-right:10px">  {{ item.value[1] }} </span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-cell title="月经周期" class="mint-field" style="width:300px" @click.native="openPickerNumber(index,'gm_period')">
+              <span style="margin-right:10px">  {{ item.value[2] }} </span>
+              <i class="mint-cell-allow-right" />
+            </mt-cell>
+            <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
+          </div>
           <div v-if="item.type==='date'">
-
-            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerByDate(index)">
+            <mt-cell class="mint-field" style="width:300px" @click.native="openPickerDate(index)">
               <span>  {{ item.value }} </span>
               <i class="mint-cell-allow-right" />
             </mt-cell>
-
             <mt-button type="primary" class="btn-sure" @click="onInputSure(index)">确定</mt-button>
           </div>
           <div v-if="item.type==='gesweek'">
-            <mt-cell title="" class="mint-field" style="width:300px" @click.native="openPickerByGesWeek(index)">
+            <mt-cell title="" class="mint-field" style="width:300px" @click.native="openPickerGesWeek(index)">
               <span>{{ item.value[0] }}周+{{ item.value[1] }}</span>
               <i class="mint-cell-allow-right" />
             </mt-cell>
@@ -78,50 +91,36 @@
     </div>
 
     <mt-datetime-picker
-      ref="pickerByDate"
+      ref="pickerDate"
       type="date"
       :start-date="new Date('1900-01-01')"
-      @confirm="onConfirmByDate"
+      @confirm="onConfirmPickerDate"
       @touchmove.native.stop.prevent
     />
 
     <mt-popup
-      v-model="popupVisibleByGesWeek"
+      v-model="popupVisiblePickerGesWeek"
       position="bottom"
       style="width:100%"
     >
       <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByGesWeek=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByGesWeek">确定</span>
+        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisiblePickerGesWeek=false">取消</span>
+        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmPickerGesWeek">确定</span>
       </div>
-      <mt-picker :slots="slotsByGesWeek" @change="onValuesChangeByGesWeek" @touchmove.native.stop.prevent />
+      <mt-picker :slots="slotsPickerGesWeek" @change="onValuesChangePickerGesWeek" @touchmove.native.stop.prevent />
     </mt-popup>
 
     <mt-popup
-      v-model="popupVisibleByHeight"
+      v-model="popupVisiblePickerNumber"
       position="bottom"
       style="width:100%"
     >
       <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByHeight=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByHeight">确定</span>
+        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisiblePickerNumber=false">取消</span>
+        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmPickerNumber">确定</span>
       </div>
 
-      <mt-picker :slots="slotsByHeight" @change="onValuesChangeByHeight" @touchmove.native.stop.prevent />
-
-    </mt-popup>
-
-    <mt-popup
-      v-model="popupVisibleByWeight"
-      position="bottom"
-      style="width:100%"
-    >
-      <div class="picker-toolbar" style="border-bottom: solid 1px #eaeaea;">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisibleByWeight=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onConfirmByWeight">确定</span>
-      </div>
-
-      <mt-picker :slots="slotsByWeight" @change="onValuesChangeByWeight" @touchmove.native.stop.prevent />
+      <mt-picker :slots="slotsPickerNumber" @change="onValuesChangePickerNumber" @touchmove.native.stop.prevent />
 
     </mt-popup>
 
@@ -145,10 +144,10 @@ export default {
       active: 0,
       nextSkip: null,
       previous: null,
-      idx_date: 0,
-      idx_gesweek: -1,
-      popupVisibleByGesWeek: false,
-      slotsByGesWeek: [
+      idxPickerDate: 0,
+      idxPickerGesweek: -1,
+      popupVisiblePickerGesWeek: false,
+      slotsPickerGesWeek: [
         {
           flex: 1,
           values: [],
@@ -167,18 +166,10 @@ export default {
           defaultIndex: 3
         }
       ],
-      idx_height: -1,
-      popupVisibleByHeight: false,
-      slotsByHeight: [{
-        flex: 1,
-        values: [],
-        className: 'slot1',
-        textAlign: 'center',
-        defaultIndex: 0
-      }],
-      idx_weight: -1,
-      popupVisibleByWeight: false,
-      slotsByWeight: [{
+      idxPickerNumber: -1,
+      idxPickerNumberType: '',
+      popupVisiblePickerNumber: false,
+      slotsPickerNumber: [{
         flex: 1,
         values: [],
         className: 'slot1',
@@ -192,14 +183,7 @@ export default {
   },
   created() {
     for (let index = 1; index < 46; index++) {
-      this.slotsByGesWeek[0].values.push(index)
-    }
-    for (let index = 50; index < 200; index++) {
-      this.slotsByHeight[0].values.push(index)
-    }
-
-    for (let index = 10; index < 200; index++) {
-      this.slotsByWeight[0].values.push(index)
+      this.slotsPickerGesWeek[0].values.push(index)
     }
   },
   methods: {
@@ -343,84 +327,128 @@ export default {
         return 'qt-checklist-item'
       }
     },
-    openPickerByDate(index) {
-      this.idx_date = index
-      this.$refs.pickerByDate.open()
+    openPickerDate(index) {
+      this.idxPickerDate = index
+      var question = this.questions[this.idxPickerDate]
+
+      var value = ''
+      if (question.type === 'gmperiod') {
+        value = question.value[0]
+      } else {
+        value = question.value
+      }
+
+      this.$picker.show({
+        type: 'datePicker',
+        date: value, // 初始化时间
+        endTime: '2050-12-31', // 截至时间
+        startTime: '1900-01-01', // 开始时间
+        onOk: (e) => {
+          this.onConfirmPickerDate(e)
+        }
+
+      })
+
+      // this.$refs.pickerDate.open()
     },
-    onConfirmByDate(val) {
-      this.questions[this.idx_date].value = this.formatDate(val)
-      // console.log(val)
+    onConfirmPickerDate(val) {
+      console.log(val)
+      var question = this.questions[this.idxPickerDate]
+      console.log(question.type)
+      if (question.type === 'gmperiod') {
+        var value = question.value
+        this.questions[this.idxPickerDate].value = [this.formatDate(val), value[1], value[2]]
+      } else {
+        this.questions[this.idxPickerDate].value = this.formatDate(val)
+      }
     },
-    openPickerByGesWeek(index) {
-      this.idx_gesweek = index
-      this.popupVisibleByGesWeek = true
-      this.slotsByGesWeek[0].defaultIndex = this.questions[index].value[0] - 1
-      this.slotsByGesWeek[2].defaultIndex = this.questions[index].value[1] - 1
+    openPickerGesWeek(index) {
+      this.idxPickerGesweek = index
+      this.popupVisiblePickerGesWeek = true
+      this.slotsPickerGesWeek[0].defaultIndex = this.questions[index].value[0] - 1
+      this.slotsPickerGesWeek[2].defaultIndex = this.questions[index].value[1] - 1
     },
-    onConfirmByGesWeek() {
-      this.popupVisibleByGesWeek = false
+    onConfirmPickerGesWeek() {
+      this.popupVisiblePickerGesWeek = false
     },
-    onValuesChangeByGesWeek(picker, values) {
+    onValuesChangePickerGesWeek(picker, values) {
       console.log(values)
-      if (this.idx_gesweek > -1) {
-        this.questions[this.idx_gesweek].value[0] = values[0]
-        this.questions[this.idx_gesweek].value[1] = values[1]
+      if (this.idxPickerGesweek > -1) {
+        this.questions[this.idxPickerGesweek].value[0] = values[0]
+        this.questions[this.idxPickerGesweek].value[1] = values[1]
       }
     },
-    openPickerByHeight(index) {
-      this.idx_height = index
-
-      var question = this.questions[this.idx_height]
-      if (question.value !== '') {
-        var defaultIndex = 0
-        var j = 0
+    openPickerNumber(index, type) {
+      this.idxPickerNumber = index
+      this.idxPickerNumberType = type
+      var question = this.questions[index]
+      var defaultIndex = 0
+      this.slotsPickerNumber[0].values = []
+      if (type === 'weight') {
         for (let i = 50; i < 200; i++) {
-          j++
+          this.slotsPickerNumber[0].values.push(i)
           if (i.toString() === question.value.toString()) {
-            defaultIndex = j - 1
-            break
+            defaultIndex = i - 50
           }
         }
 
-        this.slotsByHeight[0].defaultIndex = defaultIndex
-      }
-
-      this.popupVisibleByHeight = true
-    },
-    onConfirmByHeight() {
-      this.popupVisibleByHeight = false
-    },
-    onValuesChangeByHeight(picker, values) {
-      if (this.idx_height > -1) {
-        this.questions[this.idx_height].value = values[0]
-      }
-    },
-    openPickerByWeight(index) {
-      this.idx_weight = index
-
-      var question = this.questions[this.idx_weight]
-      if (question.value !== '') {
-        var defaultIndex = 0
-        var j = 0
+        this.slotsPickerNumber[0].defaultIndex = defaultIndex
+      } else if (type === 'height') {
         for (let i = 10; i < 200; i++) {
-          j++
+          this.slotsPickerNumber[0].values.push(i)
           if (i.toString() === question.value.toString()) {
-            defaultIndex = j - 1
-            break
+            defaultIndex = i - 10
           }
         }
-
-        this.slotsByWeight[0].defaultIndex = defaultIndex
+        this.slotsPickerNumber[0].defaultIndex = defaultIndex
+      } else if (type === 'gm_day') {
+        for (let i = 1; i < 10; i++) {
+          this.slotsPickerNumber[0].values.push(i)
+          if (i.toString() === question.value[1].toString()) {
+            defaultIndex = i - 1
+          }
+        }
+        this.slotsPickerNumber[0].defaultIndex = defaultIndex
+      } else if (type === 'gm_period') {
+        for (let i = 1; i < 30; i++) {
+          this.slotsPickerNumber[0].values.push(i)
+          if (i.toString() === question.value[2].toString()) {
+            defaultIndex = i - 1
+          }
+        }
+        this.slotsPickerNumber[0].defaultIndex = defaultIndex
       }
+      //  if (question.value !== '') {
+      //    var defaultIndex = 0
+      //    var j = 0
+      // //   for (let i = 50; i < 200; i++) {
+      // //     j++
+      // //     if (i.toString() === question.value.toString()) {
+      // //       defaultIndex = j - 1
+      // //       break
+      // //     }
+      // //   }
 
-      this.popupVisibleByWeight = true
+      // //   this.slotsByHeight[0].defaultIndex = defaultIndex
+      // // }
+
+      this.popupVisiblePickerNumber = true
     },
-    onConfirmByWeight() {
-      this.popupVisibleByWeight = false
+    onConfirmPickerNumber() {
+      this.popupVisiblePickerNumber = false
     },
-    onValuesChangeByWeight(picker, values) {
-      if (this.idx_weight > -1) {
-        this.questions[this.idx_weight].value = values[0]
+    onValuesChangePickerNumber(picker, values) {
+      if (this.idxPickerNumber > -1) {
+        var question = this.questions[this.idxPickerNumber]
+        if (this.idxPickerNumberType === 'gm_day') {
+          var value = question.value
+          this.questions[this.idxPickerNumber].value = [value[0], values[0], value[2]]
+        } else if (this.idxPickerNumberType === 'gm_period') {
+          var value = question.value
+          this.questions[this.idxPickerNumber].value = [value[0], value[1], values[0]]
+        } else {
+          this.questions[this.idxPickerNumber].value = values[0]
+        }
       }
     },
     jump(q_idx, q_val) {
@@ -429,35 +457,45 @@ export default {
 
       var jump_to = -1
       if (typeof q_item.jump !== 'undefined') {
-        var skip_ids = []
-        for (var ob in q_item.jump) {
-          var skip_id = q_item.jump[ob]
+        var jump_type = Object.prototype.toString.call(q_item.jump)
+        if (jump_type === '[object Object]') {
+          var skip_ids = []
+          for (var ob in q_item.jump) {
+            var skip_id = q_item.jump[ob]
 
-          var k1 = skip_ids.filter(function(item) {
-            return item === skip_id
-          })
+            var k1 = skip_ids.filter(function(item) {
+              return item === skip_id
+            })
 
-          if (k1 == null) {
-            skip_ids.push(skip_id)
-          }
-        }
-
-        for (let x = 0; x < skip_ids.length; x++) {
-          for (let i = 0; i < questions.length; i++) {
-            console.log(skip_ids[x])
-            if (questions[i].id === skip_ids[x]) {
-            // console.log('nextSkip:' + i + 'q_item.id:' + q_item.id + 'skip_id:' + skip_id)
-              this.nextSkip = i
+            if (k1 == null) {
+              skip_ids.push(skip_id)
             }
           }
-        }
 
-        console.log('this.nextSkip:' + this.nextSkip)
-        var jump_id = q_item.jump[q_val]
-        for (let i = 0; i < questions.length; i++) {
-          if (questions[i].id === jump_id) {
-            jump_to = i
-            break
+          for (let x = 0; x < skip_ids.length; x++) {
+            for (let i = 0; i < questions.length; i++) {
+              console.log(skip_ids[x])
+              if (questions[i].id === skip_ids[x]) {
+                // console.log('nextSkip:' + i + 'q_item.id:' + q_item.id + 'skip_id:' + skip_id)
+                this.nextSkip = i
+              }
+            }
+          }
+
+          console.log('this.nextSkip:' + this.nextSkip)
+          var jump_id = q_item.jump[q_val]
+          for (let i = 0; i < questions.length; i++) {
+            if (questions[i].id === jump_id) {
+              jump_to = i
+              break
+            }
+          }
+        } else {
+          for (let i = 0; i < questions.length; i++) {
+            if (questions[i].id === q_item.jump) {
+              jump_to = i
+              break
+            }
           }
         }
       } else {

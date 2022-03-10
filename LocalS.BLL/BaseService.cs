@@ -29,5 +29,26 @@ namespace LocalS.BLL
 
             return str;
         }
+
+
+        public string[] GetAnswerValueArr(object obj)
+        {
+            string[] str = null;
+            try
+            {
+
+                string t1 = obj.ToJsonString();
+
+                string[] a1 = t1.ToJsonObject<List<string>>().ToArray();
+
+                return a1;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return str;
+        }
     }
 }

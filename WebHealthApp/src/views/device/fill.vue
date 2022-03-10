@@ -106,7 +106,7 @@ export default {
         },
         {
           id: 'ladyidentity',
-          title: '是否已怀孕',
+          title: '近期计划',
           type: 'radio',
           options: [
             { label: '暂无孕产计划', value: '1' },
@@ -115,10 +115,10 @@ export default {
             { label: '宝妈', value: '4' }
           ],
           jump: {
-            '1': 'perplex',
-            '2': 'perplex',
+            '1': 'gmPeriod',
+            '2': 'gmPeriod',
             '3': 'geyweek',
-            '4': 'perplex'
+            '4': 'gmPeriod'
           },
           value: ''
         },
@@ -133,11 +133,19 @@ export default {
           id: 'deliveryTime',
           title: '预产期',
           type: 'date',
-          value: '',
+          value: getNowDate(),
           append: '',
           rule: {
             required: true, min: 1, max: 20, message: '必选,且必须是日期格式', pattern: fromReg.date
-          }
+          },
+          jump: 'perplex'
+        },
+        {
+          id: 'gmPeriod',
+          title: '月经周期',
+          type: 'gmperiod',
+          required: true,
+          value: [getNowDate(), 6, 28]
         },
         {
           id: 'perplex',

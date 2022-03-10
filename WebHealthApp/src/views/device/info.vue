@@ -28,6 +28,18 @@
       <mt-cell title="体重" is-link @click.native="onFieldEdit('weight',deviceInfo.weight)">
         <span style="margin-right:5px">{{ deviceInfo.weight }}</span><span>kg</span>
       </mt-cell>
+      <mt-cell v-if="deviceInfo.sex.value==='2'" title="近期计划" is-link @click.native="onFieldEdit('ladyidentity',deviceInfo.ladyidentity.value)">
+        <span>{{ deviceInfo.ladyidentity.text }}</span>
+      </mt-cell>
+      <mt-cell v-if="deviceInfo.careMode===25" title="孕周" is-link @click.native="onFieldEdit('geyweek',deviceInfo.geyweek.value)">
+        <span>{{ deviceInfo.geyweek.text }}</span>
+      </mt-cell>
+      <mt-cell v-if="deviceInfo.careMode===25" title="预产期" is-link @click.native="onFieldEdit('deliveryTime',deviceInfo.deliveryTime)">
+        <span>{{ deviceInfo.deliveryTime }}</span>
+      </mt-cell>
+      <mt-cell v-if="deviceInfo.sex.value==='2'" title="月经周期" is-link @click.native="onFieldEdit('gmPeriod',deviceInfo.gmPeriod.value)">
+        <span>{{ deviceInfo.gmPeriod.text }}</span>
+      </mt-cell>
       <mt-cell title="睡眠困扰" is-link @click.native="onFieldEdit('perplex',deviceInfo.perplex.value)">
         <span>{{ deviceInfo.perplex.text }}</span>
       </mt-cell>
@@ -64,6 +76,9 @@ export default {
         birthday: '',
         height: '',
         weight: '',
+        geyweek: { value: '', text: '' },
+        deliveryTime: '',
+        gmPeriod: { value: '', text: '' },
         perplex: { value: '', text: '' },
         chronicdisease: { value: '', text: '' },
         medicalhis: { value: '', text: '' },

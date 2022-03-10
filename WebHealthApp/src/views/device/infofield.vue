@@ -20,6 +20,7 @@
 import { infoEdit } from '@/api/device'
 import FlowForm from '@/components/FlowForm/Index.vue'
 import fromReg from '@/utils/formReg'
+import { getNowDate } from '@/utils/commonUtil'
 export default {
   name: 'DeviceInfoField',
   components: {
@@ -84,7 +85,7 @@ export default {
         },
         {
           id: 'ladyidentity',
-          title: '是否已怀孕',
+          title: '近期计划',
           type: 'radio',
           options: [
             { label: '暂无孕产计划', value: '1' },
@@ -102,14 +103,28 @@ export default {
           append: ''
         },
         {
+          id: 'geyweek',
+          title: '孕周',
+          type: 'gesweek',
+          value: [7, 3],
+          append: ''
+        },
+        {
           id: 'deliveryTime',
           title: '预产期',
           type: 'date',
-          value: '',
+          value: getNowDate(),
           append: '',
           rule: {
             required: true, min: 1, max: 20, message: '必选,且必须是日期格式', pattern: fromReg.date
           }
+        },
+        {
+          id: 'gmPeriod',
+          title: '月经周期',
+          type: 'gmperiod',
+          required: true,
+          value: [getNowDate(), 6, 28]
         },
         {
           id: 'perplex',

@@ -1,4 +1,6 @@
-﻿using LocalS.BLL.UI;
+﻿using LocalS.BLL.Biz;
+using LocalS.BLL.UI;
+using LocalS.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,23 @@ namespace LocalS.BLL
         public readonly static string CA_3 = "#e16d6d";
         public readonly static string CA_4 = "#96a2dc";
         public readonly static string CA_5 = "#628DF2";
+
+        public static FieldModel GetLadyIdentity(E_SvUserCareMode value)
+        {
+            switch (value)
+            {
+                case E_SvUserCareMode.Lady:
+                    return new FieldModel(1, "暂无孕产计划");
+                case E_SvUserCareMode.PrePregnancy:
+                    return new FieldModel(2, "备孕");
+                case E_SvUserCareMode.Pregnancy:
+                    return new FieldModel(3, "孕妈");
+                case E_SvUserCareMode.Postpartum:
+                    return new FieldModel(4, "宝妈");
+                default:
+                    return new FieldModel(1, "暂无孕产计划");
+            }
+        }
 
         //性别
         public static string GetSexName(string value)

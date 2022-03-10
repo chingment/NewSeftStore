@@ -118,9 +118,12 @@ namespace LocalS.Service.Api.Merch
                 var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
+                    if (d_Women.PregnancyTime != null)
+                    {
+                        var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime.Value, DateTime.Now);
 
-                    signTags.Add(new EleTag(string.Format("{0}周+{1}", week.Week, week.Day), ""));
+                        signTags.Add(new EleTag(string.Format("{0}周+{1}", week.Week, week.Day), ""));
+                    }
                 }
 
                 //if (d_Gravida.DeliveryWay == SenvivUserGravidaDeliveryWay.NaturalLabour)
@@ -228,14 +231,17 @@ namespace LocalS.Service.Api.Merch
                 var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var ges = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
-
-                    pregnancy = new
+                    if (d_Women.PregnancyTime != null)
                     {
-                        GesWeek = ges.Week,
-                        GesDay = ges.Day,
-                        DeliveryTime = d_Women.DeliveryTime.ToUnifiedFormatDate()
-                    };
+                        var ges = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime.Value, DateTime.Now);
+
+                        pregnancy = new
+                        {
+                            GesWeek = ges.Week,
+                            GesDay = ges.Day,
+                            DeliveryTime = d_Women.DeliveryTime.ToUnifiedFormatDate()
+                        };
+                    }
                 }
             }
 

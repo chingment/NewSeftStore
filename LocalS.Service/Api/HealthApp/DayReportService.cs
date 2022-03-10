@@ -30,9 +30,12 @@ namespace LocalS.Service.Api.HealthApp
                 var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
                 if (d_Women != null)
                 {
-                    var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime, DateTime.Now);
-                    var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime - DateTime.Now).TotalDays + 1);
-                    pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
+                    if (d_Women.PregnancyTime != null && d_Women.DeliveryTime.Value != null)
+                    {
+                        var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime.Value, DateTime.Now);
+                        var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime.Value - DateTime.Now).TotalDays + 1);
+                        pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
+                    }
                 }
             }
 
@@ -145,6 +148,13 @@ namespace LocalS.Service.Api.HealthApp
 
             #endregion
 
+            var consult = new { isOpen = false, tmpImg = "" };
+
+            if (d_SvUser.MerchId == "46120614" || d_SvUser.MerchId == "94718084")
+            {
+                consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.jpg" };
+            }
+
             var ret = new
             {
                 rd = new
@@ -171,7 +181,8 @@ namespace LocalS.Service.Api.HealthApp
                     SmZcsc = SvUtil.GetSmSmsc(d_DayRpt.SmZcsc, "2"),
                     SmZcsjfw = SvUtil.GetSmZcsjfw(d_DayRpt.SmScsj, d_DayRpt.SmLcsj),
                 },
-                userInfo = userInfo
+                userInfo = userInfo,
+                consult = consult
             };
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
