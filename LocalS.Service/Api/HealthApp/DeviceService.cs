@@ -25,12 +25,77 @@ namespace LocalS.Service.Api.HealthApp
 
     public class DeviceService : BaseService
     {
+        public string GetAnswerValueStr(object obj)
+        {
+            if (obj == null)
+                return "";
+
+            return obj.ToString();
+        }
+
+        public string GetAnswerValueArrStr(object obj)
+        {
+            string str = null;
+            try
+            {
+
+
+                string t1 = obj.ToJsonString();
+
+                string[] a1 = t1.ToJsonObject<List<string>>().ToArray();
+                str = string.Join(",", a1);
+
+                return str;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return str;
+        }
+
+        public string[] GetAnswerValueArrObj(object obj)
+        {
+            string[] str = null;
+            try
+            {
+
+                string t1 = obj.ToJsonString();
+
+                string[] a1 = t1.ToJsonObject<List<string>>().ToArray();
+
+                return a1;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return str;
+        }
+
+
+
+        public string[] ArrStrConvert2ArrObj(string val)
+        {
+            if (string.IsNullOrEmpty(val))
+                return null;
+
+            var arr = val.Split(',');
+
+            return arr;
+
+        }
+
         public CustomJsonResult InitBind(string operater, string userId, string deviceId, string requestUrl)
         {
             var result = new CustomJsonResult();
 
-            var app_Config = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
+            var cfg_App = BizFactory.Senviv.GetWxAppConfigByUserId(userId);
+
             int step = 1;
+
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
             if (string.IsNullOrEmpty(deviceId))
@@ -72,7 +137,7 @@ namespace LocalS.Service.Api.HealthApp
                 {
                     NickName = d_ClientUser.NickName
                 },
-                OpenJsSdk = SdkFactory.Wx.GetJsApiConfigParams(app_Config, HttpUtility.UrlDecode(requestUrl)),
+                OpenJsSdk = SdkFactory.Wx.GetJsApiConfigParams(cfg_App, HttpUtility.UrlDecode(requestUrl)),
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
                 Step = step
             };
@@ -187,28 +252,17 @@ namespace LocalS.Service.Api.HealthApp
                     DeliveryTime = deliveryTime,
                     GmPeriod = gmPeriod,
                     Ladyidentity = SvUtil.GetLadyIdentity(d_SvUser.CareMode),
-                    Perplex = new FieldModel(GetValue(d_SvUser.Perplex), SvUtil.GetPerplexNames(d_SvUser.Perplex, d_SvUser.PerplexOt)),
-                    Chronicdisease = new FieldModel(GetValue(d_SvUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SvUser.Chronicdisease, "")),
-                    Medicalhis = new FieldModel(GetValue(d_SvUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
-                    Medicine = new FieldModel(GetValue(d_SvUser.Medicine), SvUtil.GetMedicineNames(d_SvUser.Medicine, d_SvUser.MedicineOt)),
-                    SubHealth = new FieldModel(GetValue(d_SvUser.SubHealth), SvUtil.GetSubHealthNames(d_SvUser.SubHealth, d_SvUser.SubHealthOt)),
+                    Perplex = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.Perplex), SvUtil.GetPerplexNames(d_SvUser.Perplex, d_SvUser.PerplexOt)),
+                    Chronicdisease = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SvUser.Chronicdisease, "")),
+                    Medicalhis = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
+                    Medicine = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.Medicine), SvUtil.GetMedicineNames(d_SvUser.Medicine, d_SvUser.MedicineOt)),
+                    SubHealth = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.SubHealth), SvUtil.GetSubHealthNames(d_SvUser.SubHealth, d_SvUser.SubHealthOt)),
                 },
                 AppInfo = BizFactory.Senviv.GetWxAppInfoByUserId(userId),
             };
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
-
-        }
-
-        public string[] GetValue(string val)
-        {
-            if (string.IsNullOrEmpty(val))
-                return null;
-
-            var arr = val.Split(',');
-
-            return arr;
 
         }
 
@@ -246,27 +300,27 @@ namespace LocalS.Service.Api.HealthApp
 
             if (rop.Answers.ContainsKey("perplex"))
             {
-                d_SvUser.Perplex = GetAnswerValue(rop.Answers["perplex"]);
+                d_SvUser.Perplex = GetAnswerValueArrStr(rop.Answers["perplex"]);
             }
 
             if (rop.Answers.ContainsKey("subhealth"))
             {
-                d_SvUser.SubHealth = GetAnswerValue(rop.Answers["subhealth"]);
+                d_SvUser.SubHealth = GetAnswerValueArrStr(rop.Answers["subhealth"]);
             }
 
             if (rop.Answers.ContainsKey("chronicdisease"))
             {
-                d_SvUser.Chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
+                d_SvUser.Chronicdisease = GetAnswerValueArrStr(rop.Answers["chronicdisease"]);
             }
 
             if (rop.Answers.ContainsKey("medicalhis"))
             {
-                d_SvUser.MedicalHis = GetAnswerValue(rop.Answers["medicalhis"]);
+                d_SvUser.MedicalHis = GetAnswerValueArrStr(rop.Answers["medicalhis"]);
             }
 
             if (rop.Answers.ContainsKey("medicine"))
             {
-                d_SvUser.Medicine = GetAnswerValue(rop.Answers["medicine"]);
+                d_SvUser.Medicine = GetAnswerValueArrStr(rop.Answers["medicine"]);
             }
 
             if (rop.Answers.ContainsKey("ladyidentity"))
@@ -402,22 +456,22 @@ namespace LocalS.Service.Api.HealthApp
 
             var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
 
-            string fullName = rop.Answers["fullName"].ToString();
-            string sex = rop.Answers["sex"].ToString();
-            string birthday = rop.Answers["birthday"].ToString();
-            string height = rop.Answers["height"].ToString();
-            string weight = rop.Answers["weight"].ToString();
-            string perplex = GetAnswerValue(rop.Answers["perplex"]);
-            string subhealth = GetAnswerValue(rop.Answers["subhealth"]);
-            string chronicdisease = GetAnswerValue(rop.Answers["chronicdisease"]);
-            string medicalhis = GetAnswerValue(rop.Answers["medicalhis"]);
-            string medicine = GetAnswerValue(rop.Answers["medicine"]);
-            string ladyidentity = rop.Answers["ladyidentity"].ToString();
-            string deliveryTime = rop.Answers["deliveryTime"].ToString();
-            string[] geyweek = GetAnswerValueArr(rop.Answers["geyweek"]);
-            string[] gmPeriod = GetAnswerValueArr(rop.Answers["gmPeriod"]);
-            var careMode = GetCareMode(sex, ladyidentity);
+            string fullName = GetAnswerValueStr(rop.Answers["fullName"]);
+            string sex = GetAnswerValueStr(rop.Answers["sex"]);
+            string birthday = GetAnswerValueStr(rop.Answers["birthday"]);
+            string height = GetAnswerValueStr(rop.Answers["height"]);
+            string weight = GetAnswerValueStr(rop.Answers["weight"]);
+            string perplex = GetAnswerValueArrStr(rop.Answers["perplex"]);
+            string subhealth = GetAnswerValueArrStr(rop.Answers["subhealth"]);
+            string chronicdisease = GetAnswerValueArrStr(rop.Answers["chronicdisease"]);
+            string medicalhis = GetAnswerValueArrStr(rop.Answers["medicalhis"]);
+            string medicine = GetAnswerValueArrStr(rop.Answers["medicine"]);
+            string ladyidentity = GetAnswerValueStr(rop.Answers["ladyidentity"]);
+            string deliveryTime = GetAnswerValueStr(rop.Answers["deliveryTime"]);
+            string[] geyweek = GetAnswerValueArrObj(rop.Answers["geyweek"]);
+            string[] gmPeriod = GetAnswerValueArrObj(rop.Answers["gmPeriod"]);
 
+            var careMode = GetCareMode(sex, ladyidentity);
 
             var post = new
             {
@@ -753,20 +807,19 @@ namespace LocalS.Service.Api.HealthApp
             if (r_Api_BindBox.Result != ResultType.Success)
                 return r_Api_BindBox;
 
-            var d_UserDevice = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.DeviceId == rop.DeviceId).FirstOrDefault();
-            if (d_UserDevice != null)
+            if (d_SvUserDevice != null)
             {
-                d_UserDevice.BindDeviceIdTime = null;
-                d_UserDevice.BindPhoneTime = null;
-                d_UserDevice.InfoFillTime = null;
-                d_UserDevice.UnBindTime = DateTime.Now;
-                d_UserDevice.BindStatus = E_SvUserDeviceBindStatus.UnBind;
-                d_UserDevice.Creator = operater;
-                d_UserDevice.CreateTime = DateTime.Now;
+                d_SvUserDevice.BindDeviceIdTime = null;
+                d_SvUserDevice.BindPhoneTime = null;
+                d_SvUserDevice.InfoFillTime = null;
+                d_SvUserDevice.UnBindTime = DateTime.Now;
+                d_SvUserDevice.BindStatus = E_SvUserDeviceBindStatus.UnBind;
+                d_SvUserDevice.Creator = operater;
+                d_SvUserDevice.CreateTime = DateTime.Now;
                 CurrentDb.SaveChanges();
             }
 
-            BizFactory.Senviv.SendDeviceUnBind(d_UserDevice.SvUserId, "您已成功解绑设备，不再接收报告信息", rop.DeviceId, DateTime.Now.ToUnifiedFormatDateTime(), "感谢使用。");
+            BizFactory.Senviv.SendDeviceUnBind(d_SvUserDevice.SvUserId, "您已成功解绑设备，不再接收报告信息", rop.DeviceId, DateTime.Now.ToUnifiedFormatDateTime(), "感谢使用。");
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
@@ -879,10 +932,6 @@ namespace LocalS.Service.Api.HealthApp
 
         public void SaveSvUserWomenInfo(string svUserId, string svDeptId, E_SvUserCareMode careMode, string field, object value)
         {
-            string gmPeriod1 = "";
-            string gmPeriod2 = "";
-            string gmPeriod3 = "";
-
             var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == svUserId).FirstOrDefault();
 
             if (d_SvUserWomen == null)
@@ -893,7 +942,7 @@ namespace LocalS.Service.Api.HealthApp
 
                 if (field == "geyweek")
                 {
-                    string[] geyweek = GetAnswerValueArr(value);
+                    string[] geyweek = GetAnswerValueArrObj(value);
                     if (geyweek != null && geyweek.Length == 2)
                     {
                         if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
@@ -913,7 +962,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else if (field == "gmPeriod")
                 {
-                    string[] gmPeriod = GetAnswerValueArr(value);
+                    string[] gmPeriod = GetAnswerValueArrObj(value);
 
                     if (gmPeriod != null && gmPeriod.Length == 3)
                     {
@@ -941,7 +990,7 @@ namespace LocalS.Service.Api.HealthApp
             {
                 if (field == "geyweek")
                 {
-                    string[] geyweek = GetAnswerValueArr(value);
+                    string[] geyweek = GetAnswerValueArrObj(value);
                     if (geyweek != null && geyweek.Length == 2)
                     {
                         if (Lumos.CommonUtil.IsInt(geyweek[0]) && Lumos.CommonUtil.IsInt(geyweek[1]))
@@ -961,7 +1010,7 @@ namespace LocalS.Service.Api.HealthApp
                 }
                 else if (field == "gmPeriod")
                 {
-                    string[] gmPeriod = GetAnswerValueArr(value);
+                    string[] gmPeriod = GetAnswerValueArrObj(value);
 
                     if (gmPeriod != null && gmPeriod.Length == 3)
                     {
