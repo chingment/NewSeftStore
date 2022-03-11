@@ -33,50 +33,49 @@ namespace LocalS.BLL.Task
 
                 foreach (var d_User in d_Users)
                 {
-                    LogUtil.Info(TAG, "d_User.FullName:" + d_User.FullName + ",CareMode:" + d_User.CareMode + ",DeliveryTime:" + d_User.FullName);
+                    LogUtil.Info(TAG, "d_User.FullName:" + d_User.FullName + ",CareMode:" + d_User.CareMode);
 
                     if (d_User.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
                         #region    //怀孕中
-                        if (d_User.PregnancyTime == null)
-                            return;
-
-                        var term = Lumos.CommonUtil.GetDiffWeekDay(d_User.PregnancyTime.Value, DateTime.Now);
-                        string search_tag = string.Format("怀孕第{0}周", term.Week);
-
-                        LogUtil.Info(TAG, "search_tag:" + search_tag);
-
-                        string cdType = "article_pregnancy";
-
-                        var d_SendLog = CurrentDb.PushMessageLog.Where(m => m.SvUserId == d_User.SvUserId && m.CdType == cdType && m.CdValue == search_tag).FirstOrDefault();
-                        if (d_SendLog != null)
-                            return;
-
-                        var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
-                        if (d_Article == null)
-                            return;
-
-                        string title = string.Format("您好,{0}", search_tag);
-                        string url = string.Format("http://health.17fanju.com/article/details?id={0}&svuid={1}", d_Article.Id, d_User.SvUserId);
-                        string remark = "感谢您的支持";
-
-                        bool isSend = BizFactory.Senviv.SendArticleByPregnancy(d_User.SvUserId, title, "", "", remark, url);
-
-                        if (isSend)
+                        if (d_User.PregnancyTime != null)
                         {
-                            d_SendLog = new Entity.PushMessageLog();
-                            d_SendLog.Id = IdWorker.Build(IdType.NewGuid);
-                            d_SendLog.MerchId = d_User.MerchId;
-                            d_SendLog.UserId = d_User.UserId;
-                            d_SendLog.SvUserId = d_User.SvUserId;
-                            d_SendLog.CdType = cdType;
-                            d_SendLog.CdValue = search_tag;
-                            d_SendLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-                            d_SendLog.CreateTime = DateTime.Now;
-                            CurrentDb.PushMessageLog.Add(d_SendLog);
-                            CurrentDb.SaveChanges();
-                        }
+                            var term = Lumos.CommonUtil.GetDiffWeekDay(d_User.PregnancyTime.Value, DateTime.Now);
+                            string search_tag = string.Format("怀孕第{0}周", term.Week);
 
+                            LogUtil.Info(TAG, "search_tag:" + search_tag);
+
+                            string cdType = "article_pregnancy";
+
+                            var d_SendLog = CurrentDb.PushMessageLog.Where(m => m.SvUserId == d_User.SvUserId && m.CdType == cdType && m.CdValue == search_tag).FirstOrDefault();
+                            if (d_SendLog == null)
+                            {
+                                var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                                if (d_Article != null)
+                                {
+                                    string title = string.Format("您好,{0}", search_tag);
+                                    string url = string.Format("http://health.17fanju.com/article/details?id={0}&svuid={1}", d_Article.Id, d_User.SvUserId);
+                                    string remark = "感谢您的支持";
+
+                                    bool isSend = BizFactory.Senviv.SendArticleByPregnancy(d_User.SvUserId, title, search_tag, "点击查看", remark, url);
+
+                                    if (isSend)
+                                    {
+                                        d_SendLog = new Entity.PushMessageLog();
+                                        d_SendLog.Id = IdWorker.Build(IdType.NewGuid);
+                                        d_SendLog.MerchId = d_User.MerchId;
+                                        d_SendLog.UserId = d_User.UserId;
+                                        d_SendLog.SvUserId = d_User.SvUserId;
+                                        d_SendLog.CdType = cdType;
+                                        d_SendLog.CdValue = search_tag;
+                                        d_SendLog.Creator = IdWorker.Build(IdType.EmptyGuid);
+                                        d_SendLog.CreateTime = DateTime.Now;
+                                        CurrentDb.PushMessageLog.Add(d_SendLog);
+                                        CurrentDb.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
                         #endregion
 
                     }
@@ -105,32 +104,34 @@ namespace LocalS.BLL.Task
                         string cdType = "article_postpartum";
 
                         var d_SendLog = CurrentDb.PushMessageLog.Where(m => m.SvUserId == d_User.SvUserId && m.CdType == cdType && m.CdValue == search_tag).FirstOrDefault();
-                        if (d_SendLog != null)
-                            return;
-
-                        var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
-                        if (d_Article == null)
-                            return;
-
-                        string title = string.Format("您好,{0}", search_tag);
-                        string url = string.Format("http://health.17fanju.com/article/details?id={0}&svuid={1}", d_Article.Id, d_User.SvUserId);
-                        string remark = "感谢您的支持";
-
-                        bool isSend = BizFactory.Senviv.SendArticleByPostpartum(d_User.SvUserId, title, remark, url);
-
-                        if (isSend)
+                        if (d_SendLog == null)
                         {
-                            d_SendLog = new Entity.PushMessageLog();
-                            d_SendLog.Id = IdWorker.Build(IdType.NewGuid);
-                            d_SendLog.MerchId = d_User.MerchId;
-                            d_SendLog.UserId = d_User.UserId;
-                            d_SendLog.SvUserId = d_User.SvUserId;
-                            d_SendLog.CdType = cdType;
-                            d_SendLog.CdValue = search_tag;
-                            d_SendLog.Creator = IdWorker.Build(IdType.EmptyGuid);
-                            d_SendLog.CreateTime = DateTime.Now;
-                            CurrentDb.PushMessageLog.Add(d_SendLog);
-                            CurrentDb.SaveChanges();
+
+                            var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                            if (d_Article != null)
+                            {
+
+                                string title = string.Format("您好,{0}", search_tag);
+                                string url = string.Format("http://health.17fanju.com/article/details?id={0}&svuid={1}", d_Article.Id, d_User.SvUserId);
+                                string remark = "感谢您的支持";
+
+                                bool isSend = BizFactory.Senviv.SendArticleByPostpartum(d_User.SvUserId, title, remark, url);
+
+                                if (isSend)
+                                {
+                                    d_SendLog = new Entity.PushMessageLog();
+                                    d_SendLog.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_SendLog.MerchId = d_User.MerchId;
+                                    d_SendLog.UserId = d_User.UserId;
+                                    d_SendLog.SvUserId = d_User.SvUserId;
+                                    d_SendLog.CdType = cdType;
+                                    d_SendLog.CdValue = search_tag;
+                                    d_SendLog.Creator = IdWorker.Build(IdType.EmptyGuid);
+                                    d_SendLog.CreateTime = DateTime.Now;
+                                    CurrentDb.PushMessageLog.Add(d_SendLog);
+                                    CurrentDb.SaveChanges();
+                                }
+                            }
                         }
 
                         #endregion

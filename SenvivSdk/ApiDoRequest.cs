@@ -44,7 +44,7 @@ namespace SenvivSdk
                 string requestUrl = GetSeviceUrl() + "/" + request.ApiUrl;
                 WebUtils webUtils = new WebUtils();
 
-                LogUtil.Info(TAG, requestUrl);
+                //LogUtil.Info(TAG, requestUrl);
 
                 string str_PostData = request.PostData.ToString();
                 if (request.PostData.GetType() != typeof(String))
@@ -52,13 +52,13 @@ namespace SenvivSdk
                     str_PostData = request.PostData.ToJsonString();
                 }
 
-                LogUtil.Info(TAG, str_PostData);
+                //LogUtil.Info(TAG, str_PostData);
 
                 var obj_PostData = new { Token = request.Token, Data = GetBase64(str_PostData) };
 
                 var str_PostData2 = obj_PostData.ToJsonString();
 
-                LogUtil.Info(TAG, str_PostData2);
+                //LogUtil.Info(TAG, str_PostData2);
 
                 var doPost = webUtils.DoPost(requestUrl, str_PostData2);
 
@@ -80,7 +80,7 @@ namespace SenvivSdk
 
                 this.responseString = doPost.ResponseString;
 
-                LogUtil.Info(TAG, responseString);
+                //LogUtil.Info(TAG, responseString);
 
                 if ( request.ApiUrl.IndexOf("Boxbind") > -1)
                 {

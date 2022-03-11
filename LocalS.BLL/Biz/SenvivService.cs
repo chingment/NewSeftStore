@@ -1517,17 +1517,17 @@ namespace LocalS.BLL
                     d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
 
                     d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
-
+                    d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of);
                     d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
                     d_DayReport.SmScsj = SvUtil.D32LongToDateTime(reportpar.StartTime);//上床时间
                     d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(reportpar.FinishTime);//离床时间
                     d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
                     d_DayReport.SmRssj = SvUtil.D32LongToDateTime(reportpar.OnbedTime);//入睡时间
                     d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(reportpar.OffbedTime);//清醒时间
-                    d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
+                    d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds - SvUtil.D46Long(reportpar.of);//睡眠时长
                     d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
-                    d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
-                                                                                                      //d_DayReport.SmLzscbl = sm.OffbedRatio;
+                    d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of); //离枕时长
+                                                                      //d_DayReport.SmLzscbl = sm.OffbedRatio;
                     d_DayReport.SmSmzq = SvUtil.D46Int(reportpar.sct);//睡眠周期
 
                     d_DayReport.SmSdsmsc = SvUtil.D46Long(reportpar.dp);//深睡时长
@@ -1543,7 +1543,6 @@ namespace LocalS.BLL
                     d_DayReport.SmQxskbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
 
                     d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
-
                     d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
                     //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
                     d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
