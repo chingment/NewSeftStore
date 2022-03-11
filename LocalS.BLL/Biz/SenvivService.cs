@@ -59,7 +59,6 @@ namespace LocalS.BLL
         public string PaQrCode { get; set; }
     }
 
-
     public class SenvivService : BaseService
     {
         public readonly string TAG = "SenvivService";
@@ -1102,7 +1101,7 @@ namespace LocalS.BLL
                                 d_Label.TypeClass = "1";
                                 CurrentDb.SvHealthDayReportLabel.Add(d_Label);
                                 CurrentDb.SaveChanges();
-                            
+
                             }
 
                             d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
@@ -1718,16 +1717,16 @@ namespace LocalS.BLL
             }
         }
         //优先级别MerchId,若Merch为空再取deviceId
-        public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string deviceId)
+        public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string svDeviceId)
         {
-            LogUtil.Info("merchId:" + merchId + ",deviceId:" + deviceId);
+            LogUtil.Info("merchId:" + merchId + ",deviceId:" + svDeviceId);
 
-            if (string.IsNullOrEmpty(merchId) && string.IsNullOrEmpty(deviceId))
+            if (string.IsNullOrEmpty(merchId) && string.IsNullOrEmpty(svDeviceId))
                 return null;
 
             if (string.IsNullOrEmpty(merchId))
             {
-                return GetWxAppConfigByDeviceId(deviceId);
+                return GetWxAppConfigByDeviceId(svDeviceId);
             }
             else
             {
@@ -1768,10 +1767,10 @@ namespace LocalS.BLL
 
             return config;
         }
-        public WxAppConfig GetWxAppConfigByDeviceId(string deviceId)
+        public WxAppConfig GetWxAppConfigByDeviceId(string svDeviceId)
         {
-            LogUtil.Info("GetWxAppConfigByDeviceId:" + deviceId);
-            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == deviceId && m.IsStopUse == false).FirstOrDefault();
+            LogUtil.Info("GetWxAppConfigByDeviceId:" + svDeviceId);
+            var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == svDeviceId && m.IsStopUse == false).FirstOrDefault();
 
             if (d_MerchDevice == null)
                 return null;
@@ -1802,15 +1801,15 @@ namespace LocalS.BLL
 
             return appConfig;
         }
-        public SenvivConfig GetConfig(string deptId)
+        public SenvivConfig GetConfig(string svDeptId)
         {
             var config = new SenvivConfig();
-            if (deptId == "32")
+            if (svDeptId == "32")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
                 config.SvDeptId = "32";
             }
-            else if (deptId == "46")
+            else if (svDeptId == "46")
             {
                 config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
                 config.SvDeptId = "46";
@@ -1922,7 +1921,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendArticleByPostpartum(string svUserId, string title, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "article_postpartum");
@@ -1949,7 +1947,6 @@ namespace LocalS.BLL
 
             return true;
         }
-
         public bool SendHealthMonitor(string svUserId, string first, string keyword1, string keyword2, string keyword3, string remark)
         {
             var template = GetWxPaTpl(svUserId, "health_monitor");
