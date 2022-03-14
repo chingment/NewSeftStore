@@ -49,7 +49,7 @@ const router = new VueRouter({
     {
       path: '/imitate/lyingin',
       component: () => import('@/views/imitate/lyingin'),
-      meta: { title: '', isAuth: true }
+      meta: { title: '-', isAuth: true }
     },
     {
       path: '/errorpage/invalid',
