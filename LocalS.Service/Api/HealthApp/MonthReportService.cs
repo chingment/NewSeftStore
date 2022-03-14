@@ -290,7 +290,7 @@ namespace LocalS.Service.Api.HealthApp
                               u.TagCount
                           }).FirstOrDefault();
 
-            var tagExplain = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagId == rptTag.TagId).FirstOrDefault();
+            var tagExplain = CurrentDb.SvHealthTagExplain.Where(m => m.TagId == rptTag.TagId).FirstOrDefault();
 
             string proExplain = "";
             string tcmExplain = "";

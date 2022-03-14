@@ -48,6 +48,14 @@ namespace LocalS.Service.Api.HealthApp
                 return new ArticleService();
             }
         }
-        
+
+        public static ImitateService Imitate
+        {
+            get
+            {
+                return new ImitateService();
+            }
+        }
+
     }
 }

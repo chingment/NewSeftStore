@@ -47,6 +47,11 @@ const router = new VueRouter({
       meta: { title: '文章知识', isAuth: false }
     },
     {
+      path: '/imitate/lyingin',
+      component: () => import('@/views/imitate/lyingin'),
+      meta: { title: '', isAuth: true }
+    },
+    {
       path: '/errorpage/invalid',
       component: () => import('@/views/errorpage/invalid'),
       meta: { title: '错误提示', isAuth: false }

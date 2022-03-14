@@ -168,6 +168,22 @@ export function saveArticle(data) {
   })
 }
 
+export function getImitateLyingIns(params) {
+  return request({
+    url: '/senviv/getImitateLyingIns',
+    method: 'get',
+    params
+  })
+}
+
+export function saveImitateLyingIn(data) {
+  return request({
+    url: '/senviv/saveImitateLyingIn',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getVisitRecords: getVisitRecords,
   getHandleRecords: getHandleRecords,
@@ -189,5 +205,7 @@ export default {
   saveVisitRecordByPapush: saveVisitRecordByPapush,
   getArticles: getArticles,
   getArticle: getArticle,
-  saveArticle: saveArticle
+  saveArticle: saveArticle,
+  getImitateLyingIns: getImitateLyingIns,
+  saveImitateLyingIn: saveImitateLyingIn
 }

@@ -88,13 +88,15 @@ namespace LocalS.DAL
         public IDbSet<SvHealthStageReportTag> SvHealthStageReportTag { get; set; }
         public IDbSet<SvVisitRecord> SvVisitRecord { get; set; }
         public IDbSet<SvMerch> SvMerch { get; set; }
+        public IDbSet<SvHealthTagExplain> SvHealthTagExplain { get; set; }
+        public IDbSet<SvTask> SvTask { get; set; }
+        public IDbSet<SvUserWomen> SvUserWomen { get; set; }
+        public IDbSet<SvImitateLyingIn> SvImitateLyingIn { get; set; }
+
         public IDbSet<DeviceMqttMessage> DeviceMqttMessage { get; set; }
-        public IDbSet<SvHealthTagExplain> SenvivHealthTagExplain { get; set; }
         public IDbSet<ErpReplenishPlan> ErpReplenishPlan { get; set; }
         public IDbSet<ErpReplenishPlanDevice> ErpReplenishPlanDevice { get; set; }
         public IDbSet<ErpReplenishPlanDeviceDetail> ErpReplenishPlanDeviceDetail { get; set; }
-        public IDbSet<SvTask> SvTask { get; set; }
-        public IDbSet<SvUserWomen> SvUserWomen { get; set; }
         public IDbSet<PushMessageLog> PushMessageLog { get; set; }
         
 

@@ -163,6 +163,7 @@
     <Compile Include="Api\HealthApp\ArticleService.cs" />
     <Compile Include="Api\HealthApp\DayReportService.cs" />
     <Compile Include="Api\HealthApp\DeviceService.cs" />
+    <Compile Include="Api\HealthApp\ImitateService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDayReportGetDetails.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Api\Merch\RModels\RopReportDeviceSkuSummaryGet..cs" />
     <Compile Include="Api\Merch\RModels\RopReportDeviceSummaryGet.cs" />
     <Compile Include="Api\Merch\RModels\RopSenvivSaveArticle.cs" />
+    <Compile Include="Api\Merch\RModels\RopSenvivSaveImitateLyingIn.cs" />
     <Compile Include="Api\Merch\RModels\RopSenvivSaveUserDetail.cs" />
     <Compile Include="Api\Merch\RModels\RopSenvivSaveVisitRecordByPapush.cs" />
     <Compile Include="Api\Merch\RModels\RupAdGetContentBelongs.cs" />
@@ -326,6 +328,7 @@
     <Compile Include="Api\Merch\RModels\RupMemberRightGetSkus.cs" />
     <Compile Include="Api\Merch\RModels\RupPrdProductGetListBySale.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetDayReports.cs" />
+    <Compile Include="Api\Merch\RModels\RupSenvivGetImitateLyingIns.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetTags.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetTasks.cs" />
     <Compile Include="Api\Merch\RModels\RupSenvivGetUsers.cs" />

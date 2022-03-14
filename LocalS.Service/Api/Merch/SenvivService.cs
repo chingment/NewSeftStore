@@ -220,8 +220,8 @@ namespace LocalS.Service.Api.Merch
 
 
             var d_SvUser = (from u in CurrentDb.SvUser
-                                where u.Id == svUserId
-                                select u).FirstOrDefault();
+                            where u.Id == svUserId
+                            select u).FirstOrDefault();
 
 
             object pregnancy = null;
@@ -1316,7 +1316,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SenvivHealthTagExplain
+            var query = (from u in CurrentDb.SvHealthTagExplain
                          where u.MerchId == merchId
                          select new { u.Id, u.TagId, u.TagName, u.ProExplain, u.TcmExplain, u.Suggest });
 
@@ -1358,7 +1358,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             var result = new CustomJsonResult();
 
-            var tagExplain = CurrentDb.SenvivHealthTagExplain.Where(m => m.Id == rop.Id).FirstOrDefault();
+            var tagExplain = CurrentDb.SvHealthTagExplain.Where(m => m.Id == rop.Id).FirstOrDefault();
             if (tagExplain != null)
             {
                 tagExplain.ProExplain = rop.ProExplain;
@@ -1367,6 +1367,93 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                 CurrentDb.SaveChanges();
             }
 
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
+
+            return result;
+
+        }
+
+        public CustomJsonResult GetImitateLyingIns(string operater, string merchId, RupSenvivGetImitateLyingIns rup)
+        {
+
+            var result = new CustomJsonResult();
+
+            var query = (from u in CurrentDb.SvImitateLyingIn
+                         where u.MerchId == merchId
+                         select new { u.Id, u.Title, u.Content, u.StartTimeQt, u.EndTimeQt, u.CreateTime });
+
+
+            int total = query.Count();
+
+            int pageIndex = rup.Page - 1;
+            int pageSize = rup.Limit;
+            query = query.OrderBy(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+                olist.Add(new
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    Content = item.Content,
+                    StartTimeQt = item.StartTimeQt.ToString("HH:mm:ss"),
+                    EndTimeQt = item.EndTimeQt.ToString("HH:mm:ss"),
+                    CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
+            return result;
+
+        }
+
+        public CustomJsonResult SaveImitateLyingIn(string operater, string merchId, RopSenvivSaveImitateLyingIn rop)
+        {
+
+            var result = new CustomJsonResult();
+
+            SvImitateLyingIn d_SvImitateLyingIn;
+
+
+            string endTimeQt = rop.EndTimeQt == "24:00" ? "23:59:59" : rop.EndTimeQt;
+
+            if (string.IsNullOrEmpty(rop.Id))
+            {
+                d_SvImitateLyingIn = new SvImitateLyingIn();
+                d_SvImitateLyingIn.Id = IdWorker.Build(IdType.NewGuid);
+                d_SvImitateLyingIn.MerchId = merchId;
+                d_SvImitateLyingIn.Title = rop.Title;
+                d_SvImitateLyingIn.Content = rop.Content;
+                d_SvImitateLyingIn.Title = rop.Title;
+                d_SvImitateLyingIn.StartTimeQt = DateTime.Parse("2020-01-01 " + rop.StartTimeQt);
+                d_SvImitateLyingIn.EndTimeQt = DateTime.Parse("2020-01-01 " + endTimeQt);
+                d_SvImitateLyingIn.CreateTime = DateTime.Now;
+                d_SvImitateLyingIn.Creator = operater;
+
+                CurrentDb.SvImitateLyingIn.Add(d_SvImitateLyingIn);
+                CurrentDb.SaveChanges();
+            }
+            else
+            {
+                d_SvImitateLyingIn = CurrentDb.SvImitateLyingIn.Where(m => m.Id == rop.Id).FirstOrDefault();
+                d_SvImitateLyingIn.Title = rop.Title;
+                d_SvImitateLyingIn.Content = rop.Content;
+                d_SvImitateLyingIn.Title = rop.Title;
+                d_SvImitateLyingIn.StartTimeQt = DateTime.Parse("2020-01-01 " + rop.StartTimeQt);
+                d_SvImitateLyingIn.EndTimeQt = DateTime.Parse("2020-01-01 " + endTimeQt);
+                d_SvImitateLyingIn.MendTime = DateTime.Now;
+                d_SvImitateLyingIn.Mender = operater;
+                CurrentDb.SaveChanges();
+            }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
 
@@ -1555,10 +1642,10 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             {
                 var dic = rop.VisitContent.ToJsonObject<Dictionary<string, string>>();
                 string first = "亲，您近期的监测结果显示异常";
-                string keyword1 = dic["keyword1"];
-                string keyword2 = dic["keyword2"];
-                string keyword3 = dic["keyword3"];
-                string remark = dic["remark"];
+                string keyword1 = dic.ContainsKey("keyword1") ? dic["keyword1"] : "";
+                string keyword2 = dic.ContainsKey("keyword2") ? dic["keyword2"] : "";
+                string keyword3 = dic.ContainsKey("keyword3") ? dic["keyword3"] : "";
+                string remark = dic.ContainsKey("remark") ? dic["remark"] : "";
                 string url = "";
                 BizFactory.Senviv.SendHealthMonitor(rop.SvUserId, first, keyword1, keyword2, keyword3, remark);
             }

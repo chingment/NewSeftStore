@@ -809,7 +809,7 @@ namespace LocalS.BLL
                         d_smTag.SvUserId = svUserId;
                         d_smTag.ReportId = d_StageReport.Id;
 
-                        var d_tag = CurrentDb.SenvivHealthTagExplain.Where(m => m.TagName == smTag.Name).FirstOrDefault();
+                        var d_tag = CurrentDb.SvHealthTagExplain.Where(m => m.TagName == smTag.Name).FirstOrDefault();
                         if (d_tag != null)
                         {
                             d_smTag.TagId = d_tag.TagId;

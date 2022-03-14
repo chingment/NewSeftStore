@@ -10,6 +10,7 @@
             <el-menu-item index="/senviv/monthreport">健康报告（月）</el-menu-item>
             <el-menu-item index="/senviv/tagexplain">标签解读</el-menu-item>
             <el-menu-item index="/senviv/article">文章知识库</el-menu-item>
+            <el-menu-item index="/senviv/imitatelyingin">模拟坐月</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </el-aside>

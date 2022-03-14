@@ -104,7 +104,7 @@ namespace LocalS.Service.Api.HealthApp
             var arr_SmTags = d_DayRpt.SmTags.ToJsonObject<string[]>();
             if (arr_SmTags != null && arr_SmTags.Length > 0)
             {
-                var d_TagExplains = CurrentDb.SenvivHealthTagExplain.Where(m => arr_SmTags.Contains(m.TagName)).Take(4).ToList();
+                var d_TagExplains = CurrentDb.SvHealthTagExplain.Where(m => arr_SmTags.Contains(m.TagName)).Take(4).ToList();
 
                 foreach (var d_TagExplain in d_TagExplains)
                 {

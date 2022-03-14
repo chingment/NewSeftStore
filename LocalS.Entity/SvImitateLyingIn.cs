@@ -11,8 +11,8 @@ namespace LocalS.Entity
         public string MerchId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public string StartTimeQt { get; set; }
-        public string EndTimeQt { get; set; }
+        public DateTime StartTimeQt { get; set; }
+        public DateTime EndTimeQt { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public string Mender { get; set; }

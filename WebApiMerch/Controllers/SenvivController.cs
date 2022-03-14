@@ -159,5 +159,19 @@ namespace WebApiMerch.Controllers
         }
 
 
+
+        [HttpGet]
+        public OwnApiHttpResponse GetImitateLyingIns([FromUri]RupSenvivGetImitateLyingIns rup)
+        {
+            var result = MerchServiceFactory.Senviv.GetImitateLyingIns(this.CurrentUserId, this.CurrentMerchId, rup);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse SaveImitateLyingIn([FromBody]RopSenvivSaveImitateLyingIn rop)
+        {
+            var result = MerchServiceFactory.Senviv.SaveImitateLyingIn(this.CurrentUserId, this.CurrentMerchId, rop);
+            return new OwnApiHttpResponse(result);
+        }
     }
 }
