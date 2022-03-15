@@ -745,11 +745,63 @@ namespace LocalS.BLL
         }
         public static SvDataJd GetQxxlJlqx(string val, bool isGetRefRanges = false)
         {
+            string s_val = val.ToString();
+            int i_val = 0;
+            if (s_val == "恐慌")
+            {
+                i_val = 15;
+            }
+            else if (s_val == "重度")
+            {
+                i_val = 35;
+            }
+            else if (s_val == "中度")
+            {
+                i_val = 55;
+            }
+            else if (s_val == "轻度")
+            {
+                i_val = 75;
+            }
+            else if (s_val == "安康")
+            {
+                i_val = 90;
+            }
+
             var jd = new SvDataJd();
             jd.Id = "6";
             jd.Name = "焦虑情绪";
-            jd.Value = val.ToString();
+            jd.Value = i_val;
 
+            if (i_val <= 30)
+            {
+                jd.Set("恐慌", "", CA_1);
+            }
+            else if (i_val >= 30 && i_val <= 40)
+            {
+                jd.Set("重度", "", CA_2);
+            }
+            else if (i_val >= 40 && i_val <= 60)
+            {
+                jd.Set("中度", "", CA_3);
+            }
+            else if (i_val >= 60 && i_val <= 80)
+            {
+                jd.Set("轻度", "", CA_4);
+            }
+            else if (i_val >= 80 && i_val <= 100)
+            {
+                jd.Set("安康", "↓", CA_0);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_1, Tips = "恐慌" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 40, Color = CA_2, Tips = "重度" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 60, Color = CA_3, Tips = "中度" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 60, Max = 80, Color = CA_4, Tips = "轻度" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 80, Max = 100, Color = CA_0, Tips = "安康" });
+            }
 
             return jd;
         }
