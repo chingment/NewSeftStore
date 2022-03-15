@@ -21,9 +21,12 @@ namespace LocalS.BLL
         //参考范围
         public string RefRange { get; set; }
 
+        public List<object> RefRanges { get; set; }
+
+        public object Chat { get; set; }
         public SvDataJd()
         {
-
+            this.RefRanges = new List<object>();
         }
 
         public void Set(string tips, string sign,string color)
@@ -31,6 +34,17 @@ namespace LocalS.BLL
             this.Tips = tips;
             this.Sign = sign;
             this.Color = color;
+        }
+
+        public class RefRangeArea
+        {
+            public int Min { get; set; }
+
+            public int Max { get; set; }
+
+            public string Color { get; set; }
+
+            public string Tips { get; set; }
         }
     }
 }

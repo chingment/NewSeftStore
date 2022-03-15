@@ -105,3 +105,12 @@ div:focus {
 img[src=''] {
   opacity: 0;
 }
+
+.mint-popup-1{
+  width: 80%;
+  height: 130px;
+  border-radius: 8px;
+  padding: 10px;
+  -webkit-transform: translate(-50%);
+  transform: translate(-50%);
+}

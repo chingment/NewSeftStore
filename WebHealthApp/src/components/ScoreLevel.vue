@@ -7,10 +7,10 @@
       <div class="t3" :style="{'color': tagDv.color}">{{ tagDv.tips }}</div>
     </div>
     <div class="i-sign">
-      <template v-for="(item, index) in refRangeDv">
+      <template v-for="(item, index) in tagDv.refRanges">
         <div :key="'a'+index" class="col">
-          <div class="topnum" :style="(index>=0&&index<refRangeDv.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<refRangeDv.length-1?'visibility: hidden;':'')">
-            {{ (index>=0&&index<(refRangeDv.length-1))?item.min:item.max }}
+          <div class="topnum" :style="(index>=0&&index<tagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<tagDv.refRanges.length-1?'visibility: hidden;':'')">
+            {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}
           </div>
           <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') ">
             <div class="mt-range-content">
@@ -21,7 +21,7 @@
           </div>
           <div class="bottomtips">{{ item.tips }}</div>
         </div>
-        <div v-if="index<refRangeDv.length-1" :key="'b'+index" class="col-split">
+        <div v-if="index<tagDv.refRanges.length-1" :key="'b'+index" class="col-split">
           <div class="topnum">{{ item.max }}</div>
           <div class="border-split" />
         </div>
@@ -40,18 +40,6 @@ export default {
     tagDv: {
       type: Object,
       default: null
-    },
-    chartDv: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    refRangeDv: {
-      type: Array,
-      default() {
-        return []
-      }
     }
   },
   data() {
@@ -62,7 +50,9 @@ export default {
   },
   mounted() {
     this.i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
-    this.getChart(this.chartDv)
+    if (typeof this.tagDv.chat !== 'undefined') {
+      this.getChart(this.tagDv.chat.data)
+    }
   },
   created() {
     // this.getChart(this.chartData)
@@ -195,10 +185,11 @@ export default {
             normal: {
               color: function(params) {
                 var color = '#989ef6'
-                for (let index = 0; index < _this.refRangeDv.length; index++) {
-                  var refRangeDv = _this.refRangeDv[index]
-                  if (params.data >= refRangeDv.min && params.data <= refRangeDv.max) {
-                    color = refRangeDv.color
+                var refRanges = _this.tagDv.refRanges
+                for (let index = 0; index < refRanges.length; index++) {
+                  var refRange = refRanges[index]
+                  if (params.data >= refRange.min && params.data <= refRange.max) {
+                    color = refRange.color
                     break
                   }
                 }

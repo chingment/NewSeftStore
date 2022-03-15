@@ -21,10 +21,10 @@
           </div>
           <div class="a-part-2">
             <div style="padding:10px">
-              <carousel-3d :space="carousel.space" :width="640" :height="640" :display="carousel.display" class="carousel-gz-tags">
+              <carousel-3d :space="carousel.space" :width="640" :height="640" :on-main-slide-click="onGzTag" :display="carousel.display" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
-                  <div class="gz-tag" :data-index="index">
+                  <div ref="gz_tag" class="gz-tag" :data-index="index">
                     <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_bg.png')">
                     <div class="t1">
                       <div class="name">{{ item.name }}</div>
@@ -41,6 +41,16 @@
 
                 </slide>
               </carousel-3d>
+
+              <mt-popup
+                v-model="popupVisibleGzTag"
+                class="mint-popup-1"
+                :style="'top:'+popupTopGzTag+'px'"
+              >
+
+                <score-level :tag-dv="activeGzTag" />
+
+              </mt-popup>
             </div>
           </div>
           <div class="a-part-3">
@@ -64,6 +74,7 @@
               </div>
             </div>
           </div>
+
         </mt-tab-container-item>
         <mt-tab-container-item v-if="selected==='tab2'" id="tab2">
           <div class="b-part-1">
@@ -103,7 +114,7 @@
 
             <div class="sm-score-chart" style="width:100%">
 
-              <score-level :tag-dv="rd.smScore" :ref-range-dv="smScoreRefRange" :chart-dv="rd.smScoreByLast" />
+              <score-level :tag-dv="rd.smScore" />
 
               <!-- <div class="i-score">
                 <div class="t1">睡眠值</div>
@@ -357,50 +368,10 @@ export default {
         display: 7
       },
       smScoreCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
-      smScoreRefRange: [
-        {
-          min: 0,
-          max: 30,
-          color: '#e68a8b',
-          tips: '差'
-        },
-        {
-          min: 30,
-          max: 50,
-          color: '#f1b46d',
-          tips: '较差'
-        }, {
-          min: 50,
-          max: 70,
-          color: '#e16d6d',
-          tips: '中等'
-        }, {
-          min: 70,
-          max: 90,
-          color: '#96a2dc',
-          tips: '较好'
-        }, {
-          min: 90,
-          max: 100,
-          color: '#628DF2',
-          tips: '好'
-        }
-      ],
-      smScoreChart: {
-        data: [],
-        yAxis: {
-          min: 0,
-          max: 100,
-          splitNumber: 10,
-          label: [0, 30, 50, 70, 90, 100]
-        },
-        markLine: {
-          data: [{
-            yAxis: [70]
-          }]
-        }
-      },
       activeTabBySmTag: 0,
+      activeGzTag: {},
+      popupVisibleGzTag: false,
+      popupTopGzTag: 160,
       consult: {
         isOpen: false,
         tmpImg: ''
@@ -603,6 +574,12 @@ export default {
     },
     clearChart() {
       this.$destroy()
+    },
+    onGzTag(item) {
+      console.log(this.$refs.gz_tag[item.index].offsetHeight)
+      this.activeGzTag = this.rd.gzTags[item.index]
+      this.popupTopGzTag = this.$refs.gz_tag[item.index].offsetHeight + 320
+      this.popupVisibleGzTag = true
     }
   }
 }

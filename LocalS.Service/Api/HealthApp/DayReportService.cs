@@ -59,42 +59,42 @@ namespace LocalS.Service.Api.HealthApp
                 {
                     if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
-                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
+                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
                     }
                     else
                     {
-                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_DayRpt.ZsYq)));
+                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_DayRpt.ZsYq), true));
                     }
 
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
-                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
-                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_DayRpt.ZsYp)));
-                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_DayRpt.ZsSr)));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs),true));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
+                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_DayRpt.ZsYp), true));
+                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_DayRpt.ZsSr), true));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
                 }
                 else
                 {
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
-                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
-                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk)));
-                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk)));
-                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk)));
-                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true));
+                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
+                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true));
+                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true));
+                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true));
+                    gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
                 }
             }
             else
             {
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs)));
-                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx)));
-                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk)));
-                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk)));
-                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk)));
-                gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx));
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl)));
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj)));
+                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true));
+                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
+                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true));
+                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true));
+                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true));
+                gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
+                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
+                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
             }
             #endregion
 
@@ -162,13 +162,13 @@ namespace LocalS.Service.Api.HealthApp
                     HealthDate = d_DayRpt.HealthDate.ToUnifiedFormatDate(),
                     HealthScore = SvUtil.GetHealthScore(d_DayRpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
-                    SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore),
+                    SmScoreByLast = smScoreByLast,
+                    SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true,new { Data= smScoreByLast }),
                     SmScoreTip = "您的睡眠值已经打败77%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_DayRpt.RptSuggest,
-                    SmScoreByLast = smScoreByLast,
                     HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
                     HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl),
                     SmSmxl = SvUtil.GetSmSmxl(d_DayRpt.SmSmxl),
