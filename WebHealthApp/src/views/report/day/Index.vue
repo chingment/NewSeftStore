@@ -34,7 +34,7 @@
                       </div>
                     </div>
                     <div class="t2">
-                      <div class="value">{{ item.value }}</div>
+                      <div class="value"><span v-show="!item.isHidValue"> {{ item.value }}</span></div>
                       <div class="tips">{{ item.tips }}</div>
                     </div>
 

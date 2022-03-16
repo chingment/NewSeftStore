@@ -3,16 +3,16 @@
   <div>
     <div class="i-score">
       <div class="t1">{{ tagDv.name }}</div>
-      <div class="t2" :style="{'color': tagDv.color}">{{ tagDv.value }}</div>
+      <div class="t2" :style="{'color': tagDv.color}"> <span v-show="!tagDv.isHidValue">{{ tagDv.value }}</span></div>
       <div class="t3" :style="{'color': tagDv.color}">{{ tagDv.tips }}</div>
     </div>
     <div class="i-sign">
       <template v-for="(item, index) in tagDv.refRanges">
         <div :key="'a'+index" class="col">
           <div class="topnum" :style="(index>=0&&index<tagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<tagDv.refRanges.length-1?'visibility: hidden;':'')">
-            {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}
+            <span v-show="!tagDv.isHidValue">  {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}</span>
           </div>
-          <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') ">
+          <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') " style="padding:0px 2px">
             <div class="mt-range-content">
               <div class="mt-range-runway" :style="'border-top-width: 8px;border-top-color:'+item.color+';'" />
               <div class="mt-range-progress" style="width: 0%; height: 8px;" />
@@ -22,7 +22,7 @@
           <div class="bottomtips">{{ item.tips }}</div>
         </div>
         <div v-if="index<tagDv.refRanges.length-1" :key="'b'+index" class="col-split">
-          <div class="topnum">{{ item.max }}</div>
+          <div class="topnum"><span v-show="!tagDv.isHidValue"> {{ item.max }}</span></div>
           <div class="border-split" />
         </div>
       </template>

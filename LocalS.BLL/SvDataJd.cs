@@ -8,6 +8,7 @@ namespace LocalS.BLL
 {
     public class SvDataJd
     {
+        public bool IsHidValue { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         //具体值

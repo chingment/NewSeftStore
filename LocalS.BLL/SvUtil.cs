@@ -614,7 +614,6 @@ namespace LocalS.BLL
         public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
-            val = 100 - val;
             jd.Id = "3";
             jd.Name = "高血压管控";
             jd.Value = val.ToString("0.#####");
@@ -687,8 +686,6 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Id = "5";
             jd.Name = "糖尿病管控";
-
-            val = 100 - val;
             jd.Value = val.ToString("0.#####");
             jd.Chat = chat;
             if (val <= 39)
@@ -774,6 +771,7 @@ namespace LocalS.BLL
             jd.Name = "焦虑情绪";
             jd.Value = i_val;
             jd.Chat = chat;
+            jd.IsHidValue = true;
             if (i_val <= 30)
             {
                 jd.Set("恐慌", "", CA_1);

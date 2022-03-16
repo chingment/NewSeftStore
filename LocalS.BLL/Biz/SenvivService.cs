@@ -1020,7 +1020,7 @@ namespace LocalS.BLL
                                         break;
                                     //慢病管理-高血压管控
                                     case "高血压管控":
-                                        d_DayReport.MbGxygk = index.score;
+                                        d_DayReport.MbGxygk = 100-index.score;
 
                                         d_Label = new SvHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -1035,7 +1035,7 @@ namespace LocalS.BLL
                                         break;
                                     //慢病管理-糖尿病管控
                                     case "糖尿病管控":
-                                        d_DayReport.MbTlbgk = index.score;
+                                        d_DayReport.MbTlbgk = 100-index.score;
 
                                         d_Label = new SvHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -1465,8 +1465,8 @@ namespace LocalS.BLL
 
                     d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
                     d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
-                    d_DayReport.MbGxygk = 100 - SvUtil.D46Decimal(reportpar.hc);
-                    d_DayReport.MbTlbgk = 100 - SvUtil.D46Decimal(reportpar.tc);
+                    d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
+                    d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
                     d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
                     d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
                     d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
