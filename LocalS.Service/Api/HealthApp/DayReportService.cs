@@ -49,6 +49,45 @@ namespace LocalS.Service.Api.HealthApp
             };
 
 
+            #region last7DayData
+
+
+            List<object> smScoreByLast = new List<object>();
+            List<object> mylMylzsByLast = new List<object>();
+            List<object> mylGrfxByLast = new List<object>();
+            List<object> mbGxygkByLast = new List<object>();
+            List<object> mbGxbgkByLast = new List<object>();
+            List<object> mbTlbgkByLast = new List<object>();
+            List<object> qxxlKynlByLast = new List<object>();
+            List<object> qxxlQxyjByLast = new List<object>();
+            List<object> zsGmYqByLast = new List<object>();
+            List<object> zsGmYpByLast = new List<object>();
+            List<object> zsGmSrByLast = new List<object>();
+
+
+            var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
+                                      where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
+                                      && u.HealthDate <= d_DayRpt.HealthDate
+                                      select new { u.HealthDate, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTlbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
+
+            d_DayReportsByLast.Reverse();
+
+            foreach (var d_DayReportByLast in d_DayReportsByLast)
+            {
+                smScoreByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.SmScore });
+                mylMylzsByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MylMylzs });
+                mylGrfxByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MylGrfx });
+                mbGxygkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxygk });
+                mbGxbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxbgk });
+                mbTlbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbTlbgk });
+                qxxlKynlByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlKynl });
+                qxxlQxyjByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlQxyj });
+                zsGmYqByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYq });
+                zsGmYpByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYp });
+                zsGmSrByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmSr });
+            }
+
+            #endregion
 
             #region  gzTags
             var gzTags = new List<object>();
@@ -59,42 +98,42 @@ namespace LocalS.Service.Api.HealthApp
                 {
                     if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
-                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
+                        gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, new { Data = mylGrfxByLast }));
                     }
                     else
                     {
-                        gzTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true));
+                        gzTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true, new { Data = zsGmYqByLast }));
                     }
 
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs),true));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, new { Data = mylMylzsByLast }));
                     gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
-                    gzTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true));
-                    gzTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, new { Data = qxxlKynlByLast }));
+                    gzTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true, new { Data = zsGmYpByLast }));
+                    gzTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true, new { Data = zsGmSrByLast }));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, new { Data = qxxlQxyjByLast }));
                 }
                 else
                 {
-                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true));
-                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
-                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true));
-                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true));
-                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true));
+                    gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, new { Data = mylMylzsByLast }));
+                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, new { Data = mylGrfxByLast }));
+                    gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, new { Data = mbGxygkByLast }));
+                    gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, new { Data = mbGxbgkByLast }));
+                    gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true, new { Data = mbTlbgkByLast }));
                     gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
-                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
-                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
+                    gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, new { Data = qxxlKynlByLast }));
+                    gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, new { Data = qxxlQxyjByLast }));
                 }
             }
             else
             {
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true));
-                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true));
-                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true));
-                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true));
-                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true));
+                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, new { Data = mylMylzsByLast }));
+                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, new { Data = mylGrfxByLast }));
+                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, new { Data = mbGxygkByLast }));
+                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, new { Data = mbGxbgkByLast }));
+                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true, new { Data = mbTlbgkByLast }));
                 gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
+                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, new { Data = qxxlKynlByLast }));
+                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, new { Data = qxxlQxyjByLast }));
             }
             #endregion
 
@@ -130,23 +169,6 @@ namespace LocalS.Service.Api.HealthApp
             smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl));
             #endregion
 
-            #region smScoreByLast
-
-
-            List<object> smScoreByLast = new List<object>();
-            var d_DayReportSmScores = (from u in CurrentDb.SvHealthDayReport
-                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
-                                       && u.HealthDate <= d_DayRpt.HealthDate
-                                       select new { u.CreateTime, u.HealthDate, u.SmScore }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
-
-            d_DayReportSmScores.Reverse();
-
-            foreach (var d_hDayReportSmScore in d_DayReportSmScores)
-            {
-                smScoreByLast.Add(new { xData = d_hDayReportSmScore.HealthDate.ToString("MM-dd"), yData = d_hDayReportSmScore.SmScore });
-            }
-
-            #endregion
 
             var consult = new { isOpen = false, tmpImg = "" };
 
@@ -163,7 +185,7 @@ namespace LocalS.Service.Api.HealthApp
                     HealthScore = SvUtil.GetHealthScore(d_DayRpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过88%的人",
                     SmScoreByLast = smScoreByLast,
-                    SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true,new { Data= smScoreByLast }),
+                    SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true, new { Data = smScoreByLast }),
                     SmScoreTip = "您的睡眠值已经打败77%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签

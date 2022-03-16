@@ -44,7 +44,9 @@
               </carousel-3d>
 
               <transition>
-                <div v-if="popupVisibleGzTag" style="height:150px;padding:20px">                <score-level :tag-dv="activeGzTag" /></div>
+                <div v-if="popupVisibleGzTag" style="padding:20px">
+                  <score-level :tag-dv="activeGzTag" chat-height="150px" />
+                </div>
               </transition>
               <!-- <mt-popup
                 v-model="popupVisibleGzTag"

@@ -532,13 +532,13 @@ namespace LocalS.BLL
             //return hour.ToString("0.00");
         }
         // 免疫力指数
-        public static SvDataJd GetMylzs(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetMylzs(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "1";
             jd.Name = "免疫力";
             jd.Value = int.Parse(val.ToString("0.#####"));
-
+            jd.Chat = chat;
             if (val <= 29)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -571,13 +571,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMylGrfx(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetMylGrfx(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "2";
             jd.Name = "感染风险";
             jd.Value = val.ToString("0.#####");
-
+            jd.Chat = chat;
             if (val <= 19)
             {
                 jd.Set("低", "-", CA_0);
@@ -611,14 +611,14 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             val = 100 - val;
             jd.Id = "3";
             jd.Name = "高血压管控";
             jd.Value = val.ToString("0.#####");
-
+            jd.Chat = chat;
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -643,11 +643,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMbGxbgk(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetMbGxbgk(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "4";
             jd.Name = "冠心病管控";
+            jd.Chat = chat;
             if (val == 0)
             {
                 jd.Value = "";
@@ -681,7 +682,7 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMbTlbgk(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetMbTlbgk(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "5";
@@ -689,7 +690,7 @@ namespace LocalS.BLL
 
             val = 100 - val;
             jd.Value = val.ToString("0.#####");
-
+            jd.Chat = chat;
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -713,13 +714,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetQxxlKynl(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetQxxlKynl(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "7";
             jd.Name = "抗压能力";
             jd.Value = int.Parse(val.ToString("0.#####"));
-
+            jd.Chat = chat;
             if (val <= 29)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -743,7 +744,7 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetQxxlJlqx(string val, bool isGetRefRanges = false)
+        public static SvDataJd GetQxxlJlqx(string val, bool isGetRefRanges = false, object chat = null)
         {
             string s_val = val.ToString();
             int i_val = 0;
@@ -772,7 +773,7 @@ namespace LocalS.BLL
             jd.Id = "6";
             jd.Name = "焦虑情绪";
             jd.Value = i_val;
-
+            jd.Chat = chat;
             if (i_val <= 30)
             {
                 jd.Set("恐慌", "", CA_1);
@@ -805,7 +806,7 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetQxxlQxyj(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetQxxlQxyj(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "8";
@@ -1427,15 +1428,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsGmYq(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmYq(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "9";
             jd.Name = "孕气指数";
-
-            val = 100 - val;
             jd.Value = val.ToString("0.#####") + "%";
-
+            jd.Chat = chat;
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -1451,15 +1450,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsGmYp(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmYp(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "10";
             jd.Name = "易胖指数";
-
-            val = 100 - val;
             jd.Value = val.ToString("0.#####") + "%";
-
+            jd.Chat = chat;
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -1475,15 +1472,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsGmSr(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmSr(decimal val, bool isGetRefRanges = false, object chat = null)
         {
             var jd = new SvDataJd();
             jd.Id = "11";
             jd.Name = "水润指数";
-
-            val = 100 - val;
             jd.Value = val.ToString("0.#####") + "%";
-
+            jd.Chat = chat;
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);

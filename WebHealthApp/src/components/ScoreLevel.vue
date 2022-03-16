@@ -27,7 +27,7 @@
         </div>
       </template>
     </div>
-    <div ref="i_chart" :style="'width:100%;height:300px;margin:auto;'" />
+    <div ref="i_chart" :style="'width:100%;height:'+chatHeight+';margin:auto;'" />
   </div>
 </template>
 
@@ -40,6 +40,10 @@ export default {
     tagDv: {
       type: Object,
       default: null
+    },
+    chatHeight: {
+      type: String,
+      default: '300px'
     }
   },
   data() {
@@ -50,14 +54,21 @@ export default {
   },
   mounted() {
     this.i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
+    var isflag = false
     if (typeof this.tagDv.chat !== 'undefined') {
       if (this.tagDv.chat != null) {
         if (typeof this.tagDv.chat.data !== 'undefined') {
           if (this.tagDv.chat.data != null) {
-            this.getChart(this.tagDv.chat.data)
+            isflag = true
           }
         }
       }
+    }
+
+    if (isflag) {
+      this.getChart(this.tagDv.chat.data)
+    } else {
+      this.chatHeight = '0px'
     }
   },
   created() {
