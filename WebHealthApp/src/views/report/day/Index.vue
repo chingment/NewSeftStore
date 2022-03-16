@@ -82,7 +82,6 @@
               <div class="process-bg" />
               <div class="process-ct">
                 <div class="process-score">
-
                   <vue-circle
                     ref="sm_score"
                     :progress="rd.smScore.value"
@@ -103,7 +102,6 @@
                       <div class="t2">睡眠值</div>
                     </div>
                   </vue-circle>
-
                 </div>
                 <div class="process-text">
                   <div class="t1">{{ userInfo.signName }}</div>
@@ -111,93 +109,8 @@
                 </div>
               </div>
             </div>
-
             <div class="sm-score-chart" style="width:100%">
-
               <score-level :tag-dv="rd.smScore" />
-
-              <!-- <div class="i-score">
-                <div class="t1">睡眠值</div>
-                <div class="t2" :style="{'color': rd.smScore.color}">{{ rd.smScore.value }}</div>
-                <div class="t3" :style="{'color': rd.smScore.color}">{{ rd.smScore.tips }}</div>
-              </div>
-
-              <div class="i-sign">
-                <div class="col">
-                  <div class="topnum" style="text-align: left;">0</div>
-                  <div :class="'mt-range jd1 '+((rd.smScore.value>=0&&rd.smScore.value<30)?'':'no-ative') ">
-                    <div class="mt-range-content">
-                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #e68a8b;" />
-                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#e68a8b;'" />
-                    </div>
-                  </div>
-                  <div class="bottomtips">差</div>
-                </div>
-                <div class="col-split">
-                  <div class="topnum">30</div>
-                  <div class="border-split" />
-                </div>
-                <div class="col">
-                  <div class="topnum" style="visibility: hidden;">0</div>
-                  <div :class="'mt-range jd2 '+((rd.smScore.value>=30&&rd.smScore.value<50)?'':'no-ative') ">
-                    <div class="mt-range-content">
-                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #f1b46d;" />
-                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#f1b46d;'" />
-                    </div>
-                  </div>
-                  <div class="bottomtips">较差</div>
-                </div>
-                <div class="col-split">
-                  <div class="topnum">50</div>
-                  <div class="border-split" />
-                </div>
-                <div class="col">
-                  <div class="topnum" style="visibility: hidden;">0</div>
-                  <div :class="'mt-range jd3 '+((rd.smScore.value>=50&&rd.smScore.value<70)?'':'no-ative') ">
-                    <div class="mt-range-content">
-                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #e16d6d;" />
-                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#e16d6d;'" />
-                    </div>
-                  </div>
-                  <div class="bottomtips">中等</div>
-                </div>
-                <div class="col-split">
-                  <div class="topnum">70</div>
-                  <div class="border-split" />
-                </div>
-                <div class="col">
-                  <div class="topnum" style="visibility: hidden;">0</div>
-                  <div :class="'mt-range jd4 '+((rd.smScore.value>=70&&rd.smScore.value<90)?'':'no-ative') ">
-                    <div class="mt-range-content">
-                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #96a2dc;" />
-                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#96a2dc;'" />
-                    </div>
-                  </div>
-                  <div class="bottomtips">较好</div>
-                </div>
-                <div class="col-split">
-                  <div class="topnum">90</div>
-                  <div class="border-split" />
-                </div>
-                <div class="col">
-                  <div class="topnum" style="text-align: right;">100</div>
-                  <div :class="'mt-range jd5 '+((rd.smScore.value>=90&&rd.smScore.value<=100)?'':'no-ative') ">
-                    <div class="mt-range-content">
-                      <div class="mt-range-runway" style="border-top-width: 8px;border-top-color: #628DF2;" />
-                      <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                      <div class="mt-range-thumb" :style="'left: '+rd.smScore.value+'%;background-color:#628DF2;'" />
-                    </div>
-                  </div>
-                  <div class="bottomtips">好</div>
-                </div>
-              </div>
-
-              <div id="chart_BySmScore" ref="chart_BySmScore" :style="'width:'+(screenWidth-50)+'px;height:300px;margin:auto;'" />
-               -->
             </div>
           </div>
 
@@ -262,9 +175,7 @@ import DvItem from '@/components/DvItem.vue'
 import CardOwnA from './components/CardOwnA.vue'
 import CardOwnB from './components/CardOwnB.vue'
 import VueCircle from 'vue2-circle-progress'
-import echarts from 'echarts'
 import ScoreLevel from '@/components/ScoreLevel.vue'
-var chartBySmScore
 export default {
   name: 'ReportDayIndex',
   components: {
@@ -381,11 +292,6 @@ export default {
   },
   watch: {
     selected: function(val) {
-      if (val === 'tab2') {
-        this.$nextTick(function() {
-          // this.getChartBySmScore()
-        }, 2000)
-      }
     }
   },
   mounted() {
@@ -425,155 +331,6 @@ export default {
         }
         this.loading = false
       })
-    },
-    getChartBySmScore() {
-      chartBySmScore = echarts.init(this.$refs.chart_BySmScore, null, { renderer: 'svg' })
-
-      var datePt = [] // = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
-      var valuePt = []// = [68, 32, 65, 71, 82, 93]
-
-      this.rd.smScoreByLast.forEach(item => {
-        datePt.push(item.date)
-        valuePt.push(item.score)
-      })
-
-      console.log(datePt)
-
-      var option = {
-        grid: [{
-          x: 30,
-          y: 30,
-          x2: 30,
-          y2: 30
-        }],
-        legend: {
-          padding: 10
-        },
-        title: {
-          text: '', // 主标题
-          x: 'center',
-          y: 'top'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: {
-          data: datePt,
-          show: true,
-          axisLabel:
-          {
-            interval: 0,
-            show: true,
-            textStyle: {
-              color: '#000'
-            }
-          },
-          axisTick: {
-            show: true,
-            alignWithLabel: true
-          },
-          boundaryGap: false,
-          axisLine: {
-            lineStyle: {
-              color: '#c7c7c7',
-              width: 1
-            }
-          }
-        },
-        yAxis: {
-          min: 0,
-          max: 100,
-          type: 'value',
-          splitNumber: 10,
-          splitLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          },
-
-          axisLabel: {
-            interval: 0,
-            show: true,
-            textStyle: {
-              color: '#000'
-            },
-            formatter: function(value) {
-              var texts = []
-              if (value === 0) {
-                texts.push('0')
-              } else if (value === 10) {
-                texts.push('')
-              } else if (value === 20) {
-                texts.push('')
-              } else if (value === 30) {
-                texts.push('30')
-              } else if (value === 40) {
-                texts.push('')
-              } else if (value === 50) {
-                texts.push('50')
-              } else if (value === 60) {
-                texts.push('')
-              } else if (value === 70) {
-                texts.push('70')
-              } else if (value === 80) {
-                texts.push('')
-              } else if (value === 90) {
-                texts.push('90')
-              } else if (value === 100) {
-                texts.push('100')
-              }
-              return texts
-            }
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#c7c7c7',
-              width: 1
-            }
-          }
-        },
-        series: {
-          type: 'line',
-          name: '分数',
-          symbol: 'circle',
-          symbolSize: 8,
-          showSymbol: true,
-          itemStyle: {
-            normal: {
-              color: '#989ef6',
-              lineStyle: {
-                color: '#bbbdb7'
-              }
-            }
-          },
-          data: valuePt,
-          markLine: {
-            symbol: 'none',
-            silent: false,
-            lineStyle: {
-              normal: {
-                color: '#bac1c6' // 这儿设置安全基线颜色
-              }
-            },
-            data: [{
-              yAxis: [70]
-            }],
-            label: {
-              normal: {
-                color: '#000',
-                formatter: '70' // 这儿设置安全基线
-              }
-            }
-          }
-
-        }
-      }
-
-      chartBySmScore.setOption(option, null)
-    },
-    clearChart() {
-      this.$destroy()
     },
     onGzTag(item) {
       console.log(this.$refs.gz_tag[item.index].offsetHeight)
@@ -1166,5 +923,18 @@ export default {
     }
   }
 }
+
+  .transition-box {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 100px;
+    border-radius: 4px;
+    background-color: #42B983;
+    text-align: center;
+    color: #fff;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    margin-left: 520px;
+  }
 
 </style>

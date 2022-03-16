@@ -137,13 +137,13 @@ namespace Test
             //      OtherMedicine = "1", //用药情况其它 ,
             //      deptid = "46"
             //  };
-
+         
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
             //"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXkgPD5w99Q8WjoB9KWzVaKhilmaMYx18U+VAHSmP/me4="
-            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXzK4ogIzu99ch2EaMLa6EKIKVXzvn6vi4wRi1No7AhC0=\"";
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXIqTFBwGeqqKpQFZqiIY02sbyivJAnwfHvmDHZupWtXI=\"";
 
-            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A302", size = 1, page = 1 });
+            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A4D5", size = 1, page = 1 });
             var restb = api.DoPost(c1);
 
             //var config_Senviv = BizFactory.Senviv.GetConfig("46");
