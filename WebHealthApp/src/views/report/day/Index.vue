@@ -1,6 +1,6 @@
 <template>
   <div :class="'page-tabbar theme-' +theme">
-    <div class="page-wrap">
+    <div class="page-wrap" @scroll="onScroll">
 
       <mt-tab-container v-model="selected" class="page-tabbar-container">
         <mt-tab-container-item v-if="selected==='tab1'" id="tab1">
@@ -362,6 +362,9 @@ export default {
       setTimeout(function() {
         _this.popupVisibleGzTag = true
       }, 500)
+    },
+    onScroll() {
+      // this.popupVisibleGzTag = false
     }
   }
 }

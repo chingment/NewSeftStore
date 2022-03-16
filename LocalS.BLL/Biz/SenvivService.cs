@@ -1548,6 +1548,11 @@ namespace LocalS.BLL
                     d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
                     d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
                     d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
+                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
+                    d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp);
+                    d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq);
+                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
+                    d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
 
                     var trendcharts = d1.trendchart;
                     if (trendcharts != null)

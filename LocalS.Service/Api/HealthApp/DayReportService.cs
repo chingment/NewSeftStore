@@ -55,7 +55,7 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_SvUser.Sex == "2")
             {
-                if (d_DayRpt.ZsYp > 0)
+                if (d_DayRpt.ZsGmYp > 0)
                 {
                     if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                     {
@@ -63,14 +63,14 @@ namespace LocalS.Service.Api.HealthApp
                     }
                     else
                     {
-                        gzTags.Add(SvUtil.GetZsYq(decimal.Floor(d_DayRpt.ZsYq), true));
+                        gzTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true));
                     }
 
                     gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs),true));
                     gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true));
                     gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true));
-                    gzTags.Add(SvUtil.GetZsYp(decimal.Floor(d_DayRpt.ZsYp), true));
-                    gzTags.Add(SvUtil.GetZsSr(decimal.Floor(d_DayRpt.ZsSr), true));
+                    gzTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true));
+                    gzTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true));
                     gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true));
                 }
                 else

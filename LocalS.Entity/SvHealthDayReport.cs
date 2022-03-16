@@ -65,14 +65,12 @@ namespace LocalS.Entity
         public decimal SmSmlxx { get; set; }
 
         //孕气指数
-        public decimal ZsYq { get; set; }
-
+        public decimal ZsGmYq { get; set; }
         //易胖指数
-        public decimal ZsYp { get; set; }
-
+        public decimal ZsGmYp { get; set; }
         //水润指数
-        public decimal ZsSr { get; set; }
-
+        public decimal ZsGmSr { get; set; }
+        public decimal ZsGmMl { get; set; }
         //当次基准心率
         public int XlDcjzxl { get; set; }
         //长期基准心率

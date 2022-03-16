@@ -1427,7 +1427,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsYq(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmYq(decimal val, bool isGetRefRanges = false)
         {
             var jd = new SvDataJd();
             jd.Id = "9";
@@ -1451,7 +1451,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsYp(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmYp(decimal val, bool isGetRefRanges = false)
         {
             var jd = new SvDataJd();
             jd.Id = "10";
@@ -1475,7 +1475,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsSr(decimal val, bool isGetRefRanges = false)
+        public static SvDataJd GetZsGmSr(decimal val, bool isGetRefRanges = false)
         {
             var jd = new SvDataJd();
             jd.Id = "11";
