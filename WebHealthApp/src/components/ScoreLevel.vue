@@ -51,7 +51,13 @@ export default {
   mounted() {
     this.i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
     if (typeof this.tagDv.chat !== 'undefined') {
-      this.getChart(this.tagDv.chat.data)
+      if (this.tagDv.chat != null) {
+        if (typeof this.tagDv.chat.data !== 'undefined') {
+          if (this.tagDv.chat.data != null) {
+            this.getChart(this.tagDv.chat.data)
+          }
+        }
+      }
     }
   },
   created() {

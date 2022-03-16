@@ -20,8 +20,9 @@
 
           </div>
           <div class="a-part-2">
+            <!-- :on-main-slide-click="onGzTag" -->
             <div style="padding:10px">
-              <carousel-3d :space="carousel.space" :width="640" :height="640" :on-main-slide-click="onGzTag" :display="carousel.display" class="carousel-gz-tags">
+              <carousel-3d :space="carousel.space" :width="640" :height="640" :on-slide-change="onGzTag" :on-main-slide-click="onMainGzTag" :display="carousel.display" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
                   <div ref="gz_tag" class="gz-tag" :data-index="index">
@@ -42,7 +43,10 @@
                 </slide>
               </carousel-3d>
 
-              <mt-popup
+              <transition>
+                <div v-if="popupVisibleGzTag" style="height:150px;padding:20px">                <score-level :tag-dv="activeGzTag" /></div>
+              </transition>
+              <!-- <mt-popup
                 v-model="popupVisibleGzTag"
                 class="mint-popup-1"
                 :style="'top:'+popupTopGzTag+'px'"
@@ -50,7 +54,7 @@
 
                 <score-level :tag-dv="activeGzTag" />
 
-              </mt-popup>
+              </mt-popup> -->
             </div>
           </div>
           <div class="a-part-3">
@@ -333,10 +337,31 @@ export default {
       })
     },
     onGzTag(item) {
-      console.log(this.$refs.gz_tag[item.index].offsetHeight)
+      this.activeGzTag = this.rd.gzTags[item]
+      this.popupVisibleGzTag = false
+      var _this = this
+      setTimeout(function() {
+        _this.popupVisibleGzTag = true
+      }, 500)
+
+      // console.log(this.$refs.gz_tag[item.index].offsetHeight)
+      // this.activeGzTag = this.rd.gzTags[item.index]
+      // this.popupTopGzTag = this.$refs.gz_tag[item.index].offsetHeight + 320
+      // this.popupVisibleGzTag = false
+      // var _this = this
+      // setTimeout(function() {
+      //   _this.popupVisibleGzTag = true
+      // }, 500)
+    },
+    onMainGzTag(item) {
+      // console.log(this.$refs.gz_tag[item.index].offsetHeight)
       this.activeGzTag = this.rd.gzTags[item.index]
-      this.popupTopGzTag = this.$refs.gz_tag[item.index].offsetHeight + 320
-      this.popupVisibleGzTag = true
+      // this.popupTopGzTag = this.$refs.gz_tag[item.index].offsetHeight + 320
+      this.popupVisibleGzTag = false
+      var _this = this
+      setTimeout(function() {
+        _this.popupVisibleGzTag = true
+      }, 500)
     }
   }
 }
@@ -924,17 +949,14 @@ export default {
   }
 }
 
-  .transition-box {
-    margin-bottom: 10px;
-    width: 300px;
-    height: 100px;
-    border-radius: 4px;
-    background-color: #42B983;
-    text-align: center;
-    color: #fff;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    margin-left: 520px;
-  }
+ .v-enter,
+    .v-leave-to{
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    .v-enter-active,
+    .v-leave-active{
+        transition: all 0.4s ease;
+    }
 
 </style>
