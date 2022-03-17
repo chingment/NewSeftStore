@@ -366,7 +366,7 @@ export default {
       }, 500)
     },
     onScroll() {
-      // this.popupVisibleGzTag = false
+      this.popupVisibleGzTag = false
     }
   }
 }

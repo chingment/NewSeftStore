@@ -66,7 +66,7 @@ export default {
     }
 
     if (isflag) {
-      this.getChart(this.tagDv.chat.data)
+      this.getChart(this.tagDv.chat)
     } else {
       this.chatHeight = '0px'
     }
@@ -75,8 +75,9 @@ export default {
     // this.getChart(this.chartData)
   },
   methods: {
-    getChart(data) {
+    getChart(chat) {
       var _this = this
+      var data = chat.data
       if (data === null || data.length === 0) { return }
 
       var xData = [] // = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
@@ -86,7 +87,8 @@ export default {
         xData.push(item.xData)
         yData.push(item.yData)
       })
-      var yAxisLabel = [0, 30, 50, 70, 90, 100]
+      var yAxisLabel = chat.yAxisLabel
+      var yAxisLabelExt = typeof chat.yAxisLabelExt === 'undefined' ? null : chat.yAxisLabelExt
       var option = {
         grid: [{
           x: 30,
@@ -146,7 +148,9 @@ export default {
             textStyle: {
               color: '#000'
             },
-            formatter: function(value) {
+            formatter: function(value, index) {
+              console.log(value + ',' + index)
+
               var _val = yAxisLabel.filter(function(item) {
                 return item === value
               })
@@ -154,7 +158,11 @@ export default {
               if (_val == null) {
                 texts.push('')
               } else {
-                texts.push(_val)
+                if (yAxisLabelExt == null) {
+                  texts.push(_val)
+                } else {
+                  texts.push('')
+                }
               }
 
               // console.log(value)

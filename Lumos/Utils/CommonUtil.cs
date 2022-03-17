@@ -483,5 +483,21 @@ namespace Lumos
 
             return t2;
         }
+
+        public static int ToInt(decimal ob)
+        {
+            int i = 0;
+            try
+            {
+                i = Convert.ToInt32(ob);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return i;
+        }
     }
 }

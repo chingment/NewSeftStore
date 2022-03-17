@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace LocalS.BLL
 {
+    public class ChatDataByStr
+    {
+        public string xData { get; set; }
+
+        public string yData { get; set; }
+    }
+
     public class SvUtil
     {
         public readonly static string CA_0 = "#628DF2";//666666
@@ -532,24 +539,25 @@ namespace LocalS.BLL
             //return hour.ToString("0.00");
         }
         // 免疫力指数
-        public static SvDataJd GetMylzs(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetMylzs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+
             jd.Id = "1";
             jd.Name = "免疫力";
-            jd.Value = int.Parse(val.ToString("0.#####"));
-            jd.Chat = chat;
+            jd.Value = Lumos.CommonUtil.ToInt(val);
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val <= 29)
             {
-                jd.Set("差", "↓↓", CA_1);
+                jd.Set("差", "↓↓", CA_3);
             }
             else if (val >= 30 && val <= 49)
             {
-                jd.Set("较差", "↓", CA_2);
+                jd.Set("较差", "↓", CA_1);
             }
             else if (val >= 50 && val <= 69)
             {
-                jd.Set("中等", "-", CA_3);
+                jd.Set("中等", "-", CA_2);
             }
             else if (val >= 70 && val <= 89)
             {
@@ -562,22 +570,22 @@ namespace LocalS.BLL
 
             if (isGetRefRanges)
             {
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_1, Tips = "差" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 50, Color = CA_2, Tips = "较差" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 70, Color = CA_3, Tips = "中等" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_3, Tips = "差" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 50, Color = CA_1, Tips = "较差" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 70, Color = CA_2, Tips = "中等" });
                 jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 90, Color = CA_4, Tips = "较好" });
                 jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 90, Max = 100, Color = CA_0, Tips = "好" });
             }
 
             return jd;
         }
-        public static SvDataJd GetMylGrfx(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetMylGrfx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "2";
             jd.Name = "感染风险";
             jd.Value = val.ToString("0.#####");
-            jd.Chat = chat;
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val <= 19)
             {
                 jd.Set("低", "-", CA_0);
@@ -588,36 +596,36 @@ namespace LocalS.BLL
             }
             else if (val >= 40 && val <= 69)
             {
-                jd.Set("中等", "↓", CA_3);
+                jd.Set("中等", "↓", CA_2);
             }
             else if (val >= 70 && val <= 84)
             {
-                jd.Set("较高", "↓↓", CA_2);
+                jd.Set("较高", "↓↓", CA_1);
             }
             else if (val >= 85 && val <= 100)
             {
-                jd.Set("高", "↓↓", CA_1);
+                jd.Set("高", "↓↓", CA_3);
             }
 
             if (isGetRefRanges)
             {
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 20, Color = CA_1, Tips = "低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 20, Color = CA_0, Tips = "低" });
                 jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 20, Max = 40, Color = CA_4, Tips = "较低" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 70, Color = CA_3, Tips = "中等" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 85, Color = CA_2, Tips = "较高" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 85, Max = 100, Color = CA_1, Tips = "高" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 70, Color = CA_2, Tips = "中等" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 85, Color = CA_1, Tips = "较高" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 85, Max = 100, Color = CA_3, Tips = "高" });
             }
 
 
             return jd;
         }
-        public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "3";
             jd.Name = "高血压管控";
             jd.Value = val.ToString("0.#####");
-            jd.Chat = chat;
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -642,12 +650,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMbGxbgk(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetMbGxbgk(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "4";
             jd.Name = "冠心病管控";
-            jd.Chat = chat;
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val == 0)
             {
                 jd.Value = "";
@@ -681,13 +689,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetMbTlbgk(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetMbTlbgk(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "5";
             jd.Name = "糖尿病管控";
             jd.Value = val.ToString("0.#####");
-            jd.Chat = chat;
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val <= 39)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -711,13 +719,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetQxxlKynl(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetQxxlKynl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "7";
             jd.Name = "抗压能力";
-            jd.Value = int.Parse(val.ToString("0.#####"));
-            jd.Chat = chat;
+            jd.Value = Lumos.CommonUtil.ToInt(val);
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val <= 29)
             {
                 jd.Set("差", "↓↓", CA_1);
@@ -741,76 +749,103 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetQxxlJlqx(string val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetQxxlJlqx(string val, bool isGetRefRanges = false, List<ChatDataByStr> lastVals = null)
         {
             string s_val = val.ToString();
             int i_val = 0;
             if (s_val == "恐慌")
             {
-                i_val = 15;
+                i_val = 10;
             }
             else if (s_val == "重度")
             {
-                i_val = 35;
+                i_val = 30;
             }
             else if (s_val == "中度")
             {
-                i_val = 55;
+                i_val = 50;
             }
             else if (s_val == "轻度")
             {
-                i_val = 75;
+                i_val = 70;
             }
             else if (s_val == "安康")
             {
                 i_val = 90;
             }
 
+            List<object> i_lastVals = new List<object>();
+
+            foreach (var t in lastVals)
+            {
+                string c = t.yData;
+                if (c == "恐慌")
+                {
+                    i_lastVals.Add(new { xData = t.xData, yData = 10 });
+                }
+                else if (c == "重度")
+                {
+                    i_lastVals.Add(new { xData = t.xData, yData = 30 });
+                }
+                else if (c == "中度")
+                {
+                    i_lastVals.Add(new { xData = t.xData, yData = 50 });
+                }
+                else if (c == "轻度")
+                {
+                    i_lastVals.Add(new { xData = t.xData, yData = 70 });
+                }
+                else if (c == "安康")
+                {
+                    i_lastVals.Add(new { xData = t.xData, yData = 90 });
+                }
+            }
+
             var jd = new SvDataJd();
             jd.Id = "6";
             jd.Name = "焦虑情绪";
             jd.Value = i_val;
-            jd.Chat = chat;
+            jd.Chat = new { Data = i_lastVals, yAxisLabel = new int[] { 0, 10, 30, 50, 90 }, yAxisLabelExt = new string[] { "", "恐慌", "重度", "中度", "轻度", "安康" }, markLine = new { yAxis = "" } };
             jd.IsHidValue = true;
-            if (i_val <= 30)
+            if (i_val <= 20)
             {
-                jd.Set("恐慌", "", CA_1);
+                jd.Set("恐慌", "", CA_3);
             }
-            else if (i_val >= 30 && i_val <= 40)
+            else if (i_val > 20 && i_val <= 40)
             {
-                jd.Set("重度", "", CA_2);
+                jd.Set("重度", "", CA_1);
             }
-            else if (i_val >= 40 && i_val <= 60)
+            else if (i_val > 40 && i_val <= 60)
             {
-                jd.Set("中度", "", CA_3);
+                jd.Set("中度", "", CA_2);
             }
-            else if (i_val >= 60 && i_val <= 80)
+            else if (i_val > 60 && i_val <= 80)
             {
                 jd.Set("轻度", "", CA_4);
             }
-            else if (i_val >= 80 && i_val <= 100)
+            else if (i_val > 80 && i_val <= 100)
             {
                 jd.Set("安康", "↓", CA_0);
             }
 
             if (isGetRefRanges)
             {
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_1, Tips = "恐慌" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 40, Color = CA_2, Tips = "重度" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 60, Color = CA_3, Tips = "中度" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 20, Color = CA_3, Tips = "恐慌" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 20, Max = 40, Color = CA_1, Tips = "重度" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 60, Color = CA_2, Tips = "中度" });
                 jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 60, Max = 80, Color = CA_4, Tips = "轻度" });
                 jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 80, Max = 100, Color = CA_0, Tips = "安康" });
             }
 
             return jd;
         }
-        public static SvDataJd GetQxxlQxyj(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetQxxlQxyj(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "8";
             jd.Name = "情绪应激";
             jd.Value = val.ToString("0.#####");
-
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 } };
 
             return jd;
         }
@@ -819,6 +854,8 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "50~80";
+
+
             if (val <= 29)
             {
                 jd.Set("高风险", "↓↓", CA_1);
@@ -1311,13 +1348,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmScore(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetSmScore(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠值";
             jd.Value = val;
             jd.RefRange = "0~100";
-            jd.Chat = chat;
+            jd.Chat = jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
             if (val < 29)
             {
                 jd.Set("差", "", CA_1);
