@@ -1020,7 +1020,7 @@ namespace LocalS.BLL
                                         break;
                                     //慢病管理-高血压管控
                                     case "高血压管控":
-                                        d_DayReport.MbGxygk = 100-index.score;
+                                        d_DayReport.MbGxygk = 100 - index.score;
 
                                         d_Label = new SvHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -1035,7 +1035,7 @@ namespace LocalS.BLL
                                         break;
                                     //慢病管理-糖尿病管控
                                     case "糖尿病管控":
-                                        d_DayReport.MbTlbgk = 100-index.score;
+                                        d_DayReport.MbTlbgk = 100 - index.score;
 
                                         d_Label = new SvHealthDayReportLabel();
                                         d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -1553,6 +1553,15 @@ namespace LocalS.BLL
                     d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq);
                     d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
                     d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
+
+                    //todo 暂时一个随机值
+                    Random r1 = new Random();
+                    int healthScoreRatio = r1.Next(80, 85);
+                    Random r2 = new Random();
+                    int smScoreRatio = r2.Next(80, 85);
+
+                    d_DayReport.HealthScoreRatio = healthScoreRatio;
+                    d_DayReport.SmScoreRatio = smScoreRatio;
 
                     var trendcharts = d1.trendchart;
                     if (trendcharts != null)

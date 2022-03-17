@@ -176,5 +176,7 @@ namespace LocalS.Entity
         public E_SvHealthReportStatus Status { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }
+        public decimal SmScoreRatio { get; set; }
+        public decimal HealthScoreRatio { get; set; }
     }
 }

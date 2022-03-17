@@ -166,16 +166,26 @@ namespace LocalS.Service.Api.HealthApp
                 consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.jpg" };
             }
 
+            //var sum_HealthScores = CurrentDb.SvHealthDayReport.Select(m => m.HealthScore).ToList();
+            //int scoreRatio = 80;
+            //if (sum_HealthScores.Count > 0)
+            //{
+            //    int a = sum_HealthScores.Where(m => m < d_DayRpt.HealthScore).Count();
+            //    int b = sum_HealthScores.Count();
+            //    double r = Math.Round((Convert.ToDouble(a) / Convert.ToDouble(b)), 2) * 100;
+            //    scoreRatio = Convert.ToInt32(r);
+            //}
+
             var ret = new
             {
                 rd = new
                 {
                     HealthDate = d_DayRpt.HealthDate.ToUnifiedFormatDate(),
                     HealthScore = SvUtil.GetHealthScore(d_DayRpt.HealthScore),
-                    HealthScoreTip = "您今天的健康值超过88%的人",
+                    HealthScoreTip = "您今天的健康值超过" + d_DayRpt.HealthScoreRatio + "%的人",
                     SmScoreByLast = smScoreByLast,
                     SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true, smScoreByLast),
-                    SmScoreTip = "您的睡眠值已经打败77%的人",
+                    SmScoreTip = "您的睡眠值已经打败" + d_DayRpt.SmScoreRatio + "%的人",
                     GzTags = gzTags,//关注标签
                     SmTags = smTags,//睡眠标签
                     SmDvs = smDvs,//睡觉检测项
