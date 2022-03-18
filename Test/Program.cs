@@ -56,6 +56,8 @@ namespace Test
 
         static void Main(string[] args)
         {
+            int ss = 80;
+            decimal c = ss;
             var s = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse("2022-02-03"), DateTime.Now);
 
 

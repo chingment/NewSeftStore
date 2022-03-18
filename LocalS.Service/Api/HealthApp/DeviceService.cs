@@ -216,8 +216,8 @@ namespace LocalS.Service.Api.HealthApp
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "");
 
             var deliveryTime = "";
-            FieldModel geyweek = new FieldModel();
-            FieldModel gmPeriod = new FieldModel();
+            FieldModel geyweek = new FieldModel(new int[] { 0, 0 }, "");
+            FieldModel gmPeriod = new FieldModel(new string[] {  "", "6", "28" }, "");
             if (d_SvUser.Sex == "2")
             {
                 var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();

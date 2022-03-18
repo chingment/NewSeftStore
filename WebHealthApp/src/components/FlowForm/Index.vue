@@ -216,6 +216,17 @@ export default {
             }
           }
         }
+      } else if (question.type === 'gmperiod') {
+        if (isEmpty(val[0])) {
+          this.$toast('请选择末次月经时间')
+          return
+        } else if (isEmpty(val[1])) {
+          this.$toast('经期天数')
+          return
+        } else if (isEmpty(val[2])) {
+          this.$toast('月经周期')
+          return
+        }
       }
 
       this.jump(q_idx)

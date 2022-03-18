@@ -1311,6 +1311,16 @@ namespace LocalS.BLL
                     d_DayReport.IsSend = true;
                     d_DayReport.Status = E_SvHealthReportStatus.SendSuccess;
 
+
+                    //todo 暂时一个随机值
+                    Random r1 = new Random();
+                    int healthScoreRatio = r1.Next(80, 85);
+                    Random r2 = new Random();
+                    int smScoreRatio = r2.Next(80, 85);
+
+                    d_DayReport.HealthScoreRatio = healthScoreRatio;
+                    d_DayReport.SmScoreRatio = smScoreRatio;
+
                     d_DayReport.CreateTime = DateTime.Now;
                     d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
 
