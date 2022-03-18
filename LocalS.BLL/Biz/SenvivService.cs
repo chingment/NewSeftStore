@@ -1558,17 +1558,17 @@ namespace LocalS.BLL
                     d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
                     d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
                     d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
-                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
-                    d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp);
-                    d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq);
+                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
+                    d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
+                    d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;
                     d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
                     d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
 
                     //todo 暂时一个随机值
-                    Random r1 = new Random();
-                    int healthScoreRatio = r1.Next(80, 85);
-                    Random r2 = new Random();
-                    int smScoreRatio = r2.Next(80, 85);
+                    ThreadSafeRandom r1 = new ThreadSafeRandom();
+                    int healthScoreRatio = r1.Next(80, 90);
+                    ThreadSafeRandom r2 = new ThreadSafeRandom();
+                    int smScoreRatio = r2.Next(80, 95);
 
                     d_DayReport.HealthScoreRatio = healthScoreRatio;
                     d_DayReport.SmScoreRatio = smScoreRatio;

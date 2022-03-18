@@ -1463,68 +1463,116 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetZsGmYq(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetZsGmYq(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "9";
             jd.Name = "孕气指数";
-            jd.Value = val.ToString("0.#####") + "%";
-            jd.Chat = chat;
-            if (val <= 39)
+            jd.Value = val.ToString("0.#####");
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
+            if (val < 20)
             {
-                jd.Set("差", "↓↓", CA_1);
+                jd.Set("好", "↓↓", CA_1);
             }
-            else if (val >= 40 && val <= 69)
+            else if (val >= 20 && val < 40)
             {
-                jd.Set("一般", "↓", CA_2);
+                jd.Set("较好", "↓", CA_2);
             }
-            else if (val >= 70 && val <= 100)
+            else if (val >= 40 && val < 55)
             {
-                jd.Set("好", "-", CA_0);
+                jd.Set("中等", "-", CA_0);
             }
+            else if (val >= 50 && val < 70)
+            {
+                jd.Set("偏差", "-", CA_0);
+            }
+            else if (val >= 70 && val < 85)
+            {
+                jd.Set("较差", "-", CA_0);
+            }
+            else if (val >= 85 && val <= 100)
+            {
+                jd.Set("差", "-", CA_0);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 20, Color = CA_1, Tips = "好" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 20, Max = 40, Color = CA_2, Tips = "较好" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 40, Max = 55, Color = CA_3, Tips = "中等" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 70, Color = CA_4, Tips = "偏差" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 85, Color = CA_3, Tips = "较差" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 85, Max = 100, Color = CA_4, Tips = "差" });
+            }
+
             return jd;
         }
 
-        public static SvDataJd GetZsGmYp(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetZsGmYp(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "10";
             jd.Name = "易胖指数";
-            jd.Value = val.ToString("0.#####") + "%";
-            jd.Chat = chat;
-            if (val <= 39)
+            jd.Value = val.ToString("0.#####");
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
+            if (val < 30)
             {
-                jd.Set("差", "↓↓", CA_1);
+                jd.Set("较低", "-", CA_0);
             }
-            else if (val >= 40 && val <= 69)
+            else if (val >= 30 && val < 50)
             {
-                jd.Set("一般", "↓", CA_2);
+                jd.Set("中等", "↑", CA_2);
             }
-            else if (val >= 70 && val <= 100)
+            else if (val > 50 && val <= 70)
             {
-                jd.Set("好", "-", CA_0);
+                jd.Set("偏高", "↑", CA_3);
             }
+            else if (val > 70 && val <= 100)
+            {
+                jd.Set("较高", "↑", CA_4);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_0, Tips = "较低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 50, Color = CA_2, Tips = "中等" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 70, Color = CA_3, Tips = "偏高" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 100, Color = CA_4, Tips = "较高" });
+            }
+
             return jd;
         }
 
-        public static SvDataJd GetZsGmSr(decimal val, bool isGetRefRanges = false, object chat = null)
+        public static SvDataJd GetZsGmSr(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Id = "11";
             jd.Name = "水润指数";
-            jd.Value = val.ToString("0.#####") + "%";
-            jd.Chat = chat;
-            if (val <= 39)
+            jd.Value = val.ToString("0.#####");
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
+            if (val < 30)
             {
-                jd.Set("差", "↓↓", CA_1);
+                jd.Set("较低", "-", CA_1);
             }
-            else if (val >= 40 && val <= 69)
+            else if (val >= 30 && val < 50)
             {
-                jd.Set("一般", "↓", CA_2);
+                jd.Set("偏低", "↓", CA_2);
+            }
+            else if (val >= 50 && val < 70)
+            {
+                jd.Set("中等", "↑", CA_0);
             }
             else if (val >= 70 && val <= 100)
             {
-                jd.Set("好", "-", CA_0);
+                jd.Set("较高", "↑", CA_0);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CA_1, Tips = "较低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 50, Color = CA_2, Tips = "中等" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 70, Color = CA_3, Tips = "偏高" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 70, Max = 100, Color = CA_4, Tips = "较高" });
             }
             return jd;
         }
