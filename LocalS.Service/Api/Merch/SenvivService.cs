@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using MyWeiXinSdk;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -214,8 +215,96 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        public void pushTest()
+        {
+            // "oKWon61_kYKkAJwKads11SrXzeUg", ,"oKWon62fAPY8a0tYfBV7ts61UudY", "oKWon69d5S0fwTAtrwzstEKjYhuk", "oKWon67M1FwT8DZ6SoECnPIJ1hqo"
+            string[] openIds = new string[] { "oKWon62fAPY8a0tYfBV7ts61UudY", "oKWon69d5S0fwTAtrwzstEKjYhuk", "oKWon67M1FwT8DZ6SoECnPIJ1hqo" };
+
+            string svUserId = "461x847d0217EA";
+            var d_DayReports = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true).OrderBy(m => m.CreateTime).Take(7).ToList();
+
+            d_DayReports = d_DayReports.OrderBy(m=>m.HealthDate).ToList();
+            foreach (var d_DayReport in d_DayReports)
+            {
+                foreach (var openId in openIds)
+                {
+                    var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_DayReport.SvUserId).FirstOrDefault();
+
+                    string theme = "green";
+
+                    if (d_SvUser.Sex == "2")
+                    {
+                        theme = "pink";
+                    }
+
+                    var template = BizFactory.Senviv.GetWxPaTpl(d_DayReport.SvUserId, "day_report");
+
+                    string first = "您好，" + d_DayReport.HealthDate.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
+                    string url = "http://health.17fanju.com/report/day?rptId=" + d_DayReport.Id + "&theme=" + theme;
+                    string keyword1 = d_DayReport.HealthDate.ToUnifiedFormatDateTime();
+                    string keyword2 = "总体评分" + d_DayReport.HealthScore + "分";
+                    string remark = "感谢您的支持，如需查看详情报告信息请点击";
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("{\"touser\":\"" + openId + "\",");
+                    sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+                    sb.Append("\"url\":\"" + url + "\", ");
+                    sb.Append("\"data\":{");
+                    sb.Append("\"first\":{ \"value\":\"" + first + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"keyword1\":{ \"value\":\"" + keyword1 + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"keyword2\":{ \"value\":\"" + keyword2 + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+                    sb.Append("}}");
+
+                    WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+                    WxApi c = new WxApi();
+
+                    c.DoPost(templateSend);
+
+                }
+            }
+
+
+            foreach (var openId in openIds)
+            {
+
+                string search_tag = string.Format("怀孕第{0}周", 25);
+
+                var d_Article = CurrentDb.SvArticle.Where(m => m.Tags.StartsWith(search_tag)).FirstOrDefault();
+                if (d_Article != null)
+                {
+                    string title = string.Format("您好,{0}", search_tag);
+                    string url = string.Format("http://health.17fanju.com/article/details?id={0}&svuid={1}", d_Article.Id, svUserId);
+                    string remark = "感谢您的支持";
+
+
+                    var template = BizFactory.Senviv.GetWxPaTpl(svUserId, "article_pregnancy");
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("{\"touser\":\"" + openId + "\",");
+                    sb.Append("\"template_id\":\"" + template.TemplateId + "\",");
+                    sb.Append("\"url\":\"" + url + "\", ");
+                    sb.Append("\"data\":{");
+                    sb.Append("\"first\":{ \"value\":\"" + title + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"keyword1\":{ \"value\":\"" + search_tag + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"keyword2\":{ \"value\":\"" + "点击查看" + "\",\"color\":\"#173177\" },");
+                    sb.Append("\"remark\":{ \"value\":\"" + remark + "\",\"color\":\"#173177\"}");
+                    sb.Append("}}");
+
+                    WxApiMessageTemplateSend templateSend = new WxApiMessageTemplateSend(template.AccessToken, WxPostDataType.Text, sb.ToString());
+                    WxApi c = new WxApi();
+
+                    var ret = c.DoPost(templateSend);
+                }
+            }
+
+
+        }
+
         public CustomJsonResult GetUserDetail(string operater, string merchId, string svUserId)
         {
+            //pushTest();
+
             var result = new CustomJsonResult();
 
 
@@ -848,8 +937,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
 
             if (rup.HealthDate != null && rup.HealthDate.Length == 2)
             {
-                var d1 = CommonUtil.MonthMinDateTime(rup.HealthDate[0]);
-                var d2 = CommonUtil.MonthMaxDateTime(rup.HealthDate[1]);
+                var d1 = Lumos.CommonUtil.MonthMinDateTime(rup.HealthDate[0]);
+                var d2 = Lumos.CommonUtil.MonthMaxDateTime(rup.HealthDate[1]);
 
                 LogUtil.Info("d1：" + d1.ToUnifiedFormatDateTime());
                 LogUtil.Info("d2：" + d2.ToUnifiedFormatDateTime());
@@ -1593,8 +1682,8 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             d_SvVisitRecord.VisitType = E_SvVisitRecordVisitType.Callout;
             d_SvVisitRecord.VisitTemplate = E_SvVisitRecordVisitTemplate.CalloutRecord;
             d_SvVisitRecord.VisitContent = rop.VisitContent.ToJsonString();
-            d_SvVisitRecord.VisitTime = CommonUtil.ConverToDateTime(rop.VisitTime).Value;
-            d_SvVisitRecord.NextTime = CommonUtil.ConverToDateTime(rop.NextTime);
+            d_SvVisitRecord.VisitTime = Lumos.CommonUtil.ConverToDateTime(rop.VisitTime).Value;
+            d_SvVisitRecord.NextTime = Lumos.CommonUtil.ConverToDateTime(rop.NextTime);
             d_SvVisitRecord.Creator = operater;
             d_SvVisitRecord.CreateTime = DateTime.Now;
             CurrentDb.SvVisitRecord.Add(d_SvVisitRecord);

@@ -153,7 +153,7 @@
 
         </mt-tab-container-item>
         <mt-tab-container-item v-if="selected==='tab3'" id="tab3">
-          <div class="c-part-1">
+          <div class="c-part-1" style="padding:0px">
             <div v-if="!consult.isOpen" class="open-off">
               <div class="t1"> 敬请期待</div>
               <div class="t2"> 谢谢关注，即将开启</div>

@@ -163,7 +163,7 @@ namespace LocalS.Service.Api.HealthApp
 
             if (d_SvUser.MerchId == "46120614" || d_SvUser.MerchId == "94718084")
             {
-                consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.jpg" };
+                consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.png" };
             }
 
             //var sum_HealthScores = CurrentDb.SvHealthDayReport.Select(m => m.HealthScore).ToList();
