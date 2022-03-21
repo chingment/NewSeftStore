@@ -5,6 +5,7 @@
       <div class="wrap">
         <div class="st-1">
           <div class="field" style="width: 100%;text-align: left">
+            <div class="gesweek" style="padding: 15px 0px;">您好，{{ userInfo.signName }}</div>
             <div class="gesweek" style="padding: 15px 0px;">孕{{ userInfo.pregnancy.gesWeek }} 周+{{ userInfo.pregnancy.gesDay }}天</div>
             <div class="birthlastdays">距离宝宝出生还有<span>{{ userInfo.pregnancy.birthLastDays }}</span>天</div>
           </div>
