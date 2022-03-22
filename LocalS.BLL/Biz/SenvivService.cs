@@ -1561,7 +1561,6 @@ namespace LocalS.BLL
                     d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
                     d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
                     d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;
-                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr);
                     d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
 
                     //todo 暂时一个随机值
