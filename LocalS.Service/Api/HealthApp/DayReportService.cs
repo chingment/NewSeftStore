@@ -32,8 +32,8 @@ namespace LocalS.Service.Api.HealthApp
                 {
                     if (d_Women.PregnancyTime != null && d_Women.DeliveryTime.Value != null)
                     {
-                        var week = Lumos.CommonUtil.GetDiffWeekDay(d_Women.PregnancyTime.Value, DateTime.Now);
-                        var birthLastDays = Convert.ToInt32((d_Women.DeliveryTime.Value - DateTime.Now).TotalDays + 1);
+                        var week = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse(d_Women.PregnancyTime.Value.ToString("yyyy-MM-dd")),DateTime.Parse(d_DayRpt.CreateTime.ToString("yyyy-MM-dd")));
+                        var birthLastDays = Convert.ToInt32((DateTime.Parse(d_Women.DeliveryTime.Value.ToString("yyyy-MM-dd")) - DateTime.Parse(d_DayRpt.CreateTime.ToString("yyyy-MM-dd"))).TotalDays);
                         pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
                     }
                 }
@@ -180,7 +180,7 @@ namespace LocalS.Service.Api.HealthApp
             {
                 rd = new
                 {
-                    HealthDate = d_DayRpt.HealthDate.ToUnifiedFormatDate(),
+                    HealthDate = d_DayRpt.CreateTime.ToUnifiedFormatDate(),
                     HealthScore = SvUtil.GetHealthScore(d_DayRpt.HealthScore),
                     HealthScoreTip = "您今天的健康值超过" + d_DayRpt.HealthScoreRatio + "%的人",
                     SmScoreByLast = smScoreByLast,

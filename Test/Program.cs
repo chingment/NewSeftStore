@@ -56,6 +56,10 @@ namespace Test
 
         static void Main(string[] args)
         {
+            var week = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse(DateTime.Now.ToString("2021-09-24")), DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")));
+            var birthLastDays = Convert.ToInt32((DateTime.Parse(DateTime.Now.ToString("2022-07-01")) - DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"))).TotalDays);
+            var pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
+
             int ss = 80;
             decimal c = ss;
             var s = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse("2022-02-03"), DateTime.Now);
