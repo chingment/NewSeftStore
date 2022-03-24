@@ -166,16 +166,6 @@ namespace LocalS.Service.Api.HealthApp
                 consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.png" };
             }
 
-            //var sum_HealthScores = CurrentDb.SvHealthDayReport.Select(m => m.HealthScore).ToList();
-            //int scoreRatio = 80;
-            //if (sum_HealthScores.Count > 0)
-            //{
-            //    int a = sum_HealthScores.Where(m => m < d_DayRpt.HealthScore).Count();
-            //    int b = sum_HealthScores.Count();
-            //    double r = Math.Round((Convert.ToDouble(a) / Convert.ToDouble(b)), 2) * 100;
-            //    scoreRatio = Convert.ToInt32(r);
-            //}
-
             var ret = new
             {
                 rd = new
