@@ -902,7 +902,208 @@ namespace LocalS.BLL
 
             }
         }
-        public void BuildDayReport32(string svUserId, string svDeviceId, string svDeptId)
+
+        public void BuildDayReport(string svUserId, string svDeviceId, string svDeptId)
+        {
+            SvHealthDayReport r_DayReport = null;
+
+            if (svDeptId == "32")
+            {
+                r_DayReport = BuildDayReport32(svUserId, svDeviceId, svDeptId);
+            }
+            else if (svDeptId == "64")
+            {
+                r_DayReport = BuildDayReport46(svUserId, svDeviceId, svDeptId);
+            }
+
+            if (r_DayReport != null)
+            {
+                #region DayReport
+                SvHealthDayReport d_DayReport = new SvHealthDayReport();
+                d_DayReport.Id = r_DayReport.Id;
+                d_DayReport.SvUserId = r_DayReport.SvUserId;
+                d_DayReport.HealthDate = r_DayReport.HealthDate;
+                d_DayReport.HealthScore = r_DayReport.HealthScore;
+                d_DayReport.SmTags = r_DayReport.SmTags;
+                d_DayReport.MylMylzs = r_DayReport.MylMylzs;
+                d_DayReport.MylGrfx = r_DayReport.MylGrfx;
+                d_DayReport.MbGxygk = r_DayReport.MbGxygk;
+                d_DayReport.MbTlbgk = r_DayReport.MbTlbgk;
+                d_DayReport.MbGxbgk = r_DayReport.MbGxbgk;
+                d_DayReport.QxxlQxyj = r_DayReport.QxxlQxyj;
+                d_DayReport.QxxlKynl = r_DayReport.QxxlKynl;
+                d_DayReport.QxxlJlqx = r_DayReport.QxxlJlqx;
+                d_DayReport.QxxlQxxl = r_DayReport.QxxlQxxl;
+                d_DayReport.XlDcjzxl = r_DayReport.XlDcjzxl;//当次基准心率
+                d_DayReport.XlCqjzxl = r_DayReport.XlCqjzxl;//长期基准心率
+                d_DayReport.XlDcpjxl = r_DayReport.XlDcpjxl;//当次平均心率
+                d_DayReport.XlZg = r_DayReport.XlZg;//最高心率
+                d_DayReport.XlZd = r_DayReport.XlZd;//最低心率
+                d_DayReport.XlXdgksc = r_DayReport.XlXdgksc;//心动过快时长
+                d_DayReport.XlXdgmsc = r_DayReport.XlXdgmsc;//心动过慢时长
+                d_DayReport.Xlcg125 = r_DayReport.Xlcg125;//todo 
+                d_DayReport.Xlcg115 = r_DayReport.Xlcg115;//todo 
+                d_DayReport.Xlcg085 = r_DayReport.Xlcg085;//todo 
+                d_DayReport.Xlcg075 = r_DayReport.Xlcg075;//todo
+                d_DayReport.HxDcpjhx = r_DayReport.HxDcpjhx;//	平均呼吸
+                d_DayReport.HxDcjzhx = r_DayReport.HxDcjzhx;//基准呼吸值
+                d_DayReport.HxZdhx = r_DayReport.HxZdhx;//当夜最低呼吸率
+                d_DayReport.HxZghx = r_DayReport.HxZghx;//当夜最高呼吸率
+                d_DayReport.HxCqjzhx = r_DayReport.HxCqjzhx; //长期基准呼吸
+                d_DayReport.HxGksc = r_DayReport.HxGksc;//todo 
+                d_DayReport.HxGmsc = r_DayReport.HxGmsc;//todo 
+                d_DayReport.HxZtahizs = r_DayReport.HxZtahizs;//AHI指数
+                d_DayReport.HxZtcs = r_DayReport.HxZtcs;//呼吸暂停次数
+                d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
+                d_DayReport.HxZtpjsc = r_DayReport.HxZtpjsc;//呼吸暂停平均时长
+                d_DayReport.HrvXzznl = r_DayReport.HrvXzznl;//心脏总能量
+                d_DayReport.HrvXzznljzz = r_DayReport.HrvXzznljzz;//心脏总能量基准值
+                d_DayReport.HrvJgsjzlzs = r_DayReport.HrvJgsjzlzs;//交感神经张力指数
+                d_DayReport.HrvJgsjzlzsjzz = r_DayReport.HrvJgsjzlzsjzz;// 交感神经张力基准值
+                d_DayReport.HrvMzsjzlzs = r_DayReport.HrvMzsjzlzs;//迷走神经张力指数
+                d_DayReport.HrvMzsjzlzsjzz = r_DayReport.HrvMzsjzlzsjzz;//迷走神经张力基准值
+                d_DayReport.HrvZzsjzlzs = r_DayReport.HrvZzsjzlzs;//自主神经平衡
+                d_DayReport.HrvZzsjzlzsjzz = r_DayReport.HrvZzsjzlzsjzz;//自主神经平衡基准值
+                d_DayReport.HrvHermzs = r_DayReport.HrvHermzs;//荷尔蒙指数
+                d_DayReport.HrvHermzsjzz = r_DayReport.HrvHermzsjzz; //荷尔蒙指数基准值
+                d_DayReport.HrvTwjxgsszs = r_DayReport.HrvTwjxgsszs;//体温及血管舒缩指数
+                d_DayReport.HrvTwjxgsszhjzz = r_DayReport.HrvTwjxgsszhjzz;//体温及血管舒缩基准值
+                d_DayReport.JbfxXlscfx = r_DayReport.JbfxXlscfx;//心律失常风险指数
+                d_DayReport.JbfxXljsl = r_DayReport.JbfxXljsl;
+                d_DayReport.SmLzsc = r_DayReport.SmLzsc;
+                d_DayReport.SmScore = r_DayReport.SmScore;//睡眠分数
+                d_DayReport.SmScsj = r_DayReport.SmScsj;//上床时间
+                d_DayReport.SmLcsj = r_DayReport.SmLcsj;//离床时间
+                d_DayReport.SmZcsc = r_DayReport.SmZcsc;//起床时刻
+                d_DayReport.SmRssj = r_DayReport.SmRssj;//入睡时间
+                d_DayReport.SmQxsj = r_DayReport.SmQxsj;//清醒时间
+                d_DayReport.SmSmsc = r_DayReport.SmSmsc;//睡眠时长
+                d_DayReport.SmRsxs = r_DayReport.SmRsxs;//入睡需时
+                d_DayReport.SmLzsc = r_DayReport.SmLzsc; //离枕时长
+                d_DayReport.SmLzscbl = r_DayReport.SmLzscbl;
+                d_DayReport.SmSmzq = r_DayReport.SmSmzq;//睡眠周期
+                d_DayReport.SmSdsmsc = r_DayReport.SmSdsmsc;//深睡时长
+                d_DayReport.SmSdsmbl = r_DayReport.SmSdsmbl;//深睡期比例
+                d_DayReport.SmQdsmsc = r_DayReport.SmQdsmsc;//浅睡期时长
+                d_DayReport.SmQdsmbl = r_DayReport.SmQdsmbl;//浅睡期比例
+                d_DayReport.SmRemsmsc = r_DayReport.SmRemsmsc;//REM期时长
+                d_DayReport.SmRemsmbl = r_DayReport.SmRemsmbl;//REM期比例
+                d_DayReport.SmQxsksc = r_DayReport.SmQxsksc;//REM期时长
+                d_DayReport.SmQxskbl = r_DayReport.SmQxskbl;//REM期比例
+                d_DayReport.SmLzcs = r_DayReport.SmLzcs;
+                d_DayReport.SmTdcs = r_DayReport.SmTdcs;//体动次数
+                d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
+                d_DayReport.SmPjtdsc = r_DayReport.SmPjtdsc;//平均体动时长
+                d_DayReport.SmSmxl = r_DayReport.SmSmxl;
+                d_DayReport.SmSmlxx = r_DayReport.SmSmlxx;
+                d_DayReport.ZsGmSr = r_DayReport.ZsGmSr;
+                d_DayReport.ZsGmYp = r_DayReport.ZsGmYp;
+                d_DayReport.ZsGmYq = r_DayReport.ZsGmYq;
+                d_DayReport.ZsGmMl = r_DayReport.ZsGmMl;
+                d_DayReport.HxPoint = r_DayReport.HxPoint;
+                d_DayReport.XlPoint = r_DayReport.XlPoint;
+                d_DayReport.SmPoint = r_DayReport.SmPoint;
+                d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
+                d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
+                d_DayReport.IsSend = false;
+                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
+                d_DayReport.CreateTime = DateTime.Now;
+                d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
+
+                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                {
+                    d_DayReport.IsValid = true;
+                }
+
+                //todo 暂时一个随机值
+                ThreadSafeRandom r1 = new ThreadSafeRandom();
+                int healthScoreRatio = r1.Next(80, 90);
+                ThreadSafeRandom r2 = new ThreadSafeRandom();
+                int smScoreRatio = r2.Next(80, 95);
+            
+                d_DayReport.HealthScoreRatio = healthScoreRatio;
+                d_DayReport.SmScoreRatio = smScoreRatio;
+
+                CurrentDb.SvHealthDayReport.Add(d_DayReport);
+                CurrentDb.SaveChanges();
+
+                if (d_DayReport.IsValid)
+                {
+                    SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
+                }
+
+                #endregion
+
+                var d_User = CurrentDb.SvUser.Where(m => m.Id == svUserId).FirstOrDefault();
+
+                if (d_User.FisrtReportTime == null)
+                {
+                    d_User.FisrtReportTime = DateTime.Now;
+                }
+
+                DateTime? fisrtReportTime = d_User.FisrtReportTime;
+                DateTime? lastReportTime = DateTime.Now;
+                d_User.LastReportTime = lastReportTime;
+                d_User.LastReportId = d_DayReport.Id;
+
+                if (fisrtReportTime != null)
+                {
+                    Dictionary<string, object> taskParams = new Dictionary<string, object>();
+                    DateTime? rptStartTime = null;
+                    DateTime? rptEndTime = null;
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
+                    {
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("rpt_id", d_DayReport.Id);
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FisrtDay, taskParams);
+                    }
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
+                    {
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_SeventhDay, taskParams);
+                    }
+
+
+                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
+                    {
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FourteenthDay, taskParams);
+                    }
+
+                    DateTime dt1 = lastReportTime.Value;
+                    DateTime dt2 = DateTime.Now;
+                    int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
+                    if (month >= 1)
+                    {
+                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
+                        rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
+
+                        taskParams = new Dictionary<string, object>();
+                        taskParams.Add("start_time", rptStartTime);
+                        taskParams.Add("end_time", rptEndTime);
+
+                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_PerMonth, taskParams);
+                    }
+                }
+            }
+        }
+
+        private SvHealthDayReport BuildDayReport32(string svUserId, string svDeviceId, string svDeptId)
         {
             try
             {
@@ -914,504 +1115,427 @@ namespace LocalS.BLL
 
                 if (d1 == null)
                 {
-                    LogUtil.Info(TAG, "DayReport Is Null");
-
-                    return;
+                    return null;
                 }
 
-                var d_User = CurrentDb.SvUser.Where(m => m.Id == svUserId).FirstOrDefault();
 
-                if (d_User.FisrtReportTime == null)
+                if (d1.userid != svUserId)
                 {
-                    d_User.FisrtReportTime = DateTime.Now;
+                    LogUtil.Info(TAG, "reportpar.ReportId ：" + d1.reportId + ",reportpar.userid:" + d1.userid + ",svUserId:" + svUserId + ",is not");
+                    return null;
                 }
 
-                DateTime? fisrtReportTime = d_User.FisrtReportTime;
-                DateTime? lastReportTime = d_User.LastReportTime;
-
-                d_User.LastReportTime = DateTime.Now;
-                d_User.LastReportId = d1.reportId;
+                if (d1.sn != svDeviceId)
+                {
+                    LogUtil.Info(TAG, "reportpar.ReportId ：" + d1.reportId + ",reportpar.sn:" + d1.userid + ",svDeviceId:" + svDeviceId + ",is not");
+                    return null;
+                }
 
                 var d_DayReport = CurrentDb.SvHealthDayReport.Where(m => m.Id == d1.reportId).FirstOrDefault();
 
-                if (d_DayReport == null)
+                if (d_DayReport != null)
+                    return null;
+
+                #region DayReport
+                d_DayReport = new SvHealthDayReport();
+                d_DayReport.Id = d1.reportId;
+                d_DayReport.SvUserId = svUserId;
+                d_DayReport.HealthScore = d1.Report.TotalScore;
+
+                var x2 = d1.Report;
+
+                if (x2 != null)
                 {
-                    #region DayReport
-                    d_DayReport = new SvHealthDayReport();
-                    d_DayReport.Id = d1.reportId;
-                    d_DayReport.SvUserId = svUserId;
-                    d_DayReport.HealthScore = d1.Report.TotalScore;
+                    var indexs = x2.indexs;
 
-                    var x2 = d1.Report;
-
-                    if (x2 != null)
+                    #region indexs
+                    if (indexs != null)
                     {
-                        var indexs = x2.indexs;
-
-                        #region indexs
-                        if (indexs != null)
+                        foreach (var index in indexs)
                         {
-                            foreach (var index in indexs)
+                            SvHealthDayReportLabel d_Label = null;
+                            switch (index.type)
                             {
-                                SvHealthDayReportLabel d_Label = null;
-                                switch (index.type)
-                                {
-                                    //情绪心理-情绪应激
-                                    case "emostress":
-                                        d_DayReport.QxxlQxyj = index.score;
+                                //情绪心理-情绪应激
+                                case "emostress":
+                                    d_DayReport.QxxlQxyj = index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "QxxlQxyj";
-                                        d_Label.TypeName = "情绪应激";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
-                                        break;
-                                    //情绪心理-抗压能力
-                                    case "compressionability":
-                                        d_DayReport.QxxlKynl = index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "QxxlQxyj";
+                                    d_Label.TypeName = "情绪应激";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
+                                    break;
+                                //情绪心理-抗压能力
+                                case "compressionability":
+                                    d_DayReport.QxxlKynl = index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "QxxlKynl";
-                                        d_Label.TypeName = "抗压能力";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
-                                        break;
-                                    //免疫力-免疫力指数
-                                    case "Immunity":
-                                        d_DayReport.MylMylzs = index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "QxxlKynl";
+                                    d_Label.TypeName = "抗压能力";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
+                                    break;
+                                //免疫力-免疫力指数
+                                case "Immunity":
+                                    d_DayReport.MylMylzs = index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "MylMylZs";
-                                        d_Label.TypeName = "免疫力指数";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
-                                        break;
-                                    //免疫力-感染风险
-                                    case "感染风险":
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "MylMylZs";
+                                    d_Label.TypeName = "免疫力指数";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
+                                    break;
+                                //免疫力-感染风险
+                                case "感染风险":
 
-                                        d_DayReport.MylGrfx = index.score;
+                                    d_DayReport.MylGrfx = index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "MylGrfx";
-                                        d_Label.TypeName = "感染风险";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "MylGrfx";
+                                    d_Label.TypeName = "感染风险";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
 
-                                        break;
-                                    //慢病管理-高血压管控
-                                    case "高血压管控":
-                                        d_DayReport.MbGxygk = 100 - index.score;
+                                    break;
+                                //慢病管理-高血压管控
+                                case "高血压管控":
+                                    d_DayReport.MbGxygk = 100 - index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "MbGxbgk";
-                                        d_Label.TypeName = "高血压管控";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
-                                        break;
-                                    //慢病管理-糖尿病管控
-                                    case "糖尿病管控":
-                                        d_DayReport.MbTlbgk = 100 - index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "MbGxbgk";
+                                    d_Label.TypeName = "高血压管控";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
+                                    break;
+                                //慢病管理-糖尿病管控
+                                case "糖尿病管控":
+                                    d_DayReport.MbTlbgk = 100 - index.score;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "MbTlbgk";
-                                        d_Label.TypeName = "糖尿病管控";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "MbTlbgk";
+                                    d_Label.TypeName = "糖尿病管控";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
 
-                                        break;
-                                    //情绪心理-焦虑情绪
-                                    case "Anxiety":
+                                    break;
+                                //情绪心理-焦虑情绪
+                                case "Anxiety":
 
-                                        d_DayReport.QxxlJlqx = index.explain;
+                                    d_DayReport.QxxlJlqx = index.explain;
 
-                                        d_Label = new SvHealthDayReportLabel();
-                                        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                        d_Label.ReportId = d_DayReport.Id;
-                                        d_Label.SvUserId = d_DayReport.SvUserId;
-                                        d_Label.TypeCode = "QxxlJlqx";
-                                        d_Label.TypeName = "焦虑情绪";
-                                        d_Label.TypeClass = "2";
-                                        d_Label.Explain = index.explain;
-                                        d_Label.Suggest = index.suggest.ToJsonString();
-                                        d_Label.Score = index.score;
+                                    d_Label = new SvHealthDayReportLabel();
+                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    d_Label.ReportId = d_DayReport.Id;
+                                    d_Label.SvUserId = d_DayReport.SvUserId;
+                                    d_Label.TypeCode = "QxxlJlqx";
+                                    d_Label.TypeName = "焦虑情绪";
+                                    d_Label.TypeClass = "2";
+                                    d_Label.Explain = index.explain;
+                                    d_Label.Suggest = index.suggest.ToJsonString();
+                                    d_Label.Score = index.score;
 
-                                        break;
-                                    default:
-                                        d_Label = null;
-                                        break;
-                                }
-
-                                if (d_Label != null)
-                                {
-                                    CurrentDb.SvHealthDayReportLabel.Add(d_Label);
-                                    CurrentDb.SaveChanges();
-                                }
+                                    break;
+                                default:
+                                    d_Label = null;
+                                    break;
                             }
 
-                        }
-                        #endregion
-
-                        var labels = x2.labels;
-
-                        #region
-                        if (labels != null)
-                        {
-                            List<string> smTags = new List<string>();
-
-                            foreach (var label in labels)
+                            if (d_Label != null)
                             {
-                                var d_Label = new SvHealthDayReportLabel();
-                                d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                d_Label.ReportId = d_DayReport.Id;
-                                d_Label.SvUserId = d_DayReport.SvUserId;
-                                d_Label.TypeName = label.TagName;
-                                d_Label.Explain = label.Explain;
-                                d_Label.Suggest = label.suggest.ToJsonString();
-                                d_Label.Level = label.level;
-                                d_Label.TypeClass = "1";
                                 CurrentDb.SvHealthDayReportLabel.Add(d_Label);
                                 CurrentDb.SaveChanges();
-
                             }
-
-                            d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
-
                         }
 
-                        #endregion
+                    }
+                    #endregion
 
-                        var advices = x2.advices;
+                    var labels = x2.labels;
 
-                        #region advices
+                    #region
+                    if (labels != null)
+                    {
+                        List<string> smTags = new List<string>();
 
-                        foreach (var advice in advices)
+                        foreach (var label in labels)
                         {
-                            var d_Advice = new SvHealthDayReportAdvice();
-                            d_Advice.Id = IdWorker.Build(IdType.NewGuid);
-                            d_Advice.ReportId = d_DayReport.Id;
-                            d_Advice.SvUserId = d_DayReport.SvUserId;
-                            d_Advice.SuggestCode = advice.suggestcode;
-                            d_Advice.SuggestName = advice.suggestion;
-                            d_Advice.SuggestDirection = advice.suggestdirection;
-                            d_Advice.Summary = advice.summarystr;
-                            CurrentDb.SvHealthDayReportAdvice.Add(d_Advice);
+                            var d_Label = new SvHealthDayReportLabel();
+                            d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                            d_Label.ReportId = d_DayReport.Id;
+                            d_Label.SvUserId = d_DayReport.SvUserId;
+                            d_Label.TypeName = label.TagName;
+                            d_Label.Explain = label.Explain;
+                            d_Label.Suggest = label.suggest.ToJsonString();
+                            d_Label.Level = label.level;
+                            d_Label.TypeClass = "1";
+                            CurrentDb.SvHealthDayReportLabel.Add(d_Label);
                             CurrentDb.SaveChanges();
+
                         }
 
-                        #endregion
+                        d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
+
                     }
 
-                    var xl = d1.ReportOfHeartBeat;
-
-
-                    #region ReportOfHeartBeat
-                    if (xl != null)
-                    {
-                        d_DayReport.XlDcjzxl = xl.DayCurBenchmark;//当次基准心率
-                        d_DayReport.XlCqjzxl = xl.DayLongterm;//长期基准心率
-                        d_DayReport.XlDcpjxl = xl.Average;//当次平均心率
-                        d_DayReport.XlZg = xl.HeartbeatMax;//最高心率
-                        d_DayReport.XlZd = xl.HeartbeatMin;//最低心率
-                        d_DayReport.XlXdgksc = xl.Higher;//心动过快时长
-                        d_DayReport.XlXdgmsc = xl.Lower;//心动过慢时长
-                        d_DayReport.Xlcg125 = 0;//todo 
-                        d_DayReport.Xlcg115 = 0;//todo 
-                        d_DayReport.Xlcg085 = 0;//todo 
-                        d_DayReport.Xlcg075 = 0;//todo 
-                    }
                     #endregion
 
-                    var hx = d1.ReportOfBreath;
+                    var advices = x2.advices;
 
-                    #region ReportOfBreath
-                    if (hx != null)
+                    #region advices
+
+                    foreach (var advice in advices)
                     {
-                        d_DayReport.HxDcpjhx = hx.Average;//	平均呼吸
-                        d_DayReport.HxDcjzhx = hx.Benchmark;//基准呼吸值
-                        d_DayReport.HxZdhx = hx.BreathMin;//当夜最低呼吸率
-                        d_DayReport.HxZghx = hx.BreathMax;//当夜最高呼吸率
-                        d_DayReport.HxCqjzhx = hx.Longterm; //长期基准呼吸
-                        d_DayReport.HxGksc = 0;//todo 
-                        d_DayReport.HxGmsc = 0;//todo 
-
-
-                        d_DayReport.HxZtahizs = hx.AHI;//AHI指数
-                        d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
-
-                        var bps = hx.ReportOfBreathPause;
-                        if (bps != null)
-                        {
-                            var l_bps = new List<object>();
-
-                            foreach (var bp in bps)
-                            {
-                                var startTime = bp.StartTime / 1000;
-                                var endTime = bp.EndTime / 1000;
-                                var longerval = endTime - startTime;
-                                l_bps.Add(new { startTime = startTime, endTime = endTime, longerval = longerval });
-                            }
-
-                            d_DayReport.HxZtcsPoint = l_bps.ToJsonString();
-                        }
-
-
-                        d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
+                        var d_Advice = new SvHealthDayReportAdvice();
+                        d_Advice.Id = IdWorker.Build(IdType.NewGuid);
+                        d_Advice.ReportId = d_DayReport.Id;
+                        d_Advice.SvUserId = d_DayReport.SvUserId;
+                        d_Advice.SuggestCode = advice.suggestcode;
+                        d_Advice.SuggestName = advice.suggestion;
+                        d_Advice.SuggestDirection = advice.suggestdirection;
+                        d_Advice.Summary = advice.summarystr;
+                        CurrentDb.SvHealthDayReportAdvice.Add(d_Advice);
+                        CurrentDb.SaveChanges();
                     }
+
                     #endregion
+                }
 
-                    var hrv = d1.ReportOfHRV;
+                var xl = d1.ReportOfHeartBeat;
 
-                    #region ReportOfHRV
-                    if (hrv != null)
+
+                #region ReportOfHeartBeat
+                if (xl != null)
+                {
+                    d_DayReport.XlDcjzxl = xl.DayCurBenchmark;//当次基准心率
+                    d_DayReport.XlCqjzxl = xl.DayLongterm;//长期基准心率
+                    d_DayReport.XlDcpjxl = xl.Average;//当次平均心率
+                    d_DayReport.XlZg = xl.HeartbeatMax;//最高心率
+                    d_DayReport.XlZd = xl.HeartbeatMin;//最低心率
+                    d_DayReport.XlXdgksc = xl.Higher;//心动过快时长
+                    d_DayReport.XlXdgmsc = xl.Lower;//心动过慢时长
+                    d_DayReport.Xlcg125 = 0;//todo 
+                    d_DayReport.Xlcg115 = 0;//todo 
+                    d_DayReport.Xlcg085 = 0;//todo 
+                    d_DayReport.Xlcg075 = 0;//todo 
+                }
+                #endregion
+
+                var hx = d1.ReportOfBreath;
+
+                #region ReportOfBreath
+                if (hx != null)
+                {
+                    d_DayReport.HxDcpjhx = hx.Average;//	平均呼吸
+                    d_DayReport.HxDcjzhx = hx.Benchmark;//基准呼吸值
+                    d_DayReport.HxZdhx = hx.BreathMin;//当夜最低呼吸率
+                    d_DayReport.HxZghx = hx.BreathMax;//当夜最高呼吸率
+                    d_DayReport.HxCqjzhx = hx.Longterm; //长期基准呼吸
+                    d_DayReport.HxGksc = 0;//todo 
+                    d_DayReport.HxGmsc = 0;//todo 
+
+
+                    d_DayReport.HxZtahizs = hx.AHI;//AHI指数
+                    d_DayReport.HxZtcs = hx.HigherCounts;//呼吸暂停次数
+
+                    var bps = hx.ReportOfBreathPause;
+                    if (bps != null)
                     {
-                        d_DayReport.HrvXzznl = hrv.HeartIndex;//心脏总能量
-                        d_DayReport.HrvXzznljzz = hrv.BaseTP;//心脏总能量基准值
-                        d_DayReport.HrvJgsjzlzs = hrv.LF;//交感神经张力指数
-                        d_DayReport.HrvJgsjzlzsjzz = hrv.BaseLF;// 交感神经张力基准值
-                        d_DayReport.HrvMzsjzlzs = hrv.HF;//迷走神经张力指数
-                        d_DayReport.HrvMzsjzlzsjzz = hrv.BaseHF;//迷走神经张力基准值
-                        d_DayReport.HrvZzsjzlzs = hrv.LFHF;//自主神经平衡
-                        d_DayReport.HrvZzsjzlzsjzz = hrv.BaseLFHF;//自主神经平衡基准值
-                        d_DayReport.HrvHermzs = hrv.endocrine;//荷尔蒙指数
-                        d_DayReport.HrvHermzsjzz = 0;//荷尔蒙指数基准值
-                        d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
-                        d_DayReport.HrvTwjxgsszhjzz = 0;//体温及血管舒缩基准值
-                        d_DayReport.SmScore = hrv.SleepValue;
-                        d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
+                        var l_bps = new List<object>();
 
-                        var d2 = d1.UserBaseInfo;
-                        if (d2 != null)
+                        foreach (var bp in bps)
                         {
-                            d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
-                        }
-                    }
-                    #endregion
-
-                    var sm = d1.ReportOfSleep;
-                    if (sm != null)
-                    {
-                        d_DayReport.HealthDate = SvUtil.D32LongToDateTime(x2.FinishTime);
-
-                        d_DayReport.SmScsj = SvUtil.D32LongToDateTime(x2.StartTime);//上床时间
-                        d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(x2.FinishTime);//离床时间
-                        d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
-                        d_DayReport.SmRssj = SvUtil.D32LongToDateTime(x2.OnbedTime);//入睡时间
-                        d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(x2.OffbedTime);//清醒时间
-                        d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
-                        d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
-                        d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
-                        d_DayReport.SmLzscbl = sm.OffbedRatio;
-                        d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
-
-                        d_DayReport.SmSdsmsc = sm.Deep;//深睡时长
-                        d_DayReport.SmSdsmbl = sm.DeepRatio;//深睡期比例
-
-                        d_DayReport.SmQdsmsc = sm.Shallow;//浅睡期时长
-                        d_DayReport.SmQdsmbl = sm.ShallowRatio;//浅睡期比例
-
-                        d_DayReport.SmRemsmsc = sm.Rem;//REM期时长
-                        d_DayReport.SmRemsmbl = sm.RemRatio;//REM期比例
-
-                        d_DayReport.SmQxsksc = sm.Sober;//REM期时长
-                        d_DayReport.SmQxskbl = sm.SoberRatio;//REM期比例
-
-                        d_DayReport.SmLzcs = 0;
-
-                        d_DayReport.SmTdcs = sm.MoveCounts;//体动次数
-
-                        List<object> moves = new List<object>();
-                        if (sm.Moves != null)
-                        {
-                            foreach (var move in sm.Moves)
-                            {
-                                if (move.starttime != 0 && move.endtime != 0)
-                                {
-                                    moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = move.score });
-                                }
-                            }
-
-                            d_DayReport.SmTdcsPoint = moves.ToJsonString();
-
+                            var startTime = bp.StartTime / 1000;
+                            var endTime = bp.EndTime / 1000;
+                            var longerval = endTime - startTime;
+                            l_bps.Add(new { startTime = startTime, endTime = endTime, longerval = longerval });
                         }
 
-
-                        d_DayReport.SmPjtdsc = sm.MovingAverageLength;//平均体动时长
-
+                        d_DayReport.HxZtcsPoint = l_bps.ToJsonString();
                     }
-                    var rc = d1.ReportCharts;
-                    if (rc != null)
-                    {
-                        var trendCharts = rc.ReportTrendChart;
 
-                        if (trendCharts != null)
+
+                    d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
+                }
+                #endregion
+
+                var hrv = d1.ReportOfHRV;
+
+                #region ReportOfHRV
+                if (hrv != null)
+                {
+                    d_DayReport.HrvXzznl = hrv.HeartIndex;//心脏总能量
+                    d_DayReport.HrvXzznljzz = hrv.BaseTP;//心脏总能量基准值
+                    d_DayReport.HrvJgsjzlzs = hrv.LF;//交感神经张力指数
+                    d_DayReport.HrvJgsjzlzsjzz = hrv.BaseLF;// 交感神经张力基准值
+                    d_DayReport.HrvMzsjzlzs = hrv.HF;//迷走神经张力指数
+                    d_DayReport.HrvMzsjzlzsjzz = hrv.BaseHF;//迷走神经张力基准值
+                    d_DayReport.HrvZzsjzlzs = hrv.LFHF;//自主神经平衡
+                    d_DayReport.HrvZzsjzlzsjzz = hrv.BaseLFHF;//自主神经平衡基准值
+                    d_DayReport.HrvHermzs = hrv.endocrine;//荷尔蒙指数
+                    d_DayReport.HrvHermzsjzz = 0;//荷尔蒙指数基准值
+                    d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
+                    d_DayReport.HrvTwjxgsszhjzz = 0;//体温及血管舒缩基准值
+                    d_DayReport.SmScore = hrv.SleepValue;
+                    d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
+
+                    var d2 = d1.UserBaseInfo;
+                    if (d2 != null)
+                    {
+                        d_DayReport.JbfxXljsl = d1.UserBaseInfo.DcValue;
+                    }
+                }
+                #endregion
+
+                var sm = d1.ReportOfSleep;
+                if (sm != null)
+                {
+                    d_DayReport.HealthDate = SvUtil.D32LongToDateTime(x2.FinishTime);
+
+                    d_DayReport.SmScsj = SvUtil.D32LongToDateTime(x2.StartTime);//上床时间
+                    d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(x2.FinishTime);//离床时间
+                    d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
+                    d_DayReport.SmRssj = SvUtil.D32LongToDateTime(x2.OnbedTime);//入睡时间
+                    d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(x2.OffbedTime);//清醒时间
+                    d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
+                    d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
+                    d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
+                    d_DayReport.SmLzscbl = sm.OffbedRatio;
+                    d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
+
+                    d_DayReport.SmSdsmsc = sm.Deep;//深睡时长
+                    d_DayReport.SmSdsmbl = sm.DeepRatio;//深睡期比例
+
+                    d_DayReport.SmQdsmsc = sm.Shallow;//浅睡期时长
+                    d_DayReport.SmQdsmbl = sm.ShallowRatio;//浅睡期比例
+
+                    d_DayReport.SmRemsmsc = sm.Rem;//REM期时长
+                    d_DayReport.SmRemsmbl = sm.RemRatio;//REM期比例
+
+                    d_DayReport.SmQxsksc = sm.Sober;//REM期时长
+                    d_DayReport.SmQxskbl = sm.SoberRatio;//REM期比例
+
+                    d_DayReport.SmLzcs = 0;
+
+                    d_DayReport.SmTdcs = sm.MoveCounts;//体动次数
+
+                    List<object> moves = new List<object>();
+                    if (sm.Moves != null)
+                    {
+                        foreach (var move in sm.Moves)
                         {
-                            foreach (var chart in trendCharts)
+                            if (move.starttime != 0 && move.endtime != 0)
                             {
-                                if (chart.type == 2107)
-                                {
-                                    d_DayReport.HxPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
-                                }
-                                else if (chart.type == 2106)
-                                {
-                                    d_DayReport.XlPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
-                                }
+                                moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = move.score });
                             }
                         }
 
-                        var barCharts = rc.ReportBarChart;
-                        if (barCharts != null)
+                        d_DayReport.SmTdcsPoint = moves.ToJsonString();
+
+                    }
+
+
+                    d_DayReport.SmPjtdsc = sm.MovingAverageLength;//平均体动时长
+
+                }
+                var rc = d1.ReportCharts;
+                if (rc != null)
+                {
+                    var trendCharts = rc.ReportTrendChart;
+
+                    if (trendCharts != null)
+                    {
+                        foreach (var chart in trendCharts)
                         {
-                            foreach (var chart in barCharts)
+                            if (chart.type == 2107)
                             {
-                                var items = chart.Items;
-                                if (items != null)
+                                d_DayReport.HxPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
+                            }
+                            else if (chart.type == 2106)
+                            {
+                                d_DayReport.XlPoint = (new { DataTime = chart.XDataTime, DataValue = chart.XDataValue }).ToJsonString();
+                            }
+                        }
+                    }
+
+                    var barCharts = rc.ReportBarChart;
+                    if (barCharts != null)
+                    {
+                        foreach (var chart in barCharts)
+                        {
+                            var items = chart.Items;
+                            if (items != null)
+                            {
+                                if (chart.ChartTypeId == 2110)
                                 {
-                                    if (chart.ChartTypeId == 2110)
+                                    foreach (var item in items)
                                     {
-                                        foreach (var item in items)
-                                        {
-                                            d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
-                                        }
+                                        d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
                                     }
                                 }
                             }
                         }
                     }
-
-                    d_DayReport.IsSend = true;
-                    d_DayReport.Status = E_SvHealthReportStatus.SendSuccess;
-
-
-                    //todo 暂时一个随机值
-                    Random r1 = new Random();
-                    int healthScoreRatio = r1.Next(80, 85);
-                    Random r2 = new Random();
-                    int smScoreRatio = r2.Next(80, 85);
-
-                    d_DayReport.HealthScoreRatio = healthScoreRatio;
-                    d_DayReport.SmScoreRatio = smScoreRatio;
-
-                    d_DayReport.CreateTime = DateTime.Now;
-                    d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                    if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
-                    {
-                        d_DayReport.IsValid = true;
-                    }
-
-                    if (d_DayReport.SmZcsc > 0)
-                    {
-                        d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmZcsc), 2);
-                    }
-
-                    if (d_DayReport.SmSmsc > 0)
-                    {
-                        d_DayReport.SmSmlxx = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmSmsc), 2);
-                    }
-
-                    CurrentDb.SvHealthDayReport.Add(d_DayReport);
-                    CurrentDb.SaveChanges();
-
-                    //SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
-
-                    #endregion
                 }
 
-
-                if (fisrtReportTime != null)
+                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
                 {
-                    Dictionary<string, object> taskParams = new Dictionary<string, object>();
-                    DateTime? rptStartTime = null;
-                    DateTime? rptEndTime = null;
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("rpt_id", d_DayReport.Id);
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FisrtDay, taskParams);
-                    }
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_SeventhDay, taskParams);
-                    }
-
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FourteenthDay, taskParams);
-                    }
-
-                    DateTime dt1 = lastReportTime.Value;
-                    DateTime dt2 = DateTime.Now;
-                    int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
-                    if (month >= 1)
-                    {
-                        LogUtil.Info("月报生成");
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
-
-                        taskParams = new Dictionary<string, object>();
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_PerMonth, taskParams);
-                    }
-
+                    d_DayReport.IsValid = true;
                 }
 
+                if (d_DayReport.SmZcsc > 0)
+                {
+                    d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmZcsc), 2);
+                }
+
+                if (d_DayReport.SmSmsc > 0)
+                {
+                    d_DayReport.SmSmlxx = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmSmsc), 2);
+                }
+
+                #endregion
+
+                return d_DayReport;
             }
             catch (Exception ex)
             {
                 LogUtil.Error(TAG, ex);
+
+                return null;
             }
         }
-        public void BuildDayReport46(string svUserId, string svDeviceId, string svDeptId)
+
+        private SvHealthDayReport BuildDayReport46(string svUserId, string svDeviceId, string svDeptId)
         {
             try
             {
@@ -1423,9 +1547,7 @@ namespace LocalS.BLL
 
                 if (d1 == null)
                 {
-                    LogUtil.Info(TAG, "DayReport Is Null");
-
-                    return;
+                    return null;
                 }
 
                 var reportpar = d1.reportpar;
@@ -1433,312 +1555,241 @@ namespace LocalS.BLL
                 if (reportpar.userid != svUserId)
                 {
                     LogUtil.Info(TAG, "reportpar.ReportId ：" + reportpar.ReportId + ",reportpar.userid:" + reportpar.userid + ",svUserId:" + svUserId + ",is not");
-                    return;
+                    return null;
                 }
 
                 if (reportpar.sn != svDeviceId)
                 {
                     LogUtil.Info(TAG, "reportpar.ReportId ：" + reportpar.ReportId + ",reportpar.sn:" + reportpar.userid + ",svDeviceId:" + svDeviceId + ",is not");
-                    return;
+                    return null;
                 }
-
-
-
-
-                var d_User = CurrentDb.SvUser.Where(m => m.Id == svUserId).FirstOrDefault();
-
-                if (d_User.FisrtReportTime == null)
-                {
-                    d_User.FisrtReportTime = DateTime.Now;
-                }
-
-
-
-                DateTime? fisrtReportTime = d_User.FisrtReportTime;
-                DateTime? lastReportTime = d_User.LastReportTime;
-
-                d_User.LastReportTime = DateTime.Now;
-                d_User.LastReportId = reportpar.ReportId;
 
                 var d_DayReport = CurrentDb.SvHealthDayReport.Where(m => m.Id == reportpar.ReportId).FirstOrDefault();
 
-                if (d_DayReport == null)
+                if (d_DayReport != null)
+                    return null;
+
+
+                #region DayReport
+                d_DayReport = new SvHealthDayReport();
+                d_DayReport.Id = reportpar.ReportId;
+                d_DayReport.SvUserId = svUserId;
+                d_DayReport.HealthDate = SvUtil.D32LongToDateTime(reportpar.CreateTime);
+                d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
+
+                d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
+
+                d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
+                d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
+                d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
+                d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
+                d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
+                d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
+                d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
+                d_DayReport.QxxlJlqx = reportpar.Sc_an;
+                d_DayReport.QxxlQxxl = SvUtil.D46Decimal(reportpar.qxxl);
+
+                d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
+                d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
+                d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
+                d_DayReport.XlZg = SvUtil.D46Int(reportpar.max);//最高心率
+                d_DayReport.XlZd = SvUtil.D46Int(reportpar.min);//最低心率
+                d_DayReport.XlXdgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
+                d_DayReport.XlXdgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
+                d_DayReport.Xlcg125 = 0;//todo 
+                d_DayReport.Xlcg115 = 0;//todo 
+                d_DayReport.Xlcg085 = 0;//todo 
+                d_DayReport.Xlcg075 = 0;//todo
+
+
+                d_DayReport.HxDcpjhx = SvUtil.D46Int(reportpar.bavg);//	平均呼吸
+                d_DayReport.HxDcjzhx = SvUtil.D46Int(reportpar.br);//基准呼吸值
+                d_DayReport.HxZdhx = SvUtil.D46Int(reportpar.bmin);//当夜最低呼吸率
+                d_DayReport.HxZghx = SvUtil.D46Int(reportpar.bmax);//当夜最高呼吸率
+                d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
+                d_DayReport.HxGksc = 0;//todo 
+                d_DayReport.HxGmsc = 0;//todo 
+
+
+                d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
+                d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
+                                                                  //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
+                                                                  //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
+
+
+                d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
+                d_DayReport.HrvXzznljzz = SvUtil.D46Int(reportpar.BaseTP);//心脏总能量基准值
+                d_DayReport.HrvJgsjzlzs = SvUtil.D46Int(reportpar.LF);//交感神经张力指数
+                d_DayReport.HrvJgsjzlzsjzz = SvUtil.D46Int(reportpar.BaseLF);// 交感神经张力基准值
+                d_DayReport.HrvMzsjzlzs = SvUtil.D46Int(reportpar.HF);//迷走神经张力指数
+                d_DayReport.HrvMzsjzlzsjzz = SvUtil.D46Int(reportpar.BaseHF);//迷走神经张力基准值
+                d_DayReport.HrvZzsjzlzs = SvUtil.D46Decimal(reportpar.LFHF);//自主神经平衡
+                d_DayReport.HrvZzsjzlzsjzz = SvUtil.D46Decimal(reportpar.BaseLFHF);//自主神经平衡基准值
+                d_DayReport.HrvHermzs = SvUtil.D46Decimal(reportpar.ulf);//荷尔蒙指数
+                d_DayReport.HrvHermzsjzz = SvUtil.D46Decimal(reportpar.Baseulf); //荷尔蒙指数基准值
+                d_DayReport.HrvTwjxgsszs = SvUtil.D46Decimal(reportpar.vlf);//体温及血管舒缩指数
+                d_DayReport.HrvTwjxgsszhjzz = SvUtil.D46Decimal(reportpar.Basevlf);//体温及血管舒缩基准值
+
+                d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
+
+                d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
+                d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of);
+                d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
+                d_DayReport.SmScsj = SvUtil.D32LongToDateTime(reportpar.StartTime);//上床时间
+                d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(reportpar.FinishTime);//离床时间
+                d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
+                d_DayReport.SmRssj = SvUtil.D32LongToDateTime(reportpar.OnbedTime);//入睡时间
+                d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(reportpar.OffbedTime);//清醒时间
+                d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds - SvUtil.D46Long(reportpar.of);//睡眠时长
+                d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
+                d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of); //离枕时长
+                                                                  //d_DayReport.SmLzscbl = sm.OffbedRatio;
+                d_DayReport.SmSmzq = SvUtil.D46Int(reportpar.sct);//睡眠周期
+
+                d_DayReport.SmSdsmsc = SvUtil.D46Long(reportpar.dp);//深睡时长
+                d_DayReport.SmSdsmbl = SvUtil.D46Decimal(reportpar.dpr);//深睡期比例
+
+                d_DayReport.SmQdsmsc = SvUtil.D46Long(reportpar.sl);//浅睡期时长
+                d_DayReport.SmQdsmbl = SvUtil.D46Decimal(reportpar.slr);//浅睡期比例
+
+                d_DayReport.SmRemsmsc = SvUtil.D46Long(reportpar.rem);//REM期时长
+                d_DayReport.SmRemsmbl = SvUtil.D46Decimal(reportpar.remr);//REM期比例
+
+                d_DayReport.SmQxsksc = SvUtil.D46Long(reportpar.sr);//REM期时长
+                d_DayReport.SmQxskbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
+
+                d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
+                d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
+                                                                  //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
+                d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
+                d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
+                d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
+                d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
+                d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
+                d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;
+                d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
+
+                //todo 暂时一个随机值
+                ThreadSafeRandom r1 = new ThreadSafeRandom();
+                int healthScoreRatio = r1.Next(80, 90);
+                ThreadSafeRandom r2 = new ThreadSafeRandom();
+                int smScoreRatio = r2.Next(80, 95);
+
+                d_DayReport.HealthScoreRatio = healthScoreRatio;
+                d_DayReport.SmScoreRatio = smScoreRatio;
+
+                var trendcharts = d1.trendchart;
+                if (trendcharts != null)
                 {
-                    #region DayReport
-                    d_DayReport = new SvHealthDayReport();
-                    d_DayReport.Id = reportpar.ReportId;
-                    d_DayReport.SvUserId = svUserId;
-                    d_DayReport.HealthDate = SvUtil.D32LongToDateTime(reportpar.CreateTime);
-                    d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
-
-                    d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
-
-                    d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
-                    d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
-                    d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
-                    d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
-                    d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
-                    d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
-                    d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
-                    d_DayReport.QxxlJlqx = reportpar.Sc_an;
-                    d_DayReport.QxxlQxxl = SvUtil.D46Decimal(reportpar.qxxl);
-
-                    d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
-                    d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
-                    d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
-                    d_DayReport.XlZg = SvUtil.D46Int(reportpar.max);//最高心率
-                    d_DayReport.XlZd = SvUtil.D46Int(reportpar.min);//最低心率
-                    d_DayReport.XlXdgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
-                    d_DayReport.XlXdgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
-                    d_DayReport.Xlcg125 = 0;//todo 
-                    d_DayReport.Xlcg115 = 0;//todo 
-                    d_DayReport.Xlcg085 = 0;//todo 
-                    d_DayReport.Xlcg075 = 0;//todo
+                    var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
 
 
-                    d_DayReport.HxDcpjhx = SvUtil.D46Int(reportpar.bavg);//	平均呼吸
-                    d_DayReport.HxDcjzhx = SvUtil.D46Int(reportpar.br);//基准呼吸值
-                    d_DayReport.HxZdhx = SvUtil.D46Int(reportpar.bmin);//当夜最低呼吸率
-                    d_DayReport.HxZghx = SvUtil.D46Int(reportpar.bmax);//当夜最高呼吸率
-                    d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
-                    d_DayReport.HxGksc = 0;//todo 
-                    d_DayReport.HxGmsc = 0;//todo 
-
-
-                    d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
-                    d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
-                                                                      //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
-                                                                      //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
-
-
-                    d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
-                    d_DayReport.HrvXzznljzz = SvUtil.D46Int(reportpar.BaseTP);//心脏总能量基准值
-                    d_DayReport.HrvJgsjzlzs = SvUtil.D46Int(reportpar.LF);//交感神经张力指数
-                    d_DayReport.HrvJgsjzlzsjzz = SvUtil.D46Int(reportpar.BaseLF);// 交感神经张力基准值
-                    d_DayReport.HrvMzsjzlzs = SvUtil.D46Int(reportpar.HF);//迷走神经张力指数
-                    d_DayReport.HrvMzsjzlzsjzz = SvUtil.D46Int(reportpar.BaseHF);//迷走神经张力基准值
-                    d_DayReport.HrvZzsjzlzs = SvUtil.D46Decimal(reportpar.LFHF);//自主神经平衡
-                    d_DayReport.HrvZzsjzlzsjzz = SvUtil.D46Decimal(reportpar.BaseLFHF);//自主神经平衡基准值
-                    d_DayReport.HrvHermzs = SvUtil.D46Decimal(reportpar.ulf);//荷尔蒙指数
-                    d_DayReport.HrvHermzsjzz = SvUtil.D46Decimal(reportpar.Baseulf); //荷尔蒙指数基准值
-                    d_DayReport.HrvTwjxgsszs = SvUtil.D46Decimal(reportpar.vlf);//体温及血管舒缩指数
-                    d_DayReport.HrvTwjxgsszhjzz = SvUtil.D46Decimal(reportpar.Basevlf);//体温及血管舒缩基准值
-
-                    d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
-
-                    d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
-                    d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of);
-                    d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
-                    d_DayReport.SmScsj = SvUtil.D32LongToDateTime(reportpar.StartTime);//上床时间
-                    d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(reportpar.FinishTime);//离床时间
-                    d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
-                    d_DayReport.SmRssj = SvUtil.D32LongToDateTime(reportpar.OnbedTime);//入睡时间
-                    d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(reportpar.OffbedTime);//清醒时间
-                    d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds - SvUtil.D46Long(reportpar.of);//睡眠时长
-                    d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
-                    d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of); //离枕时长
-                                                                      //d_DayReport.SmLzscbl = sm.OffbedRatio;
-                    d_DayReport.SmSmzq = SvUtil.D46Int(reportpar.sct);//睡眠周期
-
-                    d_DayReport.SmSdsmsc = SvUtil.D46Long(reportpar.dp);//深睡时长
-                    d_DayReport.SmSdsmbl = SvUtil.D46Decimal(reportpar.dpr);//深睡期比例
-
-                    d_DayReport.SmQdsmsc = SvUtil.D46Long(reportpar.sl);//浅睡期时长
-                    d_DayReport.SmQdsmbl = SvUtil.D46Decimal(reportpar.slr);//浅睡期比例
-
-                    d_DayReport.SmRemsmsc = SvUtil.D46Long(reportpar.rem);//REM期时长
-                    d_DayReport.SmRemsmbl = SvUtil.D46Decimal(reportpar.remr);//REM期比例
-
-                    d_DayReport.SmQxsksc = SvUtil.D46Long(reportpar.sr);//REM期时长
-                    d_DayReport.SmQxskbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
-
-                    d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
-                    d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
-                    //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
-                    d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
-                    d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
-                    d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
-                    d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
-                    d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
-                    d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;
-                    d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
-
-                    //todo 暂时一个随机值
-                    ThreadSafeRandom r1 = new ThreadSafeRandom();
-                    int healthScoreRatio = r1.Next(80, 90);
-                    ThreadSafeRandom r2 = new ThreadSafeRandom();
-                    int smScoreRatio = r2.Next(80, 95);
-
-                    d_DayReport.HealthScoreRatio = healthScoreRatio;
-                    d_DayReport.SmScoreRatio = smScoreRatio;
-
-                    var trendcharts = d1.trendchart;
-                    if (trendcharts != null)
+                    foreach (var chart in trendcharts)
                     {
-                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
-
-
-                        foreach (var chart in trendcharts)
+                        if (chart.type == 2107)
                         {
-                            if (chart.type == 2107)
+                            var xdatatimes = new List<long>();
+                            foreach (var i in chart.xdatatime)
                             {
-                                var xdatatimes = new List<long>();
-                                foreach (var i in chart.xdatatime)
-                                {
-                                    xdatatimes.Add(SvUtil.D46Long(smScsj + i));
-                                }
-
-                                d_DayReport.HxPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
+                                xdatatimes.Add(SvUtil.D46Long(smScsj + i));
                             }
-                            else if (chart.type == 2106)
+
+                            d_DayReport.HxPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
+                        }
+                        else if (chart.type == 2106)
+                        {
+                            var xdatatimes = new List<long>();
+                            foreach (var i in chart.xdatatime)
                             {
-                                var xdatatimes = new List<long>();
-                                foreach (var i in chart.xdatatime)
-                                {
-                                    xdatatimes.Add(SvUtil.D46Long(smScsj + i));
-                                }
-
-                                d_DayReport.XlPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
+                                xdatatimes.Add(SvUtil.D46Long(smScsj + i));
                             }
+
+                            d_DayReport.XlPoint = (new { DataTime = xdatatimes, DataValue = chart.xdatavalue }).ToJsonString();
                         }
-                    }
-
-                    var barchart = d1.barchart;
-                    if (barchart != null)
-                    {
-                        if (barchart.type == 2110)
-                        {
-                            var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
-                            var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
-
-                            var items = barchart.items;
-                            if (items != null && items.Count > 0)
-                            {
-                                var sub = items[0];
-                                var item2s = sub.sub;
-                                var dataValues = new List<object>();
-                                foreach (var item in item2s)
-                                {
-                                    dataValues.Add(new { starttime = smScsj + SvUtil.D46Long(item.st), endtime = smScsj + SvUtil.D46Long(item.et), type = SvUtil.D46Int(item.type) });
-                                }
-                                d_DayReport.SmPoint = (new { StartTime = smScsj, EndTime = smLcjs, DataValue = dataValues }).ToJsonString();
-                            }
-                        }
-                    }
-
-                    var mvs = d1.mv;
-                    if (mvs != null)
-                    {
-                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
-                        var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
-                        var tdcsPoints = new List<object>();
-                        foreach (var mv in mvs)
-                        {
-                            tdcsPoints.Add(new { startTime = smScsj + SvUtil.D46Long(mv.s), endTime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
-                        }
-
-                        d_DayReport.SmTdcsPoint = tdcsPoints.ToJsonString();
-
-                    }
-                    var ps = d1.p;
-                    if (ps != null)
-                    {
-                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
-                        var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
-                        var hxztPoints = new List<object>();
-                        foreach (var p in ps)
-                        {
-                            hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
-                        }
-
-                        d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
-                    }
-
-                    d_DayReport.IsSend = false;
-                    d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
-
-                    d_DayReport.CreateTime = DateTime.Now;
-                    d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                    if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
-                    {
-                        d_DayReport.IsValid = true;
-                    }
-
-                    CurrentDb.SvHealthDayReport.Add(d_DayReport);
-                    CurrentDb.SaveChanges();
-
-                    if (d_DayReport.IsValid)
-                    {
-                        SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
-                    }
-
-                    #endregion
-                }
-
-
-                if (fisrtReportTime != null)
-                {
-                    Dictionary<string, object> taskParams = new Dictionary<string, object>();
-                    DateTime? rptStartTime = null;
-                    DateTime? rptEndTime = null;
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("rpt_id", d_DayReport.Id);
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FisrtDay, taskParams);
-                    }
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_SeventhDay, taskParams);
-                    }
-
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FourteenthDay, taskParams);
-                    }
-
-                    DateTime dt1 = lastReportTime.Value;
-                    DateTime dt2 = DateTime.Now;
-                    int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
-                    if (month >= 1)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
-
-                        taskParams = new Dictionary<string, object>();
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_PerMonth, taskParams);
                     }
                 }
 
+                var barchart = d1.barchart;
+                if (barchart != null)
+                {
+                    if (barchart.type == 2110)
+                    {
+                        var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                        var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
+
+                        var items = barchart.items;
+                        if (items != null && items.Count > 0)
+                        {
+                            var sub = items[0];
+                            var item2s = sub.sub;
+                            var dataValues = new List<object>();
+                            foreach (var item in item2s)
+                            {
+                                dataValues.Add(new { starttime = smScsj + SvUtil.D46Long(item.st), endtime = smScsj + SvUtil.D46Long(item.et), type = SvUtil.D46Int(item.type) });
+                            }
+                            d_DayReport.SmPoint = (new { StartTime = smScsj, EndTime = smLcjs, DataValue = dataValues }).ToJsonString();
+                        }
+                    }
+                }
+
+                var mvs = d1.mv;
+                if (mvs != null)
+                {
+                    var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                    var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
+                    var tdcsPoints = new List<object>();
+                    foreach (var mv in mvs)
+                    {
+                        tdcsPoints.Add(new { startTime = smScsj + SvUtil.D46Long(mv.s), endTime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
+                    }
+
+                    d_DayReport.SmTdcsPoint = tdcsPoints.ToJsonString();
+
+                }
+                var ps = d1.p;
+                if (ps != null)
+                {
+                    var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
+                    var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
+                    var hxztPoints = new List<object>();
+                    foreach (var p in ps)
+                    {
+                        hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
+                    }
+
+                    d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
+                }
+
+                d_DayReport.IsSend = false;
+                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
+                d_DayReport.CreateTime = DateTime.Now;
+                d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
+
+                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                {
+                    d_DayReport.IsValid = true;
+                }
+
+                CurrentDb.SvHealthDayReport.Add(d_DayReport);
+                CurrentDb.SaveChanges();
+
+                if (d_DayReport.IsValid)
+                {
+                    SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
+                }
+
+                #endregion
+
+                return d_DayReport;
             }
             catch (Exception ex)
             {
                 LogUtil.Error(TAG, ex);
+
+                return null;
             }
         }
-        //优先级别MerchId,若Merch为空再取deviceId
+
         public WxAppConfig GetWxAppInfoConfigByMerchIdOrDeviceId(string merchId, string svDeviceId)
         {
             LogUtil.Info("merchId:" + merchId + ",deviceId:" + svDeviceId);
@@ -2059,18 +2110,10 @@ namespace LocalS.BLL
             //model.OpenId = "on0dM51JLVry0lnKT4Q8nsJBRXNs";
 
 
-            if (d_SvUser.SvDeptId == "32")
-            {
-                var cofig = GetConfig("32");
-                model.AccessToken = SdkFactory.Senviv.GetWxPaAccessToken(cofig);
-            }
-            else
-            {
-                WxAppConfig config = new WxAppConfig();
-                config.AppId = d_SvMerch.WxPaAppId;
-                config.AppSecret = d_SvMerch.WxPaAppSecret;
-                model.AccessToken = SdkFactory.Wx.GetApiAccessToken(config);
-            }
+            WxAppConfig config = new WxAppConfig();
+            config.AppId = d_SvMerch.WxPaAppId;
+            config.AppSecret = d_SvMerch.WxPaAppSecret;
+            model.AccessToken = SdkFactory.Wx.GetApiAccessToken(config);
 
             switch (template)
             {
