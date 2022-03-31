@@ -604,6 +604,11 @@ namespace LocalS.Service.Api.Merch
 
                 if (payRefund.ApplyMethod == E_PayRefundMethod.Original)
                 {
+                    if ((DateTime.Now - order.SubmittedTime.Value).TotalDays >= 15)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单超过15天不能自动退款，如需要请找系统管理员");
+                    }
+
                     #region  线上处理
                     if (rop.Result == RopPayRefundHandle.E_Result.TurnToAutoRefund)
                     {

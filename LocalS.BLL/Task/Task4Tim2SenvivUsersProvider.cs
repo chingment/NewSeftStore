@@ -16,24 +16,6 @@ namespace LocalS.BLL.Task
     public class Task4Tim2SenvivUsersProvider : BaseService, IJob
     {
         public readonly string TAG = "Task4Tim2SenvivUsersProvider";
-        public DateTime Convert2DateTime(string str)
-        {
-            try
-            {
-                var dt1 = DateTime.Parse("1970-01-01T00:00:00+08:00");
-
-                var dt = DateTime.Parse(str);
-
-                if (dt < dt1)
-                    return dt1;
-
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                return DateTime.Now;
-            }
-        }
 
         public void Execute(IJobExecutionContext context)
         {
