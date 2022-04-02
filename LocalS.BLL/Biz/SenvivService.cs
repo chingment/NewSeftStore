@@ -903,7 +903,7 @@ namespace LocalS.BLL
             }
         }
 
-        public void BuildDayReport(string svUserId, string svDeviceId, string svDeptId)
+        public void BuildDayReport(string svUserId, string svDeviceId, string svDeptId, bool isStopSend)
         {
             SvHealthDayReport r_DayReport = null;
 
@@ -916,191 +916,194 @@ namespace LocalS.BLL
                 r_DayReport = BuildDayReport46(svUserId, svDeviceId, svDeptId);
             }
 
-            if (r_DayReport != null)
+            if (r_DayReport == null)
+                return;
+
+
+            #region DayReport
+            SvHealthDayReport d_DayReport = new SvHealthDayReport();
+            d_DayReport.Id = r_DayReport.Id;
+            d_DayReport.SvUserId = r_DayReport.SvUserId;
+            d_DayReport.HealthDate = r_DayReport.HealthDate;
+            d_DayReport.HealthScore = r_DayReport.HealthScore;
+            d_DayReport.SmTags = r_DayReport.SmTags;
+            d_DayReport.MylMylzs = r_DayReport.MylMylzs;
+            d_DayReport.MylGrfx = r_DayReport.MylGrfx;
+            d_DayReport.MbGxygk = r_DayReport.MbGxygk;
+            d_DayReport.MbTlbgk = r_DayReport.MbTlbgk;
+            d_DayReport.MbGxbgk = r_DayReport.MbGxbgk;
+            d_DayReport.QxxlQxyj = r_DayReport.QxxlQxyj;
+            d_DayReport.QxxlKynl = r_DayReport.QxxlKynl;
+            d_DayReport.QxxlJlqx = r_DayReport.QxxlJlqx;
+            d_DayReport.QxxlQxxl = r_DayReport.QxxlQxxl;
+            d_DayReport.XlDcjzxl = r_DayReport.XlDcjzxl;//当次基准心率
+            d_DayReport.XlCqjzxl = r_DayReport.XlCqjzxl;//长期基准心率
+            d_DayReport.XlDcpjxl = r_DayReport.XlDcpjxl;//当次平均心率
+            d_DayReport.XlZg = r_DayReport.XlZg;//最高心率
+            d_DayReport.XlZd = r_DayReport.XlZd;//最低心率
+            d_DayReport.XlXdgksc = r_DayReport.XlXdgksc;//心动过快时长
+            d_DayReport.XlXdgmsc = r_DayReport.XlXdgmsc;//心动过慢时长
+            d_DayReport.Xlcg125 = r_DayReport.Xlcg125;//todo 
+            d_DayReport.Xlcg115 = r_DayReport.Xlcg115;//todo 
+            d_DayReport.Xlcg085 = r_DayReport.Xlcg085;//todo 
+            d_DayReport.Xlcg075 = r_DayReport.Xlcg075;//todo
+            d_DayReport.HxDcpjhx = r_DayReport.HxDcpjhx;//	平均呼吸
+            d_DayReport.HxDcjzhx = r_DayReport.HxDcjzhx;//基准呼吸值
+            d_DayReport.HxZdhx = r_DayReport.HxZdhx;//当夜最低呼吸率
+            d_DayReport.HxZghx = r_DayReport.HxZghx;//当夜最高呼吸率
+            d_DayReport.HxCqjzhx = r_DayReport.HxCqjzhx; //长期基准呼吸
+            d_DayReport.HxGksc = r_DayReport.HxGksc;//todo 
+            d_DayReport.HxGmsc = r_DayReport.HxGmsc;//todo 
+            d_DayReport.HxZtahizs = r_DayReport.HxZtahizs;//AHI指数
+            d_DayReport.HxZtcs = r_DayReport.HxZtcs;//呼吸暂停次数
+            d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
+            d_DayReport.HxZtpjsc = r_DayReport.HxZtpjsc;//呼吸暂停平均时长
+            d_DayReport.HrvXzznl = r_DayReport.HrvXzznl;//心脏总能量
+            d_DayReport.HrvXzznljzz = r_DayReport.HrvXzznljzz;//心脏总能量基准值
+            d_DayReport.HrvJgsjzlzs = r_DayReport.HrvJgsjzlzs;//交感神经张力指数
+            d_DayReport.HrvJgsjzlzsjzz = r_DayReport.HrvJgsjzlzsjzz;// 交感神经张力基准值
+            d_DayReport.HrvMzsjzlzs = r_DayReport.HrvMzsjzlzs;//迷走神经张力指数
+            d_DayReport.HrvMzsjzlzsjzz = r_DayReport.HrvMzsjzlzsjzz;//迷走神经张力基准值
+            d_DayReport.HrvZzsjzlzs = r_DayReport.HrvZzsjzlzs;//自主神经平衡
+            d_DayReport.HrvZzsjzlzsjzz = r_DayReport.HrvZzsjzlzsjzz;//自主神经平衡基准值
+            d_DayReport.HrvHermzs = r_DayReport.HrvHermzs;//荷尔蒙指数
+            d_DayReport.HrvHermzsjzz = r_DayReport.HrvHermzsjzz; //荷尔蒙指数基准值
+            d_DayReport.HrvTwjxgsszs = r_DayReport.HrvTwjxgsszs;//体温及血管舒缩指数
+            d_DayReport.HrvTwjxgsszhjzz = r_DayReport.HrvTwjxgsszhjzz;//体温及血管舒缩基准值
+            d_DayReport.JbfxXlscfx = r_DayReport.JbfxXlscfx;//心律失常风险指数
+            d_DayReport.JbfxXljsl = r_DayReport.JbfxXljsl;
+            d_DayReport.SmLzsc = r_DayReport.SmLzsc;
+            d_DayReport.SmScore = r_DayReport.SmScore;//睡眠分数
+            d_DayReport.SmScsj = r_DayReport.SmScsj;//上床时间
+            d_DayReport.SmLcsj = r_DayReport.SmLcsj;//离床时间
+            d_DayReport.SmZcsc = r_DayReport.SmZcsc;//起床时刻
+            d_DayReport.SmRssj = r_DayReport.SmRssj;//入睡时间
+            d_DayReport.SmQxsj = r_DayReport.SmQxsj;//清醒时间
+            d_DayReport.SmSmsc = r_DayReport.SmSmsc;//睡眠时长
+            d_DayReport.SmRsxs = r_DayReport.SmRsxs;//入睡需时
+            d_DayReport.SmLzsc = r_DayReport.SmLzsc; //离枕时长
+            d_DayReport.SmLzscbl = r_DayReport.SmLzscbl;
+            d_DayReport.SmSmzq = r_DayReport.SmSmzq;//睡眠周期
+            d_DayReport.SmSdsmsc = r_DayReport.SmSdsmsc;//深睡时长
+            d_DayReport.SmSdsmbl = r_DayReport.SmSdsmbl;//深睡期比例
+            d_DayReport.SmQdsmsc = r_DayReport.SmQdsmsc;//浅睡期时长
+            d_DayReport.SmQdsmbl = r_DayReport.SmQdsmbl;//浅睡期比例
+            d_DayReport.SmRemsmsc = r_DayReport.SmRemsmsc;//REM期时长
+            d_DayReport.SmRemsmbl = r_DayReport.SmRemsmbl;//REM期比例
+            d_DayReport.SmQxsksc = r_DayReport.SmQxsksc;//REM期时长
+            d_DayReport.SmQxskbl = r_DayReport.SmQxskbl;//REM期比例
+            d_DayReport.SmLzcs = r_DayReport.SmLzcs;
+            d_DayReport.SmTdcs = r_DayReport.SmTdcs;//体动次数
+            d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
+            d_DayReport.SmPjtdsc = r_DayReport.SmPjtdsc;//平均体动时长
+            d_DayReport.SmSmxl = r_DayReport.SmSmxl;
+            d_DayReport.SmSmlxx = r_DayReport.SmSmlxx;
+            d_DayReport.ZsGmSr = r_DayReport.ZsGmSr;
+            d_DayReport.ZsGmYp = r_DayReport.ZsGmYp;
+            d_DayReport.ZsGmYq = r_DayReport.ZsGmYq;
+            d_DayReport.ZsGmMl = r_DayReport.ZsGmMl;
+            d_DayReport.HxPoint = r_DayReport.HxPoint;
+            d_DayReport.XlPoint = r_DayReport.XlPoint;
+            d_DayReport.SmPoint = r_DayReport.SmPoint;
+            d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
+            d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
+            d_DayReport.IsSend = false;
+            d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
+
+            if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
             {
-                #region DayReport
-                SvHealthDayReport d_DayReport = new SvHealthDayReport();
-                d_DayReport.Id = r_DayReport.Id;
-                d_DayReport.SvUserId = r_DayReport.SvUserId;
-                d_DayReport.HealthDate = r_DayReport.HealthDate;
-                d_DayReport.HealthScore = r_DayReport.HealthScore;
-                d_DayReport.SmTags = r_DayReport.SmTags;
-                d_DayReport.MylMylzs = r_DayReport.MylMylzs;
-                d_DayReport.MylGrfx = r_DayReport.MylGrfx;
-                d_DayReport.MbGxygk = r_DayReport.MbGxygk;
-                d_DayReport.MbTlbgk = r_DayReport.MbTlbgk;
-                d_DayReport.MbGxbgk = r_DayReport.MbGxbgk;
-                d_DayReport.QxxlQxyj = r_DayReport.QxxlQxyj;
-                d_DayReport.QxxlKynl = r_DayReport.QxxlKynl;
-                d_DayReport.QxxlJlqx = r_DayReport.QxxlJlqx;
-                d_DayReport.QxxlQxxl = r_DayReport.QxxlQxxl;
-                d_DayReport.XlDcjzxl = r_DayReport.XlDcjzxl;//当次基准心率
-                d_DayReport.XlCqjzxl = r_DayReport.XlCqjzxl;//长期基准心率
-                d_DayReport.XlDcpjxl = r_DayReport.XlDcpjxl;//当次平均心率
-                d_DayReport.XlZg = r_DayReport.XlZg;//最高心率
-                d_DayReport.XlZd = r_DayReport.XlZd;//最低心率
-                d_DayReport.XlXdgksc = r_DayReport.XlXdgksc;//心动过快时长
-                d_DayReport.XlXdgmsc = r_DayReport.XlXdgmsc;//心动过慢时长
-                d_DayReport.Xlcg125 = r_DayReport.Xlcg125;//todo 
-                d_DayReport.Xlcg115 = r_DayReport.Xlcg115;//todo 
-                d_DayReport.Xlcg085 = r_DayReport.Xlcg085;//todo 
-                d_DayReport.Xlcg075 = r_DayReport.Xlcg075;//todo
-                d_DayReport.HxDcpjhx = r_DayReport.HxDcpjhx;//	平均呼吸
-                d_DayReport.HxDcjzhx = r_DayReport.HxDcjzhx;//基准呼吸值
-                d_DayReport.HxZdhx = r_DayReport.HxZdhx;//当夜最低呼吸率
-                d_DayReport.HxZghx = r_DayReport.HxZghx;//当夜最高呼吸率
-                d_DayReport.HxCqjzhx = r_DayReport.HxCqjzhx; //长期基准呼吸
-                d_DayReport.HxGksc = r_DayReport.HxGksc;//todo 
-                d_DayReport.HxGmsc = r_DayReport.HxGmsc;//todo 
-                d_DayReport.HxZtahizs = r_DayReport.HxZtahizs;//AHI指数
-                d_DayReport.HxZtcs = r_DayReport.HxZtcs;//呼吸暂停次数
-                d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
-                d_DayReport.HxZtpjsc = r_DayReport.HxZtpjsc;//呼吸暂停平均时长
-                d_DayReport.HrvXzznl = r_DayReport.HrvXzznl;//心脏总能量
-                d_DayReport.HrvXzznljzz = r_DayReport.HrvXzznljzz;//心脏总能量基准值
-                d_DayReport.HrvJgsjzlzs = r_DayReport.HrvJgsjzlzs;//交感神经张力指数
-                d_DayReport.HrvJgsjzlzsjzz = r_DayReport.HrvJgsjzlzsjzz;// 交感神经张力基准值
-                d_DayReport.HrvMzsjzlzs = r_DayReport.HrvMzsjzlzs;//迷走神经张力指数
-                d_DayReport.HrvMzsjzlzsjzz = r_DayReport.HrvMzsjzlzsjzz;//迷走神经张力基准值
-                d_DayReport.HrvZzsjzlzs = r_DayReport.HrvZzsjzlzs;//自主神经平衡
-                d_DayReport.HrvZzsjzlzsjzz = r_DayReport.HrvZzsjzlzsjzz;//自主神经平衡基准值
-                d_DayReport.HrvHermzs = r_DayReport.HrvHermzs;//荷尔蒙指数
-                d_DayReport.HrvHermzsjzz = r_DayReport.HrvHermzsjzz; //荷尔蒙指数基准值
-                d_DayReport.HrvTwjxgsszs = r_DayReport.HrvTwjxgsszs;//体温及血管舒缩指数
-                d_DayReport.HrvTwjxgsszhjzz = r_DayReport.HrvTwjxgsszhjzz;//体温及血管舒缩基准值
-                d_DayReport.JbfxXlscfx = r_DayReport.JbfxXlscfx;//心律失常风险指数
-                d_DayReport.JbfxXljsl = r_DayReport.JbfxXljsl;
-                d_DayReport.SmLzsc = r_DayReport.SmLzsc;
-                d_DayReport.SmScore = r_DayReport.SmScore;//睡眠分数
-                d_DayReport.SmScsj = r_DayReport.SmScsj;//上床时间
-                d_DayReport.SmLcsj = r_DayReport.SmLcsj;//离床时间
-                d_DayReport.SmZcsc = r_DayReport.SmZcsc;//起床时刻
-                d_DayReport.SmRssj = r_DayReport.SmRssj;//入睡时间
-                d_DayReport.SmQxsj = r_DayReport.SmQxsj;//清醒时间
-                d_DayReport.SmSmsc = r_DayReport.SmSmsc;//睡眠时长
-                d_DayReport.SmRsxs = r_DayReport.SmRsxs;//入睡需时
-                d_DayReport.SmLzsc = r_DayReport.SmLzsc; //离枕时长
-                d_DayReport.SmLzscbl = r_DayReport.SmLzscbl;
-                d_DayReport.SmSmzq = r_DayReport.SmSmzq;//睡眠周期
-                d_DayReport.SmSdsmsc = r_DayReport.SmSdsmsc;//深睡时长
-                d_DayReport.SmSdsmbl = r_DayReport.SmSdsmbl;//深睡期比例
-                d_DayReport.SmQdsmsc = r_DayReport.SmQdsmsc;//浅睡期时长
-                d_DayReport.SmQdsmbl = r_DayReport.SmQdsmbl;//浅睡期比例
-                d_DayReport.SmRemsmsc = r_DayReport.SmRemsmsc;//REM期时长
-                d_DayReport.SmRemsmbl = r_DayReport.SmRemsmbl;//REM期比例
-                d_DayReport.SmQxsksc = r_DayReport.SmQxsksc;//REM期时长
-                d_DayReport.SmQxskbl = r_DayReport.SmQxskbl;//REM期比例
-                d_DayReport.SmLzcs = r_DayReport.SmLzcs;
-                d_DayReport.SmTdcs = r_DayReport.SmTdcs;//体动次数
-                d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
-                d_DayReport.SmPjtdsc = r_DayReport.SmPjtdsc;//平均体动时长
-                d_DayReport.SmSmxl = r_DayReport.SmSmxl;
-                d_DayReport.SmSmlxx = r_DayReport.SmSmlxx;
-                d_DayReport.ZsGmSr = r_DayReport.ZsGmSr;
-                d_DayReport.ZsGmYp = r_DayReport.ZsGmYp;
-                d_DayReport.ZsGmYq = r_DayReport.ZsGmYq;
-                d_DayReport.ZsGmMl = r_DayReport.ZsGmMl;
-                d_DayReport.HxPoint = r_DayReport.HxPoint;
-                d_DayReport.XlPoint = r_DayReport.XlPoint;
-                d_DayReport.SmPoint = r_DayReport.SmPoint;
-                d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
-                d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
-                d_DayReport.IsSend = false;
-                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
-                d_DayReport.CreateTime = DateTime.Now;
-                d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
-
-                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
-                {
-                    d_DayReport.IsValid = true;
-                }
-
-                //todo 暂时一个随机值
-                ThreadSafeRandom r1 = new ThreadSafeRandom();
-                int healthScoreRatio = r1.Next(80, 90);
-                ThreadSafeRandom r2 = new ThreadSafeRandom();
-                int smScoreRatio = r2.Next(80, 95);
-            
-                d_DayReport.HealthScoreRatio = healthScoreRatio;
-                d_DayReport.SmScoreRatio = smScoreRatio;
-
-                CurrentDb.SvHealthDayReport.Add(d_DayReport);
-                CurrentDb.SaveChanges();
-
-                if (d_DayReport.IsValid)
-                {
-                    SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
-                }
-
-                #endregion
-
-                var d_User = CurrentDb.SvUser.Where(m => m.Id == svUserId).FirstOrDefault();
-
-                if (d_User.FisrtReportTime == null)
-                {
-                    d_User.FisrtReportTime = DateTime.Now;
-                }
-
-                DateTime? fisrtReportTime = d_User.FisrtReportTime;
-                DateTime? lastReportTime = DateTime.Now;
-                d_User.LastReportTime = lastReportTime;
-                d_User.LastReportId = d_DayReport.Id;
-
-                if (fisrtReportTime != null)
-                {
-                    Dictionary<string, object> taskParams = new Dictionary<string, object>();
-                    DateTime? rptStartTime = null;
-                    DateTime? rptEndTime = null;
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 0)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("rpt_id", d_DayReport.Id);
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FisrtDay, taskParams);
-                    }
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 7)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_SeventhDay, taskParams);
-                    }
-
-
-                    if ((DateTime.Now - fisrtReportTime).Value.Days == 14)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(fisrtReportTime.ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
-
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FourteenthDay, taskParams);
-                    }
-
-                    DateTime dt1 = lastReportTime.Value;
-                    DateTime dt2 = DateTime.Now;
-                    int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
-                    if (month >= 1)
-                    {
-                        rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
-                        rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
-
-                        taskParams = new Dictionary<string, object>();
-                        taskParams.Add("start_time", rptStartTime);
-                        taskParams.Add("end_time", rptEndTime);
-
-                        BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_PerMonth, taskParams);
-                    }
-                }
+                d_DayReport.IsValid = true;
             }
+
+            //todo 暂时一个随机值
+            ThreadSafeRandom r1 = new ThreadSafeRandom();
+            int healthScoreRatio = r1.Next(80, 90);
+            ThreadSafeRandom r2 = new ThreadSafeRandom();
+            int smScoreRatio = r2.Next(80, 95);
+
+            d_DayReport.HealthScoreRatio = healthScoreRatio;
+            d_DayReport.SmScoreRatio = smScoreRatio;
+
+            d_DayReport.CreateTime = DateTime.Now;
+            d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
+            CurrentDb.SvHealthDayReport.Add(d_DayReport);
+            CurrentDb.SaveChanges();
+
+            #endregion
+
+            if (!d_DayReport.IsValid)
+                return;
+
+            SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
+
+            var d_User = CurrentDb.SvUser.Where(m => m.Id == svUserId).FirstOrDefault();
+
+            if (d_User.FisrtReportTime == null)
+            {
+                d_User.FisrtReportTime = DateTime.Now;
+            }
+
+            d_User.LastReportTime = DateTime.Now;
+            d_User.LastReportId = d_DayReport.Id;
+            d_User.Mender = IdWorker.Build(IdType.EmptyGuid);
+            d_User.MendTime = DateTime.Now;
+            CurrentDb.SaveChanges();
+
+            if (d_User.FisrtReportTime == null)
+                return;
+
+            Dictionary<string, object> taskParams = new Dictionary<string, object>();
+            DateTime? rptStartTime = null;
+            DateTime? rptEndTime = null;
+            if ((DateTime.Now - d_User.FisrtReportTime).Value.Days == 0)
+            {
+                rptStartTime = Lumos.CommonUtil.ConverToStartTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+                rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                taskParams.Add("rpt_id", d_DayReport.Id);
+                taskParams.Add("start_time", rptStartTime);
+                taskParams.Add("end_time", rptEndTime);
+                BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FisrtDay, taskParams);
+            }
+
+            if ((DateTime.Now - d_User.FisrtReportTime).Value.Days == 7)
+            {
+                rptStartTime = Lumos.CommonUtil.ConverToStartTime(d_User.FisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                taskParams.Add("start_time", rptStartTime);
+                taskParams.Add("end_time", rptEndTime);
+
+                BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_SeventhDay, taskParams);
+            }
+
+
+            if ((DateTime.Now - d_User.FisrtReportTime).Value.Days == 14)
+            {
+                rptStartTime = Lumos.CommonUtil.ConverToStartTime(d_User.FisrtReportTime.ToUnifiedFormatDateTime()).Value;
+                rptEndTime = Lumos.CommonUtil.ConverToEndTime(DateTime.Now.ToUnifiedFormatDateTime()).Value;
+
+                taskParams.Add("start_time", rptStartTime);
+                taskParams.Add("end_time", rptEndTime);
+
+                BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_FourteenthDay, taskParams);
+            }
+
+            DateTime dt1 = d_User.LastReportTime.Value;
+            DateTime dt2 = DateTime.Now;
+            int month = (dt2.Year - dt1.Year) * 12 + (dt2.Month - dt1.Month);
+            if (month >= 1)
+            {
+                rptStartTime = Lumos.CommonUtil.ConverToStartTime(new DateTime(dt1.Year, dt1.Month, 1).ToUnifiedFormatDateTime()).Value;
+                rptEndTime = Lumos.CommonUtil.ConverToEndTime((rptStartTime.Value.AddMonths(1).AddDays(-1)).ToUnifiedFormatDateTime()).Value;
+
+                taskParams = new Dictionary<string, object>();
+                taskParams.Add("start_time", rptStartTime);
+                taskParams.Add("end_time", rptEndTime);
+
+                BuildTask(IdWorker.Build(IdType.EmptyGuid), svUserId, E_SvTaskType.Health_Monitor_PerMonth, taskParams);
+            }
+
         }
 
         private SvHealthDayReport BuildDayReport32(string svUserId, string svDeviceId, string svDeptId)

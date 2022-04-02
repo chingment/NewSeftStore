@@ -28,9 +28,8 @@ namespace LocalS.Entity
         public DateTime? InfoFillTime { get; set; }
         public DateTime? UnBindTime { get; set; }
         public E_SvUserDeviceBindStatus BindStatus { get; set; }
-
         public string TcpAddress { get; set; }
-
+        public bool IsStopSend { get; set; }
         public string WebUrl { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

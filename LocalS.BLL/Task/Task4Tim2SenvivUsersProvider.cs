@@ -27,21 +27,21 @@ namespace LocalS.BLL.Task
                 {
                     var config_Senviv = BizFactory.Senviv.GetConfig(svDeptId);
 
-                    var i_SenvivBoxs = SdkFactory.Senviv.GetBoxList(config_Senviv);
+                    var i_Devices = SdkFactory.Senviv.GetDevices(config_Senviv);
 
-                    foreach (var i_SenvivBox in i_SenvivBoxs)
+                    foreach (var i_Device in i_Devices)
                     {
-                        var d_Device = CurrentDb.Device.Where(m => m.Id == i_SenvivBox.sn).FirstOrDefault();
+                        var d_Device = CurrentDb.Device.Where(m => m.Id == i_Device.sn).FirstOrDefault();
                         if (d_Device == null)
                         {
                             d_Device = new Entity.Device();
-                            d_Device.Id = i_SenvivBox.sn;
+                            d_Device.Id = i_Device.sn;
                             d_Device.Name = "非接触式生命体征检测仪";
                             d_Device.Type = "senvivlite";
-                            d_Device.ImeiId = i_SenvivBox.imei;
+                            d_Device.ImeiId = i_Device.imei;
                             d_Device.CurUseMerchId = "88273829";
-                            d_Device.Model = i_SenvivBox.model;
-                            d_Device.AppVersionName = i_SenvivBox.version;
+                            d_Device.Model = i_Device.model;
+                            d_Device.AppVersionName = i_Device.version;
                             d_Device.Creator = IdWorker.Build(IdType.EmptyGuid);
                             d_Device.CreateTime = DateTime.Now;
                             d_Device.SvDeptId = svDeptId;
@@ -60,15 +60,33 @@ namespace LocalS.BLL.Task
                         }
                     }
 
+
+                    var i_SvUsers = SdkFactory.Senviv.GetUsers(config_Senviv);
+
+                    foreach (var i_SvUser in i_SvUsers)
+                    {
+                        var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == i_SvUser.userid).FirstOrDefault();
+                        if (d_SvUser != null)
+                        {
+                            if (i_SvUser.products == null || i_SvUser.products.Count == 0)
+                            {
+                                d_SvUser.DeviceCount = 0;
+                            }
+                            else
+                            {
+                                d_SvUser.DeviceCount = i_SvUser.products.Count;
+                            }
+
+                            CurrentDb.SaveChanges();
+                        }
+                    }
                 }
 
-                var d_SvUsers = CurrentDb.SvUser.ToList();
-
-                foreach (var d_SvUser in d_SvUsers)
+                var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.BindStatus == Entity.E_SvUserDeviceBindStatus.Binded).ToList();
+                foreach (var d_SvUserDevice in d_SvUserDevices)
                 {
-                    BizFactory.Senviv.BuildDayReport(d_SvUser.Id, "", d_SvUser.SvDeptId);
+                    BizFactory.Senviv.BuildDayReport(d_SvUserDevice.SvUserId, d_SvUserDevice.DeviceId, d_SvUserDevice.SvDeptId, d_SvUserDevice.IsStopSend);
                 }
-
             }
             catch (Exception ex)
             {

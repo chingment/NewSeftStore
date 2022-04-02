@@ -87,7 +87,7 @@ namespace LocalS.BLL
             return accessToken;
         }
 
-        public List<SenvivSdk.UserListResult.DataModel> GetUserList(SenvivConfig config)
+        public List<SenvivSdk.UserListResult.DataModel> GetUsers(SenvivConfig config)
         {
             var list = new List<SenvivSdk.UserListResult.DataModel>();
 
@@ -130,7 +130,7 @@ namespace LocalS.BLL
             return list;
         }
 
-        public List<SenvivSdk.BoxListResult.DataModel> GetBoxList(SenvivConfig config)
+        public List<SenvivSdk.BoxListResult.DataModel> GetDevices(SenvivConfig config)
         {
             var list = new List<SenvivSdk.BoxListResult.DataModel>();
 
