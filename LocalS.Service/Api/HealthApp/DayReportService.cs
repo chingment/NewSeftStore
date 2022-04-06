@@ -20,6 +20,8 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_SvUser = CurrentDb.SvUser.Where(m => m.Id == d_DayRpt.SvUserId).FirstOrDefault();
 
+            int reportCount = 0;
+
             var togetherDays = (int)(d_DayRpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
 
 
@@ -155,7 +157,7 @@ namespace LocalS.Service.Api.HealthApp
             smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc, "2"));
             smDvs.Add(SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs));
             smDvs.Add(SvUtil.GetXlDcjzxl(d_DayRpt.XlDcjzxl));
-            smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl));
+            smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl, d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount));
             #endregion
 
 
@@ -177,7 +179,7 @@ namespace LocalS.Service.Api.HealthApp
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_DayRpt.RptSuggest,
                     HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl,d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount),
                     SmSmxl = SvUtil.GetSmSmxl(d_DayRpt.SmSmxl),
                     SmSmlxx = SvUtil.GetSmSmlxx(d_DayRpt.SmSmlxx),
                     SmSdsmbl = SvUtil.GetSmSdsmbl(d_DayRpt.SmSdsmbl),

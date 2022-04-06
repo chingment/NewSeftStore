@@ -27,6 +27,7 @@ namespace LocalS.Service.Api.HealthApp
                            tt.FullName,
                            tt.Birthday,
                            tt.Avatar,
+                           tt.ReportCount,
                            u.SmTags,
                            u.HealthScore,
                            u.HealthDate,
@@ -41,6 +42,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.JbfxXljsl,
                            u.JbfxXlscfx,
                            u.HrvXzznl,
+                           u.HrvXzznljzz,
                            u.HrvJgsjzlzs,
                            u.HrvMzsjzlzs,
                            u.HrvZzsjzlzs,
@@ -119,7 +121,7 @@ namespace LocalS.Service.Api.HealthApp
                     JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_StageRpt.JbfxXlscfx),
                     JbfxXljsl = SvUtil.GetJbfxXljsl(d_StageRpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl,d_StageRpt.HrvXzznljzz, d_StageRpt.ReportCount),
                     //交感神经张力指数
                     HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(d_StageRpt.HrvJgsjzlzs),
                     //迷走神经张力指数
@@ -174,10 +176,19 @@ namespace LocalS.Service.Api.HealthApp
             var result = new CustomJsonResult();
 
             var d_StageRpt = (from u in CurrentDb.SvHealthStageReport
-                       where u.Id == rptId
+
+                              join s in CurrentDb.SvUser on u.SvUserId equals s.Id into temp
+                              from tt in temp.DefaultIfEmpty()
+                              where u.Id == rptId
+  
                        select new
                        {
                            u.Id,
+                           tt.Sex,
+                           tt.FullName,
+                           tt.Birthday,
+                           tt.Avatar,
+                           tt.ReportCount,
                            u.HealthScore,
                            u.HealthDate,
                            u.SmTags,
@@ -186,6 +197,7 @@ namespace LocalS.Service.Api.HealthApp
                            u.SmQdsmsc,
                            u.SmRemsmsc,
                            u.HrvXzznl,
+                           u.HrvXzznljzz,
                            u.XlDcpjxl,
                            u.HxDcpjhx,
                            u.HxZtcs,
@@ -220,7 +232,7 @@ namespace LocalS.Service.Api.HealthApp
                 SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc, "1"),
                 SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
                 SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
-                HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl),
+                HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl,d_StageRpt.HrvXzznljzz, d_StageRpt.ReportCount),
                 HxDcpjhx = SvUtil.GetHxDcpjhx(d_StageRpt.HxDcpjhx),
                 XlDcpjxl = SvUtil.GetXlDcpjxl(d_StageRpt.XlDcpjxl),
                 HxZtcs = SvUtil.GetHxZtcs(d_StageRpt.HxZtcs),

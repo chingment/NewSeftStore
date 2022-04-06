@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.Merch
             string svUserId = "461x847d0217EA";
             var d_DayReports = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true).OrderBy(m => m.CreateTime).Take(7).ToList();
 
-            d_DayReports = d_DayReports.OrderBy(m=>m.HealthDate).ToList();
+            d_DayReports = d_DayReports.OrderBy(m => m.HealthDate).ToList();
             foreach (var d_DayReport in d_DayReports)
             {
                 foreach (var openId in openIds)
@@ -424,6 +424,7 @@ namespace LocalS.Service.Api.Merch
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
+                             tt.ReportCount,
                              u.HealthScore,
                              u.HealthDate,
                              u.SmTags,
@@ -440,6 +441,7 @@ namespace LocalS.Service.Api.Merch
                              u.JbfxXljsl,
                              u.JbfxXlscfx,
                              u.HrvXzznl,
+                             u.HrvXzznljzz,
                              u.HrvJgsjzlzs,
                              u.HrvMzsjzlzs,
                              u.HrvZzsjzlzs,
@@ -520,7 +522,7 @@ namespace LocalS.Service.Api.Merch
                     JbfxXlscfx = SvUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
                     JbfxXljsl = SvUtil.GetJbfxXljsl(rpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl, rpt.HrvXzznljzz, rpt.ReportCount),
                     //交感神经张力指数
                     HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
                     //迷走神经张力指数
@@ -601,6 +603,7 @@ namespace LocalS.Service.Api.Merch
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
+                             tt.ReportCount,
                              u.HealthScore,
                              u.HealthDate,
                              u.SmTags,
@@ -755,7 +758,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx),
                     JbfxXljsl = SvUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl, d_Rpt.HrvXzznljzz, d_Rpt.ReportCount),
                     //心脏总能量基准值
                     d_Rpt.HrvXzznljzz,
                     //交感神经张力指数
@@ -875,6 +878,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              tt.FullName,
                              tt.Birthday,
                              tt.Avatar,
+                             tt.ReportCount,
                              u.HealthScore,
                              u.HealthDate,
                              u.MylGrfx,
@@ -888,6 +892,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              u.JbfxXljsl,
                              u.JbfxXlscfx,
                              u.HrvXzznl,
+                             u.HrvXzznljzz,
                              u.HrvJgsjzlzs,
                              u.HrvMzsjzlzs,
                              u.HrvZzsjzlzs,
@@ -990,7 +995,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     JbfxXlscfx = SvUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
                     JbfxXljsl = SvUtil.GetJbfxXljsl(rpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl, rpt.HrvXzznljzz, rpt.ReportCount),
                     //交感神经张力指数
                     HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
                     //迷走神经张力指数
@@ -1075,6 +1080,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.JbfxXljsl,
                            u.JbfxXlscfx,
                            u.HrvXzznl,
+                           u.HrvXzznljzz,
                            u.HrvJgsjzlzs,
                            u.HrvMzsjzlzs,
                            u.HrvZzsjzlzs,
@@ -1117,6 +1123,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.JbfxXljslPt,
                            u.JbfxXlscfxPt,
                            u.TimeFrameStaPt,
+                           tt.ReportCount,
                            u.CreateTime
                        }).FirstOrDefault();
 
@@ -1149,7 +1156,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     JbfxXlscfx = SvUtil.GetJbfxXlscfx(rpt.JbfxXlscfx),
                     JbfxXljsl = SvUtil.GetJbfxXljsl(rpt.JbfxXljsl),
                     //心脏总能量
-                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl),
+                    HrvXzznl = SvUtil.GetHrvXzznl(rpt.HrvXzznl, rpt.HrvXzznljzz, rpt.ReportCount),
                     //交感神经张力指数
                     HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(rpt.HrvJgsjzlzs),
                     //迷走神经张力指数

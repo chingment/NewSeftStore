@@ -18,12 +18,12 @@ namespace LocalS.BLL
 
     public class SvUtil
     {
-        public readonly static string CA_0 = "#628DF2";//666666
-        public readonly static string CA_1 = "#e68a8b";
-        public readonly static string CA_2 = "#f1b46d";
-        public readonly static string CA_3 = "#e16d6d";
-        public readonly static string CA_4 = "#96a2dc";
-        public readonly static string CA_5 = "#628DF2";
+        public readonly static string CA_0 = "#628DF2";//蓝色
+        public readonly static string CA_1 = "#e68a8b";//红色
+        public readonly static string CA_2 = "#f1b46d";//橙色
+        public readonly static string CA_3 = "#e16d6d";//红色
+        public readonly static string CA_4 = "#96a2dc";//紫色
+        public readonly static string CA_5 = "#628DF2";//蓝色
 
         public static FieldModel GetLadyIdentity(E_SvUserCareMode value)
         {
@@ -1226,23 +1226,47 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHrvXzznl(decimal val)
+        public static SvDataJd GetHrvXzznl(decimal val, decimal jzz, int reportCount)
         {
             var jd = new SvDataJd();
             jd.Name = "心脏总能量";
             jd.Value = val.ToString();
-            jd.RefRange = "2300~5000";
-            if (val < 2300)
+
+            long var1 = 2000;
+            long var2 = 3000;
+            long var3 = 6000;
+            long var4 = 8000;
+
+            if (reportCount >= 8)
             {
-                jd.Set("低", "↓", CA_1);
+                var1 = D46Long(jzz * 0.5m);
+                var2 = D46Long(jzz * 0.75m);
+                var3 = D46Long(jzz * 1.5m);
+                var4 = D46Long(jzz * 2m);
             }
-            else if (val >= 2300 && val <= 5000)
+
+
+            jd.RefRange = var2 + "~" + var3;
+
+            if (val < var1)
+            {
+                jd.Set("偏低", "↓↓", CA_3);
+            }
+            else if (val >= var1 && val < var2)
+            {
+                jd.Set("低", "↓", CA_2);
+            }
+            else if (val >= var2 && val < var3)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (val > 30)
+            else if (val >= var3 && val < var4)
             {
-                jd.Set("高", "↑", CA_1);
+                jd.Set("高", "↑", CA_2);
+            }
+            else if (val >= var4)
+            {
+                jd.Set("偏高", "↑↑", CA_3);
             }
 
             return jd;
