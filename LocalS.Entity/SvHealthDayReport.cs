@@ -156,6 +156,10 @@ namespace LocalS.Entity
         public decimal MbGxbgk { get; set; }
         //糖尿病管控
         public decimal MbTlbgk { get; set; }
+
+        public decimal MbXytjjn { get; set; }
+        public decimal MbGzdmjn { get; set; }
+        public decimal MbXtphjn { get; set; }
         //焦虑情绪
         public string QxxlJlqx { get; set; }
         //抗压能力

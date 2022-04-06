@@ -932,6 +932,10 @@ namespace LocalS.BLL
             d_DayReport.MbGxygk = r_DayReport.MbGxygk;
             d_DayReport.MbTlbgk = r_DayReport.MbTlbgk;
             d_DayReport.MbGxbgk = r_DayReport.MbGxbgk;
+            d_DayReport.MbXytjjn = r_DayReport.MbXytjjn;
+            d_DayReport.MbGzdmjn = r_DayReport.MbGzdmjn;
+            d_DayReport.MbXtphjn = r_DayReport.MbXtphjn;
+
             d_DayReport.QxxlQxyj = r_DayReport.QxxlQxyj;
             d_DayReport.QxxlKynl = r_DayReport.QxxlKynl;
             d_DayReport.QxxlJlqx = r_DayReport.QxxlJlqx;
@@ -1590,6 +1594,9 @@ namespace LocalS.BLL
                 d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
                 d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
                 d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
+                d_DayReport.MbXytjjn = SvUtil.D46Decimal(reportpar.hcNot);
+                d_DayReport.MbGzdmjn = SvUtil.D46Decimal(reportpar.mcNot);
+                d_DayReport.MbXtphjn = SvUtil.D46Decimal(reportpar.tcNot);
                 d_DayReport.QxxlQxyj = SvUtil.D46Int(reportpar.emotion);
                 d_DayReport.QxxlKynl = SvUtil.D46Decimal(reportpar.press);
                 d_DayReport.QxxlJlqx = reportpar.Sc_an;
