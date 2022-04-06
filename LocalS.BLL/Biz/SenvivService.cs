@@ -911,7 +911,7 @@ namespace LocalS.BLL
             {
                 r_DayReport = BuildDayReport32(svUserId, svDeviceId, svDeptId);
             }
-            else if (svDeptId == "64")
+            else if (svDeptId == "46")
             {
                 r_DayReport = BuildDayReport46(svUserId, svDeviceId, svDeptId);
             }
@@ -1268,6 +1268,9 @@ namespace LocalS.BLL
                                     d_Label.Suggest = index.suggest.ToJsonString();
                                     d_Label.Score = index.score;
 
+                                    break;
+                                case "冠心病管控":
+                                    d_DayReport.MbGxbgk = 100 - index.score;
                                     break;
                                 default:
                                     d_Label = null;

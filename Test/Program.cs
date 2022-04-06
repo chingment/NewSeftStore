@@ -56,13 +56,13 @@ namespace Test
 
         static void Main(string[] args)
         {
-            var week = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse(DateTime.Now.ToString("2021-09-24")), DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")));
-            var birthLastDays = Convert.ToInt32((DateTime.Parse(DateTime.Now.ToString("2022-07-01")) - DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"))).TotalDays);
-            var pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
+            //var week = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse(DateTime.Now.ToString("2021-09-24")), DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")));
+            //var birthLastDays = Convert.ToInt32((DateTime.Parse(DateTime.Now.ToString("2022-07-01")) - DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"))).TotalDays);
+            //var pregnancy = new { birthLastDays = birthLastDays, gesWeek = week.Week, gesDay = week.Day };
 
-            int ss = 80;
-            decimal c = ss;
-            var s = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse("2022-02-03"), DateTime.Now);
+            //int ss = 80;
+            //decimal c = ss;
+            //var s = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse("2022-02-03"), DateTime.Now);
 
 
             //var c3 = Lumos.CommonUtil.GetPregnancyTime(20, 6);
@@ -147,8 +147,8 @@ namespace Test
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
             //"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXkgPD5w99Q8WjoB9KWzVaKhilmaMYx18U+VAHSmP/me4="
-            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXIqTFBwGeqqKpQFZqiIY02sbyivJAnwfHvmDHZupWtXI=\"";
-
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXtIvi/hrqs83ZVi1jVpWAfFAlkZhzdrR50RClqbEKk/w=\"";
+            
             ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A4D5", size = 1, page = 1 });
             var restb = api.DoPost(c1);
 
