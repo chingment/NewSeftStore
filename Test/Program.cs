@@ -147,9 +147,9 @@ namespace Test
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
             //"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXkgPD5w99Q8WjoB9KWzVaKhilmaMYx18U+VAHSmP/me4="
-            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXtIvi/hrqs83ZVi1jVpWAfFAlkZhzdrR50RClqbEKk/w=\"";
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXGqaIyOVTP9lF/fBNVG5Xel2WvOa+tj9CUbqIFayhmvc=\"";
             
-            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A4D5", size = 1, page = 1 });
+            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A205", size = 1, page = 1 });
             var restb = api.DoPost(c1);
 
             //var config_Senviv = BizFactory.Senviv.GetConfig("46");

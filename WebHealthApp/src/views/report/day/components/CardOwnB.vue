@@ -5,34 +5,51 @@
         本次检测结果不作为疾病的专业临床诊断依据
       </div>
       <div class="wrap">
-        <div class="st st-1">
-          <div class="health-date">{{ rd.healthDate }}</div>
-          <img class="avatar" :src="userInfo.avatar" style="width:100px;height:100px">
-        </div>
-        <div class="st st-2">
-          <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
-          <div class="t2">健康值</div>
-          <div class="t3">今天是全心监测与您相伴的</div>
-          <div class="t4">第<span class="t5">{{ userInfo.togetherDays }}</span>天</div>
-        </div>
-        <div class="st st-3">
-          <div class="dv-hrvxzznl">
-            <div class="t1">
-              <img class="t1_bg" :src="require('@/assets/report/day/green/ic_hrvXzznl.png')">
-              <span class="t1_txt" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.value }}</span>
-            </div>
-            <div class="t2"> 心脏总能量</div>
+        <div class="pt1">
+          <div class="pt1-lt">
+            <img class="avatar" :src="userInfo.avatar" alt="">
           </div>
-          <div class="dv-hrvxzznl-ref">（参考值{{ rd.hrvXzznl.refRange }}）</div>
-          <div class="dv-xldcjzxl">
-            <div class="t1">
-              <img class="t1_bg" :src="require('@/assets/report/day/green/ic_xlDcjzxl.png')">
-              <span class="t1_txt" :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.value }}</span>
-            </div>
-            <div class="t2"> 当次基准心率</div>
+          <div class="pt1-md">
+            <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
+            <div class="t2">健康值</div>
           </div>
-          <div class="dv-xldcjzxl-ref">（参考值{{ rd.xlDcjzxl.refRange }}）</div>
+          <div class="pt1-rt">
+            <div style="max-width: 200px;">
+              <div class="health-date">{{ rd.healthDate }}</div>
+              <div class="health-tword">今天是全心监测与您相伴的</div>
+              <div class="health-tday">第<span class="t5">{{ userInfo.togetherDays }}</span>天</div>
+            </div>
+          </div>
+
         </div>
+        <div class="pt2">
+
+          <div class="pt2-lt">
+
+            <div class="dv-hrvxzznl">
+              <div class="t1">
+                <img class="t1_bg" :src="require('@/assets/report/day/green/ic_hrvXzznl.png')">
+                <span class="t1_txt" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.value }}</span>
+              </div>
+              <div class="t2"><span v-if="rd.hrvXzznl.sign!='-'" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.sign }}</span> 心脏总能量</div>
+            </div>
+            <div class="dv-hrvxzznl-ref">（参考值{{ rd.hrvXzznl.refRange }}）</div>
+
+          </div>
+          <div class="pt2-rt">
+
+            <div class="dv-xldcjzxl">
+              <div class="t1">
+                <img class="t1_bg" :src="require('@/assets/report/day/green/ic_xlDcjzxl.png')">
+                <span class="t1_txt" :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.value }}</span>
+              </div>
+              <div class="t2"> 当次基准心率</div>
+            </div>
+            <div class="dv-xldcjzxl-ref">（参考值{{ rd.xlDcjzxl.refRange }}）</div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -74,124 +91,152 @@ export default {
 
   .wrap {
     display: flex;
+    flex-direction: column;
 
     color: #fff;
 
-    .st-1 {
+    .pt1 {
+      display: flex;
 
-      .health-date {
-        padding-top: 10px;
-      }
-
-      .avatar {
-        position: absolute;
-        top: 130px;
-
-        width: 90px;
-        height: 90px;
-
-        border-radius: 50%;
-      }
-    }
-
-    .st-2 {
-
-      text-align: center;
-
-      .t1 {
-        font-size: 68px;
-        font-weight: bold;
-      }
-
-      .t3 {
-        font-size: 12px;
-
-        padding: 5px;
-      }
-
-      .t4 {
-        font-size: 12px;
-
+      .pt1-lt {
         display: flex;
         align-items: center;
-        justify-content: center;
+        flex: 1;
+
+        .avatar {
+          width: 85px;
+          height: 85px;
+
+          border-radius: 50%;
+        }
       }
 
-      .t5 {
-        font-size: 23px;
-        font-weight: bold;
+      .pt1-md {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
 
-        padding: 0 5px;
+        width: 100px;
+        width: 100px;
+
+        .t1 {
+          font-size: 68px;
+          font-weight: bold;
+        }
+
+        .t2 {
+          font-size: 16px;
+
+          padding: 5px;
+        }
+      }
+
+      .pt1-rt {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        text-align: center;
+
+        .t5 {
+          font-size: 23px;
+          font-weight: bold;
+
+          padding: 0 5px;
+        }
       }
     }
 
-    .st-3 {
+    .pt2 {
+      display: flex;
 
-      .dv-hrvxzznl {
+      .pt2-lt {
         display: flex;
-
-        padding: 10px 0 5px 0;
-
-        .t1 {
-          position: relative;
-
-          .t1_bg {
-            width: 60px;
-          }
-
-          .t1_txt {
-            font-size: 13px;
-            font-weight: bold;
-
-            position: absolute;
-            top: 12px;
-            left: 13px;
-
-            color: blue;
-          }
-        }
-
-        .t2 {
-          padding-top: 10px;
-        }
+        align-items: flex-start;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
       }
 
-      .dv-hrvxzznl-ref {
-        font-size: 12px;
-      }
-
-      .dv-xldcjzxl {
+      .pt2-rt {
         display: flex;
+        align-items: flex-end;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+    }
 
-        padding: 5px 0 5px 0;
+    .health-date {
+      padding-bottom: 5px;
+    }
 
-        .t1 {
-          position: relative;
+    .dv-hrvxzznl {
+      display: flex;
 
-          .t1_bg {
-            width: 50px;
-          }
+      padding: 15px 0 5px 0;
 
-          .t1_txt {
-            font-size: 13px;
-            font-weight: bold;
+      .t1 {
+        position: relative;
 
-            position: absolute;
-            top: 16px;
-            left: 18px;
-
-            color: blue;
-          }
+        .t1_bg {
+          width: 60px;
         }
 
-        .t2 {
-          padding-top: 15px;
+        .t1_txt {
+          font-size: 13px;
+          font-weight: bold;
+
+          position: absolute;
+          top: 12px;
+          left: 13px;
+
+          color: blue;
         }
       }
 
-      .dv-xldcjzxl-ref {
-        font-size: 12px;
+      .t2 {
+        padding-top: 10px;
       }
+    }
+
+    .dv-hrvxzznl-ref {
+      font-size: 14px;
+    }
+
+    .dv-xldcjzxl {
+      display: flex;
+
+      padding: 5px 0 5px 0;
+
+      .t1 {
+        position: relative;
+
+        .t1_bg {
+          width: 50px;
+        }
+
+        .t1_txt {
+          font-size: 13px;
+          font-weight: bold;
+
+          position: absolute;
+          top: 16px;
+          left: 18px;
+
+          color: blue;
+        }
+      }
+
+      .t2 {
+        padding-top: 15px;
+      }
+    }
+
+    .dv-xldcjzxl-ref {
+      font-size: 14px;
     }
   }
 }

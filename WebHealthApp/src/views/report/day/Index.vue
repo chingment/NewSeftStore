@@ -26,7 +26,7 @@
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
                   <div ref="gz_tag" class="gz-tag" :data-index="index">
-                    <img class="image_item" :src="require('@/assets/report/day/'+theme+'/gz_tag_bg.png')">
+                    <img class="image_item" style="height:100%;width:100%" :src="require('@/assets/report/day/'+theme+'/gz_tag_bg.png')">
                     <div class="t1">
                       <div class="name">{{ item.name }}</div>
                       <div class="icon">
@@ -153,7 +153,7 @@
 
         </mt-tab-container-item>
         <mt-tab-container-item v-if="selected==='tab3'" id="tab3">
-          <div class="c-part-1" style="padding:0px">
+          <div class="c-part-1" style="padding:0px;display: inline-block;">
             <div v-if="!consult.isOpen" class="open-off">
               <div class="t1"> 敬请期待</div>
               <div class="t2"> 谢谢关注，即将开启</div>
@@ -837,18 +837,18 @@ export default {
 
   .a-part-2 {
     .carousel-gz-tags {
-      height: 180px !important;
+      height: 135px !important;
 
       /deep/ .carousel-3d-slider {
         width: 135px !important;
-        height: 180px !important;
+        height: 135px !important;
 
         background: unset;
       }
 
       /deep/ .carousel-3d-slide {
         width: 135px !important;
-        height: 180px !important;
+        height: 135px !important;
 
         border: none;
         background: unset;
@@ -858,7 +858,7 @@ export default {
         position: absolute;
 
         width: 135px;
-        height: 180px;
+        height: 135px;
 
         cursor: default;
         cursor: default;
@@ -880,7 +880,7 @@ export default {
           display: flex;
 
           width: 100%;
-          padding: 10px 20px;
+          padding: 5px 20px;
         }
 
         .t2 {
@@ -891,7 +891,7 @@ export default {
           display: flex;
 
           width: 100%;
-          padding: 10px 14px;
+          padding: 5px 20px;
         }
 
         .name {
