@@ -59,7 +59,7 @@ namespace LocalS.Service.Api.HealthApp
             List<object> mylGrfxByLast = new List<object>();
             List<object> mbGxygkByLast = new List<object>();
             List<object> mbGxbgkByLast = new List<object>();
-            List<object> mbTlbgkByLast = new List<object>();
+            List<object> mbTnbgkByLast = new List<object>();
             List<object> qxxlKynlByLast = new List<object>();
             List<object> qxxlQxyjByLast = new List<object>();
             List<ChatDataByStr> qxxlJlqxByLast = new List<ChatDataByStr>();
@@ -71,7 +71,7 @@ namespace LocalS.Service.Api.HealthApp
             var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
                                       && u.HealthDate <= d_DayRpt.HealthDate
-                                      select new { u.HealthDate, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTlbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
+                                      select new { u.HealthDate, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
 
             d_DayReportsByLast.Reverse();
 
@@ -82,7 +82,7 @@ namespace LocalS.Service.Api.HealthApp
                 mylGrfxByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MylGrfx });
                 mbGxygkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxygk });
                 mbGxbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxbgk });
-                mbTlbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbTlbgk });
+                mbTnbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbTnbgk });
                 qxxlKynlByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlKynl });
                 qxxlQxyjByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlQxyj });
                 qxxlJlqxByLast.Add(new ChatDataByStr { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlJlqx });
@@ -121,7 +121,7 @@ namespace LocalS.Service.Api.HealthApp
                 gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, mylGrfxByLast));
                 gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, mbGxygkByLast));
                 gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, mbGxbgkByLast));
-                gzTags.Add(SvUtil.GetMbTlbgk(decimal.Floor(d_DayRpt.MbTlbgk), true, mbTlbgkByLast));
+                gzTags.Add(SvUtil.GetMbTnbgk(decimal.Floor(d_DayRpt.MbTnbgk), true, mbTnbgkByLast));
                 gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true, qxxlJlqxByLast));
                 gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, qxxlKynlByLast));
                 gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, qxxlQxyjByLast));

@@ -38,9 +38,9 @@ namespace LocalS.Entity
         //REM睡眠比例
         public decimal SmRemsmbl { get; set; }
         //清醒时刻时长
-        public long SmQxsksc { get; set; }
+        public long SmQxsc { get; set; }
         //清醒时刻比例
-        public decimal SmQxskbl { get; set; }
+        public decimal SmQxscbl { get; set; }
         //离真次数
         public int SmLzcs { get; set; }
         //离真时长
@@ -155,7 +155,7 @@ namespace LocalS.Entity
         //冠心病管控
         public decimal MbGxbgk { get; set; }
         //糖尿病管控
-        public decimal MbTlbgk { get; set; }
+        public decimal MbTnbgk { get; set; }
 
         public decimal MbXytjjn { get; set; }
         public decimal MbGzdmjn { get; set; }

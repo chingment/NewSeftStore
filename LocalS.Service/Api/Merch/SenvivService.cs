@@ -434,7 +434,7 @@ namespace LocalS.Service.Api.Merch
                              u.MylMylzs,
                              u.MbGxbgk,
                              u.MbGxygk,
-                             u.MbTlbgk,
+                             u.MbTnbgk,
                              u.QxxlJlqx,
                              u.QxxlKynl,
                              u.QxxlQxyj,
@@ -515,7 +515,7 @@ namespace LocalS.Service.Api.Merch
                     MylMylzs = SvUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvUtil.GetMbGxbgk(rpt.MbGxbgk),
                     MbGxygk = SvUtil.GetMbGxygk(rpt.MbGxygk),
-                    MbTlbgk = SvUtil.GetMbTlbgk(rpt.MbTlbgk),
+                    MbTnbgk = SvUtil.GetMbTnbgk(rpt.MbTnbgk),
                     rpt.QxxlJlqx,
                     QxxlKynl = SvUtil.GetQxxlKynl(rpt.QxxlKynl),
                     rpt.QxxlQxyj,
@@ -614,7 +614,7 @@ namespace LocalS.Service.Api.Merch
 
                              u.MbGxbgk,
                              u.MbGxygk,
-                             u.MbTlbgk,
+                             u.MbTnbgk,
                              u.QxxlJlqx,
                              u.QxxlKynl,
                              u.QxxlQxyj,
@@ -696,9 +696,9 @@ namespace LocalS.Service.Api.Merch
                              //REM睡眠比例
                              u.SmRemsmbl,
                              //清醒时刻时长
-                             u.SmQxsksc,
+                             u.SmQxsc,
                              //清醒时刻比例
-                             u.SmQxskbl,
+                             u.SmQxscbl,
                              //离真次数
                              u.SmLzcs,
                              //离真时长
@@ -743,7 +743,7 @@ namespace LocalS.Service.Api.Merch
 new {  Name = "浅度", Value = d_Rpt.SmQdsmbl},
 new {  Name = "深度", Value = d_Rpt.SmSdsmbl},
 new {  Name = "REM", Value = d_Rpt.SmRemsmbl},
-new {  Name = "清醒", Value = d_Rpt.SmQxskbl},
+new {  Name = "清醒", Value = d_Rpt.SmQxscbl},
 new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     },
                     DsTags = d_Rpt.SmTags.ToJsonObject<List<string>>(),
@@ -751,7 +751,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     d_Rpt.MylMylzs,
                     d_Rpt.MbGxbgk,
                     d_Rpt.MbGxygk,
-                    d_Rpt.MbTlbgk,
+                    d_Rpt.MbTnbgk,
                     d_Rpt.QxxlJlqx,
                     d_Rpt.QxxlKynl,
                     d_Rpt.QxxlQxyj,
@@ -835,9 +835,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(d_Rpt.SmSmzq),
                     //清醒时刻时长
-                    d_Rpt.SmQxsksc,
+                    d_Rpt.SmQxsc,
                     //清醒时刻比例
-                    d_Rpt.SmQxskbl,
+                    d_Rpt.SmQxscbl,
                     //离真次数
                     d_Rpt.SmLzcs,
                     //离真时长
@@ -885,7 +885,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                              u.MylMylzs,
                              u.MbGxbgk,
                              u.MbGxygk,
-                             u.MbTlbgk,
+                             u.MbTnbgk,
                              u.QxxlJlqx,
                              u.QxxlKynl,
                              u.QxxlQxyj,
@@ -988,7 +988,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     MylMylzs = SvUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvUtil.GetMbGxbgk(rpt.MbGxbgk),
                     MbGxygk = SvUtil.GetMbGxygk(rpt.MbGxygk),
-                    MbTlbgk = SvUtil.GetMbTlbgk(rpt.MbTlbgk),
+                    MbTnbgk = SvUtil.GetMbTnbgk(rpt.MbTnbgk),
                     rpt.QxxlJlqx,
                     QxxlKynl = SvUtil.GetQxxlKynl(rpt.QxxlKynl),
                     rpt.QxxlQxyj,
@@ -1073,7 +1073,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.MylMylzs,
                            u.MbGxbgk,
                            u.MbGxygk,
-                           u.MbTlbgk,
+                           u.MbTnbgk,
                            u.QxxlJlqx,
                            u.QxxlKynl,
                            u.QxxlQxyj,
@@ -1149,7 +1149,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     MylMylzs = SvUtil.GetMylzs(rpt.MylMylzs),
                     MbGxbgk = SvUtil.GetMbGxbgk(rpt.MbGxbgk),
                     MbGxygk = SvUtil.GetMbGxygk(rpt.MbGxygk),
-                    MbTlbgk = SvUtil.GetMbTlbgk(rpt.MbTlbgk),
+                    MbTnbgk = SvUtil.GetMbTnbgk(rpt.MbTnbgk),
                     rpt.QxxlJlqx,
                     QxxlKynl = SvUtil.GetQxxlKynl(rpt.QxxlKynl),
                     rpt.QxxlQxyj,

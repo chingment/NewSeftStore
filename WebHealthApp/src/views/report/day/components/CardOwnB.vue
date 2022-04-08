@@ -10,7 +10,7 @@
             <img class="avatar" :src="userInfo.avatar" alt="">
           </div>
           <div class="pt1-md">
-            <div class="t1" :style="'color:'+rd.healthScore.color+';'">{{ rd.healthScore.value }}</div>
+            <div class="t1">{{ rd.healthScore.value }}</div>
             <div class="t2">健康值</div>
           </div>
           <div class="pt1-rt">

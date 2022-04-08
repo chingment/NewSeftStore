@@ -740,7 +740,7 @@ namespace LocalS.BLL
                     d_StageReport.MylMylzs = Decimal.Parse(d_DayReports.Select(m => m.MylMylzs).Average().ToString());//
                     d_StageReport.MbGxbgk = Decimal.Parse(d_DayReports.Select(m => m.MbGxbgk).Average().ToString());//
                     d_StageReport.MbGxygk = Decimal.Parse(d_DayReports.Select(m => m.MbGxygk).Average().ToString());//
-                    d_StageReport.MbTlbgk = Decimal.Parse(d_DayReports.Select(m => m.MbTlbgk).Average().ToString());//
+                    d_StageReport.MbTnbgk = Decimal.Parse(d_DayReports.Select(m => m.MbTnbgk).Average().ToString());//
                     d_StageReport.SmSmsc = Decimal.Parse(d_DayReports.Select(m => m.SmSmsc).Average().ToString());//
                     d_StageReport.SmQdsmsc = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmsc).Average().ToString());//
                     d_StageReport.SmQdsmbl = Decimal.Parse(d_DayReports.Select(m => m.SmQdsmbl).Average().ToString());//
@@ -930,7 +930,7 @@ namespace LocalS.BLL
             d_DayReport.MylMylzs = r_DayReport.MylMylzs;
             d_DayReport.MylGrfx = r_DayReport.MylGrfx;
             d_DayReport.MbGxygk = r_DayReport.MbGxygk;
-            d_DayReport.MbTlbgk = r_DayReport.MbTlbgk;
+            d_DayReport.MbTnbgk = r_DayReport.MbTnbgk;
             d_DayReport.MbGxbgk = r_DayReport.MbGxbgk;
             d_DayReport.MbXytjjn = r_DayReport.MbXytjjn;
             d_DayReport.MbGzdmjn = r_DayReport.MbGzdmjn;
@@ -994,8 +994,8 @@ namespace LocalS.BLL
             d_DayReport.SmQdsmbl = r_DayReport.SmQdsmbl;//浅睡期比例
             d_DayReport.SmRemsmsc = r_DayReport.SmRemsmsc;//REM期时长
             d_DayReport.SmRemsmbl = r_DayReport.SmRemsmbl;//REM期比例
-            d_DayReport.SmQxsksc = r_DayReport.SmQxsksc;//REM期时长
-            d_DayReport.SmQxskbl = r_DayReport.SmQxskbl;//REM期比例
+            d_DayReport.SmQxsc = r_DayReport.SmQxsc;//REM期时长
+            d_DayReport.SmQxscbl = r_DayReport.SmQxscbl;//REM期比例
             d_DayReport.SmLzcs = r_DayReport.SmLzcs;
             d_DayReport.SmTdcs = r_DayReport.SmTdcs;//体动次数
             d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
@@ -1247,7 +1247,7 @@ namespace LocalS.BLL
                                     break;
                                 //慢病管理-糖尿病管控
                                 case "糖尿病管控":
-                                    d_DayReport.MbTlbgk = 100 - index.score;
+                                    d_DayReport.MbTnbgk = 100 - index.score;
 
                                     d_Label = new SvHealthDayReportLabel();
                                     d_Label.Id = IdWorker.Build(IdType.NewGuid);
@@ -1392,8 +1392,8 @@ namespace LocalS.BLL
                         {
                             var startTime = bp.StartTime / 1000;
                             var endTime = bp.EndTime / 1000;
-                            var longerval = endTime - startTime;
-                            l_bps.Add(new { startTime = startTime, endTime = endTime, longerval = longerval });
+                            var longerVal = endTime - startTime;
+                            l_bps.Add(new { startTime = startTime, endTime = endTime, longerVal = longerVal });
                         }
 
                         d_DayReport.HxZtcsPoint = l_bps.ToJsonString();
@@ -1457,8 +1457,8 @@ namespace LocalS.BLL
                     d_DayReport.SmRemsmsc = sm.Rem;//REM期时长
                     d_DayReport.SmRemsmbl = sm.RemRatio;//REM期比例
 
-                    d_DayReport.SmQxsksc = sm.Sober;//REM期时长
-                    d_DayReport.SmQxskbl = sm.SoberRatio;//REM期比例
+                    d_DayReport.SmQxsc = sm.Sober;//REM期时长
+                    d_DayReport.SmQxscbl = sm.SoberRatio;//REM期比例
 
                     d_DayReport.SmLzcs = 0;
 
@@ -1515,7 +1515,13 @@ namespace LocalS.BLL
                                 {
                                     foreach (var item in items)
                                     {
-                                        d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = item.subitems }).ToJsonString();
+                                        List<object> dataValue = new List<object>();
+                                        foreach (var subitem in item.subitems)
+                                        {
+                                            dataValue.Add(new { StartTime = subitem.starttime, EndTime = subitem.endtime, Type = subitem.type });
+                                        }
+
+                                        d_DayReport.SmPoint = (new { StartTime = item.starttime, EndTime = item.endtime, DataValue = dataValue }).ToJsonString();
                                     }
                                 }
                             }
@@ -1597,7 +1603,7 @@ namespace LocalS.BLL
                 d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
                 d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
                 d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
-                d_DayReport.MbTlbgk = SvUtil.D46Decimal(reportpar.tc);
+                d_DayReport.MbTnbgk = SvUtil.D46Decimal(reportpar.tc);
                 d_DayReport.MbGxbgk = SvUtil.D46Decimal(reportpar.mc);
                 d_DayReport.MbXytjjn = SvUtil.D46Decimal(reportpar.hcNot);
                 d_DayReport.MbGzdmjn = SvUtil.D46Decimal(reportpar.mcNot);
@@ -1673,8 +1679,8 @@ namespace LocalS.BLL
                 d_DayReport.SmRemsmsc = SvUtil.D46Long(reportpar.rem);//REM期时长
                 d_DayReport.SmRemsmbl = SvUtil.D46Decimal(reportpar.remr);//REM期比例
 
-                d_DayReport.SmQxsksc = SvUtil.D46Long(reportpar.sr);//REM期时长
-                d_DayReport.SmQxskbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
+                d_DayReport.SmQxsc = SvUtil.D46Long(reportpar.sr);//REM期时长
+                d_DayReport.SmQxscbl = SvUtil.D46Decimal(reportpar.srr);//REM期比例
 
                 d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
                 d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
@@ -1743,7 +1749,7 @@ namespace LocalS.BLL
                             var dataValues = new List<object>();
                             foreach (var item in item2s)
                             {
-                                dataValues.Add(new { starttime = smScsj + SvUtil.D46Long(item.st), endtime = smScsj + SvUtil.D46Long(item.et), type = SvUtil.D46Int(item.type) });
+                                dataValues.Add(new { StartTime = smScsj + SvUtil.D46Long(item.st), EndTime = smScsj + SvUtil.D46Long(item.et), Type = SvUtil.D46Int(item.type) });
                             }
                             d_DayReport.SmPoint = (new { StartTime = smScsj, EndTime = smLcjs, DataValue = dataValues }).ToJsonString();
                         }
@@ -1772,7 +1778,7 @@ namespace LocalS.BLL
                     var hxztPoints = new List<object>();
                     foreach (var p in ps)
                     {
-                        hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerval = SvUtil.D46Long(p.i) });
+                        hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerVal = SvUtil.D46Long(p.i) });
                     }
 
                     d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();

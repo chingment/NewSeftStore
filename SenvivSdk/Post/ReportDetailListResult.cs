@@ -125,7 +125,6 @@ namespace SenvivSdk
         {
             public long StartTime { get; set; }
             public long EndTime { get; set; }
-            public int longerval { get; set; }
         }
 
         public class D_BreathMaxCount
