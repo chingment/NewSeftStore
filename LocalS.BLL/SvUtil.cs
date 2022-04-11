@@ -469,7 +469,7 @@ namespace LocalS.BLL
 
             try
             {
-                decimal c = decimal.Parse(obj.ToString());
+                decimal c = decimal.Parse(decimal.Parse(obj.ToString()).ToString("#0.00"));
                 return c;
             }
             catch (Exception ex)
@@ -1512,11 +1512,11 @@ namespace LocalS.BLL
             jd.Value = val;
             jd.RefRange = "0~100";
 
-            if (val <30)
+            if (val < 30)
             {
                 jd.Set("低", "↓↓", CB_1);
             }
-            else if (30 >=val && val < 60)
+            else if (30 >= val && val < 60)
             {
                 jd.Set("偏低", "↓", CB_2);
             }

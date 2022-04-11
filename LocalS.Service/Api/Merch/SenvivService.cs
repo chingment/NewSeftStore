@@ -643,17 +643,17 @@ namespace LocalS.Service.Api.Merch
                              //最低心率
                              u.XlZdxl,
                              //心动过快时长
-                             u.Xlgksc,
+                             u.XlGksc,
                              //心动过慢时长
-                             u.Xlgmsc,
+                             u.XlGmsc,
                              //心率超过1.25时长
-                             u.Xlcg125,
+                             u.XlCg125,
                              //心率超过1.15时长
-                             u.Xlcg115,
+                             u.XlCg115,
                              //心率超过0.85时长
-                             u.Xlcg085,
+                             u.XlCg085,
                              //心率超过075时长
-                             u.Xlcg075,
+                             u.XlCg075,
                              //呼吸当次基准呼吸
                              u.HxDcjzhx,
                              //呼吸长期基准呼吸
@@ -792,17 +792,17 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //最低心率
                     d_Rpt.XlZdxl,
                     //心动过快时长
-                    d_Rpt.Xlgksc,
+                    d_Rpt.XlGksc,
                     //心动过慢时长
-                    d_Rpt.Xlgmsc,
+                    d_Rpt.XlGmsc,
                     //心率超过1.25时长
-                    d_Rpt.Xlcg125,
+                    d_Rpt.XlCg125,
                     //心率超过1.15时长
-                    d_Rpt.Xlcg115,
+                    d_Rpt.XlCg115,
                     //心率超过0.85时长
-                    d_Rpt.Xlcg085,
+                    d_Rpt.XlCg085,
                     //心率超过075时长
-                    d_Rpt.Xlcg075,
+                    d_Rpt.XlCg075,
                     //呼吸当次基准呼吸
                     HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx),
                     //呼吸长期基准呼吸

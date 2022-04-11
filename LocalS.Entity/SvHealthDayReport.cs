@@ -82,17 +82,17 @@ namespace LocalS.Entity
         //最低心率
         public int XlZdxl { get; set; }
         //心率过快时长
-        public long Xlgksc { get; set; }
+        public long XlGksc { get; set; }
         //心率过慢时长
-        public long Xlgmsc { get; set; }
+        public long XlGmsc { get; set; }
         //心率超过1.25时长
-        public long Xlcg125 { get; set; }
+        public long XlCg125 { get; set; }
         //心率超过1.15时长
-        public long Xlcg115 { get; set; }
+        public long XlCg115 { get; set; }
         //心率超过0.85时长
-        public long Xlcg085 { get; set; }
+        public long XlCg085 { get; set; }
         //心率超过075时长
-        public long Xlcg075 { get; set; }
+        public long XlCg075 { get; set; }
         //呼吸当次基准呼吸
         public int HxDcjzhx { get; set; }
         //呼吸长期基准呼吸
