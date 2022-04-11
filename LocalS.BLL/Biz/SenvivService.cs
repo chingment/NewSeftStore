@@ -946,8 +946,8 @@ namespace LocalS.BLL
             d_DayReport.XlDcpjxl = r_DayReport.XlDcpjxl;//当次平均心率
             d_DayReport.XlZgxl = r_DayReport.XlZgxl;//最高心率
             d_DayReport.XlZdxl = r_DayReport.XlZdxl;//最低心率
-            d_DayReport.XlXdgksc = r_DayReport.XlXdgksc;//心动过快时长
-            d_DayReport.XlXdgmsc = r_DayReport.XlXdgmsc;//心动过慢时长
+            d_DayReport.Xlgksc = r_DayReport.Xlgksc;//心动过快时长
+            d_DayReport.Xlgmsc = r_DayReport.Xlgmsc;//心动过慢时长
             d_DayReport.Xlcg125 = r_DayReport.Xlcg125;//todo 
             d_DayReport.Xlcg115 = r_DayReport.Xlcg115;//todo 
             d_DayReport.Xlcg085 = r_DayReport.Xlcg085;//todo 
@@ -1360,10 +1360,10 @@ namespace LocalS.BLL
                     d_DayReport.XlDcpjxl = xl.Average;//当次平均心率
                     d_DayReport.XlZgxl = xl.HeartbeatMax;//最高心率
                     d_DayReport.XlZdxl = xl.HeartbeatMin;//最低心率
-                    d_DayReport.XlXdgksc = xl.Higher;//心动过快时长
-                    d_DayReport.XlXdgmsc = xl.Lower;//心动过慢时长
-                    d_DayReport.Xlcg125 = 0;//todo 
-                    d_DayReport.Xlcg115 = 0;//todo 
+                    d_DayReport.Xlgksc = xl.Higher;//心率过快时长
+                    d_DayReport.Xlgmsc = xl.Lower;//心率过慢时长
+                    d_DayReport.Xlcg125 = xl.ExceedBenchmark125;//125
+                    d_DayReport.Xlcg115 = xl.ExceedBenchmark115;//115
                     d_DayReport.Xlcg085 = 0;//todo 
                     d_DayReport.Xlcg075 = 0;//todo 
                 }
@@ -1421,9 +1421,9 @@ namespace LocalS.BLL
                     d_DayReport.HrvZzsjzlzs = hrv.LFHF;//自主神经平衡
                     d_DayReport.HrvZzsjzlzsjzz = hrv.BaseLFHF;//自主神经平衡基准值
                     d_DayReport.HrvHermzs = hrv.endocrine;//荷尔蒙指数
-                    d_DayReport.HrvHermzsjzz = 0;//荷尔蒙指数基准值
+                    d_DayReport.HrvHermzsjzz = hrv.BaseULF;//荷尔蒙指数基准值
                     d_DayReport.HrvTwjxgsszs = hrv.temperature;//体温及血管舒缩指数
-                    d_DayReport.HrvTwjxgsszhjzz = 0;//体温及血管舒缩基准值
+                    d_DayReport.HrvTwjxgsszhjzz = hrv.BaseVLF;//体温及血管舒缩基准值
                     d_DayReport.SmScore = hrv.SleepValue;
                     d_DayReport.JbfxXlscfx = hrv.SDNN;//心律失常风险指数
 
@@ -1447,6 +1447,10 @@ namespace LocalS.BLL
                     d_DayReport.SmQxsj = SvUtil.D32LongToDateTime(x2.OffbedTime);//清醒时间
                     d_DayReport.SmSmsc = (long)(d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalSeconds;//睡眠时长
                     d_DayReport.SmRsxs = (long)(d_DayReport.SmRssj - d_DayReport.SmScsj).TotalSeconds;//入睡需时
+                    if (d1.ReportOfOffbed != null)
+                    {
+                        d_DayReport.SmLzcs = d1.ReportOfOffbed.OffbedCounts;
+                    }
                     d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
                     d_DayReport.SmLzscbl = sm.OffbedRatio;
                     d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
@@ -1462,8 +1466,6 @@ namespace LocalS.BLL
 
                     d_DayReport.SmQxsc = sm.Sober;//REM期时长
                     d_DayReport.SmQxscbl = sm.SoberRatio;//REM期比例
-
-                    d_DayReport.SmLzcs = 0;
 
                     d_DayReport.SmTdcs = sm.MoveCounts;//体动次数
 
@@ -1621,10 +1623,10 @@ namespace LocalS.BLL
                 d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
                 d_DayReport.XlZgxl = SvUtil.D46Int(reportpar.max);//最高心率
                 d_DayReport.XlZdxl = SvUtil.D46Int(reportpar.min);//最低心率
-                d_DayReport.XlXdgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
-                d_DayReport.XlXdgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
-                d_DayReport.Xlcg125 = 0;//todo 
-                d_DayReport.Xlcg115 = 0;//todo 
+                d_DayReport.Xlgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
+                d_DayReport.Xlgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
+                d_DayReport.Xlcg125 = SvUtil.D46Int(reportpar.hr125);//hr125 
+                d_DayReport.Xlcg115 = SvUtil.D46Int(reportpar.hr115);//hr115 
                 d_DayReport.Xlcg085 = 0;//todo 
                 d_DayReport.Xlcg075 = 0;//todo
 
@@ -1634,8 +1636,8 @@ namespace LocalS.BLL
                 d_DayReport.HxZdhx = SvUtil.D46Int(reportpar.bmin);//当夜最低呼吸率
                 d_DayReport.HxZghx = SvUtil.D46Int(reportpar.bmax);//当夜最高呼吸率
                 d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
-                d_DayReport.HxGksc = 0;//todo 
-                d_DayReport.HxGmsc = 0;//todo 
+                d_DayReport.HxGksc = SvUtil.D46Int(reportpar.brfast);//呼吸过快时长 
+                d_DayReport.HxGmsc = SvUtil.D46Int(reportpar.brslow);//呼吸过慢时长 
 
 
                 d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数

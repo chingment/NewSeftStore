@@ -643,9 +643,9 @@ namespace LocalS.Service.Api.Merch
                              //最低心率
                              u.XlZdxl,
                              //心动过快时长
-                             u.XlXdgksc,
+                             u.Xlgksc,
                              //心动过慢时长
-                             u.XlXdgmsc,
+                             u.Xlgmsc,
                              //心率超过1.25时长
                              u.Xlcg125,
                              //心率超过1.15时长
@@ -792,9 +792,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //最低心率
                     d_Rpt.XlZdxl,
                     //心动过快时长
-                    d_Rpt.XlXdgksc,
+                    d_Rpt.Xlgksc,
                     //心动过慢时长
-                    d_Rpt.XlXdgmsc,
+                    d_Rpt.Xlgmsc,
                     //心率超过1.25时长
                     d_Rpt.Xlcg125,
                     //心率超过1.15时长

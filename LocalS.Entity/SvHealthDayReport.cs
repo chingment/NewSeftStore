@@ -81,10 +81,10 @@ namespace LocalS.Entity
         public int XlZgxl { get; set; }
         //最低心率
         public int XlZdxl { get; set; }
-        //心动过快时长
-        public long XlXdgksc { get; set; }
-        //心动过慢时长
-        public long XlXdgmsc { get; set; }
+        //心率过快时长
+        public long Xlgksc { get; set; }
+        //心率过慢时长
+        public long Xlgmsc { get; set; }
         //心率超过1.25时长
         public long Xlcg125 { get; set; }
         //心率超过1.15时长

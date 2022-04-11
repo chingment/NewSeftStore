@@ -28,6 +28,7 @@ namespace SenvivSdk
             public D_ReportOfHRV ReportOfHRV { get; set; }
             public D_ReportOfOffbed ReportOfOffbed { get; set; }
             public D_UserBaseInfo UserBaseInfo { get; set; }
+
             public D_ReportChart ReportCharts { get; set; }
         }
 
@@ -222,8 +223,8 @@ namespace SenvivSdk
             public int BaseSDNN { get; set; }
             public decimal endocrine { get; set; }
             public decimal temperature { get; set; }
-            public int BaseULF { get; set; }
-            public int BaseVLF { get; set; }
+            public decimal BaseULF { get; set; }
+            public decimal BaseVLF { get; set; }
             public long Today { get; set; }
             public int SleepValue { get; set; }
             public long ReportDate { get; set; }
@@ -231,7 +232,7 @@ namespace SenvivSdk
 
         public class D_ReportOfOffbed
         {
-            public long OffbedCounts { get; set; }
+            public int OffbedCounts { get; set; }
         }
 
         public class D_UserBaseInfo
