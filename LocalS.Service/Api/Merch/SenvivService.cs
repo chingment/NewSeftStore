@@ -223,7 +223,7 @@ namespace LocalS.Service.Api.Merch
             string svUserId = "461x847d0217EA";
             var d_DayReports = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true).OrderBy(m => m.CreateTime).Take(7).ToList();
 
-            d_DayReports = d_DayReports.OrderBy(m => m.HealthDate).ToList();
+            d_DayReports = d_DayReports.OrderBy(m => m.ReportTime).ToList();
             foreach (var d_DayReport in d_DayReports)
             {
                 foreach (var openId in openIds)
@@ -239,9 +239,9 @@ namespace LocalS.Service.Api.Merch
 
                     var template = BizFactory.Senviv.GetWxPaTpl(d_DayReport.SvUserId, "day_report");
 
-                    string first = "您好，" + d_DayReport.HealthDate.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
+                    string first = "您好，" + d_DayReport.ReportTime.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
                     string url = "http://health.17fanju.com/report/day?rptId=" + d_DayReport.Id + "&theme=" + theme;
-                    string keyword1 = d_DayReport.HealthDate.ToUnifiedFormatDateTime();
+                    string keyword1 = d_DayReport.ReportTime.ToUnifiedFormatDateTime();
                     string keyword2 = "总体评分" + d_DayReport.HealthScore + "分";
                     string remark = "感谢您的支持，如需查看详情报告信息请点击";
 
@@ -426,7 +426,7 @@ namespace LocalS.Service.Api.Merch
                              tt.Avatar,
                              tt.ReportCount,
                              u.HealthScore,
-                             u.HealthDate,
+                             u.ReportTime,
                              u.SmTags,
                              u.SmRssj,
                              u.SmQxsj,
@@ -478,7 +478,7 @@ namespace LocalS.Service.Api.Merch
                 DateTime? startTime = Lumos.CommonUtil.ConverToStartTime(rup.HealthDate[0]);
                 DateTime? endTime = Lumos.CommonUtil.ConverToEndTime(rup.HealthDate[1]);
 
-                query = query.Where(m => m.HealthDate >= startTime && m.HealthDate <= endTime);
+                query = query.Where(m => m.ReportTime >= startTime && m.ReportTime <= endTime);
             }
 
             if (!string.IsNullOrEmpty(rup.SvUserId))
@@ -490,7 +490,7 @@ namespace LocalS.Service.Api.Merch
 
             int pageIndex = rup.Page - 1;
             int pageSize = rup.Limit;
-            query = query.OrderByDescending(r => r.HealthDate).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.ReportTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
 
@@ -506,7 +506,7 @@ namespace LocalS.Service.Api.Merch
                     Avatar = rpt.Avatar,
                     Sex = new FieldModel(rpt.Sex, SvUtil.GetSexName(rpt.Sex)),
                     Age = SvUtil.GetAge(rpt.Birthday),
-                    HealthDate = rpt.HealthDate.ToUnifiedFormatDate(),
+                    HealthDate = rpt.ReportTime.ToUnifiedFormatDate(),
                     HealthScore = rpt.HealthScore,
                     SmRssj = rpt.SmRssj.ToString("HH:mm:ss"),
                     SmQxsj = rpt.SmQxsj.ToString("HH:mm:ss"),
@@ -605,7 +605,7 @@ namespace LocalS.Service.Api.Merch
                              tt.Avatar,
                              tt.ReportCount,
                              u.HealthScore,
-                             u.HealthDate,
+                             u.ReportTime,
                              u.SmTags,
                              u.SmRssj,
                              u.SmQxsj,
@@ -731,7 +731,7 @@ namespace LocalS.Service.Api.Merch
                 },
                 ReportData = new
                 {
-                    HealthDate = d_Rpt.HealthDate.ToUnifiedFormatDate(),
+                    HealthDate = d_Rpt.ReportTime.ToUnifiedFormatDate(),
                     HealthScore = d_Rpt.HealthScore,
                     SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
                     SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),

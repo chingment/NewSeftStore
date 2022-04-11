@@ -100,7 +100,7 @@ namespace LocalS.BLL
 
                 LogUtil.Info("userId：" + svUserId + ",rptType:" + rptType + ",d_StageReport is null");
 
-                var d_DayReports = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true && m.HealthDate >= rptStartTime && m.HealthDate <= rptEndTime).ToList();
+                var d_DayReports = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true && m.ReportTime >= rptStartTime && m.ReportTime <= rptEndTime).ToList();
                 if (d_DayReports.Count > 0)
                 {
                     LogUtil.Info("userId：" + svUserId + ",rptType:" + rptType + ",d_DayReports:" + d_DayReports.Count);
@@ -775,7 +775,7 @@ namespace LocalS.BLL
                     d_StageReport.JbfxXljsl = Decimal.Parse(d_DayReports.Select(m => m.JbfxXljsl).Average().ToString());//
                     d_StageReport.JbfxXlscfx = Decimal.Parse(d_DayReports.Select(m => m.JbfxXlscfx).Average().ToString());//
 
-                    d_StageReport.DatePt = d_DayReports.Select(m => m.HealthDate.ToUnifiedFormatDate()).ToJsonString();//
+                    d_StageReport.DatePt = d_DayReports.Select(m => m.ReportTime.ToUnifiedFormatDate()).ToJsonString();//
 
 
                     d_StageReport.HealthScorePt = d_DayReports.Select(m => m.HealthScore).ToJsonString();
@@ -907,6 +907,7 @@ namespace LocalS.BLL
         {
             SvHealthDayReport r_DayReport = null;
 
+
             if (svDeptId == "32")
             {
                 r_DayReport = BuildDayReport32(svUserId, svDeviceId, svDeptId);
@@ -924,7 +925,7 @@ namespace LocalS.BLL
             SvHealthDayReport d_DayReport = new SvHealthDayReport();
             d_DayReport.Id = r_DayReport.Id;
             d_DayReport.SvUserId = r_DayReport.SvUserId;
-            d_DayReport.HealthDate = r_DayReport.HealthDate;
+            d_DayReport.ReportTime = r_DayReport.ReportTime;
             d_DayReport.HealthScore = r_DayReport.HealthScore;
             d_DayReport.SmTags = r_DayReport.SmTags;
             d_DayReport.MylMylzs = r_DayReport.MylMylzs;
@@ -1119,6 +1120,8 @@ namespace LocalS.BLL
         {
             try
             {
+
+
                 var config_Senviv = GetConfig(svDeptId);
 
                 LogUtil.Info(TAG, "BuildDayReport32.UserId:" + svUserId + ",DeptId:" + svDeptId);
@@ -1435,7 +1438,7 @@ namespace LocalS.BLL
                 var sm = d1.ReportOfSleep;
                 if (sm != null)
                 {
-                    d_DayReport.HealthDate = SvUtil.D32LongToDateTime(x2.FinishTime);
+                    d_DayReport.ReportTime = SvUtil.D32LongToDateTime(x2.FinishTime);
 
                     d_DayReport.SmScsj = SvUtil.D32LongToDateTime(x2.StartTime);//上床时间
                     d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(x2.FinishTime);//离床时间
@@ -1595,7 +1598,7 @@ namespace LocalS.BLL
                 d_DayReport = new SvHealthDayReport();
                 d_DayReport.Id = reportpar.ReportId;
                 d_DayReport.SvUserId = svUserId;
-                d_DayReport.HealthDate = SvUtil.D32LongToDateTime(reportpar.CreateTime);
+                d_DayReport.ReportTime = SvUtil.D32LongToDateTime(reportpar.CreateTime);
                 d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
 
                 d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
@@ -1962,7 +1965,7 @@ namespace LocalS.BLL
 
             var template = GetWxPaTpl(d_DayReport.SvUserId, "day_report");
 
-            string first = "您好，" + d_DayReport.HealthDate.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
+            string first = "您好，" + d_DayReport.ReportTime.ToUnifiedFormatDate() + "日健康报告已生成，详情如下";
             string url = "http://health.17fanju.com/report/day?rptId=" + rptId + "&theme=" + theme;
             string keyword1 = DateTime.Now.ToUnifiedFormatDateTime();
             string keyword2 = "总体评分" + d_DayReport.HealthScore + "分";

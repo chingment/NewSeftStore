@@ -9,7 +9,7 @@ namespace LocalS.Entity
     {
         public string Id { get; set; }
         public string SvUserId { get; set; }
-        public DateTime HealthDate { get; set; }
+        public DateTime ReportTime { get; set; }
         public decimal HealthScore { get; set; }
         public decimal SmScore { get; set; }
         public string SmTags { get; set; }

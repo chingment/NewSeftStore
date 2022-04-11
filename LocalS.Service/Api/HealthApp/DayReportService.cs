@@ -22,7 +22,7 @@ namespace LocalS.Service.Api.HealthApp
 
             int reportCount = 0;
 
-            var togetherDays = (int)(d_DayRpt.HealthDate - d_SvUser.CreateTime).TotalDays + 1;
+            var togetherDays = (int)(d_DayRpt.ReportTime - d_SvUser.CreateTime).TotalDays + 1;
 
 
             var pregnancy = new { birthLastDays = 0, gesWeek = 0, gesDay = 0 };
@@ -70,25 +70,25 @@ namespace LocalS.Service.Api.HealthApp
 
             var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
-                                      && u.HealthDate <= d_DayRpt.HealthDate
-                                      select new { u.HealthDate, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.HealthDate).Take(7).ToList();
+                                      && u.ReportTime <= d_DayRpt.ReportTime
+                                      select new { u.ReportTime, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
 
             d_DayReportsByLast.Reverse();
 
             foreach (var d_DayReportByLast in d_DayReportsByLast)
             {
-                smScoreByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.SmScore });
-                mylMylzsByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MylMylzs });
-                mylGrfxByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MylGrfx });
-                mbGxygkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxygk });
-                mbGxbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbGxbgk });
-                mbTnbgkByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.MbTnbgk });
-                qxxlKynlByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlKynl });
-                qxxlQxyjByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlQxyj });
-                qxxlJlqxByLast.Add(new ChatDataByStr { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.QxxlJlqx });
-                zsGmYqByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYq });
-                zsGmYpByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYp });
-                zsGmSrByLast.Add(new { xData = d_DayReportByLast.HealthDate.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmSr });
+                smScoreByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmScore });
+                mylMylzsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.MylMylzs });
+                mylGrfxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.MylGrfx });
+                mbGxygkByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.MbGxygk });
+                mbGxbgkByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.MbGxbgk });
+                mbTnbgkByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.MbTnbgk });
+                qxxlKynlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.QxxlKynl });
+                qxxlQxyjByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.QxxlQxyj });
+                qxxlJlqxByLast.Add(new ChatDataByStr { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.QxxlJlqx });
+                zsGmYqByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYq });
+                zsGmYpByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYp });
+                zsGmSrByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmSr });
             }
 
             #endregion
