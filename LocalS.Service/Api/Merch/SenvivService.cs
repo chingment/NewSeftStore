@@ -1239,7 +1239,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                            u.CreateTime
                        }).FirstOrDefault();
 
-            var d_SugSkus = CurrentDb.SvHealthStageReportSugSku.Where(m => m.ReportId == reportId).ToList();
+            var d_SugSkus = CurrentDb.SvHealthReportSugSku.Where(m => m.ReportId == reportId).ToList();
 
             var sugSkus = new List<object>();
 
@@ -1280,25 +1280,25 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
             rpt.RptSummary = rop.RptSummary;
             rpt.RptSuggest = rop.RptSuggest;
 
-            var d_SugSkus = CurrentDb.SvHealthStageReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
+            var d_SugSkus = CurrentDb.SvHealthReportSugSku.Where(m => m.ReportId == rop.ReportId).ToList();
 
             foreach (var d_SugSku in d_SugSkus)
             {
-                CurrentDb.SvHealthStageReportSugSku.Remove(d_SugSku);
+                CurrentDb.SvHealthReportSugSku.Remove(d_SugSku);
             }
 
             if (rop.SugSkus != null)
             {
                 foreach (var sugSku in rop.SugSkus)
                 {
-                    var d_SugSku = new SvHealthStageReportSugSku();
+                    var d_SugSku = new SvHealthReportSugSku();
                     d_SugSku.Id = IdWorker.Build(IdType.NewGuid);
                     d_SugSku.ReportId = rop.ReportId;
                     d_SugSku.MerchId = merchId;
                     d_SugSku.SkuId = sugSku.Id;
                     d_SugSku.CreateTime = DateTime.Now;
                     d_SugSku.Creator = operater;
-                    CurrentDb.SvHealthStageReportSugSku.Add(d_SugSku);
+                    CurrentDb.SvHealthReportSugSku.Add(d_SugSku);
                 }
             }
 

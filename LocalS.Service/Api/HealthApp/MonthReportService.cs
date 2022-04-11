@@ -85,7 +85,7 @@ namespace LocalS.Service.Api.HealthApp
                 scoreRatio = Convert.ToInt32(r);
             }
 
-            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SvHealthReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -214,7 +214,7 @@ namespace LocalS.Service.Api.HealthApp
                        }).FirstOrDefault();
 
 
-            var d_SmTags = CurrentDb.SvHealthStageReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
+            var d_SmTags = CurrentDb.SvHealthReportTag.Where(m => m.ReportId == d_StageRpt.Id).OrderByDescending(m => m.TagCount).Take(4).ToList();
 
             List<object> smTags = new List<object>();
 
@@ -291,7 +291,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var rptTag = (from u in CurrentDb.SvHealthStageReportTag
+            var rptTag = (from u in CurrentDb.SvHealthReportTag
                           where u.Id == tagId
                           select new
                           {
@@ -334,7 +334,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var result = new CustomJsonResult();
 
-            var query = (from u in CurrentDb.SvHealthStageReportSugSku
+            var query = (from u in CurrentDb.SvHealthReportSugSku
                          where u.ReportId == rptId
                          select new { u.Id, u.MerchId, u.SkuId, u.CreateTime });
 

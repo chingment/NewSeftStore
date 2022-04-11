@@ -84,8 +84,8 @@ namespace LocalS.DAL
         public IDbSet<SvHealthStageReport> SvHealthStageReport { get; set; }
         //public IDbSet<SvHealthDayReportLabel> SvHealthDayReportLabel { get; set; }
         //public IDbSet<SvHealthDayReportAdvice> SvHealthDayReportAdvice { get; set; }
-        public IDbSet<SvHealthStageReportSugSku> SvHealthStageReportSugSku { get; set; }
-        public IDbSet<SvHealthStageReportTag> SvHealthStageReportTag { get; set; }
+        public IDbSet<SvHealthReportSugSku> SvHealthReportSugSku { get; set; }
+        public IDbSet<SvHealthReportTag> SvHealthReportTag { get; set; }
         public IDbSet<SvVisitRecord> SvVisitRecord { get; set; }
         public IDbSet<SvMerch> SvMerch { get; set; }
         public IDbSet<SvHealthTagExplain> SvHealthTagExplain { get; set; }

@@ -104,8 +104,8 @@
     <Compile Include="SvHealthDayReportAdvice.cs" />
     <Compile Include="SvHealthDayReportLabel.cs" />
     <Compile Include="SvHealthStageReport.cs" />
-    <Compile Include="SvHealthStageReportSugSku.cs" />
-    <Compile Include="SvHealthStageReportTag.cs" />
+    <Compile Include="SvHealthReportSugSku.cs" />
+    <Compile Include="SvHealthReportTag.cs" />
     <Compile Include="SvHealthTagExplain.cs" />
     <Compile Include="SvImitateLyingIn.cs" />
     <Compile Include="SvMerch.cs" />

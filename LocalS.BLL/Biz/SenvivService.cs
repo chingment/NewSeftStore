@@ -804,7 +804,7 @@ namespace LocalS.BLL
 
                     foreach (var smTag in smTags_Count)
                     {
-                        var d_smTag = new SvHealthStageReportTag();
+                        var d_smTag = new SvHealthReportTag();
                         d_smTag.Id = IdWorker.Build(IdType.NewGuid);
                         d_smTag.SvUserId = svUserId;
                         d_smTag.ReportId = d_StageReport.Id;
@@ -818,7 +818,7 @@ namespace LocalS.BLL
                         d_smTag.TagName = smTag.Name;
                         d_smTag.TagCount = smTag.Count;
 
-                        CurrentDb.SvHealthStageReportTag.Add(d_smTag);
+                        CurrentDb.SvHealthReportTag.Add(d_smTag);
                     }
 
                     if (rptType == "per_month")
