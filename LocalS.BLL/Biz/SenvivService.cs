@@ -943,8 +943,8 @@ namespace LocalS.BLL
             d_DayReport.XlDcjzxl = r_DayReport.XlDcjzxl;//当次基准心率
             d_DayReport.XlCqjzxl = r_DayReport.XlCqjzxl;//长期基准心率
             d_DayReport.XlDcpjxl = r_DayReport.XlDcpjxl;//当次平均心率
-            d_DayReport.XlZg = r_DayReport.XlZg;//最高心率
-            d_DayReport.XlZd = r_DayReport.XlZd;//最低心率
+            d_DayReport.XlZgxl = r_DayReport.XlZgxl;//最高心率
+            d_DayReport.XlZdxl = r_DayReport.XlZdxl;//最低心率
             d_DayReport.XlXdgksc = r_DayReport.XlXdgksc;//心动过快时长
             d_DayReport.XlXdgmsc = r_DayReport.XlXdgmsc;//心动过慢时长
             d_DayReport.Xlcg125 = r_DayReport.Xlcg125;//todo 
@@ -1355,8 +1355,8 @@ namespace LocalS.BLL
                     d_DayReport.XlDcjzxl = xl.DayCurBenchmark;//当次基准心率
                     d_DayReport.XlCqjzxl = xl.DayLongterm;//长期基准心率
                     d_DayReport.XlDcpjxl = xl.Average;//当次平均心率
-                    d_DayReport.XlZg = xl.HeartbeatMax;//最高心率
-                    d_DayReport.XlZd = xl.HeartbeatMin;//最低心率
+                    d_DayReport.XlZgxl = xl.HeartbeatMax;//最高心率
+                    d_DayReport.XlZdxl = xl.HeartbeatMin;//最低心率
                     d_DayReport.XlXdgksc = xl.Higher;//心动过快时长
                     d_DayReport.XlXdgmsc = xl.Lower;//心动过慢时长
                     d_DayReport.Xlcg125 = 0;//todo 
@@ -1616,8 +1616,8 @@ namespace LocalS.BLL
                 d_DayReport.XlDcjzxl = SvUtil.D46Int(reportpar.hr);//当次基准心率
                 d_DayReport.XlCqjzxl = SvUtil.D46Int(reportpar.lhr);//长期基准心率
                 d_DayReport.XlDcpjxl = SvUtil.D46Int(reportpar.avg);//当次平均心率
-                d_DayReport.XlZg = SvUtil.D46Int(reportpar.max);//最高心率
-                d_DayReport.XlZd = SvUtil.D46Int(reportpar.min);//最低心率
+                d_DayReport.XlZgxl = SvUtil.D46Int(reportpar.max);//最高心率
+                d_DayReport.XlZdxl = SvUtil.D46Int(reportpar.min);//最低心率
                 d_DayReport.XlXdgksc = SvUtil.D46Int(reportpar.hrfast);//心动过快时长
                 d_DayReport.XlXdgmsc = SvUtil.D46Int(reportpar.hrslow);//心动过慢时长
                 d_DayReport.Xlcg125 = 0;//todo 

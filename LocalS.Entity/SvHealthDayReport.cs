@@ -78,9 +78,9 @@ namespace LocalS.Entity
         //当次平均心率
         public int XlDcpjxl { get; set; }
         //最高心率
-        public int XlZg { get; set; }
+        public int XlZgxl { get; set; }
         //最低心率
-        public int XlZd { get; set; }
+        public int XlZdxl { get; set; }
         //心动过快时长
         public long XlXdgksc { get; set; }
         //心动过慢时长

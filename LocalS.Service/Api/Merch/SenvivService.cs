@@ -639,9 +639,9 @@ namespace LocalS.Service.Api.Merch
                              //当次平均心率
                              u.XlDcpjxl,
                              //最高心率
-                             u.XlZg,
+                             u.XlZgxl,
                              //最低心率
-                             u.XlZd,
+                             u.XlZdxl,
                              //心动过快时长
                              u.XlXdgksc,
                              //心动过慢时长
@@ -788,9 +788,9 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //当次平均心率
                     XlDcpjxl = SvUtil.GetXlDcpjxl(d_Rpt.XlDcpjxl),
                     //最高心率
-                    d_Rpt.XlZg,
+                    d_Rpt.XlZgxl,
                     //最低心率
-                    d_Rpt.XlZd,
+                    d_Rpt.XlZdxl,
                     //心动过快时长
                     d_Rpt.XlXdgksc,
                     //心动过慢时长
