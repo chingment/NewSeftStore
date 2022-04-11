@@ -638,7 +638,7 @@ namespace LocalS.Service.Api.HealthApp
 
             #endregion
 
-            var result_BindBox = SdkFactory.Senviv.BindBox(config_Senviv, d_SvUser.Id, d_SvUserDevice.DeviceId);
+            var result_BindBox = SdkFactory.Senviv.BindDevice(config_Senviv, d_SvUser.Id, d_SvUserDevice.DeviceId);
 
             if (result_BindBox.Result != ResultType.Success)
             {
@@ -802,7 +802,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
 
-            var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
+            var r_Api_BindBox = SdkFactory.Senviv.UnBindDevice(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
 
             if (r_Api_BindBox.Result != ResultType.Success)
                 return r_Api_BindBox;

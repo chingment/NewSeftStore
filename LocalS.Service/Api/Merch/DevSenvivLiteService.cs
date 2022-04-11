@@ -143,15 +143,21 @@ namespace LocalS.Service.Api.Merch
                     d_MerchDevice.MendTime = DateTime.Now;
                 }
 
+
+                var config_Senviv = BizFactory.Senviv.GetConfig(d_Device.SvDeptId);
+
+
+                var r_Devices = SdkFactory.Senviv.GetDevices(config_Senviv, d_Device.Id);
+
+                foreach (var r_Device in r_Devices)
+                {
+                    SdkFactory.Senviv.UnBindDevice(config_Senviv, r_Device.userid, r_Device.sn);
+                }
+
                 var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).ToList();
 
                 foreach (var d_SvUserDevice in d_SvUserDevices)
                 {
-
-                    var config_Senviv = BizFactory.Senviv.GetConfig(d_SvUserDevice.SvDeptId);
-
-                    var r_Api_BindBox = SdkFactory.Senviv.UnBindBox(config_Senviv, d_SvUserDevice.SvUserId, rop.DeviceId);
-
                     d_SvUserDevice.BindDeviceIdTime = null;
                     d_SvUserDevice.BindPhoneTime = null;
                     d_SvUserDevice.InfoFillTime = null;
@@ -162,7 +168,6 @@ namespace LocalS.Service.Api.Merch
                     CurrentDb.SaveChanges();
 
                 }
-
 
                 CurrentDb.SaveChanges();
                 ts.Complete();

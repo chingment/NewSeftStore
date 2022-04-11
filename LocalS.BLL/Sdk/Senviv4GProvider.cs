@@ -132,6 +132,11 @@ namespace LocalS.BLL
 
         public List<SenvivSdk.BoxListResult.DataModel> GetDevices(SenvivConfig config)
         {
+            return GetDevices(config, "");
+        }
+
+        public List<SenvivSdk.BoxListResult.DataModel> GetDevices(SenvivConfig config, string deviceId)
+        {
             var list = new List<SenvivSdk.BoxListResult.DataModel>();
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
@@ -139,7 +144,7 @@ namespace LocalS.BLL
             int page = 1;
             int size = 1000;
 
-            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page });
+            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page, keyword = deviceId });
             var result = api.DoPost(boxListRequest);
             if (result.Result == ResultType.Success)
             {
@@ -253,7 +258,7 @@ namespace LocalS.BLL
             return result.Data.Data;
         }
 
-        public CustomJsonResult BindBox(SenvivConfig config, string userid, string sn)
+        public CustomJsonResult BindDevice(SenvivConfig config, string userid, string sn)
         {
             var restult = new CustomJsonResult();
 
@@ -289,7 +294,7 @@ namespace LocalS.BLL
 
         }
 
-        public CustomJsonResult UnBindBox(SenvivConfig config, string userid, string sn)
+        public CustomJsonResult UnBindDevice(SenvivConfig config, string userid, string sn)
         {
             var restult = new CustomJsonResult();
 

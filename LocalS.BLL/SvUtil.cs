@@ -1477,19 +1477,19 @@ namespace LocalS.BLL
             {
                 jd.Set("低", "↓↓", CB_1);
             }
-            else if (30 >= val && val < 60)
+            else if (30 <= val && val < 60)
             {
                 jd.Set("偏低", "↓", CB_2);
             }
-            else if (60 >= val && val < 80)
+            else if (60 <= val && val < 80)
             {
                 jd.Set("中等", "-", CB_3);
             }
-            else if (80 >= val && val < 90)
+            else if (80 <= val && val < 90)
             {
                 jd.Set("良好", "-", CB_4);
             }
-            else if (90 >= val && val <= 100)
+            else if (90 <= val && val <= 100)
             {
                 jd.Set("优秀", "-", CB_5);
             }
@@ -1516,19 +1516,19 @@ namespace LocalS.BLL
             {
                 jd.Set("低", "↓↓", CB_1);
             }
-            else if (30 >= val && val < 60)
+            else if (30 <= val && val < 60)
             {
                 jd.Set("偏低", "↓", CB_2);
             }
-            else if (60 >= val && val < 80)
+            else if (60 <= val && val < 80)
             {
                 jd.Set("中等", "-", CB_3);
             }
-            else if (80 >= val && val < 90)
+            else if (80 <= val && val < 90)
             {
                 jd.Set("良好", "-", CB_4);
             }
-            else if (90 >= val && val <= 100)
+            else if (90 <= val && val <= 100)
             {
                 jd.Set("优秀", "-", CB_5);
             }
