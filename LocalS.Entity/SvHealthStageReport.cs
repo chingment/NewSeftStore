@@ -27,7 +27,6 @@ namespace LocalS.Entity
         public int DayCount { get; set; }
         public decimal HealthScore { get; set; }
         public decimal SmScore { get; set; }
-
         public string SmTags { get; set; }
         //在床时长
         public decimal SmZcsc { get; set; }
@@ -71,21 +70,21 @@ namespace LocalS.Entity
         //当次平均心率
         public decimal XlDcpjxl { get; set; }
         //最高心率
-        public decimal XlZg { get; set; }
+        public decimal XlZgxl { get; set; }
         //最低心率
-        public decimal XlZd { get; set; }
+        public decimal XlZdxl { get; set; }
         //心动过快时长
-        public decimal XlXdgksc { get; set; }
+        public decimal XlGksc { get; set; }
         //心动过慢时长
-        public decimal XlXdgmsc { get; set; }
+        public decimal XlGmsc { get; set; }
         //心率超过1.25时长
-        public decimal Xlcg125 { get; set; }
+        public decimal XlCg125 { get; set; }
         //心率超过1.15时长
-        public decimal Xlcg115 { get; set; }
+        public decimal XlCg115 { get; set; }
         //心率超过0.85时长
-        public decimal Xlcg085 { get; set; }
+        public decimal XlCg085 { get; set; }
         //心率超过075时长
-        public decimal Xlcg075 { get; set; }
+        public decimal XlCg075 { get; set; }
         //呼吸当次基准呼吸
         public decimal HxDcjzhx { get; set; }
         //呼吸长期基准呼吸
@@ -180,10 +179,8 @@ namespace LocalS.Entity
         public string SugByQxyl { get; set; }
         public string RptSummary { get; set; }
         public string RptSuggest { get; set; }
-
         public string RptType { get; set; }
         public DateTime? RptStartTime { get; set; }
-
         public DateTime? RptEndTime { get; set; }
         public string Creator { get; set; }
         public DateTime CreateTime { get; set; }

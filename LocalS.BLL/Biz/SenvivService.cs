@@ -1168,100 +1168,100 @@ namespace LocalS.BLL
                     {
                         foreach (var index in indexs)
                         {
-                            SvHealthDayReportLabel d_Label = null;
+                            // SvHealthDayReportLabel d_Label = null;
                             switch (index.type)
                             {
                                 //情绪心理-情绪应激
                                 case "emostress":
                                     d_DayReport.QxxlQxyj = index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "QxxlQxyj";
-                                    d_Label.TypeName = "情绪应激";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "QxxlQxyj";
+                                    //d_Label.TypeName = "情绪应激";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
                                     break;
                                 //情绪心理-抗压能力
                                 case "compressionability":
                                     d_DayReport.QxxlKynl = index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "QxxlKynl";
-                                    d_Label.TypeName = "抗压能力";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "QxxlKynl";
+                                    //d_Label.TypeName = "抗压能力";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
                                     break;
                                 //免疫力-免疫力指数
                                 case "Immunity":
                                     d_DayReport.MylMylzs = index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "MylMylZs";
-                                    d_Label.TypeName = "免疫力指数";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "MylMylZs";
+                                    //d_Label.TypeName = "免疫力指数";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
                                     break;
                                 //免疫力-感染风险
                                 case "感染风险":
 
                                     d_DayReport.MylGrfx = index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "MylGrfx";
-                                    d_Label.TypeName = "感染风险";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "MylGrfx";
+                                    //d_Label.TypeName = "感染风险";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
 
                                     break;
                                 //慢病管理-高血压管控
                                 case "高血压管控":
                                     d_DayReport.MbGxygk = 100 - index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "MbGxbgk";
-                                    d_Label.TypeName = "高血压管控";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "MbGxbgk";
+                                    //d_Label.TypeName = "高血压管控";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
                                     break;
                                 //慢病管理-糖尿病管控
                                 case "糖尿病管控":
                                     d_DayReport.MbTnbgk = 100 - index.score;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "MbTlbgk";
-                                    d_Label.TypeName = "糖尿病管控";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "MbTlbgk";
+                                    //d_Label.TypeName = "糖尿病管控";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
 
                                     break;
                                 //情绪心理-焦虑情绪
@@ -1269,84 +1269,83 @@ namespace LocalS.BLL
 
                                     d_DayReport.QxxlJlqx = index.explain;
 
-                                    d_Label = new SvHealthDayReportLabel();
-                                    d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                                    d_Label.ReportId = d_DayReport.Id;
-                                    d_Label.SvUserId = d_DayReport.SvUserId;
-                                    d_Label.TypeCode = "QxxlJlqx";
-                                    d_Label.TypeName = "焦虑情绪";
-                                    d_Label.TypeClass = "2";
-                                    d_Label.Explain = index.explain;
-                                    d_Label.Suggest = index.suggest.ToJsonString();
-                                    d_Label.Score = index.score;
+                                    //d_Label = new SvHealthDayReportLabel();
+                                    //d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                                    //d_Label.ReportId = d_DayReport.Id;
+                                    //d_Label.SvUserId = d_DayReport.SvUserId;
+                                    //d_Label.TypeCode = "QxxlJlqx";
+                                    //d_Label.TypeName = "焦虑情绪";
+                                    //d_Label.TypeClass = "2";
+                                    //d_Label.Explain = index.explain;
+                                    //d_Label.Suggest = index.suggest.ToJsonString();
+                                    //d_Label.Score = index.score;
 
                                     break;
                                 case "冠心病管控":
                                     d_DayReport.MbGxbgk = 100 - index.score;
                                     break;
                                 default:
-                                    d_Label = null;
+                                    //d_Label = null;
                                     break;
                             }
 
-                            if (d_Label != null)
-                            {
-                                CurrentDb.SvHealthDayReportLabel.Add(d_Label);
-                                CurrentDb.SaveChanges();
-                            }
+                            //if (d_Label != null)
+                            //{
+                            //    CurrentDb.SvHealthDayReportLabel.Add(d_Label);
+                            //    CurrentDb.SaveChanges();
+                            //}
                         }
 
                     }
                     #endregion
 
-                    var labels = x2.labels;
+                    //var labels = x2.labels;
 
-                    #region
-                    if (labels != null)
-                    {
-                        List<string> smTags = new List<string>();
+                    //#region
+                    //if (labels != null)
+                    //{
+                    //    List<string> smTags = new List<string>();
 
-                        foreach (var label in labels)
-                        {
-                            var d_Label = new SvHealthDayReportLabel();
-                            d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                            d_Label.ReportId = d_DayReport.Id;
-                            d_Label.SvUserId = d_DayReport.SvUserId;
-                            d_Label.TypeName = label.TagName;
-                            d_Label.Explain = label.Explain;
-                            d_Label.Suggest = label.suggest.ToJsonString();
-                            d_Label.Level = label.level;
-                            d_Label.TypeClass = "1";
-                            CurrentDb.SvHealthDayReportLabel.Add(d_Label);
-                            CurrentDb.SaveChanges();
+                    //    foreach (var label in labels)
+                    //    {
+                    //        var d_Label = new SvHealthDayReportLabel();
+                    //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                    //        d_Label.ReportId = d_DayReport.Id;
+                    //        d_Label.SvUserId = d_DayReport.SvUserId;
+                    //        d_Label.TypeName = label.TagName;
+                    //        d_Label.Explain = label.Explain;
+                    //        d_Label.Suggest = label.suggest.ToJsonString();
+                    //        d_Label.Level = label.level;
+                    //        d_Label.TypeClass = "1";
+                    //        CurrentDb.SvHealthDayReportLabel.Add(d_Label);
+                    //        CurrentDb.SaveChanges();
 
-                        }
+                    //    }
 
-                        d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
+                    //    d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
 
-                    }
+                    //}
 
-                    #endregion
+                    //#endregion
 
-                    var advices = x2.advices;
+                    //var advices = x2.advices;
 
-                    #region advices
+                    //#region advices
 
-                    foreach (var advice in advices)
-                    {
-                        var d_Advice = new SvHealthDayReportAdvice();
-                        d_Advice.Id = IdWorker.Build(IdType.NewGuid);
-                        d_Advice.ReportId = d_DayReport.Id;
-                        d_Advice.SvUserId = d_DayReport.SvUserId;
-                        d_Advice.SuggestCode = advice.suggestcode;
-                        d_Advice.SuggestName = advice.suggestion;
-                        d_Advice.SuggestDirection = advice.suggestdirection;
-                        d_Advice.Summary = advice.summarystr;
-                        CurrentDb.SvHealthDayReportAdvice.Add(d_Advice);
-                        CurrentDb.SaveChanges();
-                    }
-
-                    #endregion
+                    //foreach (var advice in advices)
+                    //{
+                    //    var d_Advice = new SvHealthDayReportAdvice();
+                    //    d_Advice.Id = IdWorker.Build(IdType.NewGuid);
+                    //    d_Advice.ReportId = d_DayReport.Id;
+                    //    d_Advice.SvUserId = d_DayReport.SvUserId;
+                    //    d_Advice.SuggestCode = advice.suggestcode;
+                    //    d_Advice.SuggestName = advice.suggestion;
+                    //    d_Advice.SuggestDirection = advice.suggestdirection;
+                    //    d_Advice.Summary = advice.summarystr;
+                    //    CurrentDb.SvHealthDayReportAdvice.Add(d_Advice);
+                    //    CurrentDb.SaveChanges();
+                    //}
+                    //#endregion
                 }
 
                 var xl = d1.ReportOfHeartBeat;
