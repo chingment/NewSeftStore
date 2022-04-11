@@ -1901,16 +1901,23 @@ namespace LocalS.BLL
         public SenvivConfig GetConfig(string svDeptId)
         {
             var config = new SenvivConfig();
+
+            string account = "";
+            string pwd = "";
             if (svDeptId == "32")
             {
-                config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("qxtadmin", "zkxz123");
-                config.SvDeptId = "32";
+                account = "qxtadmin";
+                pwd = "zkxz123";
             }
             else if (svDeptId == "46")
             {
-                config.AccessToken = SdkFactory.Senviv.GetApiAccessToken("全线通月子会所", "qxt123456");
-                config.SvDeptId = "46";
+                account = "全线通月子会所";
+                pwd = "qxt123456";
             }
+
+            config.AccessToken = SdkFactory.Senviv.GetApiAccessToken(account, pwd);
+            config.SvDeptId = svDeptId;
+
             return config;
         }
         public bool SendMonthReport(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
