@@ -115,7 +115,7 @@ namespace LocalS.Service.Api.Merch
 
                 if (d_Device == null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已解绑门店");
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到信息");
                 }
 
                 d_Device.CurUseMerchId = merchId;
@@ -138,14 +138,12 @@ namespace LocalS.Service.Api.Merch
                         d_MerchDevice.IsStopUse = true;
                     }
 
-
                     d_MerchDevice.Mender = operater;
                     d_MerchDevice.MendTime = DateTime.Now;
                 }
 
 
                 var config_Senviv = BizFactory.Senviv.GetConfig(d_Device.SvDeptId);
-
 
                 var r_Devices = SdkFactory.Senviv.GetDevices(config_Senviv, d_Device.Id);
 
@@ -234,8 +232,6 @@ namespace LocalS.Service.Api.Merch
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
-
-
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "绑定成功");
 

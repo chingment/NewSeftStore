@@ -56,6 +56,8 @@ namespace Test
 
         static void Main(string[] args)
         {
+            SvUtil.D46Long(1000 * 1m / 6);
+
             decimal cccc = SvUtil.D46Decimal("3533.56653");
 
             //var week = Lumos.CommonUtil.GetDiffWeekDay(DateTime.Parse(DateTime.Now.ToString("2021-09-24")), DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")));

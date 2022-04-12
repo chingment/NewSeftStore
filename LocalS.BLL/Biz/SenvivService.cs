@@ -1475,7 +1475,7 @@ namespace LocalS.BLL
                         {
                             if (move.starttime != 0 && move.endtime != 0)
                             {
-                                moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = move.score });
+                                moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = SvUtil.D46Int(move.score) });
                             }
                         }
 
@@ -1641,9 +1641,6 @@ namespace LocalS.BLL
 
                 d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
                 d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
-                                                                  //d_DayReport.HxZtcsPoint = hx.ReportOfBreathPause.ToJsonString();
-                                                                  //d_DayReport.HxZtpjsc = hx.AvgPause;//呼吸暂停平均时长
-
 
                 d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
                 d_DayReport.HrvXzznljzz = SvUtil.D46Int(reportpar.BaseTP);//心脏总能量基准值
@@ -1776,12 +1773,24 @@ namespace LocalS.BLL
                     var smScsj = SvUtil.D32DateTimeToLong(d_DayReport.SmScsj);
                     var smLcjs = SvUtil.D32DateTimeToLong(d_DayReport.SmLcsj);
                     var hxztPoints = new List<object>();
+                    long sumLongerVal = 0;
                     foreach (var p in ps)
                     {
-                        hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerVal = SvUtil.D46Long(p.i) });
+                        long longerVal = SvUtil.D46Long(p.i);
+
+                        sumLongerVal += longerVal;
+
+                        hxztPoints.Add(new { startTime = smScsj + SvUtil.D46Long(p.s), endTime = smScsj + SvUtil.D46Long(p.e), longerVal = longerVal });
+                    }
+
+                    long hxZtpjsc = 0;
+                    if (hxztPoints.Count > 0)
+                    {
+                        hxZtpjsc = SvUtil.D46Long(sumLongerVal * 1m / hxztPoints.Count);
                     }
 
                     d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
+                    d_DayReport.HxZtpjsc = hxZtpjsc;
                 }
 
                 d_DayReport.IsSend = false;
