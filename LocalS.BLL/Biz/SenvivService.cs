@@ -1475,8 +1475,8 @@ namespace LocalS.BLL
                         {
                             if (move.starttime != 0 && move.endtime != 0)
                             {
-                                var startTime = move.endtime / 1000;
-                                var endTime = move.starttime / 1000;
+                                var startTime = move.starttime / 1000;
+                                var endTime = move.endtime / 1000;
                                 var longerVal = endTime - startTime;
                                 moves.Add(new { startTime = startTime, endTime = endTime, longerVal = longerVal });
                             }

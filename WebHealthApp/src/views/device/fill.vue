@@ -154,7 +154,7 @@ export default {
           options: [
             { label: '打鼾', value: '3' },
             { label: '长期失眠', value: '11' },
-            { label: '易醒', value: '3' },
+            { label: '易醒', value: '21' },
             { label: '难以入睡', value: '4' },
             { label: '呼吸暂停综合症', value: '2' }
           ],

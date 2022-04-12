@@ -125,6 +125,8 @@ namespace LocalS.BLL
                     return "不宁腿综合症";
                 case "14":
                     return "其它";
+                case "21":
+                    return "易醒";
                 default:
                     return "";
             }
