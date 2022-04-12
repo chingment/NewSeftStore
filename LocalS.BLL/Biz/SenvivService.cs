@@ -1053,7 +1053,7 @@ namespace LocalS.BLL
             d_User.Mender = IdWorker.Build(IdType.EmptyGuid);
             d_User.MendTime = DateTime.Now;
 
-            var reportCount = CurrentDb.SvHealthDayReport.Where(m => m.Id == svUserId && m.IsValid == true).Count();
+            var reportCount = CurrentDb.SvHealthDayReport.Where(m => m.SvUserId == svUserId && m.IsValid == true).Count();
 
             d_User.ReportCount = reportCount;
 
