@@ -146,8 +146,8 @@ namespace SenvivSdk
 
         public class TrendChartModel
         {
-            public List< decimal> xdatavalue { get; set; }
-            public List<decimal> xdatatime { get; set; }
+            public List<int> xdatavalue { get; set; }
+            public List<long> xdatatime { get; set; }
             public decimal type { get; set; }
         }
 

@@ -1299,34 +1299,34 @@ namespace LocalS.BLL
                     }
                     #endregion
 
-                    //var labels = x2.labels;
+                    var labels = x2.labels;
 
-                    //#region
-                    //if (labels != null)
-                    //{
-                    //    List<string> smTags = new List<string>();
+                    #region
+                    if (labels != null)
+                    {
+                        List<string> smTags = new List<string>();
 
-                    //    foreach (var label in labels)
-                    //    {
-                    //        var d_Label = new SvHealthDayReportLabel();
-                    //        d_Label.Id = IdWorker.Build(IdType.NewGuid);
-                    //        d_Label.ReportId = d_DayReport.Id;
-                    //        d_Label.SvUserId = d_DayReport.SvUserId;
-                    //        d_Label.TypeName = label.TagName;
-                    //        d_Label.Explain = label.Explain;
-                    //        d_Label.Suggest = label.suggest.ToJsonString();
-                    //        d_Label.Level = label.level;
-                    //        d_Label.TypeClass = "1";
-                    //        CurrentDb.SvHealthDayReportLabel.Add(d_Label);
-                    //        CurrentDb.SaveChanges();
+                        //foreach (var label in labels)
+                        //{
+                        //    var d_Label = new SvHealthDayReportLabel();
+                        //    d_Label.Id = IdWorker.Build(IdType.NewGuid);
+                        //    d_Label.ReportId = d_DayReport.Id;
+                        //    d_Label.SvUserId = d_DayReport.SvUserId;
+                        //    d_Label.TypeName = label.TagName;
+                        //    d_Label.Explain = label.Explain;
+                        //    d_Label.Suggest = label.suggest.ToJsonString();
+                        //    d_Label.Level = label.level;
+                        //    d_Label.TypeClass = "1";
+                        //    CurrentDb.SvHealthDayReportLabel.Add(d_Label);
+                        //    CurrentDb.SaveChanges();
 
-                    //    }
+                        //}
 
-                    //    d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
+                        d_DayReport.SmTags = labels.Select(m => m.TagName).ToList().ToJsonString();
 
-                    //}
+                    }
 
-                    //#endregion
+                    #endregion
 
                     //var advices = x2.advices;
 
@@ -1475,7 +1475,10 @@ namespace LocalS.BLL
                         {
                             if (move.starttime != 0 && move.endtime != 0)
                             {
-                                moves.Add(new { startTime = move.starttime / 1000, endTime = move.endtime / 1000, score = SvUtil.D46Int(move.score) });
+                                var startTime = move.endtime / 1000;
+                                var endTime = move.starttime / 1000;
+                                var longerVal = endTime - startTime;
+                                moves.Add(new { startTime = startTime, endTime = endTime, longerVal = longerVal });
                             }
                         }
 
@@ -1761,7 +1764,11 @@ namespace LocalS.BLL
                     var tdcsPoints = new List<object>();
                     foreach (var mv in mvs)
                     {
-                        tdcsPoints.Add(new { startTime = smScsj + SvUtil.D46Long(mv.s), endTime = smScsj + SvUtil.D46Long(mv.e), score = 0 });
+                        var startTime = smScsj + SvUtil.D46Long(mv.s);
+                        var endTime = smScsj + SvUtil.D46Long(mv.e);
+                        var longerVal = endTime - startTime;
+
+                        tdcsPoints.Add(new { startTime = startTime, endTime = endTime, longerVal = longerVal });
                     }
 
                     d_DayReport.SmTdcsPoint = tdcsPoints.ToJsonString();
