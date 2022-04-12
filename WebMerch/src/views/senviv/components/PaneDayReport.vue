@@ -154,7 +154,7 @@
         >
           <template slot-scope="scope">
 
-            <dv-item :value="scope.row.mbTlbgk" sign />
+            <dv-item :value="scope.row.mbTnbgk" sign />
 
           </template>
 

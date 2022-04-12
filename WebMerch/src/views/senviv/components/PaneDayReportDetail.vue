@@ -642,8 +642,8 @@ export default {
       var sm_point_xAxis = []
       var sm_point_xAxis_data = []
       for (let index = 0; index < sm_point_d.length; index++) {
-        const var1 = sm_point_d[index].starttime
-        const var2 = sm_point_d[index].endtime
+        const var1 = sm_point_d[index].startTime
+        const var2 = sm_point_d[index].endTime
         var type = sm_point_d[index].type
 
         var var3
