@@ -456,7 +456,7 @@ namespace LocalS.BLL
 
             try
             {
-                long c = Convert.ToInt64(obj);
+                long c = Convert.ToInt64(Convert.ToDecimal(obj));
                 return c;
             }
             catch (Exception ex)
