@@ -1034,11 +1034,9 @@ namespace LocalS.BLL
 
                 #endregion
 
-                LogUtil.Info("d_DayReport.IsValid:" + d_DayReport.IsValid);
 
                 if (!d_DayReport.IsValid)
                     return;
-
 
                 SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
 
@@ -1581,7 +1579,6 @@ namespace LocalS.BLL
 
                 if (d1 == null)
                 {
-                    LogUtil.Info(TAG, "BuildDayReport46,UserId:" + svUserId + ",Report Is Null");
                     return null;
                 }
 
@@ -1603,8 +1600,6 @@ namespace LocalS.BLL
 
                 if (d_DayReport != null)
                     return null;
-
-                LogUtil.Info(TAG, "BuildDayReport46,UserId:" + svUserId + ",Report Not Null");
 
                 #region DayReport
                 d_DayReport = new SvHealthDayReport();
