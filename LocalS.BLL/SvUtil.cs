@@ -32,20 +32,20 @@ namespace LocalS.BLL
         public readonly static string CA_4 = "#96a2dc";//紫色
         public readonly static string CA_5 = "#628DF2";//蓝色
 
-        public static FieldModel GetLadyIdentity(E_SvUserCareMode value)
+        public static FieldModel GetIdentity(E_SvUserCareMode value)
         {
             switch (value)
             {
                 case E_SvUserCareMode.Lady:
-                    return new FieldModel(1, "暂无孕产计划");
+                    return new FieldModel(21, "暂无孕产计划");
                 case E_SvUserCareMode.PrePregnancy:
-                    return new FieldModel(2, "备孕");
+                    return new FieldModel(22, "备孕");
                 case E_SvUserCareMode.Pregnancy:
-                    return new FieldModel(3, "孕妈");
+                    return new FieldModel(23, "孕妈");
                 case E_SvUserCareMode.Postpartum:
-                    return new FieldModel(4, "宝妈");
+                    return new FieldModel(24, "宝妈");
                 default:
-                    return new FieldModel(1, "暂无孕产计划");
+                    return new FieldModel(21, "暂无孕产计划");
             }
         }
 

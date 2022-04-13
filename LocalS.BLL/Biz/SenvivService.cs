@@ -394,7 +394,6 @@ namespace LocalS.BLL
                                 else if (Lumos.CommonUtil.GetTimeSpan(t1, "07:00", "09:00"))
                                 {
                                     t6ByTdcs++;
-
                                 }
                                 else
                                 {

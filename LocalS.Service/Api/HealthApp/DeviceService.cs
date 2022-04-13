@@ -251,7 +251,7 @@ namespace LocalS.Service.Api.HealthApp
                     Geyweek = geyweek,
                     DeliveryTime = deliveryTime,
                     GmPeriod = gmPeriod,
-                    Ladyidentity = SvUtil.GetLadyIdentity(d_SvUser.CareMode),
+                    Identity = SvUtil.GetIdentity(d_SvUser.CareMode),
                     Perplex = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.Perplex), SvUtil.GetPerplexNames(d_SvUser.Perplex, d_SvUser.PerplexOt)),
                     Chronicdisease = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.Chronicdisease), SvUtil.GetChronicdiseaseNames(d_SvUser.Chronicdisease, "")),
                     Medicalhis = new FieldModel(ArrStrConvert2ArrObj(d_SvUser.MedicalHis), SvUtil.GetMedicalHisNames(d_SvUser.MedicalHis, d_SvUser.MedicalHisOt)),
@@ -323,11 +323,11 @@ namespace LocalS.Service.Api.HealthApp
                 d_SvUser.Medicine = GetAnswerValueArrStr(rop.Answers["medicine"]);
             }
 
-            if (rop.Answers.ContainsKey("ladyidentity"))
+            if (rop.Answers.ContainsKey("identity"))
             {
-                string ladyidentity = rop.Answers["ladyidentity"].ToString();
+                string identity = rop.Answers["identity"].ToString();
 
-                d_SvUser.CareMode = GetCareMode(d_SvUser.Sex, ladyidentity);
+                d_SvUser.CareMode = GetCareMode(d_SvUser.Sex, identity);
             }
 
 
@@ -411,19 +411,19 @@ namespace LocalS.Service.Api.HealthApp
 
             if (sex == "2")
             {
-                if (identity == "1")
+                if (identity == "21")
                 {
                     careMode = E_SvUserCareMode.Lady;
                 }
-                else if (identity == "2")
+                else if (identity == "22")
                 {
                     careMode = E_SvUserCareMode.PrePregnancy;
                 }
-                else if (identity == "3")
+                else if (identity == "23")
                 {
                     careMode = E_SvUserCareMode.Pregnancy;
                 }
-                else if (identity == "4")
+                else if (identity == "24")
                 {
                     careMode = E_SvUserCareMode.Postpartum;
                 }
@@ -466,12 +466,12 @@ namespace LocalS.Service.Api.HealthApp
             string chronicdisease = GetAnswerValueArrStr(rop.Answers["chronicdisease"]);
             string medicalhis = GetAnswerValueArrStr(rop.Answers["medicalhis"]);
             string medicine = GetAnswerValueArrStr(rop.Answers["medicine"]);
-            string ladyidentity = GetAnswerValueStr(rop.Answers["ladyidentity"]);
+            string identity = GetAnswerValueStr(rop.Answers["identity"]);
             string deliveryTime = GetAnswerValueStr(rop.Answers["deliveryTime"]);
             string[] geyweek = GetAnswerValueArrObj(rop.Answers["geyweek"]);
             string[] gmPeriod = GetAnswerValueArrObj(rop.Answers["gmPeriod"]);
 
-            var careMode = GetCareMode(sex, ladyidentity);
+            var careMode = GetCareMode(sex, identity);
 
             var post = new
             {

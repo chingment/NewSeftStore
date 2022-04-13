@@ -84,14 +84,14 @@ export default {
           value: ''
         },
         {
-          id: 'ladyidentity',
+          id: 'identity',
           title: '近期计划',
           type: 'radio',
           options: [
-            { label: '暂无孕产计划', value: '1' },
-            { label: '备孕', value: '2' },
-            { label: '孕妈', value: '3' },
-            { label: '宝妈', value: '4' }
+            { label: '暂无孕产计划', value: '21' },
+            { label: '备孕', value: '22' },
+            { label: '孕妈', value: '23' },
+            { label: '宝妈', value: '24' }
           ],
           value: ''
         },

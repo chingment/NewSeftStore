@@ -28,8 +28,8 @@
       <mt-cell title="体重" is-link @click.native="onFieldEdit('weight',deviceInfo.weight)">
         <span style="margin-right:5px">{{ deviceInfo.weight }}</span><span>kg</span>
       </mt-cell>
-      <mt-cell v-if="deviceInfo.sex.value==='2'" title="近期计划" is-link @click.native="onFieldEdit('ladyidentity',deviceInfo.ladyidentity.value)">
-        <span>{{ deviceInfo.ladyidentity.text }}</span>
+      <mt-cell v-if="deviceInfo.sex.value==='2'" title="近期计划" is-link @click.native="onFieldEdit('identity',deviceInfo.identity.value)">
+        <span>{{ deviceInfo.identity.text }}</span>
       </mt-cell>
       <mt-cell v-if="deviceInfo.careMode===25" title="孕周" is-link @click.native="onFieldEdit('geyweek',deviceInfo.geyweek.value)">
         <span>{{ deviceInfo.geyweek.text }}</span>

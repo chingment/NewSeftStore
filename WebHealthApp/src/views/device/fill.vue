@@ -100,19 +100,19 @@ export default {
           ],
           jump: {
             '1': 'perplex',
-            '2': 'ladyidentity'
+            '2': 'identity'
           },
           value: ''
         },
         {
-          id: 'ladyidentity',
+          id: 'identity',
           title: '近期计划',
           type: 'radio',
           options: [
-            { label: '暂无孕产计划', value: '1' },
-            { label: '备孕', value: '2' },
-            { label: '孕妈', value: '3' },
-            { label: '宝妈', value: '4' }
+            { label: '暂无孕产计划', value: '21' },
+            { label: '备孕', value: '22' },
+            { label: '孕妈', value: '23' },
+            { label: '宝妈', value: '24' }
           ],
           jump: {
             '1': 'gmPeriod',
@@ -153,9 +153,9 @@ export default {
           type: 'checklist',
           options: [
             { label: '打鼾', value: '3' },
-            { label: '长期失眠', value: '11' },
-            { label: '易醒', value: '21' },
-            { label: '难以入睡', value: '4' },
+            { label: '失眠', value: '81' },
+            { label: '易醒', value: '82' },
+            { label: '难以入睡', value: '83' },
             { label: '呼吸暂停综合症', value: '2' }
           ],
           required: true,
