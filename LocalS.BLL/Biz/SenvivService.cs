@@ -1642,11 +1642,8 @@ namespace LocalS.BLL
                 d_DayReport.HxCqjzhx = SvUtil.D46Int(reportpar.lbr); //长期基准呼吸
                 d_DayReport.HxGksc = SvUtil.D46Int(reportpar.brfast);//呼吸过快时长 
                 d_DayReport.HxGmsc = SvUtil.D46Int(reportpar.brslow);//呼吸过慢时长 
-
-
                 d_DayReport.HxZtahizs = SvUtil.D46Decimal(reportpar.AHI);//AHI指数
                 d_DayReport.HxZtcs = SvUtil.D46Int(reportpar.brz);//呼吸暂停次数
-
                 d_DayReport.HrvXzznl = SvUtil.D46Int(reportpar.TP);//心脏总能量
                 d_DayReport.HrvXzznljzz = SvUtil.D46Int(reportpar.BaseTP);//心脏总能量基准值
                 d_DayReport.HrvJgsjzlzs = SvUtil.D46Int(reportpar.LF);//交感神经张力指数
@@ -1659,9 +1656,7 @@ namespace LocalS.BLL
                 d_DayReport.HrvHermzsjzz = SvUtil.D46Decimal(reportpar.Baseulf); //荷尔蒙指数基准值
                 d_DayReport.HrvTwjxgsszs = SvUtil.D46Decimal(reportpar.vlf);//体温及血管舒缩指数
                 d_DayReport.HrvTwjxgsszhjzz = SvUtil.D46Decimal(reportpar.Basevlf);//体温及血管舒缩基准值
-
                 d_DayReport.JbfxXlscfx = SvUtil.D46Int(reportpar.sdnn);//心律失常风险指数
-
                 d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
                 d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of);
                 d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
@@ -1684,9 +1679,7 @@ namespace LocalS.BLL
                 d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of); //离枕时长
                 d_DayReport.SmLzscbl = 100 - d_DayReport.SmRemsmbl - d_DayReport.SmSdsmbl - d_DayReport.SmQxscbl - d_DayReport.SmQdsmbl;
                 d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
-
                 d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
-                                                                  //d_DayReport.SmTdcsPoint = sm.Moves.ToJsonString();
                 d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
                 d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
                 d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
