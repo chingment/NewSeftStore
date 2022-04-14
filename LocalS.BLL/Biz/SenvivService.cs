@@ -908,7 +908,6 @@ namespace LocalS.BLL
             {
                 SvHealthDayReport r_DayReport = null;
 
-
                 if (svDeptId == "32")
                 {
                     r_DayReport = BuildDayReport32(svUserId, svDeviceId, svDeptId);
@@ -1013,8 +1012,6 @@ namespace LocalS.BLL
                 d_DayReport.SmPoint = r_DayReport.SmPoint;
                 d_DayReport.SmTdcsPoint = r_DayReport.SmTdcsPoint;
                 d_DayReport.HxZtcsPoint = r_DayReport.HxZtcsPoint;
-                d_DayReport.IsSend = false;
-                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
                 d_DayReport.IsValid = r_DayReport.IsValid;
 
                 //todo 暂时一个随机值
@@ -1022,10 +1019,12 @@ namespace LocalS.BLL
                 int healthScoreRatio = r1.Next(80, 90);
                 ThreadSafeRandom r2 = new ThreadSafeRandom();
                 int smScoreRatio = r2.Next(80, 95);
-
+            
                 d_DayReport.HealthScoreRatio = healthScoreRatio;
                 d_DayReport.SmScoreRatio = smScoreRatio;
 
+                d_DayReport.IsSend = false;
+                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
                 d_DayReport.CreateTime = DateTime.Now;
                 d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
                 CurrentDb.SvHealthDayReport.Add(d_DayReport);
@@ -1607,8 +1606,6 @@ namespace LocalS.BLL
                 d_DayReport.ReportTime = SvUtil.D32LongToDateTime(reportpar.CreateTime);
                 d_DayReport.HealthScore = SvUtil.D46Decimal(reportpar.hv);//健康值
 
-                d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
-
                 d_DayReport.MylMylzs = SvUtil.D46Decimal(reportpar.im);
                 d_DayReport.MylGrfx = SvUtil.D46Decimal(reportpar.gr);
                 d_DayReport.MbGxygk = SvUtil.D46Decimal(reportpar.hc);
@@ -1660,6 +1657,7 @@ namespace LocalS.BLL
                 d_DayReport.JbfxXljsl = SvUtil.D46Decimal(reportpar.dc);
                 d_DayReport.SmLzsc = SvUtil.D46Int(reportpar.of);
                 d_DayReport.SmScore = SvUtil.D46Decimal(reportpar.sleepValue);//睡眠分数
+                d_DayReport.SmTags = reportpar.AbnormalLabel.ToJsonString();
                 d_DayReport.SmScsj = SvUtil.D32LongToDateTime(reportpar.StartTime);//上床时间
                 d_DayReport.SmLcsj = SvUtil.D32LongToDateTime(reportpar.FinishTime);//离床时间
                 d_DayReport.SmZcsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalSeconds;//起床时刻
@@ -1687,15 +1685,6 @@ namespace LocalS.BLL
                 d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
                 d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;
                 d_DayReport.ZsGmMl = SvUtil.D46Decimal(reportpar.gmml);
-
-                //todo 暂时一个随机值
-                ThreadSafeRandom r1 = new ThreadSafeRandom();
-                int healthScoreRatio = r1.Next(80, 90);
-                ThreadSafeRandom r2 = new ThreadSafeRandom();
-                int smScoreRatio = r2.Next(80, 95);
-
-                d_DayReport.HealthScoreRatio = healthScoreRatio;
-                d_DayReport.SmScoreRatio = smScoreRatio;
 
                 var trendcharts = d1.trendchart;
                 if (trendcharts != null)
@@ -1806,11 +1795,6 @@ namespace LocalS.BLL
                     d_DayReport.HxZtcsPoint = hxztPoints.ToJsonString();
                     d_DayReport.HxZtpjsc = hxZtpjsc;
                 }
-
-                d_DayReport.IsSend = false;
-                d_DayReport.Status = E_SvHealthReportStatus.WaitSend;
-                d_DayReport.CreateTime = DateTime.Now;
-                d_DayReport.Creator = IdWorker.Build(IdType.EmptyGuid);
 
                 if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
                 {
