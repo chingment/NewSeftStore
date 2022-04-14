@@ -64,7 +64,6 @@ namespace LocalS.Service.Api.HealthApp
 
             string merchId = app_Config.Exts["MerchId"];
 
-            LogUtil.Info("merchId=>:" + merchId);
 
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.WxPaOpenId == r_Api_UseInfo.openid).FirstOrDefault();
             if (d_ClientUser == null)

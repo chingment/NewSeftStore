@@ -1452,15 +1452,15 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "600~1800";
-            if (val < 480)
+            if (val < 600)
             {
                 jd.Set("低", "↓", CA_1);
             }
-            else if (val >= 600 && val <= 1800)
+            else if (val >= 600 && val < 1800)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (val > 1800)
+            else if (val >= 1800)
             {
                 jd.Set("高", "↑", CA_1);
             }

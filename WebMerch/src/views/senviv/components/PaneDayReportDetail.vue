@@ -587,7 +587,7 @@ export default {
           }
         },
         // 饼图中各模块的颜色
-        color: ['#32dadd', '#b6a2de', '#5ab1ef', '#59f5ae', '#1d0fdc'],
+        color: ['#a9ddfd', '#4c6ce5', '#e6affd', '#d8edff', '#ffdf24'],
         // 饼图数据
         series: {
           // name: 'bug分布',

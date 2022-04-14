@@ -45,11 +45,11 @@ namespace LocalS.BLL
 
                 }
 
-                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，已过期，重新获取", key));
+                //LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，已过期，重新获取", key));
             }
             else
             {
-                LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，value：{1}", key, accessToken));
+                //LogUtil.Info(string.Format("获取微信AccessToken，key：{0}，value：{1}", key, accessToken));
             }
 
             return accessToken;

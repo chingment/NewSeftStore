@@ -330,11 +330,11 @@ namespace LocalS.BLL
                 var wxApiGetCardApiTicketResult = c.DoGet(wxApiGetCardApiTicket);
                 if (string.IsNullOrEmpty(wxApiGetCardApiTicketResult.ticket))
                 {
-                    LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，已过期，Api重新获取失败", key));
+                    //LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，已过期，Api重新获取失败", key));
                 }
                 else
                 {
-                    LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，value：{1}，已过期，重新获取成功", key, wxApiGetCardApiTicketResult.ticket));
+                    //LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，value：{1}，已过期，重新获取成功", key, wxApiGetCardApiTicketResult.ticket));
 
                     jsApiTicket = wxApiGetCardApiTicketResult.ticket;
 
@@ -343,7 +343,7 @@ namespace LocalS.BLL
             }
             else
             {
-                LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，value：{1}", key, jsApiTicket));
+                //LogUtil.Info(string.Format("获取微信JsApiTicket，key：{0}，value：{1}", key, jsApiTicket));
             }
 
             return jsApiTicket;

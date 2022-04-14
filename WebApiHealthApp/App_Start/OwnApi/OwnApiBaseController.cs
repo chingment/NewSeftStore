@@ -33,7 +33,6 @@ namespace WebApiHealthApp
                     if (token_val != null)
                     {
                         userId = token_val["userId"];
-                        LogUtil.Info("userId2:" + userId);
                     }
                 }
 

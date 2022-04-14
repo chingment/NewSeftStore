@@ -1888,7 +1888,7 @@ namespace LocalS.BLL
         }
         public WxAppConfig GetWxAppConfigByDeviceId(string svDeviceId)
         {
-            LogUtil.Info("GetWxAppConfigByDeviceId:" + svDeviceId);
+            //LogUtil.Info("GetWxAppConfigByDeviceId:" + svDeviceId);
             var d_MerchDevice = CurrentDb.MerchDevice.Where(m => m.DeviceId == svDeviceId && m.IsStopUse == false).FirstOrDefault();
 
             if (d_MerchDevice == null)

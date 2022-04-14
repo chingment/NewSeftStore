@@ -8,6 +8,7 @@ using System.Web.Http;
 using Lumos.Web.Http;
 using Lumos.Session;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WebApiHealthApp
 {
@@ -21,10 +22,20 @@ namespace WebApiHealthApp
             {
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
                 var requestMethod = request.HttpMethod;
+                var contentType = request.ContentType.ToLower();
                 bool skipAuthorization = actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any();
                 if (skipAuthorization)
                 {
                     return;
+                }
+
+                string requstBody = null;
+
+                if (contentType.Contains("application/json"))
+                {
+                    Stream stream = request.InputStream;
+                    stream.Seek(0, SeekOrigin.Begin);
+                    requstBody = new StreamReader(stream).ReadToEnd();
                 }
 
                 var token = request.Headers["X-Token"];
@@ -48,6 +59,9 @@ namespace WebApiHealthApp
                     return;
                 }
 
+
+                MonitorLog.Log(request, requstBody);
+
                 LogUtil.Info("userId:" + token_val["userId"]);
 
                 base.OnActionExecuting(actionContext);
@@ -59,6 +73,12 @@ namespace WebApiHealthApp
                 actionContext.Response = new OwnApiHttpResponse(result);
                 return;
             }
+        }
+
+        public override void OnActionExecuted(HttpActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+            MonitorLog.Log(filterContext);
         }
     }
 }
