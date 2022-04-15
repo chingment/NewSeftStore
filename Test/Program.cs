@@ -151,9 +151,12 @@ namespace Test
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
             //"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXkgPD5w99Q8WjoB9KWzVaKhilmaMYx18U+VAHSmP/me4="
-            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXGqaIyOVTP9lF/fBNVG5Xel2WvOa+tj9CUbqIFayhmvc=\"";
+            string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1atZNDl0mSwffacII/sekRdEBiJdrrYvbL+u9HQ9rMnc=\"";
 
-            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "46", sn = "1004E747A2E3", size = 1, page = 1 });
+            var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(token, new { deptid = "32", userid = "321x847d05042C401A", size = 1, page = 1 });
+            var resultReportDetailList = api.DoPost(requestReportDetailList);
+
+            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "32",  userid = "321x167d0124346DEE", size = 1, page = 1 });
             var restb = api.DoPost(c1);
 
             //var config_Senviv = BizFactory.Senviv.GetConfig("46");

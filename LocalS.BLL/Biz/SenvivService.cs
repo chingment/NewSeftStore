@@ -78,7 +78,7 @@ namespace LocalS.BLL
                     rptType = "seventh_day";
                     break;
                 case E_SvTaskType.Health_Monitor_FourteenthDay:
-                    rptType = "fourteenth_day:";
+                    rptType = "fourteenth_day";
                     break;
             }
 
@@ -1452,7 +1452,7 @@ namespace LocalS.BLL
                     {
                         d_DayReport.SmLzcs = d1.ReportOfOffbed.OffbedCounts;
                     }
-                    d_DayReport.SmLzsc = (long)(d_DayReport.SmLcsj - d_DayReport.SmQxsj).TotalSeconds;//离枕时长
+                    d_DayReport.SmLzsc = sm.Offbed;//离枕时长
                     d_DayReport.SmLzscbl = sm.OffbedRatio;
                     d_DayReport.SmSmzq = sm.SleepCounts;//睡眠周期
 
