@@ -8,8 +8,11 @@ using LocalS.BLL.Biz;
 using log4net;
 using SenvivSdk;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Test
 {
@@ -56,6 +59,8 @@ namespace Test
 
         static void Main(string[] args)
         {
+            GetSign("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1620465964, "{\"deviceId\":\"1004BEBFB3BB\",\"svUserId\":\"321x165d0121EA53E2\"}");
+          
             //SvUtil.D46Long(1000 * 1m / 6);
 
             //decimal cccc = SvUtil.D46Decimal("3533.56653");
@@ -156,7 +161,7 @@ namespace Test
             var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(token, new { deptid = "32", userid = "321x847d05042C401A", size = 1, page = 1 });
             var resultReportDetailList = api.DoPost(requestReportDetailList);
 
-            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "32",  userid = "321x167d0124346DEE", size = 1, page = 1 });
+            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "32", userid = "321x167d0124346DEE", size = 1, page = 1 });
             var restb = api.DoPost(c1);
 
             //var config_Senviv = BizFactory.Senviv.GetConfig("46");
@@ -249,5 +254,28 @@ namespace Test
         }
 
 
+        public static string GetSign(string merch_id, string secret, long timespan, string data)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(merch_id);
+            sb.Append(secret);
+            sb.Append(timespan.ToString());
+            sb.Append(data);
+
+            var material = string.Concat(sb.ToString().OrderBy(c => c));
+
+            var input = Encoding.UTF8.GetBytes(material);
+
+            var hash = SHA256Managed.Create().ComputeHash(input);
+
+            StringBuilder sb2 = new StringBuilder();
+            foreach (byte b in hash)
+                sb2.Append(b.ToString("x2"));
+
+            string str = sb2.ToString();
+
+            return str;
+        }
     }
 }

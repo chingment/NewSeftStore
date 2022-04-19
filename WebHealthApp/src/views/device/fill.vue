@@ -115,10 +115,10 @@ export default {
             { label: '宝妈', value: '24' }
           ],
           jump: {
-            '1': 'gmPeriod',
-            '2': 'gmPeriod',
-            '3': 'geyweek',
-            '4': 'gmPeriod'
+            '21': 'gmPeriod',
+            '22': 'gmPeriod',
+            '23': 'geyweek',
+            '24': 'gmPeriod'
           },
           value: ''
         },
