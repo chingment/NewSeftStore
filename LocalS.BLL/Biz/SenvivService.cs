@@ -1033,8 +1033,8 @@ namespace LocalS.BLL
                 #endregion
 
 
-                if (!d_DayReport.IsValid)
-                    return;
+                //if (!d_DayReport.IsValid)
+                //    return;
 
                 SendDayReport(d_DayReport.Id, d_DayReport.RptSummary, d_DayReport.RptSuggest);
 
