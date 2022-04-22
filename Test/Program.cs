@@ -61,10 +61,10 @@ namespace Test
         {
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
-            //BoxBindRequest request = new BoxBindRequest("\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXhjSZVATj7V3PtQmLSpcCM+gM32j0qSholjdjkZSMafE=\"", new { sn = "1004E747A50D", userid = "461x847d04222E", deptid = "46" });
+            //BoxBindRequest request = new BoxBindRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Ep1BiTwfz+tjnczLRYK5Y0n2DrohMcndfWP25YV6f7E=\"", new { sn = "1004C7B07968", userid = "321x847d042242", deptid = "32" });
             //var r_api = api.DoPost(request);
 
-            //BoxUnBindRequest request2 = new BoxUnBindRequest("\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXhjSZVATj7V3PtQmLSpcCM+gM32j0qSholjdjkZSMafE=\"", new { sn = "1004E747A50D", userid = "461x847d04222E", deptid = "46" });
+            //BoxUnBindRequest request2 = new BoxUnBindRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Ep1BiTwfz+tjnczLRYK5Y0n2DrohMcndfWP25YV6f7E=\"", new { sn = "1004C7B07968", userid = "321x847d042242", deptid = "32" });
             //var r_api2 = api.DoPost(request2);
 
             //var userListRequest = new SenvivSdk.UserListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1PLo2wf9mBvfraL26FOANd5z01tWP1Zg+ZWgsuDNpAAQ=\"", new { deptid = "32", userid = "321x133d121013E693", size = 1, page = 1 });
