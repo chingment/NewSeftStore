@@ -75,17 +75,24 @@ namespace LocalS.BLL.Task
                             else
                             {
                                 d_SvUser.DeviceCount = i_SvUser.products.Count;
+
+                                foreach (var product in i_SvUser.products)
+                                {
+                                    var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.SvUserId == i_SvUser.userid && m.DeviceId == product.sn).FirstOrDefault();
+                                    if (d_SvUserDevice != null)
+                                    {
+                                        d_SvUserDevice.WebUrl = product.webUrl;
+                                        d_SvUserDevice.TcpAddress = product.tcpAddress;
+                                        CurrentDb.SaveChanges();
+                                    }
+
+                                    BizFactory.Senviv.BuildDayReport(d_SvUserDevice.SvUserId, d_SvUserDevice.DeviceId, d_SvUserDevice.SvDeptId, d_SvUserDevice.IsStopSend);
+                                }
                             }
 
                             CurrentDb.SaveChanges();
                         }
                     }
-                }
-
-                var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.BindStatus == Entity.E_SvUserDeviceBindStatus.Binded).ToList();
-                foreach (var d_SvUserDevice in d_SvUserDevices)
-                {
-                    BizFactory.Senviv.BuildDayReport(d_SvUserDevice.SvUserId, d_SvUserDevice.DeviceId, d_SvUserDevice.SvDeptId, d_SvUserDevice.IsStopSend);
                 }
             }
             catch (Exception ex)
