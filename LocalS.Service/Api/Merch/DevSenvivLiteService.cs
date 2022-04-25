@@ -53,7 +53,7 @@ namespace LocalS.Service.Api.Merch
                          tt.Type == "senvivlite"
                          &&
                          u.IsStopUse == false
-                         select new { u.Id, tt.Type, tt.CurUseMerchId, MerchName = tt1.Name, u.MerchId, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
+                         select new { u.Id, tt.Type, tt.SvDeptId, tt.CurUseMerchId, MerchName = tt1.Name, u.MerchId, tt.Model, u.DeviceId, u.CumCode, tt.MainImgUrl, tt.CurUseStoreId, tt.CurUseShopId, tt.RunStatus, tt.LastRequestTime, tt.AppVersionCode, tt.CtrlSdkVersionCode, tt.ExIsHas, tt.Name, u.IsStopUse, u.CreateTime });
 
 
             int total = query.Count();
@@ -80,6 +80,20 @@ namespace LocalS.Service.Api.Merch
                     distributeStatus = new FieldModel(2, "已分配");
                 }
 
+                var config_Senviv = BizFactory.Senviv.GetConfig(item.SvDeptId);
+
+                var r_Device = SdkFactory.Senviv.GetDevice(config_Senviv, item.DeviceId);
+
+                bool isBindUser = false;
+
+                if (r_Device != null)
+                {
+                    if (!string.IsNullOrEmpty(r_Device.userid))
+                    {
+                        isBindUser = true;
+                    }
+                }
+
                 olist.Add(new
                 {
                     Id = item.DeviceId,
@@ -90,7 +104,8 @@ namespace LocalS.Service.Api.Merch
                     Code = GetCode(item.DeviceId, item.CumCode),
                     MainImgUrl = item.MainImgUrl,
                     LastRequestTime = item.LastRequestTime.ToUnifiedFormatDateTime(),
-                    DistributeStatus = distributeStatus
+                    DistributeStatus = distributeStatus,
+                    IsBindUser = isBindUser
                 });
 
             }
@@ -141,6 +156,61 @@ namespace LocalS.Service.Api.Merch
                     d_MerchDevice.Mender = operater;
                     d_MerchDevice.MendTime = DateTime.Now;
                 }
+
+
+                var config_Senviv = BizFactory.Senviv.GetConfig(d_Device.SvDeptId);
+
+                var r_Devices = SdkFactory.Senviv.GetDevices(config_Senviv, d_Device.Id);
+
+                foreach (var r_Device in r_Devices)
+                {
+                    SdkFactory.Senviv.UnBindDevice(config_Senviv, r_Device.userid, r_Device.sn);
+                }
+
+                var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.DeviceId == rop.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).ToList();
+
+                foreach (var d_SvUserDevice in d_SvUserDevices)
+                {
+                    d_SvUserDevice.BindDeviceIdTime = null;
+                    d_SvUserDevice.BindPhoneTime = null;
+                    d_SvUserDevice.InfoFillTime = null;
+                    d_SvUserDevice.UnBindTime = DateTime.Now;
+                    d_SvUserDevice.BindStatus = E_SvUserDeviceBindStatus.UnBind;
+                    d_SvUserDevice.Creator = operater;
+                    d_SvUserDevice.CreateTime = DateTime.Now;
+                    CurrentDb.SaveChanges();
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "解绑成功");
+
+            }
+            return result;
+        }
+
+        public CustomJsonResult UnBindUser(string operater, string merchId, RopDeviceUnBindMerch rop)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var d_Device = CurrentDb.Device.Where(m => m.CurUseMerchId == rop.MerchId && m.Id == rop.DeviceId).FirstOrDefault();
+
+                if (d_Device == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到信息");
+                }
+
+                d_Device.CurUseMerchId = merchId;
+                d_Device.CurUseStoreId = null;
+                d_Device.CurUseShopId = null;
+                d_Device.Mender = operater;
+                d_Device.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
 
 
                 var config_Senviv = BizFactory.Senviv.GetConfig(d_Device.SvDeptId);

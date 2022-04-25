@@ -31,9 +31,18 @@ export function unBindMerch(data) {
   })
 }
 
+export function unBindUser(data) {
+  return request({
+    url: '/devsenvivlite/unBindUser',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   initGetList: initGetList,
   getList: getList,
   bindMerch: bindMerch,
-  unBindMerch: unBindMerch
+  unBindMerch: unBindMerch,
+  unBindUser: unBindUser
 }

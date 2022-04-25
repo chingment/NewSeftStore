@@ -178,28 +178,40 @@ namespace LocalS.BLL
             return list;
         }
 
-        public SenvivSdk.BoxListResult.DataModel GetBox(SenvivConfig config, string keyword)
+
+        public SenvivSdk.BoxListResult.DataModel GetDevice(SenvivConfig config, string deviceId)
         {
-            SenvivSdk.BoxListResult.DataModel model = null;
+            var list = new List<SenvivSdk.BoxListResult.DataModel>();
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
             int page = 1;
             int size = 1;
 
-            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page, keyword = keyword });
+            var boxListRequest = new SenvivSdk.BoxListRequest(config.AccessToken, new { deptid = config.SvDeptId, size = size, page = page, keyword = deviceId });
             var result = api.DoPost(boxListRequest);
             if (result.Result == ResultType.Success)
             {
                 var data = result.Data;
+
                 if (data != null)
                 {
-                    model = data.Data.data[0];
+                    if (data.Data != null)
+                    {
+                        list.AddRange(data.Data.data);
+                    }
                 }
-
             }
 
-            return model;
+            if (list.Count > 0)
+            {
+
+                return list[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public ReportDetailListResult.DataModel GetUserHealthDayReport32(SenvivConfig config, string userid)

@@ -4,24 +4,13 @@
 
       <el-form ref="form" label-width="120px" class="query-box">
         <el-form-item label="目前困扰">
-
           <el-radio-group v-model="listQuery.perplex" @change="handleFilter">
             <el-radio-button v-for="item in perplexs" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
-
-          <!-- <el-checkbox-group v-model="checkboxGroup1">
-            <el-checkbox-button v-for="item in perplexs" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox-button>
-          </el-checkbox-group> -->
-
         </el-form-item>
         <el-form-item label="慢性病">
           <el-radio-group v-model="listQuery.chronic" @change="handleFilter">
             <el-radio-button v-for="item in chronics" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="呼吸综合症">
-          <el-radio-group v-model="listQuery.sas" @change="handleFilter">
-            <el-radio-button v-for="item in sass" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="搜索">
@@ -121,19 +110,7 @@ export default {
         { value: '0', label: '全部' },
         { value: '4', label: '糖尿病' },
         { value: '5', label: '高血压' },
-        { value: '6', label: '冠心病' },
-        { value: '7', label: '心脏病' },
-        { value: '8', label: '心衰' },
-        { value: '9', label: '慢性阻塞性肺疾病' },
-        { value: '10', label: '脑梗塞/脑卒中' },
-        { value: '12', label: '癫痫' }
-      ],
-      sass: [
-        { value: '0', label: '全部' },
-        { value: '4', label: '无' },
-        { value: '1', label: '轻度' },
-        { value: '2', label: '中度' },
-        { value: '3', label: '重度' }
+        { value: '6', label: '冠心病' }
       ],
       selectUserId: '',
       dialogIsShowByDetail: false,

@@ -61,6 +61,12 @@ namespace Test
         {
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
+
+
+            var boxListRequest = new SenvivSdk.BoxListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg15Ndawoc4lQmOknAM78cCwGIdBJJAh0u7gUkK9dQkj6M=\"", new { deptid = "32", size = 1, page = 1, keyword = "1004BEBFB587" });
+            var result = api.DoPost(boxListRequest);
+
+
             //BoxBindRequest request = new BoxBindRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Ep1BiTwfz+tjnczLRYK5Y0n2DrohMcndfWP25YV6f7E=\"", new { sn = "1004C7B07968", userid = "321x847d042242", deptid = "32" });
             //var r_api = api.DoPost(request);
 

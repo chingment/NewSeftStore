@@ -52,14 +52,26 @@
           <span>{{ scope.row.merchName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="80" class-name="small-padding fixed-width">
+
+      <el-table-column label="已绑用户" prop="model" align="left" min-width="10%">
+        <template slot-scope="scope">
+          <span>{{ (scope.row.isBindUser==true?"是":"否") }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button v-if="row.distributeStatus.value===1" type="text" size="mini" @click="onDialogOpenBindMerch(row)">
-            分配
+            分配商户
           </el-button>
           <el-button v-else type="text" size="mini" @click="onUnBindMerch(row)">
-            回收
+            回收商户
           </el-button>
+
+          <el-button v-if="row.isBindUser" type="text" size="mini" @click="onUnBindUser(row)">
+            解绑用户
+          </el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -92,7 +104,7 @@
 <script>
 
 import { MessageBox } from 'element-ui'
-import { getList, initGetList, bindMerch, unBindMerch } from '@/api/devsenvivlite'
+import { getList, initGetList, bindMerch, unBindMerch, unBindUser } from '@/api/devsenvivlite'
 import Pagination from '@/components/Pagination'
 export default {
   components: { Pagination },
@@ -180,6 +192,20 @@ export default {
         type: 'warning'
       }).then(() => {
         unBindMerch({ merchId: row.merchId, deviceId: row.id }).then(res => {
+          this.$message(res.message)
+          if (res.result === 1) {
+            this.onGetList()
+          }
+        })
+      })
+    },
+    onUnBindUser(row) {
+      MessageBox.confirm('确定要解绑用户设备(' + row.id + ')？', '提示（慎重操作）', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        unBindUser({ merchId: row.merchId, deviceId: row.id }).then(res => {
           this.$message(res.message)
           if (res.result === 1) {
             this.onGetList()

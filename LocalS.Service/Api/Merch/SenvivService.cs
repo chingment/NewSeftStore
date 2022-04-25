@@ -162,7 +162,7 @@ namespace LocalS.Service.Api.Merch
             if (rup.Chronic != "0")
             {
                 var pred = PredicateExtensionses.False<SvUser>();
-                pred = pred.Or(m => m.Perplex.Contains(rup.Chronic));
+                pred = pred.Or(m => m.Chronicdisease.Contains(rup.Chronic));
                 query = query.Where(pred);
             }
 
