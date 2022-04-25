@@ -1019,7 +1019,7 @@ namespace LocalS.BLL
                 int healthScoreRatio = r1.Next(80, 90);
                 ThreadSafeRandom r2 = new ThreadSafeRandom();
                 int smScoreRatio = r2.Next(80, 95);
-            
+
                 d_DayReport.HealthScoreRatio = healthScoreRatio;
                 d_DayReport.SmScoreRatio = smScoreRatio;
 
@@ -1538,7 +1538,7 @@ namespace LocalS.BLL
                     }
                 }
 
-                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                if ((d_DayReport.SmScsj - d_DayReport.SmLcsj).TotalHours >= 4)
                 {
                     d_DayReport.IsValid = true;
                 }
@@ -1796,7 +1796,7 @@ namespace LocalS.BLL
                     d_DayReport.HxZtpjsc = hxZtpjsc;
                 }
 
-                if ((d_DayReport.SmQxsj - d_DayReport.SmRssj).TotalHours >= 4)
+                if ((d_DayReport.SmScsj - d_DayReport.SmLcsj).TotalHours >= 4)
                 {
                     d_DayReport.IsValid = true;
                 }

@@ -396,10 +396,10 @@ export default {
       var defaultIndex = 0
       this.slotsPickerNumber[0].values = []
       if (type === 'weight') {
-        for (let i = 50; i < 200; i++) {
+        for (let i = 10; i < 200; i++) {
           this.slotsPickerNumber[0].values.push(i)
           if (i.toString() === question.value.toString()) {
-            defaultIndex = i - 50
+            defaultIndex = i - 10
           }
         }
 
