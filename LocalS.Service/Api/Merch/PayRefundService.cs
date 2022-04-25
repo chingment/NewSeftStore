@@ -371,12 +371,12 @@ namespace LocalS.Service.Api.Merch
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
 
-                if (rop.Amount > payTran.ChargeAmount)
+                if (rop.Amount > order.ChargeAmount)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "退款的金额不能大于可退金额");
                 }
+
 
 
                 string payRefundId = IdWorker.Build(IdType.PayRefundId);
@@ -390,8 +390,17 @@ namespace LocalS.Service.Api.Merch
                 payRefund.ClientUserId = order.ClientUserId;
                 payRefund.ClientUserName = order.ClientUserName;
                 payRefund.OrderId = order.Id;
-                payRefund.PayPartnerPayTransId = payTran.PayPartnerPayTransId;
-                payRefund.PayTransId = payTran.Id;
+
+                if (!string.IsNullOrEmpty(order.PayTransId))
+                {
+                    var payTran = CurrentDb.PayTrans.Where(m => m.Id == order.PayTransId).FirstOrDefault();
+                    if (payTran != null)
+                    {
+                        payRefund.PayPartnerPayTransId = payTran.PayPartnerPayTransId;
+                        payRefund.PayTransId = payTran.Id;
+                    }
+                }
+                
                 payRefund.ApplyTime = DateTime.Now;
                 payRefund.ApplyMethod = rop.Method;
                 payRefund.ApplyRemark = rop.Remark;

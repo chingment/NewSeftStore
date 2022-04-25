@@ -154,6 +154,8 @@ namespace LocalS.Service.Api.Merch
                          && (rup.Name == null || u.FullName.Contains(rup.Name))
                          select u);
 
+
+
             if (rup.Sas != "0")
             {
                 query = query.Where(m => m.Sas == rup.Sas);
