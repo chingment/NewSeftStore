@@ -1538,7 +1538,7 @@ namespace LocalS.BLL
                     }
                 }
 
-                if ((d_DayReport.SmScsj - d_DayReport.SmLcsj).TotalHours >= 4)
+                if ((d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalHours >= 4)
                 {
                     d_DayReport.IsValid = true;
                 }
@@ -1796,7 +1796,7 @@ namespace LocalS.BLL
                     d_DayReport.HxZtpjsc = hxZtpjsc;
                 }
 
-                if ((d_DayReport.SmScsj - d_DayReport.SmLcsj).TotalHours >= 4)
+                if ((d_DayReport.SmLcsj - d_DayReport.SmScsj).TotalHours >= 4)
                 {
                     d_DayReport.IsValid = true;
                 }

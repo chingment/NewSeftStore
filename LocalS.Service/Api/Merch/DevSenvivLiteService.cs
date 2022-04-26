@@ -205,14 +205,6 @@ namespace LocalS.Service.Api.Merch
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到信息");
                 }
 
-                d_Device.CurUseMerchId = merchId;
-                d_Device.CurUseStoreId = null;
-                d_Device.CurUseShopId = null;
-                d_Device.Mender = operater;
-                d_Device.MendTime = DateTime.Now;
-                CurrentDb.SaveChanges();
-
-
                 var config_Senviv = BizFactory.Senviv.GetConfig(d_Device.SvDeptId);
 
                 var r_Devices = SdkFactory.Senviv.GetDevices(config_Senviv, d_Device.Id);

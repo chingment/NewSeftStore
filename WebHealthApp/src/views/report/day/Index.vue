@@ -6,14 +6,7 @@
         <mt-tab-container-item v-if="selected==='tab1'" id="tab1">
           <div class="a-part-1">
 
-            <card-own-a
-              v-if="theme==='pink'"
-              :user-info="userInfo"
-              :rd="rd"
-            />
-
             <card-own-b
-              v-if="theme==='green'"
               :user-info="userInfo"
               :rd="rd"
             />
@@ -713,6 +706,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-size: cover;
+          padding: 20px 10px;
   }
 
   .a-part-2 {

@@ -7,7 +7,10 @@
       <div class="wrap">
         <div class="pt1">
           <div class="pt1-lt">
-            <img class="avatar" :src="userInfo.avatar" alt="">
+            <div style="text-align:center;width:80px;padding-top: 20px;">
+              <img class="avatar" :src="userInfo.avatar" alt="">
+              <div class="sign-name">{{ userInfo.signName }}</div>
+            </div>
           </div>
           <div class="pt1-md">
             <div class="t1">{{ rd.healthScore.value }}</div>
@@ -22,6 +25,12 @@
           </div>
 
         </div>
+
+        <div v-if="userInfo.careMode==25" class="pta" style="text-align: center;margin-top: 10px;">
+          <div class="gesweek">孕{{ userInfo.pregnancy.gesWeek }} 周+{{ userInfo.pregnancy.gesDay }}天,距离宝宝出生还有<span>{{ userInfo.pregnancy.birthLastDays }}</span>天</div>
+          <!-- <div class="birthlastdays">距离宝宝出生还有<span>{{ userInfo.pregnancy.birthLastDays }}</span>天</div> -->
+        </div>
+
         <div class="pt2">
 
           <div class="pt2-lt">

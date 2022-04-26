@@ -57,6 +57,10 @@ namespace LocalS.Service.Api.Merch
                 //    status.Text = "停止";
                 //    status.Value = 1;
                 //    break;
+                case E_DeviceRunStatus.Exception:
+                    status.Text = "异常";
+                    status.Value = 3;
+                    break;
                 default:
                     status.Text = "未知状态";
                     status.Value = 1;
