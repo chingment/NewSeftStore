@@ -261,27 +261,27 @@ namespace LocalS.BLL
 
         }
 
-        public static List<EleTag> GetSignTags(string perplex, string otherPerplex)
+        public static List<EleTag> GetSignTags(string chronicdisease, string chronicdiseaseOt)
         {
             var tags = new List<EleTag>();
 
-            if (!string.IsNullOrEmpty(perplex))
+            if (!string.IsNullOrEmpty(chronicdisease))
             {
-                string[] arrs = perplex.Split(',');
+                string[] arrs = chronicdisease.Split(',');
 
                 foreach (var val in arrs)
                 {
-                    var name = GetPerplexName(val);
-                    if (!string.IsNullOrEmpty(name) && name != "其它")
+                    var name = GetChronicdiseaseName(val);
+                    if (!string.IsNullOrEmpty(name) && name != "无" && name != "其它")
                     {
                         tags.Add(new EleTag(name, ""));
                     }
                 }
             }
 
-            if (!string.IsNullOrEmpty(otherPerplex) && otherPerplex != "其它")
+            if (!string.IsNullOrEmpty(chronicdiseaseOt) && chronicdiseaseOt != "无" && chronicdiseaseOt != "其它")
             {
-                tags.Add(new EleTag(otherPerplex, ""));
+                tags.Add(new EleTag(chronicdiseaseOt, ""));
             }
 
             return tags;

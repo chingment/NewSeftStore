@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MyWeiXinSdk;
+using System.Data.Entity.SqlServer;
 
 namespace LocalS.Service.Api.Merch
 {
@@ -110,11 +111,8 @@ namespace LocalS.Service.Api.Merch
         {
             List<EleTag> signTags = new List<EleTag>();
 
-            if (user.CareMode == E_SvUserCareMode.Normal)
-            {
-                signTags = SvUtil.GetSignTags(user.Perplex, user.PerplexOt);
-            }
-            else if (user.CareMode == E_SvUserCareMode.Pregnancy)
+
+            if (user.CareMode == E_SvUserCareMode.Pregnancy)
             {
                 var d_Women = CurrentDb.SvUserWomen.Where(m => m.SvUserId == user.Id).FirstOrDefault();
                 if (d_Women != null)
@@ -137,6 +135,10 @@ namespace LocalS.Service.Api.Merch
                 //}
 
             }
+            else
+            {
+                signTags = SvUtil.GetSignTags(user.Chronicdisease, "");
+            }
 
             return signTags;
         }
@@ -156,24 +158,26 @@ namespace LocalS.Service.Api.Merch
 
 
 
-            if (rup.Sas != "0")
-            {
-                query = query.Where(m => m.Sas == rup.Sas);
-            }
+            //if (rup.Sas != "0")
+            //{
+            //    query = query.Where(m => m.Sas == rup.Sas);
+            //}
 
             if (rup.Chronic != "0")
             {
-                var pred = PredicateExtensionses.False<SvUser>();
-                pred = pred.Or(m => m.Chronicdisease.Contains(rup.Chronic));
-                query = query.Where(pred);
+                //var pred = PredicateExtensionses.False<SvUser>();
+                //pred = pred.Or(m => m.Chronicdisease.Contains(rup.Chronic));
+                //query = query.Where(pred);
+                LogUtil.Info("rup.Chronic:" + rup.Chronic);
+                query = query.Where(m => m.Chronicdisease.Contains(rup.Chronic));
             }
 
 
             if (rup.Perplex != "0")
             {
-                var pred = PredicateExtensionses.False<SvUser>();
-                pred = pred.Or(m => m.Perplex.Contains(rup.Perplex));
-                query = query.Where(pred);
+                //var pred = PredicateExtensionses.False<SvUser>();
+                //pred = pred.Or(m => SqlFunctions.CharIndex("1,2,3,4,5", "ds"));
+                //query = query.Where(m => SqlFunctions.CharIndex(m., "ds") > 0);
             }
 
             if (rup.CareLevel != E_SvUserCareLevel.None)

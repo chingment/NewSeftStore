@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Data.Entity.SqlServer;
 
 namespace Test
 {
@@ -59,6 +60,10 @@ namespace Test
 
         static void Main(string[] args)
         {
+            //List<string> ass = new List<string>();
+            //ass.Add("4,5,6");
+            //int? c = ass.Where(m=> SqlFunctions.CharIndex(m., "6")>-1);
+
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
