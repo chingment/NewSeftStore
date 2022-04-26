@@ -1024,10 +1024,34 @@ namespace LocalS.BLL
             }
             return jd;
         }
+
+        public static SvDataJd GetSmZcsc(decimal val, string valFormat)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "在床总时长";
+            var hour = Covevt2Hour(val);
+            jd.Value = GetTimeText(val, valFormat);
+            jd.RefRange = "6~9h";
+            if (hour < 6)
+            {
+                jd.Set("低", "↓", CA_1);
+            }
+            else if (hour >= 6 && hour <= 9)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 9)
+            {
+                jd.Set("高", "↑", CA_1);
+            }
+
+            return jd;
+        }
+
         public static SvDataJd GetSmSmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
-            jd.Name = "睡眠总时长";
+            jd.Name = "实际睡眠总时长";
             var hour = Covevt2Hour(val);
             jd.Value = GetTimeText(val, valFormat);
             jd.RefRange = "6~9h";
@@ -1147,6 +1171,29 @@ namespace LocalS.BLL
 
             return jd;
         }
+
+
+        public static SvDataJd GetSmLzcs(decimal val)
+        {
+            var jd = new SvDataJd();
+            jd.Value = val.ToString();
+            jd.RefRange = "4~5次";
+            if (val < 4)
+            {
+                jd.Set("低", "↓", CA_1);
+            }
+            else if (val >= 4 && val <= 5)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (val > 5)
+            {
+                jd.Set("高", "↑", CA_1);
+            }
+
+            return jd;
+        }
+
         public static SvDataJd GetSmSmzq(decimal val)
         {
             var jd = new SvDataJd();

@@ -217,7 +217,7 @@ namespace LocalS.Service.Api.HealthApp
 
             var deliveryTime = "";
             FieldModel geyweek = new FieldModel(new int[] { 0, 0 }, "");
-            FieldModel gmPeriod = new FieldModel(new string[] {  "", "6", "28" }, "");
+            FieldModel gmPeriod = new FieldModel(new string[] { "", "6", "28" }, "");
             if (d_SvUser.Sex == "2")
             {
                 var d_SvUserWomen = CurrentDb.SvUserWomen.Where(m => m.SvUserId == d_SvUser.Id).FirstOrDefault();
@@ -488,7 +488,7 @@ namespace LocalS.Service.Api.HealthApp
                 createtime = "2020-06-22T10:23:58.784Z", //创建时间
                 updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                 SAS = d_ClientUser.Sex,
-                Perplex = perplex, //目前困扰 （查看字典表）
+                Perplex = "4,5,6", //目前困扰 （查看字典表）
                 OtherPerplex = "", //目前困扰输入其它 ,
                 Medicalhistory = medicalhis, //既往史 （查看字典表）
                 OtherFamilyhistory = "", //既往史其它 ,
@@ -908,7 +908,7 @@ namespace LocalS.Service.Api.HealthApp
                 createtime = "2020-06-22T10:23:58.784Z", //创建时间
                 updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
                 SAS = "4",
-                Perplex = perplex, //目前困扰 （查看字典表）
+                Perplex = "4,5,6", //目前困扰 （查看字典表）
                 OtherPerplex = "", //目前困扰输入其它 ,
                 Medicalhistory = medicalhis, //既往史 （查看字典表）
                 OtherFamilyhistory = "", //既往史其它 ,

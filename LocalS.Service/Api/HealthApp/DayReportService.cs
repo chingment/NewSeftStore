@@ -152,12 +152,20 @@ namespace LocalS.Service.Api.HealthApp
 
             #region smDvs
             var smDvs = new List<object>();
+
+            smDvs.Add(SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"));
             smDvs.Add(SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"));
             smDvs.Add(SvUtil.GetSmRsxs(d_DayRpt.SmRsxs, "2"));
+            smDvs.Add(SvUtil.GetSmSmzq(d_DayRpt.SmSmzq));
             smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc, "2"));
+            smDvs.Add(SvUtil.GetSmQdsmsc(d_DayRpt.SmQdsmsc, "2"));
+            smDvs.Add(SvUtil.GetSmRemsmsc(d_DayRpt.SmRemsmsc, "2"));
+            smDvs.Add(SvUtil.GetSmLzcs(d_DayRpt.SmLzcs));
+            smDvs.Add(SvUtil.GetSmTdcs(d_DayRpt.SmTdcs));
             smDvs.Add(SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs));
-            smDvs.Add(SvUtil.GetXlDcjzxl(d_DayRpt.XlDcjzxl));
-            smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl, d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount));
+
+            //smDvs.Add(SvUtil.GetXlDcjzxl(d_DayRpt.XlDcjzxl));
+            //smDvs.Add(SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl, d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount));
             #endregion
 
 
@@ -179,7 +187,7 @@ namespace LocalS.Service.Api.HealthApp
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_DayRpt.RptSuggest,
                     HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl,d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_DayRpt.HrvXzznl, d_DayRpt.HrvXzznljzz, d_SvUser.ReportCount),
                     SmSmxl = SvUtil.GetSmSmxl(d_DayRpt.SmSmxl),
                     SmSmlxx = SvUtil.GetSmSmlxx(d_DayRpt.SmSmlxx),
                     SmSdsmbl = SvUtil.GetSmSdsmbl(d_DayRpt.SmSdsmbl),
@@ -187,7 +195,7 @@ namespace LocalS.Service.Api.HealthApp
                     XlCqjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlCqjzxl),
                     HxDcjzhx = SvUtil.GetHxDcjzhx(d_DayRpt.HxDcjzhx),
                     SmSmsc = SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"),
-                    SmZcsc = SvUtil.GetSmSmsc(d_DayRpt.SmZcsc, "2"),
+                    SmZcsc = SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"),
                     SmZcsjfw = SvUtil.GetSmZcsjfw(d_DayRpt.SmScsj, d_DayRpt.SmLcsj),
                 },
                 userInfo = userInfo,
