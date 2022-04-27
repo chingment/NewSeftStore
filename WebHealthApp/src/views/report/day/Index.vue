@@ -116,7 +116,7 @@
           <div class="b-part-2">
             <div class="mi-title">睡眠评价</div>
             <div class="mi-content">
-              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共{{ rd.smZcsc.value }}，睡眠总时长为{{ rd.smSmsc.value }}。</div>
+              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共 <span :style="'color:'+rd.smZcsc.color+';'">   {{ rd.smZcsc.value }} </span> ，睡眠总时长为 <span :style="'color:'+rd.smSmsc.color+';'">  {{ rd.smSmsc.value }} </span>   。</div>
               <div style="text-indent: 20px;">本次睡眠效率 {{ rd.smSmxl.value }}%（<span :style="'color:'+rd.smSmxl.color+';'"> {{ rd.smSmxl.tips }}</span>）,睡眠连续性 {{ rd.smSmlxx.value }}%（<span :style="'color:'+rd.smSmlxx.color+';'"> {{ rd.smSmlxx.tips }}</span>），深睡眠比例 {{ rd.smSdsmbl.value }}%（<span :style="'color:'+rd.smSdsmbl.color+';'"> {{ rd.smSdsmbl.tips }}</span>）。</div>
               <div style="text-indent: 20px;">呼吸紊乱指数 {{ rd.hxZtahizs.value }}（<span :style="'color:'+rd.hxZtahizs.color+';'"> {{ rd.hxZtahizs.tips }}</span>）；基准心率 {{ rd.xlDcjzxl.value }}次/分钟（<span :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.tips }}</span>）；基准呼吸 {{ rd.hxDcjzhx.value }} 次/分钟（<span :style="'color:'+rd.hxDcjzhx.color+';'"> {{ rd.hxDcjzhx.tips }}</span>） 。</div>
             </div>

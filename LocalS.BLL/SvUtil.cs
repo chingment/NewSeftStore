@@ -1031,19 +1031,8 @@ namespace LocalS.BLL
             jd.Name = "在床总时长";
             var hour = Covevt2Hour(val);
             jd.Value = GetTimeText(val, valFormat);
-            jd.RefRange = "6~9h";
-            if (hour < 6)
-            {
-                jd.Set("低", "↓", CA_1);
-            }
-            else if (hour >= 6 && hour <= 9)
-            {
-                jd.Set("正常", "-", CA_0);
-            }
-            else if (hour > 9)
-            {
-                jd.Set("高", "↑", CA_1);
-            }
+            jd.RefRange = "";
+            jd.Set("", "-", CA_0);
 
             return jd;
         }
@@ -1106,7 +1095,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmQdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
-
+            jd.Name = "浅度睡眠时长";
             var hour = Covevt2Hour(val);
             jd.Value = GetTimeText(val, valFormat);
 
@@ -1151,7 +1140,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmRemsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
-
+            jd.Name = "REM睡眠时长";
             var hour = Covevt2Hour(val);
 
             jd.Value = GetTimeText(val, valFormat);
@@ -1176,6 +1165,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmLzcs(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "离枕次数";
             jd.Value = val.ToString();
             jd.RefRange = "4~5次";
             if (val < 4)
@@ -1197,6 +1187,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmSmzq(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "睡眠周期";
             jd.Value = val.ToString();
             jd.RefRange = "4~5次";
             if (val < 4)
@@ -1217,6 +1208,7 @@ namespace LocalS.BLL
         public static SvDataJd GetSmTdcs(decimal val)
         {
             var jd = new SvDataJd();
+            jd.Name = "体动次数";
             jd.Value = val.ToString();
             jd.RefRange = "0~200次";
             if (val <= 200)
