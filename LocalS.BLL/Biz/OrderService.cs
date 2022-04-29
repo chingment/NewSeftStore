@@ -1637,6 +1637,97 @@ namespace LocalS.BLL.Biz
 
             return result;
         }
+
+        public CustomJsonResult CancleByOpenApi(string operater, string orderId, string orderCumId, E_OrderCancleType cancleType, string cancelReason)
+        {
+            var result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                List<StockChangeRecordModel> s_StockChangeRecords = new List<StockChangeRecordModel>();
+                Order d_Order = null;
+
+                if (string.IsNullOrEmpty(orderId) && string.IsNullOrEmpty(orderCumId))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "订单号和商户订单号不能同时为空");
+                }
+
+                if (string.IsNullOrEmpty(orderId))
+                {
+                    d_Order = CurrentDb.Order.Where(m => m.CumId == orderCumId).FirstOrDefault();
+                }
+                else
+                {
+                    d_Order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+                }
+
+                if (d_Order == null)
+                {
+                    LogUtil.Info(string.Format("该订单号:{0},找不到", orderId));
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, string.Format("该订单号:{0},找不到", orderId));
+                }
+
+                if (d_Order.PickupIsTrg)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单已经触发取货动作");
+                }
+
+
+                if (d_Order.Status == E_OrderStatus.Canceled)
+                {
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经取消");
+                }
+
+                d_Order.Status = E_OrderStatus.Canceled;
+                d_Order.CancelOperator = operater;
+                d_Order.CanceledTime = DateTime.Now;
+                d_Order.CancelReason = cancelReason;
+                d_Order.Mender = operater;
+                d_Order.MendTime = DateTime.Now;
+
+                var d_OrderSubs = CurrentDb.OrderSub.Where(m => m.OrderId == d_Order.Id).ToList();
+
+                foreach (var d_OrderSub in d_OrderSubs)
+                {
+
+                    d_OrderSub.PickupStatus = E_OrderPickupStatus.Canceled;
+                    d_OrderSub.Mender = operater;
+                    d_OrderSub.MendTime = DateTime.Now;
+
+                    var result_OperateStock = BizFactory.ProductSku.OperateStockQuantity(operater, EventCode.order_nocomplete_sign_notake, d_Order.ShopMode, d_Order.MerchId, d_Order.StoreId, d_OrderSub.ShopId, d_OrderSub.DeviceId, d_OrderSub.CabinetId, d_OrderSub.SlotId, d_OrderSub.SkuId, d_OrderSub.Quantity);
+                    if (result_OperateStock.Result != ResultType.Success)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "扣减库存失败");
+                    }
+
+                    s_StockChangeRecords.AddRange(result_OperateStock.Data.ChangeRecords);
+
+                }
+
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+
+                MqFactory.Global.PushOperateLog(operater, d_Order.AppId, d_Order.DeviceId, EventCode.order_cancle, string.Format("订单号：{0}，取消成功", d_Order.Id), new
+                {
+                    Rop = new
+                    {
+                        orderId = orderId,
+                        cancleType = cancleType,
+                        cancelReason = cancelReason
+                    },
+                    StockChangeRecords = s_StockChangeRecords
+                });
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
+
+            }
+
+            return result;
+        }
+
+
         public CustomJsonResult BuildPayParams(string operater, RopOrderBuildPayParams rop)
         {
             var result = new CustomJsonResult();

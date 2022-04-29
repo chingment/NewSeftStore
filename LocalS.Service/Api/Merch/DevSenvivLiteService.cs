@@ -94,6 +94,15 @@ namespace LocalS.Service.Api.Merch
                     }
                 }
 
+                if (!isBindUser)
+                {
+                    var d_SvUserDevice = CurrentDb.SvUserDevice.Where(m => m.DeviceId == item.DeviceId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).FirstOrDefault();
+                    if (d_SvUserDevice != null)
+                    {
+                        isBindUser = true;
+                    }
+                }
+
                 olist.Add(new
                 {
                     Id = item.DeviceId,

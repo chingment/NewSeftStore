@@ -510,7 +510,7 @@ border: 1px solid #909399;
 
   .it-header {
     display: flex;
-    padding: 5px 20px;
+    padding: 5px 10px;
     border-bottom: 1px solid #EBEEF5;
 
     .left {
@@ -541,18 +541,31 @@ border: 1px solid #909399;
     }
   }
   .it-component {
-    height: 156px;
+    height: 186px;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 5px 20px;
+    padding: 5px 10px;
 
   .t1{
     padding:  5px 0px;
     span{
     font-size: 14px;
-    margin-left: 5px;
+    margin-right: 5px;
     }
   }
+
+   
+  .t2{
+    display:flex;
+    font-size: 14px;
+    padding:  5px 0px;
+   .zs{
+ flex: 1;
+ display:flex;
+   }
+ }
+
+
   }
 }
 

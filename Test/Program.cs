@@ -64,12 +64,41 @@ namespace Test
             //ass.Add("4,5,6");
             //int? c = ass.Where(m=> SqlFunctions.CharIndex(m., "6")>-1);
 
+            var post = new
+            {
+                userid = "321x847d042242",
+                code = "",
+                mobile = "13800138000",
+                wechatid = "",
+                nick = "潘丽霞",
+                headimgurl = "https://thirdwx.qlogo.cn/mmopen/vi_32/aheseRdzK66Ze5HjlYmsy2O7mFa5hsjrErXSJyk6mSRricLW6AWHoq2AqCuCrZIeiaOib8LWvLVgoC352Gp0sNt5w/132",
+                sex = "2",
+                birthday = "1982-03-07 00:00:00.000",
+                height = 155,
+                weight = 65,
+                createtime = "2020-06-22T10:23:58.784Z", //创建时间
+                updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
+                SAS = "1",
+                Perplex = "2,3,4,5,6,7,8,9,10,11,12,13", //目前困扰 （查看字典表）
+                OtherPerplex = "", //目前困扰输入其它 ,
+                Medicalhistory = "", //既往史 （查看字典表）
+                OtherFamilyhistory = "", //既往史其它 ,
+                Medicine = "", //用药情况 （查看字典表）
+                OtherMedicine = "", //用药情况其它 ,
+                deptid = "32"
+            };
+
+
 
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
 
-            var boxListRequest = new SenvivSdk.BoxListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg15Ndawoc4lQmOknAM78cCwGIdBJJAh0u7gUkK9dQkj6M=\"", new { deptid = "32", size = 1, page = 1, keyword = "1004BEBFB587" });
-            var result = api.DoPost(boxListRequest);
+            UserCreateRequest userCreateRequest = new UserCreateRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1ADEplzDPSJTrUL3gF4SgubMJhJxYy35H6sawVJAUM20=\"", post);
+            var result = api.DoPost(userCreateRequest);
+
+
+            //var boxListRequest = new SenvivSdk.BoxListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1ADEplzDPSJTrUL3gF4SgubMJhJxYy35H6sawVJAUM20=\"", new { deptid = "32", size = 1, page = 1, keyword = "1004BEBFB587" });
+            //var result = api.DoPost(boxListRequest);
 
 
             //BoxBindRequest request = new BoxBindRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1Ep1BiTwfz+tjnczLRYK5Y0n2DrohMcndfWP25YV6f7E=\"", new { sn = "1004C7B07968", userid = "321x847d042242", deptid = "32" });

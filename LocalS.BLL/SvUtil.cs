@@ -628,6 +628,9 @@ namespace LocalS.BLL
 
             return jd;
         }
+
+
+
         public static SvDataJd GetMbGxygk(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
@@ -944,33 +947,46 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetJbfxXlscfx(decimal val)
+
+
+
+        public static SvDataJd GetJbfxXlscfx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
             jd.RefRange = "50~80";
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 13, 26, 39, 52, 65, 78, 91 }, markLine = new { yAxis = 78 } };
 
+            if (val < 30)
+            {
+                jd.Set("过低", "↓↓", CB_1);
+            }
+            else if (val >= 30 && val < 50)
+            {
+                jd.Set("偏低", "↓", CB_3);
+            }
+            else if (val >= 50 && val < 180)
+            {
+                jd.Set("正常", "-", CB_5);
+            }
+            else if (val >= 180 && val < 220)
+            {
+                jd.Set("偏高", "↑", CB_3);
+            }
+            else if (val >= 220)
+            {
+                jd.Set("过高", "↑↑", CB_1);
+            }
 
-            if (val <= 29)
+            if (isGetRefRanges)
             {
-                jd.Set("高风险", "↓↓", CA_1);
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CB_1, Tips = "过低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 50, Color = CB_3, Tips = "偏低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 180, Color = CB_5, Tips = "正常" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 180, Max = 220, Color = CB_3, Tips = "偏高" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 220, Max = 1000, Color = CB_1, Tips = "过高" });
             }
-            else if (val >= 30 && val <= 49)
-            {
-                jd.Set("中风险", "↓", CA_2);
-            }
-            else if (val >= 50 && val <= 180)
-            {
-                jd.Set("低风险", "-", CA_0);
-            }
-            else if (val >= 180 && val <= 220)
-            {
-                jd.Set("中风险", "↑", CA_2);
-            }
-            else if (val >= 221)
-            {
-                jd.Set("高风险", "↑↑", CA_1);
-            }
+
             return jd;
         }
         public static SvDataJd GetJbfxXljsl(decimal val)
@@ -1466,10 +1482,12 @@ namespace LocalS.BLL
             return jd;
 
         }
-        public static SvDataJd GetHrvHermzs(decimal val)
+        public static SvDataJd GetHrvHermzs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Id = "12";
             jd.Value = val.ToString();
+            jd.Name = "内分泌指数";
             jd.RefRange = "480~1100";
             if (val < 480)
             {

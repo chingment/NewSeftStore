@@ -487,8 +487,8 @@ namespace LocalS.Service.Api.HealthApp
                 weight = weight,
                 createtime = "2020-06-22T10:23:58.784Z", //创建时间
                 updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
-                SAS = d_ClientUser.Sex,
-                Perplex = "4,5,6", //目前困扰 （查看字典表）
+                SAS = "1",
+                Perplex = "2,3,4,5,6,7,8,9,10,11,12,13", //目前困扰 （查看字典表）
                 OtherPerplex = "", //目前困扰输入其它 ,
                 Medicalhistory = medicalhis, //既往史 （查看字典表）
                 OtherFamilyhistory = "", //既往史其它 ,
@@ -907,8 +907,8 @@ namespace LocalS.Service.Api.HealthApp
                 weight = weight,
                 createtime = "2020-06-22T10:23:58.784Z", //创建时间
                 updateTime = "2020-06-22T10:23:58.784Z", //最后一次更新时间
-                SAS = "4",
-                Perplex = "4,5,6", //目前困扰 （查看字典表）
+                SAS = "1",
+                Perplex = "2,3,4,5,6,7,8,9,10,11,12,13", //目前困扰 （查看字典表）
                 OtherPerplex = "", //目前困扰输入其它 ,
                 Medicalhistory = medicalhis, //既往史 （查看字典表）
                 OtherFamilyhistory = "", //既往史其它 ,

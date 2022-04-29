@@ -140,6 +140,7 @@ namespace LocalS.Service.Api.Merch
                 signTags = SvUtil.GetSignTags(user.Chronicdisease, "");
             }
 
+
             return signTags;
         }
 
@@ -197,6 +198,24 @@ namespace LocalS.Service.Api.Merch
 
             foreach (var item in list)
             {
+                var rd = new Dictionary<string, object>();
+
+                var smTags = new List<string>();
+
+                var hrvXzznl = SvUtil.GetHrvXzznl(0, 0, 0);
+                var xlDcjzxl = SvUtil.GetXlDcjzxl(0);
+                if (!string.IsNullOrEmpty(item.LastReportId))
+                {
+                    var d_Rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == item.LastReportId).FirstOrDefault();
+                    if (d_Rpt != null)
+                    {
+                        smTags = d_Rpt.SmTags.ToJsonObject<List<string>>();
+                        hrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl, d_Rpt.HrvXzznljzz, item.ReportCount);
+                        xlDcjzxl = SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl);
+                    }
+                }
+
+
                 olist.Add(new
                 {
                     Id = item.Id,
@@ -209,7 +228,10 @@ namespace LocalS.Service.Api.Merch
                     Weight = item.Weight,
                     PhoneNumber = item.PhoneNumber,
                     LastReportId = item.LastReportId,
-                    LastReportTime = item.LastReportTime
+                    LastReportTime = item.LastReportTime,
+                    hrvXzznl = hrvXzznl,
+                    xlDcjzxl = xlDcjzxl,
+                    smTags = smTags
                 });
             }
 

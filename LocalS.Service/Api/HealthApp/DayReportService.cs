@@ -66,12 +66,13 @@ namespace LocalS.Service.Api.HealthApp
             List<object> zsGmYqByLast = new List<object>();
             List<object> zsGmYpByLast = new List<object>();
             List<object> zsGmSrByLast = new List<object>();
-
+            List<object> hrvHermzsByLast = new List<object>();
+            List<object> jbfxXlscfxByLast = new List<object>();
 
             var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
                                       && u.ReportTime <= d_DayRpt.ReportTime
-                                      select new { u.ReportTime, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
+                                      select new { u.ReportTime, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk,u.JbfxXlscfx, u.HrvHermzs, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
 
             d_DayReportsByLast.Reverse();
 
@@ -89,6 +90,8 @@ namespace LocalS.Service.Api.HealthApp
                 zsGmYqByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYq });
                 zsGmYpByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmYp });
                 zsGmSrByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.ZsGmSr });
+                hrvHermzsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HrvHermzs });
+                jbfxXlscfxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.JbfxXlscfx });
             }
 
             #endregion
@@ -96,8 +99,10 @@ namespace LocalS.Service.Api.HealthApp
             #region  gzTags
             var gzTags = new List<object>();
 
+            gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, mylMylzsByLast));
 
-            if (d_DayRpt.ZsGmYp > 0 && d_SvUser.Sex == "2")
+
+            if (d_SvUser.Sex == "2")
             {
                 if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
                 {
@@ -108,24 +113,47 @@ namespace LocalS.Service.Api.HealthApp
                     gzTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true, zsGmYqByLast));
                 }
 
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, mylMylzsByLast));
-                gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true, qxxlJlqxByLast));
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, qxxlKynlByLast));
                 gzTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true, zsGmYpByLast));
                 gzTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true, zsGmSrByLast));
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, qxxlQxyjByLast));
             }
             else
             {
-                gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, mylMylzsByLast));
                 gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, mylGrfxByLast));
-                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, mbGxygkByLast));
-                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, mbGxbgkByLast));
+                //gzTags.Add(SvUtil.GetHrvHermzs(decimal.Floor(d_DayRpt.HrvHermzs), true, mylGrfxByLast));
+                //gzTags.Add(SvUtil.GetHrvHermzs(decimal.Floor(d_DayRpt.HrvHermzs), true, mylGrfxByLast));
+            }
+
+            string chronicdisease = d_SvUser.Chronicdisease == null ? "" : d_SvUser.Chronicdisease;
+
+            if (chronicdisease.IndexOf("4") > -1)
+            {
                 gzTags.Add(SvUtil.GetMbTnbgk(decimal.Floor(d_DayRpt.MbTnbgk), true, mbTnbgkByLast));
+            }
+            else
+            {
                 gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true, qxxlJlqxByLast));
+            }
+
+            if (chronicdisease.IndexOf("5") > -1)
+            {
+                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, mbGxygkByLast));
+            }
+            else
+            {
                 gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, qxxlKynlByLast));
+            }
+
+
+            if (chronicdisease.IndexOf("6") > -1)
+            {
+                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, mbGxbgkByLast));
+            }
+            else
+            {
                 gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, qxxlQxyjByLast));
             }
+
+
             #endregion
 
             #region smTags

@@ -139,7 +139,7 @@ namespace LocalS.Service.Api.IotTerm
 
         public IResult2 Cancle(string merchId, RopOrderCancle rop)
         {
-            var result = BizFactory.Order.Cancle(IdWorker.Build(IdType.EmptyGuid), null, rop.low_order_id, E_OrderCancleType.PayCancle, "订单支付取消");
+            var result = BizFactory.Order.CancleByOpenApi(IdWorker.Build(IdType.EmptyGuid), null, rop.low_order_id, E_OrderCancleType.OpenApi, "接口取消");
 
             return new CustomJsonResult2(result.Code, result.Message, result.Data);
         }

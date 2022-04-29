@@ -26,7 +26,8 @@ namespace LocalS.Entity
     {
         Unknow = 0,
         PayCancle = 1,
-        PayTimeout = 2
+        PayTimeout = 2,
+        OpenApi = 3
     }
 
     public enum E_OrderPickupStatus

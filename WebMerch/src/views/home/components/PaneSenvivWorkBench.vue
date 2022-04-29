@@ -117,36 +117,9 @@
                   :span="6"
                   style="margin-bottom:10px"
                 >
-                  <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
-                    <div class="it-header clearfix">
-                      <div class="left">
-                        <div class="l1">
-                          <el-avatar :src="item.avatar" size="medium" />
-                        </div>
-                        <div class="l2">
-                          <span class="name">{{ item.signName }}</span>
-                        </div>
-                      </div>
-                      <div class="right">
-                        <el-button type="text" @click="onOpenDialogByDetail(item)">查看</el-button>
-                      </div>
-                    </div>
-                    <div class="it-component">
-                      <div class="t1"><span class="sex">{{ item.sex.text }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
-                      <div>
 
-                        <el-tag
-                          v-for="tag in item.signTags"
-                          :key="tag.name"
-                          style="margin-right: 10px;margin-bottom: 10px"
-                          :type="tag.type"
-                        >
-                          {{ tag.name }}
-                        </el-tag>
+                  <card-user :rd="item" :on-saw-detail="onOpenDialogByDetail" />
 
-                      </div>
-                    </div>
-                  </el-card>
                 </el-col>
 
                 <el-col v-if="users.listData===null||users.listData.length===0" style="text-align: center;color: #909399">
@@ -236,9 +209,10 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import PaneUserDetail from '@/views/senviv/components/PaneUserDetail.vue'
 import PaneDayReportDetail from '@/views/senviv/components/PaneDayReportDetail.vue'
 import PaneStageReportDetail from '@/views/senviv/components/PaneStageReportDetail.vue'
+import CardUser from '@/views/senviv/components/CardUser.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneUserDetail, PaneDayReportDetail, PaneStageReportDetail },
+  components: { Pagination, PaneUserDetail, PaneDayReportDetail, PaneStageReportDetail, CardUser },
   data() {
     return {
       loadingConsoleInfo: false,

@@ -30,36 +30,9 @@
         :span="5"
         class="my-col"
       >
-        <el-card class="box-card box-card-senviv-user" :body-style="{ padding: '0px' }">
-          <div class="it-header clearfix">
-            <div class="left">
-              <div class="l1">
-                <el-avatar :src="item.avatar" size="medium" />
-              </div>
-              <div class="l2">
-                <span class="name">{{ item.signName }}</span>
-              </div>
-            </div>
-            <div class="right">
-              <el-button type="text" @click="handleOpenDialogByDetail(item)">查看</el-button>
-            </div>
-          </div>
-          <div class="it-component">
-            <div class="t1"><span class="sex">{{ item.sex.text }}</span> <span class="age">{{ item.age }}岁</span> <span class="height">身高：{{ item.height }}</span><span class="weight">体重：{{ item.weight }}</span></div>
-            <div>
 
-              <el-tag
-                v-for="tag in item.signTags"
-                :key="tag.name"
-                style="margin-right: 10px;margin-bottom: 10px"
-                :type="tag.type"
-              >
-                {{ tag.name }}
-              </el-tag>
+        <card-user :rd="item" :on-saw-detail="handleOpenDialogByDetail" />
 
-            </div>
-          </div>
-        </el-card>
       </el-col>
 
       <el-col v-if="listData===null||listData.length===0" style="text-align: center;color: #909399">
@@ -70,7 +43,6 @@
 
     </el-row>
     <pagination v-show="listTotal>0" :total="listTotal" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getListData" />
-
     <pane-user-detail v-if="dialogIsShowByDetail" :visible.sync="dialogIsShowByDetail" :sv-user-id="selectUserId" />
 
   </div>
@@ -80,9 +52,10 @@
 import { getUsers } from '@/api/senviv'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PaneUserDetail from './components/PaneUserDetail.vue'
+import CardUser from './components/CardUser.vue'
 export default {
   name: 'ClientUserList',
-  components: { Pagination, PaneUserDetail },
+  components: { Pagination, PaneUserDetail, CardUser },
   data() {
     return {
       loading: false,
@@ -141,6 +114,7 @@ export default {
       this.getListData()
     },
     handleOpenDialogByDetail(item) {
+      console.log(item)
       this.selectUserId = item.id
       this.dialogIsShowByDetail = true
     }
@@ -161,4 +135,5 @@ export default {
 }
 
 }
+
 </style>
