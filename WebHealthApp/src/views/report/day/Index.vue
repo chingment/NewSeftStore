@@ -109,7 +109,7 @@
               </div>
             </div>
             <div class="sm-score-chart" style="width:100%">
-              <score-level :tag-dv="rd.smScore" />
+              <score-level :tag-dv="rd.smScore" :is-collapse="true" />
             </div>
           </div>
 

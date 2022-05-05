@@ -13,6 +13,7 @@ namespace LocalS.BLL
         public string Name { get; set; }
         //具体值
         public object Value { get; set; }
+        public string ValueText { get; set; }
         //提示颜色
         public string Color { get; set; }
         //提示文字
@@ -22,6 +23,7 @@ namespace LocalS.BLL
         //参考范围
         public string RefRange { get; set; }
 
+        public string Pph { get; set; }
         public List<object> RefRanges { get; set; }
 
         public object Chat { get; set; }
@@ -30,7 +32,7 @@ namespace LocalS.BLL
             this.RefRanges = new List<object>();
         }
 
-        public void Set(string tips, string sign,string color)
+        public void Set(string tips, string sign, string color)
         {
             this.Tips = tips;
             this.Sign = sign;
@@ -39,9 +41,9 @@ namespace LocalS.BLL
 
         public class RefRangeArea
         {
-            public int Min { get; set; }
+            public object Min { get; set; }
 
-            public int Max { get; set; }
+            public object Max { get; set; }
 
             public string Color { get; set; }
 

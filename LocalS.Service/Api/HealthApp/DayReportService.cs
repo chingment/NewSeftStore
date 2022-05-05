@@ -72,7 +72,7 @@ namespace LocalS.Service.Api.HealthApp
             var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
                                       where u.SvUserId == d_DayRpt.SvUserId && u.IsValid == true
                                       && u.ReportTime <= d_DayRpt.ReportTime
-                                      select new { u.ReportTime, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk,u.JbfxXlscfx, u.HrvHermzs, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
+                                      select new { u.ReportTime, u.SmScore, u.MylMylzs, u.MylGrfx, u.MbGxygk, u.MbTnbgk, u.JbfxXlscfx, u.HrvHermzs, u.MbGxbgk, u.QxxlKynl, u.QxxlQxyj, u.QxxlJlqx, u.ZsGmSr, u.ZsGmYp, u.ZsGmYq, u.CreateTime }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
 
             d_DayReportsByLast.Reverse();
 
@@ -182,8 +182,8 @@ namespace LocalS.Service.Api.HealthApp
             var smDvs = new List<object>();
 
             smDvs.Add(SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"));
-            smDvs.Add(SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"));
-            smDvs.Add(SvUtil.GetSmRsxs(d_DayRpt.SmRsxs, "2"));
+            smDvs.Add(SvUtil.GetSmSmsc(d_DayRpt.SmSmsc));
+            smDvs.Add(SvUtil.GetSmRsxs(d_DayRpt.SmRsxs));
             smDvs.Add(SvUtil.GetSmSmzq(d_DayRpt.SmSmzq));
             smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc, "2"));
             smDvs.Add(SvUtil.GetSmQdsmsc(d_DayRpt.SmQdsmsc, "2"));
@@ -222,13 +222,90 @@ namespace LocalS.Service.Api.HealthApp
                     XlDcjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlDcjzxl),
                     XlCqjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlCqjzxl),
                     HxDcjzhx = SvUtil.GetHxDcjzhx(d_DayRpt.HxDcjzhx),
-                    SmSmsc = SvUtil.GetSmSmsc(d_DayRpt.SmSmsc, "2"),
+                    SmSmsc = SvUtil.GetSmSmsc(d_DayRpt.SmSmsc),
                     SmZcsc = SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"),
                     SmZcsjfw = SvUtil.GetSmZcsjfw(d_DayRpt.SmScsj, d_DayRpt.SmLcsj),
                 },
                 userInfo = userInfo,
                 consult = consult
             };
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+            return result;
+        }
+
+        public CustomJsonResult GetIndicator(string operater, string rptId)
+        {
+            var result = new CustomJsonResult();
+
+            var d_Rpt = CurrentDb.SvHealthDayReport.Where(m => m.Id == rptId).FirstOrDefault();
+
+
+            #region last7DayData
+
+
+            List<object> smSmscByLast = new List<object>();
+            List<object> smSmxlByLast = new List<object>();
+            List<object> smRsxsByLast = new List<object>();
+            List<object> smSmlxxByLast = new List<object>();
+            List<object> smSmzqByLast = new List<object>();
+            List<object> smQdsmblByLast = new List<object>();
+            List<object> smSdsmblByLast = new List<object>();
+            List<object> smRemsmblByLast = new List<object>();
+            List<object> smLzcsByLast = new List<object>();
+            List<object> smTdcsByLast = new List<object>();
+
+            var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
+                                      where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
+                                      && u.ReportTime <= d_Rpt.ReportTime
+                                      select new { u.ReportTime, u.SmSmsc, u.SmSmxl, u.SmRsxs, u.SmSmlxx, u.SmSmzq, u.SmQdsmbl, u.SmSdsmbl, u.SmRemsmbl, u.SmLzcs, u.SmTdcs }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
+
+            d_DayReportsByLast.Reverse();
+
+            foreach (var d_DayReportByLast in d_DayReportsByLast)
+            {
+                smSmscByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = SvUtil.Covevt2Hour(d_DayReportByLast.SmSmsc) });
+                smSmxlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmxl });
+                smRsxsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmRsxs });
+                smSmlxxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmlxx });
+                smSmzqByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmzq });
+                smQdsmblByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmQdsmbl });
+                smSdsmblByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSdsmbl });
+                smRemsmblByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmRemsmbl });
+                smLzcsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmLzcs });
+                smTdcsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmTdcs });
+            }
+
+            #endregion
+
+
+            var ret = new
+            {
+
+                rd = new
+                {
+                    SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc, true, smSmscByLast),
+                    SmSmxl = SvUtil.GetSmSmxl(d_Rpt.SmSmxl, true, smSmxlByLast),
+                    SmRsxs = SvUtil.GetSmRsxs(d_Rpt.SmRsxs, true, smRsxsByLast),
+                    SmSmlxx = SvUtil.GetSmSmlxx(d_Rpt.SmSmlxx, true, smSmlxxByLast),
+                    SmSmzq = SvUtil.GetSmSmzq(d_Rpt.SmSmzq, true, smSmlxxByLast),
+                    SmQdsmbl = SvUtil.GetSmQdsmbl(d_Rpt.SmQdsmbl, true, smSmlxxByLast),
+                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl, true, smSmlxxByLast),
+                    SmRemsmbl = SvUtil.GetSmRemsmbl(d_Rpt.SmRemsmbl, true, smSmlxxByLast),
+                    SmLzcs = SvUtil.GetSmLzcs(d_Rpt.SmSmzq, true, smSmlxxByLast),
+                    SmTdcs = SvUtil.GetSmTdcs(d_Rpt.SmTdcs, true, smSmlxxByLast),
+
+                    SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
+                    SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),
+                    SmQxsj = d_Rpt.SmQxsj.ToString("yyyy/MM/dd HH:mm"),
+                    SmLcsj = d_Rpt.SmLcsj.ToString("yyyy/MM/dd HH:mm"),
+                    SmPoint = d_Rpt.SmPoint.ToJsonObject<object>(),
+                    XlPoint = d_Rpt.XlPoint.ToJsonObject<object>(),
+                    HxPoint = d_Rpt.HxPoint.ToJsonObject<object>()
+
+                }
+            };
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
 
             return result;

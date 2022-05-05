@@ -72,6 +72,11 @@ const router = new VueRouter({
       meta: { title: '健康报告', isAuth: false }
     },
     {
+      path: '/report/day/indicator',
+      component: () => import('@/views/report/day/Indicator'),
+      meta: { title: '报告数据', isAuth: false }
+    },
+    {
       path: '/report/month/monitor',
       component: () => import('@/views/report/month/Index'),
       redirec: '/report/month/monitor',

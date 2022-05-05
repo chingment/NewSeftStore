@@ -1545,7 +1545,7 @@ namespace LocalS.BLL
 
                 if (d_DayReport.SmZcsc > 0)
                 {
-                    d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmZcsc), 2);
+                    d_DayReport.SmSmxl = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmZcsc), 2) * 100;
                 }
 
                 if (d_DayReport.SmSmsc > 0)
@@ -1679,7 +1679,7 @@ namespace LocalS.BLL
                 d_DayReport.SmLzcs = SvUtil.D46Int(reportpar.ofbdc);
                 d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
                 d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
-                d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2);
+                d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2) * 100;
                 d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
                 d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
                 d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;

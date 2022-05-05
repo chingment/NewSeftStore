@@ -1,39 +1,43 @@
 <template>
-
   <div>
-    <div class="i-score">
+    <div class="collapse-item i-score" @click="collapse = !collapse">
       <div class="t1">{{ tagDv.name }}</div>
-      <div class="t2" :style="{'color': tagDv.color}"> <span v-show="!tagDv.isHidValue">{{ tagDv.value }}</span></div>
+      <div class="t2" :style="{'color': tagDv.color}"> <span v-show="!tagDv.isHidValue">{{ tagDv.valueText }}</span></div>
       <div class="t3" :style="{'color': tagDv.color}">{{ tagDv.tips }}</div>
     </div>
-    <div class="i-sign">
-      <template v-for="(item, index) in tagDv.refRanges">
-        <div :key="'a'+index" class="col">
-          <div class="topnum" :style="(index>=0&&index<tagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<tagDv.refRanges.length-1?'visibility: hidden;':'')">
-            <span v-show="!tagDv.isHidValue">  {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}</span>
-          </div>
-          <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') " style="padding:0px 2px">
-            <div class="mt-range-content">
-              <div class="mt-range-runway" :style="'border-top-width: 8px;border-top-color:'+item.color+';'" />
-              <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-              <div class="mt-range-thumb" :style="'left: '+tagDv.value+'%;background-color:'+item.color+';'" />
+    <div v-show="collapse" class="collapse-item-more" style="width:100%">
+      <div class="i-sign">
+        <template v-for="(item, index) in tagDv.refRanges">
+          <div :key="'a'+index" class="col">
+            <div class="topnum" :style="(index>=0&&index<tagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<tagDv.refRanges.length-1?'visibility: hidden;':'')">
+              <span v-show="!tagDv.isHidValue">  {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}</span>
             </div>
+            <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') " style="padding:0px 2px">
+              <div class="mt-range-content">
+                <div class="mt-range-runway" :style="'border-top-width: 8px;border-top-color:'+item.color+';'" />
+                <div class="mt-range-progress" style="width: 0%; height: 8px;" />
+                <div class="mt-range-thumb" :style="'left: '+tagDv.value+'%;background-color:'+item.color+';'" />
+              </div>
+            </div>
+            <div class="bottomtips">{{ item.tips }}</div>
           </div>
-          <div class="bottomtips">{{ item.tips }}</div>
-        </div>
-        <div v-if="index<tagDv.refRanges.length-1" :key="'b'+index" class="col-split">
-          <div class="topnum"><span v-show="!tagDv.isHidValue"> {{ item.max }}</span></div>
-          <div class="border-split" />
-        </div>
-      </template>
+          <div v-if="index<tagDv.refRanges.length-1" :key="'b'+index" class="col-split">
+            <div class="topnum"><span v-show="!tagDv.isHidValue"> {{ item.max }}</span></div>
+            <div class="border-split" />
+          </div>
+        </template>
+      </div>
+      <div v-if="tagDv.pph!=null" class="i-pph">
+        {{ tagDv.pph }}
+      </div>
+      <div ref="i_chart" :style="'width:100%;height:'+chatHeight+';margin:auto;'" />
     </div>
-    <div ref="i_chart" :style="'width:100%;height:'+chatHeight+';margin:auto;'" />
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-
+var i_chart
 export default {
   name: 'ScoreLevel',
   props: {
@@ -43,51 +47,72 @@ export default {
     },
     chatHeight: {
       type: String,
-      default: '300px'
+      default: '200px'
+    },
+    isCollapse: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      i_chart: null,
+      innerWidth: 0,
+      collapse: this.isCollapse,
       isDesktop: this.$store.getters.isDesktop
     }
   },
-  mounted() {
-    this.i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
-    var isflag = false
-    if (typeof this.tagDv.chat !== 'undefined') {
-      if (this.tagDv.chat != null) {
-        if (typeof this.tagDv.chat.data !== 'undefined') {
-          if (this.tagDv.chat.data != null) {
-            isflag = true
-          }
-        }
-      }
+  watch: {
+    tagDv(newV, oldV) {
+      var _this = this
+      this.$nextTick(function() {
+        _this.getChart(newV.chat)
+      }, 300)
     }
-
-    if (isflag) {
-      this.getChart(this.tagDv.chat)
-    } else {
-      this.chatHeight = '0px'
+  },
+  beforeDestroy() {
+    if (i_chart) {
+      i_chart.clear()
+      i_chart.dispose()
+      i_chart = null
     }
   },
   created() {
-    // this.getChart(this.chartData)
+    var _this = this
+    this.innerWidth = window.innerWidth
+
+    this.$nextTick(function() {
+      _this.getChart(this.tagDv.chat)
+    }, 300)
+
+    window.addEventListener('resize', function() {
+      var _width = document.getElementById('i_chart').offsetWidth
+      console.log(_width)
+      var obj = {
+        width: _width
+      }
+      i_chart.resize(obj)
+    })
   },
   methods: {
     getChart(chat) {
       var _this = this
+      if (!i_chart) {
+        i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
+      }
       var data = chat.data
       if (data === null || data.length === 0) { return }
 
-      var xData = [] // = ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17']
-      var yData = []// = [68, 32, 65, 71, 82, 93]
+      var xData = []
+      var yData = []
 
       data.forEach(item => {
         xData.push(item.xData)
         yData.push(item.yData)
       })
       var yAxisLabel = chat.yAxisLabel
+      var yAxisMin = chat.yAxisMin
+      var yAxisMax = chat.yAxisMax
+      var yAxisSplitNumber = chat.yAxisSplitNumber
       var yAxisLabelExt = typeof chat.yAxisLabelExt === 'undefined' ? null : chat.yAxisLabelExt
       var option = {
         grid: [{
@@ -131,10 +156,10 @@ export default {
           }
         },
         yAxis: {
-          min: 0,
-          max: 100,
+          min: yAxisMin,
+          max: yAxisMax,
           type: 'value',
-          splitNumber: 10,
+          splitNumber: yAxisSplitNumber,
           splitLine: {
             show: false
           },
@@ -202,7 +227,7 @@ export default {
         },
         series: {
           type: 'line',
-          name: '分数',
+          name: '',
           symbol: 'circle',
           symbolSize: 8,
           showSymbol: true,
@@ -249,8 +274,8 @@ export default {
         }
       }
 
-      console.log(this.i_chart)
-      this.i_chart.setOption(option, null)
+      console.log(i_chart)
+      i_chart.setOption(option, null)
     }
   }
 }
@@ -352,6 +377,14 @@ export default {
       border-left: 1px dashed #c5c5c5;
     }
   }
+}
+
+.i-pph{
+    padding: 15px 0px;
+    color: gray;
+    text-indent: 28px;
+        font-size: 12px;
+        line-height: 16px;
 }
 
 </style>

@@ -578,7 +578,7 @@ namespace LocalS.Service.Api.Merch
                     //呼吸暂停AHI指数
                     HxZtahizs = SvUtil.GetHxZtahizs(rpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
                     SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
                     //浅度睡眠时长
@@ -853,7 +853,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     d_Rpt.HxZtpjsc,
                     d_Rpt.SmZcsc,
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc),
                     //深度睡眠时长
                     SmSdsmsc = SvUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "1"),
                     //浅度睡眠时长
@@ -1051,7 +1051,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸暂停AHI指数
                     HxZtahizs = SvUtil.GetHxZtahizs(rpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
                     SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
                     //浅度睡眠时长
@@ -1212,7 +1212,7 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //呼吸暂停AHI指数
                     HxZtahizs = SvUtil.GetHxZtahizs(rpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
                     SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
                     //浅度睡眠时长

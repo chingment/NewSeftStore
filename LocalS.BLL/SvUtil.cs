@@ -496,8 +496,7 @@ namespace LocalS.BLL
 
         public static decimal Covevt2Hour(decimal seconds)
         {
-            decimal hour = seconds / 3600m;
-
+            decimal hour = decimal.Parse((seconds / 3600m).ToString("#0.00"));
             return hour;
         }
         public static string GetTimeText(decimal scends, string valformat)
@@ -1053,24 +1052,45 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSmsc(decimal val, string valFormat)
+        public static SvDataJd GetSmSmsc(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "实际睡眠总时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val, valFormat);
+            jd.Value = hour;
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "6~9h";
-            if (hour < 6)
+            jd.Pph = "保证充足的睡眠有助于维持身心健康，美国睡眠医学会和睡眠研究学会建议：成年人每晚最佳睡眠时间是7-8小时。但睡眠时间不是评价睡眠质量的唯一标准，只要睡醒后感觉神清气爽、精神饱满即可，习惯性短睡者不需因为睡眠总时长低于推荐标准而过分担忧。另外，一味为了延长睡眠时间而赖在床上并不能弥补睡眠不足，反而更不利于获得高质量睡眠；可以通过短暂午睡来弥补夜间睡眠不足。";
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 2, 3, 5, 6, 8, 9, 11 }, yAxisMin = 0, yAxisMax = 11, yAxisSplitNumber = 8, markLine = new { yAxis = 7 } };
+
+            if (hour < 5)
             {
-                jd.Set("低", "↓", CA_1);
+                jd.Set("过少", "↓↓", CB_1);
             }
-            else if (hour >= 6 && hour <= 9)
+            else if (hour >= 5 && hour < 7)
             {
-                jd.Set("正常", "-", CA_0);
+                jd.Set("偏少", "↓", CB_3);
             }
-            else if (hour > 9)
+            else if (hour >= 7 && hour < 8)
             {
-                jd.Set("高", "↑", CA_1);
+                jd.Set("正常", "-", CB_5);
+            }
+            else if (hour >= 8 && hour < 9)
+            {
+                jd.Set("偏多", "↑", CB_3);
+            }
+            else if (hour >= 9)
+            {
+                jd.Set("过多", "↑↑", CB_1);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 5, Color = CB_1, Tips = "过少" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 5, Max = 7, Color = CB_3, Tips = "偏少" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 7, Max = 8, Color = CB_5, Tips = "正常" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 8, Max = 9, Color = CB_3, Tips = "偏多" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 9, Max = "∞", Color = CB_1, Tips = "过多" });
             }
 
             return jd;
@@ -1084,26 +1104,26 @@ namespace LocalS.BLL
             return jd;
 
         }
-        public static SvDataJd GetSmRsxs(decimal val, string valFormat)
+        public static SvDataJd GetSmRsxs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "入睡需时";
-
+            jd.Pph = "从躺在床上至入睡所需要的时长，正常人入睡应该在0.5小时以内。如果超过半小时仍然睡不着就可能存在失眠，失眠是睡眠障碍中最常见的一种。随着生活压力的增大和一系列社会事件的增多，失眠发生率升高；此外电子产品的广泛应用，也大大增加了入睡困难的发生率，与此同时也导致焦虑发生率升高。白天注意运动锻炼，晚上减少使用电子产品能避免入睡困难，如果睡不着建议起来到客厅或者书房看书或做其它活动再到床上来睡觉，不要使劲在床上睡。";
             TimeSpan ts = TimeSpan.FromSeconds(double.Parse(val.ToString()));
 
-            jd.Value = GetTimeText(val, valFormat);
+            jd.Value = GetTimeText(val, "2");
             jd.RefRange = "0~30min";
-            if (ts.TotalMinutes <= 30)
+            if (ts.TotalMinutes < 30)
             {
-                jd.Set("正常", "-", CA_5);
+                jd.Set("正常", "-", CB_5);
             }
-            else if (ts.TotalMinutes > 30 && ts.TotalMinutes <= 60)
+            else if (ts.TotalMinutes >= 30 && ts.TotalMinutes < 60)
             {
-                jd.Set("偏多", "↑", CA_2);
+                jd.Set("偏多", "↑", CB_3);
             }
-            else if (ts.TotalMinutes > 60)
+            else if (ts.TotalMinutes >= 60)
             {
-                jd.Set("过多", "↑", CA_1);
+                jd.Set("过多", "↑", CB_1);
             }
 
             return jd;
@@ -1131,6 +1151,62 @@ namespace LocalS.BLL
 
             return jd;
         }
+
+        public static SvDataJd GetSmSmlxx(decimal val, bool isGetRefRanges = false, object lastVals = null)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "睡眠连续性";
+            jd.Value = val;
+            jd.RefRange = "6~9h";
+            jd.Pph = "睡眠过程不间断，则为睡眠连续性好，是评价睡眠质量的其中一个标准，对体力恢复、情绪调节和增强记忆力都有重要作用。典型的睡眠状态转换为“浅睡-深睡-浅睡-REM（快速眼动）”，为一个睡眠周期，随即进入下一次的睡眠周期。但如果睡眠过程中觉醒次数较多，醒后难以再次入睡，则直接影响睡眠的连续性。";
+            if (val < 0.75m)
+            {
+                jd.Set("低", "↓↓", CB_1);
+            }
+            else if (val >= 0.75m && val < 0.9m)
+            {
+                jd.Set("偏低", "↓", CB_3);
+            }
+            else if (val >= 0.9m)
+            {
+                jd.Set("正常", "-", CB_5);
+            }
+
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 0.75, Color = CB_1, Tips = "低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0.75, Max = 0.9, Color = CB_3, Tips = "偏低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0.9, Max = "∞", Color = CB_5, Tips = "正常" });
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmQdsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "浅度睡眠时长";
+            var hour = Covevt2Hour(val);
+            jd.Value = GetTimeText(val, "2");
+
+            jd.RefRange = "3.5~5.4h";
+            if (hour < 3.5m)
+            {
+                jd.Set("低", "↓", CA_1);
+            }
+            else if (hour >= 3.5m && hour <= 5.4m)
+            {
+                jd.Set("正常", "-", CA_0);
+            }
+            else if (hour > 5.4m)
+            {
+                jd.Set("高", "↑", CA_1);
+            }
+
+            return jd;
+        }
+
         public static SvDataJd GetSmSdsmsc(decimal val, string valFormat)
         {
             var jd = new SvDataJd();
@@ -1177,8 +1253,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-
-        public static SvDataJd GetSmLzcs(decimal val)
+        public static SvDataJd GetSmLzcs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "离枕次数";
@@ -1200,7 +1275,7 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSmzq(decimal val)
+        public static SvDataJd GetSmSmzq(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠周期";
@@ -1221,7 +1296,7 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmTdcs(decimal val)
+        public static SvDataJd GetSmTdcs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "体动次数";
@@ -1529,8 +1604,9 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "睡眠值";
             jd.Value = val;
+            jd.ValueText = val.ToString();
             jd.RefRange = "0~100";
-            jd.Chat = jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 },yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 10, markLine = new { yAxis = 70 } };
 
             if (val < 30)
             {
@@ -1594,25 +1670,36 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmSmxl(decimal val)
+        public static SvDataJd GetSmSmxl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠效率";
-            jd.Value = Convert.ToInt32(val * 100).ToString();
+            jd.Value = val.ToString("0.#####") + "%";
             jd.RefRange = "85~100";
+            jd.Pph = "高效的睡眠，对于增强智力和体力起着重要作用，睡眠效率达到85%为正常，大于90%为优秀。难入睡者入睡需时太长，易醒者在睡眠中清醒次数增多，都是导致睡眠效率不高的直接原因。";
 
-            if (val <= 0.5m)
+            if (val < 50)
             {
-                jd.Set("低", "↓↓", CA_1);
+                jd.Set("低", "↓↓", CB_1);
             }
-            else if (val > 0.5m && val <= 0.85m)
+            else if (val >= 50 && val < 85)
             {
-                jd.Set("偏低", "↓", CA_2);
+                jd.Set("偏低", "↓", CB_3);
             }
-            else if (val > 0.85m)
+            else if (val >= 85)
             {
-                jd.Set("正常", "-", CA_5);
+                jd.Set("正常", "-", CB_5);
             }
+
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 50, Color = CB_1, Tips = "低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 50, Max = 85, Color = CB_3, Tips = "偏低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 85, Max = 100, Color = CB_5, Tips = "正常" });
+            }
+
+
 
             return jd;
 
@@ -1639,10 +1726,33 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmSdsmbl(decimal val)
+        public static SvDataJd GetSmSdsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "深度睡眠比例";
+            jd.Value = val;
+            jd.RefRange = "15~25";
+
+            if (val <= 15m)
+            {
+                jd.Set("少", "↓", CA_2);
+            }
+            else if (val > 15m && val <= 25m)
+            {
+                jd.Set("正常", "-", CA_5);
+            }
+            else if (val > 25m)
+            {
+                jd.Set("多", "-", CA_2);
+            }
+
+            return jd;
+        }
+
+        public static SvDataJd GetSmRemsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
+        {
+            var jd = new SvDataJd();
+            jd.Name = "REM睡眠比例";
             jd.Value = val;
             jd.RefRange = "15~25";
 

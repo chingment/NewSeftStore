@@ -149,7 +149,7 @@ namespace LocalS.Service.Api.HealthApp
                     //呼吸暂停AHI指数
                     HxZtahizs = SvUtil.GetHxZtahizs(d_StageRpt.HxZtahizs),
                     //睡眠时长
-                    SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc, "1"),
+                    SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc),
                     //深度睡眠时长
                     SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc,"1"),
                     //浅度睡眠时长
@@ -228,7 +228,7 @@ namespace LocalS.Service.Api.HealthApp
                 d_StageRpt.HealthScore,
                 d_StageRpt.HealthDate,
                 SmTags = smTags,
-                SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc, "1"),
+                SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc),
                 SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc, "1"),
                 SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
                 SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
