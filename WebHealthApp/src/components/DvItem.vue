@@ -1,6 +1,6 @@
 <template>
   <span class="dv-value">
-    <span :style="{'color': value.color}">{{ value.value }}</span>
+    <span :style="{'color': value.color}">{{ value.valueText }}</span>
     <span v-if="value.sign!='-'" :style="{'color': value.color}">{{ value.sign }}</span>
   </span>
 

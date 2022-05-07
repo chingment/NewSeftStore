@@ -18,7 +18,7 @@
     "@ditdot-dev/vue-flow-form": "^1.1.6",
     "@riophae/vue-treeselect": "^0.1.0",
     "@tinymce/tinymce-vue": "^2.1.0",
-    "axios": "0.18.1",
+    "axios": "^0.27.2",
     "echart": "^0.1.3",
     "echarts": "^3.8.5",
     "file-saver": "^2.0.2",
@@ -46,7 +46,7 @@
     "vue2-datepick": "^3.0.11",
     "vuex": "3.1.0",
     "weixin-js-sdk": "^1.6.0",
-    "xlsx": "^0.14.4"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
@@ -76,7 +76,7 @@
     "svg-sprite-loader": "4.1.3",
     "svgo": "1.2.2",
     "swiper": "^3.4.2",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "^2.6.14"
   },
   "engines": {
     "node": ">=8.9",

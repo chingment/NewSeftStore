@@ -5,7 +5,6 @@
       <mt-tab-container v-model="selected" class="page-tabbar-container">
         <mt-tab-container-item v-if="selected==='tab1'" id="tab1">
           <div class="a-part-1">
-
             <card-own-b
               :user-info="userInfo"
               :rd="rd"
@@ -15,7 +14,7 @@
           <div class="a-part-2">
             <!-- :on-main-slide-click="onGzTag" -->
             <div style="padding:10px">
-              <carousel-3d :space="carousel.space" :width="640" :height="640" :on-slide-change="onGzTag" :on-main-slide-click="onMainGzTag" :display="carousel.display" class="carousel-gz-tags">
+              <carousel-3d :space="100"  :width="640" :height="640" :on-slide-change="onGzTag" :on-main-slide-click="onMainGzTag" :display="5" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
                   <div ref="gz_tag" class="gz-tag" :data-index="index">
@@ -38,7 +37,7 @@
 
               <transition>
                 <div v-if="popupVisibleGzTag" style="padding:20px">
-                  <score-level :tag-dv="activeGzTag" chat-height="150px" />
+                  <score-level :tag-dv="activeGzTag" chat-height="150px"  :is-collapse="true"  />
                 </div>
               </transition>
               <!-- <mt-popup
@@ -52,6 +51,15 @@
               </mt-popup> -->
             </div>
           </div>
+
+          <div class="a-part-mb" style="padding: 0 20px 20px 20px;">
+
+ <score-level v-for="(item, index) in rd.mbTags"  :key="index"  :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true"/> 
+
+  <score-level v-for="(item, index) in rd.nxTags"  :key="index"  :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true"/> 
+
+          </div>
+
           <div class="a-part-3">
 
             <div class="lm-tabs smTags">
@@ -109,14 +117,14 @@
               </div>
             </div>
             <div class="sm-score-chart" style="width:100%">
-              <score-level :tag-dv="rd.smScore" :is-collapse="true" />
+              <score-level :tag-dv="rd.smScore" :is-collapse="true" :enable-collapse="false" />
             </div>
           </div>
 
           <div class="b-part-2">
             <div class="mi-title">睡眠评价</div>
             <div class="mi-content">
-              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共 <span :style="'color:'+rd.smZcsc.color+';'">   {{ rd.smZcsc.value }} </span> ，睡眠总时长为 <span :style="'color:'+rd.smSmsc.color+';'">  {{ rd.smSmsc.value }} </span>   。</div>
+              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共 <span :style="'color:'+rd.smZcsc.color+';'">   {{ rd.smZcsc.valueText }} </span> ，睡眠总时长为 <span :style="'color:'+rd.smSmsc.color+';'">  {{ rd.smSmsc.valueText }} </span>   。</div>
               <div style="text-indent: 20px;">本次睡眠效率 {{ rd.smSmxl.value }}%（<span :style="'color:'+rd.smSmxl.color+';'"> {{ rd.smSmxl.tips }}</span>）,睡眠连续性 {{ rd.smSmlxx.value }}%（<span :style="'color:'+rd.smSmlxx.color+';'"> {{ rd.smSmlxx.tips }}</span>），深睡眠比例 {{ rd.smSdsmbl.value }}%（<span :style="'color:'+rd.smSdsmbl.color+';'"> {{ rd.smSdsmbl.tips }}</span>）。</div>
               <div style="text-indent: 20px;">呼吸紊乱指数 {{ rd.hxZtahizs.value }}（<span :style="'color:'+rd.hxZtahizs.color+';'"> {{ rd.hxZtahizs.tips }}</span>）；基准心率 {{ rd.xlDcjzxl.value }}次/分钟（<span :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.tips }}</span>）；基准呼吸 {{ rd.hxDcjzhx.value }} 次/分钟（<span :style="'color:'+rd.hxDcjzhx.color+';'"> {{ rd.hxDcjzhx.tips }}</span>） 。</div>
             </div>
@@ -238,23 +246,15 @@ export default {
             name: ''
           },
           {
-            id: '3',
-            name: ''
-          },
-          {
-            id: '4',
-            name: ''
-          },
-          {
-            id: '5',
-            name: ''
-          },
-          {
             id: '6',
             name: ''
           },
           {
             id: '7',
+            name: ''
+          },
+          {
+            id: '8',
             name: ''
           }
         ],
@@ -274,8 +274,8 @@ export default {
         rptSuggest: ''
       },
       carousel: {
-        space: 80,
-        display: 7
+        space: 160,
+        display: 5
       },
       smScoreCircleFill: { gradient: ['#8316bd', '#fff', '#ad1da3'] },
       activeTabBySmTag: 0,

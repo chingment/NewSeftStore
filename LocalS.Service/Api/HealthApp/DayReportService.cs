@@ -100,61 +100,46 @@ namespace LocalS.Service.Api.HealthApp
             var gzTags = new List<object>();
 
             gzTags.Add(SvUtil.GetMylzs(decimal.Floor(d_DayRpt.MylMylzs), true, mylMylzsByLast));
+            gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, mylGrfxByLast));
+            gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, qxxlQxyjByLast));
+            gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true, qxxlJlqxByLast));
+            gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, qxxlKynlByLast));
+            #endregion
 
-
+            #region  nxTags
+            var nxTags = new List<object>();
             if (d_SvUser.Sex == "2")
             {
-                if (d_SvUser.CareMode == Entity.E_SvUserCareMode.Pregnancy)
+                if (d_SvUser.CareMode != Entity.E_SvUserCareMode.Pregnancy)
                 {
-                    gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, mylGrfxByLast));
-                }
-                else
-                {
-                    gzTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true, zsGmYqByLast));
+                    nxTags.Add(SvUtil.GetZsGmYq(decimal.Floor(d_DayRpt.ZsGmYq), true, zsGmYqByLast));
                 }
 
-                gzTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true, zsGmYpByLast));
-                gzTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true, zsGmSrByLast));
+                nxTags.Add(SvUtil.GetZsGmYp(decimal.Floor(d_DayRpt.ZsGmYp), true, zsGmYpByLast));
+                nxTags.Add(SvUtil.GetZsGmSr(decimal.Floor(d_DayRpt.ZsGmSr), true, zsGmSrByLast));
             }
-            else
-            {
-                gzTags.Add(SvUtil.GetMylGrfx(decimal.Floor(d_DayRpt.MylGrfx), true, mylGrfxByLast));
-                //gzTags.Add(SvUtil.GetHrvHermzs(decimal.Floor(d_DayRpt.HrvHermzs), true, mylGrfxByLast));
-                //gzTags.Add(SvUtil.GetHrvHermzs(decimal.Floor(d_DayRpt.HrvHermzs), true, mylGrfxByLast));
-            }
+            #endregion
 
+            #region  mbTags
+            var mbTags = new List<object>();
             string chronicdisease = d_SvUser.Chronicdisease == null ? "" : d_SvUser.Chronicdisease;
 
             if (chronicdisease.IndexOf("4") > -1)
             {
-                gzTags.Add(SvUtil.GetMbTnbgk(decimal.Floor(d_DayRpt.MbTnbgk), true, mbTnbgkByLast));
-            }
-            else
-            {
-                gzTags.Add(SvUtil.GetQxxlJlqx(d_DayRpt.QxxlJlqx, true, qxxlJlqxByLast));
+                mbTags.Add(SvUtil.GetMbTnbgk(decimal.Floor(d_DayRpt.MbTnbgk), true, mbTnbgkByLast));
             }
 
             if (chronicdisease.IndexOf("5") > -1)
             {
-                gzTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, mbGxygkByLast));
+                mbTags.Add(SvUtil.GetMbGxygk(decimal.Floor(d_DayRpt.MbGxygk), true, mbGxygkByLast));
             }
-            else
-            {
-                gzTags.Add(SvUtil.GetQxxlKynl(decimal.Floor(d_DayRpt.QxxlKynl), true, qxxlKynlByLast));
-            }
-
 
             if (chronicdisease.IndexOf("6") > -1)
             {
-                gzTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, mbGxbgkByLast));
+                mbTags.Add(SvUtil.GetMbGxbgk(decimal.Floor(d_DayRpt.MbGxbgk), true, mbGxbgkByLast));
             }
-            else
-            {
-                gzTags.Add(SvUtil.GetQxxlQxyj(decimal.Floor(d_DayRpt.QxxlQxyj), true, qxxlQxyjByLast));
-            }
-
-
             #endregion
+
 
             #region smTags
             var smTags = new List<object>();
@@ -181,13 +166,13 @@ namespace LocalS.Service.Api.HealthApp
             #region smDvs
             var smDvs = new List<object>();
 
-            smDvs.Add(SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"));
+            smDvs.Add(SvUtil.GetSmZcsc(d_DayRpt.SmZcsc));
             smDvs.Add(SvUtil.GetSmSmsc(d_DayRpt.SmSmsc));
             smDvs.Add(SvUtil.GetSmRsxs(d_DayRpt.SmRsxs));
             smDvs.Add(SvUtil.GetSmSmzq(d_DayRpt.SmSmzq));
-            smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc, "2"));
-            smDvs.Add(SvUtil.GetSmQdsmsc(d_DayRpt.SmQdsmsc, "2"));
-            smDvs.Add(SvUtil.GetSmRemsmsc(d_DayRpt.SmRemsmsc, "2"));
+            smDvs.Add(SvUtil.GetSmSdsmsc(d_DayRpt.SmSdsmsc));
+            smDvs.Add(SvUtil.GetSmQdsmsc(d_DayRpt.SmQdsmsc));
+            smDvs.Add(SvUtil.GetSmRemsmsc(d_DayRpt.SmRemsmsc));
             smDvs.Add(SvUtil.GetSmLzcs(d_DayRpt.SmLzcs));
             smDvs.Add(SvUtil.GetSmTdcs(d_DayRpt.SmTdcs));
             smDvs.Add(SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs));
@@ -198,7 +183,6 @@ namespace LocalS.Service.Api.HealthApp
 
 
             var consult = new { isOpen = true, tmpImg = "http://file.17fanju.com/upload/yuyi_consult.png" };
-
 
             var ret = new
             {
@@ -211,7 +195,9 @@ namespace LocalS.Service.Api.HealthApp
                     SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true, smScoreByLast),
                     SmScoreTip = "您的睡眠值已经打败" + d_DayRpt.SmScoreRatio + "%的人",
                     GzTags = gzTags,//关注标签
+                    NxTags= nxTags,//女性标签
                     SmTags = smTags,//睡眠标签
+                    MbTags= mbTags,//慢病标签
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_DayRpt.RptSuggest,
                     HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
@@ -223,7 +209,7 @@ namespace LocalS.Service.Api.HealthApp
                     XlCqjzxl = SvUtil.GetXlCqjzxl(d_DayRpt.XlCqjzxl),
                     HxDcjzhx = SvUtil.GetHxDcjzhx(d_DayRpt.HxDcjzhx),
                     SmSmsc = SvUtil.GetSmSmsc(d_DayRpt.SmSmsc),
-                    SmZcsc = SvUtil.GetSmZcsc(d_DayRpt.SmZcsc, "2"),
+                    SmZcsc = SvUtil.GetSmZcsc(d_DayRpt.SmZcsc),
                     SmZcsjfw = SvUtil.GetSmZcsjfw(d_DayRpt.SmScsj, d_DayRpt.SmLcsj),
                 },
                 userInfo = userInfo,

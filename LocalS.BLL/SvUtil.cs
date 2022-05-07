@@ -554,6 +554,7 @@ namespace LocalS.BLL
             jd.Id = "1";
             jd.Name = "免疫力";
             jd.Value = Lumos.CommonUtil.ToInt(val);
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val < 30)
             {
@@ -593,6 +594,7 @@ namespace LocalS.BLL
             jd.Id = "2";
             jd.Name = "感染风险";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val < 20)
             {
@@ -636,6 +638,7 @@ namespace LocalS.BLL
             jd.Id = "3";
             jd.Name = "高血压管控";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val < 40)
             {
@@ -667,6 +670,7 @@ namespace LocalS.BLL
             jd.Id = "4";
             jd.Name = "冠心病管控";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
 
             if (val < 40)
@@ -698,6 +702,7 @@ namespace LocalS.BLL
             jd.Id = "5";
             jd.Name = "糖尿病管控";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val < 40)
             {
@@ -822,6 +827,7 @@ namespace LocalS.BLL
             jd.Id = "7";
             jd.Name = "抗压能力";
             jd.Value = Lumos.CommonUtil.ToInt(val);
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } };
             if (val < 30)
             {
@@ -902,6 +908,7 @@ namespace LocalS.BLL
             jd.Id = "6";
             jd.Name = "焦虑情绪";
             jd.Value = i_val;
+            jd.ValueText = val;
             jd.Chat = new { Data = i_lastVals, yAxisLabel = new int[] { 0, 10, 30, 50, 90 }, yAxisLabelExt = new string[] { "", "恐慌", "重度", "中度", "轻度", "安康" }, markLine = new { yAxis = "" } };
             jd.IsHidValue = true;
             if (i_val <= 20)
@@ -942,6 +949,7 @@ namespace LocalS.BLL
             jd.Id = "8";
             jd.Name = "情绪应激";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 } };
 
             return jd;
@@ -1019,6 +1027,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.Name = "呼吸紊乱指数";
             jd.RefRange = "0~5次/h";
             if (val < 5)
@@ -1040,12 +1049,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmZcsc(decimal val, string valFormat)
+        public static SvDataJd GetSmZcsc(decimal val)
         {
             var jd = new SvDataJd();
             jd.Name = "在床总时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val, valFormat);
+            jd.Value = hour;
+            jd.ValueText= GetTimeText(val, "2");
             jd.RefRange = "";
             jd.Set("", "-", CA_0);
 
@@ -1110,8 +1120,9 @@ namespace LocalS.BLL
             jd.Name = "入睡需时";
             jd.Pph = "从躺在床上至入睡所需要的时长，正常人入睡应该在0.5小时以内。如果超过半小时仍然睡不着就可能存在失眠，失眠是睡眠障碍中最常见的一种。随着生活压力的增大和一系列社会事件的增多，失眠发生率升高；此外电子产品的广泛应用，也大大增加了入睡困难的发生率，与此同时也导致焦虑发生率升高。白天注意运动锻炼，晚上减少使用电子产品能避免入睡困难，如果睡不着建议起来到客厅或者书房看书或做其它活动再到床上来睡觉，不要使劲在床上睡。";
             TimeSpan ts = TimeSpan.FromSeconds(double.Parse(val.ToString()));
-
-            jd.Value = GetTimeText(val, "2");
+            var hour = Covevt2Hour(val);
+            jd.Value = hour;
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "0~30min";
             if (ts.TotalMinutes < 30)
             {
@@ -1128,13 +1139,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmQdsmsc(decimal val, string valFormat)
+        public static SvDataJd GetSmQdsmsc(decimal val)
         {
             var jd = new SvDataJd();
             jd.Name = "浅度睡眠时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val, valFormat);
-
+            jd.Value = hour;
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "3.5~5.4h";
             if (hour < 3.5m)
             {
@@ -1207,12 +1218,13 @@ namespace LocalS.BLL
             return jd;
         }
 
-        public static SvDataJd GetSmSdsmsc(decimal val, string valFormat)
+        public static SvDataJd GetSmSdsmsc(decimal val)
         {
             var jd = new SvDataJd();
             jd.Name = "深度睡眠时长";
             var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val, valFormat);
+            jd.Value = hour;
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "1.05~2.25h";
             if (hour < 1.05m)
             {
@@ -1229,13 +1241,13 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetSmRemsmsc(decimal val, string valFormat)
+        public static SvDataJd GetSmRemsmsc(decimal val)
         {
             var jd = new SvDataJd();
             jd.Name = "REM睡眠时长";
             var hour = Covevt2Hour(val);
-
-            jd.Value = GetTimeText(val, valFormat);
+            jd.Value = hour;
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "1.05~2.25h";
             if (hour < 1.05m)
             {
@@ -1258,6 +1270,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "离枕次数";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "4~5次";
             if (val < 4)
             {
@@ -1280,6 +1293,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "睡眠周期";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "4~5次";
             if (val < 4)
             {
@@ -1301,6 +1315,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "体动次数";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "0~200次";
             if (val <= 200)
             {
@@ -1778,6 +1793,7 @@ namespace LocalS.BLL
             jd.Id = "9";
             jd.Name = "孕气指数";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
             if (val < 20)
             {
@@ -1823,6 +1839,7 @@ namespace LocalS.BLL
             jd.Id = "10";
             jd.Name = "易胖指数";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
             if (val < 30)
             {
@@ -1858,6 +1875,7 @@ namespace LocalS.BLL
             jd.Id = "11";
             jd.Name = "水润指数";
             jd.Value = val.ToString("0.#####");
+            jd.ValueText = val.ToString("0.#####");
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, markLine = new { yAxis = 70 } }; ;
             if (val < 30)
             {

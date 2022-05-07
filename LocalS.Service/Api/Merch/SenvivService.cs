@@ -580,11 +580,11 @@ namespace LocalS.Service.Api.Merch
                     //睡眠时长
                     SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
@@ -855,11 +855,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //睡眠时长
                     SmSmsc = SvUtil.GetSmSmsc(d_Rpt.SmSmsc),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc, "1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(d_Rpt.SmSdsmsc),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(d_Rpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(d_Rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(d_Rpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(d_Rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(d_Rpt.SmSmzq),
                     //清醒时刻时长
@@ -1053,11 +1053,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //睡眠时长
                     SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数
@@ -1214,11 +1214,11 @@ new {  Name = "离床", Value = d_Rpt.SmLzscbl} }
                     //睡眠时长
                     SmSmsc = SvUtil.GetSmSmsc(rpt.SmSmsc),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc, "1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(rpt.SmSdsmsc),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(rpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(rpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(rpt.SmSmzq),
                     //体动次数

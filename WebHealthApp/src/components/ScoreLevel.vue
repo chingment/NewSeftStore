@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <div class="collapse-item i-score" @click="collapse = !collapse">
+  <div class="score-level">
+    <div class="collapse-item i-score" @click="onCollapse">
+      <div class="t-icon" v-if="elEnableIcon"> 
+         <img class="image" :src="require('@/assets/report/day/'+elTheme+'/gz_tag2_'+tagDv.id+'.png')"> 
+      </div>
       <div class="t1">{{ tagDv.name }}</div>
       <div class="t2" :style="{'color': tagDv.color}"> <span v-show="!tagDv.isHidValue">{{ tagDv.valueText }}</span></div>
       <div class="t3" :style="{'color': tagDv.color}">{{ tagDv.tips }}</div>
     </div>
-    <div v-show="collapse" class="collapse-item-more" style="width:100%">
+    <div v-show="elIsCollapse" class="collapse-item-more" style="width:100%">
       <div class="i-sign">
         <template v-for="(item, index) in tagDv.refRanges">
           <div :key="'a'+index" class="col">
@@ -49,16 +52,30 @@ export default {
       type: String,
       default: '200px'
     },
+    theme: {
+      type: String,
+      default: 'green'
+    },
     isCollapse: {
       type: Boolean,
       default: false
+    },
+    enableIcon:{
+      type: Boolean,
+      default: false
+    },
+    enableCollapse: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       innerWidth: 0,
-      collapse: this.isCollapse,
-      isDesktop: this.$store.getters.isDesktop
+      elIsCollapse: this.isCollapse,
+      elEnableIcon:this.enableIcon,
+      elTheme:this.theme,
+      elEnableCollapse:this.enableCollapse
     }
   },
   watch: {
@@ -94,6 +111,11 @@ export default {
     })
   },
   methods: {
+    onCollapse(){
+      if(this.elEnableCollapse){
+      this.elCollapse = !this.elCollapse
+      }
+    },
     getChart(chat) {
       var _this = this
       if (!i_chart) {
@@ -283,28 +305,45 @@ export default {
 
 <style lang="scss" scoped>
 
+.score-level{
+  padding: 5px 0px;
+}
+
 .i-score {
   font-size: 18px;
   font-weight: bold;
 
   display: flex;
 
+  .t-icon{
+ display: flex;
+    align-items: center;
+    margin-right: 5px;
+.image{
+  widows: 30px;
+  height: 30px;
+}
+
+  }
   .t1 {
     display: flex;
     flex: 1;
     justify-content: flex-start;
+        align-items: center
   }
 
   .t2 {
     display: flex;
     flex: 1;
     justify-content: center;
+        align-items: center
   }
 
   .t3 {
     display: flex;
     flex: 1;
     justify-content: flex-end;
+        align-items: center
   }
 }
 

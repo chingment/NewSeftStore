@@ -151,11 +151,11 @@ namespace LocalS.Service.Api.HealthApp
                     //睡眠时长
                     SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc),
                     //深度睡眠时长
-                    SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc,"1"),
+                    SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc),
                     //浅度睡眠时长
-                    SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
+                    SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc),
                     //REM睡眠时长
-                    SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
+                    SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc),
                     //睡眠周期=
                     SmSmzq = SvUtil.GetSmSmzq(d_StageRpt.SmSmzq),
                     //体动次数
@@ -229,9 +229,9 @@ namespace LocalS.Service.Api.HealthApp
                 d_StageRpt.HealthDate,
                 SmTags = smTags,
                 SmSmsc = SvUtil.GetSmSmsc(d_StageRpt.SmSmsc),
-                SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc, "1"),
-                SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc, "1"),
-                SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc, "1"),
+                SmSdsmsc = SvUtil.GetSmSdsmsc(d_StageRpt.SmSdsmsc),
+                SmQdsmsc = SvUtil.GetSmQdsmsc(d_StageRpt.SmQdsmsc),
+                SmRemsmsc = SvUtil.GetSmRemsmsc(d_StageRpt.SmRemsmsc),
                 HrvXzznl = SvUtil.GetHrvXzznl(d_StageRpt.HrvXzznl,d_StageRpt.HrvXzznljzz, d_StageRpt.ReportCount),
                 HxDcpjhx = SvUtil.GetHxDcpjhx(d_StageRpt.HxDcpjhx),
                 XlDcpjxl = SvUtil.GetXlDcpjxl(d_StageRpt.XlDcpjxl),
