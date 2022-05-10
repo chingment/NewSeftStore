@@ -182,25 +182,25 @@ export default {
       var option = {
         grid: [{
           bottom: '50%',
-          x: 22,
+          x: 28,
           y: 50,
-          x2: 22,
+          x2: 28,
           y2: 50
         }, {
           top: '50%',
-          x: 22,
-          y: 22,
-          x2: 22,
-          y2: 22
+          x: 28,
+          y: 50,
+          x2: 28,
+          y2: 50
 
         }, {
           show: false,
           borderWidth: 1,
           borderColor: '#FF0000',
-          x: 22,
-          y: 22,
-          x2: 22,
-          y2: 22
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 50
         }],
         title: [{
           left: 'center',
