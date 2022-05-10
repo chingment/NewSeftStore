@@ -305,6 +305,7 @@ namespace LocalS.Service.Api.HealthApp
                     SmQxsj = d_Rpt.SmQxsj.ToString("yyyy/MM/dd HH:mm"),
                     SmLcsj = d_Rpt.SmLcsj.ToString("yyyy/MM/dd HH:mm"),
                     SmPoint = d_Rpt.SmPoint.ToJsonObject<object>(),
+                    SmTdcsPoint= d_Rpt.SmTdcsPoint.ToJsonObject<object>(),
                     XlPoint = d_Rpt.XlPoint.ToJsonObject<object>(),
                     HxPoint = d_Rpt.HxPoint.ToJsonObject<object>()
 

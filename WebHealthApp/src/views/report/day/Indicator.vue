@@ -4,7 +4,7 @@
    <div class="pt1" style="padding:14px">
      <div ref="chartByMv" style="width: 100%;height: 320px;margin:auto" />
 
-     <div ref="chartByTd" style="width: 100%;height: 320px;margin:auto" />
+     <div ref="chartByTd" style="width: 100%;height: 150px;margin:auto" />
 
      <div class="chartByMv-Hxzt"><span class="item">{{rd.hxZtcs.value}}次呼吸暂停</span></div>
 
@@ -524,7 +524,7 @@ export default {
         chartByTd = echarts.init(this.$refs.chartByTd, null, { renderer: 'svg' })
       }
 
-      var sm_point_d = this.rd.smPoint.dataValue
+      var sm_point_d = this.rd.smTdcsPoint
 
       var sm_point_x_min_t = this.datetimeFormat2(this.rd.smPoint.startTime, -1000 * 60)
       var sm_point_x_max_t = this.datetimeFormat2(this.rd.smPoint.endTime, +1000 * 60)
@@ -538,51 +538,21 @@ export default {
       for (let index = 0; index < sm_point_d.length; index++) {
         const var1 = sm_point_d[index].startTime
         const var2 = sm_point_d[index].endTime
-        var type = sm_point_d[index].type
-
-        var var3
-        var color = ''
-
-        if (type === 0) {
-          var3 = 'W'
-          color = this.w_clr
-        } else if (type === 1) {
-          var3 = 'N1'
-          color = this.n1_clr
-        } else if (type === 5) {
-          var3 = 'N3'
-          color = this.n3_clr
-        } else if (type === 4) {
-          var3 = 'R'
-          color = this.r_clr
-        } else if (type === 3) {
-          var3 = 'O'
-          color =this.o_clr
-        } else if (type === 6) {
-          var3 = 'N2'
-          color = this.n2_clr
-        }
-
-        sm_point_xAxis.push(this.datetimeFormat(var1))
-        sm_point_xAxis.push(this.datetimeFormat(var2))
-
+        var var3= 'N3'
+        var color =  this.n3_clr
         sm_point_xAxis_data.push({ itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
+        console.log(sm_point_xAxis_data)
+        
       }
+
+      console.log(sm_point_xAxis_data.l)
 
       var option = {
         grid: [{
-          bottom: '50%',
           x: 28,
           y: 50,
           x2: 28,
           y2: 50
-        }, {
-          top: '50%',
-          x: 28,
-          y: 50,
-          x2: 28,
-          y2: 50
-
         }],
         title: [{
           left: 'center',
@@ -653,31 +623,29 @@ export default {
                 // console.log('离床')
                 return '|\n|\n|\n离床 ' + getMin(value)
               }
-              return ''
+              return  ''
             }
           }
         }],
         yAxis: [{
           splitLine: { show: false },
           gridIndex: 0,
-          data: ['N3', 'N2', 'N1', 'R', 'W', 'O']
+          data: ['N3']
         }],
         series: [
           {
-            xAxisIndex: 0,
-            yAxisIndex: 0,
             type: 'custom',
             renderItem: function(params, api) {
               var categoryIndex = api.value(0)
               var start = api.coord([api.value(1), categoryIndex])
               var end = api.coord([api.value(2), categoryIndex])
-              var height = 12
+              var height = 30
               return {
                 type: 'rect',
                 shape: echarts.graphic.clipRectByRect({
                   x: start[0],
                   y: start[1] - height / 2,
-                  width: end[0] - start[0],
+                  width: (end[0] - start[0])*4,
                   height: height
                 }, {
                   x: params.coordSys.x,
