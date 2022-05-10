@@ -121,17 +121,12 @@
             </div>
           </div>
 
-          <div class="b-part-2">
-            <div class="mi-title">睡眠评价</div>
-            <div class="mi-content">
-              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共 <span :style="'color:'+rd.smZcsc.color+';'">   {{ rd.smZcsc.valueText }} </span> ，睡眠总时长为 <span :style="'color:'+rd.smSmsc.color+';'">  {{ rd.smSmsc.valueText }} </span>   。</div>
-              <div style="text-indent: 20px;">本次睡眠效率 {{ rd.smSmxl.value }}%（<span :style="'color:'+rd.smSmxl.color+';'"> {{ rd.smSmxl.tips }}</span>）,睡眠连续性 {{ rd.smSmlxx.value }}%（<span :style="'color:'+rd.smSmlxx.color+';'"> {{ rd.smSmlxx.tips }}</span>），深睡眠比例 {{ rd.smSdsmbl.value }}%（<span :style="'color:'+rd.smSdsmbl.color+';'"> {{ rd.smSdsmbl.tips }}</span>）。</div>
-              <div style="text-indent: 20px;">呼吸紊乱指数 {{ rd.hxZtahizs.value }}（<span :style="'color:'+rd.hxZtahizs.color+';'"> {{ rd.hxZtahizs.tips }}</span>）；基准心率 {{ rd.xlDcjzxl.value }}次/分钟（<span :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.tips }}</span>）；基准呼吸 {{ rd.hxDcjzhx.value }} 次/分钟（<span :style="'color:'+rd.hxDcjzhx.color+';'"> {{ rd.hxDcjzhx.tips }}</span>） 。</div>
-            </div>
-          </div>
 
           <div class="b-part-3">
-            <div class="mi-title">监测结果</div>
+            <div class="mi-title">
+               <div class="tt-t1">监测结果</div>
+               <div class="tt-t2" @click="onSawMorePoint"> 查看更多 <img :src="require('@/assets/images/arrow-right.png')" alt=""   width="30px" height="30px" > </div>
+              </div>
             <div class="mi-content">
               <div v-for="(item, index) in rd.smDvs" :key="index" :class="'mi-item mi-item_'+(index%2==0?'0':'1')">
                 <div class="wrap">
@@ -141,6 +136,16 @@
               </div>
             </div>
           </div>
+
+          <div class="b-part-2">
+            <div class="mi-title">睡眠评价</div>
+            <div class="mi-content">
+              <div style="text-indent: 20px;"> 您本次睡眠的在床时间为 {{ rd.smZcsjfw.value }}，共 <span :style="'color:'+rd.smZcsc.color+';'">   {{ rd.smZcsc.valueText }} </span> ，睡眠总时长为 <span :style="'color:'+rd.smSmsc.color+';'">  {{ rd.smSmsc.valueText }} </span>   。</div>
+              <div style="text-indent: 20px;">本次睡眠效率 {{ rd.smSmxl.value }}%（<span :style="'color:'+rd.smSmxl.color+';'"> {{ rd.smSmxl.tips }}</span>）,睡眠连续性 {{ rd.smSmlxx.value }}%（<span :style="'color:'+rd.smSmlxx.color+';'"> {{ rd.smSmlxx.tips }}</span>），深睡眠比例 {{ rd.smSdsmbl.value }}%（<span :style="'color:'+rd.smSdsmbl.color+';'"> {{ rd.smSdsmbl.tips }}</span>）。</div>
+              <div style="text-indent: 20px;">呼吸紊乱指数 {{ rd.hxZtahizs.value }}（<span :style="'color:'+rd.hxZtahizs.color+';'"> {{ rd.hxZtahizs.tips }}</span>）；基准心率 {{ rd.xlDcjzxl.value }}次/分钟（<span :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.tips }}</span>）；基准呼吸 {{ rd.hxDcjzhx.value }} 次/分钟（<span :style="'color:'+rd.hxDcjzhx.color+';'"> {{ rd.hxDcjzhx.tips }}</span>） 。</div>
+            </div>
+          </div>
+
 
           <div v-if="rd.rptSuggest!=null" class="b-part-4">
             <div class="mi-title">今日建议</div>
@@ -360,6 +365,9 @@ export default {
     },
     onScroll() {
       this.popupVisibleGzTag = false
+    },
+    onSawMorePoint(){
+      this.$router.push('/report/day/indicator?rptId=' + this.rptId)
     }
   }
 }
@@ -565,8 +573,8 @@ export default {
     font-size: 16px;
     font-weight: bold;
     line-height: 38px;
-
     height: 38px;
+    display: flex;
   }
 
   .mi-content {
@@ -591,8 +599,22 @@ export default {
     font-size: 16px;
     font-weight: bold;
     line-height: 38px;
-
+    display: flex;
     height: 38px;
+
+    .tt-t1{
+      flex: 1;
+      display: flex;
+        justify-content: flex-start;
+    }
+
+     .tt-t2{
+      flex: 1;
+      display: flex;
+         justify-content: flex-end;
+         align-items: center;
+    }
+
   }
 
   .mi-item {

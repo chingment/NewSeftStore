@@ -1550,7 +1550,7 @@ namespace LocalS.BLL
 
                 if (d_DayReport.SmSmsc > 0)
                 {
-                    d_DayReport.SmSmlxx = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmSmsc), 2);
+                    d_DayReport.SmSmlxx = Math.Round(((decimal)(d_DayReport.SmSdsmsc + d_DayReport.SmQdsmsc + d_DayReport.SmRemsmsc) / d_DayReport.SmSmsc), 2)*100;
                 }
 
                 #endregion
@@ -1680,7 +1680,7 @@ namespace LocalS.BLL
                 d_DayReport.SmTdcs = SvUtil.D46Int(reportpar.mct);//体动次数
                 d_DayReport.SmPjtdsc = SvUtil.D46Int(reportpar.mvavg);//平均体动时长
                 d_DayReport.SmSmxl = SvUtil.D46Decimal(reportpar.sffcy2) * 100;
-                d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity);
+                d_DayReport.SmSmlxx = SvUtil.D46Decimal(reportpar.SleepContinuity)*100;
                 d_DayReport.ZsGmSr = SvUtil.D46Decimal(reportpar.gmsr) * 100;
                 d_DayReport.ZsGmYp = SvUtil.D46Decimal(reportpar.gmyp) * 100;
                 d_DayReport.ZsGmYq = SvUtil.D46Decimal(reportpar.gmyq) * 100;

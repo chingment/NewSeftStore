@@ -1,39 +1,39 @@
 <template>
-  <div class="score-level">
+  <div class="score-level" >
     <div class="collapse-item i-score" @click="onCollapse">
       <div class="t-icon" v-if="elEnableIcon"> 
-         <img class="image" :src="require('@/assets/report/day/'+elTheme+'/gz_tag2_'+tagDv.id+'.png')"> 
+         <img class="image" :src="require('@/assets/report/day/'+elTheme+'/gz_tag2_'+elTagDv.id+'.png')"> 
       </div>
-      <div class="t1">{{ tagDv.name }}</div>
-      <div class="t2" :style="{'color': tagDv.color}"> <span v-show="!tagDv.isHidValue">{{ tagDv.valueText }}</span></div>
-      <div class="t3" :style="{'color': tagDv.color}">{{ tagDv.tips }}</div>
+      <div class="t1">{{ elTagDv.name }}</div>
+      <div class="t2" :style="{'color': elTagDv.color}"> <span v-show="!elTagDv.isHidValue">{{ elTagDv.valueText }}</span></div>
+      <div class="t3" :style="{'color': elTagDv.color}">{{ elTagDv.tips }}</div>
     </div>
-    <div v-show="elIsCollapse" class="collapse-item-more" style="width:100%">
+    <div  v-show="elIsCollapse" class="collapse-item-more" style="width:100%">
       <div class="i-sign">
-        <template v-for="(item, index) in tagDv.refRanges">
+        <template v-for="(item, index) in elTagDv.refRanges">
           <div :key="'a'+index" class="col">
-            <div class="topnum" :style="(index>=0&&index<tagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<tagDv.refRanges.length-1?'visibility: hidden;':'')">
-              <span v-show="!tagDv.isHidValue">  {{ (index>=0&&index<(tagDv.refRanges.length-1))?item.min:item.max }}</span>
+            <div class="topnum" :style="(index>=0&&index<elTagDv.refRanges.length-1?'text-align:left;':'text-align:right')+(index>=1&&index<elTagDv.refRanges.length-1?'visibility: hidden;':'')">
+              <span v-show="!elTagDv.isHidValue">  {{ (index>=0&&index<(elTagDv.refRanges.length-1))?item.min:item.max }}</span>
             </div>
-            <div :class="'mt-range jd1 '+((tagDv.value>=item.min&&tagDv.value<item.max)?'':'no-ative') " style="padding:0px 2px">
+            <div :class="'mt-range jd1 '+((elTagDv.value>=item.min&&elTagDv.value<item.max)?'':'no-ative') " style="padding:0px 2px">
               <div class="mt-range-content">
                 <div class="mt-range-runway" :style="'border-top-width: 8px;border-top-color:'+item.color+';'" />
                 <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                <div class="mt-range-thumb" :style="'left: '+tagDv.value+'%;background-color:'+item.color+';'" />
+                <div class="mt-range-thumb" :style="'left: '+elTagDv.value+'%;background-color:'+item.color+';'" />
               </div>
             </div>
             <div class="bottomtips">{{ item.tips }}</div>
           </div>
-          <div v-if="index<tagDv.refRanges.length-1" :key="'b'+index" class="col-split">
-            <div class="topnum"><span v-show="!tagDv.isHidValue"> {{ item.max }}</span></div>
+          <div v-if="index<elTagDv.refRanges.length-1" :key="'b'+index" class="col-split">
+            <div class="topnum"><span v-show="!elTagDv.isHidValue"> {{ item.max }}</span></div>
             <div class="border-split" />
           </div>
         </template>
       </div>
-      <div v-if="tagDv.pph!=null" class="i-pph">
-        {{ tagDv.pph }}
+      <div v-if="elTagDv.pph!=null" class="i-pph">
+        {{ elTagDv.pph }}
       </div>
-      <div ref="i_chart" :style="'width:100%;height:'+chatHeight+';margin:auto;'" />
+      <div  ref="i_chart" :style="'width:'+elChatWidth+';height:'+elChatHeight+';margin:auto;'" />
     </div>
   </div>
 </template>
@@ -46,7 +46,9 @@ export default {
   props: {
     tagDv: {
       type: Object,
-      default: null
+        default: function () {
+    return {name:'',chat:{} }
+    }
     },
     chatHeight: {
       type: String,
@@ -75,13 +77,18 @@ export default {
       elIsCollapse: this.isCollapse,
       elEnableIcon:this.enableIcon,
       elTheme:this.theme,
-      elEnableCollapse:this.enableCollapse
+      elEnableCollapse:this.enableCollapse,
+      elChatHeight:this.chatHeight,
+      elChatWidth:'100%',
+      elTagDv:this.tagDv,
     }
   },
   watch: {
     tagDv(newV, oldV) {
       var _this = this
+      _this.elTagDv=newV
       this.$nextTick(function() {
+        _this.$refs.i_chart.style.width=window.innerWidth+ 'px' 
         _this.getChart(newV.chat)
       }, 300)
     }
@@ -98,25 +105,19 @@ export default {
     this.innerWidth = window.innerWidth
 
     this.$nextTick(function() {
-      _this.getChart(this.tagDv.chat)
+        _this.$refs.i_chart.style.width='100%' 
+        _this.getChart(_this.elTagDv.chat)
     }, 300)
-
-    window.addEventListener('resize', function() {
-      var _width = document.getElementById('i_chart').offsetWidth
-      console.log(_width)
-      var obj = {
-        width: _width
-      }
-      i_chart.resize(obj)
-    })
   },
   methods: {
     onCollapse(){
       if(this.elEnableCollapse){
-      this.elCollapse = !this.elCollapse
+      this.elIsCollapse = !this.elIsCollapse
       }
     },
     getChart(chat) {
+      if(chat==null)
+       return
       var _this = this
       if (!i_chart) {
         i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
@@ -305,14 +306,18 @@ export default {
 
 <style lang="scss" scoped>
 
+
 .score-level{
-  padding: 5px 0px;
+  padding: 12px 0px;
+  border-bottom: 1px solid #efefef;
+}
+
+.score-level:last-child{
+    border-bottom: 0px solid #efefef;
 }
 
 .i-score {
   font-size: 18px;
-  font-weight: bold;
-
   display: flex;
 
   .t-icon{
@@ -329,21 +334,25 @@ export default {
     display: flex;
     flex: 1;
     justify-content: flex-start;
-        align-items: center
+        align-items: center;
+      font-size: 14px;
   }
 
   .t2 {
     display: flex;
     flex: 1;
     justify-content: center;
-        align-items: center
+        align-items: center;
+          font-weight: bold;
+
   }
 
   .t3 {
     display: flex;
     flex: 1;
     justify-content: flex-end;
-        align-items: center
+        align-items: center;
+           font-size: 14px;
   }
 }
 
@@ -425,5 +434,6 @@ export default {
         font-size: 12px;
         line-height: 16px;
 }
+
 
 </style>

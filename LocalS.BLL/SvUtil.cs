@@ -960,7 +960,9 @@ namespace LocalS.BLL
         public static SvDataJd GetJbfxXlscfx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "心律失常风险";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "50~80";
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 13, 26, 39, 52, 65, 78, 91 }, markLine = new { yAxis = 78 } };
 
@@ -996,10 +998,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetJbfxXljsl(decimal val)
+        public static SvDataJd GetJbfxXljsl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "心律减速理";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "4.6~12";
             if (val <= 2.5m)
             {
@@ -1023,11 +1027,12 @@ namespace LocalS.BLL
             }
             return jd;
         }
-        public static SvDataJd GetHxZtahizs(decimal val)
+        public static SvDataJd GetHxZtahizs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Value = val.ToString();
-            jd.ValueText = val.ToString();
+            jd.ValueText = val.ToString() + "次/h";
+
             jd.Name = "呼吸紊乱指数";
             jd.RefRange = "0~5次/h";
             if (val < 5)
@@ -1168,6 +1173,7 @@ namespace LocalS.BLL
             var jd = new SvDataJd();
             jd.Name = "睡眠连续性";
             jd.Value = val;
+            jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "6~9h";
             jd.Pph = "睡眠过程不间断，则为睡眠连续性好，是评价睡眠质量的其中一个标准，对体力恢复、情绪调节和增强记忆力都有重要作用。典型的睡眠状态转换为“浅睡-深睡-浅睡-REM（快速眼动）”，为一个睡眠周期，随即进入下一次的睡眠周期。但如果睡眠过程中觉醒次数较多，醒后难以再次入睡，则直接影响睡眠的连续性。";
             if (val < 0.75m)
@@ -1197,20 +1203,19 @@ namespace LocalS.BLL
         public static SvDataJd GetSmQdsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
-            jd.Name = "浅度睡眠时长";
-            var hour = Covevt2Hour(val);
-            jd.Value = GetTimeText(val, "2");
-
-            jd.RefRange = "3.5~5.4h";
-            if (hour < 3.5m)
+            jd.Name = "浅睡眠";
+            jd.Value = val;
+            jd.ValueText = val.ToString("0.#####") + "%";
+            jd.RefRange = "45~65";
+            if (val < 45m)
             {
                 jd.Set("低", "↓", CA_1);
             }
-            else if (hour >= 3.5m && hour <= 5.4m)
+            else if (val >= 45m && val < 65m)
             {
                 jd.Set("正常", "-", CA_0);
             }
-            else if (hour > 5.4m)
+            else if (val >= 65m)
             {
                 jd.Set("高", "↑", CA_1);
             }
@@ -1328,11 +1333,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetXlDcjzxl(decimal val)
+        public static SvDataJd GetXlDcjzxl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
-            jd.Name = "基准心率";
+            jd.Name = "当次基准心率";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~83次/min";
             if (val < 50)
             {
@@ -1349,10 +1355,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetXlCqjzxl(decimal val)
+        public static SvDataJd GetXlCqjzxl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "长期基准心率";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~65次/min";
             if (val < 50)
             {
@@ -1369,10 +1377,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetXlDcpjxl(decimal val)
+        public static SvDataJd GetXlDcpjxl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "平均心率";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~65次/min";
             if (val < 50)
             {
@@ -1389,10 +1399,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHxDcjzhx(decimal val)
+        public static SvDataJd GetHxDcjzhx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "当次基准呼吸";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "12~20次/min";
             if (val < 12)
             {
@@ -1409,10 +1421,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHxCqjzhx(decimal val)
+        public static SvDataJd GetHxCqjzhx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "长期基准呼吸";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "10~18次/min";
             if (val < 10)
             {
@@ -1429,10 +1443,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHxDcpjhx(decimal val)
+        public static SvDataJd GetHxDcpjhx(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "平均呼吸";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "10~18次/min";
             if (val < 10)
             {
@@ -1449,11 +1465,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHxZtcs(decimal val)
+        public static SvDataJd GetHxZtcs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "呼吸暂停次数";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString() + "次";
             jd.RefRange = "0~30次";
             if (val <= 30)
             {
@@ -1466,12 +1483,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHrvXzznl(decimal val, decimal jzz, int reportCount)
+        public static SvDataJd GetHrvXzznl(decimal val, decimal jzz, int reportCount, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
             jd.Name = "心脏总能量";
             jd.Value = val.ToString();
-
+            jd.ValueText = val.ToString();
             long var1 = 2000;
             long var2 = 3000;
             long var3 = 6000;
@@ -1511,10 +1528,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHrvJgsjzlzs(decimal val)
+        public static SvDataJd GetHrvJgsjzlzs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "交感神经张力";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "500~1200";
             if (val < 500)
             {
@@ -1531,10 +1550,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHrvMzsjzlzs(decimal val)
+        public static SvDataJd GetHrvMzsjzlzs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "迷走神经张力";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "520~1200";
             if (val < 520)
             {
@@ -1551,10 +1572,12 @@ namespace LocalS.BLL
 
             return jd;
         }
-        public static SvDataJd GetHrvZzsjzlzs(decimal val)
+        public static SvDataJd GetHrvZzsjzlzs(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
+            jd.Name = "自主神经张力";
             jd.Value = val.ToString();
+            jd.ValueText = val.ToString();
             jd.RefRange = "0.7~1.3";
             if (val < 0.7m)
             {
@@ -1689,10 +1712,11 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Name = "睡眠效率";
-            jd.Value = val.ToString("0.#####") + "%";
+            jd.Value = val;
+            jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "85~100";
             jd.Pph = "高效的睡眠，对于增强智力和体力起着重要作用，睡眠效率达到85%为正常，大于90%为优秀。难入睡者入睡需时太长，易醒者在睡眠中清醒次数增多，都是导致睡眠效率不高的直接原因。";
-
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 25, 50, 85, 100 }, yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 5, markLine = new { yAxis = 7 } };
             if (val < 50)
             {
                 jd.Set("低", "↓↓", CB_1);
@@ -1744,8 +1768,9 @@ namespace LocalS.BLL
         public static SvDataJd GetSmSdsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
-            jd.Name = "深度睡眠比例";
+            jd.Name = "深睡眠";
             jd.Value = val;
+            jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "15~25";
 
             if (val <= 15m)
@@ -1767,8 +1792,9 @@ namespace LocalS.BLL
         public static SvDataJd GetSmRemsmbl(decimal val, bool isGetRefRanges = false, object lastVals = null)
         {
             var jd = new SvDataJd();
-            jd.Name = "REM睡眠比例";
+            jd.Name = "REM睡眠";
             jd.Value = val;
+            jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "15~25";
 
             if (val <= 15m)

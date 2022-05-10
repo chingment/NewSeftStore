@@ -195,9 +195,9 @@ namespace LocalS.Service.Api.HealthApp
                     SmScore = SvUtil.GetSmScore(d_DayRpt.SmScore, true, smScoreByLast),
                     SmScoreTip = "您的睡眠值已经打败" + d_DayRpt.SmScoreRatio + "%的人",
                     GzTags = gzTags,//关注标签
-                    NxTags= nxTags,//女性标签
+                    NxTags = nxTags,//女性标签
                     SmTags = smTags,//睡眠标签
-                    MbTags= mbTags,//慢病标签
+                    MbTags = mbTags,//慢病标签
                     SmDvs = smDvs,//睡觉检测项
                     RptSuggest = d_DayRpt.RptSuggest,
                     HxZtahizs = SvUtil.GetHxZtahizs(d_DayRpt.HxZtahizs),
@@ -280,6 +280,25 @@ namespace LocalS.Service.Api.HealthApp
                     SmRemsmbl = SvUtil.GetSmRemsmbl(d_Rpt.SmRemsmbl, true, smSmlxxByLast),
                     SmLzcs = SvUtil.GetSmLzcs(d_Rpt.SmSmzq, true, smSmlxxByLast),
                     SmTdcs = SvUtil.GetSmTdcs(d_Rpt.SmTdcs, true, smSmlxxByLast),
+
+
+                    XlDcjzxl = SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl, true, smSmlxxByLast),
+                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl, true, smSmlxxByLast),
+                    XlDcpjxl = SvUtil.GetXlDcpjxl(d_Rpt.XlDcpjxl, true, smSmlxxByLast),
+
+                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx, true, smSmlxxByLast),
+                    HxCqjzhx = SvUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx, true, smSmlxxByLast),
+                    HxDcpjhx = SvUtil.GetHxDcpjhx(d_Rpt.HxDcpjhx, true, smSmlxxByLast),
+                    HxZtahizs = SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs, true, smSmlxxByLast),
+                    HxZtcs = SvUtil.GetHxZtcs(d_Rpt.HxZtcs, true, smSmlxxByLast),
+
+
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl, d_Rpt.HrvJgsjzlzsjzz, 0, true, smSmlxxByLast),
+                    HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs, true, smSmlxxByLast),
+                    HrvMzsjzlzs = SvUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs, true, smSmlxxByLast),
+                    HrvZzsjzlzs = SvUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs, true, smSmlxxByLast),
+                    JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx, true, smSmlxxByLast),
+                    JbfxXljsl = SvUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl, true, smSmlxxByLast),
 
                     SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
                     SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),
