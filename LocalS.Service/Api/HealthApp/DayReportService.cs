@@ -140,7 +140,6 @@ namespace LocalS.Service.Api.HealthApp
             }
             #endregion
 
-
             #region smTags
             var smTags = new List<object>();
 
@@ -252,7 +251,7 @@ namespace LocalS.Service.Api.HealthApp
             {
                 smSmscByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = SvUtil.Covevt2Hour(d_DayReportByLast.SmSmsc) });
                 smSmxlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmxl });
-                smRsxsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmRsxs });
+                smRsxsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = TimeSpan.FromSeconds(double.Parse(d_DayReportByLast.SmRsxs.ToString())).TotalMinutes });
                 smSmlxxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmlxx });
                 smSmzqByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmSmzq });
                 smQdsmblByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmQdsmbl });
@@ -274,12 +273,12 @@ namespace LocalS.Service.Api.HealthApp
                     SmSmxl = SvUtil.GetSmSmxl(d_Rpt.SmSmxl, true, smSmxlByLast),
                     SmRsxs = SvUtil.GetSmRsxs(d_Rpt.SmRsxs, true, smRsxsByLast),
                     SmSmlxx = SvUtil.GetSmSmlxx(d_Rpt.SmSmlxx, true, smSmlxxByLast),
-                    SmSmzq = SvUtil.GetSmSmzq(d_Rpt.SmSmzq, true, smSmlxxByLast),
-                    SmQdsmbl = SvUtil.GetSmQdsmbl(d_Rpt.SmQdsmbl, true, smSmlxxByLast),
-                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl, true, smSmlxxByLast),
-                    SmRemsmbl = SvUtil.GetSmRemsmbl(d_Rpt.SmRemsmbl, true, smSmlxxByLast),
-                    SmLzcs = SvUtil.GetSmLzcs(d_Rpt.SmSmzq, true, smSmlxxByLast),
-                    SmTdcs = SvUtil.GetSmTdcs(d_Rpt.SmTdcs, true, smSmlxxByLast),
+                    SmSmzq = SvUtil.GetSmSmzq(d_Rpt.SmSmzq, true, smSmzqByLast),
+                    SmQdsmbl = SvUtil.GetSmQdsmbl(d_Rpt.SmQdsmbl, true, smQdsmblByLast),
+                    SmSdsmbl = SvUtil.GetSmSdsmbl(d_Rpt.SmSdsmbl, true, smSdsmblByLast),
+                    SmRemsmbl = SvUtil.GetSmRemsmbl(d_Rpt.SmRemsmbl, true, smRemsmblByLast),
+                    SmLzcs = SvUtil.GetSmLzcs(d_Rpt.SmLzcs, true, smLzcsByLast),
+                    SmTdcs = SvUtil.GetSmTdcs(d_Rpt.SmTdcs, true, smTdcsByLast),
 
 
                     XlDcjzxl = SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl, true, smSmlxxByLast),
