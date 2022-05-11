@@ -25,6 +25,13 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse EgyContacts()
+        {
+            var result = HealthAppServiceFactory.Own.EgyContacts(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
 
         [HttpPost]
         [AllowAnonymous]

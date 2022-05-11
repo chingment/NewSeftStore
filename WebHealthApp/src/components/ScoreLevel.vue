@@ -271,7 +271,13 @@ export default {
                 var refRanges = _this.tagDv.refRanges
                 for (let index = 0; index < refRanges.length; index++) {
                   var refRange = refRanges[index]
-                  if (params.data >= refRange.min && params.data <= refRange.max) {
+
+                  var max = refRange.max
+                  if (refRange.max === '∞') {
+                    max = 1000000
+                  }
+
+                  if (params.data >= refRange.min && params.data <= max) {
                     color = refRange.color
                     break
                   }

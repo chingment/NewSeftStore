@@ -114,3 +114,20 @@ img[src=''] {
   -webkit-transform: translate(-50%);
   transform: translate(-50%);
 }
+
+
+.data-empty{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+}
+
+.data-empty .icon{
+  width: 100px;
+  height: 100px;
+}
+
+.data-empty .tips{
+  color: #cdcdcd;
+}

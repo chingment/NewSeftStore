@@ -64,6 +64,8 @@ namespace LocalS.Entity
         //睡眠连续性
         public decimal SmSmlxx { get; set; }
 
+        //public decimal SmDtqcs { get; set; }
+
         //孕气指数
         public decimal ZsGmYq { get; set; }
         //易胖指数

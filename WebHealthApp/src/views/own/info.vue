@@ -9,13 +9,18 @@
           {{ userInfo.signName }}
         </div>
       </div>
-      <div class="rf" />
+      <div class="rf">
+
+        <img class="qrcode" src="@/assets/images/my_qrcode.png" alt="" style="display:none" @click="onMyQrcode">
+
+      </div>
     </div>
 
     <div class="info-nav">
       <mt-cell v-for="(item, index) in devices" :key="index" :title="'设备（'+item.id+'）'" is-link @click.native="onDeviceInfo(item)">
         <span style="color: green">{{ item.signName }}</span>
       </mt-cell>
+      <mt-cell title="紧急联系人" is-link @click.native="onEgyContacts()" />
     </div>
   </div>
 
@@ -57,6 +62,12 @@ export default {
       this.$router.push({ path: '/device/info', query: {
         deviceId: item.id
       }})
+    },
+    onEgyContacts() {
+      this.$router.push('/own/egycontacts')
+    },
+    onMyQrcode() {
+      this.$router.push('/own/qrcode')
     }
   }
 }
@@ -80,14 +91,25 @@ export default {
 
     border-radius: 50%;
   }
-
+  .lf{
+    width: 70px;
+  }
   .md {
+    flex: 1;
     padding: 10px;
 
     .sign-name {
       font-size: 16px;
       font-weight: bold;
     }
+  }
+
+  .rf{
+     width: 30px;
+     .qrcode{
+       width: 30px;
+       height: 30px;
+     }
   }
 }
 

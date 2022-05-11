@@ -48,6 +48,8 @@ namespace Lumos.DbRelay
         public IDbSet<BackgroundJob> BackgroundJob { get; set; }
         public IDbSet<BackgroundJobLog> BackgroundJobLog { get; set; }
         public IDbSet<SysUserFingerVein> SysUserFingerVein { get; set; }
+
+        public IDbSet<SysUserContact> SysUserContact { get; set; }
         public AuthorizeRelayDbContext(string nameOrConnectionString)
                 : base(nameOrConnectionString)
         {

@@ -32,9 +32,18 @@ export function info(params) {
   })
 }
 
+export function egyContacts(params) {
+  return request({
+    url: '/own/egyContacts',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
   authTokenCheck: authTokenCheck,
-  info: info
+  info: info,
+  egyContacts: egyContacts
 }

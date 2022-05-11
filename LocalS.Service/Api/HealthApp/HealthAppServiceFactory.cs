@@ -57,5 +57,13 @@ namespace LocalS.Service.Api.HealthApp
             }
         }
 
+        public static EgyContactService EgyContact
+        {
+            get
+            {
+                return new EgyContactService();
+            }
+        }
+
     }
 }

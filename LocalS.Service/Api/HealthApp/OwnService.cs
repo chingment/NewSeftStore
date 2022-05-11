@@ -112,7 +112,7 @@ namespace LocalS.Service.Api.HealthApp
         {
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId).ToList();
+            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.BindStatus != E_SvUserDeviceBindStatus.NotBind).ToList();
 
             List<object> devices = new List<object>();
 
@@ -165,6 +165,35 @@ namespace LocalS.Service.Api.HealthApp
 
 
         }
+
+        public CustomJsonResult EgyContacts(string operater, string userId)
+        {
+            var d_SysUserContacts = CurrentDb.SysUserContact.Where(m => m.UserId == userId && m.Type == 1).ToList();
+
+            List<object> items = new List<object>();
+
+            foreach (var d_SysUserContact in d_SysUserContacts)
+            {
+                items.Add(new
+                {
+                    Id = d_SysUserContact.Id,
+                    FullName = d_SysUserContact.FullName,
+                    PhoneNumber = d_SysUserContact.PhoneNumber
+                });
+            }
+
+            var ret = new
+            {
+                total = d_SysUserContacts.Count,
+                items = items
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+
+
+        }
+
+
 
         public CustomJsonResult AuthTokenCheck(string token)
         {

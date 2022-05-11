@@ -239,11 +239,43 @@ namespace LocalS.Service.Api.HealthApp
             List<object> smRemsmblByLast = new List<object>();
             List<object> smLzcsByLast = new List<object>();
             List<object> smTdcsByLast = new List<object>();
+            List<object> xlDcjzxlByLast = new List<object>();
+            List<object> xlCqjzxlByLast = new List<object>();
+            List<object> xlDcpjxlByLast = new List<object>();
+            List<object> hxDcjzhxByLast = new List<object>();
+            List<object> hxCqjzhxByLast = new List<object>();
+            List<object> hxDcpjhxByLast = new List<object>();
+            List<object> hxZtahizsByLast = new List<object>();
+            List<object> hxZtcsByLast = new List<object>();
+            List<object> hrvXzznlByLast = new List<object>();
+            List<object> hrvJgsjzlzsByLast = new List<object>();
+            List<object> hrvMzsjzlzsByLast = new List<object>();
+            List<object> hrvZzsjzlzsByLast = new List<object>();
+            List<object> jbfxXlscfxByLast = new List<object>();
+            List<object> jbfxXljslByLast = new List<object>();
+
+
 
             var d_DayReportsByLast = (from u in CurrentDb.SvHealthDayReport
                                       where u.SvUserId == d_Rpt.SvUserId && u.IsValid == true
                                       && u.ReportTime <= d_Rpt.ReportTime
-                                      select new { u.ReportTime, u.SmSmsc, u.SmSmxl, u.SmRsxs, u.SmSmlxx, u.SmSmzq, u.SmQdsmbl, u.SmSdsmbl, u.SmRemsmbl, u.SmLzcs, u.SmTdcs }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
+                                      select new { u.ReportTime, u.SmSmsc, u.SmSmxl, u.SmRsxs, u.SmSmlxx, u.SmSmzq, u.SmQdsmbl, u.SmSdsmbl, u.SmRemsmbl, u.SmLzcs,
+                                          u.SmTdcs,
+                                          u.XlDcjzxl,
+                                          u.XlCqjzxl,
+                                          u.XlDcpjxl,
+                                          u.HxDcjzhx,
+                                          u.HxCqjzhx,
+                                          u.HxDcpjhx,
+                                          u.HxZtahizs,
+                                          u.HxZtcs,
+                                          u.HrvXzznl,
+                                          u.HrvJgsjzlzs,
+                                          u.HrvMzsjzlzs,
+                                          u.HrvZzsjzlzs,
+                                          u.JbfxXlscfx,
+                                          u.JbfxXljsl
+                                      }).OrderByDescending(m => m.ReportTime).Take(7).ToList();
 
             d_DayReportsByLast.Reverse();
 
@@ -259,6 +291,22 @@ namespace LocalS.Service.Api.HealthApp
                 smRemsmblByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmRemsmbl });
                 smLzcsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmLzcs });
                 smTdcsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.SmTdcs });
+                xlDcjzxlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.XlDcjzxl });
+                xlCqjzxlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.XlCqjzxl });
+                xlDcpjxlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.XlDcpjxl });
+                hxDcjzhxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HxDcjzhx });
+                hxCqjzhxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HxCqjzhx });
+                hxDcpjhxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HxDcpjhx });
+                hxZtahizsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HxZtahizs });
+                hxZtcsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HxZtcs });
+                hrvXzznlByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HrvXzznl });
+                hrvJgsjzlzsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HrvJgsjzlzs });
+                hrvMzsjzlzsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HrvMzsjzlzs});
+                hrvZzsjzlzsByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.HrvZzsjzlzs });
+                jbfxXlscfxByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.JbfxXlscfx });
+                jbfxXljslByLast.Add(new { xData = d_DayReportByLast.ReportTime.ToString("MM-dd"), yData = d_DayReportByLast.JbfxXljsl });
+
+
             }
 
             #endregion
@@ -281,23 +329,23 @@ namespace LocalS.Service.Api.HealthApp
                     SmTdcs = SvUtil.GetSmTdcs(d_Rpt.SmTdcs, true, smTdcsByLast),
 
 
-                    XlDcjzxl = SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl, true, smSmlxxByLast),
-                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl, true, smSmlxxByLast),
-                    XlDcpjxl = SvUtil.GetXlDcpjxl(d_Rpt.XlDcpjxl, true, smSmlxxByLast),
+                    XlDcjzxl = SvUtil.GetXlDcjzxl(d_Rpt.XlDcjzxl, true, xlDcjzxlByLast),
+                    XlCqjzxl = SvUtil.GetXlCqjzxl(d_Rpt.XlCqjzxl, true, xlCqjzxlByLast),
+                    XlDcpjxl = SvUtil.GetXlDcpjxl(d_Rpt.XlDcpjxl, true, xlDcpjxlByLast),
 
-                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx, true, smSmlxxByLast),
-                    HxCqjzhx = SvUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx, true, smSmlxxByLast),
-                    HxDcpjhx = SvUtil.GetHxDcpjhx(d_Rpt.HxDcpjhx, true, smSmlxxByLast),
-                    HxZtahizs = SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs, true, smSmlxxByLast),
-                    HxZtcs = SvUtil.GetHxZtcs(d_Rpt.HxZtcs, true, smSmlxxByLast),
+                    HxDcjzhx = SvUtil.GetHxDcjzhx(d_Rpt.HxDcjzhx, true, hxDcjzhxByLast),
+                    HxCqjzhx = SvUtil.GetHxCqjzhx(d_Rpt.HxCqjzhx, true, hxCqjzhxByLast),
+                    HxDcpjhx = SvUtil.GetHxDcpjhx(d_Rpt.HxDcpjhx, true, hxDcpjhxByLast),
+                    HxZtahizs = SvUtil.GetHxZtahizs(d_Rpt.HxZtahizs, true, hxZtahizsByLast),
+                    HxZtcs = SvUtil.GetHxZtcs(d_Rpt.HxZtcs, true, hxZtcsByLast),
 
 
-                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl, d_Rpt.HrvJgsjzlzsjzz, 0, true, smSmlxxByLast),
-                    HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs, true, smSmlxxByLast),
-                    HrvMzsjzlzs = SvUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs, true, smSmlxxByLast),
-                    HrvZzsjzlzs = SvUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs, true, smSmlxxByLast),
-                    JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx, true, smSmlxxByLast),
-                    JbfxXljsl = SvUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl, true, smSmlxxByLast),
+                    HrvXzznl = SvUtil.GetHrvXzznl(d_Rpt.HrvXzznl, d_Rpt.HrvJgsjzlzsjzz, 0, true, hrvXzznlByLast),
+                    HrvJgsjzlzs = SvUtil.GetHrvJgsjzlzs(d_Rpt.HrvJgsjzlzs, true, hrvJgsjzlzsByLast),
+                    HrvMzsjzlzs = SvUtil.GetHrvMzsjzlzs(d_Rpt.HrvMzsjzlzs, true, hrvMzsjzlzsByLast),
+                    HrvZzsjzlzs = SvUtil.GetHrvZzsjzlzs(d_Rpt.HrvZzsjzlzs, true, hrvZzsjzlzsByLast),
+                    JbfxXlscfx = SvUtil.GetJbfxXlscfx(d_Rpt.JbfxXlscfx, true, jbfxXlscfxByLast),
+                    JbfxXljsl = SvUtil.GetJbfxXljsl(d_Rpt.JbfxXljsl, true, jbfxXljslByLast),
 
                     SmScsj = d_Rpt.SmScsj.ToString("yyyy/MM/dd HH:mm"),
                     SmRssj = d_Rpt.SmRssj.ToString("yyyy/MM/dd HH:mm"),

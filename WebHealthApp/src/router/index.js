@@ -17,6 +17,21 @@ const router = new VueRouter({
       meta: { title: '我的信息', isAuth: true }
     },
     {
+      path: '/own/qrcode',
+      component: () => import('@/views/own/qrcode'),
+      meta: { title: '我的二维码', isAuth: false }
+    },
+    {
+      path: '/own/egycontacts',
+      component: () => import('@/views/own/egycontacts'),
+      meta: { title: '紧急联系人', isAuth: true }
+    },
+    {
+      path: '/own/egycontact/edit',
+      component: () => import('@/views/own/egycontactedit'),
+      meta: { title: '紧急联系人', isAuth: true }
+    },
+    {
       path: '/device/bind',
       component: () => import('@/views/device/bind'),
       meta: { title: '设备绑定', isAuth: true }

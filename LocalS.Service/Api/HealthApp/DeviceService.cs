@@ -148,7 +148,7 @@ namespace LocalS.Service.Api.HealthApp
         public CustomJsonResult InitManage(string operater, string userId)
         {
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
-            var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId).ToList();
+            var d_SvUserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.BindStatus != E_SvUserDeviceBindStatus.NotBind).ToList();
 
             List<object> devices = new List<object>();
 

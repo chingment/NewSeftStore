@@ -4,7 +4,7 @@
     <div class="pt1" style="padding:14px">
       <div ref="chartByMv" style="width: 100%;height: 320px;margin:auto" />
 
-      <div ref="chartByTd" style="width: 100%;height: 150px;margin:auto" />
+      <!-- <div ref="chartByTd" style="width: 100%;height: 150px;margin:auto" /> -->
 
       <div class="chartByMv-Hxzt"><span class="item">{{ rd.hxZtcs.value }}次呼吸暂停</span></div>
 
@@ -108,7 +108,7 @@ export default {
 
         this.$nextTick(function() {
           this.onGetChartByMv()
-          this.onGetChartByTd()
+          // this.onGetChartByTd()
         }, 500)
       }
 

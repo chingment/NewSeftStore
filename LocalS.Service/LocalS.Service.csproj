@@ -163,12 +163,14 @@
     <Compile Include="Api\HealthApp\ArticleService.cs" />
     <Compile Include="Api\HealthApp\DayReportService.cs" />
     <Compile Include="Api\HealthApp\DeviceService.cs" />
+    <Compile Include="Api\HealthApp\EgyContactService.cs" />
     <Compile Include="Api\HealthApp\ImitateService.cs" />
     <Compile Include="Api\HealthApp\OwnService.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDayReportGetDetails.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindPhoneNumber.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceBindSerialNo.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceInfoEdit.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopEgyContactSave.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnGetPhoneVaildCode.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceUnBind.cs" />
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthInfo.cs" />
