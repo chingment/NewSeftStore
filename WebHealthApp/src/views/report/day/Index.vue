@@ -14,7 +14,7 @@
           <div class="a-part-2">
             <!-- :on-main-slide-click="onGzTag" -->
             <div style="padding:10px">
-              <carousel-3d :space="100"  :width="640" :height="640" :on-slide-change="onGzTag" :on-main-slide-click="onMainGzTag" :display="5" class="carousel-gz-tags">
+              <carousel-3d :space="100" :width="640" :height="640" :on-slide-change="onGzTag" :on-main-slide-click="onMainGzTag" :display="5" class="carousel-gz-tags">
                 <slide v-for="(item, index) in rd.gzTags" :key="index" :index="index">
 
                   <div ref="gz_tag" class="gz-tag" :data-index="index">
@@ -37,7 +37,7 @@
 
               <transition>
                 <div v-if="popupVisibleGzTag" style="padding:20px">
-                  <score-level :tag-dv="activeGzTag" chat-height="150px"  :is-collapse="true"  />
+                  <score-level :tag-dv="activeGzTag" chat-height="150px" :is-collapse="true" :enable-collapse="false" />
                 </div>
               </transition>
               <!-- <mt-popup
@@ -54,9 +54,9 @@
 
           <div class="a-part-mb" style="padding: 0 20px 20px 20px;">
 
- <score-level v-for="(item, index) in rd.mbTags"  :key="index"  :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true"/> 
+            <score-level v-for="(item, index) in rd.mbTags" :key="index" :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true" />
 
-  <score-level v-for="(item, index) in rd.nxTags"  :key="index"  :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true"/> 
+            <score-level v-for="(item, index) in rd.nxTags" :key="index" :tag-dv="item" :enable-collapse="false" :theme="theme" :enable-icon="true" />
 
           </div>
 
@@ -121,12 +121,11 @@
             </div>
           </div>
 
-
           <div class="b-part-3">
             <div class="mi-title">
-               <div class="tt-t1">监测结果</div>
-               <div class="tt-t2" @click="onSawMorePoint"> 查看更多 <img :src="require('@/assets/images/arrow-right.png')" alt=""   width="30px" height="30px" > </div>
-              </div>
+              <div class="tt-t1">监测结果</div>
+              <div class="tt-t2" @click="onSawMorePoint"> 查看更多 <img :src="require('@/assets/images/arrow-right.png')" alt="" width="30px" height="30px"> </div>
+            </div>
             <div class="mi-content">
               <div v-for="(item, index) in rd.smDvs" :key="index" :class="'mi-item mi-item_'+(index%2==0?'0':'1')">
                 <div class="wrap">
@@ -145,7 +144,6 @@
               <div style="text-indent: 20px;">呼吸紊乱指数 {{ rd.hxZtahizs.value }}（<span :style="'color:'+rd.hxZtahizs.color+';'"> {{ rd.hxZtahizs.tips }}</span>）；基准心率 {{ rd.xlDcjzxl.value }}次/分钟（<span :style="'color:'+rd.xlDcjzxl.color+';'"> {{ rd.xlDcjzxl.tips }}</span>）；基准呼吸 {{ rd.hxDcjzhx.value }} 次/分钟（<span :style="'color:'+rd.hxDcjzhx.color+';'"> {{ rd.hxDcjzhx.tips }}</span>） 。</div>
             </div>
           </div>
-
 
           <div v-if="rd.rptSuggest!=null" class="b-part-4">
             <div class="mi-title">今日建议</div>
@@ -366,7 +364,7 @@ export default {
     onScroll() {
       this.popupVisibleGzTag = false
     },
-    onSawMorePoint(){
+    onSawMorePoint() {
       this.$router.push('/report/day/indicator?rptId=' + this.rptId)
     }
   }

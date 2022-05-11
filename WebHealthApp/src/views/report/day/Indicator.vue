@@ -1,67 +1,66 @@
 <template>
   <div class="pg-indicator">
-  
-   <div class="pt1" style="padding:14px">
-     <div ref="chartByMv" style="width: 100%;height: 320px;margin:auto" />
 
-     <div ref="chartByTd" style="width: 100%;height: 150px;margin:auto" />
+    <div class="pt1" style="padding:14px">
+      <div ref="chartByMv" style="width: 100%;height: 320px;margin:auto" />
 
-     <div class="chartByMv-Hxzt"><span class="item">{{rd.hxZtcs.value}}次呼吸暂停</span></div>
+      <div ref="chartByTd" style="width: 100%;height: 150px;margin:auto" />
 
+      <div class="chartByMv-Hxzt"><span class="item">{{ rd.hxZtcs.value }}次呼吸暂停</span></div>
 
-    <div class="chartByMv-Legend">
-       <div class="ld"> <span class="n-c" :style="' background-color:'+ n3_clr+';'"/> <span class="n-n">深睡</span></div>
-       <div class="ld"> <span class="n-c" :style="' background-color:'+ n2_clr+';'"/> <span class="n-n">浅睡</span></div>
-       <div class="ld"> <span class="n-c" :style="' background-color:'+ r_clr+';'"/> <span class="n-n">REM</span></div>
-       <div class="ld"> <span class="n-c" :style="' background-color:'+ n1_clr+';'"/> <span class="n-n">清醒</span></div>
-       <div class="ld"> <span class="n-c" :style="' background-color:'+ o_clr+';'"/> <span class="n-n">离枕</span></div>
+      <div class="chartByMv-Legend">
+        <div class="ld"> <span class="n-c" :style="' background-color:'+ n3_clr+';'" /> <span class="n-n">深睡</span></div>
+        <div class="ld"> <span class="n-c" :style="' background-color:'+ n2_clr+';'" /> <span class="n-n">浅睡</span></div>
+        <div class="ld"> <span class="n-c" :style="' background-color:'+ r_clr+';'" /> <span class="n-n">REM</span></div>
+        <div class="ld"> <span class="n-c" :style="' background-color:'+ n1_clr+';'" /> <span class="n-n">清醒</span></div>
+        <div class="ld"> <span class="n-c" :style="' background-color:'+ o_clr+';'" /> <span class="n-n">离枕</span></div>
+      </div>
     </div>
-   </div>
 
-  <div class="line"></div>
-   <div class="pt2" style="padding:0 14px 14px 14px">
+    <div class="line" />
+    <div class="pt2" style="padding:0 14px 14px 14px">
 
-    <mt-navbar v-model="active_tag_point" class="tag-point">
-      <mt-tab-item id="tag_point_1">睡眠</mt-tab-item>
-      <mt-tab-item id="tag_point_2">心率</mt-tab-item>
-      <mt-tab-item id="tag_point_3">呼吸</mt-tab-item>
-      <mt-tab-item id="tag_point_4">HRV</mt-tab-item>
-    </mt-navbar>
-    <mt-tab-container v-model="active_tag_point">
-      <mt-tab-container-item id="tag_point_1">
-        <score-level :tag-dv="rd.smSmsc" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.smSmxl" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smRsxs" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smSmlxx" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smSmzq" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smQdsmbl" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smSdsmbl" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smRemsmbl" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smLzcs" :is-collapse="false" :enable-collapse="false"/>
-        <score-level :tag-dv="rd.smTdcs" :is-collapse="false" :enable-collapse="false"/>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="tag_point_2" >
-        <score-level :tag-dv="rd.xlDcjzxl" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.xlCqjzxl" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.xlDcpjxl" :is-collapse="false" :enable-collapse="false"  />
-      </mt-tab-container-item>
-      <mt-tab-container-item id="tag_point_3" >
-        <score-level :tag-dv="rd.hxDcjzhx" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hxCqjzhx" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hxDcpjhx" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hxZtahizs" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hxZtcs" :is-collapse="false" :enable-collapse="false"  />
-      </mt-tab-container-item>
-      <mt-tab-container-item id="tag_point_4" >
-        <score-level :tag-dv="rd.hrvXzznl" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hrvJgsjzlzs" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hrvMzsjzlzs" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.hrvZzsjzlzs" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.jbfxXlscfx" :is-collapse="false" :enable-collapse="false"  />
-        <score-level :tag-dv="rd.jbfxXljsl" :is-collapse="false" :enable-collapse="false"  />
-      </mt-tab-container-item>
-    </mt-tab-container>
-   </div>
+      <mt-navbar v-model="active_tag_point" class="tag-point">
+        <mt-tab-item id="tag_point_1">睡眠</mt-tab-item>
+        <mt-tab-item id="tag_point_2">心率</mt-tab-item>
+        <mt-tab-item id="tag_point_3">呼吸</mt-tab-item>
+        <mt-tab-item id="tag_point_4">HRV</mt-tab-item>
+      </mt-navbar>
+      <mt-tab-container v-model="active_tag_point">
+        <mt-tab-container-item id="tag_point_1">
+          <score-level :tag-dv="rd.smSmsc" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smSmxl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smRsxs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smSmlxx" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smSmzq" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smQdsmbl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smSdsmbl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smRemsmbl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smLzcs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.smTdcs" :is-collapse="false" :enable-collapse="true" />
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tag_point_2">
+          <score-level :tag-dv="rd.xlDcjzxl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.xlCqjzxl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.xlDcpjxl" :is-collapse="false" :enable-collapse="true" />
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tag_point_3">
+          <score-level :tag-dv="rd.hxDcjzhx" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hxCqjzhx" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hxDcpjhx" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hxZtahizs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hxZtcs" :is-collapse="false" :enable-collapse="true" />
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tag_point_4">
+          <score-level :tag-dv="rd.hrvXzznl" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hrvJgsjzlzs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hrvMzsjzlzs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.hrvZzsjzlzs" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.jbfxXlscfx" :is-collapse="false" :enable-collapse="true" />
+          <score-level :tag-dv="rd.jbfxXljsl" :is-collapse="false" :enable-collapse="true" />
+        </mt-tab-container-item>
+      </mt-tab-container>
+    </div>
 
   </div>
 </template>
@@ -88,12 +87,12 @@ export default {
         xlPoint: [],
         smPoint: []
       },
-      w_clr:"#d8edff",
-      n1_clr:"#a9ddfd",
-      n3_clr:"#4c6ce5",
-      r_clr:"#e6affd",
-      o_clr:"#ffdf24",
-      n2_clr:"#a9ddfd",
+      w_clr: '#d8edff',
+      n1_clr: '#a9ddfd',
+      n3_clr: '#4c6ce5',
+      r_clr: '#e6affd',
+      o_clr: '#ffdf24',
+      n2_clr: '#a9ddfd',
       active_tag_point: 'tag_point_1'
     }
   },
@@ -123,7 +122,7 @@ export default {
       chartByMv = null
     }
 
-    if(chartByTd){
+    if (chartByTd) {
       chartByTd.clear()
       chartByTd.dispose()
       chartByTd = null
@@ -175,7 +174,7 @@ export default {
           color = this.r_clr
         } else if (type === 3) {
           var3 = 'O'
-          color =this.o_clr
+          color = this.o_clr
         } else if (type === 6) {
           var3 = 'N2'
           color = this.n2_clr
@@ -519,7 +518,7 @@ export default {
 
       chartByMv.setOption(option, null)
     },
-    onGetChartByTd(){
+    onGetChartByTd() {
       if (!chartByTd) {
         chartByTd = echarts.init(this.$refs.chartByTd, null, { renderer: 'svg' })
       }
@@ -538,14 +537,13 @@ export default {
       for (let index = 0; index < sm_point_d.length; index++) {
         const var1 = sm_point_d[index].startTime
         const var2 = sm_point_d[index].endTime
-        var var3= 'N3'
-        var color =  this.n3_clr
+        var var3 = 'N3'
+        var color = this.n3_clr
         sm_point_xAxis_data.push({ itemStyle: { normal: { color: color }}, value: [var3, this.datetimeFormat(var1), this.datetimeFormat(var2)] })
-        console.log(sm_point_xAxis_data)
-        
+        // consoleconsole.log(sm_point_xAxis_data)
       }
 
-      console.log(sm_point_xAxis_data.l)
+      // console.log(sm_point_xAxis_data.l)
 
       var option = {
         grid: [{
@@ -623,7 +621,7 @@ export default {
                 // console.log('离床')
                 return '|\n|\n|\n离床 ' + getMin(value)
               }
-              return  ''
+              return ''
             }
           }
         }],
@@ -645,7 +643,7 @@ export default {
                 shape: echarts.graphic.clipRectByRect({
                   x: start[0],
                   y: start[1] - height / 2,
-                  width: (end[0] - start[0])*4,
+                  width: (end[0] - start[0]) * 4,
                   height: height
                 }, {
                   x: params.coordSys.x,
@@ -665,8 +663,6 @@ export default {
       }
 
       chartByTd.setOption(option, null)
-
-
     },
     datetimeFormat(longTypeDate) {
       const date = new Date(longTypeDate * 1000)
@@ -705,11 +701,11 @@ export default {
 <style lang="scss" scoped>
 
 .line{
-  background-color: #f3f3f3fa;
+  background: #f3f3f3;
   height: 10px;
 }
 
-.chartByMv-Hxzt{ 
+.chartByMv-Hxzt{
   margin:30px 0px;
   text-align: center;
   .item{
@@ -745,6 +741,5 @@ export default {
 .tag-point{
   padding-bottom: 10px;
 }
-
 
 </style>

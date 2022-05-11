@@ -965,7 +965,7 @@ namespace LocalS.BLL
             jd.ValueText = val.ToString();
             jd.RefRange = "50~80";
             jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 13, 26, 39, 52, 65, 78, 91 }, markLine = new { yAxis = 78 } };
-
+            jd.Pph = "心律失常风险指数，反映了心脏跳动节律的总体变异性，可用于预测心律失常发生风险，参考范围为50~180，指数值升高或降低都可能出现心律失常。 当心律失常风险指数降低时，提示快速性心律失常风险增加，原患高血压、冠心病或其他心脏病者，可能出现心动过速、房扑等。当心律失常风险指数升高，提示慢速性心律失常风险增加，心动过缓、停搏、房室传导阻滞的风险增加。";
             if (val < 30)
             {
                 jd.Set("过低", "↓↓", CB_1);
@@ -1005,6 +1005,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "4.6~12";
+            jd.Pph = "心率减速力是迷走神经的负性作用对心率的减速调节结果，即降低心率，对心脏起到保护性作用。心率减速力对预测心脏性猝死有重要意义，参考范围为4.6~12，心率减速力越低，心脏性猝死风险越高。相反的情况，当心率减速力过大，停搏、房室传导阻滞的风险会升高。";
             if (val <= 2.5m)
             {
                 jd.Set("过低", "↓↓", CA_1);
@@ -1035,6 +1036,7 @@ namespace LocalS.BLL
 
             jd.Name = "呼吸紊乱指数";
             jd.RefRange = "0~5次/h";
+            jd.Pph = "也叫睡眠呼吸暂停和低通气指数，是指每小时发生呼吸暂停和低通气的平均次数，正常范围是0~5次/小时。超过5次/小时则可判断为睡眠呼吸暂停，5~15次/小时为轻度，15~30次/小时为中度，大于30次/小时为重度。中重度呼吸暂停会增加高血压、心律失常、冠心病、心衰、卒中、认知异常等疾病的风险。";
             if (val < 5)
             {
                 jd.Set("正常", "-", CA_0);
@@ -1060,7 +1062,7 @@ namespace LocalS.BLL
             jd.Name = "在床总时长";
             var hour = Covevt2Hour(val);
             jd.Value = hour;
-            jd.ValueText= GetTimeText(val, "2");
+            jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "";
             jd.Set("", "-", CA_0);
 
@@ -1076,7 +1078,7 @@ namespace LocalS.BLL
             jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "6~9h";
             jd.Pph = "保证充足的睡眠有助于维持身心健康，美国睡眠医学会和睡眠研究学会建议：成年人每晚最佳睡眠时间是7-8小时。但睡眠时间不是评价睡眠质量的唯一标准，只要睡醒后感觉神清气爽、精神饱满即可，习惯性短睡者不需因为睡眠总时长低于推荐标准而过分担忧。另外，一味为了延长睡眠时间而赖在床上并不能弥补睡眠不足，反而更不利于获得高质量睡眠；可以通过短暂午睡来弥补夜间睡眠不足。";
-            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 2, 3, 5, 6, 8, 9, 11 }, yAxisMin = 0, yAxisMax = 11, yAxisSplitNumber = 8, markLine = new { yAxis = 7 } };
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 2, 3, 5, 6, 8, 9, 11 }, yAxisMin = 0, yAxisMax = 11, yAxisSplitNumber = 8, yAxisMarkLine = 7 };
 
             if (hour < 5)
             {
@@ -1129,6 +1131,7 @@ namespace LocalS.BLL
             jd.Value = hour;
             jd.ValueText = GetTimeText(val, "2");
             jd.RefRange = "0~30min";
+            jd.Chat = new { Data = lastVals, yAxisMin = 0, yAxisMax = 11, yAxisSplitNumber = 8, yAxisMarkLine = 30 };
             if (ts.TotalMinutes < 30)
             {
                 jd.Set("正常", "-", CB_5);
@@ -1140,6 +1143,13 @@ namespace LocalS.BLL
             else if (ts.TotalMinutes >= 60)
             {
                 jd.Set("过多", "↑", CB_1);
+            }
+
+            if (isGetRefRanges)
+            {
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 30, Color = CB_5, Tips = "正常" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 30, Max = 60, Color = CB_3, Tips = "偏多" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 60, Max = "∞", Color = CB_1, Tips = "过多" });
             }
 
             return jd;
@@ -1174,17 +1184,19 @@ namespace LocalS.BLL
             jd.Name = "睡眠连续性";
             jd.Value = val;
             jd.ValueText = val.ToString("0.#####") + "%";
-            jd.RefRange = "6~9h";
+            jd.RefRange = "90~100";
             jd.Pph = "睡眠过程不间断，则为睡眠连续性好，是评价睡眠质量的其中一个标准，对体力恢复、情绪调节和增强记忆力都有重要作用。典型的睡眠状态转换为“浅睡-深睡-浅睡-REM（快速眼动）”，为一个睡眠周期，随即进入下一次的睡眠周期。但如果睡眠过程中觉醒次数较多，醒后难以再次入睡，则直接影响睡眠的连续性。";
-            if (val < 0.75m)
+            jd.Chat = new { Data = lastVals, yAxisMarkLine = 90 };
+
+            if (val <75)
             {
                 jd.Set("低", "↓↓", CB_1);
             }
-            else if (val >= 0.75m && val < 0.9m)
+            else if (val >= 75 && val < 90)
             {
                 jd.Set("偏低", "↓", CB_3);
             }
-            else if (val >= 0.9m)
+            else if (val >= 90)
             {
                 jd.Set("正常", "-", CB_5);
             }
@@ -1192,9 +1204,9 @@ namespace LocalS.BLL
 
             if (isGetRefRanges)
             {
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 0.75, Color = CB_1, Tips = "低" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0.75, Max = 0.9, Color = CB_3, Tips = "偏低" });
-                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0.9, Max = "∞", Color = CB_5, Tips = "正常" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 0, Max = 75, Color = CB_1, Tips = "低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 75, Max = 90, Color = CB_3, Tips = "偏低" });
+                jd.RefRanges.Add(new SvDataJd.RefRangeArea { Min = 90, Max = 100, Color = CB_5, Tips = "正常" });
             }
 
             return jd;
@@ -1207,6 +1219,7 @@ namespace LocalS.BLL
             jd.Value = val;
             jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "45~65";
+            jd.Pph = "浅睡眠阶段的心率和呼吸比清醒时减慢，人在浅睡眠时容易被唤醒，对人体疲劳消除、精力恢复的作用不如深睡眠，但浅睡眠是人从深睡眠过度到清醒的保护机制，是一种必须的生理需求。浅睡眠的正常比例为45%~65%。";
             if (val < 45m)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1277,6 +1290,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "4~5次";
+            jd.Pph = "睡眠过程中体动次数的多少反映了睡眠质量的高低，正常人体动次数为50~200次，体动过多通常是因为睡眠不安、早醒、难入睡等，而睡眠呼吸暂停患者由于翻身较多、身体抽动等原因，体动次数通常也较多。";
             if (val < 4)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1300,6 +1314,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "4~5次";
+            jd.Pph = "典型的睡眠状态转换为浅睡-深睡-浅睡-REM（快速眼动），为一个睡眠周期，随即进入下一次的睡眠周期。但实际过程中不一定会经历所有的睡眠状态，睡眠状态的转换也不一定是完全规律的。7小时睡眠中3-6个周期是正常的。";
             if (val < 4)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1340,6 +1355,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~83次/min";
+            jd.Pph = "基准心率反映心脏基础功能，夜间心率的参考范围为50~65次/分钟。长期夜间心率太高，会使心血管疾病风险升高。心率高的几种可能情况：感染发热、长期不运动、饮酒、疲劳、高血压/糖尿病/冠心病/心衰患者、服用药物如阿托品、肾上腺素等。心率低的几种可能情况：长期运动人群、窦性心动过缓、停搏、传导阻滞。";
             if (val < 50)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1362,6 +1378,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~65次/min";
+            jd.Pph = "长期基准心率反映了一段时间内心脏的总体功能，其参考范围为50~65次/分钟。长期不运动、经常饮酒、吸烟、睡眠障碍者，患高血压、冠心病、心衰的患者等长期基准心率可能会较正常人要高，发生心血管意外的风险也会相应增加。";
             if (val < 50)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1384,6 +1401,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "50~65次/min";
+            jd.Pph = "";
             if (val < 50)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1406,6 +1424,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "12~20次/min";
+            jd.Pph = "基准呼吸是评价肺功能的基础指标之一，其参考范围为9~18次/分钟，感染发热、睡眠呼吸障碍、缺血缺氧或某些药物的影响可能会导致呼吸加快。";
             if (val < 12)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1428,6 +1447,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "10~18次/min";
+            jd.Pph = "长期基准呼吸反映了一段时间内的肺功能情况，参考范围为9~18次/分钟，长期运动者肺活量大，呼吸频率比普通人要低；而长期不运动者、吸烟、有心肺功能受损的患者长期基准呼吸通常较高。";
             if (val < 10)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1450,6 +1470,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次/min";
             jd.RefRange = "10~18次/min";
+            jd.Pph = "";
             if (val < 10)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1472,6 +1493,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString() + "次";
             jd.RefRange = "0~30次";
+            jd.Pph = "睡眠过程中呼吸运动停止10秒钟以上记录为呼吸暂停，主要特征表现为打鼾。引起睡眠呼吸暂停的因素中最常见的是肥胖，呼吸道炎症（如感冒、鼻炎等）和气道解剖学异常（如鼻甲肿大、肿物等）也会导致呼吸暂停。呼吸暂停不超过15次是最好的，呼吸暂停较多时会导致血氧饱和度下降，血液黏稠度增加，高血压、冠心病的发病风险升高。";
             if (val <= 30)
             {
                 jd.Set("正常", "-", CA_0);
@@ -1489,6 +1511,7 @@ namespace LocalS.BLL
             jd.Name = "心脏总能量";
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
+            jd.Pph = "心脏总能量反映了心脏的整体储备功能，过低提示心脏储备能量不足，过高提示心脏负荷过大。人群的参考范围为3000~6000，并随着年龄的增加，心脏总能量降低。 心功能不全、心衰、高血压长期用药者，糖尿病患者，久坐不动者心脏总能量降低；高血压未用药者，停搏患者，心律失常患者，过量运动者心脏总能量升高。";
             long var1 = 2000;
             long var2 = 3000;
             long var3 = 6000;
@@ -1535,6 +1558,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "500~1200";
+            jd.Pph = "反映了交感神经的调节张力，交感神经是保证人在紧张状态下生理功能的重要因素，参考范围为600~1800，随着年龄的增大，交感神经张力降低。 交感神经张力过高时能引起末梢血管收缩、心跳加快、新陈代谢亢进，过低则容易出现乏力、精神萎靡。交感神经张力指数过高通常发生在高血压患者血压控制不佳时，房颤、停搏、房室传导阻滞发生时，情绪过激或运动过量时。而交感神经张力指数降低则发生在高血压、糖尿病患者发生自主神经损伤时，心律失常、冠心病患者，年龄增大心功能减弱者也会降低。";
             if (val < 500)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1557,6 +1581,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "520~1200";
+            jd.Pph = "反映了迷走神经的调节张力，其与交感神经的功能是相互拮抗的，迷走神经保持人在安静时的平衡状态，迷走神经张力指数的参考范围为600-1200，并随着年龄的增大而降低。 迷走神经的主要的生理功能是使心跳减慢、血压降低、促进胃肠蠕动和消化腺分泌。迷走神经张力过高时可能导致胃肠过激、肠易激综合征等，导致便秘、腹泻等；高血压、冠心病患者这个值太高可能出现早搏、房颤或其他心律不齐。迷走神经张力指数过低则可能出现胃肠功能减弱、便秘，糖尿病患者则提示出现了自主神经受损，喝酒、服用抑制神经的药物则会导致迷走神经张力降低。";
             if (val < 520)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1579,6 +1604,7 @@ namespace LocalS.BLL
             jd.Value = val.ToString();
             jd.ValueText = val.ToString();
             jd.RefRange = "0.7~1.3";
+            jd.Pph = "自主神经平衡指数，反映了交感神经和迷走神经的平衡性，正常人在睡眠状态下，交感神经活性降低，迷走神经活性升高，参考范围为0.8~1.2。 自主神经平衡指数升高，有以下情况：提示高血压风险升高，高血压患者血压波动、情绪烦躁不安、焦虑恐惧等。对于自主神经平衡指数降低的，原患糖尿病者提示出现明显自主神经受损，可能出现血糖控制不佳。血压降低或低血压者此值也会降低。";
             if (val < 0.7m)
             {
                 jd.Set("低", "↓", CA_1);
@@ -1644,7 +1670,7 @@ namespace LocalS.BLL
             jd.Value = val;
             jd.ValueText = val.ToString();
             jd.RefRange = "0~100";
-            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 },yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 10, markLine = new { yAxis = 70 } };
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 30, 50, 70, 90, 100 }, yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 10, markLine = new { yAxis = 70 } };
 
             if (val < 30)
             {
@@ -1716,7 +1742,7 @@ namespace LocalS.BLL
             jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "85~100";
             jd.Pph = "高效的睡眠，对于增强智力和体力起着重要作用，睡眠效率达到85%为正常，大于90%为优秀。难入睡者入睡需时太长，易醒者在睡眠中清醒次数增多，都是导致睡眠效率不高的直接原因。";
-            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 25, 50, 85, 100 }, yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 5, markLine = new { yAxis = 7 } };
+            jd.Chat = new { Data = lastVals, yAxisLabel = new int[] { 0, 25, 50, 85, 100 }, yAxisMin = 0, yAxisMax = 100, yAxisSplitNumber = 5, yAxisMarkLine = 80 };
             if (val < 50)
             {
                 jd.Set("低", "↓↓", CB_1);
@@ -1772,7 +1798,7 @@ namespace LocalS.BLL
             jd.Value = val;
             jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "15~25";
-
+            jd.Pph = "深睡眠，也称为“黄金睡眠”，深睡眠对机体细胞修复、生长激素分泌、增强免疫、消除疲劳、精力恢复有重要作用。正常人的深睡眠比例为15%~25%，缺乏深睡眠将可能出现代谢紊乱、免疫力下降、精神疲劳等；深睡眠比例长期过高则可能是某些疾病发作的信号，需寻找专业医生的指导。";
             if (val <= 15m)
             {
                 jd.Set("少", "↓", CA_2);
@@ -1796,7 +1822,7 @@ namespace LocalS.BLL
             jd.Value = val;
             jd.ValueText = val.ToString("0.#####") + "%";
             jd.RefRange = "15~25";
-
+            jd.Pph = "REM睡眠，即快速眼动睡眠，得名于此睡眠期内眼球的特征性快速运动。睡梦多发生在这个阶段，如果在这个阶段被唤醒，大多数人都可能说自己在做梦。快速眼动睡眠对记忆力形成、情绪调节、维持精神健康起着重要作用。正常人的REM睡眠比例为15%~25%，REM睡眠不足会影响记忆形成，导致记忆力下降，并且增加全因死亡风险和老年痴呆风险。REM睡眠过多则会影响身体而得不到完全恢复，易怒很难控制自己情绪。";
             if (val <= 15m)
             {
                 jd.Set("少", "↓", CA_2);

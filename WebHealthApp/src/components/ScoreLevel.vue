@@ -1,14 +1,14 @@
 <template>
-  <div class="score-level" >
+  <div class="score-level">
     <div class="collapse-item i-score" @click="onCollapse">
-      <div class="t-icon" v-if="elEnableIcon"> 
-         <img class="image" :src="require('@/assets/report/day/'+elTheme+'/gz_tag2_'+elTagDv.id+'.png')"> 
+      <div v-if="elEnableIcon" class="t-icon">
+        <img class="image" :src="require('@/assets/report/day/'+elTheme+'/gz_tag2_'+tagDv.id+'.png')">
       </div>
       <div class="t1">{{ elTagDv.name }}</div>
       <div class="t2" :style="{'color': elTagDv.color}"> <span v-show="!elTagDv.isHidValue">{{ elTagDv.valueText }}</span></div>
-      <div class="t3" :style="{'color': elTagDv.color}">{{ elTagDv.tips }}</div>
+      <div class="t3" :style="{'color': elTagDv.color}">{{ elTagDv.tips }} <span v-if="elEnableCollapse" style="display:flex">  <img v-if="elIsCollapse" :src="require('@/assets/images/arrow-down.png')" alt="" width="26px" height="26px"> <img v-else :src="require('@/assets/images/arrow-right.png')" alt="" width="26px" height="26px"> </span> </div>
     </div>
-    <div  v-show="elIsCollapse" class="collapse-item-more" style="width:100%">
+    <div v-show="elIsCollapse" class="collapse-item-more" style="width:100%">
       <div class="i-sign">
         <template v-for="(item, index) in elTagDv.refRanges">
           <div :key="'a'+index" class="col">
@@ -33,7 +33,7 @@
       <div v-if="elTagDv.pph!=null" class="i-pph">
         {{ elTagDv.pph }}
       </div>
-      <div  ref="i_chart" :style="'width:'+elChatWidth+';height:'+elChatHeight+';margin:auto;'" />
+      <div ref="i_chart" :style="'width:100%;height:'+elChatHeight+';margin:auto;'" />
     </div>
   </div>
 </template>
@@ -46,9 +46,9 @@ export default {
   props: {
     tagDv: {
       type: Object,
-        default: function () {
-    return {name:'',chat:{} }
-    }
+      default: function() {
+        return { name: '', chat: { data: [] }}
+      }
     },
     chatHeight: {
       type: String,
@@ -62,7 +62,7 @@ export default {
       type: Boolean,
       default: false
     },
-    enableIcon:{
+    enableIcon: {
       type: Boolean,
       default: false
     },
@@ -75,24 +75,24 @@ export default {
     return {
       innerWidth: 0,
       elIsCollapse: this.isCollapse,
-      elEnableIcon:this.enableIcon,
-      elTheme:this.theme,
-      elEnableCollapse:this.enableCollapse,
-      elChatHeight:this.chatHeight,
-      elChatWidth:'100%',
-      elTagDv:this.tagDv,
+      elEnableIcon: this.enableIcon,
+      elTheme: this.theme,
+      elEnableCollapse: this.enableCollapse,
+      elChatHeight: this.chatHeight,
+      elChatWidth: '100%',
+      elTagDv: this.tagDv
     }
   },
-  watch: {
-    tagDv(newV, oldV) {
-      var _this = this
-      _this.elTagDv=newV
-      this.$nextTick(function() {
-        _this.$refs.i_chart.style.width=window.innerWidth+ 'px' 
-        _this.getChart(newV.chat)
-      }, 300)
-    }
-  },
+  // watch: {
+  //   tagDv(newV, oldV) {
+  //     var _this = this
+  //     _this.elTagDv = newV
+  //     this.$nextTick(function() {
+  //       _this.$refs.i_chart.style.width = window.innerWidth + 'px'
+  //       _this.getChart(newV.chat)
+  //     }, 300)
+  //   }
+  // },
   beforeDestroy() {
     if (i_chart) {
       i_chart.clear()
@@ -104,25 +104,35 @@ export default {
     var _this = this
     this.innerWidth = window.innerWidth
 
-    this.$nextTick(function() {
-        _this.$refs.i_chart.style.width='100%' 
-        _this.getChart(_this.elTagDv.chat)
-    }, 300)
+    if (this.elIsCollapse) {
+      this.$nextTick(function() {
+        _this.$refs.i_chart.style.width = '100%'
+        _this.getChart(_this.tagDv.chat)
+      }, 300)
+    }
   },
   methods: {
-    onCollapse(){
-      if(this.elEnableCollapse){
-      this.elIsCollapse = !this.elIsCollapse
+    onCollapse() {
+      var _this = this
+      if (this.elEnableCollapse) {
+        this.elIsCollapse = !this.elIsCollapse
+
+        if (this.elIsCollapse) {
+          this.$nextTick(function() {
+            _this.$refs.i_chart.style.width = '100%'
+            _this.getChart(_this.tagDv.chat)
+          }, 300)
+        }
       }
     },
     getChart(chat) {
-      if(chat==null)
-       return
+      if (chat == null) { return }
       var _this = this
-      if (!i_chart) {
-        i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
-      }
+
+      i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
+
       var data = chat.data
+
       if (data === null || data.length === 0) { return }
 
       var xData = []
@@ -132,11 +142,14 @@ export default {
         xData.push(item.xData)
         yData.push(item.yData)
       })
-      var yAxisLabel = chat.yAxisLabel
-      var yAxisMin = chat.yAxisMin
-      var yAxisMax = chat.yAxisMax
-      var yAxisSplitNumber = chat.yAxisSplitNumber
+      // var yAxisLabel = chat.yAxisLabel
+      // var yAxisMin = chat.yAxisMin
+      // var yAxisMax = chat.yAxisMax
+      // var yAxisSplitNumber = chat.yAxisSplitNumber
+      var yAxisMarkLine = typeof chat.yAxisMarkLine === 'undefined' ? null : chat.yAxisMarkLine
+
       var yAxisLabelExt = typeof chat.yAxisLabelExt === 'undefined' ? null : chat.yAxisLabelExt
+      var markLine = chat.markLine
       var option = {
         grid: [{
           x: 30,
@@ -179,10 +192,7 @@ export default {
           }
         },
         yAxis: {
-          min: yAxisMin,
-          max: yAxisMax,
           type: 'value',
-          splitNumber: yAxisSplitNumber,
           splitLine: {
             show: false
           },
@@ -197,21 +207,21 @@ export default {
               color: '#000'
             },
             formatter: function(value, index) {
-              console.log(value + ',' + index)
+              // console.log(value + ',' + index)
 
-              var _val = yAxisLabel.filter(function(item) {
-                return item === value
-              })
-              var texts = []
-              if (_val == null) {
-                texts.push('')
-              } else {
-                if (yAxisLabelExt == null) {
-                  texts.push(_val)
-                } else {
-                  texts.push('')
-                }
-              }
+              // var _val = yAxisLabel.filter(function(item) {
+              //   return item === value
+              // })
+              // var texts = []
+              // if (_val == null) {
+              //   texts.push('')
+              // } else {
+              //   if (yAxisLabelExt == null) {
+              //     texts.push(_val)
+              //   } else {
+              //     texts.push('')
+              //   }
+              // }
 
               // console.log(value)
               // var texts = []
@@ -238,7 +248,7 @@ export default {
               // } else if (value === 100) {
               //   texts.push('100')
               // }
-              return texts
+              return value
             }
           },
           axisLine: {
@@ -284,12 +294,12 @@ export default {
               }
             },
             data: [{
-              yAxis: [70]
+              yAxis: [yAxisMarkLine]
             }],
             label: {
               normal: {
                 color: '#000',
-                formatter: '70' // 这儿设置安全基线
+                formatter: yAxisMarkLine // 这儿设置安全基线
               }
             }
           }
@@ -297,7 +307,7 @@ export default {
         }
       }
 
-      console.log(i_chart)
+      // console.log(i_chart)
       i_chart.setOption(option, null)
     }
   }
@@ -305,7 +315,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 
 .score-level{
   padding: 12px 0px;
@@ -434,6 +443,5 @@ export default {
         font-size: 12px;
         line-height: 16px;
 }
-
 
 </style>
