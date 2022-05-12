@@ -21,6 +21,8 @@
         <span style="color: green">{{ item.signName }}</span>
       </mt-cell>
       <mt-cell title="紧急联系人" is-link @click.native="onEgyContacts()" />
+      <mt-cell title="我关注的人" is-link @click.native="onIdolers()" />
+      <mt-cell title="关注我的人" is-link @click.native="onFollowers()" />
     </div>
   </div>
 
@@ -65,6 +67,12 @@ export default {
     },
     onEgyContacts() {
       this.$router.push('/own/egycontacts')
+    },
+    onIdolers() {
+      this.$router.push('/own/idolers')
+    },
+    onFollowers() {
+      this.$router.push('/own/followers')
     },
     onMyQrcode() {
       this.$router.push('/own/qrcode')

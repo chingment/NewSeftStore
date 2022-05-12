@@ -40,10 +40,28 @@ export function egyContacts(params) {
   })
 }
 
+export function followers(params) {
+  return request({
+    url: '/own/followers',
+    method: 'get',
+    params
+  })
+}
+
+export function idolers(params) {
+  return request({
+    url: '/own/idolers',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
   authTokenCheck: authTokenCheck,
   info: info,
-  egyContacts: egyContacts
+  egyContacts: egyContacts,
+  followers: followers,
+  idolers: idolers
 }

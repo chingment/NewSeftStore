@@ -18,13 +18,11 @@
         当您的健康报告出现异常时，心晓设备会同步发送短信通知您和紧急联系人，提醒您的健康异常情况。同时建议您邀请紧急联系人关注您的心晓精准健康账号，关注后紧急联系人可同步收到您的每日健康报告
       </div>
 
-      <div v-if="egyContacts.length>0" class="data-list">
-        <div v-for="(item, index) in egyContacts" :key="index" class="device">
-          <mt-cell :title="item.fullName" is-link @click.native="onEditContact(item)" />
+      <div class="lm-body">
+        <div v-if="list.items.length>0" class="data-list">
+          <mt-cell v-for="(item, index) in list.items" :key="index" :title="item.fullName" is-link @click.native="onEditContact(item)" />
         </div>
-      </div>
-      <div v-else>
-        <div class="data-empty">
+        <div v-else class="data-empty">
           <img class="icon" src="@/assets/images/data_empty.png" alt="">
           <span class="tips">暂无数据</span>
         </div>
@@ -41,14 +39,16 @@
 import { egyContacts } from '@/api/own'
 
 export default {
-  name: 'EgyContacts',
+  name: 'OwnEgyContacts',
   components: {
   },
   data() {
     return {
       loading: false,
-      appInfo: {},
-      egyContacts: []
+      list: {
+        total: 0,
+        items: []
+      }
     }
   },
   created() {
@@ -57,12 +57,9 @@ export default {
   methods: {
     onInit() {
       this.loading = true
-      console.log('cc')
       egyContacts({}).then(res => {
-        console.log(res)
         if (res.result === 1) {
-          var d = res.data
-          this.egyContacts = d.items
+          this.list = res.data
         }
         this.loading = false
       })

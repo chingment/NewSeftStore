@@ -50,6 +50,9 @@ namespace Lumos.DbRelay
         public IDbSet<SysUserFingerVein> SysUserFingerVein { get; set; }
 
         public IDbSet<SysUserContact> SysUserContact { get; set; }
+
+        public IDbSet<SysUserFollow> SysUserFollow { get; set; }
+
         public AuthorizeRelayDbContext(string nameOrConnectionString)
                 : base(nameOrConnectionString)
         {

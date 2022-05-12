@@ -166,6 +166,21 @@ namespace LocalS.Service.Api.HealthApp
 
         }
 
+        public CustomJsonResult AuthTokenCheck(string token)
+        {
+
+            var session = new Session();
+
+            var token_val = session.Get<Dictionary<string, string>>(string.Format("token:{0}", token));
+
+            if (token_val == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2Sign, "");
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+        }
+
         public CustomJsonResult EgyContacts(string operater, string userId)
         {
             var d_SysUserContacts = CurrentDb.SysUserContact.Where(m => m.UserId == userId && m.Type == 1).ToList();
@@ -193,22 +208,95 @@ namespace LocalS.Service.Api.HealthApp
 
         }
 
-
-
-        public CustomJsonResult AuthTokenCheck(string token)
+        public CustomJsonResult Followers(string operater, string userId)
         {
+            var query = (from u in CurrentDb.SysUserFollow
+                         join s in CurrentDb.SysUser on u.UserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where u.IsDelete == false
+                         && u.FollowUserId == userId
+                         select new
+                         {
+                             u.UserId,
+                             tt.Avatar,
+                             tt.NickName,
+                             tt.FullName,
+                             u.CreateTime
+                         });
 
-            var session = new Session();
+            int total = query.Count();
 
-            var token_val = session.Get<Dictionary<string, string>>(string.Format("token:{0}", token));
+            int pageIndex = 0;
+            int pageSize = int.MaxValue;
 
-            if (token_val == null)
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
             {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure2Sign, "");
+
+                olist.Add(new
+                {
+                    UserId = item.UserId,
+                    Avatar = item.Avatar,
+                    FullName = item.FullName,
+                    NickName = item.NickName,
+                    CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
+                });
             }
 
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "");
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+
         }
 
+        public CustomJsonResult Idolers(string operater, string userId)
+        {
+            var query = (from u in CurrentDb.SysUserFollow
+                         join s in CurrentDb.SysUser on u.FollowUserId equals s.Id into temp
+                         from tt in temp.DefaultIfEmpty()
+                         where u.IsDelete == false
+                         && u.UserId == userId
+                         select new
+                         {
+                             u.FollowUserId,
+                             tt.Avatar,
+                             tt.NickName,
+                             tt.FullName,
+                             u.CreateTime
+                         });
+
+            int total = query.Count();
+
+            int pageIndex = 0;
+            int pageSize = int.MaxValue;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list = query.ToList();
+
+            List<object> olist = new List<object>();
+
+            foreach (var item in list)
+            {
+
+                olist.Add(new
+                {
+                    FollowUserId = item.FollowUserId,
+                    Avatar = item.Avatar,
+                    FullName = item.FullName,
+                    NickName = item.NickName,
+                    CreateTime = item.CreateTime.ToUnifiedFormatDateTime()
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+        }
     }
 }

@@ -80,6 +80,7 @@
     <Compile Include="Entity\SysMerchUser.cs" />
     <Compile Include="Entity\SysSupplierUser.cs" />
     <Compile Include="Entity\SysUserContact.cs" />
+    <Compile Include="Entity\SysUserFollow.cs" />
     <Compile Include="Entity\SysUserOperateLog.cs" />
     <Compile Include="Entity\SysOrg.cs" />
     <Compile Include="Entity\SysPermission.cs" />

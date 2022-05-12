@@ -28,8 +28,18 @@ const router = new VueRouter({
     },
     {
       path: '/own/egycontact/edit',
-      component: () => import('@/views/own/egycontactedit'),
+      component: () => import('@/views/own/egycontact/edit'),
       meta: { title: '紧急联系人', isAuth: true }
+    },
+    {
+      path: '/own/followers',
+      component: () => import('@/views/own/followers'),
+      meta: { title: '关注我的人', isAuth: true }
+    },
+    {
+      path: '/own/idolers',
+      component: () => import('@/views/own/idolers'),
+      meta: { title: '我关注的人', isAuth: true }
     },
     {
       path: '/device/bind',

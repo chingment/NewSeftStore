@@ -32,6 +32,20 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+        [HttpGet]
+        public OwnApiHttpResponse Followers()
+        {
+            var result = HealthAppServiceFactory.Own.Followers(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpGet]
+        public OwnApiHttpResponse Idolers()
+        {
+            var result = HealthAppServiceFactory.Own.Idolers(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
 
         [HttpPost]
         [AllowAnonymous]
