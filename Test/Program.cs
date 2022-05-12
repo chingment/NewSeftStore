@@ -93,8 +93,8 @@ namespace Test
             SenvivSdk.ApiDoRequest api = new SenvivSdk.ApiDoRequest();
 
 
-            UserCreateRequest userCreateRequest = new UserCreateRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1ADEplzDPSJTrUL3gF4SgubMJhJxYy35H6sawVJAUM20=\"", post);
-            var result = api.DoPost(userCreateRequest);
+            //UserCreateRequest userCreateRequest = new UserCreateRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1ADEplzDPSJTrUL3gF4SgubMJhJxYy35H6sawVJAUM20=\"", post);
+            //var result = api.DoPost(userCreateRequest);
 
 
             //var boxListRequest = new SenvivSdk.BoxListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1ADEplzDPSJTrUL3gF4SgubMJhJxYy35H6sawVJAUM20=\"", new { deptid = "32", size = 1, page = 1, keyword = "1004BEBFB587" });
@@ -110,7 +110,7 @@ namespace Test
             //var userListRequest = new SenvivSdk.UserListRequest("\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1PLo2wf9mBvfraL26FOANd5z01tWP1Zg+ZWgsuDNpAAQ=\"", new { deptid = "32", userid = "321x133d121013E693", size = 1, page = 1 });
             //var result = api.DoPost(userListRequest);
 
-            GetSign("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1620465964, "{\"deviceId\":\"1004BEBFB3BB\",\"svUserId\":\"321x165d0121EA53E2\"}");
+            //GetSign("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1620465964, "{\"deviceId\":\"1004BEBFB3BB\",\"svUserId\":\"321x165d0121EA53E2\"}");
 
             //SvUtil.D46Long(1000 * 1m / 6);
 
@@ -207,13 +207,13 @@ namespace Test
             //  //LoginRequest b = new LoginRequest("", new { Name = "全线通月子会所", Pwd = "qxt123456" });
             //  //var restb = api.DoPost(b);
             //"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXkgPD5w99Q8WjoB9KWzVaKhilmaMYx18U+VAHSmP/me4="
-            string token = "\"w8RlypEyYP1g6jctLFI3bNjS9bJn0bf9f+KSm9p94S9HPS1M6ij8bnCQJY7Epcg1atZNDl0mSwffacII/sekRdEBiJdrrYvbL+u9HQ9rMnc=\"";
+            string token = "\"uSHRH8B+8DwNDkACgL/F+pqakM7xJ+AHP2/k/36d96/ttvzZg6QTc2WSahsp6GIXVpEnTDDXH1wB5kVRZtnJHFbHwcW8OZSiBgLPfTkhd5E=\"";
 
-            var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(token, new { deptid = "32", userid = "321x847d05042C401A", size = 1, page = 1 });
-            var resultReportDetailList = api.DoPost(requestReportDetailList);
+            //var requestReportDetailList = new SenvivSdk.ReportDetailListRequest(token, new { deptid = "32", userid = "321x847d05042C401A", size = 1, page = 1 });
+            //var resultReportDetailList = api.DoPost(requestReportDetailList);
 
-            ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "32", userid = "321x167d0124346DEE", size = 1, page = 1 });
-            var restb = api.DoPost(c1);
+            //ReportParDetailRequest c1 = new ReportParDetailRequest(token, new { deptid = "32", userid = "321x167d0124346DEE", size = 1, page = 1 });
+            //var restb = api.DoPost(c1);
 
             //var config_Senviv = BizFactory.Senviv.GetConfig("46");
 
@@ -241,8 +241,8 @@ namespace Test
             //  //    }
             //  //}
 
-            //  //BoxBindRequest b = new BoxBindRequest(token, new { sn = sn, userid = "461x847d0113A4", deptid = deptid });
-            //  //var restb = api.DoPost(b);
+            BoxBindRequest b = new BoxBindRequest(token, new { sn = "1004E747A50D", userid = "461x847d0512F8", deptid = "46" });
+            var rest = api.DoPost(b);
 
             //  BoxUnBindRequest c = new BoxUnBindRequest(token, new { sn = sn, userid = "461x847d0113A4", deptid = deptid });
             //  var restc = api.DoPost(c);

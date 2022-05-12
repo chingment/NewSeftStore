@@ -71,6 +71,13 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
-  
+        [HttpGet]
+        public OwnApiHttpResponse QrcodeUrlByRp()
+        {
+            var result = HealthAppServiceFactory.Own.QrcodeUrlByRp(this.CurrentUserId, this.CurrentUserId);
+            return new OwnApiHttpResponse(result);
+        }
+
+        //http://health.17fanju.com/invite/rpfollow?merchId=88273829&ts=11&iv_uid=fc70dee105e9455db2fb7f31a44aa419
     }
 }

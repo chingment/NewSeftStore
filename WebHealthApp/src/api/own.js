@@ -56,6 +56,14 @@ export function idolers(params) {
   })
 }
 
+export function qrcodeUrlByRp(params) {
+  return request({
+    url: '/own/qrcodeUrlByRp',
+    method: 'get',
+    params
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
@@ -63,5 +71,6 @@ export default {
   info: info,
   egyContacts: egyContacts,
   followers: followers,
-  idolers: idolers
+  idolers: idolers,
+  qrcodeUrlByRp: qrcodeUrlByRp
 }

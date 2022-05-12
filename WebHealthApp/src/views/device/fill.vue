@@ -169,7 +169,7 @@ export default {
             { label: '疲乏无力', value: '1' },
             { label: '情绪波动', value: '2' },
             { label: '精力不足', value: '3' },
-            { label: '怕冷怕冷', value: '4' },
+            { label: '怕冷怕热', value: '4' },
             { label: '头昏头痛', value: '5' },
             { label: '易于感冒', value: '6' },
             { label: '记忆力下降', value: '7' },

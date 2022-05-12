@@ -17,8 +17,8 @@ const router = new VueRouter({
       meta: { title: '我的信息', isAuth: true }
     },
     {
-      path: '/own/qrcode',
-      component: () => import('@/views/own/qrcode'),
+      path: '/own/qrcodebyrp',
+      component: () => import('@/views/own/qrcodebyrp'),
       meta: { title: '我的二维码', isAuth: false }
     },
     {
@@ -40,6 +40,11 @@ const router = new VueRouter({
       path: '/own/idolers',
       component: () => import('@/views/own/idolers'),
       meta: { title: '我关注的人', isAuth: true }
+    },
+    {
+      path: '/invite/rpfollow',
+      component: () => import('@/views/invite/rpfollow'),
+      meta: { title: '邀请关注', isAuth: false }
     },
     {
       path: '/device/bind',

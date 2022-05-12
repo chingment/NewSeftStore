@@ -1,21 +1,20 @@
 <template>
   <div id="pg_own_idolers">
-    <div class="step-1">
-      <div class="lm-header-big">
-        <div class="bg-title">我关注的人</div>
-        <div class="sm-title">以下是您关注的人</div>
+
+    <div class="lm-header-big">
+      <div class="bg-title">我关注的人</div>
+      <div class="sm-title">以下是您关注的人</div>
+    </div>
+    <div class="lm-body">
+      <div v-if="list.items.length>0" class="data-list">
+        <mt-cell v-for="(item, index) in list.items" :key="index" :title="item.nickName">
+          <img slot="icon" :src="item.avatar" width="24" height="24">
+          <span class="btn-remove" @click="onRemove(item)">移除</span>
+        </mt-cell>
       </div>
-      <div class="lm-body">
-        <div v-if="list.items.length>0" class="data-list">
-          <mt-cell v-for="(item, index) in list.items" :key="index" :title="item.nickName">
-            <img slot="icon" :src="item.avatar" width="24" height="24">
-            <span class="btn-remove" @click="onRemove(item)">移除</span>
-          </mt-cell>
-        </div>
-        <div v-else class="data-empty">
-          <img class="icon" src="@/assets/images/data_empty.png" alt="">
-          <span class="tips">暂无数据</span>
-        </div>
+      <div v-else class="data-empty">
+        <img class="icon" src="@/assets/images/data_empty.png" alt="">
+        <span class="tips">暂无数据</span>
       </div>
     </div>
 

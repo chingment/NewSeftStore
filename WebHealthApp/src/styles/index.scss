@@ -131,3 +131,21 @@ img[src=''] {
 .data-empty .tips{
   color: #cdcdcd;
 }
+
+
+.tip-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 50px;
+
+  .icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .tip {
+    color: #000;
+    padding: 10px;
+  }
+}

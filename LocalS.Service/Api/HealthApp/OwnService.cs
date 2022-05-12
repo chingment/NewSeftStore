@@ -112,7 +112,7 @@ namespace LocalS.Service.Api.HealthApp
         {
             var d_ClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
 
-            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.BindStatus != E_SvUserDeviceBindStatus.NotBind).ToList();
+            var d_UserDevices = CurrentDb.SvUserDevice.Where(m => m.UserId == userId && m.BindStatus == E_SvUserDeviceBindStatus.Binded).ToList();
 
             List<object> devices = new List<object>();
 
@@ -298,5 +298,20 @@ namespace LocalS.Service.Api.HealthApp
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
         }
+
+        public CustomJsonResult QrcodeUrlByRp(string operater, string userId)
+        {
+            var d_SysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            string merchId = d_SysClientUser.MerchId;
+            string ts = "1223123131";
+            var ret = new
+            {
+                url = string.Format("http://health.17fanju.com/invite/rpfollow?merchId={0}&ts={1}&iv_uid={2}", merchId, ts, userId)
+            };
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", ret);
+        }
+
     }
 }

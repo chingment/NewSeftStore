@@ -11,7 +11,7 @@
       </div>
       <div class="rf">
 
-        <img class="qrcode" src="@/assets/images/my_qrcode.png" alt="" style="display:none" @click="onMyQrcode">
+        <img class="qrcode" src="@/assets/images/my_qrcode.png" alt="" style="display:none" @click="onMyQrcodeByRp">
 
       </div>
     </div>
@@ -74,8 +74,8 @@ export default {
     onFollowers() {
       this.$router.push('/own/followers')
     },
-    onMyQrcode() {
-      this.$router.push('/own/qrcode')
+    onMyQrcodeByRp() {
+      this.$router.push('/own/qrcodebyrp')
     }
   }
 }

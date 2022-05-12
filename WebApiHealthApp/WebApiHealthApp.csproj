@@ -157,6 +157,7 @@
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\EgyContactController.cs" />
     <Compile Include="Controllers\ImitateController.cs" />
+    <Compile Include="Controllers\InviteController.cs" />
     <Compile Include="Controllers\MonthReportController.cs" />
     <Compile Include="Controllers\OwnController.cs" />
     <Compile Include="Global.asax.cs">

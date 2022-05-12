@@ -65,5 +65,13 @@ namespace LocalS.Service.Api.HealthApp
             }
         }
 
+        public static InviteService Invite
+        {
+            get
+            {
+                return new InviteService();
+            }
+        }
+
     }
 }

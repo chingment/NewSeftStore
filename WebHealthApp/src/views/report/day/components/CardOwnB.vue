@@ -40,7 +40,7 @@
                 <img class="t1_bg" :src="require('@/assets/report/day/green/ic_hrvXzznl.png')">
                 <span class="t1_txt" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.value }}</span>
               </div>
-              <div class="t2"><span v-if="rd.hrvXzznl.sign!='-'" :style="'color:'+rd.hrvXzznl.color+';'"> {{ rd.hrvXzznl.sign }}</span> 心脏总能量</div>
+              <div class="t2"><span v-if="rd.hrvXzznl.sign!='-'" :style="'color:'+rd.hrvXzznl.color+';font-weight: bold;'"> {{ rd.hrvXzznl.sign }}</span> 心脏总能量</div>
             </div>
             <div class="dv-hrvxzznl-ref">（参考值{{ rd.hrvXzznl.refRange }}）</div>
 
