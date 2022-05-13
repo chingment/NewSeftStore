@@ -23,7 +23,7 @@
 </template>
 <script>
 
-import { idolers } from '@/api/own'
+import { idolers, removeIdoler } from '@/api/own'
 
 export default {
   name: 'OwnIdolers',
@@ -43,6 +43,9 @@ export default {
   },
   methods: {
     onInit() {
+      this.getIdolers()
+    },
+    getIdolers() {
       this.loading = true
       idolers({}).then(res => {
         if (res.result === 1) {
@@ -51,9 +54,17 @@ export default {
         this.loading = false
       })
     },
-    onRemove() {
+    onRemove(item) {
+      this.loading = true
       this.$messagebox.confirm('确定要移除?').then(action => {
-
+        removeIdoler({ idolerId: item.userId }).then(res => {
+          if (res.result === 1) {
+            this.getIdolers()
+          } else {
+            this.$toast(res.message)
+          }
+          this.loading = false
+        })
       })
     }
   }

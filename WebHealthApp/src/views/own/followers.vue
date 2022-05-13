@@ -25,7 +25,7 @@
 </template>
 <script>
 
-import { followers } from '@/api/own'
+import { followers, removeFollower } from '@/api/own'
 
 export default {
   name: 'OwnFollowers',
@@ -45,6 +45,9 @@ export default {
   },
   methods: {
     onInit() {
+      this.getFollowers()
+    },
+    getFollowers() {
       this.loading = true
       followers({}).then(res => {
         if (res.result === 1) {
@@ -53,9 +56,17 @@ export default {
         this.loading = false
       })
     },
-    onRemove() {
+    onRemove(item) {
+      this.loading = true
       this.$messagebox.confirm('确定要移除?').then(action => {
-
+        removeFollower({ followerId: item.userId }).then(res => {
+          if (res.result === 1) {
+            this.getFollowers()
+          } else {
+            this.$toast(res.message)
+          }
+          this.loading = false
+        })
       })
     }
   }

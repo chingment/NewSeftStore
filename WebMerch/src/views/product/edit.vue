@@ -39,7 +39,7 @@
           :data="{folder:'product',isBuildms:'true'}"
           ext=".jpg,.png,.jpeg"
           tip="图片500*500，格式（jpg,png）不超过4M；第一张为主图，可拖动改变图片顺序"
-          :max-size="1024"
+          :max-size="4*1024"
           :sortable="true"
           :limit="4"
         />
@@ -150,7 +150,7 @@
           :data="{folder:'product'}"
           ext=".jpg,.png,.jpeg"
           tip="图片500*500，格式（jpg,png）不超过4M；可拖动改变图片顺序"
-          :max-size="1024"
+          :max-size="4*1024"
           :sortable="true"
           :limit="4"
         />
@@ -233,9 +233,9 @@ export default {
           this.form.name = d.name
           this.form.spuCode = d.spuCode
           this.form.kindIds = d.kindIds
-          this.form.detailsDes = d.detailsDes
+          this.form.detailsDes = d.detailsDes == null ? [] : d.detailsDes
           this.form.briefDes = d.briefDes
-          this.form.displayImgUrls = d.displayImgUrls
+          this.form.displayImgUrls = d.displayImgUrls == null ? [] : d.displayImgUrls
           this.form.specItems = d.specItems
           this.form.skus = d.skus
           this.form.isMavkBuy = d.isMavkBuy

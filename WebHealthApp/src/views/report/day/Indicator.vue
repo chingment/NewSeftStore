@@ -69,13 +69,11 @@
 import echarts from 'echarts'
 import { getIndicator } from '@/api/dayreport'
 import ScoreLevel from '@/components/ScoreLevel.vue'
-import DvCollapse from '@/components/DvCollapse/Index.vue'
 var chartByMv
 var chartByTd
 export default {
   name: '',
   components: {
-    DvCollapse,
     ScoreLevel
   },
   data() {
@@ -565,7 +563,7 @@ export default {
           type: 'time',
           rotate: 0,
           splitLine: { show: false },
-          interval: 60 * 1000,
+          interval: 1000,
           min: sm_point_x_min_t,
           max: sm_point_x_max_t,
           axisLabel: {
@@ -655,7 +653,7 @@ export default {
               }
             },
             encode: {
-              x: [1, 2],
+              x: null,
               y: 0
             },
             data: sm_point_xAxis_data

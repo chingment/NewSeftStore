@@ -263,6 +263,7 @@ export default {
     uploadCardCheckShow() {
       if (typeof this.$refs.uploadImg === 'undefined') { return }
       var uploadcard = this.$refs.uploadImg.$el.querySelectorAll('.el-upload--picture-card')
+
       if (this.elFileList.length === this.elLimit) {
         uploadcard[0].style.display = 'none'
       } else {

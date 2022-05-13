@@ -64,6 +64,22 @@ export function qrcodeUrlByRp(params) {
   })
 }
 
+export function removeFollower(data) {
+  return request({
+    url: '/own/removeFollower',
+    method: 'post',
+    data
+  })
+}
+
+export function removeIdoler(data) {
+  return request({
+    url: '/own/removeIdoler',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   authInfo: authInfo,
   authUrl: authUrl,
@@ -72,5 +88,7 @@ export default {
   egyContacts: egyContacts,
   followers: followers,
   idolers: idolers,
-  qrcodeUrlByRp: qrcodeUrlByRp
+  qrcodeUrlByRp: qrcodeUrlByRp,
+  removeFollower: removeFollower,
+  removeIdoler: removeIdoler
 }

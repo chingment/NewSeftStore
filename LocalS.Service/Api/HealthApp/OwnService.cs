@@ -263,7 +263,7 @@ namespace LocalS.Service.Api.HealthApp
                          && u.UserId == userId
                          select new
                          {
-                             u.FollowUserId,
+                             UserId = u.FollowUserId,
                              tt.Avatar,
                              tt.NickName,
                              tt.FullName,
@@ -286,7 +286,7 @@ namespace LocalS.Service.Api.HealthApp
 
                 olist.Add(new
                 {
-                    FollowUserId = item.FollowUserId,
+                    UserId = item.UserId,
                     Avatar = item.Avatar,
                     FullName = item.FullName,
                     NickName = item.NickName,
@@ -297,6 +297,40 @@ namespace LocalS.Service.Api.HealthApp
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, Total = total, Items = olist };
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "", pageEntity);
+        }
+
+        public CustomJsonResult RemoveFollower(string operater, string userId, RopOwnRemoveFollower rop)
+        {
+
+            var d_SysUserFollow = CurrentDb.SysUserFollow.Where(m => m.UserId == rop.FollowerId && m.FollowUserId == userId).FirstOrDefault();
+            if (d_SysUserFollow != null)
+            {
+                d_SysUserFollow.IsDelete = true;
+                d_SysUserFollow.Mender = operater;
+                d_SysUserFollow.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+
+        }
+
+        public CustomJsonResult RemoveIdoler(string operater, string userId, RopOwnRemoveIdoler rop)
+        {
+
+            var d_SysUserFollow = CurrentDb.SysUserFollow.Where(m => m.UserId == userId && m.FollowUserId == rop.IdolerId).FirstOrDefault();
+            if (d_SysUserFollow != null)
+            {
+                d_SysUserFollow.IsDelete = true;
+                d_SysUserFollow.Mender = operater;
+                d_SysUserFollow.MendTime = DateTime.Now;
+                CurrentDb.SaveChanges();
+            }
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
+
         }
 
         public CustomJsonResult QrcodeUrlByRp(string operater, string userId)

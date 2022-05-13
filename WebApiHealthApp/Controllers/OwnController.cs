@@ -78,6 +78,21 @@ namespace WebApiHealthApp.Controllers
             return new OwnApiHttpResponse(result);
         }
 
+
+        [HttpPost]
+        public OwnApiHttpResponse RemoveFollower(RopOwnRemoveFollower rop)
+        {
+            var result = HealthAppServiceFactory.Own.RemoveFollower(this.CurrentUserId, this.CurrentUserId,rop);
+            return new OwnApiHttpResponse(result);
+        }
+
+        [HttpPost]
+        public OwnApiHttpResponse RemoveIdoler(RopOwnRemoveIdoler rop)
+        {
+            var result = HealthAppServiceFactory.Own.RemoveIdoler(this.CurrentUserId, this.CurrentUserId, rop);
+            return new OwnApiHttpResponse(result);
+        }
+
         //http://health.17fanju.com/invite/rpfollow?merchId=88273829&ts=11&iv_uid=fc70dee105e9455db2fb7f31a44aa419
     }
 }

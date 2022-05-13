@@ -179,6 +179,8 @@
     <Compile Include="Api\HealthApp\RModels\RopOwnAuthUrl.cs" />
     <Compile Include="Api\HealthApp\RModels\RopDeviceFill.cs" />
     <Compile Include="Api\HealthApp\RModels\RopInviteInitRpFollow.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopOwnRemoveFollower.cs" />
+    <Compile Include="Api\HealthApp\RModels\RopOwnRemoveIdoler.cs" />
     <Compile Include="Api\Merch\DeviceService.cs" />
     <Compile Include="Api\HealthApp\HealthAppServiceFactory.cs" />
     <Compile Include="Api\HealthApp\MonthReportService.cs" />

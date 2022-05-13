@@ -1998,7 +1998,12 @@ namespace LocalS.BLL
                 return true;
             }
 
+
+
         }
+
+
+
         public bool SendArticleByPregnancy(string svUserId, string first, string keyword1, string keyword2, string remark, string url)
         {
             var template = GetWxPaTpl(svUserId, "article_pregnancy");
