@@ -19,7 +19,7 @@
               <div class="mt-range-content">
                 <div class="mt-range-runway" :style="'border-top-width: 8px;border-top-color:'+item.color+';'" />
                 <div class="mt-range-progress" style="width: 0%; height: 8px;" />
-                <div class="mt-range-thumb" :style="'left: '+elTagDv.value+'%;background-color:'+item.color+';'" />
+                <div class="mt-range-thumb" :style="'left: '+((elTagDv.value<=100)?elTagDv.value:elTagDv.value/100)+'%;background-color:'+item.color+';'" />
               </div>
             </div>
             <div class="bottomtips">{{ item.tips }}</div>
@@ -129,7 +129,7 @@ export default {
       if (chat == null) { return }
       var _this = this
 
-      i_chart = echarts.init(this.$refs.i_chart, null, { renderer: 'svg' })
+      i_chart = echarts.init(this.$refs.i_chart, null)
 
       var data = chat.data
 

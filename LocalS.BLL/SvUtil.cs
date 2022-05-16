@@ -1385,7 +1385,7 @@ namespace LocalS.BLL
         {
             var jd = new SvDataJd();
             jd.Name = "体动次数";
-            jd.Value = val.ToString();
+            jd.Value = val;
             jd.ValueText = val.ToString();
             jd.RefRange = "0~200次";
             jd.Chat = new { Data = lastVals };
@@ -1398,11 +1398,11 @@ namespace LocalS.BLL
             {
                 jd.Set("正常", "-", CB_5);
             }
-            else if (val > 200 && val <= 300)
+            else if (val > 200 && val < 300)
             {
                 jd.Set("偏多", "↑", CB_3);
             }
-            else if (val > 300)
+            else if (val >= 300)
             {
                 jd.Set("过多", "↑↑", CB_1);
             }
