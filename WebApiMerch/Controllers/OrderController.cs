@@ -36,6 +36,15 @@ namespace WebApiMerch.Controllers
         }
 
         [HttpPost]
+        public OwnApiHttpResponse CancleByOpenApi(RopOrderCancleByOpenApi rop)
+        {
+            var result = LocalS.BLL.Biz.BizFactory.Order.CancleByOpenApi(this.CurrentUserId, rop.Id, "", LocalS.Entity.E_OrderCancleType.OpenApi, "");
+            return new OwnApiHttpResponse(result);
+        }
+
+
+
+        [HttpPost]
         public OwnApiHttpResponse SendDeviceShip(RopOrderHandleExByDeviceSelfTake rop)
         {
             rop.AppId = AppId.MERCH;

@@ -64,6 +64,14 @@ export function SendDeviceShip(data) {
   })
 }
 
+export function cancleByOpenApi(data) {
+  return request({
+    url: '/order/cancleByOpenApi',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList: getList,
   getListByDelivery: getListByDelivery,
@@ -71,5 +79,6 @@ export default {
   getListByStoreSelfTake: getListByStoreSelfTake,
   getDetails: getDetails,
   handleExByDeviceSelfTake: handleExByDeviceSelfTake,
-  SendDeviceShip: SendDeviceShip
+  SendDeviceShip: SendDeviceShip,
+  cancleByOpenApi: cancleByOpenApi
 }

@@ -263,6 +263,7 @@
     <Compile Include="Api\Merch\RModels\RopHomeSaveWorkBench.cs" />
     <Compile Include="Api\Merch\RModels\RopMerchAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopMerchEdit.cs" />
+    <Compile Include="Api\Merch\RModels\RopOrderCancleByOpenApi.cs" />
     <Compile Include="Api\Merch\RModels\RopOrgAdd.cs" />
     <Compile Include="Api\Merch\RModels\RopOrgEdit.cs" />
     <Compile Include="Api\Merch\RModels\RopOrgSort.cs" />

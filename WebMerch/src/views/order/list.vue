@@ -331,6 +331,9 @@
         <el-button v-if="details.canHandleEx" size="small" type="primary" @click="_handleEx(details)">
           确认处理
         </el-button>
+        <el-button v-if="details.sourceName==='开放接口'&&details.status.value==3000" size="small" @click="onCancle(details)">
+          取消订单
+        </el-button>
         <el-button size="small" @click="dialogDetailsIsVisible = false">
           关闭
         </el-button>
@@ -342,7 +345,7 @@
 
 <script>
 import { MessageBox } from 'element-ui'
-import { getList, getDetails, handleExByDeviceSelfTake } from '@/api/order'
+import { getList, getDetails, handleExByDeviceSelfTake, cancleByOpenApi } from '@/api/order'
 import Pagination from '@/components/Pagination'
 import { isEmpty, getUrlParam } from '@/utils/commonUtil'
 export default {
@@ -614,6 +617,34 @@ export default {
     },
     selectNav(e) {
 
+    },
+    onCancle(details) {
+      var _this = this
+      MessageBox.confirm('确定要取消,慎重操作，会影响设备实际库存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        this.detailsLoading = true
+        cancleByOpenApi({ id: details.id }).then(res => {
+          if (res.result === 1) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            _this.refreshDetails(details.id)
+            _this.getListData()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
+
+          this.detailsLoading = false
+        })
+      })
     },
     getExStatusColor(status) {
       switch (status) {

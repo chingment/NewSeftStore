@@ -247,6 +247,8 @@ namespace LocalS.Service.Api.Merch
             return result;
         }
 
+        
+
         public CustomJsonResult SendDeviceShip(string operater, string merchId, RopOrderHandleExByDeviceSelfTake rop)
         {
             var result = BizFactory.Order.SendDeviceShip(operater, merchId, rop.Id);

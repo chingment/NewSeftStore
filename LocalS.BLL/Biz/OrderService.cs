@@ -1720,7 +1720,7 @@ namespace LocalS.BLL.Biz
                     StockChangeRecords = s_StockChangeRecords
                 });
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "已取消");
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "取消成功");
 
             }
 
