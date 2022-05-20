@@ -567,8 +567,8 @@ into g
 
             if (!string.IsNullOrEmpty(rop.Product))
             {
-                query = query.Where(u => u.SkuCumCode == rop.Product || u.SkuName.StartsWith(rop.Product));
-                query_all = query_all.Where(u => u.SkuCumCode == rop.Product || u.SkuName.StartsWith(rop.Product));
+                query = query.Where(u => u.SkuCumCode == rop.Product || u.SkuName.Contains(rop.Product));
+                query_all = query_all.Where(u => u.SkuCumCode == rop.Product || u.SkuName.Contains(rop.Product));
             }
 
             int total = query.Count();

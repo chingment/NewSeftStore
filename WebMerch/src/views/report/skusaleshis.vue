@@ -269,6 +269,7 @@ export default {
         this.$message('请选择日期范围')
         return
       }
+      this.listQuery.page = 1
       this.onGetList()
     },
     onDownload() {
